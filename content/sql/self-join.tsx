@@ -78,7 +78,7 @@ export default function SelfJoin() {
     <LearnLayout
       title="SELF JOIN"
       description="Join a table to itself — manager-employee hierarchies, comparing rows within the same table, finding duplicates, and every pattern where two rows of the same table need to be compared"
-      section="SQL — Module 34"
+      section="SQL — Lesson 34"
       readTime="12–16 min"
       updatedAt="April 2026"
     >
@@ -205,7 +205,7 @@ ORDER BY senior.employee_id NULLS LAST,
       />
 
       <Callout type="info">
-        The three-level hierarchy query with explicit JOINs works well for shallow trees (2-3 levels). For trees of arbitrary depth — organisational charts, file systems, category hierarchies — you need recursive CTEs (covered in Module 56). Self JOIN handles a fixed known depth; recursive CTE handles unlimited depth.
+        The three-level hierarchy query with explicit JOINs works well for shallow trees (2-3 levels). For trees of arbitrary depth — organisational charts, file systems, category hierarchies — you need recursive CTEs (covered in Lesson 56). Self JOIN handles a fixed known depth; recursive CTE handles unlimited depth.
       </Callout>
 
       <HR />
@@ -400,7 +400,7 @@ ORDER BY a.role, a.salary;`}
 
       <H>Compare each order to the customer's previous order</H>
 
-      <P>The subquery inside the ON clause below references curr.customer_id and curr.order_date from the outer query — that makes it a <Hl>correlated</Hl> subquery, covered properly in Module 37; for now, read it as "look up this specific customer's previous order date."</P>
+      <P>The subquery inside the ON clause below references curr.customer_id and curr.order_date from the outer query — that makes it a <Hl>correlated</Hl> subquery, covered properly in Lesson 37; for now, read it as "look up this specific customer's previous order date."</P>
 
       <SQLPlayground
         initialQuery={`-- Each customer's order compared to their immediately previous order
@@ -457,7 +457,7 @@ ORDER BY emp.role, emp.salary;`}
       />
 
       <ProTip>
-        Sequential row comparison with SELF JOIN works but can be verbose — especially when finding "the immediately next row." Window functions (LAG and LEAD, Module 54) are the modern, cleaner solution for this pattern. SELF JOIN is worth knowing for databases that do not support window functions and for situations where the "next row" definition is complex enough that a subquery is clearer than a window expression.
+        Sequential row comparison with SELF JOIN works but can be verbose — especially when finding "the immediately next row." Window functions (LAG and LEAD, Lesson 54) are the modern, cleaner solution for this pattern. SELF JOIN is worth knowing for databases that do not support window functions and for situations where the "next row" definition is complex enough that a subquery is clearer than a window expression.
       </ProTip>
 
       <HR />
@@ -515,7 +515,7 @@ ORDER BY salary_gap DESC;`}
 
       <H>Customers who share the same loyalty tier and city</H>
 
-      <P>COUNT(*) OVER (PARTITION BY ...) below is a <Hl>window function</Hl> — those are taught properly in Module 52; for now, just read it as a running count per city/tier group that does not collapse the rows the way GROUP BY would.</P>
+      <P>COUNT(*) OVER (PARTITION BY ...) below is a <Hl>window function</Hl> — those are taught properly in Lesson 52; for now, just read it as a running count per city/tier group that does not collapse the rows the way GROUP BY would.</P>
 
       <SQLPlayground
         initialQuery={`-- Customer peer groups: same loyalty tier AND same city
@@ -576,7 +576,7 @@ ORDER BY orders_together DESC;`}
         Part 1: three-alias self join for employee + manager + senior manager. Part 2: peer count subquery or aggregation. Combine with CTE.
       </TimeBlock>
 
-      <P>The query below opens with a <Hl>CTE</Hl> (the WITH clause) — you'll learn CTEs properly in Module 55; for now, just know it names a subquery so it can be referenced by name later in the query.</P>
+      <P>The query below opens with a <Hl>CTE</Hl> (the WITH clause) — you'll learn CTEs properly in Lesson 55; for now, just know it names a subquery so it can be referenced by name later in the query.</P>
 
       <SQLPlayground
         initialQuery={`-- Full org chart report: employee, manager, senior manager,
@@ -762,9 +762,9 @@ ORDER BY a.category, price_difference;`}
           'For pair comparison: add a.id < b.id to the ON condition. This prevents duplicate pairs (A,B) and (B,A) and self-matches (A,A). Use <> instead of < when direction matters.',
           'Three-level hierarchy: chain three aliases with LEFT JOINs — emp → mgr → senior. Use LEFT JOIN at every level to preserve employees at the top of each sub-hierarchy.',
           'Product co-occurrence: JOIN order_items AS oi1 to order_items AS oi2 on order_id AND oi1.product_id < oi2.product_id. Then join each alias to products to get names. This finds which products are purchased together.',
-          'SELF JOIN for sequential comparison (comparing each row to its predecessor) is verbose. Window functions LAG and LEAD (Module 54) are the cleaner modern solution for this pattern.',
+          'SELF JOIN for sequential comparison (comparing each row to its predecessor) is verbose. Window functions LAG and LEAD (Lesson 54) are the cleaner modern solution for this pattern.',
           'Duplicate detection: JOIN table AS a to itself AS b on the columns that define a duplicate AND a.id < b.id. Rows that match on those columns are potential duplicates.',
-          'For arbitrary-depth hierarchies (unknown number of levels), SELF JOIN with fixed aliases handles only known depth. Recursive CTEs (Module 56) handle unlimited depth.',
+          'For arbitrary-depth hierarchies (unknown number of levels), SELF JOIN with fixed aliases handles only known depth. Recursive CTEs (Lesson 56) handle unlimited depth.',
         ]}
       />
 
@@ -772,10 +772,10 @@ ORDER BY a.category, price_difference;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 35</strong>, you learn CROSS JOIN — generating all combinations, calendar tables, test data grids, and the scenarios where the Cartesian product is intentional and powerful.
+          In <strong>Lesson 35</strong>, you learn CROSS JOIN — generating all combinations, calendar tables, test data grids, and the scenarios where the Cartesian product is intentional and powerful.
         </p>
         <Link href="/learn/sql/cross-join" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 35 → CROSS JOIN
+          Lesson 35 → CROSS JOIN
         </Link>
       </div>
 

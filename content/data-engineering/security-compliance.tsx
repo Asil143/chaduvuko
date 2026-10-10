@@ -189,7 +189,7 @@ export default function SecurityCompliancePage() {
     <LearnLayout
       title="Security and Compliance for Data Engineers"
       description="GDPR and the CCPA — what they mean for your pipelines and how to build systems that are compliant by design."
-      section="Data Engineering — Module 39"
+      section="Data Engineering — Lesson 39"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -221,7 +221,7 @@ export default function SecurityCompliancePage() {
         you handle PII in your Kafka topics.
       </Para>
       <Para>
-        This module covers what you actually need to know as a data engineer: encryption,
+        This lesson covers what you actually need to know as a data engineer: encryption,
         PII handling, access control, GDPR, and the CCPA (California Consumer Privacy
         Act). Not legal theory — practical decisions your pipelines must make.
       </Para>
@@ -1006,7 +1006,7 @@ The trade-off is architectural commitment upfront — you need per-user encrypti
         {[
           {
             q: 'Assuming default cloud encryption at rest means sensitive fields don\'t need column-level encryption',
-            a: 'Section 2 and this module\'s Misconceptions section both cover this — encryption at rest protects against physical storage theft, not against a legitimate but overly broad SELECT query. SSNs, payment data, and similar fields need column-level encryption on top of the default, not instead of thinking about it further.',
+            a: 'Section 2 and this lesson\'s Misconceptions section both cover this — encryption at rest protects against physical storage theft, not against a legitimate but overly broad SELECT query. SSNs, payment data, and similar fields need column-level encryption on top of the default, not instead of thinking about it further.',
           },
           {
             q: 'Treating "the data was deleted from the warehouse table" as equivalent to a completed GDPR erasure request',
@@ -1022,7 +1022,7 @@ The trade-off is architectural commitment upfront — you need per-user encrypti
           },
           {
             q: 'Assuming GDPR-level compliance automatically satisfies CCPA, or vice versa, without checking the specific differences',
-            a: 'Section 6\'s comparison table and this module\'s Misconceptions section both show real gaps — different deadlines, different legal bases, different fine structures. Section 6\'s own Callout is careful to say GDPR-level rigor covers "most" CCPA requirements, not all of them.',
+            a: 'Section 6\'s comparison table and this lesson\'s Misconceptions section both show real gaps — different deadlines, different legal bases, different fine structures. Section 6\'s own Callout is careful to say GDPR-level rigor covers "most" CCPA requirements, not all of them.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1088,10 +1088,10 @@ The trade-off is architectural commitment upfront — you need per-user encrypti
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 40 covers streaming data — event-driven architecture, producers and consumers, offsets, consumer groups, and replay — the core concepts behind every streaming system, without locking you to a specific tool.
+          Lesson 40 covers streaming data — event-driven architecture, producers and consumers, offsets, consumer groups, and replay — the core concepts behind every streaming system, without locking you to a specific tool.
         </p>
         <Link href="/learn/data-engineering/streaming-data" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 40 → Streaming Data — What It Is and How It Works
+          Lesson 40 → Streaming Data — What It Is and How It Works
         </Link>
       </div>
     </LearnLayout>

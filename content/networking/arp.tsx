@@ -355,7 +355,7 @@ export default function ArpPage() {
     <LearnLayout
       title="ARP — Address Resolution Protocol"
       description="The glue between Layer 2 and Layer 3 — how every packet finds the MAC address it needs, and why this simple protocol is a persistent security vulnerability."
-      section="Networking Fundamentals — Module 09"
+      section="Networking Fundamentals — Lesson 09"
       readTime="18–24 min"
       updatedAt="May 2026"
     >

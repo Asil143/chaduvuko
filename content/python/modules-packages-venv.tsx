@@ -77,7 +77,7 @@ export default function ModulesPackagesVenv() {
     <LearnLayout
       title="Modules, Packages & Virtual Environments"
       description="import, pip, requirements.txt, and virtual environments — how real Python projects are actually structured."
-      section="Python — Module 18"
+      section="Python — Lesson 18"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -668,11 +668,11 @@ pip install -r requirements.txt
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 19 begins the Object-Oriented Python phase — classes, objects, and the __init__ method,
+          Lesson 19 begins the Object-Oriented Python phase — classes, objects, and the __init__ method,
           from first principles.
         </p>
         <Link href="/learn/python/classes-objects" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 19 → Classes and Objects — The Basics
+          Lesson 19 → Classes and Objects — The Basics
         </Link>
       </div>
     </LearnLayout>

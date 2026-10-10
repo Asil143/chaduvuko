@@ -74,7 +74,7 @@ export default function DeliverySemantics() {
     <LearnLayout
       title="Delivery Semantics: At-Most, At-Least, Exactly-Once"
       description="What at-most-once, at-least-once, and exactly-once actually guarantee in Kafka, how the idempotent producer and transactions work mechanically, and how to choose the right semantics for a real workload instead of copying a default."
-      section="Apache Kafka — Module 09"
+      section="Apache Kafka — Lesson 09"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -128,10 +128,10 @@ export default function DeliverySemantics() {
             ['Exactly-once (effectively-once)', 'No', 'No, as observed', 'Idempotent producer deduplicates retries; transactions make read-process-write atomic; or consumer-side idempotency absorbs any remaining duplicates.'],
           ]}
         />
-        <Callout title="Why this module comes after replication" color={K}>
+        <Callout title="Why this lesson comes after replication" color={K}>
           Delivery semantics sit one layer above the durability guarantees covered in Part 06 of the
           replication module. <code>acks</code> and <code>min.insync.replicas</code> determine whether a
-          write that reaches the broker survives a broker failure. This module is about a different question:
+          write that reaches the broker survives a broker failure. This lesson is about a different question:
           given that the write did or did not reach the broker, what does the producer do about
           acknowledgement and retries, and what does the consumer do about processing and offset commits —
           the layer where loss and duplication actually get introduced or prevented.
@@ -709,7 +709,7 @@ partition ends up with: [4, 5, 6, 1, 2, 3] instead of [1, 2, 3, 4, 5, 6]
           Kafka Streams (and stream-processing layers built on top of it, like ksqlDB) advertise
           "exactly-once processing" as a configuration flag —
           <code> processing.guarantee=exactly_once_v2</code> — which can make it sound like a fundamentally
-          different, stronger guarantee than anything covered in this module. It is not. Under the hood,
+          different, stronger guarantee than anything covered in this lesson. It is not. Under the hood,
           Kafka Streams' exactly-once mode is implemented using exactly the transactional producer mechanics
           from Part 04: every state update and every output record a stream task produces is wrapped in a
           Kafka transaction, atomic with the consumer offset commit for the input record that triggered it.
@@ -759,7 +759,7 @@ for each input record consumed by a stream task:
         <SectionTag text="// Part 12 — Testing delivery semantics before production finds the bug for you" />
         <SectionTitle>Chaos-Style Failure Injection Is the Only Reliable Way to Verify a Semantics Choice</SectionTitle>
         <Para>
-          Everything this module has covered so far is a design and a mental model. None of it substitutes
+          Everything this lesson has covered so far is a design and a mental model. None of it substitutes
           for actually verifying, before shipping, that a pipeline behaves the way its delivery-semantics
           design claims it does under the specific failure conditions that matter — a producer retry, a
           consumer crash mid-batch, a broker restart during an in-flight transaction. Code review can confirm
@@ -811,7 +811,7 @@ def test_replay_is_idempotent():
         <SectionTag text="// Part 13 — A decision checklist to run before shipping a new topic" />
         <SectionTitle>Turning This Module Into a Repeatable Checklist</SectionTitle>
         <Para>
-          Every concept in this module ultimately exists to answer one practical question a team faces when
+          Every concept in this lesson ultimately exists to answer one practical question a team faces when
           standing up a new producer or consumer: what should actually be configured, and why. Rather than
           re-deriving the reasoning from scratch each time, it helps to have a short, concrete checklist to
           run through before a new topic's producers and consumers go to production.
@@ -857,7 +857,7 @@ Idempotency replay-tested?     [ ] yes  [ ] no -- schedule:`}
         <SectionTag text="// Part 14 — Idempotence and transactions cost something real" />
         <SectionTitle>None of This Is Free — Weigh the Overhead Honestly Against the Guarantee</SectionTitle>
         <Para>
-          It would be easy to close this module concluding that idempotent producers and transactions should
+          It would be easy to close this lesson concluding that idempotent producers and transactions should
           simply always be on, everywhere, since Part 03 already noted idempotence has essentially no
           downside. Idempotence really is close to free. Transactions are a different story, and treating
           them as a costless upgrade over at-least-once leads to teams reaching for them on workloads where
@@ -924,7 +924,7 @@ Idempotency replay-tested?     [ ] yes  [ ] no -- schedule:`}
           ]}
         />
         <Callout title="Keep this table, forget the rest if you must" color={K}>
-          If only one part of this module survives in memory a year from now, this table is the one worth
+          If only one part of this lesson survives in memory a year from now, this table is the one worth
           keeping — it is the practical index back into everything else, and every row points to the specific
           mechanism, worked example, or failure mode that explains it in full.
         </Callout>

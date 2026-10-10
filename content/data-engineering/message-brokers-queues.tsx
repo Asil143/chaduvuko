@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     'How messages flow from producer to consumer. Queues vs topics, durability, replication, compaction, backpressure, dead letter queues, ordering guarantees, and exactly-once semantics — the internal mechanics without tool noise.',
 }
 
-/* ── Local components (Module 37 style) ─────────────────────────────────── */
+/* ── Local components (Lesson 37 style) ─────────────────────────────────── */
 
 const SectionTag = ({ text }: { text: string }) => (
   <div style={{
@@ -172,7 +172,7 @@ export default function MessageBrokersQueuesModule() {
     <LearnLayout
       title="Message Brokers and Queues — How They Work Internally"
       description="How messages flow from producer to consumer. Queues vs topics, durability, replication, compaction, backpressure, dead letter queues, ordering guarantees, and exactly-once semantics — the internal mechanics without tool noise."
-      section="Data Engineering — Module 41"
+      section="Data Engineering — Lesson 41"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -233,7 +233,7 @@ export default function MessageBrokersQueuesModule() {
           The broker is not a passive pipe. It is an active storage and
           routing system with its own durability guarantees, replication
           strategy, indexing structure, and failure modes. Understanding
-          those internals is what this module is about.
+          those internals is what this lesson is about.
         </Para>
       </section>
 
@@ -666,7 +666,7 @@ export default function MessageBrokersQueuesModule() {
         <SectionTitle>Ordering Guarantees — What the Broker Actually Promises</SectionTitle>
 
         <Para>
-          Module 40 covered ordering at the conceptual level. Here we go deeper
+          Lesson 40 covered ordering at the conceptual level. Here we go deeper
           into the specific ordering guarantees and the ways ordering can break
           in real production systems even when you think it is guaranteed.
         </Para>
@@ -952,7 +952,7 @@ def process_with_dlq(
         <SectionTitle>Exactly-Once Internals — Idempotent Producers and Transactional APIs</SectionTitle>
 
         <Para>
-          Module 40 explained exactly-once semantics conceptually. Here is
+          Lesson 40 explained exactly-once semantics conceptually. Here is
           the mechanism — specifically how Kafka implements idempotent producers
           and transactions, because understanding the mechanism tells you
           exactly where it works and where it breaks down.
@@ -995,7 +995,7 @@ def process_with_dlq(
 # This means idempotent producer only deduplicates retries within one producer session
 # Producer restart = new PID = no deduplication for messages from the old session
 # → This is why idempotent producer alone is not enough for crash recovery
-# → You also need consumer-side idempotency (as covered in Module 40)`}
+# → You also need consumer-side idempotency (as covered in Lesson 40)`}
         </CodeBox>
 
         <SubTitle>Transactions — atomic writes across partitions and topics</SubTitle>
@@ -1143,7 +1143,7 @@ consumer.subscribe(['freshcart.orders'])`}
             messages. The fix is two lines of config change. But before you
             can make that change, you need to understand why idempotence works,
             what sequence numbers the broker tracks, and why it's safe to
-            enable without changing application logic. This module is the
+            enable without changing application logic. This lesson is the
             prerequisite for that conversation.
           </Para>
         </HighlightBox>
@@ -1174,7 +1174,7 @@ consumer.subscribe(['freshcart.orders'])`}
             after N failures, committing the offset so downstream processing
             continues, alerting on DLQ depth, building a replay mechanism,
             and the operational runbook for investigating and replaying DLQ
-            messages. Every one of those points is in this module.
+            messages. Every one of those points is in this lesson.
           </Para>
         </HighlightBox>
       </section>
@@ -1364,10 +1364,10 @@ That broader case — read from topic A, process, write to topic B, and commit t
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 42 covers distributed systems — CAP theorem, consistency models, partitioning, replication, and fault tolerance — explained with data engineering scenarios, not abstract distributed systems theory.
+          Lesson 42 covers distributed systems — CAP theorem, consistency models, partitioning, replication, and fault tolerance — explained with data engineering scenarios, not abstract distributed systems theory.
         </p>
         <Link href="/learn/data-engineering/distributed-systems" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 42 → Distributed Systems for Data Engineers
+          Lesson 42 → Distributed Systems for Data Engineers
         </Link>
       </div>
     </LearnLayout>

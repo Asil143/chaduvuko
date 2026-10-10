@@ -61,7 +61,7 @@ export default function SocialEngineeringPhishing() {
     <LearnLayout
       title="Social Engineering and Phishing"
       description="The most successful attack vector in history — how social engineering works, why humans are the hardest patch, and how organisations defend against it."
-      section="Cybersecurity — Module 08"
+      section="Cybersecurity — Lesson 08"
       readTime="28 min"
       updatedAt="May 2026"
     >
@@ -74,7 +74,7 @@ export default function SocialEngineeringPhishing() {
       <P>The numbers are unambiguous. The Verizon Data Breach Investigations Report (DBIR) consistently attributes <Hl>68–80% of breaches to the human element</Hl> — phishing, credential reuse, or social engineering in some form. The most sophisticated technical attacks frequently begin with a phishing email that delivers an employee's credentials to an attacker. The SolarWinds supply chain attack — which compromised US government agencies, Microsoft, and thousands of organisations — began with a credential compromise.</P>
 
       <div style={{ background: `${C}08`, border: `1px solid ${C}25`, borderLeft: `4px solid ${C}`, borderRadius: '0 10px 10px 0', padding: '20px 24px', margin: '4px 0 28px' }}>
-        <P>Social engineering is the art of manipulating people into taking actions or divulging information they should not. It does not require technical sophistication. The best social engineering attacks require psychological sophistication — understanding how people think, what they respond to, and what mental shortcuts can be exploited. This module covers both how attacks work and how defences address a problem that cannot be solved by patching.</P>
+        <P>Social engineering is the art of manipulating people into taking actions or divulging information they should not. It does not require technical sophistication. The best social engineering attacks require psychological sophistication — understanding how people think, what they respond to, and what mental shortcuts can be exploited. This lesson covers both how attacks work and how defences address a problem that cannot be solved by patching.</P>
       </div>
 
       <HR />
@@ -507,10 +507,10 @@ export default function SocialEngineeringPhishing() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 09</strong>, you dive into the OWASP Top 10 from first principles — SQL injection, XSS, SSRF, IDOR, and every major web vulnerability class explained with real attack examples. The module every developer and every pentester needs.
+          In <strong>Lesson 09</strong>, you dive into the OWASP Top 10 from first principles — SQL injection, XSS, SSRF, IDOR, and every major web vulnerability class explained with real attack examples. The module every developer and every pentester needs.
         </p>
         <Link href="/learn/cybersecurity/web-attacks-owasp" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 09 → Web Application Attacks — OWASP Top 10 From First Principles
+          Lesson 09 → Web Application Attacks — OWASP Top 10 From First Principles
         </Link>
       </div>
 

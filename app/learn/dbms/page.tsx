@@ -37,7 +37,7 @@ export default function DBMSTrackPage() {
       {/* ── Stats Bar ── */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 36 }}>
         {[
-          { label: 'Modules',      value: `${totalCount}` },
+          { label: 'Lessons',      value: `${totalCount}` },
           { label: 'Live Now',     value: `${liveCount}`  },
           { label: 'Total Hours',  value: `~${totalHours}h` },
           { label: 'Coverage',     value: 'GATE + Placements' },
@@ -74,7 +74,7 @@ export default function DBMSTrackPage() {
           {[
             { icon: '◎', title: 'GATE + Placement Ready',    desc: 'Every topic mapped to GATE syllabus, campus placement rounds, and product company interviews — one track covers all three.', color: '#ec4899' },
             { icon: '⊞', title: 'Visual Theory Diagrams',    desc: 'ER diagrams, B+ trees, lock graphs, and ARIES recovery drawn step by step — not just textbook definitions.', color: '#0078d4' },
-            { icon: '▶', title: '60 Interview Questions',     desc: 'A full module of categorized Q&A — service companies, product companies, and GATE-level questions with complete answers.', color: '#00e676', href: '/learn/dbms/interview-questions' },
+            { icon: '▶', title: '60 Interview Questions',     desc: 'A full lesson of categorized Q&A — service companies, product companies, and GATE-level questions with complete answers.', color: '#00e676', href: '/learn/dbms/interview-questions' },
             { icon: '≡', title: 'Theory + SQL Together',      desc: 'DBMS theory and SQL practice taught in the same track so you understand why the syntax works, not just how to write it.', color: '#8b5cf6' },
           ].map(f => (
             <div key={f.title} style={{
@@ -110,7 +110,7 @@ export default function DBMSTrackPage() {
               fontWeight: 900, letterSpacing: '-1px',
               color: 'var(--text)', margin: 0,
             }}>
-              20 Modules. Zero to Advanced.
+              20 Lessons. Zero to Advanced.
             </h2>
           </div>
 
@@ -142,7 +142,7 @@ export default function DBMSTrackPage() {
               })}
             </div>
             <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap', flexShrink: 0 }}>
-              {filtered.length} modules
+              {filtered.length} lessons
             </span>
           </div>
         </div>
@@ -172,7 +172,7 @@ export default function DBMSTrackPage() {
                     Section {mod.section} — {section.title}
                   </span>
                   <span style={{ fontSize: 10, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
-                    · {modules.filter(m => m.section === mod.section).length} modules
+                    · {modules.filter(m => m.section === mod.section).length} lessons
                   </span>
                 </div>
               )}
@@ -321,10 +321,10 @@ export default function DBMSTrackPage() {
           fontSize: 'clamp(18px, 2.5vw, 26px)', fontWeight: 900,
           color: 'var(--text)', letterSpacing: '-1px', marginBottom: 12,
         }}>
-          20 modules. Zero to exam-ready.
+          20 lessons. Zero to exam-ready.
         </h3>
         <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 480, margin: '0 auto 24px' }}>
-          Start with Module 01 right now — no prior database knowledge needed.
+          Start with Lesson 01 right now — no prior database knowledge needed.
           Every module builds on the previous one, in the exact order it should be learned.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -333,7 +333,7 @@ export default function DBMSTrackPage() {
             fontWeight: 700, fontSize: 13, borderRadius: 8,
             padding: '10px 24px', textDecoration: 'none',
           }}>
-            Start Module 01 →
+            Start Lesson 01 →
           </Link>
           <Link href="/learn/interview" style={{
             display: 'inline-block', background: 'var(--surface)', color: 'var(--text)',

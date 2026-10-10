@@ -52,7 +52,7 @@ export default function Module37() {
     <LearnLayout
       title="Security Certifications and Career Paths"
       description="Navigate the certification landscape strategically. Learn which certs matter for which roles, the most efficient study paths, exam strategies, and how to build a portfolio that gets you hired in the US cybersecurity job market."
-      section="Cybersecurity — Module 37"
+      section="Cybersecurity — Lesson 37"
       readTime="35 min"
       updatedAt="May 2026"
     >
@@ -340,7 +340,7 @@ Splunk Enterprise Certified Admin:
 
 Study path:
   - Splunk free self-paced courses on splunk.com (Splunk Fundamentals 1/2)
-  - Practise SPL daily: write queries for every module 31 scenario in this course
+  - Practise SPL daily: write queries for every lesson 31 scenario in this course
   - BOTS (Boss of the SOC) — free Splunk CTF with datasets for practise`}
         </Block>
       </Part>
@@ -615,8 +615,8 @@ Senior Cloud Security Architect (6+ years):
       ]} />
 
       <Callout type="info">
-        <strong>Up Next — Module 38: Bug Bounty Hunting</strong><br />
-        Module 38 teaches you to earn money finding real vulnerabilities. You will learn how to choose the right programmes, set up an efficient recon workflow, escalate discoveries into valid high-severity reports, and build a bug bounty reputation on HackerOne and Bugcrowd — from first submission to consistent payouts.
+        <strong>Up Next — Lesson 38: Bug Bounty Hunting</strong><br />
+        Lesson 38 teaches you to earn money finding real vulnerabilities. You will learn how to choose the right programmes, set up an efficient recon workflow, escalate discoveries into valid high-severity reports, and build a bug bounty reputation on HackerOne and Bugcrowd — from first submission to consistent payouts.
       </Callout>
 
     </LearnLayout>

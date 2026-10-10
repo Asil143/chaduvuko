@@ -78,7 +78,7 @@ export default function AlterTable() {
     <LearnLayout
       title="ALTER TABLE"
       description="Modify table structure safely — add, rename, and drop columns, change data types, manage constraints, and run schema changes in production without downtime"
-      section="SQL — Module 24"
+      section="SQL — Lesson 24"
       readTime="10–14 min"
       updatedAt="April 2026"
     >
@@ -107,7 +107,7 @@ export default function AlterTable() {
         ))}
       </div>
 
-      <P>This module teaches every ALTER TABLE operation — what it does, how it behaves on large tables, and how to run schema changes safely in production without causing downtime.</P>
+      <P>This lesson teaches every ALTER TABLE operation — what it does, how it behaves on large tables, and how to run schema changes safely in production without causing downtime.</P>
 
       <HR />
 
@@ -408,7 +408,7 @@ WHERE table_name = 'orders' AND column_name = 'order_status';`}
       {/* ── PART 06 ── */}
       <Part n="06" title="ALTER TABLE and Constraints — Adding and Dropping" />
 
-      <P>You learned the constraint syntax in Module 23. Here is the complete ALTER TABLE reference for managing constraints on existing tables.</P>
+      <P>You learned the constraint syntax in Lesson 23. Here is the complete ALTER TABLE reference for managing constraints on existing tables.</P>
 
       <CodeBlock
         label="All constraint operations via ALTER TABLE"
@@ -840,10 +840,10 @@ ORDER BY loyalty_points DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 25</strong>, you learn DROP TABLE and TRUNCATE — when to use each, the irreversibility of both, and how to safely clean up tables in development vs production environments.
+          In <strong>Lesson 25</strong>, you learn DROP TABLE and TRUNCATE — when to use each, the irreversibility of both, and how to safely clean up tables in development vs production environments.
         </p>
         <Link href="/learn/sql/drop-truncate" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 25 → DROP TABLE and TRUNCATE
+          Lesson 25 → DROP TABLE and TRUNCATE
         </Link>
       </div>
 

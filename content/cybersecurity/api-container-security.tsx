@@ -59,7 +59,7 @@ export default function Module19() {
     <LearnLayout
       title="API Security and Container Security"
       description="REST and GraphQL API vulnerabilities, JWT attacks, OAuth misconfigurations, Docker container escape, Kubernetes RBAC, and supply chain security."
-      section="Cybersecurity — Module 19"
+      section="Cybersecurity — Lesson 19"
       readTime="44 min"
       updatedAt="May 2026"
     >
@@ -68,7 +68,7 @@ export default function Module19() {
           Modern applications are built from APIs and containers. A REST API that exposes user data is just as valuable a target as an HTTPS web page. A container with a misconfigured security context is just as dangerous as a misconfigured server. The attack surface has changed; the attacker's objectives haven't.
         </P>
         <P>
-          This module covers the OWASP API Security Top 10, the specific mechanics of <Hl>JWT attacks</Hl> and <Hl>OAuth misconfiguration</Hl>, how <Hl>Docker containers can be escaped</Hl> via privileged mode or volume mounts, <Hl>Kubernetes RBAC</Hl> and how its misconfigurations become privilege escalation paths, and <Hl>supply chain security</Hl> for container images — because an attacker who poisons your base image owns everything built on top of it.
+          This lesson covers the OWASP API Security Top 10, the specific mechanics of <Hl>JWT attacks</Hl> and <Hl>OAuth misconfiguration</Hl>, how <Hl>Docker containers can be escaped</Hl> via privileged mode or volume mounts, <Hl>Kubernetes RBAC</Hl> and how its misconfigurations become privilege escalation paths, and <Hl>supply chain security</Hl> for container images — because an attacker who poisons your base image owns everything built on top of it.
         </P>
       </Part>
 
@@ -741,13 +741,13 @@ trivy k8s --report all cluster`}</Block>
 
       <div style={{ background: 'var(--code-bg)', borderRadius: 12, padding: '28px 32px', marginTop: 40 }}>
         <div style={{ fontSize: 13, color: C, fontWeight: 700, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
-          Up Next — Module 20
+          Up Next — Lesson 20
         </div>
         <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--heading)', marginBottom: 12 }}>
           Secure Coding Practices
         </div>
         <p style={{ ...s.p, marginBottom: 20 }}>
-          In Module 20, you learn to write code that is secure by design: input validation patterns, output encoding, parameterised queries, secrets management in code, dependency management, security testing in CI/CD, and threat modelling as a development practice. This module bridges development and security — making security the developer's job, not an afterthought.
+          In Lesson 20, you learn to write code that is secure by design: input validation patterns, output encoding, parameterised queries, secrets management in code, dependency management, security testing in CI/CD, and threat modelling as a development practice. This lesson bridges development and security — making security the developer's job, not an afterthought.
         </p>
         <Link
           href="/learn/cybersecurity/secure-coding"
@@ -762,7 +762,7 @@ trivy k8s --report all cluster`}</Block>
             textDecoration: 'none',
           }}
         >
-          Continue to Module 20 →
+          Continue to Lesson 20 →
         </Link>
       </div>
     </LearnLayout>

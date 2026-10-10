@@ -52,7 +52,7 @@ export default function Module33() {
     <LearnLayout
       title="Incident Response — From Alert to Recovery"
       description="Master the full incident response lifecycle: preparation, detection, containment, eradication, recovery, and lessons learned. Build playbooks, work a ransomware scenario, and learn digital forensics fundamentals."
-      section="Cybersecurity — Module 33"
+      section="Cybersecurity — Lesson 33"
       readTime="40 min"
       updatedAt="May 2026"
     >
@@ -872,8 +872,8 @@ DETECTION GAP: What signals were present but missed?`}
       ]} />
 
       <Callout type="info">
-        <strong>Up Next — Module 34: Threat Intelligence and Threat Hunting</strong><br />
-        Module 34 moves you from reactive incident response to proactive defence. You will learn how to consume and produce threat intelligence (STIX/TAXII, threat intel feeds, TLP classifications), build MITRE ATT&CK-based hunting hypotheses, write detection rules from adversary TTPs, and run structured threat hunts before the attackers announce themselves.
+        <strong>Up Next — Lesson 34: Threat Intelligence and Threat Hunting</strong><br />
+        Lesson 34 moves you from reactive incident response to proactive defence. You will learn how to consume and produce threat intelligence (STIX/TAXII, threat intel feeds, TLP classifications), build MITRE ATT&CK-based hunting hypotheses, write detection rules from adversary TTPs, and run structured threat hunts before the attackers announce themselves.
       </Callout>
 
     </LearnLayout>

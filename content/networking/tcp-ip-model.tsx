@@ -428,7 +428,7 @@ export default function TCPIPModel() {
     <LearnLayout
       title="The TCP/IP Model — How the Internet Works"
       description="The four-layer model that actually runs the internet — from the protocol that created it, to the IP header fields, TCP state machine, and how every packet travels from your keyboard to a server on the other side of the world."
-      section="Networking Fundamentals — Module 4"
+      section="Networking Fundamentals — Lesson 4"
       readTime="35–50 min"
       updatedAt="May 2026"
     >

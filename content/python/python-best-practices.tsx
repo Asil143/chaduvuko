@@ -77,7 +77,7 @@ export default function PythonBestPractices() {
     <LearnLayout
       title="Python Best Practices — PEP 8, Clean Code"
       description="The conventions that separate readable, maintainable Python from code that works but nobody wants to touch."
-      section="Python — Module 45"
+      section="Python — Lesson 45"
       readTime="30 min"
       updatedAt="August 2026"
     >
@@ -604,7 +604,7 @@ pre-commit install`}</CodeBox>
           all 46 modules into a focused set of real interview questions and coding patterns.
         </p>
         <Link href="/learn/python/python-interview-prep" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 46 → Python Interview Prep
+          Lesson 46 → Python Interview Prep
         </Link>
       </div>
     </LearnLayout>

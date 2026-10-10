@@ -74,7 +74,7 @@ export default function ConsumerDesign() {
     <LearnLayout
       title="Consumer Design"
       description="How to build a production-grade Kafka consumer: the full config walkthrough, manual commit-after-processing, idempotent processing, poison-message handling, graceful shutdown, rebalance listeners, and a production-readiness checklist."
-      section="Apache Kafka — Module 12"
+      section="Apache Kafka — Lesson 12"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -87,14 +87,14 @@ export default function ConsumerDesign() {
         <SectionTag text="// Part 01 — From concept to client" />
         <SectionTitle>A Consumer That Just Reads Records Is the Easy 10%</SectionTitle>
         <Para>
-          Module 03 established the mechanics: consumers pull records by calling <code>poll()</code>, track
+          Lesson 03 established the mechanics: consumers pull records by calling <code>poll()</code>, track
           progress through offsets, and belong to consumer groups that share partition ownership. That
           module also flagged, without fully resolving, the hardest part of consumer design — the separation
           between processing a record and committing its offset, and everything that can go wrong in the gap
           between those two actions.
         </Para>
         <Para>
-          This module closes that gap with real, applied code. As in the producer module, we use Python with
+          This lesson closes that gap with real, applied code. As in the producer module, we use Python with
           the <code>confluent-kafka</code> client throughout, consistently, so the property names and control
           flow map directly onto whatever client library you actually use in production. A production
           consumer is not a <code>poll()</code> loop with a <code>process()</code> call inside it — it is a
@@ -125,7 +125,7 @@ export default function ConsumerDesign() {
         <SectionTag text="// Part 02 — The configuration surface" />
         <SectionTitle>Every Property That Actually Matters, and What Its Default Costs You</SectionTitle>
         <Para>
-          Consumer configuration has the same shape as producer configuration from the previous module: a
+          Consumer configuration has the same shape as producer configuration from the previous lesson: a
           handful of properties actually determine reliability, and several defaults are tuned for
           convenience rather than production safety.
         </Para>
@@ -133,7 +133,7 @@ export default function ConsumerDesign() {
         <Para>
           Every consumer must belong to a consumer group, identified by <code>group.id</code>. This is not
           optional metadata — it is the key the broker uses to track committed offsets (stored in the
-          internal <code>__consumer_offsets</code> topic, per Module 03) and to determine which consumers
+          internal <code>__consumer_offsets</code> topic, per Lesson 03) and to determine which consumers
           share partition ownership. Two processes with the same <code>group.id</code> reading the same topic
           split the partitions between them. Two processes with different <code>group.id</code> values each
           get an independent, full copy of every partition. Getting this wrong — accidentally sharing a
@@ -155,10 +155,10 @@ export default function ConsumerDesign() {
         </Para>
         <SubTitle>enable.auto.commit — the setting most responsible for silent data loss</SubTitle>
         <Para>
-          As Module 03 covered, <code>enable.auto.commit=true</code> (the default in most client libraries)
+          As Lesson 03 covered, <code>enable.auto.commit=true</code> (the default in most client libraries)
           commits the latest offset returned by <code>poll()</code> on a fixed timer
           (<code>auto.commit.interval.ms</code>, typically 5 seconds), independent of whether your application
-          has actually finished processing those records. This module treats <code>enable.auto.commit=false</code>
+          has actually finished processing those records. This lesson treats <code>enable.auto.commit=false</code>
           combined with explicit, manual commits after real processing success as the default posture for any
           consumer whose work has a real side effect — writing to a database, calling a payment API, sending a
           notification. Part 03 builds the manual-commit pattern in full.
@@ -202,7 +202,7 @@ export default function ConsumerDesign() {
           ]}
         />
         <Callout title="These settings interact — never tune one in isolation" color={K}>
-          max.poll.records and max.poll.interval.ms are a pair, not independent knobs — Module 03's rebalance
+          max.poll.records and max.poll.interval.ms are a pair, not independent knobs — Lesson 03's rebalance
           timeline shows exactly how tuning one without the other produces a mysterious rebalance under load.
           The same discipline applies here: change the ratio deliberately, and re-verify under realistic
           per-record processing time, not synthetic benchmarks with a no-op process function.
@@ -793,7 +793,7 @@ consumer.subscribe(
 )`}
         </CodeBox>
         <Callout title="Cooperative rebalancing changes which partitions on_revoke actually sees" color="#38bdf8">
-          Per Module 03's cooperative rebalancing coverage, with the incremental cooperative protocol,
+          Per Lesson 03's cooperative rebalancing coverage, with the incremental cooperative protocol,
           on_revoke is called only with the specific partitions actually moving, not the consumer's entire
           assignment — unaffected partitions are never revoked at all. Code that assumes on_revoke always
           receives the full current assignment (a holdover assumption from the older eager protocol) can
@@ -808,7 +808,7 @@ consumer.subscribe(
         <SectionTitle>Is This Consumer Actually Production-Ready?</SectionTitle>
         <Para>
           Run any new consumer — or a pull request adding one — against this checklist before it ships. Every
-          item traces to a specific failure mode covered earlier in this module.
+          item traces to a specific failure mode covered earlier in this lesson.
         </Para>
         <BulletList
           items={[
@@ -1058,7 +1058,7 @@ consumer.subscribe(
         {[
           {
             q: 'Q1. Explain why "commit after processing" is not, by itself, a complete reliability strategy for a Kafka consumer.',
-            a: `Committing after processing, rather than before or on an independent timer, is the right foundation — it avoids the specific auto-commit failure mode from Module 03 where a crash between an early commit and actual work completion silently skips records. But per Part 03 and Part 04, it only prevents skipped work; it does not prevent duplicate work.
+            a: `Committing after processing, rather than before or on an independent timer, is the right foundation — it avoids the specific auto-commit failure mode from Lesson 03 where a crash between an early commit and actual work completion silently skips records. But per Part 03 and Part 04, it only prevents skipped work; it does not prevent duplicate work.
 
 If a consumer processes a record successfully, has a real side effect like a database write or an external API call, and then crashes before the commit itself lands — or a rebalance takes the partition away at exactly that moment — the same record gets redelivered to whoever processes that partition next. Commit-after-processing guarantees at-least-once delivery, not exactly-once.
 
@@ -1147,7 +1147,7 @@ For the parts of the pipeline where the side effect is external rather than a da
           {
             error: `Consumer group rebalances repeatedly with logs showing CommitFailedException or a similar "commit cannot be completed" error`,
             cause: 'Per Part 02, this almost always means max.poll.interval.ms was exceeded before the commit call was reached — the consumer was removed from the group mid-processing, and the offset it is trying to commit is for a partition it no longer owns.',
-            fix: 'Compare real per-record processing time times max.poll.records against max.poll.interval.ms, exactly as covered for producers\' consumer counterpart in Module 03. Lower max.poll.records, raise max.poll.interval.ms to match realistic processing time, or move slow work off the poll thread.',
+            fix: 'Compare real per-record processing time times max.poll.records against max.poll.interval.ms, exactly as covered for producers\' consumer counterpart in Lesson 03. Lower max.poll.records, raise max.poll.interval.ms to match realistic processing time, or move slow work off the poll thread.',
           },
           {
             error: `The same order status update appears to apply twice in application logs, but the database ends up in the correct final state either way`,

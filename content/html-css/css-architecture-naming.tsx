@@ -77,7 +77,7 @@ export default function CssArchitectureNaming() {
     <LearnLayout
       title="CSS Architecture & Naming Conventions"
       description="BEM and other naming systems, organizing large stylesheets, and the patterns that keep CSS maintainable as a project grows."
-      section="HTML & CSS — Module 35"
+      section="HTML & CSS — Lesson 35"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -117,7 +117,7 @@ export default function CssArchitectureNaming() {
         </Para>
 
         <Callout type="info">
-          This module focuses on <strong>BEM</strong> (Block, Element, Modifier), by a meaningful margin
+          This lesson focuses on <strong>BEM</strong> (Block, Element, Modifier), by a meaningful margin
           the most widely adopted naming convention in real production CSS today, along with the broader
           architectural habits — stylesheet organization, specificity discipline — that any naming system
           needs to be paired with to actually deliver on its promise.
@@ -283,7 +283,7 @@ export default function CssArchitectureNaming() {
           classes: 0,0,2,0 for <code>.price.discounted</code>), which makes these rules progressively
           harder to override later without reaching for even more specific selectors or{' '}
           <code>!important</code> — exactly the specificity escalation problem covered in the Selectors
-          Deep Dive module (Module 20). Second, and just as damaging: <code>.title</code>,{' '}
+          Deep Dive module (Lesson 20). Second, and just as damaging: <code>.title</code>,{' '}
           <code>.price</code>, and <code>.button</code> are now generic enough that they are highly likely
           to collide with an unrelated component reusing the same short, common name, exactly like the{' '}
           <code>.title</code> collision shown in Part 01.
@@ -425,7 +425,7 @@ div.product-card .body .button.primary { background: blue; }
 
         <Para>
           The leading underscore on each partial filename (<code>_product-card.css</code>) is a
-          convention borrowed directly from Sass — covered in full in the next module — signaling "this
+          convention borrowed directly from Sass — covered in full in the next lesson — signaling "this
           file is a partial, meant to be imported, not compiled or linked on its own." The organizing
           principle worth internalizing here: <strong>one file per BEM block</strong>. Because every rule
           for a given block already shares the same class-name prefix, the file boundary and the naming
@@ -771,11 +771,11 @@ div.product-card .body .button.primary { background: blue; }
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 36 covers Sass — the preprocessor that came before native CSS variables, with real
+          Lesson 36 covers Sass — the preprocessor that came before native CSS variables, with real
           $variables, nesting, mixins, and why many production codebases still reach for it today.
         </p>
         <Link href="/learn/html-css/intro-to-sass" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 36 → Intro to Sass — Variables, Nesting, Mixins
+          Lesson 36 → Intro to Sass — Variables, Nesting, Mixins
         </Link>
       </div>
     </LearnLayout>

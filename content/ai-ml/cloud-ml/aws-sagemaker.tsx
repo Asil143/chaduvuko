@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'AWS SageMaker — Training Jobs and Pipelines — Chaduvuko',
@@ -176,13 +175,12 @@ export default function AWSSageMakerPage() {
       readTime="40–52 min"
       updatedAt="April 2026"
     >
-      <MLPageHeader section="cloud-ml" topic="aws-sagemaker" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Before any code — what SageMaker actually is</span>
         <h2 style={S.h2}>
-          Everything from Modules 69–74 — pipelines, experiment tracking,
+          Everything from Lessons 69–74 — pipelines, experiment tracking,
           model registry, deployment, monitoring — exists as a managed service
           on AWS. SageMaker is the platform so you do not have to build
           and maintain that infrastructure yourself.
@@ -437,7 +435,7 @@ aws logs tail /aws/sagemaker/TrainingJobs \\
           A single Estimator runs one script. A Pipeline chains multiple steps
           together — the output artifact of one step flows automatically into
           the next. This is SageMaker&apos;s equivalent of the Prefect flow you built
-          in Module 69 and the AML Pipeline from Module 76. SageMaker Pipelines
+          in Lesson 69 and the AML Pipeline from Lesson 76. SageMaker Pipelines
           add managed data passing, step-level caching (skip unchanged steps),
           a visual DAG in Studio, and a cron/event trigger for automated retraining.
         </p>

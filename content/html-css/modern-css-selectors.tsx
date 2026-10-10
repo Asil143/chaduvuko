@@ -77,7 +77,7 @@ export default function ModernCssSelectors() {
     <LearnLayout
       title="Modern Selectors — :has, :is, :where, Container Queries"
       description="The newest selectors that changed how CSS is written — the parent selector finally arrives, plus container queries for truly component-based responsive design."
-      section="HTML & CSS — Module 34"
+      section="HTML & CSS — Lesson 34"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -763,12 +763,12 @@ aside nav a:hover {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 35 covers CSS architecture and naming conventions — BEM with a full worked example, why
+          Lesson 35 covers CSS architecture and naming conventions — BEM with a full worked example, why
           naming systems matter once a project grows past a handful of files, and avoiding the
           overly-specific selectors and !important overuse that make stylesheets painful to maintain.
         </p>
         <Link href="/learn/html-css/css-architecture-naming" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 35 → CSS Architecture &amp; Naming Conventions
+          Lesson 35 → CSS Architecture &amp; Naming Conventions
         </Link>
       </div>
     </LearnLayout>

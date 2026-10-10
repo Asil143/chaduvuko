@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Neural Networks from Scratch — Chaduvuko',
@@ -206,7 +205,6 @@ export default function NeuralNetworksFromScratchPage() {
       readTime="40–52 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="deep-learning" topic="neural-networks-from-scratch" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -237,11 +235,11 @@ export default function NeuralNetworksFromScratchPage() {
         </p>
 
         <p style={S.p}>
-          This module builds a neural network from scratch in NumPy —
+          This lesson builds a neural network from scratch in NumPy —
           no PyTorch, no TensorFlow. Every operation is explicit.
           You will understand exactly what a forward pass does,
           what backpropagation computes, and why gradient descent works.
-          After this module, PyTorch becomes obvious — it automates
+          After this lesson, PyTorch becomes obvious — it automates
           exactly what you will code by hand here.
         </p>
 
@@ -264,7 +262,7 @@ export default function NeuralNetworksFromScratchPage() {
         </AnalogyBox>
 
         <Callout type="tip">
-          Read Module 07 (Derivatives and Gradients) before this one.
+          Read Lesson 07 (Derivatives and Gradients) before this one.
           Backpropagation is the chain rule applied to nested functions.
           If derivatives feel unfamiliar, the "why" of backpropagation
           will be unclear even if the code makes sense.
@@ -1058,7 +1056,7 @@ print(f"  autograd → the chain rule applied automatically to any graph")`} />
           Framework bugs almost never raise exceptions — a transposed weight matrix, a
           wrong reduction, a mismatched activation derivative all train "successfully"
           while quietly computing the wrong thing. That is exactly the failure mode
-          this module's numerical gradient check exists to catch, and it is exactly
+          this lesson's numerical gradient check exists to catch, and it is exactly
           what interviewers are checking a candidate can reason about by hand.
         </p>
 
@@ -1094,7 +1092,7 @@ print(f"  autograd → the chain rule applied automatically to any graph")`} />
           The same skill shows up directly in production debugging, not just interviews.
           Any team that ships a custom loss function, a custom autograd operation, or a
           hand-written CUDA kernel for performance reasons runs into exactly the
-          from-scratch problem this module teaches: PyTorch's autograd only computes
+          from-scratch problem this lesson teaches: PyTorch's autograd only computes
           the correct gradient automatically for operations it already knows about.
           The moment you write a custom backward method, you are back to being
           responsible for the chain rule yourself — and a wrong custom gradient will
@@ -1129,14 +1127,14 @@ class WeightedBCE(torch.autograd.Function):
                        + (1 - targets) * probs) / n
         return grad_output * grad_logits, None, None
 
-# ── Exactly the check this module teaches, run on the real op ─────────
+# ── Exactly the check this lesson teaches, run on the real op ─────────
 torch.manual_seed(0)
 logits  = torch.randn(8, dtype=torch.float64, requires_grad=True)
 targets = torch.randint(0, 2, (8,), dtype=torch.float64)
 weight  = torch.tensor(3.0, dtype=torch.float64)
 
 # gradcheck compares the custom backward() to a numerical finite-difference
-# gradient — the exact same idea as this module's numerical_gradient(),
+# gradient — the exact same idea as this lesson's numerical_gradient(),
 # just wrapped as a standard PyTorch utility teams run before shipping
 # any custom autograd.Function.
 ok = torch.autograd.gradcheck(
@@ -1163,7 +1161,7 @@ print("silently wrong gradient, degrading accuracy with no error raised.")`} />
             neurons spike in time, involve thousands of distinct neurotransmitter mechanisms, and do
             not compute a single differentiable scalar. Treating the biological analogy as literal
             leads people to expect properties (adaptability, energy efficiency, one-shot learning) that
-            artificial neurons simply do not have. The useful mental model is the one this module
+            artificial neurons simply do not have. The useful mental model is the one this lesson
             actually uses: a neuron is z = Σwᵢxᵢ + b followed by a non-linearity — nothing more, nothing
             biological required to reason about it correctly.
           </p>
@@ -1175,7 +1173,7 @@ print("silently wrong gradient, degrading accuracy with no error raised.")`} />
             looks like — it does not mean every design decision is automatic. You still choose the
             number of layers, the width of each layer, which activation to use where, how to
             standardise inputs, how to initialise weights, and the batch size. Get any of these wrong —
-            as the errors section of this module shows with NaN losses and dead networks — and the
+            as the errors section of this lesson shows with NaN losses and dead networks — and the
             network learns nothing at all, no matter how good the raw data is. Feature learning
             replaces manual feature engineering; it does not replace architecture and preprocessing
             decisions.
@@ -1188,7 +1186,7 @@ print("silently wrong gradient, degrading accuracy with no error raised.")`} />
             whenever every input is zero — geometrically, the decision boundary of every layer is
             forced to pass through the origin. For real data, where the useful separation between
             classes is rarely centred exactly at the origin, this is a serious restriction, not a
-            cosmetic one. That is why this module initialises biases to zero but weights to a scaled
+            cosmetic one. That is why this lesson initialises biases to zero but weights to a scaled
             random distribution — the bias needs to be free to shift away from zero during training, it
             just does not need a random starting point to break symmetry the way weights do.
           </p>
@@ -1196,7 +1194,7 @@ print("silently wrong gradient, degrading accuracy with no error raised.")`} />
 
         <ConceptBox title="Myth: A bigger network — more layers, more neurons — is always a better network" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            More capacity only helps if the dataset has enough signal to constrain it. This module's
+            More capacity only helps if the dataset has enough signal to constrain it. This lesson's
             own errors section shows the failure mode directly: a network with far more parameters
             than training examples will memorise the training set and score much worse on unseen data —
             the loss keeps dropping on training data while test performance gets worse. Model size has
@@ -1212,7 +1210,7 @@ print("silently wrong gradient, degrading accuracy with no error raised.")`} />
             steps downhill on a loss surface that is almost never convex for a real network — different
             random initialisations, different mini-batch orderings, and different learning rates will
             all converge to different sets of weights, often with similar but never identical loss. That
-            is precisely why this module trains with mini-batches over many epochs rather than solving
+            is precisely why this lesson trains with mini-batches over many epochs rather than solving
             a system of equations once: there is no single correct answer to converge to, only a "good
             enough" region of weight space reached through repeated, approximate steps.
           </p>
@@ -1271,7 +1269,7 @@ print("silently wrong gradient, degrading accuracy with no error raised.")`} />
             exact same z, applies the exact same activation, and — critically — receives the exact same
             gradient during backpropagation. Every neuron in the layer updates identically forever, so a
             layer with 100 neurons behaves like a layer with 1 neuron repeated 100 times; the network
-            never breaks this symmetry on its own. Random initialisation (this module uses He
+            never breaks this symmetry on its own. Random initialisation (this lesson uses He
             initialisation, scaling by √(2/n_inputs) for ReLU networks) breaks that symmetry so
             different neurons learn different things, while also keeping the initial activations in a
             numerically well-behaved range instead of vanishing or exploding.
@@ -1280,7 +1278,7 @@ print("silently wrong gradient, degrading accuracy with no error raised.")`} />
 
         <ConceptBox title="Q5 — Beyond convenience, what does PyTorch's autograd actually give you that is hard to hand-roll?">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            The NumPy version in this module works, but every time the architecture changes — a new
+            The NumPy version in this lesson works, but every time the architecture changes — a new
             layer, a skip connection, a different activation — the backward() function has to be
             rewritten by hand, and a single wrong transpose silently produces incorrect gradients with
             no error thrown. Autograd builds a computational graph automatically during the forward pass
@@ -1303,7 +1301,7 @@ print("silently wrong gradient, degrading accuracy with no error raised.")`} />
 
         <p style={S.p}>
           The network you just built works — but plain SGD is the slowest,
-          least reliable optimizer available. Module 41 covers the training
+          least reliable optimizer available. Lesson 41 covers the training
           techniques that make modern deep learning practical:
           Adam optimizer (adaptive learning rates per parameter),
           batch normalisation (stabilise activations between layers),
@@ -1325,7 +1323,7 @@ print("silently wrong gradient, degrading accuracy with no error raised.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 41 · Deep Learning
+              Next — Lesson 41 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

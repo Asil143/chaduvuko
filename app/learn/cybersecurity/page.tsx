@@ -23,7 +23,7 @@ export default function CybersecurityTrack() {
   return (
     <LearnLayout
       title="Cybersecurity"
-      description="From zero to job-ready security engineer — 40 modules, no prerequisites"
+      description="From zero to job-ready security engineer — 40 lessons, no prerequisites"
       section="Cybersecurity"
       readTime="Self-paced"
       updatedAt="May 2026"
@@ -69,7 +69,7 @@ export default function CybersecurityTrack() {
         marginBottom: 36,
       }}>
         {[
-          { value: `${modules.length}`, label: 'Modules'        },
+          { value: `${modules.length}`, label: 'Lessons'        },
           { value: '6',                 label: 'Phases'          },
           { value: `${totalTopics}+`,   label: 'Topics covered'  },
           { value: `${totalHours}h`,    label: 'Total content'   },
@@ -124,7 +124,7 @@ export default function CybersecurityTrack() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              40 Modules. Zero to Job-Ready.
+              40 Lessons. Zero to Job-Ready.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
               Follow in order. Each module builds on the last. Attack patterns before
@@ -344,7 +344,7 @@ export default function CybersecurityTrack() {
           color: 'var(--text)', fontFamily: 'var(--font-display)',
           letterSpacing: '-1px', marginBottom: 12,
         }}>
-          Start with Module 01. Build from zero.
+          Start with Lesson 01. Build from zero.
         </h3>
         <p style={{
           fontSize: 14, color: 'var(--muted)', lineHeight: 1.7,
@@ -359,7 +359,7 @@ export default function CybersecurityTrack() {
           color: '#fff', fontWeight: 700, fontSize: 13,
           borderRadius: 8, padding: '10px 24px', textDecoration: 'none',
         }}>
-          Start Module 01 →
+          Start Lesson 01 →
         </Link>
       </div>
 

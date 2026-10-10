@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Evaluation Metrics — Beyond Accuracy — Chaduvuko',
@@ -178,7 +177,6 @@ export default function EvaluationMetricsPage() {
       readTime="26–34 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="evaluation" topic="evaluation-metrics" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -208,7 +206,7 @@ export default function EvaluationMetricsPage() {
         </p>
 
         <p style={S.p}>
-          This module teaches the metrics that actually matter:
+          This lesson teaches the metrics that actually matter:
           the confusion matrix (what kind of errors is the model making?),
           precision and recall (the fundamental trade-off),
           F1 score (one number that balances both),
@@ -236,7 +234,7 @@ export default function EvaluationMetricsPage() {
           The right metric depends entirely on the cost of each type of error in your
           business context. Missing a fraud case costs more than a false alarm?
           Optimise recall. False alarms cause customers to call support constantly?
-          Optimise precision. This module shows you how to make that decision explicitly.
+          Optimise precision. This lesson shows you how to make that decision explicitly.
         </Callout>
       </div>
 
@@ -1040,8 +1038,8 @@ for name, f1, count in zip(class_names, per_class_f1, class_counts):
 
         <ErrorBlock
           error="ROC-AUC is 0.97 on validation but drops to 0.71 in production"
-          cause="There are three common causes: data leakage during training (validation set was contaminated by training statistics — Module 20), temporal leakage (training on future data to predict the past — the fraud patterns changed), or distribution shift (production transactions have a different distribution than training data — different time period, different merchant mix, different fraud patterns)."
-          fix="Audit the training pipeline for leakage using the Module 20 checklist. For time-series data (transactions always are), verify you used chronological splits: train on January–October, validate on November, test on December. Monitor the model's AUC in production with a weekly shadow evaluation against labelled samples. When production AUC drops 5+ points, trigger a retraining."
+          cause="There are three common causes: data leakage during training (validation set was contaminated by training statistics — Lesson 20), temporal leakage (training on future data to predict the past — the fraud patterns changed), or distribution shift (production transactions have a different distribution than training data — different time period, different merchant mix, different fraud patterns)."
+          fix="Audit the training pipeline for leakage using the Lesson 20 checklist. For time-series data (transactions always are), verify you used chronological splits: train on January–October, validate on November, test on December. Monitor the model's AUC in production with a weekly shadow evaluation against labelled samples. When production AUC drops 5+ points, trigger a retraining."
         />
 
         <ErrorBlock
@@ -1340,7 +1338,7 @@ for k, v in screening_week.items():
         </p>
 
         <p style={S.p}>
-          The next module — Calibration — answers this. Calibration curves,
+          The next lesson — Calibration — answers this. Calibration curves,
           reliability diagrams, and the two most common miscalibration patterns
           in gradient boosting and neural networks.
           Well-calibrated probabilities are essential for fraud scoring,
@@ -1360,7 +1358,7 @@ for k, v in screening_week.items():
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 35 · Model Evaluation
+              Next — Lesson 35 · Model Evaluation
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

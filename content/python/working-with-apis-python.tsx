@@ -77,7 +77,7 @@ export default function WorkingWithAPIsPython() {
     <LearnLayout
       title="Working with APIs in Python"
       description="The requests library, REST calls, authentication, and the error-handling patterns real production code needs when talking to the outside world."
-      section="Python — Module 37"
+      section="Python — Lesson 37"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -757,11 +757,11 @@ with requests.Session() as session:
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 38 covers unit testing with pytest — fixtures, parametrization, mocking, and testing as
+          Lesson 38 covers unit testing with pytest — fixtures, parametrization, mocking, and testing as
           a genuine habit rather than an afterthought bolted on at the end.
         </p>
         <Link href="/learn/python/unit-testing-pytest" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 38 → Unit Testing with pytest
+          Lesson 38 → Unit Testing with pytest
         </Link>
       </div>
     </LearnLayout>

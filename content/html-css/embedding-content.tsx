@@ -77,7 +77,7 @@ export default function EmbeddingContent() {
     <LearnLayout
       title="Embedding Content — iframe, embed, object"
       description="Embedding external content safely — iframe, embed, object, and the security considerations every embed introduces."
-      section="HTML & CSS — Module 12"
+      section="HTML & CSS — Lesson 12"
       readTime="30 min"
       updatedAt="August 2026"
     >
@@ -479,11 +479,11 @@ console.log(frame.contentDocument)
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 13 covers metadata and SEO fundamentals — meta tags, Open Graph, favicons, and the head
+          Lesson 13 covers metadata and SEO fundamentals — meta tags, Open Graph, favicons, and the head
           content that determines how your page is discovered and shared.
         </p>
         <Link href="/learn/html-css/metadata-seo-fundamentals" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 13 → Metadata & SEO Fundamentals
+          Lesson 13 → Metadata & SEO Fundamentals
         </Link>
       </div>
     </LearnLayout>

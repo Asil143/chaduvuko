@@ -74,7 +74,7 @@ export default function PackagesModule() {
     <LearnLayout
       title="Packages and dbt_utils"
       description="What a dbt package actually is, packages.yml syntax, dbt deps, why version pinning matters, and the dbt_utils macros worth knowing cold — surrogate_key, date_spine, pivot, and unique_combination_of_columns."
-      section="dbt — Module 11"
+      section="dbt — Lesson 11"
       readTime="55 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -99,8 +99,8 @@ export default function PackagesModule() {
         </Para>
 
         <Para>
-          This is a different distribution unit than anything covered in the earlier modules in this track.
-          A macro (covered in the previous module) is something you write once inside your own project and
+          This is a different distribution unit than anything covered in the earlier lessons in this track.
+          A macro (covered in the previous lesson) is something you write once inside your own project and
           call repeatedly within that project. A package is something someone else wrote, in an entirely
           separate project, that you install as a dependency of your project. The macros inside an installed
           package become callable from your own models exactly like your own project's macros — dbt does not
@@ -258,7 +258,7 @@ Installed 2 packages in 3.41s`}
         <SubTitle>The real risk: an unpinned or loosely-pinned package changing under you</SubTitle>
 
         <Para>
-          This is the single most important operational fact in this module. dbt deps is not a one-time
+          This is the single most important operational fact in this lesson. dbt deps is not a one-time
           action — it is re-run constantly: on every developer's laptop when they clone the project fresh,
           in CI on every pull request, and in the production job that runs your scheduled dbt build. If a
           package's version constraint is loose — a floating range with no upper bound, or a git revision
@@ -572,7 +572,7 @@ group by order_date
         <SubTitle>dbt_utils.unique_combination_of_columns — testing a composite key</SubTitle>
 
         <Para>
-          Module 09's testing content covered the built-in unique test, which only checks a single column.
+          Lesson 09's testing content covered the built-in unique test, which only checks a single column.
           A great many real primary keys are composite — no single column is unique on its own, but the
           combination of several columns together is. dbt_utils ships a generic test,
           unique_combination_of_columns, specifically for this case, applied through the same YAML tests:
@@ -793,7 +793,7 @@ models:
         <Para>
           This is the complete loop: a dependency declared with a safe version range, installed with dbt
           deps, used inside a model through its namespaced macro call, and validated with the same testing
-          patterns covered in Module 09 — no different, from the model author's point of view, than if the
+          patterns covered in Lesson 09 — no different, from the model author's point of view, than if the
           hashing logic had been written by hand inside the project's own macros/ directory.
         </Para>
       </section>

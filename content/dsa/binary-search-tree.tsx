@@ -106,7 +106,7 @@ const Edge = ({ horizontal }: { horizontal?: boolean }) => (
 export default function BSTPage() {
   return (
     <LearnLayout
-      title="Unit 12 — Binary Search Tree"
+      title="Binary Search Tree"
       description="A binary tree with one powerful rule: every left child is smaller, every right child is larger. This rule makes search, insert, and delete all run in O(log n) on a balanced tree."
       section="DSA"
       readTime="75 min"
@@ -116,9 +116,7 @@ export default function BSTPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'UNIT 12', green: true },
-          { label: 'Prerequisite: Unit 11 — Trees', green: false },
-          { label: '75 min read', green: false },
+          { label: 'Prerequisite: Lesson 12 — Trees', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -127,13 +125,13 @@ export default function BSTPage() {
       </div>
 
       <p style={{ fontSize: 16, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
-        In Unit 11 we built a binary tree and learned to traverse it. But a plain binary tree
+        In Lesson 12 we built a binary tree and learned to traverse it. But a plain binary tree
         has no organisation — elements can be placed anywhere. A Binary Search Tree adds one
         simple rule on top of everything you already know, and that rule transforms the tree
         from a random structure into a powerful, searchable, self-organised data structure.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
-        In this unit we learn the BST property, build insert and search from scratch,
+        In this lesson we learn the BST property, build insert and search from scratch,
         tackle the tricky delete operation with all three cases, and understand why
         balance matters — and what happens when a BST goes wrong.
       </p>
@@ -353,7 +351,7 @@ int main() {
       <SectionTitle>Search — O(log n) by Design</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 20 }}>
-        Searching in a BST is the same logic as binary search from Unit 10 —
+        Searching in a BST is the same logic as binary search from Lesson 11 —
         but on a tree instead of an array. At each node you either found the target,
         or the BST property tells you exactly which half to search. You never
         look at both sides. Half the tree is eliminated at every step.
@@ -954,7 +952,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Unit 13</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 14</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now know the BST completely — the property, insert, search, all three delete cases,
@@ -962,7 +960,7 @@ int main() {
         that appear in every serious technical interview.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Unit 13 we cover <strong style={{ color: 'var(--text)' }}>Heaps</strong> —
+        In Lesson 14 we cover <strong style={{ color: 'var(--text)' }}>Heaps</strong> —
         a special tree where the parent is always larger (or smaller) than its children.
         Heaps power priority queues, heap sort, and Dijkstra's shortest path algorithm.
         Unlike BSTs, heaps are always balanced — so every operation is guaranteed O(log n).
@@ -970,7 +968,7 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → UNIT 13</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 14</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Heaps — Always Balanced, Always Fast</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Min heap, max heap, heap as array, insert, delete, heap sort — in C.</div>
         </div>

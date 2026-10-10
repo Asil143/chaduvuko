@@ -77,7 +77,7 @@ export default function NestedDataStructures() {
     <LearnLayout
       title="Nested Data Structures"
       description="Lists of dicts, dicts of lists, and the real-world JSON-shaped data you will actually work with — safe access, flattening, sorting, and aggregation."
-      section="Python — Module 13"
+      section="Python — Lesson 13"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -92,8 +92,8 @@ export default function NestedDataStructures() {
           numbers, a dict of a single employee&apos;s fields. Real data almost never looks like that.
           Open the response from any REST API, read a JSON config file, or inspect a database query
           result loaded into Python, and you will find lists containing dicts, dicts containing lists,
-          and several levels of that nested inside each other. This module does not introduce any new
-          syntax — it is entirely about combining what Module 11 (dicts) and Module 12
+          and several levels of that nested inside each other. This lesson does not introduce any new
+          syntax — it is entirely about combining what Lesson 11 (dicts) and Lesson 12
           (comprehensions) already taught you to work confidently with the shapes data actually
           arrives in.
         </Para>
@@ -112,7 +112,7 @@ export default function NestedDataStructures() {
 }
 
 # The exact output shape you'd get from grouping the list above by department —
-# using the defaultdict pattern from Module 11`}</CodeBox>
+# using the defaultdict pattern from Lesson 11`}</CodeBox>
 
         <Para>
           These two shapes — a list of dicts, and a dict of lists — cover the overwhelming majority of
@@ -147,7 +147,7 @@ print(user["address"]["zip"])
 # KeyError: 'zip' — this key was simply never provided for this user`}</CodeBox>
 
         <Para>
-          Recall <code>.get()</code> from Module 11 — the same tool applies here, chained the same way
+          Recall <code>.get()</code> from Lesson 11 — the same tool applies here, chained the same way
           the brackets were chained, just swapping <code>[]</code> for <code>.get()</code> at each
           level that might be missing.
         </Para>
@@ -199,7 +199,7 @@ third_item = items[2] if len(items) > 2 else None`}</CodeBox>
 
         <Para>
           This is the shape of data you will meet constantly in real work — a list of orders, each with
-          nested customer details and a nested list of line items. Every technique in this module gets
+          nested customer details and a nested list of line items. Every technique in this lesson gets
           exercised against this one structure, so it is worth reading closely.
         </Para>
 
@@ -246,7 +246,7 @@ third_item = items[2] if len(items) > 2 else None`}</CodeBox>
 
         <Para>
           This line does real work in a single expression: <code>sum(...)</code> consumes a generator
-          expression (Module 12, Part 08) that reaches into each item&apos;s nested{' '}
+          expression (Lesson 12, Part 08) that reaches into each item&apos;s nested{' '}
           <code>qty</code> and <code>price</code> fields, multiplies them, and totals the result — no
           intermediate list ever gets built, since the total is the only thing needed.
         </Para>
@@ -311,13 +311,13 @@ by_city = sorted(customers_flat, key=lambda c: c["city"])`}</CodeBox>
       {/* ── Part 05 ── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 05 — Aggregating Over Nested Structures" />
-        <SectionTitle>Sums, Counts, and Grouping — Combining Module 11 and Module 12</SectionTitle>
+        <SectionTitle>Sums, Counts, and Grouping — Combining Lesson 11 and Lesson 12</SectionTitle>
 
         <Para>
           Aggregation — computing totals, counts, or groups from a list of nested records — is the
           single most common thing you will actually do with data shaped like the orders list above.
-          It combines exactly two tools you already have: <code>defaultdict</code> from Module 11 to
-          group, and a comprehension or generator expression from Module 12 to compute.
+          It combines exactly two tools you already have: <code>defaultdict</code> from Lesson 11 to
+          group, and a comprehension or generator expression from Lesson 12 to compute.
         </Para>
 
         <CodeBox label="Grouping order totals by customer">{`from collections import defaultdict
@@ -357,7 +357,7 @@ print(dict(orders_by_state))
           <code>int</code> for a count, <code>list</code> for a group of items), loop once over the
           nested structure, and update the accumulator. This single pattern covers the vast majority of
           real reporting and analytics code you will write with Python before ever reaching pandas
-          (Module 43), which exists largely to make exactly this kind of aggregation more concise at
+          (Lesson 43), which exists largely to make exactly this kind of aggregation more concise at
           much larger scale.
         </Para>
       </section>
@@ -371,7 +371,7 @@ print(dict(orders_by_state))
 
         <Para>
           Nested data is efficient to store and easy to build incrementally, but reports, spreadsheets,
-          and CSV files (Module 16) want <strong>flat</strong> rows — one row per record, no nesting.
+          and CSV files (Lesson 16) want <strong>flat</strong> rows — one row per record, no nesting.
           Flattening means walking the nested structure once and emitting one flat dict per "leaf" you
           actually care about.
         </Para>
@@ -402,7 +402,7 @@ for row in flat_rows[:2]:
           JSON so often need conversion in both directions.
         </Para>
 
-        <CodeBox label="As a nested comprehension — the compact version, from Module 12's Part 06">{`flat_rows = [
+        <CodeBox label="As a nested comprehension — the compact version, from Lesson 12's Part 06">{`flat_rows = [
     {
         "order_id": order["order_id"],
         "customer_name": order["customer"]["name"],
@@ -412,7 +412,7 @@ for row in flat_rows[:2]:
     for order in orders
     for item in order["items"]
 ]
-# Same two-for-clause flattening pattern from Module 12 — genuinely readable here,
+# Same two-for-clause flattening pattern from Lesson 12 — genuinely readable here,
 # since there's exactly one level of nesting and no additional filter or ternary.`}</CodeBox>
       </section>
 
@@ -427,7 +427,7 @@ for row in flat_rows[:2]:
           Nothing in Python stops you from nesting dicts and lists five or six levels deep — a dict of
           customers, each with a list of orders, each with a nested dict of items, each with a nested
           dict of discounts... it is technically valid, and you will occasionally receive data shaped
-          exactly like this from a third-party API you do not control. The question this module wants
+          exactly like this from a third-party API you do not control. The question this lesson wants
           you to ask is: once you receive data this deep, should <em>your own code</em> keep working
           with it in that exact shape?
         </Para>
@@ -673,7 +673,7 @@ for order in api_orders:
           },
           {
             q: 'Mutating a nested dict or list shared between two variables',
-            a: 'Just like the shallow-copy issue from Module 11, nested mutable structures are easy to accidentally share and mutate through more than one reference. If you need a fully independent nested copy, use copy.deepcopy() rather than a plain .copy() or list()/dict() wrap, which only copies the top level.',
+            a: 'Just like the shallow-copy issue from Lesson 11, nested mutable structures are easy to accidentally share and mutate through more than one reference. If you need a fully independent nested copy, use copy.deepcopy() rather than a plain .copy() or list()/dict() wrap, which only copies the top level.',
           },
           {
             q: 'Threading deep chained access through many different functions across the codebase',
@@ -769,7 +769,7 @@ for order in api_orders:
         'Two shapes cover most real-world data: a list of dicts (rows of records) and a dict of lists (records grouped by key). Learn to move confidently between them.',
         'Chain .get() with sensible intermediate defaults ({} for a dict, [] for a list) instead of chaining [] — real data is rarely as complete as your test data.',
         'sorted() needs an explicit key= for a list of dicts — a lambda or, idiomatically, operator.itemgetter for sorting directly by one or more existing fields.',
-        'Aggregation (sums, counts, grouping) over nested data combines collections.defaultdict from Module 11 with a comprehension or generator expression from Module 12.',
+        'Aggregation (sums, counts, grouping) over nested data combines collections.defaultdict from Lesson 11 with a comprehension or generator expression from Lesson 12.',
         'Flattening a one-to-many nested structure (like orders containing multiple items) genuinely expands the row count — it is not a lossless, row-preserving transformation.',
         'Normalize deeply nested or messy external data into a clean, flat shape in one isolated place near where it enters your program — do not thread deep chained access through the rest of the codebase.',
         'A missing field that never appeared in test data can still appear in production. Defensive access (.get() with defaults) is not paranoia — it is standard practice for any data you do not fully control.',
@@ -781,12 +781,12 @@ for order in api_orders:
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 14 goes back to strings — building directly on Module 04&apos;s foundations — to cover
+          Lesson 14 goes back to strings — building directly on Lesson 04&apos;s foundations — to cover
           parsing messy real-world text, cleaning and normalising it, and the formatting tools that
           matter once you are producing output, not just consuming it.
         </p>
         <Link href="/learn/python/string-manipulation-deep-dive" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 14 → String Manipulation Deep Dive
+          Lesson 14 → String Manipulation Deep Dive
         </Link>
       </div>
     </LearnLayout>

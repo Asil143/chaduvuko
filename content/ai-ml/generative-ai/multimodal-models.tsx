@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Multimodal Models — CLIP, LLaVA, and Vision-Language — Chaduvuko',
@@ -178,7 +177,6 @@ export default function MultimodalModelsPage() {
       readTime="36–46 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="generative-ai" topic="multimodal-models" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -1144,7 +1142,7 @@ def stage_two_verify(candidates, user_query, vlm_model):
           <p style={{ ...S.ps, marginBottom: 0 }}>
             Fluent, accurate-sounding descriptions and genuine understanding are not the same
             capability, and VLMs reliably demonstrate the gap. The hallucination failure mode
-            documented earlier in this module — confidently describing details that are not in the
+            documented earlier in this lesson — confidently describing details that are not in the
             image at all — happens precisely because the language model component is doing what
             language models do: generating plausible next tokens conditioned on the visual features
             it was given, not verifying claims against ground truth. A model can nail the general
@@ -1260,7 +1258,7 @@ def stage_two_verify(candidates, user_query, vlm_model):
         <p style={S.p}>
           You now understand the full generative AI landscape — GANs, VAEs,
           diffusion models, LLMs, fine-tuning, and multimodal models.
-          Module 67 returns to RAG with production techniques:
+          Lesson 67 returns to RAG with production techniques:
           reranking retrieved chunks for better precision, hybrid dense-sparse
           search that combines semantic and keyword retrieval, and evaluation
           frameworks that measure RAG quality systematically.
@@ -1280,7 +1278,7 @@ def stage_two_verify(candidates, user_query, vlm_model):
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 67 · Generative AI
+              Next — Lesson 67 · Generative AI
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

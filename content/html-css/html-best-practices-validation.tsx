@@ -77,7 +77,7 @@ export default function HtmlBestPracticesValidation() {
     <LearnLayout
       title="HTML Best Practices & Validation"
       description="The W3C validator, void elements, self-closing tag myths, and the conventions that separate clean markup from markup that merely renders."
-      section="HTML & CSS — Module 15"
+      section="HTML & CSS — Lesson 15"
       readTime="30 min"
       updatedAt="August 2026"
     >
@@ -115,7 +115,7 @@ export default function HtmlBestPracticesValidation() {
         </Para>
 
         <Callout type="info">
-          This module is about closing that gap — writing HTML that is not just visually correct in
+          This lesson is about closing that gap — writing HTML that is not just visually correct in
           today&apos;s Chrome, but structurally correct according to the HTML specification itself, which
           is what keeps it reliable across browsers, screen readers, crawlers, and whatever renders the
           web five years from now.
@@ -746,12 +746,12 @@ From line 18, column 1; to line 18, column 5`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 16 is the capstone of the HTML Deep Dive phase — a full, real one-page site built end to
+          Lesson 16 is the capstone of the HTML Deep Dive phase — a full, real one-page site built end to
           end, pulling together structure, semantics, media, forms, metadata, entities, and everything
-          covered in this module into one complete, valid page.
+          covered in this lesson into one complete, valid page.
         </p>
         <Link href="/learn/html-css/building-a-complete-static-page" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 16 → Building a Complete Static Page
+          Lesson 16 → Building a Complete Static Page
         </Link>
       </div>
     </LearnLayout>

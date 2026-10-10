@@ -19,8 +19,8 @@ interface Module {
   color: string
 }
 
-// Derived from the shared PYTHON_CURRICULUM (also used by PythonSectionNav on
-// lesson pages) so the module list only has one source of truth.
+// Derived from the shared PYTHON_CURRICULUM so the module list
+// only has one source of truth.
 const phaseColors: Record<number, string> = Object.fromEntries(
   PYTHON_CURRICULUM.map(s => [s.id, s.color])
 )
@@ -55,7 +55,7 @@ export default function PythonTrack() {
   return (
     <LearnLayout
       title="Python"
-      description="Zero to production Python — 46 modules, no prerequisites"
+      description="Zero to production Python — 46 lessons, no prerequisites"
       section="Python"
       readTime="Self-paced"
       updatedAt="August 2026"
@@ -101,7 +101,7 @@ export default function PythonTrack() {
         marginBottom: 36,
       }}>
         {[
-          { value: `${modules.length}`, label: 'Modules'        },
+          { value: `${modules.length}`, label: 'Lessons'        },
           { value: '6',                 label: 'Phases'          },
           { value: `${liveCount}`,      label: 'Live now'        },
           { value: `${totalTopics}+`,   label: 'Topics covered'  },
@@ -158,7 +158,7 @@ export default function PythonTrack() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              46 Modules. Foundations to Advanced.
+              46 Lessons. Foundations to Advanced.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
               Follow in order. Each module builds on the last. Every concept is
@@ -384,7 +384,7 @@ export default function PythonTrack() {
           fontSize: 14, color: 'var(--muted)', lineHeight: 1.7,
           maxWidth: 480, margin: '0 auto 24px',
         }}>
-          Start with Module 01 today. Each module is self-contained enough to read
+          Start with Lesson 01 today. Each module is self-contained enough to read
           on its own — but follow the order. Every concept earns the next one.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -393,7 +393,7 @@ export default function PythonTrack() {
             color: '#000', fontWeight: 700, fontSize: 13,
             borderRadius: 8, padding: '10px 24px', textDecoration: 'none',
           }}>
-            Start Module 01 →
+            Start Lesson 01 →
           </Link>
           <Link href="/learn/roadmap" style={{
             display: 'inline-block', background: 'var(--surface)',

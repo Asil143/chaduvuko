@@ -77,7 +77,7 @@ export default function DisplayPositioning() {
     <LearnLayout
       title="Display & Positioning"
       description="display: block/inline/inline-block in real rendered behavior, position: static/relative/absolute/fixed/sticky and how each containing block is determined, and what genuinely creates a stacking context."
-      section="HTML & CSS — Module 21"
+      section="HTML & CSS — Lesson 21"
       readTime="45 min"
       updatedAt="August 2026"
     >
@@ -248,7 +248,7 @@ a horizontal row of equal-sized clickable elements.
 
 <!-- Fix 3 (the real modern answer): don't use inline-block for this at all —
      use display: flex on the parent, which has no whitespace-gap issue
-     and is covered in full starting in Module 23 -->`}</CodeBox>
+     and is covered in full starting in Lesson 23 -->`}</CodeBox>
 
         <Callout type="tip">
           In real production code today, Flexbox has almost entirely replaced{' '}
@@ -909,12 +909,12 @@ the SAME level, and 9999 correctly wins.
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 22 moves from structure to visual polish — background properties and the shorthand,
+          Lesson 22 moves from structure to visual polish — background properties and the shorthand,
           linear and radial gradients, border-radius (including elliptical corners), and stacking multiple
           box-shadows for real depth.
         </p>
         <Link href="/learn/html-css/backgrounds-borders" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 22 → Backgrounds & Borders
+          Lesson 22 → Backgrounds & Borders
         </Link>
       </div>
     </LearnLayout>

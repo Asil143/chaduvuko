@@ -77,7 +77,7 @@ export default function CssAccessibilityBestPractices() {
     <LearnLayout
       title="CSS Accessibility Best Practices"
       description="Focus states, color contrast, prefers-reduced-motion, and the CSS-level decisions that make or break real accessibility."
-      section="HTML & CSS — Module 38"
+      section="HTML & CSS — Lesson 38"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -101,7 +101,7 @@ export default function CssAccessibilityBestPractices() {
         </Para>
 
         <Para>
-          This module covers four specific, concrete CSS-level responsibilities: focus states, color
+          This lesson covers four specific, concrete CSS-level responsibilities: focus states, color
           contrast, motion preferences, and touch-aware hover design. Each one is something a design or
           engineering team can get quietly, invisibly wrong while shipping a page that looks completely
           fine to the person who built it — because the person who built it was not the person the mistake
@@ -109,7 +109,7 @@ export default function CssAccessibilityBestPractices() {
         </Para>
 
         <Callout type="info">
-          None of what follows requires assistive technology to verify — every check in this module can
+          None of what follows requires assistive technology to verify — every check in this lesson can
           be done with nothing but your keyboard, DevTools, and (for contrast) a browser extension or
           online tool. That is deliberate: these are baseline checks every front-end engineer should be
           able to run themselves, not specialist audits that only an accessibility team can perform.
@@ -475,7 +475,7 @@ Level AAA (a stricter standard, not required for general compliance):
           on afterward; they are baseline requirements the component has to meet from the start.
         </Para>
 
-        <CodeBox label="A single accessible interactive component, combining every technique in this module">{`<button class="info-btn" aria-expanded="false" aria-controls="shipping-info">
+        <CodeBox label="A single accessible interactive component, combining every technique in this lesson">{`<button class="info-btn" aria-expanded="false" aria-controls="shipping-info">
   Shipping details
 </button>
 <div id="shipping-info" class="info-panel" hidden>
@@ -845,12 +845,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 39 moves from accessibility to reliability — vendor prefixes, feature detection with{' '}
+          Lesson 39 moves from accessibility to reliability — vendor prefixes, feature detection with{' '}
           <code>@supports</code>, real DevTools debugging workflows, and a full worked investigation of a
           bug that only shows up in Safari.
         </p>
         <Link href="/learn/html-css/cross-browser-compatibility-debugging" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 39 → Cross-Browser Compatibility & Debugging
+          Lesson 39 → Cross-Browser Compatibility & Debugging
         </Link>
       </div>
     </LearnLayout>

@@ -28,7 +28,7 @@ export default function SQLTrackPage() {
   return (
     <LearnLayout
       title="SQL — Zero to Advanced"
-      description="From your first SELECT to window functions and query optimisation — 62 modules, no prerequisites"
+      description="From your first SELECT to window functions and query optimisation — 62 lessons, no prerequisites"
       section="SQL"
       readTime="Self-paced"
       updatedAt="April 2026"
@@ -74,7 +74,7 @@ export default function SQLTrackPage() {
         marginBottom: 36,
       }}>
         {[
-          { value: `${allModules.length}`, label: 'Modules'       },
+          { value: `${allModules.length}`, label: 'Lessons'       },
           { value: '13',                   label: 'Sections'       },
           { value: `${totalTopics}+`,      label: 'Topics covered' },
           { value: `${totalHours}h`,       label: 'Total content'  },
@@ -105,7 +105,7 @@ export default function SQLTrackPage() {
       }}>
         <strong style={{ color: '#06b6d4' }}>This track teaches SQL from first principles.</strong>{' '}
         Every concept is introduced with visual examples, practiced immediately in the browser,
-        and connected to a real job context. You write real queries from Module 01 — no setup,
+        and connected to a real job context. You write real queries from Lesson 01 — no setup,
         no install, no account required.
       </div>
 
@@ -117,9 +117,9 @@ export default function SQLTrackPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
           {[
             { icon: '▶', title: 'Live SQL Playground',   desc: 'Run real queries in your browser — no install, no account. Uses DuckDB-WASM with the FreshCart database preloaded.',               color: '#06b6d4', href: '/learn/sql/playground' },
-            { icon: '◎', title: 'Try It Challenges',     desc: "Every module ends with a practice question. Reveal the answer and explanation when you're ready.",                                  color: '#10b981', href: '/learn/sql/what-is-a-database' },
+            { icon: '◎', title: 'Try It Challenges',     desc: "Every lesson ends with a practice question. Reveal the answer and explanation when you're ready.",                                  color: '#10b981', href: '/learn/sql/what-is-a-database' },
             { icon: '⊞', title: 'Visual JOIN Diagrams',  desc: "Row-matching visualizations that make joins click — switch between INNER, LEFT, RIGHT, and FULL OUTER live.",                      color: '#8b5cf6', href: '/learn/sql/joins' },
-            { icon: '≡', title: 'SQL Cheat Sheet',       desc: "All 62 modules' syntax on one printable page. Bookmark it for interviews.",                                                        color: '#f97316', href: '/learn/sql/cheatsheet' },
+            { icon: '≡', title: 'SQL Cheat Sheet',       desc: "All 62 lessons' syntax on one printable page. Bookmark it for interviews.",                                                        color: '#f97316', href: '/learn/sql/cheatsheet' },
           ].map(f => (
             <div key={f.title} style={{
               background: 'var(--surface)',
@@ -202,11 +202,11 @@ export default function SQLTrackPage() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              62 Modules. Zero to Advanced.
+              62 Lessons. Zero to Advanced.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
-              Follow in order. Each module builds on the last. Module 01 assumes you know nothing —
-              Module 62 ends with real projects and 50 interview questions.
+              Follow in order. Each module builds on the last. Lesson 01 assumes you know nothing —
+              Lesson 62 ends with real projects and 50 interview questions.
             </p>
           </div>
 
@@ -431,7 +431,7 @@ export default function SQLTrackPage() {
           color: 'var(--text)', fontFamily: 'var(--font-display)',
           letterSpacing: '-1px', marginBottom: 12,
         }}>
-          Start with Module 01. No setup required.
+          Start with Lesson 01. No setup required.
         </h3>
         <p style={{
           fontSize: 14, color: 'var(--muted)', lineHeight: 1.7,
@@ -446,7 +446,7 @@ export default function SQLTrackPage() {
             color: '#000', fontWeight: 700, fontSize: 13,
             borderRadius: 8, padding: '10px 24px', textDecoration: 'none',
           }}>
-            Start Module 01 →
+            Start Lesson 01 →
           </Link>
           <Link href="/learn/sql/cheatsheet" style={{
             display: 'inline-block', background: 'var(--surface)',

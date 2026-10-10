@@ -74,7 +74,7 @@ export default function StreamProcessingKafkaStreams() {
     <LearnLayout
       title="Stream Processing and Kafka Streams"
       description="What stream processing actually means, Kafka Streams as a client library instead of a separate cluster, KStream vs KTable, stateless vs stateful operations, windowing and event-time, KStream-KTable and KStream-KStream joins, exactly-once processing, and a worked real-time fraud-detection example."
-      section="Apache Kafka — Module 14"
+      section="Apache Kafka — Lesson 14"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -133,7 +133,7 @@ export default function StreamProcessingKafkaStreams() {
           The conceptual difference is not merely speed. A batch job can always look at "everything," so
           questions like sorting, global aggregation, or exact deduplication across the whole dataset are
           straightforward. A stream processing job never has "everything" — it only ever has what has
-          arrived so far — so every aggregation, join, and window in this module exists specifically to
+          arrived so far — so every aggregation, join, and window in this lesson exists specifically to
           answer well-defined questions despite that constraint, which is the recurring theme of this
           whole module.
         </Callout>
@@ -146,7 +146,7 @@ export default function StreamProcessingKafkaStreams() {
         <SectionTitle>Kafka Streams Is a Client Library, Not a Separate Cluster</SectionTitle>
         <Para>
           This is the single most important architectural fact about Kafka Streams, and the thing that
-          distinguishes it from both Kafka Connect (Module 13) and from external stream processing
+          distinguishes it from both Kafka Connect (Lesson 13) and from external stream processing
           frameworks like Apache Flink or Spark Structured Streaming. Kafka Streams is a Java library that
           you add as a dependency to your own application. There is no separate "Kafka Streams cluster" to
           deploy or operate — a Kafka Streams application is simply your own JVM process, running your own
@@ -177,7 +177,7 @@ Kafka Streams:
           on-call practices your organization already uses for any other service apply directly. Scaling
           out a Kafka Streams application means running more instances of your own application, each of
           which automatically claims a share of the input topic's partitions, using the same consumer
-          group rebalancing protocol covered in Module 03.
+          group rebalancing protocol covered in Lesson 03.
         </Para>
         <Table
           headers={['Property', 'Kafka Streams']}
@@ -520,7 +520,7 @@ With exactly_once_v2:
           extend to a side effect outside that boundary — calling an external API, or writing to a database
           from inside a Kafka Streams processor, is not covered by the transaction and can still be executed
           more than once on reprocessing. That kind of external side effect needs its own idempotency design,
-          exactly as covered for sink connectors in Module 13.
+          exactly as covered for sink connectors in Lesson 13.
         </Callout>
       </section>
 
@@ -650,7 +650,7 @@ assertEquals(9, alert.getTransactionCount());`}
         <Para>
           Kafka Streams divides a topology's work into <strong>stream tasks</strong>, where the number of
           tasks is determined by the number of partitions on the input topics — the same partition-driven
-          parallelism ceiling covered for consumer groups in Module 03 applies directly here, because a
+          parallelism ceiling covered for consumer groups in Lesson 03 applies directly here, because a
           Kafka Streams application's underlying mechanism is still ordinary consumer group partition
           assignment. A topology reading from an 8-partition topic has, at most, 8 stream tasks, and running
           more than 8 application instances means some instances sit idle with no tasks assigned, exactly as
@@ -778,7 +778,7 @@ transactions
           rows={[
             ['process-latency-avg / process-rate', 'How long the topology takes to process each record, and how many records per second it is handling — the stream-processing equivalent of request latency and throughput'],
             ['record-lateness-avg / record-lateness-max', 'How far behind event-time the records actually being processed are — directly relevant to whether Part 05\'s grace period is set appropriately'],
-            ['rebalance-total / rebalance-rate-per-hour', 'How often the underlying consumer group is rebalancing — frequent rebalances mean brief state-store unavailability windows, the same diagnostic signal covered for ordinary consumer groups in Module 03'],
+            ['rebalance-total / rebalance-rate-per-hour', 'How often the underlying consumer group is rebalancing — frequent rebalances mean brief state-store unavailability windows, the same diagnostic signal covered for ordinary consumer groups in Lesson 03'],
             ['restore-consumer records consumed (during startup)', 'How much changelog data is currently being replayed to rebuild state stores after a restart or rebalance — directly explains the "why is my count temporarily low" pattern from the Error Library'],
             ['commit-latency-avg', 'Under exactly_once_v2 (Part 07), how long transaction commits are taking — a rising trend points at transaction coordinator load or broker-side contention'],
           ]}
@@ -1070,7 +1070,7 @@ It's also why stateful operations in Kafka Streams need durable, recoverable loc
 
 Kafka Connect, by contrast, runs its own worker processes that you submit connector configurations to via REST — the connector logic runs inside Connect's infrastructure, not your application. An external engine like Flink or Spark Structured Streaming goes further still: you submit a job to a genuinely separate cluster (JobManager/TaskManagers, or a Spark cluster) that someone operates independently of any individual application.
 
-The practical consequence is operational: if your team already knows how to deploy and scale a normal service, and your processing logic only needs to read from and write to Kafka topics, Kafka Streams usually has the lowest operational overhead, because there's no new cluster type to learn or maintain — scaling out is just running more instances of your application, and partition assignment rebalances across them using the same consumer group protocol covered in Module 03.`,
+The practical consequence is operational: if your team already knows how to deploy and scale a normal service, and your processing logic only needs to read from and write to Kafka topics, Kafka Streams usually has the lowest operational overhead, because there's no new cluster type to learn or maintain — scaling out is just running more instances of your application, and partition assignment rebalances across them using the same consumer group protocol covered in Lesson 03.`,
           },
           {
             q: 'Q3. When would you model a Kafka topic as a KStream versus a KTable, and what changes about a join depending on which one you use?',

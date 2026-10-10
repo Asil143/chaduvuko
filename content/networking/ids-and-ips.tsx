@@ -378,7 +378,7 @@ export default function IdsAndIpsPage() {
     <LearnLayout
       title="IDS and IPS"
       description="From signature matching to machine learning anomaly detection: how intrusion detection and prevention systems work, why they alert on everything and nothing, and how to make them useful."
-      section="Networking Fundamentals — Module 35"
+      section="Networking Fundamentals — Lesson 35"
       readTime="28–38 min"
       updatedAt="May 2026"
     >

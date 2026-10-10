@@ -74,7 +74,7 @@ export default function ProjectStructure() {
     <LearnLayout
       title="Project Structure and Layering"
       description="Staging, intermediate, and marts in real depth — one staging model per source, business logic isolated in intermediate, domain-organized marts, naming conventions, and how a project stays maintainable past 200 models."
-      section="dbt — Module 16"
+      section="dbt — Lesson 16"
       readTime="65 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -89,7 +89,7 @@ export default function ProjectStructure() {
         <SectionTitle>Layering Is a Maintenance Strategy, Not a Folder Convention</SectionTitle>
 
         <Para>
-          An earlier module introduced staging, intermediate, and marts as a beginner-level convention:
+          An earlier lesson introduced staging, intermediate, and marts as a beginner-level convention:
           staging cleans, intermediate combines, marts finalize. That description is correct as far as it
           goes, but it undersells what the layering is actually for. Layering is not primarily about tidy
           folders — it is a deliberate strategy for containing the blast radius of change in a project that
@@ -98,7 +98,7 @@ export default function ProjectStructure() {
         </Para>
 
         <Para>
-          The question this module is really answering is: when something upstream breaks — a column gets
+          The question this lesson is really answering is: when something upstream breaks — a column gets
           renamed in a source system, a business rule changes, a new join condition is discovered — how many
           files does a person have to touch, and how confident can they be that they found all of them? A
           well-layered project has a precise, small, predictable answer to that question for almost any kind
@@ -108,18 +108,18 @@ export default function ProjectStructure() {
 
         <HighlightBox>
           <Para>
-            <strong>The organizing principle behind everything in this module:</strong> every model should
+            <strong>The organizing principle behind everything in this lesson:</strong> every model should
             have exactly one reason to change. A staging model changes only when its one raw source table's
             shape changes. An intermediate model changes only when the specific business logic it encodes
             changes. A mart changes only when the business-facing shape stakeholders consume needs to
             change. When a model has two or more of those reasons braided together, a change to one reason
             forces you to re-review logic that had nothing to do with the change — and that is exactly the
-            situation this module's layering rules exist to prevent.
+            situation this lesson's layering rules exist to prevent.
           </Para>
         </HighlightBox>
 
         <Para>
-          This module assumes you're comfortable with the mechanics of a model — <code>ref()</code>,
+          This lesson assumes you're comfortable with the mechanics of a model — <code>ref()</code>,
           <code>source()</code>, materializations, the <code>config()</code> block — covered earlier in this
           track. What follows goes deep on the one topic those modules only sketched: exactly what belongs in
           each layer, why the boundaries are drawn where they are, how to name things so a project stays
@@ -702,7 +702,7 @@ stg_recurly__subscriptions.sql   -- from a legacy Recurly billing system
         <SectionTitle>A Realistic Multi-Source Project, End to End</SectionTitle>
 
         <Para>
-          Bringing every rule in this module together: a project ingesting from three real source
+          Bringing every rule in this lesson together: a project ingesting from three real source
           systems — Stripe for payments, a Postgres application database for orders and customers, and a
           marketing platform for campaign and spend data — flowing through staging, into intermediate, and
           landing in a finance mart and a marketing mart.

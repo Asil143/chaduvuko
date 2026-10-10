@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout  } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Scikit-learn Interface — Chaduvuko',
@@ -215,7 +214,6 @@ export default function SklearnInterfacePage() {
       readTime="30–40 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="programming" topic="sklearn-interface" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -245,7 +243,7 @@ export default function SklearnInterfacePage() {
         </p>
 
         <p style={S.p}>
-          This module teaches you that pattern thoroughly. Once you understand it,
+          This lesson teaches you that pattern thoroughly. Once you understand it,
           you can use any of sklearn's 200+ algorithms without reading the docs for each one.
           You will also learn Pipeline and ColumnTransformer — the two tools that
           turn a messy sequence of preprocessing steps into a clean, production-ready,
@@ -270,7 +268,7 @@ export default function SklearnInterfacePage() {
         </AnalogyBox>
 
         <Callout type="tip">
-          This module is intentionally practical. You will not just read about the API —
+          This lesson is intentionally practical. You will not just read about the API —
           you will use it on the DoorDash delivery time dataset with four different algorithms,
           switching between them by changing one line each time.
           By the end, switching algorithms will feel completely natural.
@@ -1368,7 +1366,7 @@ prediction = loaded_pipeline.predict(new_order_df)`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 15 · Data Engineering for ML
+              Next — Lesson 15 · Data Engineering for ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

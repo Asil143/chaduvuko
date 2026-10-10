@@ -243,7 +243,7 @@ export default function IPv6Module() {
     <LearnLayout
       title="IPv6 — The Next Generation Internet Protocol"
       description="IPv6 replaces IPv4's exhausted 32-bit address space with 128 bits — enough addresses for every atom on Earth. But it also redesigns neighbor discovery, eliminates broadcast, and enables SLAAC. The future of networking is already here."
-      section="Networking Fundamentals — Module 15"
+      section="Networking Fundamentals — Lesson 15"
       readTime="22–30 min"
       updatedAt="May 2026"
     >

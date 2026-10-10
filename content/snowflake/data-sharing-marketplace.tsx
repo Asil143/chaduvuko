@@ -5,7 +5,7 @@ export default function DataSharingMarketplace() {
     <LearnLayout
       title="Data Sharing and Marketplace"
       description="Secure Data Sharing, shares, reader accounts, the Snowflake Marketplace, data clean rooms, governance over shared objects, and a worked provider/consumer walkthrough."
-      section="Snowflake — Module 16"
+      section="Snowflake — Lesson 16"
       readTime="65 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -81,7 +81,7 @@ Compute cost: provider's ETL           Compute cost: consumer's own warehouse`}
         <Para>
           The governance column is the one people underestimate. When you hand someone a file, your control
           ends at the handoff. When you share through Snowflake, your control does not end — it is why Part 09
-          of this module, on governance, is one of the most important sections here.
+          of this lesson, on governance, is one of the most important sections here.
         </Para>
       </section>
 

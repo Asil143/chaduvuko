@@ -90,7 +90,7 @@ export default function IndexStrategies() {
     <LearnLayout
       title="Index Strategies"
       description="Production index design — composite column order, covering indexes, partial indexes, functional indexes, index-only scans, the write cost tradeoff, and the complete decision framework for when to add or drop an index"
-      section="SQL — Module 58"
+      section="SQL — Lesson 58"
       readTime="14–20 min"
       updatedAt="April 2026"
     >
@@ -98,7 +98,7 @@ export default function IndexStrategies() {
       {/* ── PART 01 ── */}
       <Part n="01" title="Why Index Strategy Matters" />
 
-      <P>Module 46 covered the mechanics of indexes — B-tree structure, CREATE INDEX syntax, and basic types. This module goes deeper into strategy: how to design indexes that serve your actual query workload, how to avoid the common traps that make indexes useless or harmful, and how to audit and maintain indexes as a production database evolves.</P>
+      <P>Lesson 46 covered the mechanics of indexes — B-tree structure, CREATE INDEX syntax, and basic types. This lesson goes deeper into strategy: how to design indexes that serve your actual query workload, how to avoid the common traps that make indexes useless or harmful, and how to audit and maintain indexes as a production database evolves.</P>
 
       <P>Most databases are under-indexed in some places and over-indexed in others simultaneously. Under-indexed queries do full table scans. Over-indexed tables pay unnecessary write overhead on every INSERT, UPDATE, and DELETE. The goal is a minimal set of indexes that covers the query workload precisely — nothing missing, nothing redundant.</P>
 
@@ -635,7 +635,7 @@ ORDER BY tbl_name, name;
         showSchema={false}
       />
 
-      <P>Index <Hl>usage</Hl> counts are a different story. PostgreSQL's <Hl>pg_stat_user_indexes.idx_scan</Hl> tracks exactly how many times each index has been used since the last statistics reset — the number the rest of this module's "drop unused indexes" workflow depends on. SQLite keeps no such counter anywhere queryable: it does not track per-index scan counts, in sql.js or otherwise. There is no working SQLite rewrite for this one — it stays PostgreSQL-only, shown here for reference.</P>
+      <P>Index <Hl>usage</Hl> counts are a different story. PostgreSQL's <Hl>pg_stat_user_indexes.idx_scan</Hl> tracks exactly how many times each index has been used since the last statistics reset — the number the rest of this lesson's "drop unused indexes" workflow depends on. SQLite keeps no such counter anywhere queryable: it does not track per-index scan counts, in sql.js or otherwise. There is no working SQLite rewrite for this one — it stays PostgreSQL-only, shown here for reference.</P>
 
       <CodeBlock
         label="PostgreSQL only — index usage stats via pg_stat_user_indexes (no SQLite equivalent, not runnable here)"
@@ -1038,10 +1038,10 @@ ORDER BY pg_relation_size(indexrelid) DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 59</strong>, you learn Query Best Practices — the full set of SQL writing habits that separate beginner queries from production-grade code: sargability, NULL handling, anti-patterns, and writing SQL that stays fast as data grows.
+          In <strong>Lesson 59</strong>, you learn Query Best Practices — the full set of SQL writing habits that separate beginner queries from production-grade code: sargability, NULL handling, anti-patterns, and writing SQL that stays fast as data grows.
         </p>
         <Link href="/learn/sql/query-best-practices" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 59 → Query Best Practices
+          Lesson 59 → Query Best Practices
         </Link>
       </div>
 

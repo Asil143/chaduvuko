@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Diffusion Models and Stable Diffusion — Chaduvuko',
@@ -178,7 +177,6 @@ export default function DiffusionModelsPage() {
       readTime="40–52 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="generative-ai" topic="diffusion-models" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -233,7 +231,7 @@ export default function DiffusionModelsPage() {
         </AnalogyBox>
 
         <Callout type="tip">
-          This module covers DDPM (the foundational algorithm) from scratch,
+          This lesson covers DDPM (the foundational algorithm) from scratch,
           then shows practical usage with the Diffusers library.
           Install: <span style={S.code as React.CSSProperties}>pip install diffusers transformers accelerate</span>.
           Running Stable Diffusion requires a GPU with ≥4GB VRAM for fp16
@@ -836,7 +834,7 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
           brand-specific visual language, you need to fine-tune.
           Two efficient methods: DreamBooth fine-tunes the entire U-Net
           on 3–30 images of a specific concept and teaches the model a
-          new token that refers to it. LoRA (Module 51) fine-tunes only
+          new token that refers to it. LoRA (Lesson 51) fine-tunes only
           0.5% of the U-Net parameters — achieves similar results
           with 10× less memory and training time.
         </p>
@@ -879,7 +877,7 @@ CLASS_PROMPT    = 'a photo of a denim jacket'
 
 # ── LoRA fine-tuning for Stable Diffusion ─────────────────────────────
 print("""
-LoRA for SD: same concept as Module 51 but applied to the U-Net.
+LoRA for SD: same concept as Lesson 51 but applied to the U-Net.
 Trains only the low-rank delta matrices in attention layers.
 Result: 50-100MB .safetensors file vs 4GB full fine-tuned model.
 
@@ -1212,7 +1210,7 @@ Weakest but fastest — good for simple style transfer.
           Diffusion models generate images by learning to reverse a noising
           process. LLMs generate text by learning to predict the next token —
           but at a scale and with emergent capabilities that make them
-          qualitatively different from anything before. Module 64 covers
+          qualitatively different from anything before. Lesson 64 covers
           how GPT, Claude, and Gemini are built: next-token pretraining at scale,
           RLHF alignment, DPO, instruction tuning, and the scaling laws
           that predict capability from compute.
@@ -1230,7 +1228,7 @@ Weakest but fastest — good for simple style transfer.
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 64 · Generative AI
+              Next — Lesson 64 · Generative AI
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

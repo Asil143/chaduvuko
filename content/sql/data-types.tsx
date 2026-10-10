@@ -108,7 +108,7 @@ export default function DataTypes() {
     <LearnLayout
       title="SQL Data Types"
       description="What types exist, which to choose for each use case, how types affect storage and performance, and how type mismatches cause silent bugs in calculations and comparisons"
-      section="SQL — Module 18"
+      section="SQL — Lesson 18"
       readTime="12–16 min"
       updatedAt="April 2026"
     >
@@ -148,7 +148,7 @@ export default function DataTypes() {
         ))}
       </div>
 
-      <P>In FreshCart's schema, every type choice was deliberate. unit_price is DECIMAL(10,2) — not FLOAT — because money must be exact. customer_id is INTEGER — not VARCHAR — because IDs are numbers used in arithmetic and joins. order_date is DATE — not TIMESTAMP — because FreshCart only needs day precision. This module explains every choice like that.</P>
+      <P>In FreshCart's schema, every type choice was deliberate. unit_price is DECIMAL(10,2) — not FLOAT — because money must be exact. customer_id is INTEGER — not VARCHAR — because IDs are numbers used in arithmetic and joins. order_date is DATE — not TIMESTAMP — because FreshCart only needs day precision. This lesson explains every choice like that.</P>
 
       <HR />
 
@@ -1061,10 +1061,10 @@ ORDER BY cent_component DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 18</strong>, you learn CREATE TABLE — how to define a table from scratch, set column types, add constraints, and design schemas that enforce data quality at the database level.
+          In <strong>Lesson 18</strong>, you learn CREATE TABLE — how to define a table from scratch, set column types, add constraints, and design schemas that enforce data quality at the database level.
         </p>
         <Link href="/learn/sql/create-table" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 18 → CREATE TABLE
+          Lesson 18 → CREATE TABLE
         </Link>
       </div>
 

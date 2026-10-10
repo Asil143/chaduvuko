@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Agents and Tool Use — Building Autonomous AI Systems — Chaduvuko',
@@ -157,14 +156,13 @@ export default function AgentsToolUsePage() {
       readTime="36–46 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="generative-ai" topic="agents-tool-use" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
-        <span style={S.tag}>Before any code — what agents are beyond Module 54</span>
+        <span style={S.tag}>Before any code — what agents are beyond Lesson 54</span>
         <h2 style={S.h2}>
-          Module 54 built a toy ReAct agent with text parsing.
-          This module builds production agents — structured tool calling,
+          Lesson 54 built a toy ReAct agent with text parsing.
+          This lesson builds production agents — structured tool calling,
           persistent memory, failure recovery, and the architectural patterns
           top tech teams actually ship.
         </h2>
@@ -224,7 +222,7 @@ export default function AgentsToolUsePage() {
         <h2 style={S.h2}>Structured tool calling — JSON schemas, not text parsing</h2>
 
         <p style={S.p}>
-          Module 54 parsed tool calls by extracting text between
+          Lesson 54 parsed tool calls by extracting text between
           "Action:" and "(" with regex. This breaks constantly — the LLM
           formats output slightly differently each run, adds punctuation,
           or skips the format entirely. Structured tool calling solves this:
@@ -602,7 +600,7 @@ for query in test_queries:
           the agent knows what was said earlier in this conversation.
           Episodic memory stores summaries of past sessions — the agent knows
           this merchant called last week about the same issue.
-          Semantic memory is the knowledge base (RAG from Module 67) —
+          Semantic memory is the knowledge base (RAG from Lesson 67) —
           the agent knows Stripe's policies and documentation.
         </p>
 
@@ -692,7 +690,7 @@ class EpisodicMemory:
 
 # ── Memory 3: Semantic memory (knowledge base) ────────────────────────
 class SemanticMemory:
-    """Vector store for Stripe documentation — same as RAG Module 67."""
+    """Vector store for Stripe documentation — same as RAG Lesson 67."""
     def __init__(self):
         self.chunks = []
         self.index  = None
@@ -1194,7 +1192,7 @@ def gate_irreversible_action(tool_name: str, args: dict,
 
         <ConceptBox title="Myth: An 'agent' is fundamentally different technology from function calling" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            Mechanically, an agent is the same structured tool-calling API this module opened with,
+            Mechanically, an agent is the same structured tool-calling API this lesson opened with,
             called repeatedly inside a loop that feeds each tool's result back in as context for the
             next decision. Nothing about the underlying model changes between 'a chatbot that calls
             one function' and 'an agent that resolves an eight-step dispute.' What actually
@@ -1233,7 +1231,7 @@ def gate_irreversible_action(tool_name: str, args: dict,
 
         <ConceptBox title="Myth: Hashing tool calls and capping max_calls fully solves the infinite-loop risk" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            Identical-call loop detection, shown earlier in this module, only catches the exact same
+            Identical-call loop detection, shown earlier in this lesson, only catches the exact same
             (tool, arguments) pair repeating — it does nothing about a semantic loop, where the agent
             cycles through slightly different but equally unproductive calls (searching the knowledge
             base with five different phrasings of the same question, for instance). A hard max_calls

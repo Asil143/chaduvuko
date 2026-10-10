@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Encoding Categorical Features — Chaduvuko',
@@ -175,7 +174,6 @@ export default function EncodingCategoricalFeaturesPage() {
       readTime="36–45 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='data-engineering' topic='encoding-categorical-features' />
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -206,7 +204,7 @@ export default function EncodingCategoricalFeaturesPage() {
         </p>
 
         <p style={S.p}>
-          This module teaches every encoding strategy used in production ML,
+          This lesson teaches every encoding strategy used in production ML,
           what each one tells the model, and the exact situations where each
           is the right choice.
         </p>
@@ -214,7 +212,7 @@ export default function EncodingCategoricalFeaturesPage() {
         <HBox color="#1D9E75">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module covers:
+              What this lesson covers:
             </span>
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -243,7 +241,7 @@ export default function EncodingCategoricalFeaturesPage() {
         </HBox>
 
         <Callout type="tip">
-          Target encoding is the one technique in this module where leakage
+          Target encoding is the one technique in this lesson where leakage
           is a real risk. Every other encoder is computed from the input features
           alone — no target required. For target encoding, always use cross-fold
           encoding or sklearn's built-in{' '}
@@ -257,7 +255,7 @@ export default function EncodingCategoricalFeaturesPage() {
       {/* ══ SECTION 2 — SETUP ══════════════════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Setup</span>
-        <h2 style={S.h2}>The dataset used throughout this module</h2>
+        <h2 style={S.h2}>The dataset used throughout this lesson</h2>
 
         <CodeBlock code={`import pandas as pd
 import numpy as np
@@ -469,7 +467,7 @@ print(f"\nSample encoding: {ord_enc.transform(sample).flatten()}")
 # time_slot: 'breakfast', 'lunch', 'evening', 'dinner'
 # These have a time-of-day order but the ML relationship to delivery
 # time is NOT linear — dinner might be worse than evening.
-# For time_slot: use one-hot OR cyclical encoding (from Module 17).
+# For time_slot: use one-hot OR cyclical encoding (from Lesson 17).
 # Only use ordinal for features where the ordering is the SIGNAL.
 
 # ── Ordinal encoding for tree models ─────────────────────────────────
@@ -1236,7 +1234,7 @@ print(f"  Unique values remaining: {X_train_coll['restaurant'].nunique()}")`} />
         <ErrorBlock
           error="Target encoding produces worse CV score than one-hot but better training score"
           cause="Classic leakage signature. You computed the target mean encoding on the full training set before cross-validation folds were split. Each training row's encoding includes its own target value — the model memorises training labels instead of learning patterns."
-          fix="Use sklearn's TargetEncoder (sklearn >= 1.3) which handles cross-fold encoding internally. Or implement the cross-fold encoding shown in this module where each row's encoding uses only data from other folds. Never compute target means on the full dataset before CV."
+          fix="Use sklearn's TargetEncoder (sklearn >= 1.3) which handles cross-fold encoding internally. Or implement the cross-fold encoding shown in this lesson where each row's encoding uses only data from other folds. Never compute target means on the full dataset before CV."
         />
 
         <ErrorBlock
@@ -1260,9 +1258,9 @@ print(f"  Unique values remaining: {X_train_coll['restaurant'].nunique()}")`} />
         <h2 style={S.h2}>Encoding decisions at scale — cardinality growth and unseen categories</h2>
 
         <p style={S.p}>
-          Every encoding technique in this module assumes a fixed, known set of categories.
+          Every encoding technique in this lesson assumes a fixed, known set of categories.
           Production categorical features rarely stay fixed. A restaurant column that had 8
-          values in this module's dataset looks very different as
+          values in this lesson's dataset looks very different as
           <span style={S.code as React.CSSProperties}> restaurant_id</span> in a real
           delivery platform — tens of thousands of restaurants at launch, growing by hundreds
           a week as the platform expands into new cities. The encoding choice that worked
@@ -1315,7 +1313,7 @@ pipeline = Pipeline([
 pipeline.fit(X_train, y_train)
 
 # The fitted encoder's category list is frozen the moment fit() returns —
-# persist encoder + model together, exactly like the scaler in Module 12
+# persist encoder + model together, exactly like the scaler in Lesson 12
 joblib.dump(pipeline, 'delivery_model_v9.joblib')
 
 # ── Six months later — the platform has added 40 new restaurants ──────
@@ -1511,9 +1509,9 @@ new_restaurant_order = [[3.2, 7.0, 15.0, 210.0, 'Cloud Kitchen 47', 'Austin', 'l
         </p>
 
         <p style={S.p}>
-          Module 19 is the capstone of the Data Engineering section —
+          Lesson 19 is the capstone of the Data Engineering section —
           Feature Engineering and the sklearn Pipeline. It combines everything
-          from Modules 12–15 into a single reusable preprocessing and modelling
+          from Lessons 12–15 into a single reusable preprocessing and modelling
           pipeline, adds interaction features and transformations,
           and shows the complete workflow from raw DataFrame to trained model
           ready for cross-validation.
@@ -1531,7 +1529,7 @@ new_restaurant_order = [[3.2, 7.0, 15.0, 210.0, 'Cloud Kitchen 47', 'Austin', 'l
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 19 · Data Engineering for ML
+              Next — Lesson 19 · Data Engineering for ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

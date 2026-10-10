@@ -305,7 +305,7 @@ export default function FtpAndSftpPage() {
     <LearnLayout
       title="FTP, FTPS, and SFTP"
       description="From the original two-channel design of FTP to the encrypted simplicity of SFTP: how file transfer protocols work, why FTP is dangerous, and what to use in 2026."
-      section="Networking Fundamentals — Module 29"
+      section="Networking Fundamentals — Lesson 29"
       readTime="25–35 min"
       updatedAt="May 2026"
     >

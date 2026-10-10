@@ -52,7 +52,7 @@ export default function Module35() {
     <LearnLayout
       title="DevSecOps — Security Embedded in the Pipeline"
       description="Embed security into every phase of the SDLC without slowing delivery. Build SAST/DAST/SCA gates, secure CI/CD pipelines, scan infrastructure-as-code, manage secrets, and build a security culture where developers own security outcomes."
-      section="Cybersecurity — Module 35"
+      section="Cybersecurity — Lesson 35"
       readTime="38 min"
       updatedAt="May 2026"
     >
@@ -90,7 +90,7 @@ Operate           | Runtime security monitoring     | Falco, Sysdig
                   | CSPM (cloud posture)            | Wiz, Orca, AWS Security Hub
                   | VM scanning                     | Tenable, Qualys
 ─────────────────────────────────────────────────────────────────
-Monitor / Respond | SIEM, EDR, threat hunting       | Splunk, CrowdStrike (Module 31/34)`}
+Monitor / Respond | SIEM, EDR, threat hunting       | Splunk, CrowdStrike (Lesson 31/34)`}
         </Block>
 
         <H>Security Champions Programme</H>
@@ -872,8 +872,8 @@ jobs:
       ]} />
 
       <Callout type="info">
-        <strong>Up Next — Module 36: Compliance Frameworks</strong><br />
-        Module 36 demystifies the compliance landscape: SOC 2, PCI-DSS, HIPAA, ISO 27001, GDPR, and NIST frameworks. You will learn what each framework requires, how they overlap, how to build a unified control library that satisfies multiple frameworks simultaneously, and how to prepare for and survive an audit.
+        <strong>Up Next — Lesson 36: Compliance Frameworks</strong><br />
+        Lesson 36 demystifies the compliance landscape: SOC 2, PCI-DSS, HIPAA, ISO 27001, GDPR, and NIST frameworks. You will learn what each framework requires, how they overlap, how to build a unified control library that satisfies multiple frameworks simultaneously, and how to prepare for and survive an audit.
       </Callout>
 
     </LearnLayout>

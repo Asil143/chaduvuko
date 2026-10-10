@@ -78,7 +78,7 @@ export default function DerivedTables() {
     <LearnLayout
       title="Derived Tables"
       description="Subqueries in FROM as reusable virtual tables — pre-aggregation, multi-step analytics, fan-out prevention, filtering before joining, and when to choose derived tables over CTEs"
-      section="SQL — Module 40"
+      section="SQL — Lesson 40"
       readTime="10–14 min"
       updatedAt="April 2026"
     >
@@ -151,7 +151,7 @@ WHERE total_spend > (                          -- Step 2: filter on Step 1 resul
       {/* ── PART 03 ── */}
       <Part n="03" title="Pre-Aggregation — The Most Common Pattern" />
 
-      <P>Pre-aggregation is the most frequent use of derived tables: aggregate a table first, then join the aggregated result to other tables. This prevents the fan-out problem (Module 31) and ensures aggregates are computed at the correct granularity before joining.</P>
+      <P>Pre-aggregation is the most frequent use of derived tables: aggregate a table first, then join the aggregated result to other tables. This prevents the fan-out problem (Lesson 31) and ensures aggregates are computed at the correct granularity before joining.</P>
 
       <H>Per-store revenue joined to store details</H>
 
@@ -332,7 +332,7 @@ ORDER BY big_orders.total_amount DESC;`}
       {/* ── PART 06 ── */}
       <Part n="06" title="Fan-Out Prevention — The Critical Use Case" />
 
-      <P>The fan-out problem (Module 31): joining a one-to-many relationship before aggregating causes the aggregate to count the "one" side multiple times. Derived tables prevent this by aggregating the "many" side first — before the join — so the join is one-to-one at the order level.</P>
+      <P>The fan-out problem (Lesson 31): joining a one-to-many relationship before aggregating causes the aggregate to count the "one" side multiple times. Derived tables prevent this by aggregating the "many" side first — before the join — so the join is one-to-one at the order level.</P>
 
       <H>The fan-out bug and its fix</H>
 
@@ -408,7 +408,7 @@ ORDER BY order_revenue DESC;`}
 
       <P>Derived tables that use window functions to compute rankings can then be filtered in the outer query — the classic "filter by rank" pattern. This is how you find the top-N per group cleanly.</P>
 
-      <P>RANK() OVER (PARTITION BY ...) below is a <Hl>window function</Hl> — window functions get their own deep dive in Module 52; for now, just read PARTITION BY as "restart the ranking for each store" and ORDER BY as "rank within that group by this column."</P>
+      <P>RANK() OVER (PARTITION BY ...) below is a <Hl>window function</Hl> — window functions get their own deep dive in Lesson 52; for now, just read PARTITION BY as "restart the ranking for each store" and ORDER BY as "rank within that group by this column."</P>
 
       <SQLPlayground
         initialQuery={`-- Top 2 orders by value per store
@@ -835,10 +835,10 @@ ORDER BY cs.total_delivered_spend DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 41</strong>, you learn the String Function in full depth — syntax, multi-step composition, reuse within one query, performance considerations, and every pattern where CTEs outshine derived tables and subqueries.
+          In <strong>Lesson 41</strong>, you learn the String Function in full depth — syntax, multi-step composition, reuse within one query, performance considerations, and every pattern where CTEs outshine derived tables and subqueries.
         </p>
         <Link href="/learn/sql/string-functions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 41 → String Function
+          Lesson 41 → String Function
         </Link>
       </div>
 

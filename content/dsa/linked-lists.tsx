@@ -114,7 +114,7 @@ const NullBox = ({ marginTop }: { marginTop?: number }) => (
 export default function LinkedListsPage() {
   return (
     <LearnLayout
-      title="Unit 05 — Linked Lists"
+      title="Linked Lists"
       description="A chain of nodes where each one points to the next. More flexible than arrays, a favourite in interviews, and the foundation of stacks, queues, and trees."
       section="DSA"
       readTime="90 min"
@@ -124,9 +124,7 @@ export default function LinkedListsPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'UNIT 05', green: true },
-          { label: 'Prerequisite: Unit 04 — Pointers', green: false },
-          { label: '90 min read', green: false },
+          { label: 'Prerequisite: Lesson 5 — Pointers', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -139,10 +137,10 @@ export default function LinkedListsPage() {
         Once you declare <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--green)', fontSize: 14 }}>int arr[10]</code>,
         you get exactly 10 slots. You cannot grow or shrink it while the program runs.
         Linked lists solve this completely — they grow and shrink dynamically,
-        one node at a time, using the pointers you mastered in Unit 04.
+        one node at a time, using the pointers you mastered in Lesson 5.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
-        In this unit we build linked lists completely from scratch in C —
+        In this lesson we build linked lists completely from scratch in C —
         singly, doubly, and circular. We implement every operation, understand
         every edge case, and solve the classic interview problems that come from this topic.
       </p>
@@ -991,15 +989,15 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Unit 06</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 7</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now know how to build, traverse, insert into, delete from, reverse,
         and detect loops in a linked list. Every one of those operations used
-        the pointer knowledge from Unit 04 directly.
+        the pointer knowledge from Lesson 5 directly.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Unit 06 we build <strong style={{ color: 'var(--text)' }}>Stacks</strong> —
+        In Lesson 7 we build <strong style={{ color: 'var(--text)' }}>Stacks</strong> —
         a data structure built on top of arrays or linked lists that enforces one rule:
         Last In, First Out. Stacks power undo/redo, function calls, expression evaluation,
         and much more.
@@ -1007,7 +1005,7 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → UNIT 06</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 7</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Stacks — Last In, First Out</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Push, pop, peek — with arrays and linked lists. Balanced brackets and the call stack.</div>
         </div>

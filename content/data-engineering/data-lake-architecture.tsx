@@ -172,7 +172,7 @@ export default function DataLakeArchitectureModule() {
     <LearnLayout
       title="Data Lake Architecture"
       description="What a data lake is, why it was invented, zone-based organisation, compute-storage separation, and the rise of the lakehouse."
-      section="Data Engineering — Module 29"
+      section="Data Engineering — Lesson 29"
       readTime="55 min"
       updatedAt="August 2026"
     >
@@ -186,7 +186,7 @@ export default function DataLakeArchitectureModule() {
           "Data lake" is one of the most overloaded terms in data engineering.
           It has been used to mean a dump of raw files on S3, a governed analytical
           platform, a Hadoop cluster, and a marketing term for whatever a vendor
-          is selling. This module gives a precise, technical definition and the
+          is selling. This lesson gives a precise, technical definition and the
           historical context that explains why data lakes were invented, what
           problems they solve, and where they fall short.
         </Para>
@@ -405,7 +405,7 @@ GENERATION 2: CLOUD OBJECT STORAGE + SPARK (2015-2022)
           The difference is organisation. Every mature data lake uses a zone-based
           architecture that separates data by its quality level, transformation
           state, and access pattern. The zone model is the foundation of both
-          the Medallion Architecture (covered in Module 30) and every well-governed
+          the Medallion Architecture (covered in Lesson 30) and every well-governed
           data lake.
         </Para>
 
@@ -995,7 +995,7 @@ After ZORDER BY (store_id, order_date): same queries skip ~80% of files`}</Outpu
           },
           {
             wrong: '"Once you adopt an open table format, ACID transactions mean you never have to think about concurrent writers again"',
-            right: 'Part 08\'s ACID explanation and this module\'s Error Library are both specific that Delta\'s optimistic concurrency detects conflicts and makes one writer retry — it does not prevent conflicts from happening. Two jobs writing the same table simultaneously will still see one succeed and one fail-and-retry; design pipelines (like Airflow\'s max_active_runs=1) to avoid the conflict in the first place.',
+            right: 'Part 08\'s ACID explanation and this lesson\'s Error Library are both specific that Delta\'s optimistic concurrency detects conflicts and makes one writer retry — it does not prevent conflicts from happening. Two jobs writing the same table simultaneously will still see one succeed and one fail-and-retry; design pipelines (like Airflow\'s max_active_runs=1) to avoid the conflict in the first place.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
@@ -1209,15 +1209,15 @@ For new projects in 2026, Iceberg is the most future-proof choice due to its eng
           },
           {
             q: 'Treating Delta Lake\'s ACID guarantees as eliminating the need to think about concurrent writers',
-            a: 'This module\'s Error Library shows the ConcurrentModificationException that Delta throws precisely because two writers hit the same table at once — optimistic concurrency detects the conflict and fails one writer, it doesn\'t prevent the collision. Design pipelines (Airflow max_active_runs=1, or writes to separate partitions) so two jobs rarely contend for the same table version.',
+            a: 'This lesson\'s Error Library shows the ConcurrentModificationException that Delta throws precisely because two writers hit the same table at once — optimistic concurrency detects the conflict and fails one writer, it doesn\'t prevent the collision. Design pipelines (Airflow max_active_runs=1, or writes to separate partitions) so two jobs rarely contend for the same table version.',
           },
           {
             q: 'Running Delta VACUUM with a shortened or disabled retention window to save storage cost',
-            a: 'This module\'s Error Library describes exactly this failure: disabling the 7-day retention safety check and running VACUUM with retention 0 deletes files a concurrent reader or time-travel query still needs, producing FileNotFoundException downstream. Run VACUUM weekly with the standard 168-hour retention instead of touching the safety threshold.',
+            a: 'This lesson\'s Error Library describes exactly this failure: disabling the 7-day retention safety check and running VACUUM with retention 0 deletes files a concurrent reader or time-travel query still needs, producing FileNotFoundException downstream. Run VACUUM weekly with the standard 168-hour retention instead of touching the safety threshold.',
           },
           {
             q: 'Forgetting to register new partitions after a pipeline writes them, then wondering why Athena scans everything',
-            a: 'This module\'s Error Library shows this exact case: an Athena table with a partition filter but a stale Glue catalog scans the full 4.2 TB instead of pruning. Run MSCK REPAIR TABLE, add a Glue Crawler on a schedule, or register partitions programmatically right after the pipeline writes them — Part 05\'s note on S3 having no real directories is why this doesn\'t happen automatically.',
+            a: 'This lesson\'s Error Library shows this exact case: an Athena table with a partition filter but a stale Glue catalog scans the full 4.2 TB instead of pruning. Run MSCK REPAIR TABLE, add a Glue Crawler on a schedule, or register partitions programmatically right after the pipeline writes them — Part 05\'s note on S3 having no real directories is why this doesn\'t happen automatically.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1313,10 +1313,10 @@ For new projects in 2026, Iceberg is the most future-proof choice due to its eng
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 30 covers the Medallion Architecture — why it became the dominant data lake design pattern, what each layer does, and the decisions that determine what data belongs where.
+          Lesson 30 covers the Medallion Architecture — why it became the dominant data lake design pattern, what each layer does, and the decisions that determine what data belongs where.
         </p>
         <Link href="/learn/data-engineering/medallion-architecture" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 30 → Medallion Architecture — Bronze, Silver, Gold
+          Lesson 30 → Medallion Architecture — Bronze, Silver, Gold
         </Link>
       </div>
     </LearnLayout>

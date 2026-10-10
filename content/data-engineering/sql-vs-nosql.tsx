@@ -176,7 +176,7 @@ export default function SQLvsNoSQLModule() {
     <LearnLayout
       title="SQL vs NoSQL — The Real Difference"
       description="What each one trades off, four NoSQL families from first principles, and how to choose."
-      section="Data Engineering — Module 10"
+      section="Data Engineering — Lesson 10"
       readTime="55 min"
       updatedAt="August 2026"
     >
@@ -1126,7 +1126,7 @@ QUESTION 3: What scale is genuinely needed?
         {[
           {
             wrong: '"NoSQL is one thing — you either adopt it or you don\'t"',
-            right: 'Part 03 is explicit that "NoSQL" groups four completely different designs — key-value, document, column-family, graph — with nothing in common beyond not being relational. MongoDB and Cassandra solve opposite problems; treating "NoSQL" as one decision instead of four separate ones is the root confusion this module exists to fix.',
+            right: 'Part 03 is explicit that "NoSQL" groups four completely different designs — key-value, document, column-family, graph — with nothing in common beyond not being relational. MongoDB and Cassandra solve opposite problems; treating "NoSQL" as one decision instead of four separate ones is the root confusion this lesson exists to fix.',
           },
           {
             wrong: '"MongoDB scales better than PostgreSQL, so it\'s the safer default for a new product"',
@@ -1138,11 +1138,11 @@ QUESTION 3: What scale is genuinely needed?
           },
           {
             wrong: '"CAP theorem means a well-engineered system can just deliver all three guarantees"',
-            right: 'Part 04 is explicit that partition tolerance is not optional in any real distributed system — networks do fail. The actual, unavoidable trade-off in practice is CP vs AP, and every database in this module\'s CompareTable made a real choice between them, not a way around the theorem.',
+            right: 'Part 04 is explicit that partition tolerance is not optional in any real distributed system — networks do fail. The actual, unavoidable trade-off in practice is CP vs AP, and every database in this lesson\'s CompareTable made a real choice between them, not a way around the theorem.',
           },
           {
             wrong: '"Since Cassandra and DynamoDB are designed to scale, data extracted from them is already as clean as a relational extract"',
-            right: 'Part 04\'s CompareTable and Interview Prep Q2 both flag the opposite: AP systems like Cassandra can produce duplicate or inconsistent values during partitions, reconciled later via Last-Write-Wins. This module\'s Common Mistakes and Error Library both treat "always deduplicate AP extracts in Silver" as a required step, not an edge case.',
+            right: 'Part 04\'s CompareTable and Interview Prep Q2 both flag the opposite: AP systems like Cassandra can produce duplicate or inconsistent values during partitions, reconciled later via Last-Write-Wins. This lesson\'s Common Mistakes and Error Library both treat "always deduplicate AP extracts in Silver" as a required step, not an edge case.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
@@ -1320,19 +1320,19 @@ In practice, most data engineering work involves the relational model. Graph dat
         {[
           {
             q: 'Reaching for $where in MongoDB or ALLOW FILTERING in Cassandra because it "makes the query work"',
-            a: 'This module\'s Error Library shows both sides of this: MongoDB $where is disabled on managed tiers precisely because it runs unindexed JavaScript, and Cassandra ALLOW FILTERING silently triggers a full cluster scan. Both are usually a sign the table or query was designed for a different access pattern than the one being run — see Part 03\'s "design one table per query" rule for Cassandra specifically.',
+            a: 'This lesson\'s Error Library shows both sides of this: MongoDB $where is disabled on managed tiers precisely because it runs unindexed JavaScript, and Cassandra ALLOW FILTERING silently triggers a full cluster scan. Both are usually a sign the table or query was designed for a different access pattern than the one being run — see Part 03\'s "design one table per query" rule for Cassandra specifically.',
           },
           {
             q: 'Querying Cassandra by a clustering key without providing the partition key',
-            a: 'This module\'s Error Library shows the exact error Cassandra returns for this. Part 03 is explicit that the partition key is required in every query because it\'s how Cassandra routes the request to one node — a query missing it would otherwise require scanning the whole cluster, which Cassandra refuses by design.',
+            a: 'This lesson\'s Error Library shows the exact error Cassandra returns for this. Part 03 is explicit that the partition key is required in every query because it\'s how Cassandra routes the request to one node — a query missing it would otherwise require scanning the whole cluster, which Cassandra refuses by design.',
           },
           {
             q: 'Using plain insert instead of upsert on a pipeline that might rerun against a uniquely-indexed MongoDB collection',
-            a: 'This module\'s Error Library shows a DuplicateKeyError from exactly this — a rerun re-inserting a document whose order_id already exists. Any pipeline that must be safely rerunnable should use updateOne with upsert:true rather than insert, the same idempotency principle that applies to SQL\'s INSERT ... ON CONFLICT.',
+            a: 'This lesson\'s Error Library shows a DuplicateKeyError from exactly this — a rerun re-inserting a document whose order_id already exists. Any pipeline that must be safely rerunnable should use updateOne with upsert:true rather than insert, the same idempotency principle that applies to SQL\'s INSERT ... ON CONFLICT.',
           },
           {
             q: 'Running an open-ended graph traversal with no hop limit',
-            a: 'This module\'s Error Library shows Neo4j\'s MemoryLimitExceededException from a pattern like MATCH (n)-[*]->(m) with no depth bound — the engine tries to materialize an unbounded subgraph. Part 03\'s graph section is explicit that traversal cost is proportional to edges actually visited; an unbounded pattern removes that guarantee entirely. Always bound hops explicitly, e.g. [*1..3].',
+            a: 'This lesson\'s Error Library shows Neo4j\'s MemoryLimitExceededException from a pattern like MATCH (n)-[*]->(m) with no depth bound — the engine tries to materialize an unbounded subgraph. Part 03\'s graph section is explicit that traversal cost is proportional to edges actually visited; an unbounded pattern removes that guarantee entirely. Always bound hops explicitly, e.g. [*1..3].',
           },
           {
             q: 'Trusting data extracted from an AP system (Cassandra, DynamoDB) as already deduplicated',
@@ -1432,10 +1432,10 @@ In practice, most data engineering work involves the relational model. Graph dat
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 11 compares the three main enterprise data storage strategies — the traditional warehouse, the data lake, and the emerging lakehouse — with honest trade-offs for each.
+          Lesson 11 compares the three main enterprise data storage strategies — the traditional warehouse, the data lake, and the emerging lakehouse — with honest trade-offs for each.
         </p>
         <Link href="/learn/data-engineering/warehouse-lake-lakehouse" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 11 → Data Warehouse vs Data Lake vs Lakehouse
+          Lesson 11 → Data Warehouse vs Data Lake vs Lakehouse
         </Link>
       </div>
     </LearnLayout>

@@ -194,7 +194,7 @@ export default function EmailProtocolsPage() {
     <LearnLayout
       title="Email Protocols"
       description="SMTP, IMAP, POP3, SPF, DKIM, DMARC — the aging but critical infrastructure that delivers 300 billion emails daily, and the security stack bolted on to stop most of it from being spam."
-      section="Networking Fundamentals — Module 27"
+      section="Networking Fundamentals — Lesson 27"
       readTime="25–35 min"
       updatedAt="May 2026"
     >

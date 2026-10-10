@@ -101,7 +101,7 @@ export default function SlowlyChangingDimensionsModule() {
     <LearnLayout
       title="Slowly Changing Dimensions (SCD)"
       description="Every SCD type in depth — when each is the right choice, full SQL implementations, dbt snapshot patterns, and the operational pitfalls."
-      section="Data Engineering — Module 34"
+      section="Data Engineering — Lesson 34"
       readTime="60 min"
       updatedAt="August 2026"
     >
@@ -939,11 +939,11 @@ REAL EXAMPLES FROM FOOD DELIVERY PLATFORMS:
           },
           {
             wrong: '"Joining a fact table to a dimension\'s natural key with an is_current filter is basically the same as joining on the surrogate key"',
-            right: 'Part 03\'s "wrong approach" callout shows exactly how these diverge: the natural-key-plus-is_current join reassigns every historical fact to whatever the CURRENT dimension version is, silently destroying the point-in-time accuracy Type 2 exists to provide — which is exactly the bug in this module\'s Real World section and Error Library\'s first entry.',
+            right: 'Part 03\'s "wrong approach" callout shows exactly how these diverge: the natural-key-plus-is_current join reassigns every historical fact to whatever the CURRENT dimension version is, silently destroying the point-in-time accuracy Type 2 exists to provide — which is exactly the bug in this lesson\'s Real World section and Error Library\'s first entry.',
           },
           {
             wrong: '"A dbt snapshot with strategy=\'timestamp\' is always the safer, more accurate choice over strategy=\'check\'"',
-            right: 'This module\'s Error Library shows the opposite happening in production: when a Silver pipeline sets updated_at=NOW() on every upsert regardless of whether values actually changed, the timestamp strategy creates a new version on every single run. The check strategy, comparing actual column values, is what catches this correctly.',
+            right: 'This lesson\'s Error Library shows the opposite happening in production: when a Silver pipeline sets updated_at=NOW() on every upsert regardless of whether values actually changed, the timestamp strategy creates a new version on every single run. The check strategy, comparing actual column values, is what catches this correctly.',
           },
           {
             wrong: '"Once a customer\'s row is expired in a Type 2 dimension, the historical row is basically frozen and never touched again"',
@@ -1135,7 +1135,7 @@ The fix is to run snapshots frequently — every 15-30 minutes for dimensions th
         {[
           {
             q: 'Joining a fact table to a Type 2 dimension using the natural key plus an is_current filter, instead of the surrogate key',
-            a: 'Part 03\'s "wrong approach" callout and this module\'s Error Library first entry are the same bug from two angles — that join reassigns every historical fact to whichever version is current right now, which is precisely what Type 2 is supposed to prevent.',
+            a: 'Part 03\'s "wrong approach" callout and this lesson\'s Error Library first entry are the same bug from two angles — that join reassigns every historical fact to whichever version is current right now, which is precisely what Type 2 is supposed to prevent.',
           },
           {
             q: 'Applying Type 2 to every dimension attribute "to be safe"',
@@ -1143,7 +1143,7 @@ The fix is to run snapshots frequently — every 15-30 minutes for dimensions th
           },
           {
             q: 'Deploying a dbt snapshot without checking whether the source updated_at column is trustworthy',
-            a: 'This module\'s Error Library shows what happens when it isn\'t: a Silver pipeline that sets updated_at=NOW() on every upsert (not just real changes) makes the timestamp strategy create a new version on every single run. Check what actually drives updated_at before picking timestamp over check.',
+            a: 'This lesson\'s Error Library shows what happens when it isn\'t: a Silver pipeline that sets updated_at=NOW() on every upsert (not just real changes) makes the timestamp strategy create a new version on every single run. Check what actually drives updated_at before picking timestamp over check.',
           },
           {
             q: 'Running a dbt snapshot at the same cadence as the dbt run that consumes it',
@@ -1151,7 +1151,7 @@ The fix is to run snapshots frequently — every 15-30 minutes for dimensions th
           },
           {
             q: 'Treating a Type 6 dimension\'s current_city column as write-once instead of updating it across all existing rows on every change',
-            a: 'Part 06\'s update procedure is explicit that Step 1 overwrites current_city on every row for that customer, historical rows included — skip that step and current_city silently goes stale on old rows, which is exactly the kind of duplicate-current-row bug this module\'s Error Library documents for Type 6.',
+            a: 'Part 06\'s update procedure is explicit that Step 1 overwrites current_city on every row for that customer, historical rows included — skip that step and current_city silently goes stale on old rows, which is exactly the kind of duplicate-current-row bug this lesson\'s Error Library documents for Type 6.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
@@ -1230,10 +1230,10 @@ The fix is to run snapshots frequently — every 15-30 minutes for dimensions th
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 35 covers Data Vault 2.0 — hubs, links, and satellites from first principles, hash keys, parallel loading patterns, and when Data Vault beats dimensional modelling for enterprise integration.
+          Lesson 35 covers Data Vault 2.0 — hubs, links, and satellites from first principles, hash keys, parallel loading patterns, and when Data Vault beats dimensional modelling for enterprise integration.
         </p>
         <Link href="/learn/data-engineering/data-vault" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 35 → Data Vault 2.0 — Hubs, Links and Satellites
+          Lesson 35 → Data Vault 2.0 — Hubs, Links and Satellites
         </Link>
       </div>
     </LearnLayout>

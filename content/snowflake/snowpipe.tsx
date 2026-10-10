@@ -5,7 +5,7 @@ export default function Snowpipe() {
     <LearnLayout
       title="Snowpipe and Continuous Loading"
       description="Snowpipe architecture, stages, file formats, pipes, auto-ingest, cloud notifications, error handling, monitoring, replay, file sizing, cost, and production loading patterns."
-      section="Snowflake — Module 10"
+      section="Snowflake — Lesson 10"
       readTime="70 min"
       updatedAt="September 2026"
       breadcrumbs={[

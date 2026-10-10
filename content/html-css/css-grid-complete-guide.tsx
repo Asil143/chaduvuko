@@ -77,7 +77,7 @@ export default function CssGridCompleteGuide() {
     <LearnLayout
       title="CSS Grid — The Complete Guide"
       description="Two-dimensional layout done right — grid-template-columns/rows, grid areas, and the mental model that makes Grid click."
-      section="HTML & CSS — Module 25"
+      section="HTML & CSS — Lesson 25"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -270,7 +270,7 @@ export default function CssGridCompleteGuide() {
         <Para>
           This deserves its own full treatment — the difference between <code>auto-fill</code> and{' '}
           <code>auto-fit</code>, and a real image gallery built on exactly this pattern, is covered in
-          depth in the next module, CSS Grid in Practice. For now, the important thing to internalise is
+          depth in the next lesson, CSS Grid in Practice. For now, the important thing to internalise is
           that <code>repeat()</code> accepts <code>auto-fill</code>/<code>auto-fit</code> as its count
           argument instead of a fixed number — that is what makes the column count itself responsive,
           not just the column widths.
@@ -604,7 +604,7 @@ aside   { grid-area: sidebar; }`}</CodeBox>
 
           <Para>
             The engineer replaces the entire shell with a single <code>grid-template-areas</code>{' '}
-            declaration — the exact pattern from Part 04 of this module. The sidebar width now lives in{' '}
+            declaration — the exact pattern from Part 04 of this lesson. The sidebar width now lives in{' '}
             <strong>exactly one place</strong>.
           </Para>
 
@@ -900,7 +900,7 @@ main { grid-area: main; } /* matches the name used in grid-template-areas exactl
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Now that the full Grid vocabulary is in place, the next module puts every piece of it to work
+          Now that the full Grid vocabulary is in place, the next lesson puts every piece of it to work
           on real layouts — a holy grail page shell, a responsive image gallery, and a genuinely
           non-trivial dashboard.
         </p>

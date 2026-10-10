@@ -79,7 +79,7 @@ export default function DataGovernanceModule() {
     <LearnLayout
       title="Data Governance — Lineage, Cataloging, Access Control, and Data Mesh"
       description="What governance actually means in practice — lineage, cataloging, access control, GDPR, PII handling, and the data mesh organizational pattern."
-      section="Data Engineering — Module 38"
+      section="Data Engineering — Lesson 38"
       readTime="65 min"
       updatedAt="August 2026"
     >
@@ -136,7 +136,7 @@ export default function DataGovernanceModule() {
           Pick any table you work with regularly and try to answer, without
           looking anything up: who owns it, when was it last updated, and what
           does each column actually mean? If you can&rsquo;t answer all three, that
-          table has a governance gap — the kind this module exists to close.
+          table has a governance gap — the kind this lesson exists to close.
         </TryThis>
       </section>
 
@@ -1058,11 +1058,11 @@ For most organisations — anything below 100-200 engineers or fewer than 5-10 d
         {[
           {
             q: 'Granting OWNERSHIP or ACCOUNTADMIN to an analyst role "just to unblock them faster"',
-            a: 'Part 04\'s masking policies and this module\'s Error Library both note that masking silently stops applying to any role with OWNERSHIP or ACCOUNTADMIN — an elevated role doesn\'t just over-grant access, it bypasses PII protection entirely without any error or warning. Keep analyst roles strictly to SELECT on the schemas they need.',
+            a: 'Part 04\'s masking policies and this lesson\'s Error Library both note that masking silently stops applying to any role with OWNERSHIP or ACCOUNTADMIN — an elevated role doesn\'t just over-grant access, it bypasses PII protection entirely without any error or warning. Keep analyst roles strictly to SELECT on the schemas they need.',
           },
           {
             q: 'Treating a one-off SQL script in the warehouse as equivalent to a dbt model',
-            a: 'This module\'s Error Library shows exactly what breaks: a table built by a manual script never appears in the dbt manifest, so DataHub\'s lineage graph shows it with no upstream at all — even though it was clearly built from another table. Every Gold table needs to go through dbt specifically so lineage and cataloging stay accurate automatically.',
+            a: 'This lesson\'s Error Library shows exactly what breaks: a table built by a manual script never appears in the dbt manifest, so DataHub\'s lineage graph shows it with no upstream at all — even though it was clearly built from another table. Every Gold table needs to go through dbt specifically so lineage and cataloging stay accurate automatically.',
           },
           {
             q: 'Assuming a GDPR erasure request means deleting rows from Bronze',
@@ -1153,10 +1153,10 @@ For most organisations — anything below 100-200 engineers or fewer than 5-10 d
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 39 covers security and compliance — encryption at rest and in transit, PII handling, GDPR, and the CCPA — with practical patterns for building pipelines that are compliant by design.
+          Lesson 39 covers security and compliance — encryption at rest and in transit, PII handling, GDPR, and the CCPA — with practical patterns for building pipelines that are compliant by design.
         </p>
         <Link href="/learn/data-engineering/security-compliance" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 39 → Security and Compliance for Data Engineers
+          Lesson 39 → Security and Compliance for Data Engineers
         </Link>
       </div>
     </LearnLayout>

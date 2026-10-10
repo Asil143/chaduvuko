@@ -77,7 +77,7 @@ export default function AsyncPython() {
     <LearnLayout
       title="Async Python — asyncio, async/await"
       description="What async solves, coroutines and the event loop explained properly, asyncio.gather, a concurrent-API-calls worked example, and honest guidance on complexity."
-      section="Python — Module 35"
+      section="Python — Lesson 35"
       readTime="55 min"
       updatedAt="August 2026"
     >
@@ -88,16 +88,16 @@ export default function AsyncPython() {
         <SectionTitle>A Third Way to Handle I/O-Bound Work</SectionTitle>
 
         <Para>
-          Module 34 ended with a decision framework and a deliberate loose thread: for I/O-bound work,
+          Lesson 34 ended with a decision framework and a deliberate loose thread: for I/O-bound work,
           it recommended "threading, or <code>asyncio</code>," without fully explaining the second
-          option. This module closes that gap. Asynchronous programming solves the exact same category
+          option. This lesson closes that gap. Asynchronous programming solves the exact same category
           of problem threading solves — making productive use of time your program would otherwise spend
           idly waiting on I/O — but with a fundamentally different mechanism, and, for large numbers of
           concurrent operations, real advantages over threading.
         </Para>
 
         <Para>
-          Recall from Module 34 that each OS thread carries real overhead — memory for its own stack,
+          Recall from Lesson 34 that each OS thread carries real overhead — memory for its own stack,
           and cost for the operating system to schedule and switch between threads. Fine for a handful of
           concurrent threads; expensive if you genuinely need thousands of concurrent I/O operations, as
           a high-traffic web server or a service polling hundreds of external APIs might. Asynchronous
@@ -190,7 +190,7 @@ print(type(result))
           there genuinely is only one thread doing the actual executing, at any given instant — but
           because coroutines voluntarily step aside at each <code>await</code>, the single thread never
           sits fully idle waiting on one operation while other work could be progressing. It is a very
-          similar underlying idea to the GIL-released-during-I/O behavior from Module 34, but achieved
+          similar underlying idea to the GIL-released-during-I/O behavior from Lesson 34, but achieved
           deliberately and explicitly through <code>await</code> points, rather than as a side effect of
           the interpreter's memory-management locking.
         </Para>
@@ -343,7 +343,7 @@ asyncio.run(get_all_prices_async())`}</CodeBox>
 
         <Para>
           A production version would use a real async HTTP client — the popular third-party library{' '}
-          <code>httpx</code> supports async requests directly, and Module 37's <code>requests</code>{' '}
+          <code>httpx</code> supports async requests directly, and Lesson 37's <code>requests</code>{' '}
           library (synchronous by design) is not usable inside a coroutine without blocking the whole
           event loop, exactly the mistake covered next.
         </Para>
@@ -453,7 +453,7 @@ asyncio.run(main())`}</CodeBox>
         <CodeBox label="When simple synchronous code is honestly fine">{`- A script that makes a handful of sequential API calls, run occasionally,
   where a few extra seconds of total runtime genuinely does not matter
 - CPU-bound work — async provides NO benefit here, same underlying reason
-  threading doesn't (Module 34) — reach for multiprocessing instead
+  threading doesn't (Lesson 34) — reach for multiprocessing instead
 - Small internal tools and one-off scripts, where the added complexity of
   getting async code correct is not worth the modest speed gain`}</CodeBox>
 
@@ -464,7 +464,7 @@ asyncio.run(main())`}</CodeBox>
           comfortably supports — it is very likely worth the complexity. If you are reaching for it
           because it feels like the "modern" or "advanced" way to write Python, that instinct alone is
           not a strong enough reason, and plain synchronous code, or the simpler threading approach from
-          Module 34, is very often the better engineering decision.
+          Lesson 34, is very often the better engineering decision.
         </Para>
       </section>
 
@@ -558,7 +558,7 @@ asyncio.run(main())`}</CodeBox>
           },
           {
             wrong: '"Async is strictly faster than synchronous code"',
-            right: 'Async provides essentially no benefit for CPU-bound work — the same fundamental reason threading does not, from Module 34. It specifically speeds up I/O-bound work by overlapping waiting periods across multiple coroutines. For a program that is already fast or does little I/O, adding asyncio adds complexity without a meaningful speed benefit.',
+            right: 'Async provides essentially no benefit for CPU-bound work — the same fundamental reason threading does not, from Lesson 34. It specifically speeds up I/O-bound work by overlapping waiting periods across multiple coroutines. For a program that is already fast or does little I/O, adding asyncio adds complexity without a meaningful speed benefit.',
           },
           {
             wrong: '"Any library works fine inside an async function, since Python doesn\'t care"',
@@ -759,11 +759,11 @@ asyncio.run(main())`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 36 covers type hints and static typing with mypy — annotating your code so tooling can
+          Lesson 36 covers type hints and static typing with mypy — annotating your code so tooling can
           catch bugs before runtime, without giving up any of Python&apos;s dynamic flexibility.
         </p>
         <Link href="/learn/python/type-hints-mypy" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 36 → Type Hints and Static Typing with mypy
+          Lesson 36 → Type Hints and Static Typing with mypy
         </Link>
       </div>
     </LearnLayout>

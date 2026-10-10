@@ -1100,7 +1100,7 @@ WHERE pid = 12345;`}
         <Para>
           This is the checklist a security engineer or senior data engineer runs
           when auditing a production PostgreSQL database. Every item maps directly
-          to a concept in this module.
+          to a concept in this lesson.
         </Para>
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>

@@ -77,7 +77,7 @@ export default function FlexboxInPractice() {
     <LearnLayout
       title="Flexbox in Practice — Real Layouts"
       description="Building real, common UI patterns with Flexbox — a responsive navbar, an equal-height card grid, the centering reflex, a sticky footer layout, and the gap property."
-      section="HTML & CSS — Module 24"
+      section="HTML & CSS — Lesson 24"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -179,7 +179,7 @@ export default function FlexboxInPractice() {
         <Para>
           A standard navbar — logo on the left, nav links in the middle or right, all vertically centered
           on one row — is one of the most universal real-world Flexbox layouts, and combines several
-          properties from the previous module in one practical structure.
+          properties from the previous lesson in one practical structure.
         </Para>
 
         <CodeBox label="A complete navbar: logo, centered nav links, right-aligned actions">{`<nav class="navbar">
@@ -259,7 +259,7 @@ export default function FlexboxInPractice() {
 }
 
 .card {
-  flex: 1;   /* equal width per Module 23's flex: 1 vs flex: 1 1 auto distinction */
+  flex: 1;   /* equal width per Lesson 23's flex: 1 vs flex: 1 1 auto distinction */
   padding: 24px;
   border-radius: 12px;
   background: white;
@@ -297,7 +297,7 @@ export default function FlexboxInPractice() {
 
         <Para>
           This is the exact same "one flex-grow: 1 spacer absorbs the leftover space" idea from the
-          toolbar pattern in the previous module — applied here to a <code>column</code>-direction
+          toolbar pattern in the previous lesson — applied here to a <code>column</code>-direction
           container instead of a <code>row</code>, so the leftover space being absorbed is vertical
           instead of horizontal. Recognizing this as the same underlying pattern, rather than a separate
           trick to memorize, is exactly the kind of transfer that makes Flexbox click.
@@ -379,7 +379,7 @@ body {
           realistic component.
         </Para>
 
-        <CodeBox label="A full product card — every technique from this module in one place">{`<div class="product-card">
+        <CodeBox label="A full product card — every technique from this lesson in one place">{`<div class="product-card">
   <img class="product-image" src="/sneaker.jpg" alt="Running shoe" />
   <div class="product-body">
     <div class="product-header">
@@ -739,12 +739,12 @@ body {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 25 introduces CSS Grid — true two-dimensional layout, grid-template-columns/rows, grid
+          Lesson 25 introduces CSS Grid — true two-dimensional layout, grid-template-columns/rows, grid
           areas, the fr unit, and the mental model that makes Grid click once Flexbox&apos;s one-
           dimensional limits start to show.
         </p>
         <Link href="/learn/html-css/css-grid-complete-guide" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 25 → CSS Grid — The Complete Guide
+          Lesson 25 → CSS Grid — The Complete Guide
         </Link>
       </div>
     </LearnLayout>

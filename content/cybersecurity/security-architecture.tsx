@@ -59,7 +59,7 @@ export default function Module28() {
     <LearnLayout
       title="Security Architecture — Defence in Depth and Zero Trust"
       description="How to design systems that are resilient under attack: defence in depth, Zero Trust principles, network segmentation, security control selection, threat modelling integration, and architectural patterns for cloud-native environments."
-      section="Cybersecurity — Module 28"
+      section="Cybersecurity — Lesson 28"
       readTime="33 min"
       updatedAt="May 2026"
     >
@@ -488,7 +488,7 @@ Security properties:
       <Callout type="info">
         Security architecture designs the system. In{' '}
         <Link href="/learn/cybersecurity/identity-access-management">
-          Module 29: Identity and Access Management
+          Lesson 29: Identity and Access Management
         </Link>
         , you go deep on the most attacked layer: how to design IAM systems that prevent credential-based attacks, implement least privilege at scale, and integrate SSO, MFA, and privileged access management in enterprise environments.
       </Callout>

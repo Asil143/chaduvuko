@@ -172,7 +172,7 @@ export default function ErrorHandlingRetriesModule() {
     <LearnLayout
       title="Error Handling, Retries, and Dead Letter Queues"
       description="Classifying errors, exponential backoff with jitter, circuit breakers, DLQ design, and building pipelines that recover automatically."
-      section="Data Engineering — Module 27"
+      section="Data Engineering — Lesson 27"
       readTime="70 min"
       updatedAt="August 2026"
     >
@@ -337,7 +337,7 @@ def classify_error(exc: Exception, response=None) -> tuple[str, str]:
           Add one more branch to <code>classify_error</code> for{' '}
           <code>json.JSONDecodeError</code> — is a response that fails to parse as
           JSON a row-level failure, a transient error, or a permanent one? Justify
-          your answer before checking the Error Library at the end of this module.
+          your answer before checking the Error Library at the end of this lesson.
         </TryThis>
       </section>
 
@@ -1007,15 +1007,15 @@ WARNING High DLQ rate in orders_pipeline_incremental: 8.0% of rows rejected.
           },
           {
             wrong: '"If the pipeline logs the error, that counts as handling it"',
-            right: 'A logged-and-swallowed exception with no DLQ write and no re-raise is indistinguishable, later, from data that was silently dropped — Part 05 exists because a log line nobody is actively watching is not a recovery mechanism, and this module\'s Common Mistakes below has the exact except: pass pattern that causes this.',
+            right: 'A logged-and-swallowed exception with no DLQ write and no re-raise is indistinguishable, later, from data that was silently dropped — Part 05 exists because a log line nobody is actively watching is not a recovery mechanism, and this lesson\'s Common Mistakes below has the exact except: pass pattern that causes this.',
           },
           {
             wrong: '"Once alerting exists, more alerts is strictly better than fewer"',
-            right: 'Part 06\'s five-tier model is built around the opposite idea: alerting on every transient error (Part 03\'s retries handle those automatically) trains engineers to ignore the alert channel, which is exactly the alert-fatigue failure documented in this module\'s Error Library. An alert that fires and nobody reads is worse than no alert at all.',
+            right: 'Part 06\'s five-tier model is built around the opposite idea: alerting on every transient error (Part 03\'s retries handle those automatically) trains engineers to ignore the alert channel, which is exactly the alert-fatigue failure documented in this lesson\'s Error Library. An alert that fires and nobody reads is worse than no alert at all.',
           },
           {
             wrong: '"A 500 error and a 400 error are both just \'the request failed\' — handle them the same way"',
-            right: 'A 500 is the server\'s problem and often resolves on its own; a 400 is the request\'s problem and will fail identically forever until the request itself changes. Part 02\'s taxonomy exists precisely because collapsing these into one "request failed" bucket is what causes Q1 of this module\'s Interview Prep and the very first Error Library entry.',
+            right: 'A 500 is the server\'s problem and often resolves on its own; a 400 is the request\'s problem and will fail identically forever until the request itself changes. Part 02\'s taxonomy exists precisely because collapsing these into one "request failed" bucket is what causes Q1 of this lesson\'s Interview Prep and the very first Error Library entry.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1305,10 +1305,10 @@ The redesigned error flow: row-level data errors → DLQ (row processed, pipelin
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 28 covers pipeline orchestration — what a scheduler actually does, how DAGs model dependencies, what backfill means and why it is hard, and the design decisions that determine how maintainable an orchestration layer is.
+          Lesson 28 covers pipeline orchestration — what a scheduler actually does, how DAGs model dependencies, what backfill means and why it is hard, and the design decisions that determine how maintainable an orchestration layer is.
         </p>
         <Link href="/learn/data-engineering/pipeline-orchestration" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 28 → Pipeline Orchestration — What a Scheduler Does
+          Lesson 28 → Pipeline Orchestration — What a Scheduler Does
         </Link>
       </div>
     </LearnLayout>

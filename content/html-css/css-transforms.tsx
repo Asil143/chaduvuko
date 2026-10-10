@@ -77,7 +77,7 @@ export default function CssTransforms() {
     <LearnLayout
       title="CSS Transforms (2D and 3D)"
       description="translate, rotate, scale, skew, and 3D transforms with perspective — how modern interfaces move without touching layout."
-      section="HTML & CSS — Module 33"
+      section="HTML & CSS — Lesson 33"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -109,7 +109,7 @@ export default function CssTransforms() {
           <code>translateX(200px)</code> still occupies its <em>original</em> space as far as every
           other element on the page is concerned; siblings do not shift to fill the gap, and nothing
           reflows around the new visual position. You will come back to exactly why that matters for
-          performance in Part 07 of this module.
+          performance in Part 07 of this lesson.
         </Para>
 
         <Callout type="info">
@@ -412,9 +412,9 @@ export default function CssTransforms() {
         <SectionTitle>Why transform Never Triggers Layout — The Same Idea From the Transitions Module</SectionTitle>
 
         <Para>
-          The CSS Transitions module (Module 31) introduced the idea that some CSS properties are cheap
+          The CSS Transitions module (Lesson 31) introduced the idea that some CSS properties are cheap
           to animate and others are expensive, because of what the browser has to redo every time the
-          property&apos;s value changes across a frame. This module is the concrete payoff of that idea:{' '}
+          property&apos;s value changes across a frame. This lesson is the concrete payoff of that idea:{' '}
           <code>transform</code> is, alongside <code>opacity</code>, one of the two properties every
           performance-conscious front-end engineer reaches for first, precisely because animating it
           never triggers layout.
@@ -801,7 +801,7 @@ export default function CssTransforms() {
         'transform-origin sets the pivot point (default: center) that rotate() and scale() operate around — changing it changes the visual result of those functions dramatically.',
         'rotateX/rotateY/rotateZ add a third axis; rotateZ() is identical to plain rotate(). rotateX/rotateY need a perspective value somewhere in the ancestor chain to render with real visible depth.',
         'perspective is normally set on the parent of the transformed element, establishing a shared 3D viewing context; perspective() as a function inside transform applies it to a single element only.',
-        'transform never triggers layout — the same cheap-vs-expensive-properties principle from the Transitions module (Module 31). Combined with opacity, it is the standard choice for smooth, GPU-composited animation.',
+        'transform never triggers layout — the same cheap-vs-expensive-properties principle from the Transitions module (Lesson 31). Combined with opacity, it is the standard choice for smooth, GPU-composited animation.',
         'Combine multiple transform functions into a single space-separated declaration — writing separate transform rules causes the later one to silently overwrite the earlier one entirely.',
         'Building a real 3D flip effect requires transform-style: preserve-3d on the parent and backface-visibility: hidden on each face, not perspective and rotateY alone.',
       ]} />
@@ -812,12 +812,12 @@ export default function CssTransforms() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 34 covers the newest selectors that changed how CSS is written — :has() as the
+          Lesson 34 covers the newest selectors that changed how CSS is written — :has() as the
           long-awaited native parent selector, :is()/:where() for simplifying repetitive selector lists,
           and container queries for genuinely component-based responsive design.
         </p>
         <Link href="/learn/html-css/modern-css-selectors" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 34 → Modern Selectors — :has, :is, :where, Container Queries
+          Lesson 34 → Modern Selectors — :has, :is, :where, Container Queries
         </Link>
       </div>
     </LearnLayout>

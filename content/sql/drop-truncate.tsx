@@ -78,7 +78,7 @@ export default function DropTruncate() {
     <LearnLayout
       title="DROP TABLE and TRUNCATE"
       description="Remove entire tables or all their data — the difference between DROP and TRUNCATE, cascade behaviour, safe patterns for dev vs production, and why these commands demand maximum respect"
-      section="SQL — Module 25"
+      section="SQL — Lesson 25"
       readTime="8–12 min"
       updatedAt="April 2026"
     >
@@ -86,9 +86,9 @@ export default function DropTruncate() {
       {/* ── PART 01 ── */}
       <Part n="01" title="The Two Nuclear Options" />
 
-      <P>You have learned DELETE — removing specific rows. This module covers two more destructive operations that go further. <Hl>TRUNCATE</Hl> removes every row from a table at once, far faster than DELETE but with no WHERE clause and limited rollback options. <Hl>DROP TABLE</Hl> goes further still — it removes the table itself, including every row, every column definition, every constraint, every index, and every dependent object.</P>
+      <P>You have learned DELETE — removing specific rows. This lesson covers two more destructive operations that go further. <Hl>TRUNCATE</Hl> removes every row from a table at once, far faster than DELETE but with no WHERE clause and limited rollback options. <Hl>DROP TABLE</Hl> goes further still — it removes the table itself, including every row, every column definition, every constraint, every index, and every dependent object.</P>
 
-      <P>Both commands demand maximum respect. They are legitimate, frequently-used tools — but in the wrong context, they cause catastrophic and irreversible data loss. Understanding exactly what each does, when each is appropriate, and what safeguards exist is the point of this module.</P>
+      <P>Both commands demand maximum respect. They are legitimate, frequently-used tools — but in the wrong context, they cause catastrophic and irreversible data loss. Understanding exactly what each does, when each is appropriate, and what safeguards exist is the point of this lesson.</P>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 14, margin: '20px 0 32px' }}>
         {[
@@ -761,10 +761,10 @@ ORDER BY table_name;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 26</strong>, you learn normalisation — the theory and practice of designing relational schemas that eliminate redundancy, prevent update anomalies, and stay consistent as data grows.
+          In <strong>Lesson 26</strong>, you learn normalisation — the theory and practice of designing relational schemas that eliminate redundancy, prevent update anomalies, and stay consistent as data grows.
         </p>
         <Link href="/learn/sql/normalization" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 26 → Normalisation
+          Lesson 26 → Normalisation
         </Link>
       </div>
 

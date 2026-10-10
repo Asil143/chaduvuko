@@ -61,7 +61,7 @@ export default function CybersecurityCareersUS() {
     <LearnLayout
       title="Cybersecurity Career Paths and the US Job Market (2026)"
       description="Every security role mapped with real salary data, which certifications matter at which stage, and the companies hiring the most security engineers."
-      section="Cybersecurity — Module 06"
+      section="Cybersecurity — Lesson 06"
       readTime="27 min"
       updatedAt="May 2026"
     >
@@ -89,7 +89,7 @@ export default function CybersecurityCareersUS() {
       </div>
 
       <Callout type="info">
-        Security salary data varies significantly by source. The figures in this module are drawn from BLS Occupational Outlook, LinkedIn Salary Insights, Levels.fyi (for tech companies), and SANS 2025 Salary Survey. Real ranges depend heavily on: location (San Francisco vs Dallas vs remote), industry (Big Tech vs healthcare vs government), years of experience, specific skills, and clearance status.
+        Security salary data varies significantly by source. The figures in this lesson are drawn from BLS Occupational Outlook, LinkedIn Salary Insights, Levels.fyi (for tech companies), and SANS 2025 Salary Survey. Real ranges depend heavily on: location (San Francisco vs Dallas vs remote), industry (Big Tech vs healthcare vs government), years of experience, specific skills, and clearance status.
       </Callout>
 
       <HR />
@@ -430,7 +430,7 @@ export default function CybersecurityCareersUS() {
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px', marginBottom: 24 }}>
         {[
-          { month: 'Month 1–2', label: 'Fundamentals', body: 'Networking (TCP/IP, DNS, HTTP), Linux basics, how web applications work. TryHackMe Pre-Security path. Modules 01–06 of this track.' },
+          { month: 'Month 1–2', label: 'Fundamentals', body: 'Networking (TCP/IP, DNS, HTTP), Linux basics, how web applications work. TryHackMe Pre-Security path. Lessons 01–06 of this track.' },
           { month: 'Month 3–4', label: 'Security+ preparation', body: 'Study for Security+ using Professor Messer\'s free course + practice exams. Take the exam. This is your baseline credential.' },
           { month: 'Month 5–8', label: 'Hands-on practice', body: 'TryHackMe SOC Level 1 path or Web Fundamentals path. Document all practice in writeups. Build a home lab. Start on Hack The Box easy machines.' },
           { month: 'Month 9–12', label: 'Specialisation and job applications', body: 'Choose your track. For SOC: get Splunk fundamentals certification (free). For AppSec: build web app security projects. Start applying for L1 SOC analyst, junior security analyst, or help desk + security roles.' },
@@ -585,10 +585,10 @@ export default function CybersecurityCareersUS() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 07</strong>, you make the shift from defender to attacker mindset — how attackers plan and execute campaigns, the kill chain model that maps every attack step, and the MITRE ATT&CK framework that every security team in the world uses to describe attacker behaviour.
+          In <strong>Lesson 07</strong>, you make the shift from defender to attacker mindset — how attackers plan and execute campaigns, the kill chain model that maps every attack step, and the MITRE ATT&CK framework that every security team in the world uses to describe attacker behaviour.
         </p>
         <Link href="/learn/cybersecurity/attacker-mindset-kill-chain" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 07 → How Attackers Think — The Kill Chain and MITRE ATT&CK
+          Lesson 07 → How Attackers Think — The Kill Chain and MITRE ATT&CK
         </Link>
       </div>
 

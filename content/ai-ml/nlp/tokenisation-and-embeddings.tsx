@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Tokenisation and Word Embeddings — Chaduvuko',
@@ -178,7 +177,6 @@ export default function TokenisationAndEmbeddingsPage() {
       readTime="30–40 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="nlp" topic="tokenisation-and-embeddings" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -668,7 +666,7 @@ import numpy as np
 
 # ── Demonstrate contextual vs static embeddings ───────────────────────
 # Without a real BERT (large download), we show the concept
-# using a small Transformer encoder from Module 48
+# using a small Transformer encoder from Lesson 48
 
 class MiniContextualEncoder(nn.Module):
     """Minimal contextual encoder — same architecture as BERT."""
@@ -1202,7 +1200,7 @@ print(f"  English truncated: '{truncate_to_token_budget(samples['english'], 15)}
           The next step is using pretrained language models in production —
           loading BERT or RoBERTa from HuggingFace, fine-tuning on a
           labelled dataset, and deploying for inference.
-          Module 50 covers the complete HuggingFace fine-tuning workflow —
+          Lesson 50 covers the complete HuggingFace fine-tuning workflow —
           the Trainer API, evaluation, saving checkpoints, and serving
           predictions in production.
         </p>
@@ -1219,7 +1217,7 @@ print(f"  English truncated: '{truncate_to_token_budget(samples['english'], 15)}
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 50 · NLP
+              Next — Lesson 50 · NLP
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -78,7 +78,7 @@ export default function WhereClause() {
     <LearnLayout
       title="Filtering Rows — WHERE Clause"
       description="Get only the rows you actually need — every comparison operator, every data type, and how the database evaluates filters internally"
-      section="SQL — Module 06"
+      section="SQL — Lesson 06"
       readTime="12–16 min"
       updatedAt="April 2026"
     >
@@ -86,7 +86,7 @@ export default function WhereClause() {
       {/* ── PART 01 ── */}
       <Part n="01" title="Why WHERE Is the Most Important Clause in SQL" />
 
-      <P>In Module 05 you learned SELECT and FROM — they let you read data from a table. But SELECT without WHERE returns <Hl>every single row</Hl> in the table. The customers table has 20 rows. The orders table at a real company has 500 million. Returning all 500 million rows every time you need to answer a question is not just slow — it is impossible. Your screen cannot display it, your network cannot transfer it, and your database server will collapse under the load.</P>
+      <P>In Lesson 05 you learned SELECT and FROM — they let you read data from a table. But SELECT without WHERE returns <Hl>every single row</Hl> in the table. The customers table has 20 rows. The orders table at a real company has 500 million. Returning all 500 million rows every time you need to answer a question is not just slow — it is impossible. Your screen cannot display it, your network cannot transfer it, and your database server will collapse under the load.</P>
 
       <P>WHERE is the clause that tells the database: <Hl>"Only give me rows that satisfy this condition."</Hl> It is the difference between "show me everything" and "show me exactly what I asked for." Every useful SQL query in a production system has a WHERE clause. Mastering WHERE is mastering SQL.</P>
 
@@ -121,13 +121,13 @@ WHERE city = 'Seattle';`}
       <H>The evaluation process — row by row</H>
       <P>When the database executes a WHERE clause, it goes through the table row by row. For each row, it evaluates your condition. The condition produces one of three results: <Hl>TRUE</Hl> (the row satisfies the condition — include it), <Hl>FALSE</Hl> (the row does not satisfy the condition — discard it), or <Hl>NULL</Hl> (the condition could not be evaluated because a value is missing — also discarded). Only rows where the condition evaluates to TRUE make it into the result.</P>
 
-      <P>This happens before SELECT — remember from Module 05 that the execution order is FROM → WHERE → SELECT. The database identifies all rows that match the WHERE condition first, then extracts the requested columns from only those rows. This is efficient: if WHERE filters 10 million rows down to 100, SELECT only has to process those 100.</P>
+      <P>This happens before SELECT — remember from Lesson 05 that the execution order is FROM → WHERE → SELECT. The database identifies all rows that match the WHERE condition first, then extracts the requested columns from only those rows. This is efficient: if WHERE filters 10 million rows down to 100, SELECT only has to process those 100.</P>
 
       <H>Without an index — full table scan</H>
       <P>If the column in your WHERE clause has no index, the database must read every single page of the table, check every row, and keep only the ones where the condition is true. This is called a <Hl>full table scan</Hl>. On a table with 500 million rows and no index, a full table scan takes minutes to hours.</P>
 
       <H>With an index — direct lookup</H>
-      <P>If the column in your WHERE clause has an index (a B-tree), the database jumps directly to the matching rows without reading the whole table. Finding 100 rows out of 500 million with an index takes milliseconds — the same query without an index takes minutes. You will learn to create indexes in Module 46. For now, know that WHERE on a primary key or a properly indexed column is always fast regardless of table size.</P>
+      <P>If the column in your WHERE clause has an index (a B-tree), the database jumps directly to the matching rows without reading the whole table. Finding 100 rows out of 500 million with an index takes milliseconds — the same query without an index takes minutes. You will learn to create indexes in Lesson 46. For now, know that WHERE on a primary key or a properly indexed column is always fast regardless of table size.</P>
 
       <Callout type="info">
         In the FreshCart playground, all tables are small (under 120 rows) so every query is fast regardless of indexes. In real production databases with millions of rows, WHERE performance depends entirely on whether the filtered column has an index. Always think about indexes when writing WHERE clauses on large tables.
@@ -373,7 +373,7 @@ ORDER BY margin_pct DESC;`}
 
       <SQLPlayground
         initialQuery={`-- Orders where total_amount is more than 3x the average
--- This is a subquery — you'll learn these fully in Module 36
+-- This is a subquery — you'll learn these fully in Lesson 36
 SELECT order_id, customer_id, total_amount, order_status
 FROM orders
 WHERE total_amount > (SELECT AVG(total_amount) * 3 FROM orders)
@@ -383,7 +383,7 @@ ORDER BY total_amount DESC;`}
       />
 
       <Callout type="warning">
-        Applying functions or calculations to the column side of a WHERE condition (e.g. WHERE YEAR(order_date) = 2024) can prevent the database from using an index on that column — because the index stores raw values, not the computed results. This is called a non-SARGable condition. Where possible, rewrite calculations to the value side: WHERE order_date &gt;= '2024-01-01' AND order_date &lt; '2025-01-01'. You will learn this in depth in Module 57 (Query Optimisation).
+        Applying functions or calculations to the column side of a WHERE condition (e.g. WHERE YEAR(order_date) = 2024) can prevent the database from using an index on that column — because the index stores raw values, not the computed results. This is called a non-SARGable condition. Where possible, rewrite calculations to the value side: WHERE order_date &gt;= '2024-01-01' AND order_date &lt; '2025-01-01'. You will learn this in depth in Lesson 57 (Query Optimisation).
       </Callout>
 
       <HR />
@@ -441,7 +441,7 @@ WHERE manager_id IS NULL;`}
       />
 
       <ProTip>
-        NULL confusion causes silent data quality bugs that are extremely hard to find. Whenever you write a WHERE condition on a column that might contain NULLs, ask yourself: "What do I want to happen with NULL rows?" If you want them included, you need to explicitly handle them. If you want them excluded, your regular condition already excludes them (remember: NULL condition = row discarded). Module 11 covers NULL in full depth — this is a preview of why it matters.
+        NULL confusion causes silent data quality bugs that are extremely hard to find. Whenever you write a WHERE condition on a column that might contain NULLs, ask yourself: "What do I want to happen with NULL rows?" If you want them included, you need to explicitly handle them. If you want them excluded, your regular condition already excludes them (remember: NULL condition = row discarded). Lesson 11 covers NULL in full depth — this is a preview of why it matters.
       </ProTip>
 
       <HR />
@@ -654,14 +654,14 @@ GROUP BY store_id
 HAVING COUNT(*) > 2;               -- then filter groups`}
       />
 
-      <P>You will learn GROUP BY and HAVING in full depth in Modules 28 and 29. For now, remember this one rule: <Hl>WHERE for rows, HAVING for groups</Hl>.</P>
+      <P>You will learn GROUP BY and HAVING in full depth in Lessons 28 and 29. For now, remember this one rule: <Hl>WHERE for rows, HAVING for groups</Hl>.</P>
 
       <HR />
 
       {/* ── PART 10 ── */}
       <Part n="10" title="Performance — Writing WHERE Clauses That Stay Fast" />
 
-      <P>A WHERE clause that works correctly but runs slowly is still a problem in production. Here are the most important performance rules for WHERE — you will learn the full details in Module 57, but these habits should start now.</P>
+      <P>A WHERE clause that works correctly but runs slowly is still a problem in production. Here are the most important performance rules for WHERE — you will learn the full details in Lesson 57, but these habits should start now.</P>
 
       <H>Filter on indexed columns</H>
       <P>Primary keys are always indexed. Other columns may or may not have indexes — that depends on how the database was designed. When you write WHERE on a column that has an index, the database does an index lookup (fast). When you write WHERE on an unindexed column, the database does a full table scan (slow on large tables). Ask your team which columns are indexed when joining a new project.</P>
@@ -697,7 +697,7 @@ WHERE order_status = 'Delivered'
       />
 
       <ProTip>
-        Every WHERE clause you write in a production environment should be accompanied by a mental question: "Does this column have an index?" If you are filtering on a column that millions of rows will be scanned against and there is no index, the query will be slow. The fix is adding an index — which you will learn to do in Module 46. For now, build the habit of asking the question.
+        Every WHERE clause you write in a production environment should be accompanied by a mental question: "Does this column have an index?" If you are filtering on a column that millions of rows will be scanned against and there is no index, the query will be slow. The fix is adding an index — which you will learn to do in Lesson 46. For now, build the habit of asking the question.
       </ProTip>
 
       <HR />
@@ -757,7 +757,7 @@ ORDER BY delivery_date DESC;`}
       </TimeBlock>
 
       <ProTip>
-        This is real SQL work. Not complex analytics — just precise, targeted WHERE queries that narrow from "the whole database" to "the exact rows that explain the problem." The investigation above uses only what you have learned in Modules 01–06. This is how much SQL you need to be genuinely useful on day one.
+        This is real SQL work. Not complex analytics — just precise, targeted WHERE queries that narrow from "the whole database" to "the exact rows that explain the problem." The investigation above uses only what you have learned in Lessons 01–06. This is how much SQL you need to be genuinely useful on day one.
       </ProTip>
 
       <HR />
@@ -821,7 +821,7 @@ ORDER BY delivery_date DESC;`}
       <Err
         msg="ERROR: column 'total' does not exist — WHERE total > 1000 (when SELECT has AS total)"
         cause="You gave a computed column an alias (AS total) in SELECT and then tried to use that alias in WHERE. This fails because WHERE executes before SELECT in SQL's logical processing order — the alias 'total' does not exist yet when WHERE is evaluated. This is one of the most common SQL logic errors for beginners who expect aliases to be available throughout the query."
-        fix="Repeat the expression in WHERE instead of using the alias: WHERE total_amount > 1000 (use the original column name), or WHERE (unit_price - cost_price) > 100 (repeat the calculation). Alternatively, wrap your query in a subquery or CTE (covered in Modules 36 and 55) where the inner query defines the alias and the outer query filters on it: SELECT * FROM (SELECT *, unit_price - cost_price AS margin FROM products) t WHERE margin > 100. Note: ORDER BY is the one clause where aliases ARE available, because ORDER BY executes after SELECT."
+        fix="Repeat the expression in WHERE instead of using the alias: WHERE total_amount > 1000 (use the original column name), or WHERE (unit_price - cost_price) > 100 (repeat the calculation). Alternatively, wrap your query in a subquery or CTE (covered in Lessons 36 and 55) where the inner query defines the alias and the outer query filters on it: SELECT * FROM (SELECT *, unit_price - cost_price AS margin FROM products) t WHERE margin > 100. Note: ORDER BY is the one clause where aliases ARE available, because ORDER BY executes after SELECT."
       />
 
       <Err
@@ -835,7 +835,7 @@ ORDER BY delivery_date DESC;`}
       {/* ── Try It ── */}
       <TryItChallenge
         question="The FreshCart operations team needs a report of all high-value delivered orders placed in February 2024 — specifically orders with a total_amount above $800 that were successfully delivered. Show the order_id, order_date, delivery_date, payment_method, and total_amount. Sort by total_amount descending."
-        hint="You need three conditions in WHERE: order_status = 'Delivered', order_date range for February 2024 (>= '2024-02-01' AND < '2024-03-01'), and total_amount > 800. All three must be true — combine them with AND (covered in Module 07)."
+        hint="You need three conditions in WHERE: order_status = 'Delivered', order_date range for February 2024 (>= '2024-02-01' AND < '2024-03-01'), and total_amount > 800. All three must be true — combine them with AND (covered in Lesson 07)."
         answer={`SELECT
   order_id,
   order_date,
@@ -848,7 +848,7 @@ WHERE order_status = 'Delivered'
   AND order_date <  '2024-03-01'
   AND total_amount > 800
 ORDER BY total_amount DESC;`}
-        explanation="This query combines four WHERE conditions using AND — all four must be true for a row to appear in the result. The date range uses >= on the first day and < on the first day of the next month, which correctly captures all dates in February without worrying about time components. The result shows which high-value February orders were successfully delivered, which the operations team can use to verify delivery performance on important transactions. You will learn AND, OR, and NOT in full depth in Module 07."
+        explanation="This query combines four WHERE conditions using AND — all four must be true for a row to appear in the result. The date range uses >= on the first day and < on the first day of the next month, which correctly captures all dates in February without worrying about time components. The result shows which high-value February orders were successfully delivered, which the operations team can use to verify delivery performance on important transactions. You will learn AND, OR, and NOT in full depth in Lesson 07."
       />
 
       <HR />
@@ -873,10 +873,10 @@ ORDER BY total_amount DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 07</strong>, you combine multiple WHERE conditions using AND, OR, and NOT — turning simple single-condition filters into precise multi-condition queries that can answer complex business questions in a single statement.
+          In <strong>Lesson 07</strong>, you combine multiple WHERE conditions using AND, OR, and NOT — turning simple single-condition filters into precise multi-condition queries that can answer complex business questions in a single statement.
         </p>
         <Link href="/learn/sql/and-or-not" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 07 → Multiple Conditions — AND, OR, NOT
+          Lesson 07 → Multiple Conditions — AND, OR, NOT
         </Link>
       </div>
 

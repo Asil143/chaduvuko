@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'ML System Design — End to End — Chaduvuko',
@@ -146,7 +145,6 @@ export default function MLSystemDesignPage() {
       readTime="55–70 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="mlops" topic="ml-system-design" />
 
       {/* ══ SECTION 1 — THE FRAMEWORK ══════════════════════════════════════════ */}
       <div style={S.sec}>

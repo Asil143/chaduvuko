@@ -77,7 +77,7 @@ export default function HtmlEntitiesSpecialCharacters() {
     <LearnLayout
       title="HTML Entities & Special Characters"
       description="Why some characters need to be escaped, the entities you will actually use, and the bugs that happen when you forget."
-      section="HTML & CSS — Module 14"
+      section="HTML & CSS — Lesson 14"
       readTime="20 min"
       updatedAt="August 2026"
     >
@@ -91,7 +91,7 @@ export default function HtmlEntitiesSpecialCharacters() {
           HTML has a small set of characters that carry special meaning to the parser itself — they are
           not ordinary text, they are syntax. The moment the parser encounters one of these characters
           inside what you intended as plain text content, it stops treating that text as text and starts
-          trying to interpret it as markup instead. This module is about exactly which characters those
+          trying to interpret it as markup instead. This lesson is about exactly which characters those
           are, the safe replacement syntax (called an <strong>entity</strong>) for writing them literally,
           and — just as importantly — when you genuinely do <em>not</em> need an entity at all.
         </Para>
@@ -642,12 +642,12 @@ export default function HtmlEntitiesSpecialCharacters() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 15 covers HTML best practices and validation — the W3C Markup Validator, void elements,
+          Lesson 15 covers HTML best practices and validation — the W3C Markup Validator, void elements,
           attribute quoting conventions, and the specific mistakes the validator catches that a browser
           silently forgives.
         </p>
         <Link href="/learn/html-css/html-best-practices-validation" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 15 → HTML Best Practices & Validation
+          Lesson 15 → HTML Best Practices & Validation
         </Link>
       </div>
     </LearnLayout>

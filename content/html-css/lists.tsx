@@ -77,7 +77,7 @@ export default function Lists() {
     <LearnLayout
       title="Lists — ul, ol, dl"
       description="Ordered, unordered, and description lists — nesting them correctly, and the semantic reasons to choose one over the other."
-      section="HTML & CSS — Module 06"
+      section="HTML & CSS — Lesson 06"
       readTime="25 min"
       updatedAt="August 2026"
     >
@@ -398,7 +398,7 @@ export default function Lists() {
         <SectionTitle>Styling Lists With CSS — A Preview, Not the Full Picture</SectionTitle>
 
         <Para>
-          The default bullets and numbers you have seen throughout this module are browser default
+          The default bullets and numbers you have seen throughout this lesson are browser default
           styles, not something baked permanently into the elements — CSS can change or remove them
           entirely. Full CSS styling depth is out of scope for this HTML-focused module, but the single
           property worth knowing now is <code>list-style-type</code>, since you will reach for it almost
@@ -492,7 +492,7 @@ export default function Lists() {
 </ol>`}</CodeBox>
 
           <Para>
-            The fix is two changes, both directly from this module: swapping the <code>{`<div>`}</code>{' '}
+            The fix is two changes, both directly from this lesson: swapping the <code>{`<div>`}</code>{' '}
             wrapper and item elements for a genuine <code>{`<ol>`}</code>/<code>{`<li>`}</code> structure
             (Part 02), and sorting the items by an explicit <code>step_order</code> field from the API
             before rendering, rather than trusting whatever order the response happened to arrive in —
@@ -718,12 +718,12 @@ export default function Lists() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 07 covers HTML tables — table, thead/tbody/tfoot, th, td, colspan/rowspan — and exactly
+          Lesson 07 covers HTML tables — table, thead/tbody/tfoot, th, td, colspan/rowspan — and exactly
           why tables should never be used for page layout, a mistake with a genuinely important history
           behind it.
         </p>
         <Link href="/learn/html-css/tables" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 07 → Tables — Structure and Correct Usage
+          Lesson 07 → Tables — Structure and Correct Usage
         </Link>
       </div>
     </LearnLayout>

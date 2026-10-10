@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Optimisers — SGD, Adam, AdamW — Chaduvuko',
@@ -178,7 +177,6 @@ export default function OptimisersPage() {
       readTime="26–34 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="deep-learning" topic="optimisers" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -1001,7 +999,7 @@ print("costs nothing to check before reaching for a bigger model.")`} />
 
         <ConceptBox title="Myth: Adam converges faster than SGD, so there is no real downside to always using it" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            Faster convergence and better final performance are different properties, and this module's
+            Faster convergence and better final performance are different properties, and this lesson's
             own comparison section shows them diverging: on large-scale image classification and some
             NLP tasks, SGD with momentum reaches worse training loss more slowly but ends up
             generalising better, because Adam's adaptive per-weight steps tend to settle into sharp,
@@ -1040,7 +1038,7 @@ print("costs nothing to check before reaching for a bigger model.")`} />
         <ConceptBox title="Myth: If training feels slow, raising the learning rate is a safe way to speed it up" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
             Past a certain threshold, a higher learning rate does not train faster — it stops training
-            at all. As this module's errors section shows, too-large a step causes updates to overshoot
+            at all. As this lesson's errors section shows, too-large a step causes updates to overshoot
             the minimum and bounce between opposite sides of the loss valley, producing a loss that
             oscillates indefinitely rather than converging, sometimes even diverging to NaN. The
             actual fix for "training feels slow" is usually a schedule — a higher rate early for fast
@@ -1147,7 +1145,7 @@ print("costs nothing to check before reaching for a bigger model.")`} />
 
         <p style={S.p}>
           You now have the complete training loop: forward pass, loss,
-          backprop, optimiser step. Module 45 adds the two techniques
+          backprop, optimiser step. Lesson 45 adds the two techniques
           that make deep networks stable and generalisable at scale —
           Batch Normalisation (stabilise activations between layers)
           and Dropout (prevent co-adaptation and overfitting).
@@ -1167,7 +1165,7 @@ print("costs nothing to check before reaching for a bigger model.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 45 · Deep Learning
+              Next — Lesson 45 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

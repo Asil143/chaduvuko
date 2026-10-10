@@ -52,7 +52,7 @@ export default function Module36() {
     <LearnLayout
       title="Compliance Frameworks — SOC 2, PCI-DSS, HIPAA, ISO 27001, NIST"
       description="Navigate the compliance landscape without losing your mind. Learn what each major framework requires, how they overlap, how to build a unified control library, and how to prepare for and survive an audit."
-      section="Cybersecurity — Module 36"
+      section="Cybersecurity — Lesson 36"
       readTime="36 min"
       updatedAt="May 2026"
     >
@@ -754,8 +754,8 @@ What a GRC platform gives you:
       ]} />
 
       <Callout type="info">
-        <strong>Up Next — Module 37: Security Certifications and Career Paths</strong><br />
-        Module 37 maps the cybersecurity certification landscape: which certs matter for which roles, the most efficient study paths, exam strategies, and how to build a portfolio that gets you hired. From CompTIA Security+ for entry-level to OSCP for offensive roles and CISSP for security leadership — learn where to invest your time.
+        <strong>Up Next — Lesson 37: Security Certifications and Career Paths</strong><br />
+        Lesson 37 maps the cybersecurity certification landscape: which certs matter for which roles, the most efficient study paths, exam strategies, and how to build a portfolio that gets you hired. From CompTIA Security+ for entry-level to OSCP for offensive roles and CISSP for security leadership — learn where to invest your time.
       </Callout>
 
     </LearnLayout>

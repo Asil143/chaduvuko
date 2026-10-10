@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'ML Pipelines and Feature Stores — Chaduvuko',
@@ -178,7 +177,6 @@ export default function MLPipelinesFeatureStoresPage() {
       readTime="40–52 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="mlops" topic="ml-pipelines-feature-stores" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -1278,7 +1276,7 @@ print("""
           Pipelines produce models automatically. But which of the 50 models
           trained over the past month is the best? What hyperparameters,
           what data version, what feature set produced it? Without experiment
-          tracking you cannot answer these questions. Module 70 covers MLflow
+          tracking you cannot answer these questions. Lesson 70 covers MLflow
           and Weights & Biases — log every run, compare experiments on a
           dashboard, version models, and register the best ones for deployment.
         </p>
@@ -1295,7 +1293,7 @@ print("""
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 70 · MLOps
+              Next — Lesson 70 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

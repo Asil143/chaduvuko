@@ -54,7 +54,7 @@ export default function InterviewQuestions() {
     <LearnLayout
       title="Top 50 SQL Interview Questions"
       description="Every question that appears in data analyst and data engineer interviews — with complete answers, example queries, and the traps interviewers set"
-      section="SQL — Module 61"
+      section="SQL — Lesson 61"
       readTime="55–70 min"
       updatedAt="April 2026"
     >
@@ -570,7 +570,7 @@ WHERE o.order_status = 'Delivered'
       <Part n="04" title="Transactions, Constraints, and Design (Q31–Q40)" />
 
       <Q num={31} q="What are ACID properties?" difficulty="Medium" topic="Transactions">
-        <p style={{ margin: '0 0 10px' }}>Atomicity: a transaction is all-or-nothing. Consistency: only valid states. Isolation: concurrent transactions don't interfere. Durability: committed data survives crashes. See Module 48 for full coverage.</p>
+        <p style={{ margin: '0 0 10px' }}>Atomicity: a transaction is all-or-nothing. Consistency: only valid states. Isolation: concurrent transactions don't interfere. Durability: committed data survives crashes. See Lesson 48 for full coverage.</p>
       </Q>
 
       <Q num={32} q="What is a deadlock and how do you prevent it?" difficulty="Medium" topic="Transactions">
@@ -723,7 +723,7 @@ GROUP BY store_id;`}</Code>
       <HR />
 
       <SQLPlayground
-        initialQuery={`-- Practice sandbox: run any of the query examples from this module
+        initialQuery={`-- Practice sandbox: run any of the query examples from this lesson
 -- The full FreshCart schema is available (customers, orders, order_items, products, stores)
 
 -- Example: Q13 running total
@@ -762,10 +762,10 @@ LIMIT 10;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 62</strong>, you build 3 complete real-world SQL projects end-to-end — schema design, data loading, analytical queries, and presenting results.
+          In <strong>Lesson 62</strong>, you build 3 complete real-world SQL projects end-to-end — schema design, data loading, analytical queries, and presenting results.
         </p>
         <Link href="/learn/sql/sql-projects" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 62 → 3 Real SQL Projects
+          Lesson 62 → 3 Real SQL Projects
         </Link>
       </div>
 

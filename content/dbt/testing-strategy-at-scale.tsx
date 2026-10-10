@@ -74,7 +74,7 @@ export default function TestingStrategyAtScale() {
     <LearnLayout
       title="Testing Strategy and Data Quality at Scale"
       description="Why 'add tests everywhere' fails at scale, tiering tests by DAG position and severity, store_failures for real debugging, freshness SLAs as team agreements, and building a data-quality culture instead of a pile of assertions nobody owns."
-      section="dbt — Module 19"
+      section="dbt — Lesson 19"
       readTime="65 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -89,7 +89,7 @@ export default function TestingStrategyAtScale() {
         <SectionTitle>More Tests Is Not the Same Thing as Better Data Quality</SectionTitle>
 
         <Para>
-          Module 08 covered <code>unique</code>, <code>not_null</code>, <code>accepted_values</code>, and
+          Lesson 08 covered <code>unique</code>, <code>not_null</code>, <code>accepted_values</code>, and
           <code>relationships</code>, plus custom generic and singular tests, and where in the DAG a test
           belongs. Everything in that module is correct in isolation. But a real dbt project with 200 or 300
           models, run daily by a small platform team, cannot simply apply every one of those tests to every
@@ -127,14 +127,14 @@ export default function TestingStrategyAtScale() {
           The fix is not fewer tests for the sake of fewer tests. It is a deliberate strategy: which tests
           matter enough to block a pipeline, which are worth a human's attention without blocking anything,
           where in the DAG a given risk actually lives, and who is responsible for looking at a failure when
-          it happens. The rest of this module builds that strategy piece by piece, building directly on the
-          testing mechanics from Module 08 rather than re-explaining them.
+          it happens. The rest of this lesson builds that strategy piece by piece, building directly on the
+          testing mechanics from Lesson 08 rather than re-explaining them.
         </Para>
 
-        <Callout title="This module assumes Module 08's mechanics" color={K}>
+        <Callout title="This lesson assumes Lesson 08's mechanics" color={K}>
           If <code>unique</code>, <code>not_null</code>, generic vs. singular tests, or how a generic test
-          compiles to a plain <code>SELECT</code> are unfamiliar, that is Module 08's territory
-          (Testing: Generic and Singular Tests). This module is about deciding <em>which</em> tests to write,
+          compiles to a plain <code>SELECT</code> are unfamiliar, that is Lesson 08's territory
+          (Testing: Generic and Singular Tests). This lesson is about deciding <em>which</em> tests to write,
           <em>where</em> to put them, and <em>how severely</em> to treat a failure — not about the test
           syntax itself.
         </Callout>
@@ -148,7 +148,7 @@ export default function TestingStrategyAtScale() {
         <SectionTitle>Source and Staging Tests Are High Leverage; Mart Tests Are High Visibility</SectionTitle>
 
         <Para>
-          Module 08's Part 07 already introduced the idea that a test's position in the DAG changes what
+          Lesson 08's Part 07 already introduced the idea that a test's position in the DAG changes what
           kind of problem it catches. At scale, this distinction becomes the backbone of an entire test
           strategy, not just a debugging convenience. Two different DAG positions earn tests for two
           genuinely different reasons, and a mature strategy invests deliberately in both rather than
@@ -209,7 +209,7 @@ export default function TestingStrategyAtScale() {
         <SectionTitle>Not Every Test Failure Should Block a dbt build</SectionTitle>
 
         <Para>
-          Module 08 mentioned <code>severity</code> briefly; at scale it becomes one of the most important
+          Lesson 08 mentioned <code>severity</code> briefly; at scale it becomes one of the most important
           levers a test strategy has. Every generic and singular test accepts a <code>severity</code> config
           of <code>error</code> (the default) or <code>warn</code>. This single setting is what separates a
           test that is worth writing from a test that is worth writing <em>and</em> having block the entire
@@ -318,7 +318,7 @@ export default function TestingStrategyAtScale() {
         <SectionTitle>Persisting Failing Rows Is What Makes a Failure Debuggable, Not Just Visible</SectionTitle>
 
         <Para>
-          Module 08 introduced <code>store_failures: true</code> as a way to persist a failing test's result
+          Lesson 08 introduced <code>store_failures: true</code> as a way to persist a failing test's result
           set to a real table. At scale, this stops being a nice-to-have and becomes close to mandatory for
           any test whose failure needs to be investigated by more than one person, or investigated more than
           a few minutes after the run finished. Console output from a <code>dbt build</code> that ran overnight
@@ -443,7 +443,7 @@ export default function TestingStrategyAtScale() {
         <SectionTitle>A Pile of Tests Nobody Owns Is Not a Testing Strategy</SectionTitle>
 
         <Para>
-          Everything covered so far in this module — tiering, severity, thresholds, persisted failures,
+          Everything covered so far in this lesson — tiering, severity, thresholds, persisted failures,
           freshness SLAs — is mechanical. None of it matters if a test failing in production has no defined
           next step. A mature data-quality practice is as much an operational and cultural commitment as it
           is a set of YAML configs, and the questions below are the ones an actual team needs answered, in

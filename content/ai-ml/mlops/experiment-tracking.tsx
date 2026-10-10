@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Experiment Tracking with MLflow and Weights & Biases — Chaduvuko',
@@ -178,7 +177,6 @@ export default function ExperimentTrackingPage() {
       readTime="30–40 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="mlops" topic="experiment-tracking" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -1052,7 +1050,7 @@ jobs:
             made it, and why. An experiment tracking run records what happened in one specific
             execution of that code — which parameters, which metrics, which resulting artifact. A run
             is only actually reproducible if it also logged which git commit produced it, which is why
-            the standardised wrapper pattern in this module logs git_commit as a tag on every run.
+            the standardised wrapper pattern in this lesson logs git_commit as a tag on every run.
             Skip that link and a perfectly detailed MLflow run becomes unreproducible the moment the
             training script changes again.
           </p>
@@ -1184,7 +1182,7 @@ jobs:
 
         <p style={S.p}>
           Experiment tracking gives you a registered model artifact.
-          Module 71 takes that artifact and deploys it — wrapping the model
+          Lesson 71 takes that artifact and deploys it — wrapping the model
           in a FastAPI REST endpoint, containerising it with Docker,
           and scaling it with Kubernetes. The full deployment path
           from a pkl file to a production API serving thousands of
@@ -1203,7 +1201,7 @@ jobs:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 71 · MLOps
+              Next — Lesson 71 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

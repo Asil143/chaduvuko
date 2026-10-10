@@ -74,7 +74,7 @@ export default function DisasterRecoveryMultiRegion() {
     <LearnLayout
       title="Disaster Recovery and Multi-Region Kafka"
       description="Why a single-cluster, single-region Kafka deployment has a blast radius, how rack awareness and MirrorMaker 2 mitigate it, active-passive vs active-active DR patterns, RPO/RTO framing, and a worked regional failover runbook."
-      section="Apache Kafka — Module 19"
+      section="Apache Kafka — Lesson 19"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -114,9 +114,9 @@ export default function DisasterRecoveryMultiRegion() {
         </Para>
         <HighlightBox>
           <Para>
-            <strong>What this module is not about:</strong> normal broker failures, disk failures, or a
+            <strong>What this lesson is not about:</strong> normal broker failures, disk failures, or a
             single broker restart. Those are covered by replication and the ISR mechanics you already know —
-            they are routine, survivable, and largely invisible to applications. This module is specifically
+            they are routine, survivable, and largely invisible to applications. This lesson is specifically
             about failures large enough that the cluster itself — or the region it lives in — stops being a
             usable unit at all.
           </Para>
@@ -132,7 +132,7 @@ export default function DisasterRecoveryMultiRegion() {
           ]}
         />
         <Callout title="The core trade-off ahead" color={K}>
-          Everything in this module is really one recurring trade-off: more geographic spread buys more
+          Everything in this lesson is really one recurring trade-off: more geographic spread buys more
           resilience against large-scale failure, at the direct cost of write latency, operational
           complexity, and (for active-active designs) the correctness headaches of handling conflicting
           writes. There is no configuration that gives you regional resilience for free.
@@ -221,7 +221,7 @@ broker.rack=us-east-1a
           actually run, and the reason is latency, not theory.
         </Para>
         <Para>
-          Recall from earlier modules that <code>acks=all</code> means the leader waits for every replica
+          Recall from earlier lessons that <code>acks=all</code> means the leader waits for every replica
           currently in the ISR to confirm the write before acknowledging the producer. If those replicas are
           in different regions, that acknowledgement now has to wait for a full round trip across whatever
           network path connects the regions — typically 30-90ms between two US regions on the same
@@ -416,7 +416,7 @@ us-east.checkpoints.internal  <- MM2's internal offset-translation bookkeeping t
 
 # Without offset translation, a team's only fallback is an
 # application-level reconciliation: seeking consumers by TIMESTAMP
-# instead of offset (using the timeindex covered in earlier modules),
+# instead of offset (using the timeindex covered in earlier lessons),
 # accepting some imprecision, and relying on idempotent downstream
 # processing to absorb any resulting reprocessing`}
         </CodeBox>
@@ -768,7 +768,7 @@ us-west> kafka-mirror-maker-offset-tool --translate-offsets \\
         <SectionTag text="// Part 11 — The Cost Conversation" />
         <SectionTitle>Paying for Resilience — What Multi-Region DR Actually Costs, and How to Scope It</SectionTitle>
         <Para>
-          Every pattern in this module has a real dollar cost, and pretending otherwise is how DR proposals
+          Every pattern in this lesson has a real dollar cost, and pretending otherwise is how DR proposals
           stall in budget review. A passive DR cluster in a second region means paying for a second set of
           brokers, sized to handle full production load even though it serves none of it day to day — plus
           cross-region data transfer costs for the continuous MM2 replication stream, which scale directly
@@ -818,12 +818,12 @@ us-west> kafka-mirror-maker-offset-tool --translate-offsets \\
           headers={['Standby level', 'DR cluster state before failover', 'Typical RTO', 'Ongoing cost']}
           rows={[
             ['Cold standby', 'Brokers and infrastructure are provisioned but not continuously replicating; MM2 is started only at the point of failover, or replication runs on a long, infrequent schedule', 'Hours — includes catch-up replication time from wherever the last sync left off', 'Lowest — minimal ongoing compute and data transfer cost'],
-            ['Warm standby', 'Brokers are running, MM2 replication is continuous, but the cluster is not pre-scaled to instantly absorb full production load without some scale-up step', 'Minutes to tens of minutes — mostly the time to redirect traffic and scale up, replication itself is already current', 'Moderate — the pattern this module has described as the default active-passive setup'],
+            ['Warm standby', 'Brokers are running, MM2 replication is continuous, but the cluster is not pre-scaled to instantly absorb full production load without some scale-up step', 'Minutes to tens of minutes — mostly the time to redirect traffic and scale up, replication itself is already current', 'Moderate — the pattern this lesson has described as the default active-passive setup'],
             ['Hot standby', 'Brokers running, MM2 replication continuous, DR cluster pre-scaled to instantly absorb full production load with no scale-up step needed', 'Minutes — largely just the traffic-redirection and validation steps from Part 09\'s runbook', 'Highest — effectively paying for two full production-capacity clusters continuously'],
           ]}
         />
         <Para>
-          Most of this module's guidance, including the Part 09 runbook, describes warm standby — it is the
+          Most of this lesson's guidance, including the Part 09 runbook, describes warm standby — it is the
           most common production choice because it gets RTO down to a reasonable, business-justifiable number
           without paying for a fully duplicated, always-scaled second production environment. Cold standby is
           sometimes acceptable for genuinely low-priority topics where a multi-hour RTO is tolerable and the
@@ -884,8 +884,8 @@ us-west> kafka-mirror-maker-offset-tool --translate-offsets \\
         <SectionTag text="// Part 14 — Schema Registry and ACLs in a Multi-Region Setup" />
         <SectionTitle>Don't Forget the Supporting Systems — Schema Registry and Security Config Also Need a DR Story</SectionTitle>
         <Para>
-          Everything in this module has focused on the Kafka clusters themselves, but a production Kafka
-          deployment almost always runs alongside a schema registry (covered in earlier modules for its role
+          Everything in this lesson has focused on the Kafka clusters themselves, but a production Kafka
+          deployment almost always runs alongside a schema registry (covered in earlier lessons for its role
           in enforcing compatibility) and a set of access-control configurations. A DR plan that covers the
           Kafka clusters but forgets these supporting systems still leaves a real gap: a failed-over cluster
           that producers and consumers cannot actually authenticate against, or a DR cluster whose schema

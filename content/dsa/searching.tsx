@@ -124,7 +124,7 @@ const SearchStep = ({ values, low, high, mid, found, eliminated }: {
 export default function SearchingPage() {
   return (
     <LearnLayout
-      title="Unit 10 — Searching Algorithms"
+      title="Searching Algorithms"
       description="Linear search checks every element. Binary search cuts the problem in half each step. Learn when to use each, how binary search works exactly, and all its powerful variations."
       section="DSA"
       readTime="45 min"
@@ -134,9 +134,7 @@ export default function SearchingPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'UNIT 10', green: true },
-          { label: 'Prerequisite: Unit 09 — Sorting', green: false },
-          { label: '45 min read', green: false },
+          { label: 'Prerequisite: Lesson 10 — Sorting', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -146,8 +144,8 @@ export default function SearchingPage() {
 
       <p style={{ fontSize: 16, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         Searching is the act of finding a specific value inside a collection of data.
-        You have already seen linear search in Unit 02 when we searched arrays.
-        In this unit we go deeper — understanding exactly when linear search is the right
+        You have already seen linear search in Lesson 3 when we searched arrays.
+        In this lesson we go deeper — understanding exactly when linear search is the right
         choice, and when binary search makes it hundreds of thousands of times faster.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
@@ -807,7 +805,7 @@ int main() {
             color: 'var(--green)',
           },
           {
-            condition: 'Data is in a hash table (Unit 14)',
+            condition: 'Data is in a hash table (Lesson 15)',
             answer: 'Direct lookup — O(1). Faster than both for point queries.',
             color: '#4285f4',
           },
@@ -862,7 +860,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Unit 11</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 12</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now have a complete toolkit for searching — linear search for unsorted data,
@@ -871,7 +869,7 @@ int main() {
         occurrence patterns alone will save you in dozens of future problems.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Unit 11 we enter the world of <strong style={{ color: 'var(--text)' }}>Trees</strong> —
+        In Lesson 12 we enter the world of <strong style={{ color: 'var(--text)' }}>Trees</strong> —
         hierarchical data structures that look like upside-down trees.
         Trees are everywhere: file systems, HTML pages, databases, compilers.
         We build binary trees from scratch, learn all four traversal orders,
@@ -880,7 +878,7 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → UNIT 11</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 12</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Trees — Hierarchical Data</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Binary trees, inorder, preorder, postorder, level order — built in C.</div>
         </div>

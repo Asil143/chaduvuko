@@ -296,7 +296,7 @@ export default function WhatIsDbt() {
     <LearnLayout
       title="What is dbt?"
       description="What dbt actually is, the ETL-to-ELT shift that created the need for it, its exact scope boundary against ingestion tools, why it exists, and how it compares to hand-rolled SQL, GUI ETL tools, and Dataform."
-      section="dbt — Module 01"
+      section="dbt — Lesson 01"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -501,7 +501,7 @@ ELT (current model, what dbt is built for):
           SELECT in the appropriate DDL/DML automatically, based on how you've configured that model
           (typically as a table or a view). You reference other models not by hardcoding a schema and table
           name, but through a function called <code>ref()</code>, which dbt resolves at compile time and uses
-          to build a dependency graph automatically — covered in full mechanical detail in the next module.
+          to build a dependency graph automatically — covered in full mechanical detail in the next lesson.
         </Para>
         <CodeBox label="a minimal dbt model — models/stg_orders.sql">
 {`select
@@ -517,7 +517,7 @@ where order_status is not null`}
           Running <code>dbt run</code> takes that file, resolves the <code>source()</code> call into the
           actual raw table name, and executes the equivalent of <code>CREATE OR REPLACE VIEW stg_orders AS
           &lt;that SELECT&gt;</code> against your warehouse. That is the entire mechanic, at a beginner level
-          — the deep mechanics of compilation and execution order are the subject of Module 02.
+          — the deep mechanics of compilation and execution order are the subject of Lesson 02.
         </Para>
         <SubTitle>The critical scope boundary: dbt does not extract or load data</SubTitle>
         <Para>
@@ -747,7 +747,7 @@ where order_status = 'refunded'
         </Para>
         <Para>
           After adopting dbt, the same fix is made once, in one model, as a pull request. Anyone who depends
-          on that model — tracked explicitly through <code>ref()</code>, as later modules cover — is
+          on that model — tracked explicitly through <code>ref()</code>, as later lessons cover — is
           automatically affected the next time the project runs, with no separate copies to hunt down. The
           change has a commit message, an author, a timestamp, and (ideally) a reviewer, forming a durable
           record of exactly what changed and why, which is precisely the kind of change-tracking software
@@ -901,7 +901,7 @@ where order_status = 'refunded'
           solves, the same honest evaluation this Part has tried to walk through rather than assert.
         </Para>
         <Callout title="Take away a fair picture, not a sales pitch" color={K}>
-          This module is not trying to convince you dbt is the only correct choice. It's trying to make sure
+          This lesson is not trying to convince you dbt is the only correct choice. It's trying to make sure
           you understand precisely what problem it solves (the transformation layer of ELT), what it doesn't
           do (extraction, loading, dashboarding), and where it sits relative to genuinely reasonable
           alternatives — so that when you do use it, you understand why.
@@ -925,7 +925,7 @@ where order_status = 'refunded'
           rows={[
             ['Analytics engineer', 'Writes and maintains the bulk of models, tests, and documentation; owns the overall project structure and conventions'],
             ['Data analyst', 'Often writes simpler mart models for their own reporting needs, and consumes staging/intermediate models others built rather than starting from raw sources'],
-            ['Data engineer', 'Owns the ingestion tools feeding raw data into the warehouse and the orchestration (Part 05 of Module 02) that triggers dbt runs, without necessarily writing many models themselves'],
+            ['Data engineer', 'Owns the ingestion tools feeding raw data into the warehouse and the orchestration (Part 05 of Lesson 02) that triggers dbt runs, without necessarily writing many models themselves'],
           ]}
         />
         <Para>
@@ -938,7 +938,7 @@ where order_status = 'refunded'
           workflow happens through SQL files and git, exactly the way software engineers work with application
           code.
         </Para>
-        <Callout title="This is the practical payoff of everything in this module" color={K}>
+        <Callout title="This is the practical payoff of everything in this lesson" color={K}>
           Every concept covered so far — ELT, the transformation-layer scope boundary, models/tests/docs,
           analytics engineering as a discipline — converges on this one everyday workflow: editing a SQL file
           in a code editor, running it locally, and merging it through a pull request, the same rhythm a
@@ -949,7 +949,7 @@ where order_status = 'refunded'
           Because the daily workflow is fundamentally "edit a SQL file, run it, check the result," the most
           effective way to build real fluency with dbt is not to memorize every configuration option up
           front, but to get a small project running locally as early as possible and start making small,
-          concrete changes to it — exactly the sequence the next module in this track walks through, moving
+          concrete changes to it — exactly the sequence the next lesson in this track walks through, moving
           from this conceptual foundation into the mechanical details of compilation, the dependency graph,
           and execution order.
         </Para>
@@ -1061,7 +1061,7 @@ where order_status = 'refunded'
         <SectionTag text="// Error Library" />
         <SectionTitle>Errors and Mix-Ups You'll Actually Hit</SectionTitle>
         <Para>
-          Module 01 is largely conceptual, so most of the "errors" a true beginner runs into are not
+          Lesson 01 is largely conceptual, so most of the "errors" a true beginner runs into are not
           stack traces from dbt itself yet — they're the mix-ups and false starts that come from applying the
           wrong mental model before you've run dbt for real. The list below mixes those early conceptual
           errors with the first genuine tool errors most learners hit in their first week.

@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Python for Machine Learning — Chaduvuko',
@@ -175,11 +174,10 @@ export default function PythonForMLPage() {
       readTime="55–70 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='programming' topic='python-for-ml' />
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}
       <div style={S.sec}>
-        <span style={S.tag}>What this module actually teaches</span>
+        <span style={S.tag}>What this lesson actually teaches</span>
         <h2 style={S.h2}>
           Python for ML is not the same as Python for web development.
         </h2>
@@ -197,7 +195,7 @@ export default function PythonForMLPage() {
         </p>
 
         <p style={S.p}>
-          This module bridges that gap. Every pattern here was pulled from
+          This lesson bridges that gap. Every pattern here was pulled from
           real production ML codebases — sklearn, PyTorch, HuggingFace Transformers,
           and actual data team repositories. If you know basic Python already,
           skim the early sections and slow down at generators, OOP for ML,
@@ -207,7 +205,7 @@ export default function PythonForMLPage() {
         <HBox color="#888888">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module covers:
+              What this lesson covers:
             </span>
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -240,7 +238,7 @@ export default function PythonForMLPage() {
           The most important shift in mindset for ML Python is this:
           stop thinking in loops, start thinking in operations on whole arrays.
           A for loop over 1 million rows takes seconds. The equivalent NumPy
-          operation takes milliseconds. This module builds the habits that
+          operation takes milliseconds. This lesson builds the habits that
           make the difference.
         </Callout>
       </div>
@@ -1628,7 +1626,7 @@ fast_distances = euclidean_distances(X_norm)  # vectorised → 100× faster`} />
           three function calls deep to find where a KeyError actually
           originated, and writing a small, boring script to reshape one team's
           output into the format another team's pipeline expects. The patterns
-          in this module — comprehensions, generators, a clean class, a
+          in this lesson — comprehensions, generators, a clean class, a
           decorator — matter because you will read them constantly in other
           people's code, not because you will invent something clever with
           them every day yourself.
@@ -1642,7 +1640,7 @@ fast_distances = euclidean_distances(X_norm)  # vectorised → 100× faster`} />
           that a transform was applied before a filter and will therefore
           include rows that should have been excluded, and say so in a comment.
           That is a Python reading skill, not a Python writing skill, and it is
-          exercised far more often than any pattern in this module is written
+          exercised far more often than any pattern in this lesson is written
           from scratch.
         </p>
 
@@ -1679,7 +1677,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
 # usually because an earlier step in the pipeline silently dropped or
 # renamed the column, which the original traceback could not tell you.
 # This — narrowing down where an assumption broke, one small assertion
-# at a time — is the debugging skill this module is actually building
+# at a time — is the debugging skill this lesson is actually building
 # toward, far more than any single language feature.`} />
 
         <p style={S.p}>
@@ -1704,7 +1702,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
           <p style={{ ...S.ps, marginBottom: 0 }}>
             Production ML codebases mostly reward boring, readable Python — clear function
             signatures, type hints, small functions that do one thing. The features that actually
-            show up constantly are the ones covered in this module: comprehensions, generators,
+            show up constantly are the ones covered in this lesson: comprehensions, generators,
             decorators, a clean class with an underscore-suffixed learned attribute. Metaclasses,
             descriptor protocols, and multiple-inheritance tricks show up occasionally inside
             library internals, almost never in the feature-engineering and modelling code most ML
@@ -1731,7 +1729,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
             hundred config entries, or a debugging snippet run once in a notebook, does not need
             it, and forcing an awkward NumPy trick onto something that reads more clearly as a
             plain for loop trades away readability for a speedup nobody will ever notice. The
-            profiling habit from this module's own section on performance — measure before
+            profiling habit from this lesson's own section on performance — measure before
             optimising — exists precisely so this decision is based on evidence, not a blanket rule.
           </p>
         </ConceptBox>
@@ -1741,7 +1739,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
             The actual fix for slow numerical code is almost never clever pure-Python
             micro-optimisation — it is calling into NumPy, pandas, or PyTorch, all of which run
             their heavy loops in compiled C or CUDA underneath a thin Python interface. As the
-            profiling section of this module shows directly, a Python loop that took hundreds of
+            profiling section of this lesson shows directly, a Python loop that took hundreds of
             milliseconds became a fraction of a millisecond once rewritten as a single NumPy
             expression — not because the Python was hand-tuned, but because the loop moved into
             compiled code entirely. Profiling first, as taught here, usually finds a Python loop
@@ -1755,7 +1753,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
             things at once — config-driven branching, feature-flag gating, edge cases specific to
             one business rule that only makes sense with context the reader does not yet have.
             Being able to read and untangle that kind of code — not just write clean, isolated
-            examples from scratch — is the actual day-to-day skill this module has been building
+            examples from scratch — is the actual day-to-day skill this lesson has been building
             toward, and it is a different skill from writing clean code yourself. Confusion is
             sometimes a signal to ask a question, not a verdict on the code's quality.
           </p>
@@ -1785,7 +1783,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
           <p style={{ ...S.ps, marginBottom: 0 }}>
             Mutable default arguments are the classic one — a function defined with a default of
             an empty list or dict reuses the exact same object across every call, silently
-            accumulating state across unrelated invocations, which this module covers directly in
+            accumulating state across unrelated invocations, which this lesson covers directly in
             Section 3. Floating-point comparison is another: checking if a computed value equals
             an expected float exactly, instead of checking whether the difference is below a small
             tolerance, causes intermittent failures that depend on the exact order operations were
@@ -1843,19 +1841,19 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
         <h2 style={S.h2}>You now write Python the way ML engineers write it.</h2>
 
         <p style={S.p}>
-          The patterns in this module — comprehensions, generators, OOP,
+          The patterns in this lesson — comprehensions, generators, OOP,
           decorators, proper error handling — are what separate ML code
           that only works in a notebook from ML code that works in production.
           Every module from here uses these patterns naturally.
         </p>
 
         <p style={S.p}>
-          Module 09 moves to NumPy — the numerical foundation of all ML in Python.
+          Lesson 09 moves to NumPy — the numerical foundation of all ML in Python.
           With the Python patterns you've just learned, every NumPy operation
           will make immediate sense: arrays are just vectors and matrices
-          (Module 03), broadcasting is just the rule from Module 03 applied
+          (Lesson 03), broadcasting is just the rule from Lesson 03 applied
           in code, and vectorisation is just avoiding Python loops
-          in favour of matrix operations (Module 04).
+          in favour of matrix operations (Lesson 04).
         </p>
 
         <div style={{
@@ -1870,7 +1868,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
               textTransform: 'uppercase' as const, color: '#888888',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 09 · Programming Ecosystem
+              Next — Lesson 09 · Programming Ecosystem
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

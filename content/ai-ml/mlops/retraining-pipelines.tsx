@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Retraining Pipelines — Keeping Models Fresh — Chaduvuko',
@@ -178,7 +177,6 @@ export default function RetrainingPipelinesPage() {
       readTime="30–40 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="mlops" topic="retraining-pipelines" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -190,7 +188,7 @@ export default function RetrainingPipelinesPage() {
         </h2>
 
         <p style={S.p}>
-          Module 72 explained when to retrain. This module explains how.
+          Lesson 72 explained when to retrain. This lesson explains how.
           The naive approach: train a new model, compare its offline metrics
           to the old model's offline metrics, deploy if better.
           This fails in practice for two reasons. Offline metrics measured
@@ -958,7 +956,7 @@ print(f"Traffic: {promo.split.challenger_pct:.0%} challenger / "
         <ErrorBlock
           error="Retraining uses future data — evaluation metrics look perfect but production accuracy is poor"
           cause="The retraining pipeline does not enforce a temporal split. When joining features to training events, it fetches the latest feature values from the feature store rather than the historical values as of the event timestamp. Training events from January use features computed from March data — data leakage. The model learns to exploit future information that is not available at inference time."
-          fix="Always use point-in-time correct feature retrieval for training (covered in Module 69 — Feature Stores). For the test set: verify by checking that no feature in the training dataset has a timestamp later than the corresponding training event's timestamp. Add a canary test: train two models — one with correct temporal splits and one without. The leaky model will have suspiciously better offline metrics (MAE 30-50% lower). If offline metrics look too good, suspect leakage."
+          fix="Always use point-in-time correct feature retrieval for training (covered in Lesson 69 — Feature Stores). For the test set: verify by checking that no feature in the training dataset has a timestamp later than the corresponding training event's timestamp. Add a canary test: train two models — one with correct temporal splits and one without. The leaky model will have suspiciously better offline metrics (MAE 30-50% lower). If offline metrics look too good, suspect leakage."
         />
       </div>
 
@@ -974,12 +972,12 @@ print(f"Traffic: {promo.split.challenger_pct:.0%} challenger / "
           pipeline from trigger straight through to production. What actually
           happens is a mix: a scheduled cadence (nightly or weekly, depending on
           how fast the model's world changes) runs alongside the drift- and
-          performance-triggered retraining from Module 72, and the final
+          performance-triggered retraining from Lesson 72, and the final
           promotion step almost always includes a human checkpoint for anything
           with real business or safety stakes — a credit model, a fraud model, a
           medical triage model. A low-stakes recommendation model might genuinely
           retrain and promote itself end to end with no human in the loop, gated
-          only by the offline and shadow checks earlier in this module. A model
+          only by the offline and shadow checks earlier in this lesson. A model
           that decides who gets a loan does not get that same trust, no matter how
           good its automated gates look, because the cost of a bad promotion is
           not symmetric with the cost of a slightly stale model.
@@ -1047,7 +1045,7 @@ print(f"Traffic: {promo.split.challenger_pct:.0%} challenger / "
           statistics question. It is a question of how much a bad promotion would
           cost this specific model, how quickly this specific model's world
           changes, and how much engineering effort the team can afford to spend
-          reviewing promotions manually. The five-stage pipeline in this module
+          reviewing promotions manually. The five-stage pipeline in this lesson
           is the same regardless of the answer — what changes is how much of it
           runs unattended.
         </p>
@@ -1082,7 +1080,7 @@ print(f"Traffic: {promo.split.challenger_pct:.0%} challenger / "
             resulting model is any good. A model trained on corrupted, leaked, or
             simply worse data will complete training successfully and produce a
             confident-looking artifact that is quietly wrong. That is exactly why
-            this module's five stages exist as separate checks after training
+            this lesson's five stages exist as separate checks after training
             completes: the offline quality gate, the shadow deployment comparison,
             and the champion-challenger A/B test all evaluate something the
             training job itself cannot see — whether the new model is actually
@@ -1234,7 +1232,7 @@ print(f"Traffic: {promo.split.challenger_pct:.0%} challenger / "
 
         <p style={S.p}>
           Safe retraining requires knowing exactly which data produced each model.
-          Module 74 covers DVC (Data Version Control) — tracking datasets as
+          Lesson 74 covers DVC (Data Version Control) — tracking datasets as
           first-class artifacts alongside code, so every model has a reproducible
           lineage: this model was trained on this exact dataset, with this exact
           feature pipeline, at this exact code commit. Reproduce any past experiment
@@ -1253,7 +1251,7 @@ print(f"Traffic: {promo.split.challenger_pct:.0%} challenger / "
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 74 · MLOps
+              Next — Lesson 74 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -119,7 +119,7 @@ export default function SqlProjects() {
     <LearnLayout
       title="3 Real SQL Projects"
       description="Three production-grade analytical projects — revenue intelligence, customer lifecycle analysis, and schema design — built step by step with business context and interpretation"
-      section="SQL — Module 62"
+      section="SQL — Lesson 62"
       readTime="80–100 min"
       updatedAt="April 2026"
     >

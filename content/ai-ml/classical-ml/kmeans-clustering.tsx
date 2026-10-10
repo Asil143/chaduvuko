@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'K-Means Clustering — Customer Segmentation — Chaduvuko',
@@ -178,7 +177,6 @@ export default function KMeansClusteringPage() {
       readTime="22–28 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="classical-ml" topic="kmeans-clustering" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -234,7 +232,7 @@ export default function KMeansClusteringPage() {
           K-Means answers a specific question: given that there are k groups
           in this data, which group does each point belong to?
           You must choose k in advance — or use the elbow method and silhouette
-          scores to find a good k. This module teaches both.
+          scores to find a good k. This lesson teaches both.
         </Callout>
       </div>
 
@@ -769,7 +767,7 @@ print(df_customers['segment_name'].value_counts().to_string())`} />
             {
               problem: 'Non-spherical clusters',
               color: '#D85A30',
-              desc: 'K-Means assumes clusters are round blobs of equal size. It fails completely on ring-shaped clusters (Module 26 showed this for Spectral Clustering), elongated ellipses, or interleaved crescents. K-Means draws Voronoi boundaries (straight lines equidistant between centroids) — these cannot capture curved cluster shapes.',
+              desc: 'K-Means assumes clusters are round blobs of equal size. It fails completely on ring-shaped clusters (Lesson 26 showed this for Spectral Clustering), elongated ellipses, or interleaved crescents. K-Means draws Voronoi boundaries (straight lines equidistant between centroids) — these cannot capture curved cluster shapes.',
               fix: 'Use DBSCAN (density-based, finds arbitrary shapes) or Spectral Clustering (eigenvector-based, handles non-convex clusters).',
             },
             {
@@ -1179,7 +1177,7 @@ print(f"\nNew restaurant (47.58°N, -122.31°W) → Zone {zone_id}")`} />
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 33 · Classical ML
+              Next — Lesson 33 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

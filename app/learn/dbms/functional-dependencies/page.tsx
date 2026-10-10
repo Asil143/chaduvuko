@@ -111,7 +111,7 @@ export default function FunctionalDependencies() {
         <SectionTitle>What Functional Dependencies Are — And Why They Are the Engine Behind Normalization</SectionTitle>
 
         <Para>
-          In Module 05 we learned normalization: partial dependencies violate 2NF,
+          In Lesson 05 we learned normalization: partial dependencies violate 2NF,
           transitive dependencies violate 3NF, and non-superkey determinants violate BCNF.
           But we used an informal version of these concepts — we said things like
           "student_name depends on student_id alone." This informality was sufficient for
@@ -524,7 +524,7 @@ export default function FunctionalDependencies() {
                 <strong style={{ color: 'var(--text)' }}>What it produces:</strong> The transitive
                 closure of FDs. This is the axiom that formalises
                 <strong style={{ color: 'var(--text)' }}> transitive dependency</strong> — the 3NF
-                violation we studied in Module 05. The chain employee_id → dept_id → dept_name
+                violation we studied in Lesson 05. The chain employee_id → dept_id → dept_name
                 is transitivity in action. Transitivity is also the primary axiom used in the
                 attribute closure algorithm.
               </Para>
@@ -1362,7 +1362,7 @@ F = {A→B, A→C, A→D, AB→C, B→D}
         <Para>
           The 3NF synthesis algorithm uses FDs to produce a guaranteed 3NF decomposition
           that is both lossless and dependency-preserving. It is the algorithmic realisation
-          of what we did manually in Module 05.
+          of what we did manually in Lesson 05.
         </Para>
 
         <CodeBox label="3NF Synthesis Algorithm — the complete procedure">

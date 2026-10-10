@@ -254,7 +254,7 @@ export default function DataModels() {
           courses. The model cannot represent this naturally. The solution was to duplicate the
           student record under each course they attend. This duplication is not accidental —
           it is a structural consequence of the one-parent constraint. And it brings back every
-          problem we listed in Module 01: redundancy, inconsistency, and update anomalies.
+          problem we listed in Lesson 01: redundancy, inconsistency, and update anomalies.
         </Para>
 
         <SubTitle>How Navigation Worked — The Pointer Model</SubTitle>
@@ -286,7 +286,7 @@ WHILE status = ok:
 // This is not a query — it is navigation code.
 // The programmer must know the physical tree structure to write this.
 // Change the tree structure → rewrite every program that navigates it.
-// This is the data dependency problem from Module 01 at its worst.`}
+// This is the data dependency problem from Lesson 01 at its worst.`}
         </CodeBox>
 
         <Para>
@@ -345,7 +345,7 @@ WHILE status = ok:
             },
             {
               weakness: 'Schema Changes are Catastrophic',
-              desc: 'Adding a new level to the hierarchy, or reorganising the tree structure, requires rewriting every program that navigates the affected branches. The data-program dependency problem (Module 01) is at its most severe here.',
+              desc: 'Adding a new level to the hierarchy, or reorganising the tree structure, requires rewriting every program that navigates the affected branches. The data-program dependency problem (Lesson 01) is at its most severe here.',
             },
             {
               weakness: 'Cannot Ask Cross-Tree Questions',
@@ -810,7 +810,7 @@ WHERE c.course_name = 'DBMS'
           {[
             { step: 'Requirements Gathering', desc: 'Understand the real-world domain — what objects exist, what facts matter, what questions must be answered. Talk to stakeholders. Document the miniworld.', color: '#0078d4' },
             { step: 'ER Modelling (Conceptual Design)', desc: 'Draw the ER diagram — identify entities, define their attributes, identify relationships between entities, determine cardinalities. This produces the conceptual schema.', color: 'var(--accent)' },
-            { step: 'Logical Design (ER to Relational)', desc: 'Convert the ER diagram to relational tables using the mapping rules (covered in Module 03). Normalise the tables. This produces the logical schema.', color: '#f97316' },
+            { step: 'Logical Design (ER to Relational)', desc: 'Convert the ER diagram to relational tables using the mapping rules (covered in Lesson 03). Normalise the tables. This produces the logical schema.', color: '#f97316' },
             { step: 'Physical Design', desc: 'Choose indexes, storage organisation, partitioning strategies, and hardware configuration. This produces the internal schema (the DBA\'s domain).', color: '#8b5cf6' },
             { step: 'Implementation', desc: 'Write the DDL (CREATE TABLE statements), create indexes, configure the DBMS, load initial data.', color: '#facc15' },
           ].map((item, i) => (
@@ -839,7 +839,7 @@ WHERE c.course_name = 'DBMS'
         </div>
 
         <Callout type="info">
-          The ER model is covered in complete depth in Module 03 — including every type of entity,
+          The ER model is covered in complete depth in Lesson 03 — including every type of entity,
           every type of attribute, every cardinality notation, the complete rules for ER-to-relational
           mapping, and a full worked example designing a real system from scratch. What matters here
           is understanding its role in the data model landscape: it is a conceptual design tool,

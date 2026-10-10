@@ -77,7 +77,7 @@ export default function LinksNavigation() {
     <LearnLayout
       title="Links and Navigation"
       description="The anchor tag in full — relative vs absolute paths, targets, anchor links within a page, and building real navigation."
-      section="HTML & CSS — Module 04"
+      section="HTML & CSS — Lesson 04"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -335,8 +335,8 @@ export default function LinksNavigation() {
         <SectionTitle>Building a Real, Semantic Navigation Menu</SectionTitle>
 
         <Para>
-          Putting everything in this module together: a real navigation menu is a <code>&lt;nav&gt;</code>{' '}
-          landmark (from the previous module) containing a <code>&lt;ul&gt;</code> of links — not a row of
+          Putting everything in this lesson together: a real navigation menu is a <code>&lt;nav&gt;</code>{' '}
+          landmark (from the previous lesson) containing a <code>&lt;ul&gt;</code> of links — not a row of
           bare <code>&lt;a&gt;</code> tags separated by spaces, and not a row of <code>&lt;div&gt;</code>s.
         </Para>
 
@@ -669,11 +669,11 @@ export default function LinksNavigation() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 05 covers images and media in full — the img tag and why alt text is never optional,
+          Lesson 05 covers images and media in full — the img tag and why alt text is never optional,
           figure/figcaption, audio and video, the source element, and lazy loading.
         </p>
         <Link href="/learn/html-css/images-media" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 05 → Images and Media
+          Lesson 05 → Images and Media
         </Link>
       </div>
     </LearnLayout>

@@ -207,7 +207,7 @@ export default function SQLComplete() {
               type: 'TCL', full: 'Transaction Control Language',
               color: '#8b5cf6',
               commands: 'COMMIT, ROLLBACK, SAVEPOINT, SET TRANSACTION',
-              purpose: 'Manages transactions — groups of DML operations that must succeed or fail together. Implements the ACID properties discussed in Module 09.',
+              purpose: 'Manages transactions — groups of DML operations that must succeed or fail together. Implements the ACID properties discussed in Lesson 09.',
               example: 'BEGIN\n  UPDATE accounts SET balance...\n  UPDATE accounts SET balance...\nCOMMIT',
             },
           ].map((item) => (
@@ -223,10 +223,10 @@ export default function SQLComplete() {
           ))}
         </div>
 
-        <SubTitle>The Reference Schema — Used Throughout This Module</SubTitle>
+        <SubTitle>The Reference Schema — Used Throughout This Lesson</SubTitle>
 
         <Para>
-          All examples in this module use a consistent schema representing a simplified
+          All examples in this lesson use a consistent schema representing a simplified
           food delivery platform. This makes it easy to follow along — you see the same
           tables evolve through every concept rather than learning a new schema for each section.
         </Para>
@@ -2269,7 +2269,7 @@ ORDER BY s.streak_length DESC;`}
         <Para>
           These are the exact types of SQL tasks that appear in DoorDash, Amazon, Stripe,
           and Brex job descriptions for data engineering and analytics roles. Every one of
-          these exercises pulls from the concepts in this module.
+          these exercises pulls from the concepts in this lesson.
         </Para>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>

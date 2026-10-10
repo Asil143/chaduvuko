@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Derivatives, Gradients and the Chain Rule — Chaduvuko',
@@ -169,7 +168,6 @@ export default function DerivativesGradientsPage() {
       readTime="30–40 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='math-foundations' topic='derivatives-and-gradients' />
 
       {/* ══ SECTION 1 — THE PROBLEM ════════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -201,7 +199,7 @@ export default function DerivativesGradientsPage() {
         <HBox color="#7F77DD">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module teaches:
+              What this lesson teaches:
             </span>
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -226,7 +224,7 @@ export default function DerivativesGradientsPage() {
         </HBox>
 
         <Callout type="tip">
-          You do not need to have studied calculus. This module teaches
+          You do not need to have studied calculus. This lesson teaches
           everything from first principles. If you have studied calculus,
           you'll recognise the ideas — but the ML-specific framing
           and the intuition for why each piece matters will be new.
@@ -1354,7 +1352,7 @@ if gradient_norm > max_norm:
         <p style={S.p}>
           Once autograd exists, an ML engineer almost never writes
           <span style={S.code as React.CSSProperties}> dL_dw = 2 * error * x </span>
-          by hand in production code. So where does this module actually show up
+          by hand in production code. So where does this lesson actually show up
           in a job? Not in writing derivatives — in reading them, when something
           about training goes wrong and the only way to understand why is to know
           what the optimizer is computing under the hood.
@@ -1376,7 +1374,7 @@ if gradient_norm > max_norm:
               { step: '1. Check the gradient magnitude first', desc: 'print(param.grad.abs().mean()) right after loss.backward(). If it is exactly zero, no gradient is flowing — dead ReLUs, a detached tensor, or a frozen layer that should be trainable.' },
               { step: '2. Check the loss value itself', desc: 'If loss is NaN or inf, the forward pass overflowed before backprop even ran — check for log(0), division by zero, or unclipped exponentials, not the gradient code.' },
               { step: '3. Check the learning rate', desc: 'A loss that oscillates wildly (not steadily decreasing) usually means the learning rate is too large — the gradient direction is right, the step size is wrong.' },
-              { step: '4. Check the gradient magnitude by layer', desc: 'In deep networks, print the gradient norm per layer. A magnitude that shrinks by 10x with every layer closer to the input is vanishing gradients — the textbook case Module 07 explains.' },
+              { step: '4. Check the gradient magnitude by layer', desc: 'In deep networks, print the gradient norm per layer. A magnitude that shrinks by 10x with every layer closer to the input is vanishing gradients — the textbook case Lesson 07 explains.' },
               { step: '5. Only then suspect the math', desc: 'If none of the above explains it and you wrote a custom backward pass, gradient-check it against a numerical derivative before assuming the model architecture is wrong.' },
             ].map((row) => (
               <div key={row.step} style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -1440,7 +1438,7 @@ for step in range(200):
 
 # This is the same information a monitoring dashboard (Weights & Biases,
 # MLflow) would plot as "gradient norm per layer over time" — the exact
-# same partial derivatives this module teaches, just watched instead
+# same partial derivatives this lesson teaches, just watched instead
 # of computed by hand.`} />
       </div>
 
@@ -1609,7 +1607,7 @@ for step in range(200):
         </p>
 
         <p style={S.p}>
-          The next module covers probability distributions and Bayes theorem.
+          The next lesson covers probability distributions and Bayes theorem.
           This is the foundation for understanding loss functions at a deeper level —
           why cross-entropy loss is the right choice for classification,
           why MSE is the right choice for regression, and how every loss function
@@ -1628,7 +1626,7 @@ for step in range(200):
               textTransform: 'uppercase' as const, color: '#7F77DD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 06
+              Next — Lesson 06
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -79,7 +79,7 @@ export default function InfrastructureAsCodeModule() {
     <LearnLayout
       title="Infrastructure as Code for Data Engineering"
       description="Terraform fundamentals, provisioning Snowflake warehouses, S3 buckets, Airflow environments, IAM roles, and managing data infrastructure with state, modules, and CI/CD."
-      section="Data Engineering — Module 45"
+      section="Data Engineering — Lesson 45"
       readTime="70 min"
       updatedAt="August 2026"
     >
@@ -102,7 +102,7 @@ export default function InfrastructureAsCodeModule() {
         <Para>
           Infrastructure as Code treats cloud resources like software: defined
           in version-controlled files, reviewed through pull requests, tested
-          in CI, and deployed through an automated pipeline. This module builds
+          in CI, and deployed through an automated pipeline. This lesson builds
           the Terraform configuration for FreshCart&rsquo;s actual data platform —
           the S3 lake, the IAM roles, the Snowflake account, and the CI/CD
           pipeline that applies changes safely — one piece at a time.
@@ -788,7 +788,7 @@ resource "snowflake_database" "freshcart_prod" {
           },
           {
             wrong: '"Renaming a resource block is a harmless refactor, like renaming a variable in code"',
-            right: 'Terraform identifies resources by their block name, not by what they represent — renaming snowflake_warehouse.analytics to snowflake_warehouse.analyst_wh looks like a destroy-then-create to Terraform, not a rename. This exact mistake is Q5 in this module\'s Interview Prep and is fixed with a moved block, not by hoping the plan looks fine.',
+            right: 'Terraform identifies resources by their block name, not by what they represent — renaming snowflake_warehouse.analytics to snowflake_warehouse.analyst_wh looks like a destroy-then-create to Terraform, not a rename. This exact mistake is Q5 in this lesson\'s Interview Prep and is fixed with a moved block, not by hoping the plan looks fine.',
           },
           {
             wrong: '"An S3 lifecycle rule without a prefix filter just applies more broadly, which is fine"',
@@ -926,7 +926,7 @@ For a data platform, I would create modules for infrastructure components that a
 
 A data_lake module provisions an S3 bucket with all production settings: KMS encryption, versioning, public access blocking, lifecycle policies for each zone (landing, bronze, silver, gold), access logging, and bucket notifications. The module inputs are environment, retention periods per zone, and tags. The outputs are the bucket ARN and KMS key ID for use by IAM policies. Both prod and dev use the same module — prod keeps bronze data for 365 days, dev for 30 days.
 
-A snowflake_env module provisions a Snowflake database with schemas, roles, warehouse configurations, and FUTURE GRANTs for each access pattern. Inputs include environment, warehouse sizes, analyst email list, and data retention days. This module is called with different warehouse sizes for prod versus dev.
+A snowflake_env module provisions a Snowflake database with schemas, roles, warehouse configurations, and FUTURE GRANTs for each access pattern. Inputs include environment, warehouse sizes, analyst email list, and data retention days. This lesson is called with different warehouse sizes for prod versus dev.
 
 An airflow_mwaa module (or similar for self-hosted) provisions the Airflow environment including the VPC, security groups, S3 bucket for DAG files, IAM roles, and the MWAA environment itself. Input variables control instance class, the maximum number of workers, and the DAG S3 path.
 
@@ -986,7 +986,7 @@ For the immediate recovery after an accidental delete: a Snowflake warehouse hol
           },
           {
             q: 'Writing an S3 lifecycle rule and assuming the default scope is "this one prefix"',
-            a: 'The default scope with no filter block is the entire bucket. This is the single most consequential omission in this module\'s Error Library — a 30-day landing-zone cleanup rule with no filter deletes Gold and Silver data on the same schedule.',
+            a: 'The default scope with no filter block is the entire bucket. This is the single most consequential omission in this lesson\'s Error Library — a 30-day landing-zone cleanup rule with no filter deletes Gold and Silver data on the same schedule.',
           },
           {
             q: 'Treating dev and prod Terraform code as two separate copies instead of one module, two variable files',
@@ -994,7 +994,7 @@ For the immediate recovery after an accidental delete: a Snowflake warehouse hol
           },
           {
             q: 'Skipping prevent_destroy on production because "we\'re always careful with applies"',
-            a: 'Careful applies still get bitten by resource renames that look like harmless refactors — the exact accidental-warehouse-deletion scenario in this module\'s Interview Prep Q5. prevent_destroy costs nothing to add and turns a silent production incident into a Terraform error that stops the apply cold.',
+            a: 'Careful applies still get bitten by resource renames that look like harmless refactors — the exact accidental-warehouse-deletion scenario in this lesson\'s Interview Prep Q5. prevent_destroy costs nothing to add and turns a silent production incident into a Terraform error that stops the apply cold.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
@@ -1073,10 +1073,10 @@ For the immediate recovery after an accidental delete: a Snowflake warehouse hol
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 46 covers data engineering system design — the complete framework for designing any data system from scratch, with five fully worked designs for scenarios you will encounter in senior interviews and real jobs.
+          Lesson 46 covers data engineering system design — the complete framework for designing any data system from scratch, with five fully worked designs for scenarios you will encounter in senior interviews and real jobs.
         </p>
         <Link href="/learn/data-engineering/system-design-de" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 46 → Data Engineering System Design
+          Lesson 46 → Data Engineering System Design
         </Link>
       </div>
     </LearnLayout>

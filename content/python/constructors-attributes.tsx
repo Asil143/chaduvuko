@@ -77,7 +77,7 @@ export default function ConstructorsAttributes() {
     <LearnLayout
       title="Constructors, Instance vs Class Attributes"
       description="Constructor validation and defaults, the critical difference between instance and class attributes, the mutable-default-class-attribute trap, attribute lookup order, and __dict__."
-      section="Python — Module 20"
+      section="Python — Lesson 20"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -88,7 +88,7 @@ export default function ConstructorsAttributes() {
         <SectionTitle>__init__ With Default Values and Real Validation</SectionTitle>
 
         <Para>
-          Module 19 introduced <code>__init__</code> as the method that sets up an object&apos;s
+          Lesson 19 introduced <code>__init__</code> as the method that sets up an object&apos;s
           starting state. In real code, a constructor rarely just assigns parameters straight through —
           it usually needs to supply sensible defaults for optional data, and reject clearly invalid
           input before the object is ever allowed to exist in a broken state.
@@ -142,7 +142,7 @@ Employee("", 50000)
           program — every piece of code that later receives an <code>Employee</code> instance can trust
           that its <code>salary</code> is non-negative and its <code>name</code> is non-empty, without
           re-checking. This is a small, concrete example of an "invariant," the same concept introduced
-          in Module 19&apos;s discussion of when a class earns its complexity.
+          in Lesson 19&apos;s discussion of when a class earns its complexity.
         </Callout>
       </section>
 
@@ -177,7 +177,7 @@ print(bob.company_name)      # "Northwind Traders" — the SAME string object, s
         <Para>
           Class attributes are genuinely useful for data that really is the same across every instance
           — a company name shared by every <code>Employee</code>, a species name shared by every dog in
-          Module 19&apos;s example, or a constant like a tax rate. The moment you assign to that
+          Lesson 19&apos;s example, or a constant like a tax rate. The moment you assign to that
           attribute through a specific instance, though, something subtle happens that trips up almost
           every engineer the first time they encounter it.
         </Para>
@@ -284,7 +284,7 @@ print(bob_cart.items)      # [] — correctly empty, independent of alice's cart
           behavior works the way it does — requires knowing the actual lookup rule Python follows when
           you write <code>instance.attribute</code>. Python checks the <strong>instance&apos;s own
           attributes first</strong>. Only if the instance does not have that attribute does it fall back
-          to checking the <strong>class</strong> (and, once inheritance is introduced in Module 21, the
+          to checking the <strong>class</strong> (and, once inheritance is introduced in Lesson 21, the
           class&apos;s parent classes, in a defined order).
         </Para>
 
@@ -700,11 +700,11 @@ print(alice.id, bob.id)   # 1000 1001 — a working shared auto-incrementing ID`
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 21 builds one class on top of another — inheritance, method overriding, polymorphism,
+          Lesson 21 builds one class on top of another — inheritance, method overriding, polymorphism,
           and the real, practical difference between "is-a" and "has-a" relationships in your code.
         </p>
         <Link href="/learn/python/inheritance-polymorphism" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 21 → Inheritance and Polymorphism
+          Lesson 21 → Inheritance and Polymorphism
         </Link>
       </div>
     </LearnLayout>

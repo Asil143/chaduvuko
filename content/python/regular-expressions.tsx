@@ -77,7 +77,7 @@ export default function RegularExpressions() {
     <LearnLayout
       title="Regular Expressions with re"
       description="What regex is actually for, when it's overkill, the re module built up systematically, and a real log-parsing example."
-      section="Python — Module 32"
+      section="Python — Lesson 32"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -88,7 +88,7 @@ export default function RegularExpressions() {
         <SectionTitle>Advanced Python Starts Here</SectionTitle>
 
         <Para>
-          This module opens <strong>Phase 5 — Advanced Python</strong>, the most demanding phase of
+          This lesson opens <strong>Phase 5 — Advanced Python</strong>, the most demanding phase of
           this track before you move into production-readiness and career topics in Phase 6. Everything
           up to this point — variables, control flow, functions, data structures, files, exceptions,
           object-oriented Python — was about writing correct programs. Phase 5 is about writing programs
@@ -123,9 +123,9 @@ else:
 
         <Para>
           That single pattern — <code>^\d&#123;5&#125;$</code> — says "exactly five digits, and nothing
-          else." By the end of this module you will be able to read that immediately. Regex syntax looks
+          else." By the end of this lesson you will be able to read that immediately. Regex syntax looks
           intimidating in bulk, but it is built from a genuinely small set of building blocks combined
-          together — this module introduces them one at a time, in order, so nothing feels like it
+          together — this lesson introduces them one at a time, in order, so nothing feels like it
           appeared from nowhere.
         </Para>
       </section>
@@ -140,9 +140,9 @@ else:
         <Para>
           Before diving into syntax, it is worth being direct about something most tutorials skip:{' '}
           <strong>regex is frequently the wrong tool</strong>, reached for out of habit rather than
-          necessity. You already know Module 04's string methods —{' '}
+          necessity. You already know Lesson 04's string methods —{' '}
           <code>.startswith()</code>, <code>.endswith()</code>, <code>.split()</code>,{' '}
-          <code>in</code> — and Module 14's string-processing techniques. For a huge share of everyday
+          <code>in</code> — and Lesson 14's string-processing techniques. For a huge share of everyday
           text checks, those are faster to write, faster to read, and faster to execute than a regex.
         </Para>
 
@@ -163,7 +163,7 @@ if re.search(r"error", log_line, re.IGNORECASE):   # heavier than it needs to be
           <strong>structure</strong> that plain string methods cannot express — "one or more digits,
           optionally followed by a decimal point and more digits," or "a sequence of letters, then a
           dash, then exactly four digits." That is a genuinely different kind of problem than "does this
-          string start with a fixed prefix," and it is exactly the kind of problem this module is about.
+          string start with a fixed prefix," and it is exactly the kind of problem this lesson is about.
         </Para>
 
         <Callout type="tip">
@@ -478,7 +478,7 @@ for c in candidates:
         <SectionTitle>Why Every Pattern in This Module Starts With r&quot;...&quot;</SectionTitle>
 
         <Para>
-          Back in Module 04, you met raw strings — <code>r&quot;...&quot;</code> — which tell Python not
+          Back in Lesson 04, you met raw strings — <code>r&quot;...&quot;</code> — which tell Python not
           to interpret backslash escape sequences like <code>\n</code> or <code>\t</code>. Regex patterns
           use the backslash constantly for their own purposes (<code>\d</code>, <code>\w</code>,{' '}
           <code>\s</code>), and those meanings are completely unrelated to Python's own string escape
@@ -559,7 +559,7 @@ for e in errors:
 #  'message': 'Failed to process order 4473: card declined'}`}</CodeBox>
 
         <Para>
-          Notice how the pattern is built from exactly the pieces this module covered, composed
+          Notice how the pattern is built from exactly the pieces this lesson covered, composed
           together: named groups for the fields you need to extract, <code>\d</code> and{' '}
           <code>\w</code> shorthand classes, quantifiers for repeated digits, and a nested{' '}
           <code>re.search()</code> call to pull the order ID out of the already-extracted message text —
@@ -864,11 +864,11 @@ is_valid_phone("303-555-0192 ext 4")    # True — ALSO accepted, incorrectly`}<
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 33 covers dates and times — the datetime module, timezone-aware datetimes, and the
+          Lesson 33 covers dates and times — the datetime module, timezone-aware datetimes, and the
           formatting codes that trip up almost everyone the first time they need them.
         </p>
         <Link href="/learn/python/dates-times" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 33 → Working with Dates and Times
+          Lesson 33 → Working with Dates and Times
         </Link>
       </div>
     </LearnLayout>

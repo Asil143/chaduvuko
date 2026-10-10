@@ -86,7 +86,7 @@ export default function DateTimeFunctions() {
     <LearnLayout
       title="Date and Time Functions"
       description="Extract parts, calculate differences, truncate to periods, format for display, handle timezones — every temporal operation for time-series analytics and reporting"
-      section="SQL — Module 42"
+      section="SQL — Lesson 42"
       readTime="14–18 min"
       updatedAt="April 2026"
     >
@@ -167,7 +167,7 @@ GET_CURRENT_TIMESTAMP()         -- current timestamp
       />
 
       <Callout type="info">
-        julianday() converts a date to a Julian day number (days since a fixed reference point) — subtracting two of them gives you the number of days between two dates. You'll see this pattern throughout this module.
+        julianday() converts a date to a Julian day number (days since a fixed reference point) — subtracting two of them gives you the number of days between two dates. You'll see this pattern throughout this lesson.
       </Callout>
 
       <SQLPlayground
@@ -634,7 +634,7 @@ LIMIT 8;`}
       <H>Month-over-month growth</H>
 
       <Callout type="info">
-        LAG(revenue) OVER (ORDER BY month_start) is a window function — covered fully in Module 52. For now: LAG reaches back to the previous row's value (here, last month's revenue) without a self-join.
+        LAG(revenue) OVER (ORDER BY month_start) is a window function — covered fully in Lesson 52. For now: LAG reaches back to the previous row's value (here, last month's revenue) without a self-join.
       </Callout>
 
       <SQLPlayground
@@ -1031,10 +1031,10 @@ ORDER BY s.store_id, month_start;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 43</strong>, you learn math and numeric functions — ROUND, FLOOR, CEIL, ABS, MOD, POWER, SQRT, LOG, and every numeric operation for financial calculations, statistical summaries, and data transformation.
+          In <strong>Lesson 43</strong>, you learn math and numeric functions — ROUND, FLOOR, CEIL, ABS, MOD, POWER, SQRT, LOG, and every numeric operation for financial calculations, statistical summaries, and data transformation.
         </p>
         <Link href="/learn/sql/math-functions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 43 → Math Functions
+          Lesson 43 → Math Functions
         </Link>
       </div>
 

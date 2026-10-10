@@ -65,7 +65,7 @@ export default function WebAttacksOwasp() {
     <LearnLayout
       title="Web Application Attacks — OWASP Top 10 From First Principles"
       description="SQL injection, XSS, SSRF, IDOR — every OWASP vulnerability explained with real attack examples and the exact code patterns that cause them."
-      section="Cybersecurity — Module 09"
+      section="Cybersecurity — Lesson 09"
       readTime="35 min"
       updatedAt="May 2026"
     >
@@ -78,7 +78,7 @@ export default function WebAttacksOwasp() {
       <P>These are not theoretical vulnerabilities. SQL injection, Cross-Site Scripting, and Broken Access Control appear in real breaches every week. The 2021 LinkedIn data scrape (700 million records), the 2022 Optus breach (9.8 million Australians' data), and hundreds of smaller breaches each year trace back to one or more OWASP Top 10 vulnerabilities. Understanding them from first principles — not just knowing the names — is what separates a security engineer who can find and fix these issues from one who can only recite them.</P>
 
       <div style={{ background: `${C}08`, border: `1px solid ${C}25`, borderLeft: `4px solid ${C}`, borderRadius: '0 10px 10px 0', padding: '20px 24px', margin: '4px 0 28px' }}>
-        <P>This module covers the OWASP Top 10 (2021 edition) from the attacker's perspective: the exact conditions that create each vulnerability, how an attacker exploits it, the real-world impact, and the specific code patterns that fix it. The goal is to build the mental model that lets you recognise these vulnerabilities in code you read and write — not just in exam questions.</P>
+        <P>This lesson covers the OWASP Top 10 (2021 edition) from the attacker's perspective: the exact conditions that create each vulnerability, how an attacker exploits it, the real-world impact, and the specific code patterns that fix it. The goal is to build the mental model that lets you recognise these vulnerabilities in code you read and write — not just in exam questions.</P>
       </div>
 
       <HR />
@@ -666,10 +666,10 @@ Set-Cookie: session=abc123; HttpOnly; Secure; SameSite=Strict`}</Block>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 10</strong>, you go to the network layer — how MITM attacks intercept traffic, how ARP poisoning works at the wire level, how DNS hijacking redirects connections, and the tools that perform and detect these attacks.
+          In <strong>Lesson 10</strong>, you go to the network layer — how MITM attacks intercept traffic, how ARP poisoning works at the wire level, how DNS hijacking redirects connections, and the tools that perform and detect these attacks.
         </p>
         <Link href="/learn/cybersecurity/network-attacks" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 10 → Network Attacks — MITM, Sniffing, ARP Poisoning, DNS Hijacking
+          Lesson 10 → Network Attacks — MITM, Sniffing, ARP Poisoning, DNS Hijacking
         </Link>
       </div>
 

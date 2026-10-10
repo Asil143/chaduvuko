@@ -74,7 +74,7 @@ export default function VariablesAndEnvironments() {
     <LearnLayout
       title="Variables and Environments"
       description="The dev/staging/prod pattern, the target context variable, vars in dbt_project.yml versus --vars on the CLI, var() defaults, env_var() for secrets, the real difference between vars and env_var, and custom per-environment schema naming."
-      section="dbt — Module 14"
+      section="dbt — Lesson 14"
       readTime="65 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -591,7 +591,7 @@ dbt run --target prod`}
         <SectionTitle>The Same Codebase, Three Environments, What Actually Differs at Each Layer</SectionTitle>
 
         <Para>
-          Bringing every mechanism in this module together: here is exactly what changes, and what stays
+          Bringing every mechanism in this lesson together: here is exactly what changes, and what stays
           identical, as the same dbt project runs across dev, CI, and prod for a fictional grocery-delivery
           company's order pipeline.
         </Para>
@@ -639,7 +639,7 @@ where ordered_at >= '{{ var("start_date") }}'
           get this behavior across three environments. Every difference is driven entirely by which target is
           active (<code>target.name</code>, <code>target.schema</code>), which variables are set at the
           project or CLI level (<code>var()</code>), and which secrets are present in the surrounding process
-          environment (<code>env_var()</code>) — exactly the separation of concerns this module set out to
+          environment (<code>env_var()</code>) — exactly the separation of concerns this lesson set out to
           build. A developer can run this exact codebase locally, break things repeatedly, and never once put
           production data or credentials at risk.
         </Para>
@@ -727,7 +727,7 @@ where ordered_at >= '{{ var("start_date") }}'
         <SectionTitle>Building Only What Changed: Comparing a PR's Models Against Production State</SectionTitle>
 
         <Para>
-          Every mechanism so far in this module (targets, <code>vars</code>, <code>env_var()</code>,
+          Every mechanism so far in this lesson (targets, <code>vars</code>, <code>env_var()</code>,
           per-developer schemas) answers "how do dev, CI, and prod stay safely separate." This Part answers a
           related but distinct question that only comes up once a project has grown large: a CI job that
           rebuilds the <em>entire</em> project on every pull request, to validate even a one-line change to a
@@ -815,7 +815,7 @@ dbt build \\
         <SectionTitle>--profile, --target, and --profiles-dir: the Full Resolution Order</SectionTitle>
 
         <Para>
-          Every earlier Part in this module assumed a single, obvious answer to "which target is active" —
+          Every earlier Part in this lesson assumed a single, obvious answer to "which target is active" —
           usually whatever <code>target:</code> defaults to in <code>profiles.yml</code>, per Part 01. In
           practice, several different flags and files can all influence that answer at once, and a project
           with more than one profile, or a CI system invoking dbt with explicit overrides, needs the actual

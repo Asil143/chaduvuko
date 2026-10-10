@@ -104,7 +104,7 @@ export default function AggregateFunctions() {
     <LearnLayout
       title="Aggregate Functions"
       description="COUNT, SUM, AVG, MIN, MAX — turn raw rows into business metrics, understand NULL behaviour, combine with DISTINCT, and build the analytics queries that power every dashboard"
-      section="SQL — Module 27"
+      section="SQL — Lesson 27"
       readTime="12–16 min"
       updatedAt="April 2026"
     >
@@ -797,7 +797,7 @@ ORDER BY
       <IQ q="Can you use aggregate functions without GROUP BY? What do they return?">
         <p style={{ margin: '0 0 14px' }}>Yes — aggregate functions can be used without GROUP BY. When used without GROUP BY, they collapse the entire result set (or the entire filtered result set after WHERE) into a single row. SELECT COUNT(*), SUM(total_amount), AVG(total_amount) FROM orders returns exactly one row containing three numbers that summarise all orders.</p>
         <p style={{ margin: '0 0 14px' }}>Without GROUP BY, all rows that pass the WHERE filter are treated as one group. This is the simplest and most common form of aggregation — getting a single summary metric for a dataset. Total revenue for the month, average order value, the number of active customers, the highest-paid employee salary — all of these are single-row aggregate queries without GROUP BY.</p>
-        <p style={{ margin: 0 }}>The important rule: when aggregate functions are used without GROUP BY, you cannot include non-aggregated columns in SELECT. SELECT customer_id, COUNT(*) FROM orders without GROUP BY is an error — the database cannot return one row from COUNT(*) and simultaneously return a different customer_id for each row. Every column in SELECT must either be inside an aggregate function or be part of the GROUP BY clause. The only exception is window functions (covered in later modules), which compute aggregates alongside individual rows without collapsing them.</p>
+        <p style={{ margin: 0 }}>The important rule: when aggregate functions are used without GROUP BY, you cannot include non-aggregated columns in SELECT. SELECT customer_id, COUNT(*) FROM orders without GROUP BY is an error — the database cannot return one row from COUNT(*) and simultaneously return a different customer_id for each row. Every column in SELECT must either be inside an aggregate function or be part of the GROUP BY clause. The only exception is window functions (covered in later lessons), which compute aggregates alongside individual rows without collapsing them.</p>
       </IQ>
 
       <IQ q="What is the difference between SUM and COUNT and when would you use each?">
@@ -897,10 +897,10 @@ FROM orders;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 28</strong>, you learn GROUP BY — the clause that splits rows into groups so aggregate functions compute separately per group. This is where SQL analytics becomes truly powerful.
+          In <strong>Lesson 28</strong>, you learn GROUP BY — the clause that splits rows into groups so aggregate functions compute separately per group. This is where SQL analytics becomes truly powerful.
         </p>
         <Link href="/learn/sql/group-by" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 28 → GROUP BY
+          Lesson 28 → GROUP BY
         </Link>
       </div>
 

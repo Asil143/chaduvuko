@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Training Deep Networks — Adam, BatchNorm, Dropout — Chaduvuko',
@@ -178,18 +177,17 @@ export default function TrainingDeepNetworksPage() {
       readTime="22–28 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="deep-learning" topic="batch-norm-dropout" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
-        <span style={S.tag}>Before any code — what problem does this module solve?</span>
+        <span style={S.tag}>Before any code — what problem does this lesson solve?</span>
         <h2 style={S.h2}>
-          Module 41 built a network that works. This module makes it
+          Lesson 41 built a network that works. This lesson makes it
           train 10× faster, generalise better, and stay stable on deep architectures.
         </h2>
 
         <p style={S.p}>
-          The network from Module 41 used plain SGD — subtract a fixed
+          The network from Lesson 41 used plain SGD — subtract a fixed
           fraction of the gradient from each weight every step.
           It works, but it has three serious problems in practice.
           First: the same learning rate for every weight regardless of how
@@ -1069,7 +1067,7 @@ print("incident that paged the on-call engineer in the first place.")`} />
         <VisualBox label="BatchNorm is not universal — what production teams swap in by domain">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[
-              { domain: 'Tabular / MLP (batch 32-256)', norm: 'BatchNorm1d', color: '#1D9E75', why: 'The case this module covers — batch statistics are stable and meaningful at these batch sizes.' },
+              { domain: 'Tabular / MLP (batch 32-256)', norm: 'BatchNorm1d', color: '#1D9E75', why: 'The case this lesson covers — batch statistics are stable and meaningful at these batch sizes.' },
               { domain: 'Object detection / segmentation (large images, batch 2-8 per GPU)', norm: 'GroupNorm or SyncBatchNorm', color: '#D85A30', why: 'GPU memory limits batch size so much that per-GPU batch statistics become noisy and unstable. GroupNorm normalises within groups of channels instead, independent of batch size.' },
               { domain: 'Transformers / sequence models', norm: 'LayerNorm', color: '#7b61ff', why: 'Sequences have variable length and no meaningful shared batch statistic per position — LayerNorm normalises across the feature dimension per token instead.' },
               { domain: 'Style transfer / image generation', norm: 'InstanceNorm', color: '#378ADD', why: 'Normalises per-sample, per-channel, ignoring the batch entirely — batch statistics would otherwise leak style information between unrelated images in the same batch.' },
@@ -1094,7 +1092,7 @@ print("incident that paged the on-call engineer in the first place.")`} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[
               ['Input layer', 'Rarely used, 0.0-0.1 at most', 'Too aggressive here destroys raw signal before the network has done anything with it.'],
-              ['Early / middle hidden layers (MLP)', '0.2-0.3', 'The default this module trains with — enough regularisation without starving the network of capacity.'],
+              ['Early / middle hidden layers (MLP)', '0.2-0.3', 'The default this lesson trains with — enough regularisation without starving the network of capacity.'],
               ['Layer right before the output', '0.4-0.5', 'The most overfitting-prone junction, closest to memorising training examples directly.'],
               ['Conv layers (CNN feature extractor)', 'Often skipped, or Dropout2d if used', 'Most CNNs lean on BatchNorm plus data augmentation instead. Plain Dropout zeroes individual pixels, which barely changes a spatially correlated feature map — Dropout2d zeroes whole channels instead.'],
               ['Transformer blocks (attention + FFN)', 'Flat 0.1', 'The exact default from the original Attention Is All You Need paper, still used by most transformer implementations today.'],
@@ -1292,7 +1290,7 @@ print("incident that paged the on-call engineer in the first place.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 43 · Deep Learning
+              Next — Lesson 43 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

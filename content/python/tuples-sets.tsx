@@ -77,7 +77,7 @@ export default function TuplesSets() {
     <LearnLayout
       title="Tuples and Sets"
       description="Immutable sequences and unordered unique collections — tuple packing/unpacking, named tuples, every set operation, and when sets beat lists for membership testing."
-      section="Python — Module 09"
+      section="Python — Lesson 09"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -775,12 +775,12 @@ for employee in get_all_employees():
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 10 wraps up the fundamentals of input and output — input() mechanics, print()&apos;s
+          Lesson 10 wraps up the fundamentals of input and output — input() mechanics, print()&apos;s
           lesser-known keyword arguments, and print-based debugging — before Phase 2 begins with
           dictionaries.
         </p>
         <Link href="/learn/python/io-formatting" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 10 → Input/Output &amp; f-string Formatting
+          Lesson 10 → Input/Output &amp; f-string Formatting
         </Link>
       </div>
     </LearnLayout>

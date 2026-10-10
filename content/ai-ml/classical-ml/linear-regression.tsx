@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Linear Regression — Chaduvuko',
@@ -124,7 +123,6 @@ export default function LinearRegressionPage() {
       readTime="30–35 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="classical-ml" topic="linear-regression" />
 
       {/* ── SECTION 1: The problem ─────────────────────────────────────────── */}
       <div style={sec}>

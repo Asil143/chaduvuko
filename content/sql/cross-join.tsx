@@ -79,7 +79,7 @@ export default function CrossJoin() {
     <LearnLayout
       title="CROSS JOIN"
       description="Generate every combination — Cartesian products, reference grids, calendar scaffolding, test data, and the scenarios where every-row-with-every-row is exactly what you need"
-      section="SQL — Module 35"
+      section="SQL — Lesson 35"
       readTime="8–12 min"
       updatedAt="April 2026"
     >
@@ -778,10 +778,10 @@ ORDER BY g.store_id, total_revenue DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 36</strong>, you learn subqueries — queries nested inside other queries. Scalar subqueries, correlated subqueries, subqueries in FROM, WHERE, and SELECT — the foundation of every complex multi-step analysis.
+          In <strong>Lesson 36</strong>, you learn subqueries — queries nested inside other queries. Scalar subqueries, correlated subqueries, subqueries in FROM, WHERE, and SELECT — the foundation of every complex multi-step analysis.
         </p>
         <Link href="/learn/sql/subqueries" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 36 → Subqueries
+          Lesson 36 → Subqueries
         </Link>
       </div>
 

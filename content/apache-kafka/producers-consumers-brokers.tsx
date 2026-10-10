@@ -74,7 +74,7 @@ export default function ProducersConsumersBrokers() {
     <LearnLayout
       title="Producers, Consumers, and Brokers"
       description="How Kafka clients and servers actually work together: metadata discovery, broker leadership, producer batching and acks, the consumer poll loop, pull-based backpressure, and cluster coordination."
-      section="Apache Kafka — Module 03"
+      section="Apache Kafka — Lesson 03"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -100,7 +100,7 @@ export default function ProducersConsumersBrokers() {
           cluster leadership.
         </Para>
         <Para>
-          The reason this module matters more than it looks is that almost every production Kafka incident
+          The reason this lesson matters more than it looks is that almost every production Kafka incident
           traces back to a misunderstanding of one of these three roles. "Why did we lose a message?" is
           almost always a producer acknowledgement question. "Why is processing duplicated?" is almost
           always a consumer offset-commit-timing question. "Why did clients suddenly time out?" is almost
@@ -120,7 +120,7 @@ export default function ProducersConsumersBrokers() {
           </Para>
         </HighlightBox>
         <Callout title="Why this ordering" color={K}>
-          This module walks broker responsibilities first, then producers, then consumers, because clients
+          This lesson walks broker responsibilities first, then producers, then consumers, because clients
           cannot be understood in isolation. A producer's <code>acks</code> setting only makes sense once you
           know what a partition leader and an in-sync replica are. A consumer's offset commit strategy only
           makes sense once you know that Kafka retains records instead of deleting them on read.
@@ -216,7 +216,7 @@ client sends each request to the correct leader`}
         <Callout title="You do not need to run ZooKeeper" color="#38bdf8">
           If you are setting up Kafka for the first time in 2026, you never need to install or configure
           ZooKeeper. Every current Kafka distribution supports KRaft mode out of the box, including
-          single-node setups where one process acts as both broker and controller. Module 04 walks through
+          single-node setups where one process acts as both broker and controller. Lesson 04 walks through
           exactly this kind of setup.
         </Callout>
         <Para>
@@ -224,7 +224,7 @@ client sends each request to the correct leader`}
           or is shut down, the controller detects this (brokers send periodic heartbeats to the controller
           quorum), picks a suitable replacement leader from the partition's in-sync replicas, and pushes that
           new leadership assignment out to every broker in the cluster. Producers and consumers learn about
-          the change the next time they refresh metadata, which is exactly what Part 09 of this module covers
+          the change the next time they refresh metadata, which is exactly what Part 09 of this lesson covers
           in depth.
         </Para>
         <SubTitle>Why a dedicated controller role, instead of every broker deciding independently</SubTitle>
@@ -793,7 +793,7 @@ They read the same topic independently.`}
           or force the consumer to buffer them in memory until it runs out. A pull-based consumer instead
           simply falls 10,000 records/second further behind in the broker's durable log every second — fully
           visible as growing consumer lag, and fully recoverable later, bounded only by the topic's retention
-          window, exactly as covered in this module's monitoring guidance in Part 10.
+          window, exactly as covered in this lesson's monitoring guidance in Part 10.
         </Para>
       </section>
 
@@ -884,7 +884,7 @@ They read the same topic independently.`}
         <SectionTag text="// Part 10 — Putting it together" />
         <SectionTitle>Monitoring the Whole Picture: Producers, Brokers, Consumers</SectionTitle>
         <Para>
-          Every setting covered in this module maps to a real, observable metric. Treating producers,
+          Every setting covered in this lesson maps to a real, observable metric. Treating producers,
           brokers, and consumers as three independently healthy systems misses the point — a Kafka pipeline
           is only as reliable as the weakest link across all three, and the right monitoring makes that
           weak link visible before it becomes an incident rather than after.
@@ -904,7 +904,7 @@ They read the same topic independently.`}
           A producer with <code>acks=all</code> writing to a broker with <code>min.insync.replicas=2</code>
           still loses the durability story if the consumer reading that data commits offsets before
           processing finishes. Every layer's guarantees are necessary but none is sufficient on its own —
-          this is why this module covers all three roles together instead of in isolation.
+          this is why this lesson covers all three roles together instead of in isolation.
         </Callout>
       </section>
 

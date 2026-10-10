@@ -485,7 +485,7 @@ export default function TcpDeepDive() {
     <LearnLayout
       title="TCP Deep Dive"
       description="A complete exploration of TCP — from the 3-way handshake and sequence number mechanics to congestion control algorithms, flow control, TIME_WAIT, TCP options, performance tuning, and the subtle failure modes that make TCP connections mysteriously hang."
-      section="Networking Fundamentals — Module 20"
+      section="Networking Fundamentals — Lesson 20"
       readTime="28–38 min"
       updatedAt="May 2026"
     >

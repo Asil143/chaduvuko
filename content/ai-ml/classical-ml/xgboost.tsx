@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout }from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'XGBoost in Practice — End to End — Chaduvuko',
@@ -178,7 +177,6 @@ export default function XGBoostPage() {
       readTime="36–45 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="classical-ml" topic="xgboost" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -190,7 +188,7 @@ export default function XGBoostPage() {
         </h2>
 
         <p style={S.p}>
-          Module 29 explained gradient boosting conceptually — sequential trees
+          Lesson 29 explained gradient boosting conceptually — sequential trees
           each correcting the previous ensemble's mistakes.
           XGBoost (eXtreme Gradient Boosting) is an engineering implementation
           of that idea that made it practical at scale. Chen and Guestrin (2016)
@@ -1165,7 +1163,7 @@ print(f"\nTransaction decision: {decision}  (P(fraud)={prob:.3f})")`} />
               textTransform: 'uppercase' as const, color: '#D85A30',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 31 · Classical ML
+              Next — Lesson 31 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Train / Validation / Test Split — Chaduvuko',
@@ -177,7 +176,6 @@ export default function TrainValTestSplitPage() {
       readTime="26–34 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="data-engineering" topic="train-val-test-split" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -230,7 +228,7 @@ export default function TrainValTestSplitPage() {
         </AnalogyBox>
 
         <Callout type="tip">
-          The single most important rule in this module:
+          The single most important rule in this lesson:
           the test set is touched exactly once — at the very end,
           after all training and tuning is complete.
           Every time you look at the test set score to make a decision,
@@ -1076,7 +1074,7 @@ for n in [500, 5_000, 50_000]:
         <h2 style={S.h2}>How splitting actually goes wrong in production — beyond the textbook case</h2>
 
         <p style={S.p}>
-          The leakage table earlier in this module covers the mechanics. In practice, the two
+          The leakage table earlier in this lesson covers the mechanics. In practice, the two
           failure modes that show up over and over on real teams are group leakage and
           splitting after feature engineering — both are easy to miss because the code runs
           without any error, the metrics look great, and the problem only surfaces weeks
@@ -1098,7 +1096,7 @@ for n in [500, 5_000, 50_000]:
 
         <p style={S.p}>
           Splitting after feature engineering is the second recurring failure, and it is
-          subtler than the "scaler fit before split" case this module already covers. A team
+          subtler than the "scaler fit before split" case this lesson already covers. A team
           computes a rolling 30-day average or a cumulative count directly on the full,
           chronologically sorted dataframe — before ever calling a split function — and only
           then splits train and test out of the result. Every "past" feature for a row near
@@ -1239,7 +1237,7 @@ print(f"Test period:  {test_orders.index[0].date()} to {test_orders.index[-1].da
 
         <ConceptBox title="Myth: Leakage only happens when you deliberately do something wrong, like literally including the label in the features" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            Every leakage example in this module — a scaler fit before splitting, a rolling
+            Every leakage example in this lesson — a scaler fit before splitting, a rolling
             feature computed across the split boundary, a customer's rows scattered across
             train and test — happens without anyone including the label anywhere in X. Leakage
             is usually a statistical dependency introduced by the order operations happen in,
@@ -1347,7 +1345,7 @@ print(f"Test period:  {test_orders.index[0].date()} to {test_orders.index[-1].da
 
         <p style={S.p}>
           Section 5 — Classical Machine Learning — begins next.
-          Module 21 answers the question you have been building toward:
+          Lesson 21 answers the question you have been building toward:
           what actually is machine learning, and how does training work mechanically?
           Every algorithm in the section — linear regression, logistic regression,
           decision trees, random forests — builds on the data engineering foundation
@@ -1366,7 +1364,7 @@ print(f"Test period:  {test_orders.index[0].date()} to {test_orders.index[-1].da
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 21 · Classical ML
+              Next — Lesson 21 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

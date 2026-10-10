@@ -3,7 +3,6 @@ import Link from 'next/link'
 import {LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'BERT and the Encoder-Only Family — Chaduvuko',
@@ -178,7 +177,6 @@ export default function BertEncoderFamilyPage() {
       readTime="36–46 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="nlp" topic="bert-encoder-family" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -203,7 +201,7 @@ export default function BertEncoderFamilyPage() {
         <p style={S.p}>
           BERT (Bidirectional Encoder Representations from Transformers)
           uses a Transformer encoder — the left half of the original
-          Transformer architecture from Module 48. Every token attends
+          Transformer architecture from Lesson 48. Every token attends
           to every other token with no causal mask.
           To pretrain this bidirectional model without the ability to
           simply predict the next token (which would leak the answer),
@@ -1234,7 +1232,7 @@ def moderate_message(text, encoder_model, llm_client):
           GPU memory and storage. PEFT (Parameter-Efficient Fine-Tuning)
           methods like LoRA and adapters fine-tune less than 1% of parameters
           while achieving 95% of full fine-tuning performance.
-          Module 51 covers LoRA, adapters, and prefix tuning —
+          Lesson 51 covers LoRA, adapters, and prefix tuning —
           how to fine-tune a 7B parameter model on a single GPU.
         </p>
 
@@ -1250,7 +1248,7 @@ def moderate_message(text, encoder_model, llm_client):
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 51 · NLP
+              Next — Lesson 51 · NLP
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

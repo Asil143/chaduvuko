@@ -77,7 +77,7 @@ export default function PerformanceProfiling() {
     <LearnLayout
       title="Python Performance — Profiling and Optimisation"
       description="Finding real bottlenecks before optimising anything — profiling tools and the optimisations that actually matter."
-      section="Python — Module 42"
+      section="Python — Lesson 42"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -269,7 +269,7 @@ print(timeit.timeit(concat_with_join, number=1000))     # e.g. 0.187 seconds tot
       repeatedly with overlapping inputs.
 
 4. Genuinely CPU-bound work at the limits of what pure Python can do?
-   -> reach for NumPy/pandas (next module) for vectorised numeric work, or
+   -> reach for NumPy/pandas (next lesson) for vectorised numeric work, or
       multiprocessing (covered earlier in this phase) for true parallelism.
 
 5. Is it actually a problem worth fixing at all?
@@ -554,11 +554,11 @@ if record["id"] not in seen:   # now O(1) instead of O(n)`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 43 introduces NumPy and pandas — the bridge from core Python into real data work, and
+          Lesson 43 introduces NumPy and pandas — the bridge from core Python into real data work, and
           why vectorised operations exist at all.
         </p>
         <Link href="/learn/python/numpy-pandas-intro" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 43 → Intro to NumPy and pandas
+          Lesson 43 → Intro to NumPy and pandas
         </Link>
       </div>
     </LearnLayout>

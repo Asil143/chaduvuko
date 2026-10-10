@@ -233,7 +233,7 @@ export default function HttpAndHttpsPage() {
     <LearnLayout
       title="HTTP and HTTPS"
       description="The application protocol that powers the web — from HTTP/0.9's single-line request to HTTP/3's multiplexed, encrypted, QUIC-based streams handling billions of requests per second."
-      section="Networking Fundamentals — Module 26"
+      section="Networking Fundamentals — Lesson 26"
       readTime="28–38 min"
       updatedAt="May 2026"
     >

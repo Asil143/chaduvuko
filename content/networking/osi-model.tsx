@@ -507,7 +507,7 @@ export default function OSIModel() {
     <LearnLayout
       title="The OSI Model — All 7 Layers"
       description="The universal framework every network engineer uses to understand, design, and troubleshoot networks — from copper cables to application APIs."
-      section="Networking Fundamentals — Module 3"
+      section="Networking Fundamentals — Lesson 3"
       readTime="22–30 min"
       updatedAt="May 2026"
     >

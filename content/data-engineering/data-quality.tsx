@@ -79,7 +79,7 @@ export default function DataQualityModule() {
     <LearnLayout
       title="Data Quality — Dimensions, Testing, Monitoring, and Contracts"
       description="The six dimensions of quality, dbt tests at every layer, anomaly detection, data contracts, and building quality into pipelines rather than checking at the end."
-      section="Data Engineering — Module 36"
+      section="Data Engineering — Lesson 36"
       readTime="75 min"
       updatedAt="August 2026"
     >
@@ -101,7 +101,7 @@ export default function DataQualityModule() {
           The correct approach is preventive: build quality checks into every
           pipeline stage, test at every layer boundary, alert on anomalies before
           analysts hit them, and define quality contracts with source system owners
-          so violations are caught at ingestion rather than at Gold. This module
+          so violations are caught at ingestion rather than at Gold. This lesson
           builds that whole stack around FreshCart&rsquo;s orders pipeline.
         </Para>
 
@@ -364,7 +364,7 @@ if result['status'] == 'ANOMALY':
           FreshCart&rsquo;s Saturday order volume is always lower than a weekday&rsquo;s. Would
           a plain 7-day rolling average correctly flag a broken Saturday pipeline,
           or would it also flag every normal Saturday as anomalous? Check your
-          answer against the Error Library at the end of this module.
+          answer against the Error Library at the end of this lesson.
         </TryThis>
       </section>
 
@@ -536,7 +536,7 @@ def validate_against_contract(df, contract_path: str) -> list[ContractViolation]
         <Output>{`>>> validate_against_contract(bronze_orders_df, 'contracts/orders_api_v2.yml')
 [ContractViolation(field='status', constraint='allowed_values',
                     actual_value=['scheduled'], severity='error')]
-# exactly the violation from this module's Real World section below`}</Output>
+# exactly the violation from this lesson's Real World section below`}</Output>
 
         <SubSubTitle>Detecting breaking changes before they ship</SubSubTitle>
 
@@ -575,7 +575,7 @@ def validate_against_contract(df, contract_path: str) -> list[ContractViolation]
 Field 'status': breaking change NOT detected (new value 'scheduled' only ADDS an option)
 ✓ Additive change — requires 7-day notice, not 30. PR may proceed.
 # had this check existed, it's exactly what should have caught the enum
-# addition described in this module's Real World section`}</Output>
+# addition described in this lesson's Real World section`}</Output>
       </section>
 
       <Divider />
@@ -716,7 +716,7 @@ Slack: "Pipeline quality: 97.1% checks passed. 3 failures."`}</Output>
         {[
           {
             wrong: '"dbt tests and anomaly detection cover the same ground, so one is enough"',
-            right: 'They catch fundamentally different failure classes — Part 02\'s tests are deterministic checks against rules someone already anticipated (not_null, accepted_values), while Part 03\'s anomaly detection catches deviations nobody wrote a rule for. This module\'s Real World scenario is exactly a case a rule DID catch (accepted_values) three days late — the Z-score anomaly on row count would have caught it the same evening.',
+            right: 'They catch fundamentally different failure classes — Part 02\'s tests are deterministic checks against rules someone already anticipated (not_null, accepted_values), while Part 03\'s anomaly detection catches deviations nobody wrote a rule for. This lesson\'s Real World scenario is exactly a case a rule DID catch (accepted_values) three days late — the Z-score anomaly on row count would have caught it the same evening.',
           },
           {
             wrong: '"A data contract is just documentation of the schema — it doesn\'t actually prevent anything"',
@@ -724,7 +724,7 @@ Slack: "Pipeline quality: 97.1% checks passed. 3 failures."`}</Output>
           },
           {
             wrong: '"Testing your expectation suite isn\'t necessary — the checks are obviously correct"',
-            right: 'An expectation suite is code, and code has bugs — this module\'s Error Library has a real example where ExpectTableRowCountToBeBetween(min_value=0, ...) let a completely empty file pass validation because zero technically satisfies "at least 0 rows." Test the test suite itself against edge cases before trusting it in production.',
+            right: 'An expectation suite is code, and code has bugs — this lesson\'s Error Library has a real example where ExpectTableRowCountToBeBetween(min_value=0, ...) let a completely empty file pass validation because zero technically satisfies "at least 0 rows." Test the test suite itself against edge cases before trusting it in production.',
           },
           {
             wrong: '"More quality checks is always better, regardless of where you put them"',
@@ -732,7 +732,7 @@ Slack: "Pipeline quality: 97.1% checks passed. 3 failures."`}</Output>
           },
           {
             wrong: '"A rolling 7-day average is a safe, generic default for row-count anomaly detection"',
-            right: 'It silently assumes no weekly seasonality — this module\'s Error Library documents exactly the failure mode where a business with lower weekend volume gets false CRITICAL alerts every single Monday, because the rolling average is diluted by two quiet days. Compare like days (Monday vs the last 4 Mondays) when the metric has a weekly pattern.',
+            right: 'It silently assumes no weekly seasonality — this lesson\'s Error Library documents exactly the failure mode where a business with lower weekend volume gets false CRITICAL alerts every single Monday, because the rolling average is diluted by two quiet days. Compare like days (Monday vs the last 4 Mondays) when the metric has a weekly pattern.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
@@ -910,7 +910,7 @@ The fifth step is fixing and reprocessing. Fix the root cause in code, then repr
         {[
           {
             q: 'Writing a row-count or NULL check but never testing the check itself against an empty or malformed input',
-            a: 'This module\'s Error Library has a real ExpectTableRowCountToBeBetween(min_value=0, ...) that let a completely empty file pass, because zero technically satisfies "at least zero rows." A quality check is code and needs its own test cases — an empty file, an all-null file, a file with one row — before it can be trusted.',
+            a: 'This lesson\'s Error Library has a real ExpectTableRowCountToBeBetween(min_value=0, ...) that let a completely empty file pass, because zero technically satisfies "at least zero rows." A quality check is code and needs its own test cases — an empty file, an all-null file, a file with one row — before it can be trusted.',
           },
           {
             q: 'Setting every dbt test to severity: error without considering whether that\'s actually correct',
@@ -918,7 +918,7 @@ The fifth step is fixing and reprocessing. Fix the root cause in code, then repr
           },
           {
             q: 'Building a data contract and never actually enforcing it in the producer\'s CI',
-            a: 'A contract that only the consumer reads is documentation, not enforcement — see this module\'s Misconceptions. Part 05\'s is_breaking_change() only prevents incidents like the Real World scenario if it runs as a required CI check in the SOURCE team\'s own pipeline, blocking their merge, not just informing data engineering after the fact.',
+            a: 'A contract that only the consumer reads is documentation, not enforcement — see this lesson\'s Misconceptions. Part 05\'s is_breaking_change() only prevents incidents like the Real World scenario if it runs as a required CI check in the SOURCE team\'s own pipeline, blocking their merge, not just informing data engineering after the fact.',
           },
           {
             q: 'Treating anomaly detection alerts with the same urgency as dbt test failures',
@@ -926,7 +926,7 @@ The fifth step is fixing and reprocessing. Fix the root cause in code, then repr
           },
           {
             q: 'Adding quality checks only at Gold because "that\'s what the dashboards read from"',
-            a: 'Part 01\'s 10× cost rule means the same check catches the same problem far cheaper at Bronze or Silver than at Gold — by the time bad data reaches Gold, it has already been transformed, aggregated, and in this module\'s Real World case, sat unnoticed for days. Push checks as far upstream as the data allows.',
+            a: 'Part 01\'s 10× cost rule means the same check catches the same problem far cheaper at Bronze or Silver than at Gold — by the time bad data reaches Gold, it has already been transformed, aggregated, and in this lesson\'s Real World case, sat unnoticed for days. Push checks as far upstream as the data allows.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
@@ -962,7 +962,7 @@ The fifth step is fixing and reprocessing. Fix the root cause in code, then repr
           {
             error: `dbt test accepted_values fails on Silver after source added 'refunded' status — but the test was passing for 6 months and nothing changed in dbt`,
             cause: 'The source system added a new order status value without going through the data contract change process. There is no data contract CI check that would have blocked the source team from deploying this change. The dbt accepted_values test correctly caught the violation — but it was caught in Silver after 3 days of data was in the DLQ, not at ingestion.',
-            fix: 'Immediate: add \'refunded\' to the accepted_values list, reprocess DLQ records. Long term: implement the data contract enforcement described in this module. The contract for the orders API must specify allowed_values for status. The orders team\'s CI pipeline must include a contract validation check that fails if new enum values are added without a matching contract update. This moves the detection from "3 days in Silver DLQ" to "before source deployment".',
+            fix: 'Immediate: add \'refunded\' to the accepted_values list, reprocess DLQ records. Long term: implement the data contract enforcement described in this lesson. The contract for the orders API must specify allowed_values for status. The orders team\'s CI pipeline must include a contract validation check that fails if new enum values are added without a matching contract update. This moves the detection from "3 days in Silver DLQ" to "before source deployment".',
           },
           {
             error: `Row count anomaly detection fires false positives every Monday — Saturday data is always flagged as anomalous`,
@@ -1005,10 +1005,10 @@ The fifth step is fixing and reprocessing. Fix the root cause in code, then repr
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 37 covers data observability — pipeline metrics, structured logging, anomaly detection, and the alerting design that ensures you know about data problems before your stakeholders do.
+          Lesson 37 covers data observability — pipeline metrics, structured logging, anomaly detection, and the alerting design that ensures you know about data problems before your stakeholders do.
         </p>
         <Link href="/learn/data-engineering/monitoring-observability" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 37 → Data Observability — Metrics, Logging and Anomaly Detection
+          Lesson 37 → Data Observability — Metrics, Logging and Anomaly Detection
         </Link>
       </div>
     </LearnLayout>

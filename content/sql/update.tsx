@@ -78,7 +78,7 @@ export default function Update() {
     <LearnLayout
       title="UPDATE — Modifying Existing Rows"
       description="Change data in existing rows — single column updates, multi-column updates, computed updates, UPDATE from another table, and the golden rule: SELECT before UPDATE"
-      section="SQL — Module 21"
+      section="SQL — Lesson 21"
       readTime="10–14 min"
       updatedAt="April 2026"
     >
@@ -88,9 +88,9 @@ export default function Update() {
 
       <P>UPDATE modifies existing rows in a table. It is one of the four DML commands (SELECT, INSERT, UPDATE, DELETE) and the one most likely to cause irreversible damage when used carelessly. A SELECT returns wrong results — you rewrite the query. An UPDATE without a proper WHERE clause rewrites every row in a million-row table in seconds, and there is no undo.</P>
 
-      <P>This module teaches you not just the syntax but the discipline. Every professional SQL writer has a set of habits around UPDATE that they follow without exception — not because they doubt their own abilities, but because the cost of a mistake is high enough that verification is always worth the 30 seconds it takes.</P>
+      <P>This lesson teaches you not just the syntax but the discipline. Every professional SQL writer has a set of habits around UPDATE that they follow without exception — not because they doubt their own abilities, but because the cost of a mistake is high enough that verification is always worth the 30 seconds it takes.</P>
 
-      <P>The single most important rule in this module:</P>
+      <P>The single most important rule in this lesson:</P>
 
       <div style={{ background: `${C}08`, border: `2px solid ${C}40`, borderRadius: 10, padding: '20px 24px', margin: '20px 0 32px' }}>
         <p style={{ fontSize: 16, fontWeight: 700, color: C, margin: '0 0 8px', fontFamily: 'var(--font-mono)' }}>The Golden Rule</p>
@@ -844,10 +844,10 @@ WHERE category = 'Staples' AND in_stock = true;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 22</strong>, you learn DELETE — removing rows from tables, soft delete patterns, truncate vs delete, and why DELETE is even more dangerous than UPDATE and requires even more care.
+          In <strong>Lesson 22</strong>, you learn DELETE — removing rows from tables, soft delete patterns, truncate vs delete, and why DELETE is even more dangerous than UPDATE and requires even more care.
         </p>
         <Link href="/learn/sql/delete" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 22 → DELETE
+          Lesson 22 → DELETE
         </Link>
       </div>
 

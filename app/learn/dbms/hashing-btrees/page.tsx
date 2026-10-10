@@ -1164,7 +1164,7 @@ CREATE INDEX idx_orders_date ON orders(order_date) WITH (fillfactor = 70);
         <SectionTitle>Choosing the Right Index Structure — A Real Schema Decision</SectionTitle>
 
         <Para>
-          The knowledge from this module directly informs every index design decision.
+          The knowledge from this lesson directly informs every index design decision.
           Here is a realistic scenario showing how to apply it.
         </Para>
 

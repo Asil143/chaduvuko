@@ -81,7 +81,7 @@ export default function WhatIsPythonSetup() {
     <LearnLayout
       title="What is Python? Setup & Your First Program"
       description="Why Python is the most in-demand language in the US job market, how it actually runs, and getting a real environment set up."
-      section="Python — Module 01"
+      section="Python — Lesson 01"
       readTime="55 min"
       updatedAt="August 2026"
     >
@@ -515,7 +515,7 @@ print("Hello, World!")`}</CodeBox>
         </Para>
 
         <Callout type="tip">
-          Set up VS Code with the Python extension before continuing to the next module. Open the{' '}
+          Set up VS Code with the Python extension before continuing to the next lesson. Open the{' '}
           <code>hello.py</code> file you just created, run it with the green "Run" arrow in the
           top-right corner (or the keyboard shortcut it shows), and confirm the output appears in the
           integrated terminal panel at the bottom. This is the workflow you will use for the rest of
@@ -571,7 +571,7 @@ print("Hello, World!")`}</CodeBox>
             3.12.
           </Para>
 
-          <SubSubTitle>Why every step from this module mattered</SubSubTitle>
+          <SubSubTitle>Why every step from this lesson mattered</SubSubTitle>
 
           <Para>
             If you had skipped the virtual environment and installed packages globally, you would
@@ -585,7 +585,7 @@ print("Hello, World!")`}</CodeBox>
           </Para>
 
           <Para>
-            None of this is advanced. All of it is assumed. This is exactly why this module exists
+            None of this is advanced. All of it is assumed. This is exactly why this lesson exists
             before any real Python syntax — the setup fundamentals are the difference between
             spending your first day writing code and spending your first day stuck on tooling.
           </Para>
@@ -768,7 +768,7 @@ print("Hello, World!")`}</CodeBox>
           {
             error: `error: externally-managed-environment`,
             cause: 'A newer protection in some Linux distributions and Homebrew-installed Python that blocks "pip install" from modifying the system-wide Python installation directly, to prevent accidentally breaking OS-level tools that depend on specific package versions.',
-            fix: 'This is not a bug — it is the correct behavior working as intended. It is telling you to use a virtual environment, exactly as this module recommends. Create and activate one with python3 -m venv venv, and the error disappears because you are no longer touching the protected system installation.',
+            fix: 'This is not a bug — it is the correct behavior working as intended. It is telling you to use a virtual environment, exactly as this lesson recommends. Create and activate one with python3 -m venv venv, and the error disappears because you are no longer touching the protected system installation.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -823,11 +823,11 @@ print("Hello, World!")`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 02 covers variables and every core data type in Python — how dynamic typing actually
+          Lesson 02 covers variables and every core data type in Python — how dynamic typing actually
           works, and how to convert between types without introducing silent bugs.
         </p>
         <Link href="/learn/python/variables-data-types" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 02 → Variables, Data Types & Type Conversion
+          Lesson 02 → Variables, Data Types & Type Conversion
         </Link>
       </div>
     </LearnLayout>

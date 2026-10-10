@@ -176,7 +176,7 @@ export default function DatabasesInternalsModule() {
     <LearnLayout
       title="Databases — What They Are and How They Work Internally"
       description="Storage engines, B-trees, indexes, buffer pools, WAL — the inside story."
-      section="Data Engineering — Module 09"
+      section="Data Engineering — Lesson 09"
       readTime="65 min"
       updatedAt="August 2026"
     >
@@ -1307,15 +1307,15 @@ The correct architecture: run a scheduled pipeline that copies data from the OLT
           },
           {
             q: 'Opening a new database connection per thread or per parallel task instead of using a connection pool',
-            a: 'This module\'s Error Library shows the direct consequence — "remaining connection slots are reserved," PostgreSQL\'s default max_connections (100) exhausted by a pipeline that never reused connections. Always route pipeline connections through a pool (SQLAlchemy\'s pool_size/max_overflow, or PgBouncer) rather than opening one per parallel task.',
+            a: 'This lesson\'s Error Library shows the direct consequence — "remaining connection slots are reserved," PostgreSQL\'s default max_connections (100) exhausted by a pipeline that never reused connections. Always route pipeline connections through a pool (SQLAlchemy\'s pool_size/max_overflow, or PgBouncer) rather than opening one per parallel task.',
           },
           {
             q: 'Dismissing a large gap between EXPLAIN\'s estimated and actual row counts as normal variance',
-            a: 'Part 07 and this module\'s Error Library both treat a 10×+ estimate-vs-actual gap as a specific, actionable signal — stale statistics, fixed by running ANALYZE — not noise to ignore. Query plans built on stale statistics are exactly how a previously-fast query silently starts choosing a sequential scan.',
+            a: 'Part 07 and this lesson\'s Error Library both treat a 10×+ estimate-vs-actual gap as a specific, actionable signal — stale statistics, fixed by running ANALYZE — not noise to ignore. Query plans built on stale statistics are exactly how a previously-fast query silently starts choosing a sequential scan.',
           },
           {
             q: 'Running a CDC connector in production with no monitoring on its lag against WAL retention',
-            a: 'This module\'s Error Library shows what happens without it: a Debezium connector falls behind, PostgreSQL deletes WAL the connector still needed, and the only recovery is dropping the replication slot and re-snapshotting the source tables from scratch. Part 05\'s TryThis is exactly this check — know where your connector\'s lag is visible before it becomes an outage.',
+            a: 'This lesson\'s Error Library shows what happens without it: a Debezium connector falls behind, PostgreSQL deletes WAL the connector still needed, and the only recovery is dropping the replication slot and re-snapshotting the source tables from scratch. Part 05\'s TryThis is exactly this check — know where your connector\'s lag is visible before it becomes an outage.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1411,10 +1411,10 @@ The correct architecture: run a scheduled pipeline that copies data from the OLT
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 10 explains the real difference between SQL and NoSQL — the relational model, document stores, key-value stores, and the decision framework for choosing the right database for any workload.
+          Lesson 10 explains the real difference between SQL and NoSQL — the relational model, document stores, key-value stores, and the decision framework for choosing the right database for any workload.
         </p>
         <Link href="/learn/data-engineering/sql-vs-nosql" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 10 → SQL vs NoSQL — The Real Difference
+          Lesson 10 → SQL vs NoSQL — The Real Difference
         </Link>
       </div>
     </LearnLayout>

@@ -150,7 +150,7 @@ const Divider = () => (
 export default function DSAIntroductionPage() {
   return (
     <LearnLayout
-      title="Unit 00 — Before We Write Code"
+      title="Before We Write Code"
       description="What DSA is, why it matters, how computers store data, and your first C program."
       section="DSA"
       readTime="45 min"
@@ -160,9 +160,7 @@ export default function DSAIntroductionPage() {
       {/* ── Unit badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'UNIT 00', green: true },
           { label: 'No prerequisites', green: false },
-          { label: '45 min read', green: false },
         ].map((b) => (
           <span key={b.label} style={{
             fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600,
@@ -180,7 +178,7 @@ export default function DSAIntroductionPage() {
         And why are we using C instead of Python or JavaScript?
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
-        This unit is for everyone — especially those who have never written code before,
+        This lesson is for everyone — especially those who have never written code before,
         or who come from a non-IT background. If you already know some programming, you will
         still find the memory and computer internals section useful. Read it anyway.
       </p>
@@ -618,7 +616,7 @@ int main() {
       </p>
 
       <Callout type="azure">
-        <strong>Preview of Unit 04:</strong> That <code style={{ fontFamily: 'var(--font-mono)' }}>&</code> symbol
+        <strong>Preview of Lesson 5:</strong> That <code style={{ fontFamily: 'var(--font-mono)' }}>&</code> symbol
         you just saw is the beginning of pointers. You gave scanf the address of a variable so it
         could write directly into memory. That exact idea — working with addresses — is how linked lists,
         trees, and graphs are built. You have already touched the most important concept in C.
@@ -672,14 +670,14 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Unit 01</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 2</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now know what DSA is, why it matters, how memory works, why we use C,
         and the basics of writing C programs. That is the complete foundation.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Unit 01, we tackle <strong style={{ color: 'var(--text)' }}>Complexity</strong> —
+        In Lesson 2, we tackle <strong style={{ color: 'var(--text)' }}>Complexity</strong> —
         how to measure the speed and memory usage of any piece of code. This is the skill
         that separates engineers who write code from engineers who write <em>good</em> code.
       </p>
@@ -693,7 +691,7 @@ int main() {
       }}>
         <div>
           <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>
-            UP NEXT → UNIT 01
+            UP NEXT → LESSON 2
           </div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>
             Complexity — The Scoreboard for Code

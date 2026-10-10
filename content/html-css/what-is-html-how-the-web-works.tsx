@@ -77,7 +77,7 @@ export default function WhatIsHtml() {
     <LearnLayout
       title="What is HTML? How the Web Actually Works"
       description="Browsers, servers, the DOM, and the HTTP request/response cycle — the foundation every web page sits on."
-      section="HTML & CSS — Module 01"
+      section="HTML & CSS — Lesson 01"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -125,7 +125,7 @@ export default function WhatIsHtml() {
         <Callout type="info">
           "The web" is really just an enormous number of client/server conversations happening
           constantly, all using the same shared set of rules for how to ask for things and how to answer.
-          Those shared rules are what the rest of this module unpacks — DNS to find the right server,
+          Those shared rules are what the rest of this lesson unpacks — DNS to find the right server,
           HTTP to have the actual conversation, and HTML as the format the answer arrives in.
         </Callout>
       </section>
@@ -229,7 +229,7 @@ Content-Length: 4531
 
         <Callout type="warning">
           This is exactly why the order and placement of tags inside <code>&lt;head&gt;</code> and{' '}
-          <code>&lt;body&gt;</code>, covered in the next module, genuinely affects real load performance —
+          <code>&lt;body&gt;</code>, covered in the next lesson, genuinely affects real load performance —
           every referenced file is a separate network round trip, and the browser can only discover a
           file it hasn&apos;t parsed yet. A stylesheet linked at the very bottom of a long page delays
           every one of its own requests until the browser has read through everything above it first.
@@ -711,12 +711,12 @@ JAVASCRIPT →  BEHAVIOR.  What happens when the user interacts with this?
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 02 zooms into the HTML document itself — the exact skeleton every page starts from, why{' '}
+          Lesson 02 zooms into the HTML document itself — the exact skeleton every page starts from, why{' '}
           <code>&lt;!DOCTYPE html&gt;</code> silently changes how the entire page is interpreted, and the
           mistakes that break rendering without ever throwing a visible error.
         </p>
         <Link href="/learn/html-css/document-structure" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 02 → Document Structure — DOCTYPE, html, head, body
+          Lesson 02 → Document Structure — DOCTYPE, html, head, body
         </Link>
       </div>
     </LearnLayout>

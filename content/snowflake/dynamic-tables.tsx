@@ -5,7 +5,7 @@ export default function DynamicTables() {
     <LearnLayout
       title="Dynamic Tables"
       description="Declarative incremental pipelines, TARGET_LAG semantics, incremental vs full refresh, dynamic table DAGs, and how dynamic tables compare to streams/tasks and materialized views."
-      section="Snowflake — Module 12"
+      section="Snowflake — Lesson 12"
       readTime="70 min"
       updatedAt="September 2026"
       breadcrumbs={[

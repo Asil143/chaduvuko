@@ -74,7 +74,7 @@ export default function Snapshots() {
     <LearnLayout
       title="Snapshots: Type 2 Slowly Changing Dimensions"
       description="Why mutable source tables silently destroy history, how dbt snapshots build a permanent append-only record of change, the timestamp and check detection strategies, the dbt_valid_from/dbt_valid_to/dbt_scd_id columns, querying current and point-in-time state, and handling hard deletes."
-      section="dbt — Module 13"
+      section="dbt — Lesson 13"
       readTime="65 min"
       updatedAt="September 2026"
       breadcrumbs={[

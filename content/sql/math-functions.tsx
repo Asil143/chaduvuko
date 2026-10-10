@@ -92,7 +92,7 @@ export default function MathFunctions() {
     <LearnLayout
       title="Math Functions"
       description="ROUND, FLOOR, CEIL, ABS, MOD, POWER, SQRT, LOG — every numeric operation for financial calculations, statistical analysis, data bucketing, and percentage computations"
-      section="SQL — Module 43"
+      section="SQL — Lesson 43"
       readTime="10–14 min"
       updatedAt="April 2026"
     >
@@ -295,7 +295,7 @@ LIMIT 10;`}
       <FnCard fn="EXP" syntax="EXP(number)" returns="e^number" note="EXP(1) = 2.71828 (Euler's number). EXP(0) = 1. Used for exponential growth models and log-scale transformations." />
 
       <Callout type="info">
-        You'll learn the WITH clause (CTEs) formally in Module 55 — for now, just know it names a subquery so you can reference it by name later in the same query.
+        You'll learn the WITH clause (CTEs) formally in Lesson 55 — for now, just know it names a subquery so you can reference it by name later in the same query.
       </Callout>
 
       <SQLPlayground
@@ -327,7 +327,7 @@ WHERE jan.mo = 1 AND feb.mo = 2;`}
       />
 
       <Callout type="info">
-        This is a window function (OVER (...)) — covered fully in Module 52. For now: it computes an aggregate per group without collapsing the rows, unlike GROUP BY.
+        This is a window function (OVER (...)) — covered fully in Lesson 52. For now: it computes an aggregate per group without collapsing the rows, unlike GROUP BY.
       </Callout>
 
       <SQLPlayground
@@ -1014,10 +1014,10 @@ ORDER BY gross_margin_pct DESC NULLS LAST;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 44</strong>, you learn CAST and type conversion — converting between data types, implicit vs explicit casting, safe casting with TRY_CAST, and the type coercion rules that prevent silent errors.
+          In <strong>Lesson 44</strong>, you learn CAST and type conversion — converting between data types, implicit vs explicit casting, safe casting with TRY_CAST, and the type coercion rules that prevent silent errors.
         </p>
         <Link href="/learn/sql/cast-convert" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 44 → CAST and Type Conversion
+          Lesson 44 → CAST and Type Conversion
         </Link>
       </div>
 

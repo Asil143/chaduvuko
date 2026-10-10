@@ -74,7 +74,7 @@ export default function ManagedKafkaCloud() {
     <LearnLayout
       title="Managed Kafka and Cloud Choices"
       description="Why teams choose managed Kafka over self-hosting, how Confluent Cloud, Amazon MSK, Redpanda, and WarpStream actually differ, Kubernetes-based self-management with Strimzi as a middle ground, real cost-model trade-offs, migration considerations, and a decision framework for choosing based on team size, cloud provider, compliance, and throughput."
-      section="Apache Kafka — Module 22"
+      section="Apache Kafka — Lesson 22"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -160,11 +160,11 @@ export default function ManagedKafkaCloud() {
           managing a Kafka Streams application's own deployment.
         </Para>
         <Table
-          headers={['Component', 'Self-hosted, the way earlier modules covered it', 'Confluent Cloud equivalent']}
+          headers={['Component', 'Self-hosted, the way earlier lessons covered it', 'Confluent Cloud equivalent']}
           rows={[
             ['Brokers', 'Deployed, patched, and capacity-planned by your team', 'Fully managed, provisioned by cluster type and throughput tier'],
             ['Schema Registry', 'A separate service you deploy and operate', 'A managed service, provisioned alongside the cluster'],
-            ['Kafka Connect', 'A distributed Connect cluster you deploy, per Module 13', 'Managed connectors, configured through Confluent\'s own console/API rather than a self-run Connect REST API'],
+            ['Kafka Connect', 'A distributed Connect cluster you deploy, per Lesson 13', 'Managed connectors, configured through Confluent\'s own console/API rather than a self-run Connect REST API'],
             ['ksqlDB / stream processing', 'Deployed and scaled as your own application or cluster', 'Managed ksqlDB clusters, provisioned per workload'],
           ]}
         />
@@ -455,7 +455,7 @@ engineering time is worth relative to the vendor's markup.`}
         <SectionTag text="// Part 07 — Migration Considerations" />
         <SectionTitle>Migrating Between Kafka Deployments — Client Code Doesn't Change, the Operational Surface Does</SectionTitle>
         <Para>
-          Because every option covered in this module — self-hosted Apache Kafka, MSK, Confluent Cloud,
+          Because every option covered in this lesson — self-hosted Apache Kafka, MSK, Confluent Cloud,
           Redpanda, WarpStream, Strimzi-on-Kubernetes — speaks the same Kafka wire protocol, a producer or
           consumer written against one of them generally requires no application code changes to point at
           another. The bootstrap servers change, authentication configuration changes, and TLS settings
@@ -663,7 +663,7 @@ producer_config = {
           A single-region Kafka cluster, whether self-hosted or managed, is only as durable as that region.
           A team with a genuine business requirement to survive a full regional outage needs a
           multi-region story, and how straightforward that story is differs sharply across the deployment
-          models this module has covered.
+          models this lesson has covered.
         </Para>
         <SubTitle>Cluster linking and cross-cluster replication — the general mechanism</SubTitle>
         <Para>
@@ -761,7 +761,7 @@ producer_config = {
         <SectionTag text="// Part 12 — Security and Multi-Tenancy Across Providers" />
         <SectionTitle>Security Configuration Looks Similar Everywhere — the Access-Control Model Underneath Differs</SectionTitle>
         <Para>
-          Every option covered in this module supports the same broad security building blocks the earlier
+          Every option covered in this lesson supports the same broad security building blocks the earlier
           Kafka modules assumed — TLS in transit, authentication, and per-topic authorization — but how those
           building blocks are configured and administered differs enough across providers to be worth a
           direct comparison, especially for a team that will be running many teams' workloads on one shared
@@ -896,18 +896,18 @@ kafka-configs --bootstrap-server broker:9092 --alter \\
           <Para>
             <strong>At Vercel (a platform company whose entire product is built on making infrastructure
             decisions disappear for its customers):</strong> internally, the platform engineering team
-            faces the same build-vs-buy question this module covers, but pointed at their own event
+            faces the same build-vs-buy question this lesson covers, but pointed at their own event
             pipelines. A small platform team supporting rapid product iteration does not want its senior
             engineers spending a quarter building Kafka operational tooling when a managed offering gets
             them the same reliability with a fraction of the internal build cost — the same Part 01 and
-            Part 06 trade-off this module walks through, evaluated by a company whose entire business model
+            Part 06 trade-off this lesson walks through, evaluated by a company whose entire business model
             is making exactly this kind of infrastructure trade-off invisible to its own customers.
           </Para>
         </HighlightBox>
         <HighlightBox>
           <Para>
             <strong>At HashiCorp (whose own products — Vault, Consul, Terraform — are frequently the tools
-            teams use to manage the infrastructure decisions this module covers):</strong> an internal
+            teams use to manage the infrastructure decisions this lesson covers):</strong> an internal
             platform team standardizing on Kubernetes across the company evaluates Strimzi specifically
             because their organization already runs Kubernetes everywhere for other services, and adding a
             second, unrelated ops model (a hand-rolled VM-based Kafka cluster, or a new vendor relationship)
@@ -1075,7 +1075,7 @@ Compare that to a fully managed service, where the vendor owns broker patching, 
         'Redpanda (C++, no JVM) and WarpStream (stateless brokers on object storage) are Kafka-wire-protocol-compatible, so basic client code generally works unmodified — but protocol compatibility is not the same claim as full ecosystem feature parity, and specific dependencies need explicit testing.',
         'Strimzi on Kubernetes automates Kafka-specific operational mechanics (rolling upgrades, reconciliation) through a declarative operator model, but shifts the operational burden into Kubernetes expertise rather than eliminating it — a strong fit specifically for teams with existing Kubernetes maturity.',
         'The self-hosted vs. managed cost crossover depends on scale: managed pricing usually wins at low-to-moderate throughput once engineering time is priced in; self-hosted or Kubernetes-based deployment can win at sustained very high throughput with an existing platform team.',
-        'Migrating between Kafka platforms is mostly a configuration and operational-tooling project, not an application rewrite, because every option in this module speaks the same Kafka wire protocol — client send() and poll() calls are typically unchanged.',
+        'Migrating between Kafka platforms is mostly a configuration and operational-tooling project, not an application rewrite, because every option in this lesson speaks the same Kafka wire protocol — client send() and poll() calls are typically unchanged.',
         'Choose a deployment model using team size and existing platform expertise first, then cloud-provider fit, then compliance/data-residency requirements, then throughput and its predictability — and treat the decision as revisitable, not permanent.',
       ]} />
     </LearnLayout>

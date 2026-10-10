@@ -77,7 +77,7 @@ export default function InheritancePolymorphism() {
     <LearnLayout
       title="Inheritance and Polymorphism"
       description="Single inheritance, super(), method overriding, real polymorphism, the method resolution order, isinstance vs type ==, and composition over inheritance."
-      section="Python — Module 21"
+      section="Python — Lesson 21"
       readTime="45 min"
       updatedAt="August 2026"
     >
@@ -88,7 +88,7 @@ export default function InheritancePolymorphism() {
         <SectionTitle>Building One Class on Top of Another</SectionTitle>
 
         <Para>
-          By the end of Module 20 you can build a self-contained class with its own attributes and
+          By the end of Lesson 20 you can build a self-contained class with its own attributes and
           behavior. Real systems, though, are full of things that are variations on a theme —
           different kinds of employees, different kinds of payments, different kinds of shapes — that
           share a large amount of common structure and behavior, but differ in specific, well-defined
@@ -161,7 +161,7 @@ print(alice.name, alice.salary, alice.direct_reports)
           <code>super().__init__(name, salary)</code> is exactly equivalent in effect to writing{' '}
           <code>self.name = name</code> and <code>self.salary = salary</code> directly inside{' '}
           <code>Manager.__init__</code> — but written this way, if <code>Employee.__init__</code> ever
-          changes (say, a validation rule is added, exactly like Module 20&apos;s salary check),{' '}
+          changes (say, a validation rule is added, exactly like Lesson 20&apos;s salary check),{' '}
           <code>Manager</code> automatically picks up that change for free, with zero edits needed in{' '}
           <code>Manager</code> itself.
         </Para>
@@ -453,7 +453,7 @@ print(isinstance(my_car, Engine))   # False — correctly, a Car is not an Engin
           meaningful structure and an intentionally uniform interface. The guidance is about defaulting
           to composition when the relationship is genuinely "has-a," and reaching for inheritance
           specifically when the relationship is genuinely "is-a" and you want that shared, substitutable
-          interface — exactly the difference this module has now shown from both directions.
+          interface — exactly the difference this lesson has now shown from both directions.
         </Callout>
       </section>
 
@@ -743,12 +743,12 @@ print(isinstance(my_car, Engine))   # False — correctly, a Car is not an Engin
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 22 covers Python&apos;s convention-based privacy, and the dunder methods — __str__,
+          Lesson 22 covers Python&apos;s convention-based privacy, and the dunder methods — __str__,
           __repr__, __eq__, __len__, and operator overloading — that let your own objects behave like
           Python&apos;s built-in types.
         </p>
         <Link href="/learn/python/encapsulation-dunder-methods" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 22 → Encapsulation and Magic/Dunder Methods
+          Lesson 22 → Encapsulation and Magic/Dunder Methods
         </Link>
       </div>
     </LearnLayout>

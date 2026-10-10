@@ -77,7 +77,7 @@ export default function Html5ApisOverview() {
     <LearnLayout
       title="HTML5 APIs Overview"
       description="data-* attributes, contenteditable, and the drag-and-drop API — the browser features beyond plain markup."
-      section="HTML & CSS — Module 11"
+      section="HTML & CSS — Lesson 11"
       readTime="30 min"
       updatedAt="August 2026"
     >
@@ -205,7 +205,7 @@ el.dataset.itemCount = '12';
           JavaScript — is genuinely one of the most common patterns in real front-end code for tracking
           per-element state directly in the DOM itself, without a separate JavaScript data structure kept
           in sync with what is on screen, and it also plays a starring role in CSS selectors (Part 03)
-          and in the drag-and-drop pattern covered later in this module (Part 08).
+          and in the drag-and-drop pattern covered later in this lesson (Part 08).
         </Para>
       </section>
 
@@ -542,7 +542,7 @@ drop        — fires ONCE, on the drop target, the instant the item is released
 
         <Para>
           Notice the <code>data-card-id</code> attribute doing double duty exactly as described earlier
-          in this module — it identifies each card for the drag-and-drop logic in Part 07, and it is
+          in this lesson — it identifies each card for the drag-and-drop logic in Part 07, and it is
           also the attribute a CSS selector or a query like{' '}
           <code>{'document.querySelector(\'[data-card-id="1"]\')'}</code> can target directly, without
           any additional class or id needed purely for this purpose.
@@ -844,12 +844,12 @@ drop        — fires ONCE, on the drop target, the instant the item is released
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 12 covers embedding external content safely — iframe, the legacy embed and object
+          Lesson 12 covers embedding external content safely — iframe, the legacy embed and object
           elements, the sandbox attribute, cross-origin restrictions, and the clickjacking risk every
           embedded page introduces.
         </p>
         <Link href="/learn/html-css/embedding-content" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 12 → Embedding Content — iframe, embed, object
+          Lesson 12 → Embedding Content — iframe, embed, object
         </Link>
       </div>
     </LearnLayout>

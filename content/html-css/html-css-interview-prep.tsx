@@ -94,7 +94,7 @@ export default function HtmlCssInterviewPrep() {
     <LearnLayout
       title="HTML & CSS Interview Prep — Common Questions and Patterns"
       description="The HTML and CSS questions that come up in real front-end interviews, answered at senior-engineer depth."
-      section="HTML & CSS — Module 42 (Capstone)"
+      section="HTML & CSS — Lesson 42 (Capstone)"
       readTime="55 min"
       updatedAt="August 2026"
     >
@@ -104,7 +104,7 @@ export default function HtmlCssInterviewPrep() {
         <SectionTag text="// The Final Module" />
         <SectionTitle>Everything From This Track, Interview-Ready</SectionTitle>
         <Para>
-          This module is different from the other 41 — instead of teaching one new topic in depth, it
+          This lesson is different from the other 41 — instead of teaching one new topic in depth, it
           pulls together the questions, patterns, and hands-on challenges from across the entire
           curriculum into the format an actual front-end interview uses: real questions, answered
           completely, organized by theme, plus the "build this" coding challenges that come up
@@ -307,7 +307,7 @@ export default function HtmlCssInterviewPrep() {
    space evenly. As the viewport shrinks, columns drop one at a time
    automatically — the same rule handles a phone, a tablet, and an
    ultrawide monitor with zero explicit breakpoints. */`}</CodeBox>
-        <CodeBox label="An individual card, using the box-model and spacing-scale habits from earlier modules">{`.card {
+        <CodeBox label="An individual card, using the box-model and spacing-scale habits from earlier lessons">{`.card {
   background: white;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0,0,0,.1);
@@ -504,7 +504,7 @@ export default function HtmlCssInterviewPrep() {
       <KeyTakeaways items={[
         'Interviews reward reasoning out loud — why Flexbox versus Grid, why a bug is happening, what edge case needs verifying — at least as much as a single correct final answer.',
         'A small set of recurring patterns (Flexbox/Grid centering, responsive grids via auto-fit, the Flexbox sticky-footer pattern, box-sizing debugging) covers a large fraction of real front-end layout interview questions.',
-        'The conceptual fundamentals that come up constantly — the box model, specificity and the cascade, stacking contexts, the difference between semantic and non-semantic markup — are exactly the ones this curriculum flagged individually across earlier modules, because they are also genuinely common real production bugs, not just interview trivia.',
+        'The conceptual fundamentals that come up constantly — the box model, specificity and the cascade, stacking contexts, the difference between semantic and non-semantic markup — are exactly the ones this curriculum flagged individually across earlier lessons, because they are also genuinely common real production bugs, not just interview trivia.',
         'Semantic HTML and basic accessibility are treated as baseline front-end competence, not a specialty track — expect them to surface even in interviews not explicitly framed around accessibility.',
         'Testing your own solution against edge cases (very few grid items, a very narrow viewport, long content) unprompted is consistently rated positively — it mirrors real engineering practice, not just interview performance.',
       ]} />

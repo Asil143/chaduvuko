@@ -74,7 +74,7 @@ export default function DSAPage() {
         marginBottom: 40,
       }}>
         {[
-          { value: `${units.length}`, label: 'Units' },
+          { value: `${units.length}`, label: 'Lessons' },
           { value: `${totalTopics}+`, label: 'Topics covered' },
           { value: `${totalHours}h`, label: 'Total content' },
           { value: 'C', label: 'Language used' },
@@ -96,7 +96,7 @@ export default function DSAPage() {
 
       {/* ── Prereqs ── */}
       <Callout type="tip">
-        <strong>Prerequisites:</strong> None. Absolutely zero. If you can use a computer and type, you can start Unit 00 right now. No math degree, no prior coding, no CS background required.
+        <strong>Prerequisites:</strong> None. Absolutely zero. If you can use a computer and type, you can start the first lesson right now. No math degree, no prior coding, no CS background required.
       </Callout>
 
       {/* ── Units heading ── */}
@@ -113,10 +113,10 @@ export default function DSAPage() {
           letterSpacing: '-1px', color: 'var(--text)',
           fontFamily: 'var(--font-display)', marginBottom: 6,
         }}>
-          20 Units. Zero to Advanced.
+          {units.length} Lessons. Zero to Advanced.
         </h2>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.7, maxWidth: 560 }}>
-          Go in order. Each unit builds on the last. Do not skip — every concept
+          Go in order. Each lesson builds on the last. Do not skip — every concept
           is introduced exactly when you need it, not before.
         </p>
       </div>
@@ -155,7 +155,7 @@ export default function DSAPage() {
                         border: `1px solid ${accentColor}33`,
                         borderRadius: 6, padding: '3px 8px',
                       }}>
-                        UNIT {unit.number}
+                        LESSON {Number(unit.number) + 1}
                       </span>
                       {isLive ? (
                         <span style={{
@@ -275,11 +275,11 @@ export default function DSAPage() {
           color: 'var(--text)', fontFamily: 'var(--font-display)',
           letterSpacing: '-1px', marginBottom: 12,
         }}>
-          Units are dropping weekly.
+          All {units.length} lessons are live.
         </h3>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.7, maxWidth: 480, margin: '0 auto 24px' }}>
-          Start with Unit 00 the moment it goes live. Each unit is self-contained —
-          no chapter you need to have read first. Just come back, pick up where you left off.
+          Start with lesson 1 and go in order. Your progress saves in this browser,
+          so you can come back and pick up where you left off.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link

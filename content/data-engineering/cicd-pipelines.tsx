@@ -79,7 +79,7 @@ export default function CICDPipelinesModule() {
     <LearnLayout
       title="CI/CD for Data Pipelines"
       description="Testing dbt models in CI, environment promotion, blue-green deployments, Airflow deployment patterns, slim CI, and building a safe deployment pipeline for data transformations."
-      section="Data Engineering — Module 44"
+      section="Data Engineering — Lesson 44"
       readTime="70 min"
       updatedAt="August 2026"
     >
@@ -100,7 +100,7 @@ export default function CICDPipelinesModule() {
         <Para>
           A software bug surfaces as an error page users see and report. A data
           bug surfaces as a wrong number that looks correct until someone
-          notices it doesn&rsquo;t match expectations — often days later. This module
+          notices it doesn&rsquo;t match expectations — often days later. This lesson
           builds FreshCart&rsquo;s dbt and Airflow CI/CD pipeline around that asymmetry.
         </Para>
 
@@ -129,7 +129,7 @@ export default function CICDPipelinesModule() {
           Think of the last time you (or a teammate) pushed a schema change.
           Was there anything automated that would have caught a renamed column
           before it reached a dashboard? If the honest answer is &ldquo;no,&rdquo; that&rsquo;s
-          exactly the gap this module&rsquo;s Real World section walks through.
+          exactly the gap this lesson&rsquo;s Real World section walks through.
         </TryThis>
       </section>
 
@@ -610,23 +610,23 @@ test_morning_pipeline_e2e PASSED
         {[
           {
             wrong: '"If dbt compiles and the tests pass, the PR is safe to merge"',
-            right: 'This module\'s Real World incident is exactly a PR where compile succeeded and every dbt test passed — the column rename simply had no test written against it, because not_null and unique don\'t know a column was renamed out from under three dashboards. Passing tests prove the tests you wrote weren\'t violated, not that nothing broke.',
+            right: 'This lesson\'s Real World incident is exactly a PR where compile succeeded and every dbt test passed — the column rename simply had no test written against it, because not_null and unique don\'t know a column was renamed out from under three dashboards. Passing tests prove the tests you wrote weren\'t violated, not that nothing broke.',
           },
           {
             wrong: '"Slim CI (state:modified+) is just a speed optimization — it doesn\'t change what gets tested"',
-            right: 'It changes coverage in a way worth being deliberate about: Part 03\'s example only tests the 4 models actually affected by a change, which is correct and fast, but it also means a stale prod_artifacts manifest (this module\'s Error Library) silently causes either far too little or far too much to run — slim CI is only as trustworthy as the reference state it diffs against.',
+            right: 'It changes coverage in a way worth being deliberate about: Part 03\'s example only tests the 4 models actually affected by a change, which is correct and fast, but it also means a stale prod_artifacts manifest (this lesson\'s Error Library) silently causes either far too little or far too much to run — slim CI is only as trustworthy as the reference state it diffs against.',
           },
           {
             wrong: '"A blue-green schema swap is basically instant, so it doesn\'t need the same care as a slow migration"',
-            right: 'This module\'s Error Library documents exactly the failure: the connection drops between the two ALTER statements and production is left with no gold schema at all for 5 minutes. "Fast" and "atomic" are different properties — and Snowflake DDL auto-commits, so wrapping the two renames in BEGIN/COMMIT would not have made this atomic anyway. Part 04\'s actual fix is to verify the swap landed and roll back immediately if it didn\'t, not to rely on a transaction Snowflake DDL can\'t participate in.',
+            right: 'This lesson\'s Error Library documents exactly the failure: the connection drops between the two ALTER statements and production is left with no gold schema at all for 5 minutes. "Fast" and "atomic" are different properties — and Snowflake DDL auto-commits, so wrapping the two renames in BEGIN/COMMIT would not have made this atomic anyway. Part 04\'s actual fix is to verify the swap landed and roll back immediately if it didn\'t, not to rely on a transaction Snowflake DDL can\'t participate in.',
           },
           {
             wrong: '"Renaming a column is a simple, low-risk change since the data itself doesn\'t change"',
-            right: 'The data staying identical is exactly why it\'s dangerous — nothing about the VALUES looks wrong, so no anomaly detection or data-quality check fires. Only a check that specifically watches for renamed/removed columns (Part 03\'s schema change detection) catches it, which is why this module treats it as its own distinct category of risk, not a subset of "SQL changed."',
+            right: 'The data staying identical is exactly why it\'s dangerous — nothing about the VALUES looks wrong, so no anomaly detection or data-quality check fires. Only a check that specifically watches for renamed/removed columns (Part 03\'s schema change detection) catches it, which is why this lesson treats it as its own distinct category of risk, not a subset of "SQL changed."',
           },
           {
             wrong: '"Testing an incremental model in CI is equivalent to testing it in production"',
-            right: 'This module\'s Error Library has the exact gap: CI ran in incremental mode and only validated today\'s new rows (which had the new column populated), while 400 million existing production rows had NULL for it — the not_null test passed in CI and failed on the real deploy. A schema addition to an incremental model needs a --full-refresh test pass, not an incremental one.',
+            right: 'This lesson\'s Error Library has the exact gap: CI ran in incremental mode and only validated today\'s new rows (which had the new column populated), while 400 million existing production rows had NULL for it — the not_null test passed in CI and failed on the real deploy. A schema addition to an incremental model needs a --full-refresh test pass, not an incremental one.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
@@ -794,15 +794,15 @@ The goal is not process for its own sake — it is making the data platform trus
         {[
           {
             q: 'Trusting dbt tests alone to catch schema-shape changes like column renames',
-            a: 'not_null and unique tests check VALUES, not column NAMES — a rename passes every existing test while breaking every dashboard that hardcodes the old name. Part 03\'s schema change detection is a separate check specifically for this, and this module\'s Real World incident is what happens without it.',
+            a: 'not_null and unique tests check VALUES, not column NAMES — a rename passes every existing test while breaking every dashboard that hardcodes the old name. Part 03\'s schema change detection is a separate check specifically for this, and this lesson\'s Real World incident is what happens without it.',
           },
           {
             q: 'Letting the prod_artifacts manifest go stale',
-            a: 'Slim CI\'s state:modified+ selection is only correct if the reference manifest reflects the actual last production deploy — this module\'s Error Library shows a stale manifest causing CI to (wrongly) treat all 150 models as changed, defeating the entire point of slim CI. The S3 manifest upload has to run as part of every successful prod deployment, not as an occasional manual step.',
+            a: 'Slim CI\'s state:modified+ selection is only correct if the reference manifest reflects the actual last production deploy — this lesson\'s Error Library shows a stale manifest causing CI to (wrongly) treat all 150 models as changed, defeating the entire point of slim CI. The S3 manifest upload has to run as part of every successful prod deployment, not as an occasional manual step.',
           },
           {
             q: 'Assuming a two-step schema rename can be made atomic by wrapping it in BEGIN/COMMIT',
-            a: 'Snowflake DDL statements auto-commit — each ALTER SCHEMA commits itself the instant it runs, transaction block or not. Between the two renames there is a real window where the target schema name doesn\'t exist at all, and this module\'s Error Library documents exactly this causing 5 minutes of production outage from a dropped connection mid-swap. The actual mitigation is verifying the swap landed and rolling back immediately if it didn\'t — not a BEGIN/COMMIT wrapper that Snowflake ignores for DDL.',
+            a: 'Snowflake DDL statements auto-commit — each ALTER SCHEMA commits itself the instant it runs, transaction block or not. Between the two renames there is a real window where the target schema name doesn\'t exist at all, and this lesson\'s Error Library documents exactly this causing 5 minutes of production outage from a dropped connection mid-swap. The actual mitigation is verifying the swap landed and rolling back immediately if it didn\'t — not a BEGIN/COMMIT wrapper that Snowflake ignores for DDL.',
           },
           {
             q: 'Testing a new required column against an incremental CI run instead of a full refresh',
@@ -889,10 +889,10 @@ The goal is not process for its own sake — it is making the data platform trus
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 45 covers Infrastructure as Code — provisioning cloud data infrastructure with Terraform so your environments are version-controlled, reproducible, and never subject to configuration drift.
+          Lesson 45 covers Infrastructure as Code — provisioning cloud data infrastructure with Terraform so your environments are version-controlled, reproducible, and never subject to configuration drift.
         </p>
         <Link href="/learn/data-engineering/infrastructure-as-code" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 45 → Infrastructure as Code for Data Engineers
+          Lesson 45 → Infrastructure as Code for Data Engineers
         </Link>
       </div>
     </LearnLayout>

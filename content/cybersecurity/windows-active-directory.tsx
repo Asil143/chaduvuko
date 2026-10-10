@@ -59,7 +59,7 @@ export default function Module17() {
     <LearnLayout
       title="Windows Security and Active Directory"
       description="How Active Directory works, what the most dangerous AD misconfigurations are, how Group Policy enforces security, and how to defend Windows enterprise environments."
-      section="Cybersecurity — Module 17"
+      section="Cybersecurity — Lesson 17"
       readTime="45 min"
       updatedAt="May 2026"
     >
@@ -68,7 +68,7 @@ export default function Module17() {
           Over 90% of Fortune 500 companies run Microsoft Active Directory. It's the central nervous system of Windows enterprise environments — managing authentication, authorisation, group membership, and Group Policy configuration for every device and user in the domain. It's also the primary target once an attacker gets a foothold, because Domain Admin access to AD means access to everything.
         </P>
         <P>
-          This module covers the Windows and AD security model: <Hl>how AD stores and protects credentials</Hl>, what <Hl>Group Policy Objects (GPOs)</Hl> can enforce, how <Hl>tiered administration</Hl> limits the blast radius of compromise, the top <Hl>AD misconfigurations</Hl> attackers look for (and you should fix), and how BloodHound reveals attack paths through trust relationships that administrators didn't know existed.
+          This lesson covers the Windows and AD security model: <Hl>how AD stores and protects credentials</Hl>, what <Hl>Group Policy Objects (GPOs)</Hl> can enforce, how <Hl>tiered administration</Hl> limits the blast radius of compromise, the top <Hl>AD misconfigurations</Hl> attackers look for (and you should fix), and how BloodHound reveals attack paths through trust relationships that administrators didn't know existed.
         </P>
       </Part>
 
@@ -636,13 +636,13 @@ SIEM alerts to configure from these events:
 
       <div style={{ background: 'var(--code-bg)', borderRadius: 12, padding: '28px 32px', marginTop: 40 }}>
         <div style={{ fontSize: 13, color: C, fontWeight: 700, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
-          Up Next — Module 18
+          Up Next — Lesson 18
         </div>
         <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--heading)', marginBottom: 12 }}>
           Cloud Security — AWS, Azure, and GCP
         </div>
         <p style={{ ...s.p, marginBottom: 20 }}>
-          In Module 18, you learn cloud security from first principles: the shared responsibility model and exactly where cloud provider responsibility ends and yours begins, how IAM works across AWS/Azure/GCP, the most dangerous cloud misconfigurations (public S3 buckets, over-permissive IAM roles, exposed metadata services), and how cloud-native security tools detect threats in cloud environments.
+          In Lesson 18, you learn cloud security from first principles: the shared responsibility model and exactly where cloud provider responsibility ends and yours begins, how IAM works across AWS/Azure/GCP, the most dangerous cloud misconfigurations (public S3 buckets, over-permissive IAM roles, exposed metadata services), and how cloud-native security tools detect threats in cloud environments.
         </p>
         <Link
           href="/learn/cybersecurity/cloud-security"
@@ -657,7 +657,7 @@ SIEM alerts to configure from these events:
             textDecoration: 'none',
           }}
         >
-          Continue to Module 18 →
+          Continue to Lesson 18 →
         </Link>
       </div>
     </LearnLayout>

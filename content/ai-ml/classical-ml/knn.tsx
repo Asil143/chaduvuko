@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout  } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'K-Nearest Neighbours — Chaduvuko',
@@ -178,7 +177,6 @@ export default function KNNPage() {
       readTime="22–28 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="classical-ml" topic="knn" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -225,7 +223,7 @@ export default function KNNPage() {
             How many neighbours k should you ask?
             And what happens when the neighbourhood is crowded in some
             dimensions but empty in others — the curse of dimensionality.
-            This module answers all three.
+            This lesson answers all three.
           </p>
         </AnalogyBox>
 
@@ -1363,7 +1361,7 @@ except ImportError:
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 27 · Classical ML
+              Next — Lesson 27 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -21,7 +21,7 @@ const TRACKS = [
     cat: 'data' as Cat,
     icon: '📁', color: '#00e676',
     name: 'Data Engineering',
-    desc: 'From zero to production-grade DE — pipelines, architecture, and real patterns. 47 modules.',
+    desc: 'From zero to production-grade DE — pipelines, architecture, and real patterns. 47 lessons.',
     pills: ['Pipelines', 'Batch', 'Streaming', 'Medallion', 'SQL', 'Python'],
     jobs: 'Data Engineer · Analytics Engineer',
     track: 'data-engineering',
@@ -75,7 +75,7 @@ const TRACKS = [
     cat: 'data' as Cat,
     icon: '📊', color: '#8b5cf6',
     name: 'Data Science',
-    desc: 'Python, NumPy, pandas, statistics, and predictive modeling — one live in-browser dataset from Module 01 to your capstone.',
+    desc: 'Python, NumPy, pandas, statistics, and predictive modeling — one live in-browser dataset from Lesson 01 to your capstone.',
     pills: ['pandas', 'NumPy', 'Statistics', 'Visualization', 'ML Basics'],
     jobs: 'Data Scientist · Data Analyst · BI Analyst',
     track: 'data-science',
@@ -158,7 +158,7 @@ const TRACKS = [
     cat: 'web' as Cat,
     icon: '🌐', color: '#e34c26',
     name: 'HTML & CSS',
-    desc: 'Web foundations done right — Semantic HTML, Flexbox, CSS Grid, Responsive Design, animations. 42 modules.',
+    desc: 'Web foundations done right — Semantic HTML, Flexbox, CSS Grid, Responsive Design, animations. 42 lessons.',
     pills: ['Semantic HTML', 'Flexbox', 'CSS Grid', 'Responsive', 'Animations'],
     jobs: 'Frontend Dev · Web Developer',
     track: 'html-css',
@@ -423,7 +423,7 @@ export default function LearnPage({ tracks, stats }: { tracks: TrackSummaries; s
                       </div>
                       {modules && (
                         <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
-                          {modules} modules
+                          {modules} lessons
                         </div>
                       )}
                     </div>

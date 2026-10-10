@@ -74,7 +74,7 @@ export default function ScalingCapacityPlanning() {
     <LearnLayout
       title="Scaling and Capacity Planning"
       description="How to size a Kafka cluster before it exists and grow it correctly afterward: disk math from throughput and retention, partition count sizing, broker sizing, horizontal scaling and throttled reassignment, quotas for multi-tenancy, and a full worked capacity-planning example."
-      section="Apache Kafka — Module 18"
+      section="Apache Kafka — Lesson 18"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -87,7 +87,7 @@ export default function ScalingCapacityPlanning() {
         <SectionTag text="// Part 01 — Capacity Planning Inputs" />
         <SectionTitle>The Four Numbers Every Capacity Plan Starts From</SectionTitle>
         <Para>
-          The performance tuning module covered how to make an already-running cluster faster. This module is
+          The performance tuning module covered how to make an already-running cluster faster. This lesson is
           about a different, earlier question: how big does the cluster need to be in the first place, and how
           does it need to grow. Capacity planning is not a guess — it is arithmetic performed on four inputs
           that every team can actually measure or reasonably estimate before a single broker is provisioned.
@@ -102,7 +102,7 @@ export default function ScalingCapacityPlanning() {
         />
         <Para>
           These four numbers feed directly into the most fundamental capacity-planning calculation there is:
-          how much disk a topic needs. Every other sizing decision in this module — partition count, broker
+          how much disk a topic needs. Every other sizing decision in this lesson — partition count, broker
           count, broker specs — is downstream of getting a realistic handle on these four inputs first.
         </Para>
         <Para>
@@ -113,7 +113,7 @@ export default function ScalingCapacityPlanning() {
           incident, not a planning conversation. Over-provisioning wastes real budget on idle capacity, and in
           some organizations makes the next capacity request harder to get approved, since the previous
           "generous" estimate visibly went unused. Neither failure mode is free, which is the whole argument for
-          doing the arithmetic in this module rather than picking a round number that feels safe.
+          doing the arithmetic in this lesson rather than picking a round number that feels safe.
         </Para>
         <SubTitle>The disk math</SubTitle>
         <CodeBox label="the core capacity-planning formula">
@@ -174,13 +174,13 @@ disk_needed = 20,971,520 * 604,800 * 3
         <SectionTag text="// Part 02 — Sizing Partition Count" />
         <SectionTitle>Enough Partitions for Peak Parallelism, Not So Many That Metadata Suffers</SectionTitle>
         <Para>
-          Partition count is the single most consequential sizing decision in this module, because — unlike
+          Partition count is the single most consequential sizing decision in this lesson, because — unlike
           broker count or disk size — it is expensive and disruptive to change later, for reasons covered in
           Part 06. Getting it roughly right up front avoids a much harder problem down the line.
         </Para>
         <SubTitle>The floor: enough partitions for your peak required consumer parallelism</SubTitle>
         <Para>
-          A partition is the unit of parallelism within a consumer group — Module 03 established that within one
+          A partition is the unit of parallelism within a consumer group — Lesson 03 established that within one
           group, only one consumer reads a given partition at a time, so a topic with 8 partitions can never be
           processed by more than 8 active consumers in a single group, no matter how many instances you deploy.
           The floor for partition count is therefore driven by the maximum number of consumers you will ever
@@ -298,7 +298,7 @@ outgoing_to_followers     = 20 MB/sec * (replication_factor - 1)
 outgoing_to_consumers     = 20 MB/sec * number_of_consumer_groups
                            = 20 * 3 = 60 MB/sec
                            # (each independent consumer group reads
-                           #  the full topic, per Module 03's
+                           #  the full topic, per Lesson 03's
                            #  consumer-group independence model)
 
 total_network_activity = 20 + 40 + 60 = 120 MB/sec
@@ -641,7 +641,7 @@ hash("customer-42") % 6 = 5   -> customer-42's events now go to partition 5
           preserved across the full history of a key. An unkeyed topic, or a keyed topic where consumers process
           each record independently without caring which partition it lands on, can have its partition count
           increased with no functional consequence at all — the sticky, batch-aware distribution for unkeyed
-          records (Module 03) simply spreads across more partitions going forward, and no ordering guarantee
+          records (Lesson 03) simply spreads across more partitions going forward, and no ordering guarantee
           existed to break in the first place.
         </Para>
         <Table
@@ -734,7 +734,7 @@ kafka-configs.sh --bootstrap-server broker-1:9092 \\
         <SectionTag text="// Part 08 — Worked Capacity-Planning Example" />
         <SectionTitle>Sizing a Clickstream Ingestion System From Scratch</SectionTitle>
         <Para>
-          Pulling every piece of this module together: a hypothetical e-commerce platform needs to ingest
+          Pulling every piece of this lesson together: a hypothetical e-commerce platform needs to ingest
           clickstream events — page views, clicks, add-to-cart actions — into Kafka for real-time
           personalization and downstream warehouse loading.
         </Para>
@@ -870,7 +870,7 @@ broker_count = 191 / 8 ≈ 24 brokers
           artifact. Real traffic grows, shrinks, and shifts shape in ways the original estimate could not fully
           predict, and a plan that was correct on day one can become quietly wrong six months later if nobody
           revisits it. This closing section is a practical checklist for what a periodic capacity review should
-          actually check, tying every earlier part of this module back into a repeatable process.
+          actually check, tying every earlier part of this lesson back into a repeatable process.
         </Para>
         <SubTitle>What changed since the last review</SubTitle>
         <Table
@@ -880,7 +880,7 @@ broker_count = 191 / 8 ≈ 24 brokers
             ['Average message size', 'Check whether payload shape has grown (new fields, richer events) since the original estimate.', 'Throughput in bytes/sec can rise even with a stable events/sec rate — disk math depends on bytes, not event count alone.'],
             ['Retention window', 'Confirm the business requirement for retention has not changed (compliance, replay needs, downstream consumer requirements).', 'A retention increase multiplies disk need directly, per the Part 01 formula — this is often a policy decision made without anyone re-running the disk math.'],
             ['Replication factor', 'Confirm no durability requirement change has occurred for this topic.', 'Same multiplicative effect on disk as retention — a durability upgrade from RF=2 to RF=3 is a real, sometimes large capacity decision.'],
-            ['Required consumer parallelism', 'Check whether any new consumer group has been added to this topic, or an existing one\'s throughput need has grown.', 'A new, independent consumer group does not consume additional partitions from other groups (Module 03), but a growing single group can approach the existing partition-count ceiling.'],
+            ['Required consumer parallelism', 'Check whether any new consumer group has been added to this topic, or an existing one\'s throughput need has grown.', 'A new, independent consumer group does not consume additional partitions from other groups (Lesson 03), but a growing single group can approach the existing partition-count ceiling.'],
           ]}
         />
         <SubTitle>Signals that a review is overdue, even before a scheduled date</SubTitle>

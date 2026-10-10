@@ -74,7 +74,7 @@ export default function PerformanceTuningDbt() {
     <LearnLayout
       title="Performance and Query Optimization in dbt"
       description="Finding slow models, materialization trade-offs revisited for performance, incremental strategy tuning, warehouse-specific config passthrough like cluster_by, reducing full-refresh cost, splitting workloads across warehouse sizes, and thread parallelism — with a real before-and-after case study."
-      section="dbt — Module 17"
+      section="dbt — Lesson 17"
       readTime="65 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -196,7 +196,7 @@ limit 20`}
         <SectionTitle>A View Queried Constantly by BI Is Often Better as a Table</SectionTitle>
 
         <Para>
-          Earlier modules in this track covered view versus table as a correctness and freshness decision —
+          Earlier lessons in this track covered view versus table as a correctness and freshness decision —
           a view is always current, a table is a point-in-time snapshot from the last run. Performance tuning
           revisits the same choice through a different lens entirely: not "which one is correct for this
           model's freshness needs," but "which one minimizes total compute spent, once you account for every
@@ -263,7 +263,7 @@ on the nightly dbt run. Materializing it as a table instead: one
         <SectionTitle>merge, delete+insert, and append Are Also a Performance Decision, Not Just a Correctness One</SectionTitle>
 
         <Para>
-          An earlier module in this track covered <code>incremental_strategy</code> purely as a correctness
+          An earlier lesson in this track covered <code>incremental_strategy</code> purely as a correctness
           question: does this model's data ever get updated after it first lands, and if so, does the
           warehouse support an efficient native <code>MERGE</code>. That framing is correct, but it leaves out
           a real performance dimension worth tuning deliberately once correctness is settled: among the
@@ -279,7 +279,7 @@ on the nightly dbt run. Materializing it as a table instead: one
           <code>delete+insert</code> pays a similar cost on its delete step, plus the overhead of two separate
           statements instead of one. <code>append</code> avoids the matching cost entirely, at the cost of
           never checking for or handling duplicates — which is exactly why Part 03's correctness framing in
-          the earlier module restricts it to genuinely immutable data.
+          the earlier lesson restricts it to genuinely immutable data.
         </Para>
 
         <Table
@@ -293,7 +293,7 @@ on the nightly dbt run. Materializing it as a table instead: one
 
         <Para>
           The practical performance tuning move here is not usually switching strategies — correctness
-          constraints from the earlier module still apply — but making the chosen strategy cheaper to execute,
+          constraints from the earlier lesson still apply — but making the chosen strategy cheaper to execute,
           most commonly by ensuring the underlying table is clustered or sorted on the same column the merge
           or delete condition filters and matches on, which is exactly what Part 04's warehouse-specific
           config passthrough addresses directly.
@@ -570,7 +570,7 @@ select ...`}
       +snowflake_warehouse: transform_large_wh`}
         </CodeBox>
 
-        <Callout title="This is the same config-precedence rule from earlier modules, applied to compute sizing" color={K}>
+        <Callout title="This is the same config-precedence rule from earlier lessons, applied to compute sizing" color={K}>
           A model-level <code>config()</code> override for <code>snowflake_warehouse</code> beats the
           directory-level default in <code>dbt_project.yml</code>, exactly as with materialization. This means
           a single unusually heavy staging model can still be routed to the large warehouse as a deliberate
@@ -693,7 +693,7 @@ where counts_as_revenue`}
 
         <Para>
           Three separate problems were compounding here, matched directly against Parts 02, 03, and 04 of
-          this module: the model was a full <code>table</code> rebuild on every single run rather than
+          this lesson: the model was a full <code>table</code> rebuild on every single run rather than
           incremental, meaning all two billion historical rows were recomputed from
           <code>int_payments_joined_to_orders</code> every time, regardless of how few rows had actually
           changed; there was no clustering key at all, so even the full rebuild's underlying scan of the
@@ -818,7 +818,7 @@ After dedicated warehouse: 9.1s (no contention for compute during its build wind
         <SectionTitle>A One-Time Fix Is Not a Performance Strategy — Track Regressions Before They're Incidents</SectionTitle>
 
         <Para>
-          Every technique in this module up to now addresses fixing a model that is already known to be slow
+          Every technique in this lesson up to now addresses fixing a model that is already known to be slow
           or expensive. The harder, longer-term problem is noticing a model that is <em>becoming</em> slow or
           expensive before it becomes a fire — a table that grows a little every day, an incremental filter
           whose match rate creeps upward, a warehouse that gets a little more contended every quarter as more
@@ -882,9 +882,9 @@ order by ms_regression desc`}
           ]}
         />
 
-        <Callout title="Tie regression alerts back to the specific fixes this module covers" color={K}>
+        <Callout title="Tie regression alerts back to the specific fixes this lesson covers" color={K}>
           A model flagged as regressing by trend monitoring isn't a mystery to start diagnosing from scratch
-          — it's a prompt to walk through this module's own checklist in order: has its incremental match
+          — it's a prompt to walk through this lesson's own checklist in order: has its incremental match
           rate grown (Part 03), does it need a clustering key it doesn't have, or does an existing one need
           revisiting as the table's shape has changed (Part 04), and is it now competing for warehouse compute
           with more concurrently-running models than it used to (Part 06)? Most real regressions trace back
@@ -907,7 +907,7 @@ order by ms_regression desc`}
 # 2. For any model exceeding the regression threshold (e.g. 1.5x),
 #    post its name, the baseline, and the current average to a
 #    shared alerting channel
-# 3. A human triages the alert against this module's checklist:
+# 3. A human triages the alert against this lesson's checklist:
 #    incremental match rate, clustering, warehouse contention
 
 0 9 * * 1  run_weekly_dbt_perf_regression_check.sh`}
@@ -933,7 +933,7 @@ order by ms_regression desc`}
         <Para>
           The last piece worth stating plainly: none of Part 09's monitoring replaces the diagnostic and
           tuning techniques covered in Parts 01 through 08 — it only changes when they get applied. A team
-          without any regression monitoring still has access to every fix in this module, but only ever
+          without any regression monitoring still has access to every fix in this lesson, but only ever
           discovers the need for them reactively, after a model has already become slow enough to notice
           without instrumentation. A team with monitoring wired in applies the exact same fixes, just earlier
           and cheaper, which is the entire case for treating performance tuning as an ongoing practice rather
@@ -941,7 +941,7 @@ order by ms_regression desc`}
         </Para>
 
         <Para>
-          Tie this back to the broader project-structure discipline from the previous module in this track,
+          Tie this back to the broader project-structure discipline from the previous lesson in this track,
           too: a well-layered project makes performance regressions easier to localize in the first place. A
           regression flagged against a thin, single-purpose mart is trivial to reason about — there's exactly
           one join or aggregation it could be. A regression flagged against a sprawling, do-everything model

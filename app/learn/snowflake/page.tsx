@@ -46,8 +46,8 @@ export default function SnowflakeTrackPage() {
 
       <div style={{ display: 'flex', gap: 28, flexWrap: 'wrap', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '20px 28px', marginBottom: 36 }}>
         {[
-          [`${allModules.length}`, 'Planned modules'],
-          [`${liveCount}`, 'Deep modules live now'],
+          [`${allModules.length}`, 'Planned lessons'],
+          [`${liveCount}`, 'Deep lessons live now'],
           [`${SNOWFLAKE_CURRICULUM.length}`, 'Sections'],
           [`${totalTopics}+`, 'Concepts covered'],
           ['0', 'Prerequisites'],
@@ -69,7 +69,7 @@ export default function SnowflakeTrackPage() {
           // Curriculum
         </div>
         <h2 style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 900, letterSpacing: '-1px', color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 6 }}>
-          20 Modules. Snowflake from First Query to Production Platform.
+          20 Lessons. Snowflake from First Query to Production Platform.
         </h2>
         <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 660, margin: 0 }}>
           Follow in order. Each module starts from the beginner mental model and ends with production and interview readiness.

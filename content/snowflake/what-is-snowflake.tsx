@@ -5,7 +5,7 @@ export default function WhatIsSnowflake() {
     <LearnLayout
       title="What is Snowflake?"
       description="Snowflake explained from scratch: warehouse vs database, OLAP vs OLTP, storage vs compute, why companies adopt it, its history, and how it compares to BigQuery, Redshift, and Databricks."
-      section="Snowflake — Module 01"
+      section="Snowflake — Lesson 01"
       readTime="65 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -164,7 +164,7 @@ export default function WhatIsSnowflake() {
           fighting each other for CPU. Both warehouses read from the same shared storage. Neither one "owns"
           the data — they are temporary compute that attaches to data that exists independently of them. This
           is the payoff of storage/compute separation made concrete, and it is covered in far more depth,
-          with real warehouse-sizing tradeoffs, in the next module on architecture.
+          with real warehouse-sizing tradeoffs, in the next lesson on architecture.
         </Para>
         <Table
           headers={['Layer', 'Purpose', 'Simple analogy']}
@@ -279,7 +279,7 @@ ORDER BY 1 DESC;`}
           That "built for the cloud from day one" framing matters because many older warehouse products took
           the opposite path: they started as on-prem software and were later ported, wrapped, or bolted onto
           cloud infrastructure. Snowflake's storage/compute separation, its automatic micro-partitioning
-          (covered in the next module), and its multi-cluster elastic warehouses were all designed around
+          (covered in the next lesson), and its multi-cluster elastic warehouses were all designed around
           cloud primitives from the start rather than retrofitted onto them.
         </Para>
         <Para>
@@ -370,7 +370,7 @@ ORDER BY 1 DESC;`}
         <SectionTag text="// Part 10 — Hands-on: recognizing OLAP vs OLTP shapes" />
         <SectionTitle>Hands-On: Sort These Workloads Into OLTP or OLAP</SectionTitle>
         <Para>
-          Before moving into Snowflake's architecture in the next module, it helps to practice recognizing
+          Before moving into Snowflake's architecture in the next lesson, it helps to practice recognizing
           which category a real workload falls into — this judgment call comes up constantly when deciding
           what should and should not touch Snowflake directly.
         </Para>
@@ -425,7 +425,7 @@ or OLAP (belongs in Snowflake or a similar warehouse).`}
         <SectionTag text="// Part 12 — Who touches Snowflake, and how" />
         <SectionTitle>The People and Roles Around a Snowflake Account</SectionTitle>
         <Para>
-          A useful way to finish grounding this module is to see who actually works with Snowflake day to
+          A useful way to finish grounding this lesson is to see who actually works with Snowflake day to
           day, since the platform serves several different roles at once rather than one narrow job.
         </Para>
         <Table
@@ -463,7 +463,7 @@ or OLAP (belongs in Snowflake or a similar warehouse).`}
             ['Snowpark', 'Write data transformations and UDFs in Python, Java, or Scala that run inside Snowflake compute, instead of only SQL.'],
             ['Snowflake Marketplace', 'Discover and directly query third-party and public datasets without building your own ingestion pipeline for them.'],
             ['Secure data sharing', 'Share live, governed access to specific tables with another Snowflake account, without copying or exporting files.'],
-            ['Streams and tasks', 'Native change tracking and scheduled SQL execution for building incremental pipelines inside Snowflake, covered in a dedicated later module.'],
+            ['Streams and tasks', 'Native change tracking and scheduled SQL execution for building incremental pipelines inside Snowflake, covered in a dedicated later lesson.'],
             ['Time Travel and zero-copy cloning', 'Query or restore data as it existed at a past point in time, and create instant, storage-efficient copies of databases/tables/schemas.'],
           ]}
         />
@@ -475,7 +475,7 @@ or OLAP (belongs in Snowflake or a similar warehouse).`}
           what used to require separate external tools.
         </Para>
         <Callout title="Where this track goes from here">
-          The rest of this track builds outward from the ideas in this module and the next one on
+          The rest of this track builds outward from the ideas in this lesson and the next one on
           architecture: SQL basics and setup, then loading data, then modeling Raw/Silver/Gold layers,
           performance tuning, security and governance, and the native pipeline features (streams, tasks,
           Snowpipe, dynamic tables) that make Snowflake a full platform rather than just a query engine.
@@ -591,7 +591,7 @@ FROM RAW.EVENTS;`}
           ]}
         />
         <Callout title="This is the mental model to carry forward">
-          Every later module in this track — architecture, loading, modeling Raw/Silver/Gold, streams and
+          Every later lesson in this track — architecture, loading, modeling Raw/Silver/Gold, streams and
           tasks, performance, governance — is really just filling in the details of one or more steps in this
           five-step journey. If you can explain this journey in your own words, you already understand why
           Snowflake exists.

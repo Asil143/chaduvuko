@@ -77,7 +77,7 @@ export default function TypeHintsMypy() {
     <LearnLayout
       title="Type Hints and Static Typing with mypy"
       description="Adding types to Python without losing what makes it Python — annotations, generics, and catching bugs before runtime."
-      section="Python — Module 36"
+      section="Python — Lesson 36"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -103,7 +103,7 @@ print(add("3", "4"))     # "34" — ALSO runs fine! Python never checked the typ
         <Callout type="warning">
           <strong>This surprises almost everyone coming from a statically-typed language.</strong>{' '}
           Type hints are purely documentation and tooling input — real enforcement requires running a
-          separate static type checker (like <code>mypy</code>, covered in this module) as a{' '}
+          separate static type checker (like <code>mypy</code>, covered in this lesson) as a{' '}
           <em>development-time</em> step, completely separate from actually running the program.
         </Callout>
       </section>
@@ -565,11 +565,11 @@ def record_fee(txn_id: str) -> None:
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 37 covers working with real-world APIs in Python — the requests library, authentication,
+          Lesson 37 covers working with real-world APIs in Python — the requests library, authentication,
           and the timeout mistake that causes production incidents.
         </p>
         <Link href="/learn/python/working-with-apis-python" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 37 → Working with APIs in Python
+          Lesson 37 → Working with APIs in Python
         </Link>
       </div>
     </LearnLayout>

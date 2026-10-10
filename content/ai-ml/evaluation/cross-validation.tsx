@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Cross-Validation and the Bias-Variance Tradeoff — Chaduvuko',
@@ -178,7 +177,6 @@ export default function CrossValidationPage() {
       readTime="26–34 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="evaluation" topic="cross-validation" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -207,7 +205,7 @@ export default function CrossValidationPage() {
         </p>
 
         <p style={S.p}>
-          This module also covers the bias-variance tradeoff — the fundamental
+          This lesson also covers the bias-variance tradeoff — the fundamental
           tension that cross-validation exposes. A model with high variance
           produces very different scores across folds (std is large).
           A model with high bias produces consistently mediocre scores across
@@ -938,7 +936,7 @@ print("  Nested CV is slower (k_outer × k_inner × n_param_combos) but honest."
             {
               scale: 'Medium — tens of thousands to a few million rows',
               color: '#378ADD',
-              practice: 'Standard 5- or 10-fold CV — the textbook default this module teaches, and the right trade-off for most applied ML work.',
+              practice: 'Standard 5- or 10-fold CV — the textbook default this lesson teaches, and the right trade-off for most applied ML work.',
             },
             {
               scale: 'Huge — tens of millions of rows and up',
@@ -1193,7 +1191,7 @@ print("already honest before it got there.")`} />
           Cross-validation tells you how good a model is at a given set of
           hyperparameters. Hyperparameter tuning searches across many combinations
           to find the set that produces the best CV score.
-          Module 38 covers Optuna — a modern hyperparameter optimisation framework
+          Lesson 38 covers Optuna — a modern hyperparameter optimisation framework
           that is far more efficient than GridSearchCV or RandomizedSearchCV.
           It uses Bayesian optimisation to focus the search on promising regions
           of the hyperparameter space instead of evaluating combinations randomly.
@@ -1211,7 +1209,7 @@ print("already honest before it got there.")`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 38 · Model Evaluation
+              Next — Lesson 38 · Model Evaluation
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

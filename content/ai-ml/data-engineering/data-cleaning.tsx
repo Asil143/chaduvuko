@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Data Cleaning and Validation — Chaduvuko',
@@ -175,7 +174,6 @@ export default function DataCleaningPage() {
       readTime="45–58 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='data-engineering' topic='data-cleaning' />
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -203,7 +201,7 @@ export default function DataCleaningPage() {
         </p>
 
         <p style={S.p}>
-          This module gives you a systematic process — not a one-time cleaning script,
+          This lesson gives you a systematic process — not a one-time cleaning script,
           but a validation framework that runs automatically every time new data arrives
           and catches problems before they reach training.
         </p>
@@ -211,7 +209,7 @@ export default function DataCleaningPage() {
         <HBox color="#1D9E75">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module covers:
+              What this lesson covers:
             </span>
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -241,7 +239,7 @@ export default function DataCleaningPage() {
         </HBox>
 
         <Callout type="tip">
-          Clean data once, validate forever. The goal of this module is not
+          Clean data once, validate forever. The goal of this lesson is not
           to write a script that fixes this week's dataset — it's to build
           a validation layer that runs on every dataset automatically
           and fails loudly when something is wrong.
@@ -253,11 +251,11 @@ export default function DataCleaningPage() {
       {/* ══ SECTION 2 — GENERATE MESSY DATA ════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Setup</span>
-        <h2 style={S.h2}>The messy DoorDash dataset used throughout this module</h2>
+        <h2 style={S.h2}>The messy DoorDash dataset used throughout this lesson</h2>
 
         <p style={S.p}>
           Run this block once to create a realistic messy dataset with deliberate
-          data quality problems. All sections in this module clean and validate it.
+          data quality problems. All sections in this lesson clean and validate it.
         </p>
 
         <CodeBlock code={`import pandas as pd
@@ -1795,7 +1793,7 @@ print("Saved to /tmp/doordash_clean.parquet")`} />
           gold, or raw, validated, and curated. Data engineering typically owns the boundary between
           bronze and silver: enforcing schema, deduplicating on the business key, coercing types, and
           catching schema drift, exactly like the SchemaValidator and drift detector built earlier in
-          this module. That layer is deliberately model-agnostic — the same validated orders table
+          this lesson. That layer is deliberately model-agnostic — the same validated orders table
           feeds the ETA model, the fraud model, and a quarterly business dashboard, so it cannot bake
           in decisions specific to any one of them.
         </p>
@@ -1834,9 +1832,9 @@ print("Saved to /tmp/doordash_clean.parquet")`} />
           </div>
         </VisualBox>
 
-        <ConceptBox title="Where the DoorDashDataCleaner class in this module actually sits">
+        <ConceptBox title="Where the DoorDashDataCleaner class in this lesson actually sits">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            Looking back at the cleaner class built earlier in this module: coerce_types,
+            Looking back at the cleaner class built earlier in this lesson: coerce_types,
             deduplicate, and clean_strings are silver-layer work — model-agnostic, correct regardless
             of which model eventually consumes the table. handle_outliers and drop_unusable are
             gold-layer decisions — the specific percentile chosen, and the specific columns required
@@ -1969,7 +1967,7 @@ print("Saved to /tmp/doordash_clean.parquet")`} />
             I tie the severity of the response to the blast radius of being wrong. A schema violation
             on a required, non-nullable column, or a swing in null rate on a feature the model depends
             on heavily, should hard-fail the pipeline the way the SchemaValidator and drift detector in
-            this module do — better to block training on bad data than silently ship a degraded model.
+            this lesson do — better to block training on bad data than silently ship a degraded model.
             A small number of rows violating a soft consistency rule, like a handful of rows where
             delivery_time is slightly below restaurant_prep, is worth logging and monitoring as a trend
             but rarely worth blocking an entire pipeline run over, since the cost of a false alarm at
@@ -2003,7 +2001,7 @@ print("Saved to /tmp/doordash_clean.parquet")`} />
         <p style={S.p}>
           Cleaning removes what is wrong. Validation catches new problems automatically.
           Together they ensure that the data reaching your model is trustworthy.
-          The next module — Feature Engineering — takes clean data and transforms it
+          The next lesson — Feature Engineering — takes clean data and transforms it
           into the representations that make ML models learn fastest and generalise best.
           Distance becomes log-distance. Timestamps become hour-of-day, day-of-week,
           and cyclical encodings. Categorical columns become embeddings or one-hot vectors.
@@ -2023,7 +2021,7 @@ print("Saved to /tmp/doordash_clean.parquet")`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 17 · Data Engineering
+              Next — Lesson 17 · Data Engineering
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

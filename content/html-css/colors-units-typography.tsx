@@ -77,7 +77,7 @@ export default function ColorsUnitsTypography() {
     <LearnLayout
       title="Colors, Units & Typography"
       description="px vs em vs rem vs %, every color format, font-family stacks, and web fonts — the values you will type in every single stylesheet."
-      section="HTML & CSS — Module 19"
+      section="HTML & CSS — Lesson 19"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -831,11 +831,11 @@ p  { font-size: 1rem;      }   /* 16px, same as before */
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 20 goes deep on selectors — combinators, pseudo-classes, pseudo-elements, and the exact
-          numeric specificity calculation only introduced conceptually back in Module 17.
+          Lesson 20 goes deep on selectors — combinators, pseudo-classes, pseudo-elements, and the exact
+          numeric specificity calculation only introduced conceptually back in Lesson 17.
         </p>
         <Link href="/learn/html-css/css-selectors-deep-dive" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 20 → CSS Selectors Deep Dive
+          Lesson 20 → CSS Selectors Deep Dive
         </Link>
       </div>
     </LearnLayout>

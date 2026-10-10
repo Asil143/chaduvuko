@@ -77,7 +77,7 @@ export default function ResponsiveDesignMediaQueries() {
     <LearnLayout
       title="Responsive Design & Media Queries"
       description="Building layouts that adapt to any screen — media query syntax, common breakpoints, and testing responsively for real."
-      section="HTML & CSS — Module 28"
+      section="HTML & CSS — Lesson 28"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -508,11 +508,11 @@ export default function ResponsiveDesignMediaQueries() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 29 covers mobile-first design principles — why designing for the smallest screen first
+          Lesson 29 covers mobile-first design principles — why designing for the smallest screen first
           tends to produce leaner, more maintainable CSS.
         </p>
         <Link href="/learn/html-css/mobile-first-design" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 29 → Mobile-First Design Principles
+          Lesson 29 → Mobile-First Design Principles
         </Link>
       </div>
     </LearnLayout>

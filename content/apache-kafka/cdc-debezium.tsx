@@ -74,7 +74,7 @@ export default function CdcDebezium() {
     <LearnLayout
       title="Change Data Capture with Debezium"
       description="What Change Data Capture actually is, why polling for changes is fragile, how Debezium reads a database's own transaction log instead of querying tables, the Debezium event envelope, initial snapshots, the outbox pattern, schema evolution, and the operational pitfalls of running CDC in production."
-      section="Apache Kafka — Module 21"
+      section="Apache Kafka — Lesson 21"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -118,19 +118,19 @@ export default function CdcDebezium() {
             every single row, forever, which most schemas do not do.
           </Para>
           <Para>
-            <strong>Near-zero load on the source database</strong> — CDC, done the way this module covers,
+            <strong>Near-zero load on the source database</strong> — CDC, done the way this lesson covers,
             reads the database's own internal change log rather than running repeated <code>SELECT</code>
             queries against live tables, so it does not compete with production traffic for query capacity
             or lock contention.
           </Para>
         </HighlightBox>
         <Para>
-          This module builds directly on Kafka Connect (Module 13). Debezium — the dominant open-source CDC
-          project, and the one this module focuses on — does not run as a separate system you deploy and
+          This lesson builds directly on Kafka Connect (Lesson 13). Debezium — the dominant open-source CDC
+          project, and the one this lesson focuses on — does not run as a separate system you deploy and
           operate independently. It runs <em>as</em> a Kafka Connect source connector, in distributed mode,
           configured through the same REST API, using the same converters and Single Message Transforms
-          you already learned. Everything Module 13 taught about tasks, offsets, distributed-mode
-          rebalancing, and DLQ handling for source connectors applies to Debezium directly — this module
+          you already learned. Everything Lesson 13 taught about tasks, offsets, distributed-mode
+          rebalancing, and DLQ handling for source connectors applies to Debezium directly — this lesson
           does not re-teach that ground, it builds on it.
         </Para>
       </section>
@@ -269,7 +269,7 @@ t=3:05   DELETE FROM orders WHERE order_id=4821   -- customer cancelled, refunde
           non-Kafka targets, but it is the exception, not the norm covered here). In the overwhelmingly
           common deployment, Debezium is a connector JAR installed into a Kafka Connect distributed cluster,
           configured with a JSON payload submitted to the same <code>POST /connectors</code> REST endpoint
-          covered in Module 13, running as tasks on Connect workers, with the same offset-tracking,
+          covered in Lesson 13, running as tasks on Connect workers, with the same offset-tracking,
           rebalancing, and error-handling model as any other source connector.
         </Callout>
       </section>
@@ -316,7 +316,7 @@ t=3:05   DELETE FROM orders WHERE order_id=4821   -- customer cancelled, refunde
             'slot.name — the name of the logical replication slot this connector owns. Only one consumer can read a given slot; the slot persists on the Postgres server itself until explicitly dropped (see Part 08 on why this matters).',
             'table.include.list — restricts capture to specific tables rather than the whole database, keeping the blast radius of one connector small.',
             'snapshot.mode: "initial" — take a full snapshot of existing rows once, then switch to streaming the WAL (see Part 06).',
-            'tasks.max: "1" — Debezium\'s Postgres connector runs a single task per connector; unlike the JDBC source connector from Module 13, parallelism across tables comes from running multiple connectors, not multiple tasks within one.',
+            'tasks.max: "1" — Debezium\'s Postgres connector runs a single task per connector; unlike the JDBC source connector from Lesson 13, parallelism across tables comes from running multiple connectors, not multiple tasks within one.',
           ]}
         />
         <Para>
@@ -484,7 +484,7 @@ Phase 2 — Streaming (continuous, from here on)
         <Para>
           Debezium follows a topic-per-table convention by default: <code>{'{topic.prefix}.{schema}.{table}'}</code>.
           For the FreshCart example in Part 04, that produces <code>freshcart.pg.public.orders</code>. This
-          mirrors the naming discipline covered for Connect topics generally in Module 13, and matters even
+          mirrors the naming discipline covered for Connect topics generally in Lesson 13, and matters even
           more for CDC, because a single Debezium connector configured against a whole schema can spin up
           dozens of topics automatically — one per table — with no manual topic-creation step required.
         </Para>
@@ -583,7 +583,7 @@ t=3 days+  If disk fills completely, Postgres refuses new writes
           ]}
         />
         <Callout title="This risk is specific to log-based CDC on Postgres and MySQL — not a general Kafka Connect concern" color="#ff4757">
-          A JDBC source connector from Module 13, polling a table with an incrementing column, has no
+          A JDBC source connector from Lesson 13, polling a table with an incrementing column, has no
           equivalent failure mode — there is no server-side resource being held open on its behalf. The
           replication-slot risk is the direct cost of the mechanism that makes Debezium fast, low-impact,
           and delete-aware in the first place. Understanding it is not optional for anyone operating
@@ -673,7 +673,7 @@ COMMIT;
           any downstream consumer or Schema Registry compatibility check was prepared for it.
         </Para>
         <Para>
-          This makes the converter and Schema Registry discipline from Module 13 more important for Debezium
+          This makes the converter and Schema Registry discipline from Lesson 13 more important for Debezium
           topics than almost any other kind of Connect pipeline. With an Avro converter and Schema Registry
           configured — as in the Part 04 configuration — a genuinely breaking schema change (removing a
           required field, changing a field's type incompatibly) is rejected at registration time, before it
@@ -706,7 +706,7 @@ COMMIT;
         <SectionTag text="// Part 11 — Monitoring and Operating Debezium" />
         <SectionTitle>Monitoring a Debezium Deployment — What to Watch Beyond Ordinary Connect Task Health</SectionTitle>
         <Para>
-          Module 13 already covered the baseline for monitoring any Kafka Connect source connector — task
+          Lesson 13 already covered the baseline for monitoring any Kafka Connect source connector — task
           state (RUNNING/PAUSED/FAILED), poll and write rates, and DLQ produce rates. Debezium connectors
           need everything from that baseline plus a handful of CDC-specific signals that a generic JDBC
           source connector does not have, because Debezium's failure modes are shaped by the replication
@@ -722,7 +722,7 @@ COMMIT;
           ]}
         />
         <Para>
-          The single highest-leverage alert to add on top of Module 13's baseline is replication slot lag
+          The single highest-leverage alert to add on top of Lesson 13's baseline is replication slot lag
           specifically, alerted well before it reaches a level that threatens disk capacity — not just when
           the connector's task itself transitions to FAILED. A connector can be technically RUNNING while
           steadily falling behind the WAL, which is exactly the silent, slow-building failure mode Part 08
@@ -878,7 +878,7 @@ EXEC sys.sp_cdc_enable_table
         <Table
           headers={['Approach', 'Best fit', 'Trade-off']}
           rows={[
-            ['Debezium on Kafka Connect (this module)', 'Real-time, replayable Kafka topics feeding multiple independent internal services and applications — the outbox pattern, event-driven architectures, stream processing', 'Requires operating Kafka Connect (or a managed Connect offering) and understanding the operational risks in Part 08 and Part 11'],
+            ['Debezium on Kafka Connect (this lesson)', 'Real-time, replayable Kafka topics feeding multiple independent internal services and applications — the outbox pattern, event-driven architectures, stream processing', 'Requires operating Kafka Connect (or a managed Connect offering) and understanding the operational risks in Part 08 and Part 11'],
             ['Fivetran / Airbyte-style managed CDC', 'Getting database changes into a data warehouse with minimal engineering setup, when Kafka itself is not otherwise part of the architecture', 'Not designed as a general-purpose event bus for multiple internal application consumers — it is a warehouse-loading tool, not a Kafka topic producer, in its primary use case'],
             ['Hand-rolled log reader', 'A database engine with no existing Debezium connector, or a narrow, unusual capture requirement', 'Reimplements snapshot handling, offset tracking, and log-decoding logic that Debezium has already solved and battle-tested'],
           ]}
@@ -953,7 +953,7 @@ DELETE FROM orders WHERE order_id = 999001;
           },
           {
             wrong: '"Debezium is a separate database replication tool you install and run independently of Kafka"',
-            right: 'Part 01 and Part 03 are clear that Debezium is, in its standard deployment, a Kafka Connect source connector — it runs on Connect workers, is configured through the same REST API, and uses the same distributed-mode fault tolerance as any other connector from Module 13.',
+            right: 'Part 01 and Part 03 are clear that Debezium is, in its standard deployment, a Kafka Connect source connector — it runs on Connect workers, is configured through the same REST API, and uses the same distributed-mode fault tolerance as any other connector from Lesson 13.',
           },
           {
             wrong: '"Debezium adds meaningful query load to the source database, since it\'s constantly reading from it"',
@@ -997,7 +997,7 @@ DELETE FROM orders WHERE order_id = 999001;
         <HighlightBox>
           <Para>
             <strong>At Fivetran (a data-integration company whose product overlaps directly with
-            what this module teaches — moving database changes reliably into downstream systems):</strong>
+            what this lesson teaches — moving database changes reliably into downstream systems):</strong>
             an engineer is reviewing a new customer's Postgres-to-warehouse pipeline design and flags that
             the customer's schema includes several tables with frequent column renames as part of an
             ongoing internal refactor. The engineer explains, in terms directly out of Part 10, that a
@@ -1060,7 +1060,7 @@ Prevention is the more important half of the answer: alert directly on replicati
 
 The outbox pattern turns this into a single-system problem: instead of writing to the database and separately calling a Kafka producer, the service writes the business data change and a row describing the event into an outbox table, both inside the same database transaction. Since it's one ACID transaction, both commit together or neither does — there's no window of inconsistency.
 
-Debezium is what makes the pattern practical rather than theoretical: it captures changes to the outbox table exactly like it would capture changes to any other table, turning each new outbox row into a Kafka event reliably, using the same log-based mechanism covered throughout this module. Debezium even has a dedicated Single Message Transform, the outbox event router, that unwraps the outbox row's structure into a clean domain event on an appropriately named topic.`,
+Debezium is what makes the pattern practical rather than theoretical: it captures changes to the outbox table exactly like it would capture changes to any other table, turning each new outbox row into a Kafka event reliably, using the same log-based mechanism covered throughout this lesson. Debezium even has a dedicated Single Message Transform, the outbox event router, that unwraps the outbox row's structure into a clean domain event on an appropriately named topic.`,
           },
           {
             q: 'Q5. How does schema evolution work differently for a Debezium-backed topic compared to a topic written by a hand-written application producer?',
@@ -1087,7 +1087,7 @@ Because of this, I'd treat a Debezium-tracked table's schema with the same disci
         {[
           {
             q: 'Decommissioning the Connect cluster a Debezium connector runs on without first deleting the connector',
-            a: 'Part 08 covers this as the most consequential operational mistake in this module: the replication slot the connector owns on Postgres is not tied to the Connect cluster\'s lifecycle. It has to be explicitly dropped, either by deleting the connector through the REST API first, or by manually dropping the slot on the database — otherwise it silently accumulates WAL until the disk fills.',
+            a: 'Part 08 covers this as the most consequential operational mistake in this lesson: the replication slot the connector owns on Postgres is not tied to the Connect cluster\'s lifecycle. It has to be explicitly dropped, either by deleting the connector through the REST API first, or by manually dropping the slot on the database — otherwise it silently accumulates WAL until the disk fills.',
           },
           {
             q: 'Setting snapshot.mode to "never" without realizing existing rows will be permanently absent from the topic',

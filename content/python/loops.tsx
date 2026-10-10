@@ -77,7 +77,7 @@ export default function Loops() {
     <LearnLayout
       title="Loops — for / while, break / continue"
       description="Every form of iteration in Python — for loops, range(), while loops, break/continue, the loop else clause, nested loops, enumerate(), and zip()."
-      section="Python — Module 06"
+      section="Python — Lesson 06"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -110,7 +110,7 @@ export default function Loops() {
         <Para>
           This works identically over a <code>range()</code> (covered in depth in Part 02) and over a{' '}
           <code>list</code> — you have not formally met lists yet (that is the entire subject of the
-          next module), but you have already seen enough of them to follow a loop over one.
+          next lesson), but you have already seen enough of them to follow a loop over one.
         </Para>
 
         <CodeBox label="for loops over a range and a list">{`for i in range(5):
@@ -135,8 +135,8 @@ for fruit in fruits:
         </Para>
 
         <Callout type="info">
-          Lists, dicts, and sets each get a full dedicated module shortly (Modules 08, 09, and 11). For
-          now, treat them the way this module does — as "a collection of values a for loop can walk
+          Lists, dicts, and sets each get a full dedicated module shortly (Lessons 08, 09, and 11). For
+          now, treat them the way this lesson does — as "a collection of values a for loop can walk
           through" — and focus entirely on how the loop itself behaves. The specific data structures
           will fill in fast once the loop mechanics underneath them are second nature.
         </Callout>
@@ -481,7 +481,7 @@ print(count)   # 1,000,000 — not 2,000
           then becomes unbearably slow in production.</strong> Testing with 10-item sample lists, a
           nested loop runs 100 times — instant. The same code against 50,000 real records runs 2.5
           billion times. Before writing a nested loop over real data, it is worth asking whether a
-          dictionary lookup (covered in Module 11) or a set membership check (covered in the next
+          dictionary lookup (covered in Lesson 11) or a set membership check (covered in the next
           module) could replace the inner loop entirely — both are dramatically faster for exactly this
           kind of "does this exist in the other collection" question.
         </Callout>
@@ -684,7 +684,7 @@ for reservation in get_new_reservations():
 
           <Para>
             The engineer converts <code>flagged_resort_ids</code> from a list to a <code>set</code> —
-            covered in full in the next module, but the relevant idea is simple enough to use here
+            covered in full in the next lesson, but the relevant idea is simple enough to use here
             already: checking whether a value exists in a set is dramatically faster than scanning
             through a list, because a set does not need to check every item one by one. The nested loop
             collapses into a single loop with a fast membership check.
@@ -822,7 +822,7 @@ for reservation in get_new_reservations():
           },
           {
             q: 'Using a nested loop to check membership instead of a set',
-            a: 'A nested loop that checks "does this item exist in the other collection" scales as O(n × m) and gets slow fast as both collections grow. Converting the collection being checked against into a set (covered in Part 07 of the Real World example, and fully in the next module) turns that into a single fast lookup per item.',
+            a: 'A nested loop that checks "does this item exist in the other collection" scales as O(n × m) and gets slow fast as both collections grow. Converting the collection being checked against into a set (covered in Part 07 of the Real World example, and fully in the next lesson) turns that into a single fast lookup per item.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -927,12 +927,12 @@ for reservation in get_new_reservations():
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 07 covers functions — how to stop repeating yourself, parameters and default arguments
+          Lesson 07 covers functions — how to stop repeating yourself, parameters and default arguments
           (including a classic gotcha that catches even experienced engineers), return values, and the
           basics of variable scope.
         </p>
         <Link href="/learn/python/functions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 07 → Functions — Defining, Parameters, Return Values
+          Lesson 07 → Functions — Defining, Parameters, Return Values
         </Link>
       </div>
     </LearnLayout>

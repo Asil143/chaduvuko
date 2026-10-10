@@ -94,7 +94,7 @@ export default function PythonInterviewPrep() {
     <LearnLayout
       title="Python Interview Prep — Common Questions and Patterns"
       description="The Python questions that come up in real technical interviews, answered at senior-engineer depth."
-      section="Python — Module 46 (Capstone)"
+      section="Python — Lesson 46 (Capstone)"
       readTime="60 min"
       updatedAt="August 2026"
     >
@@ -104,7 +104,7 @@ export default function PythonInterviewPrep() {
         <SectionTag text="// The Final Module" />
         <SectionTitle>Everything From This Track, Interview-Ready</SectionTitle>
         <Para>
-          This module is different from the other 45 — instead of teaching one new topic in depth, it
+          This lesson is different from the other 45 — instead of teaching one new topic in depth, it
           pulls together the gotchas, patterns, and trade-offs from across the entire curriculum into
           the format an actual technical interview uses: real questions, answered completely, organised
           by theme. If a question below references something unfamiliar, the module it was originally
@@ -472,7 +472,7 @@ is_valid("(")         # False — nothing left to match it, stack is non-empty a
       <KeyTakeaways items={[
         'Interviews reward reasoning out loud — trade-offs, edge cases, and iteration toward a better solution — at least as much as a single correct final answer.',
         'A small set of recurring patterns (hash-map lookups for O(1) membership/complement checks, two pointers for in-place traversal, careful loop/condition logic) covers a large fraction of real coding interview questions.',
-        'The conceptual gotchas that come up constantly — mutable defaults, shallow vs deep copy, is vs ==, the GIL, __eq__/__hash__ consistency — are exactly the ones this curriculum flagged individually across earlier modules, because they are also genuinely common real production bugs, not just interview trivia.',
+        'The conceptual gotchas that come up constantly — mutable defaults, shallow vs deep copy, is vs ==, the GIL, __eq__/__hash__ consistency — are exactly the ones this curriculum flagged individually across earlier lessons, because they are also genuinely common real production bugs, not just interview trivia.',
         'Clarifying ambiguous requirements before coding, and testing your own solution against edge cases unprompted, are consistently rated positively — they mirror real engineering practice, not just interview performance.',
         'Type hints, testing, and clean code practices (covered in the Production & Career Readiness phase) come up constantly in interviews for any role beyond the most junior level — interviewers care whether you write production-quality code, not just code that solves the immediate problem.',
       ]} />

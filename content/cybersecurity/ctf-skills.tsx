@@ -59,7 +59,7 @@ export default function Module27() {
     <LearnLayout
       title="CTF Skills — Categories, Methodology, and Getting Your First Flag"
       description="How Capture The Flag competitions work, the five challenge categories (web, crypto, pwn, reverse engineering, forensics), essential tools for each, and the systematic approach to solving challenges when you are completely stuck."
-      section="Cybersecurity — Module 27"
+      section="Cybersecurity — Lesson 27"
       readTime="30 min"
       updatedAt="May 2026"
     >
@@ -72,7 +72,7 @@ export default function Module27() {
           The security professionals who are most effective at penetration testing are almost universally CTF players, past or present. The skills transfer directly: the mindset of "how does this system work and how can I make it do something unexpected?" is identical in both contexts. Many professional pentesters first discovered their vocation through CTFs.
         </P>
         <Callout type="info">
-          CTF challenges are run on isolated infrastructure specifically designed to be attacked. Applying CTF techniques to real-world systems without authorisation is illegal. The legal and ethical boundary discussed in Module 21 applies here too.
+          CTF challenges are run on isolated infrastructure specifically designed to be attacked. Applying CTF techniques to real-world systems without authorisation is illegal. The legal and ethical boundary discussed in Lesson 21 applies here too.
         </Callout>
       </Part>
 
@@ -145,7 +145,7 @@ export default function Module27() {
         <Block>{`# Essential web CTF tools:
 
 # Burp Suite Community — proxy, repeater, intruder
-# (covered in depth in Module 25)
+# (covered in depth in Lesson 25)
 
 # curl — quick request testing
 curl -v http://challenge.ctf.com/flag.php
@@ -665,7 +665,7 @@ uncompyle6 challenge.pyc
       <Callout type="info">
         You have completed Phase 4 — the full offensive security toolkit. In{' '}
         <Link href="/learn/cybersecurity/security-architecture">
-          Module 28: Security Architecture
+          Lesson 28: Security Architecture
         </Link>
         , Phase 5 begins: the defensive side. You will learn how to design systems that are resilient to the attacks you now know how to execute — zero trust architecture, defence in depth, security controls selection, and how to think like an architect rather than an attacker.
       </Callout>

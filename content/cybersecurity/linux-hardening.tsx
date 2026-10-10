@@ -59,7 +59,7 @@ export default function Module16() {
     <LearnLayout
       title="Linux Hardening — From Default Install to Production-Ready"
       description="A systematic approach to hardening Linux servers: minimal install, user privilege management, SSH, kernel parameters, SELinux/AppArmor, audit logging, and CIS compliance."
-      section="Cybersecurity — Module 16"
+      section="Cybersecurity — Lesson 16"
       readTime="44 min"
       updatedAt="May 2026"
     >
@@ -68,7 +68,7 @@ export default function Module16() {
           A default Linux install is configured for convenience, not security. Root login is often enabled. Unnecessary services are running. Kernel security features are not enabled. Password authentication is allowed over SSH. A hardening process systematically closes these gaps, reducing the attack surface before the server handles any production traffic.
         </P>
         <P>
-          This module follows the <Hl>CIS (Center for Internet Security) Linux Benchmark</Hl> structure — the industry standard for Linux hardening. You'll work through each major category: minimal installation, filesystem security, user and permission management, SSH hardening, network and kernel parameters, mandatory access controls, audit logging, and automated compliance checking. Every control is explained at the level of why it matters, not just what commands to run.
+          This lesson follows the <Hl>CIS (Center for Internet Security) Linux Benchmark</Hl> structure — the industry standard for Linux hardening. You'll work through each major category: minimal installation, filesystem security, user and permission management, SSH hardening, network and kernel parameters, mandatory access controls, audit logging, and automated compliance checking. Every control is explained at the level of why it matters, not just what commands to run.
         </P>
       </Part>
 
@@ -834,13 +834,13 @@ Automated Compliance:
 
       <div style={{ background: 'var(--code-bg)', borderRadius: 12, padding: '28px 32px', marginTop: 40 }}>
         <div style={{ fontSize: 13, color: C, fontWeight: 700, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
-          Up Next — Module 17
+          Up Next — Lesson 17
         </div>
         <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--heading)', marginBottom: 12 }}>
           Windows and Active Directory Security
         </div>
         <p style={{ ...s.p, marginBottom: 20 }}>
-          In Module 17, you go deep into the Windows security model — how NTLM and Kerberos authentication work in a domain environment, how Active Directory stores and protects credentials, how Group Policy enforces security settings across thousands of machines, and what the most common AD misconfigurations are that attackers exploit in real enterprise breaches.
+          In Lesson 17, you go deep into the Windows security model — how NTLM and Kerberos authentication work in a domain environment, how Active Directory stores and protects credentials, how Group Policy enforces security settings across thousands of machines, and what the most common AD misconfigurations are that attackers exploit in real enterprise breaches.
         </p>
         <Link
           href="/learn/cybersecurity/windows-active-directory"
@@ -855,7 +855,7 @@ Automated Compliance:
             textDecoration: 'none',
           }}
         >
-          Continue to Module 17 →
+          Continue to Lesson 17 →
         </Link>
       </div>
     </LearnLayout>

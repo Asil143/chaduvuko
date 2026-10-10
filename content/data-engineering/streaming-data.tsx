@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     'Event-driven architecture, producers, consumers, offsets, partitions, consumer groups, delivery semantics, time, and ordering — the complete conceptual foundation before you touch Kafka or Flink.',
 }
 
-/* ── Local components (Module 37 style) ─────────────────────────────────── */
+/* ── Local components (Lesson 37 style) ─────────────────────────────────── */
 
 const SectionTag = ({ text }: { text: string }) => (
   <div style={{
@@ -172,7 +172,7 @@ export default function StreamingDataModule() {
     <LearnLayout
       title="Streaming Data — What It Is and How It Works"
       description="Event-driven architecture, producers, consumers, offsets, partitions, consumer groups, delivery semantics, time, and ordering — the complete conceptual foundation before you touch Kafka or Flink."
-      section="Data Engineering — Module 40"
+      section="Data Engineering — Lesson 40"
       readTime="55 min"
       updatedAt="August 2026"
     >
@@ -358,7 +358,7 @@ export default function StreamingDataModule() {
         <Para>
           Before you understand producers and consumers, you need to understand
           the two fundamentally different ways systems can communicate. This is
-          the most important concept in this module.
+          the most important concept in this lesson.
         </Para>
 
         <SubTitle>Request-driven (synchronous)</SubTitle>
@@ -1259,7 +1259,7 @@ event = {
           },
           {
             wrong: '"A consumer reading a message removes it from the stream, same as a queue"',
-            right: 'This module\'s core definition (Part 01) is that a stream is append-only and non-destructive to read — Part 04\'s consumer section reinforces that multiple completely independent consumers can read the same events at their own pace, none affecting the others, which is impossible with a destructive-read queue.',
+            right: 'This lesson\'s core definition (Part 01) is that a stream is append-only and non-destructive to read — Part 04\'s consumer section reinforces that multiple completely independent consumers can read the same events at their own pace, none affecting the others, which is impossible with a destructive-read queue.',
           },
           {
             wrong: '"Sorting events by their timestamp gives you the correct real-world order they happened in"',
@@ -1323,7 +1323,7 @@ event = {
             group design (how many consumers, what happens during rebalance),
             and late data strategy (mobile apps go offline — how do you handle
             events that arrive 10 minutes late). Every one of these concepts
-            is in this module.
+            is in this lesson.
           </Para>
         </HighlightBox>
       </section>
@@ -1401,11 +1401,11 @@ So the watermark encodes a deliberate business trade-off: the allowed lateness s
         {[
           {
             q: 'Treating streaming as "batch but faster" and carrying batch assumptions (bounded data, stateless runs) into a streaming design',
-            a: 'Part 01 and this module\'s Misconceptions section both open with this exact error. A pipeline designed assuming the dataset eventually "ends" will handle state, checkpointing, and failure recovery incorrectly — those all depend on the dataset being genuinely unbounded.',
+            a: 'Part 01 and this lesson\'s Misconceptions section both open with this exact error. A pipeline designed assuming the dataset eventually "ends" will handle state, checkpointing, and failure recovery incorrectly — those all depend on the dataset being genuinely unbounded.',
           },
           {
             q: 'Choosing a partition key by convenience (whatever field is handy) instead of checking cardinality and distribution',
-            a: 'Part 04\'s partition key section and this module\'s first TryThis both point at the same failure mode — a low-cardinality or skewed key creates a hot partition that no amount of adding partitions can fix, since the hot key still hashes to one partition either way.',
+            a: 'Part 04\'s partition key section and this lesson\'s first TryThis both point at the same failure mode — a low-cardinality or skewed key creates a hot partition that no amount of adding partitions can fix, since the hot key still hashes to one partition either way.',
           },
           {
             q: 'Writing consumer logic that assumes at-most-once delivery ("this will only run once per event") in a system actually configured for at-least-once',
@@ -1417,7 +1417,7 @@ So the watermark encodes a deliberate business trade-off: the allowed lateness s
           },
           {
             q: 'Assuming events read from different partitions arrive at the consumer in a meaningful combined order',
-            a: 'Part 09 states plainly that ordering is guaranteed only within a partition — merging events from multiple partitions by arrival order at the consumer reflects processing-time coincidence, not the real sequence of what happened, per this module\'s Misconceptions section.',
+            a: 'Part 09 states plainly that ordering is guaranteed only within a partition — merging events from multiple partitions by arrival order at the consumer reflects processing-time coincidence, not the real sequence of what happened, per this lesson\'s Misconceptions section.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1511,10 +1511,10 @@ So the watermark encodes a deliberate business trade-off: the allowed lateness s
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 41 covers message brokers and queues — how messages flow from producer to consumer, durability guarantees, ordering, replayability, and the difference between at-least-once and exactly-once delivery.
+          Lesson 41 covers message brokers and queues — how messages flow from producer to consumer, durability guarantees, ordering, replayability, and the difference between at-least-once and exactly-once delivery.
         </p>
         <Link href="/learn/data-engineering/message-brokers-queues" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 41 → Message Brokers and Queues — Internal Mechanics
+          Lesson 41 → Message Brokers and Queues — Internal Mechanics
         </Link>
       </div>
     </LearnLayout>

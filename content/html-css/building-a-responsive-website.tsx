@@ -77,7 +77,7 @@ export default function BuildingAResponsiveWebsite() {
     <LearnLayout
       title="Building a Complete Responsive Website"
       description="The capstone project — a full, real, responsive website built end-to-end using everything from this entire track."
-      section="HTML & CSS — Module 40 (Capstone Project)"
+      section="HTML & CSS — Lesson 40 (Capstone Project)"
       readTime="60 min"
       updatedAt="August 2026"
     >
@@ -87,10 +87,10 @@ export default function BuildingAResponsiveWebsite() {
         <SectionTag text="// The Major Capstone" />
         <SectionTitle>Every Technique From This Entire Track, in One Real Build</SectionTitle>
         <Para>
-          This module builds a complete, real, responsive marketing site for a fictional studio
+          This lesson builds a complete, real, responsive marketing site for a fictional studio
           (Ridgeline Design Co.) end to end — a hero section, a navigation bar that collapses on mobile,
           a responsive content grid, and a footer. Every technique used is one already covered somewhere
-          earlier in this 42-module track; this module's job is showing how they compose into one
+          earlier in this 42-module track; this lesson's job is showing how they compose into one
           genuinely working page, not teaching anything new.
         </Para>
       </section>
@@ -313,7 +313,7 @@ button:focus-visible {
 }`}</CodeBox>
 
         <Callout type="tip">
-          <strong>Every input keeps its real, associated label from Module 8</strong> — never replaced
+          <strong>Every input keeps its real, associated label from Lesson 8</strong> — never replaced
           with placeholder text — and the <code>prefers-reduced-motion</code> query from the
           Accessibility module disables the hover-lift transition for users who have indicated they
           prefer reduced motion at the OS level.
@@ -373,7 +373,7 @@ button:focus-visible {
 
           <Para>
             A newly freelance developer delivers a small studio's marketing site — structurally almost
-            identical to this module's build — and the client comes back a week later specifically
+            identical to this lesson's build — and the client comes back a week later specifically
             praising how well it "just works" on their phone, without ever having asked for mobile
             support explicitly.
           </Para>
@@ -608,12 +608,12 @@ button:focus-visible {
           </h2>
           <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 24 }}>
             This build pulled together structure, layout, responsiveness, and accessibility from across
-            the entire track into one real, working site. Module 41 closes out with the conventions and
+            the entire track into one real, working site. Lesson 41 closes out with the conventions and
             common mistakes that separate maintainable CSS from a stylesheet nobody wants to touch, and
-            Module 42 — the capstone — synthesizes everything into interview-ready form.
+            Lesson 42 — the capstone — synthesizes everything into interview-ready form.
           </p>
           <Link href="/learn/html-css/css-best-practices-common-mistakes" style={{ background: C, color: '#fff', padding: '12px 26px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none', display: 'inline-block' }}>
-            Module 41 → CSS Best Practices &amp; Common Mistakes
+            Lesson 41 → CSS Best Practices &amp; Common Mistakes
           </Link>
         </div>
       </section>

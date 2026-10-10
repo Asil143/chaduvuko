@@ -74,7 +74,7 @@ export default function Materializations() {
     <LearnLayout
       title="Materializations: View, Table, Incremental, Ephemeral"
       description="What a materialization actually is, how view/table/ephemeral/incremental compile to different warehouse DDL, how to set materializations per model or per directory, and a decision framework for picking the right one."
-      section="dbt — Module 06"
+      section="dbt — Lesson 06"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -87,7 +87,7 @@ export default function Materializations() {
         <SectionTag text="// Part 01 — What a materialization is" />
         <SectionTitle>A Model Is a SELECT; a Materialization Decides What It Becomes</SectionTitle>
         <Para>
-          The previous module established that a dbt model file contains a single SELECT statement — no
+          The previous lesson established that a dbt model file contains a single SELECT statement — no
           `CREATE TABLE`, no `INSERT`, just a query describing what the data should look like. But a SELECT
           statement, on its own, is not persisted anywhere. It runs, returns rows, and those rows evaporate
           the moment the query finishes, exactly like running a SELECT in a SQL client and never doing
@@ -114,7 +114,7 @@ export default function Materializations() {
           </Para>
         </HighlightBox>
         <Para>
-          There are four materializations covered in this module: <code>view</code>, <code>table</code>,
+          There are four materializations covered in this lesson: <code>view</code>, <code>table</code>,
           <code>ephemeral</code>, and <code>incremental</code>. Every dbt project uses a mix of all four,
           because different models have genuinely different usage patterns — a lightly-transformed staging
           model queried only by one or two downstream models has a completely different ideal materialization
@@ -332,7 +332,7 @@ WHERE status != 'test_order'`}
         <Para>
           <code>incremental</code> is the materialization built specifically for large, growing tables where a
           full rebuild on every run is wasteful or simply too slow to finish inside a scheduling window. The
-          next module goes deep into the mechanics, strategies, and failure modes of incremental models in
+          next lesson goes deep into the mechanics, strategies, and failure modes of incremental models in
           full — this section gives you a correct working understanding of what it does conceptually, enough
           to reason about when to reach for it.
         </Para>
@@ -378,7 +378,7 @@ FROM {{ ref('stg_orders') }}
           What incremental strategy to use (merge versus append versus delete+insert), how <code>unique_key</code>
           actually gets used during a merge, what happens when a late-arriving row shows up after its
           window has already been processed, and how to safely handle schema changes on an incremental table
-          are all covered in full depth in the next module. Treat this section as "incremental models exist
+          are all covered in full depth in the next lesson. Treat this section as "incremental models exist
           and roughly do this" — enough to place it correctly in the decision framework below, not the
           complete mechanics.
         </Callout>
@@ -391,7 +391,7 @@ FROM {{ ref('stg_orders') }}
         <SectionTitle>{'{{ config(materialized=...) }}'} — Setting It on One Model</SectionTitle>
         <Para>
           The most granular way to set a materialization is the <code>config()</code> macro at the top of a
-          single model's SQL file. Every example so far in this module has used this form. It overrides
+          single model's SQL file. Every example so far in this lesson has used this form. It overrides
           whatever the default or folder-level setting would otherwise be, for that one model only.
         </Para>
         <CodeBox label="Per-model config() — overriding whatever the default would be">
@@ -667,7 +667,7 @@ FROM {{ ref('stg_page_view_events') }}
         <SectionTag text="// Part 11 — dbt run vs dbt build" />
         <SectionTitle>dbt run Builds Models; dbt build Builds Models, Tests, Snapshots, and Seeds Together</SectionTitle>
         <Para>
-          Every example in this module has shown models being built with `dbt run`. It's worth being precise
+          Every example in this lesson has shown models being built with `dbt run`. It's worth being precise
           about what that command actually does relative to its more complete sibling, `dbt build`, because
           the difference affects how quickly a broken materialization surfaces.
         </Para>
@@ -735,7 +735,7 @@ dbt build
         <Para>
           This also means teams with a genuinely unusual persistence need can define their own custom
           materialization as a macro, though this is uncommon and should be a late resort — reached for only
-          once the four built-in materializations covered in this module have been confirmed not to fit,
+          once the four built-in materializations covered in this lesson have been confirmed not to fit,
           since a custom materialization means maintaining warehouse-specific DDL logic yourselves instead of
           relying on dbt's well-tested built-in implementations.
         </Para>
@@ -1058,7 +1058,7 @@ Skipping --full-refresh here is exactly the kind of mistake that doesn't fail lo
           'view compiles to CREATE OR REPLACE VIEW — cheap to build, but the underlying query is recomputed on every single downstream read.',
           'table compiles to CREATE OR REPLACE TABLE ... AS SELECT — a full rebuild every run, but fast to query afterward since rows are precomputed.',
           'ephemeral is never its own database object — it is inlined as a CTE into every model that references it, which is efficient for narrow reuse and expensive when reused widely, since each reference recomputes it independently.',
-          'incremental behaves like a table on the first run, then processes only new or changed rows on subsequent runs, guarded by the is_incremental() macro — full mechanics covered in the next module.',
+          'incremental behaves like a table on the first run, then processes only new or changed rows on subsequent runs, guarded by the is_incremental() macro — full mechanics covered in the next lesson.',
           'Materialization is set per model with {{ config(materialized=...) }} or per directory with +materialized in dbt_project.yml, with the per-model setting always winning when both are present.',
           'Choosing the right materialization is a cost-and-usage decision, not a correctness decision: staging models usually default to views, BI-facing marts to tables, narrow shared snippets to ephemeral, and large append-heavy fact tables to incremental.',
         ]}

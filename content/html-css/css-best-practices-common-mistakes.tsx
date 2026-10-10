@@ -77,7 +77,7 @@ export default function CssBestPracticesCommonMistakes() {
     <LearnLayout
       title="CSS Best Practices & Common Mistakes"
       description="The conventions that separate maintainable CSS from a stylesheet nobody wants to touch — and the mistakes every beginner makes at least once."
-      section="HTML & CSS — Module 41"
+      section="HTML & CSS — Lesson 41"
       readTime="30 min"
       updatedAt="August 2026"
     >
@@ -90,7 +90,7 @@ export default function CssBestPracticesCommonMistakes() {
         <Para>
           The CSS Architecture &amp; Naming Conventions module covered BEM (
           <code>block__element--modifier</code>) in depth — the block, element, and modifier
-          convention that keeps class names predictable and self-documenting. This module does not
+          convention that keeps class names predictable and self-documenting. This lesson does not
           re-teach BEM; it assumes you have it, and looks at what actually goes wrong when a team
           <em> doesn&apos;t</em> stick to a convention consistently, because that is where real
           stylesheets rot.
@@ -172,7 +172,7 @@ export default function CssBestPracticesCommonMistakes() {
 
         <Para>
           The CSS Custom Properties module covered <code>var()</code> and <code>--custom-property</code>{' '}
-          as the mechanism — this module applies that mechanism to the single most common source of
+          as the mechanism — this lesson applies that mechanism to the single most common source of
           layout inconsistency: spacing. The fix is a <strong>spacing scale</strong> — a small, fixed
           set of spacing values, each expressed as a custom property, that every component draws
           from instead of inventing its own numbers.
@@ -349,7 +349,7 @@ style="..."           /* 1-0-0-0 inline — avoid for styling entirely */
         <SectionTitle>Box Model, Selectors & Positioning Mistakes Seen Across This Entire Track</SectionTitle>
 
         <Para>
-          The following mistakes each map back to a specific earlier module in this track — they are
+          The following mistakes each map back to a specific earlier lesson in this track — they are
           collected here because, individually, each one is easy to explain, but together they
           account for a disproportionate share of real CSS bugs reported in code review.
         </Para>
@@ -540,7 +540,7 @@ h1 { font-size: 2rem; }      /* 2 * the root font-size — scales if the user ch
           <SubSubTitle>What the audit traces this back to</SubSubTitle>
 
           <Para>
-            Every issue maps directly back to habits covered in this module: the deeply chained,
+            Every issue maps directly back to habits covered in this lesson: the deeply chained,
             overqualified selector (Part 05) meant nobody could safely write a competing rule without
             an even longer selector or an <code>!important</code> — which is exactly how the{' '}
             <code>!important</code> count reached 340 in the first place (Part 03). The{' '}
@@ -794,7 +794,7 @@ h1 { font-size: 2rem; }      /* 2 * the root font-size — scales if the user ch
           different ways and fixing a broken sticky footer.
         </p>
         <Link href="/learn/html-css/html-css-interview-prep" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 42 → HTML &amp; CSS Interview Prep — Common Questions and Patterns
+          Lesson 42 → HTML &amp; CSS Interview Prep — Common Questions and Patterns
         </Link>
       </div>
     </LearnLayout>

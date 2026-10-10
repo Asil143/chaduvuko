@@ -77,7 +77,7 @@ export default function CssSelectorsDeepDive() {
     <LearnLayout
       title="CSS Selectors Deep Dive"
       description="Combinators, pseudo-classes, pseudo-elements, and specificity — the rules that decide which style actually wins."
-      section="HTML & CSS — Module 20"
+      section="HTML & CSS — Lesson 20"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -393,7 +393,7 @@ a[href$=".pdf"] {
         <SectionTitle>The Actual Specificity Calculation — Worked Through With Real Numbers</SectionTitle>
 
         <Para>
-          Module 17 introduced specificity conceptually. Here is the real, precise mechanism the browser
+          Lesson 17 introduced specificity conceptually. Here is the real, precise mechanism the browser
           actually runs. Every selector is scored as a tuple of four numbers, conventionally written{' '}
           <strong>(inline, ID, class, element)</strong>, counted by tallying how many of each selector type
           appear in the full selector.
@@ -518,7 +518,7 @@ button {
 
         <Para>
           If Rule 2 and Rule 3 had ended up with the exact same specificity tuple, the tie-breaker would
-          fall back to source order (Module 17, Part 04) — whichever was declared later in the combined,
+          fall back to source order (Lesson 17, Part 04) — whichever was declared later in the combined,
           final CSS would win. Specificity decides the vast majority of real conflicts; source order only
           settles the rare genuine tie.
         </Para>
@@ -610,7 +610,7 @@ button {
             The team explicitly rejects reaching for a higher-specificity override or an{' '}
             <code>!important</code> on <code>.btn</code> — doing so would fix this one page while making the
             shared component permanently harder to override anywhere else it is legitimately needed, exactly
-            the trap described back in Module 17&apos;s discussion of <code>!important</code>. Instead, the
+            the trap described back in Lesson 17&apos;s discussion of <code>!important</code>. Instead, the
             legacy ID-based selector itself gets removed as part of the migration, since it was leftover,
             page-specific styling the new shared component was always meant to fully replace.
           </Para>
@@ -704,7 +704,7 @@ button {
           },
           {
             q: 'In a real codebase, when would you choose to remove a legacy overriding rule entirely, versus writing a new rule with higher specificity to beat it?',
-            a: 'Removing the legacy rule is the better long-term fix whenever it is genuinely obsolete or is meant to be fully superseded by the new styling — exactly the design-system migration scenario covered in this module\'s Real World example. Writing a higher-specificity override instead just adds another layer competing for the same property, making the NEXT change harder, and is really only appropriate when the legacy rule is still needed for something else and cannot be safely deleted.',
+            a: 'Removing the legacy rule is the better long-term fix whenever it is genuinely obsolete or is meant to be fully superseded by the new styling — exactly the design-system migration scenario covered in this lesson\'s Real World example. Writing a higher-specificity override instead just adds another layer competing for the same property, making the NEXT change harder, and is really only appropriate when the legacy rule is still needed for something else and cannot be safely deleted.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -850,11 +850,11 @@ button {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 21 covers display and positioning — block/inline/inline-block in full, every position
+          Lesson 21 covers display and positioning — block/inline/inline-block in full, every position
           value from static through sticky, and z-index and stacking contexts explained properly.
         </p>
         <Link href="/learn/html-css/display-positioning" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 21 → Display & Positioning
+          Lesson 21 → Display & Positioning
         </Link>
       </div>
     </LearnLayout>

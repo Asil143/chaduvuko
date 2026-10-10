@@ -78,7 +78,7 @@ export default function ExistsNotExists() {
     <LearnLayout
       title="EXISTS and NOT EXISTS"
       description="The cleanest existence check in SQL — how EXISTS works, when it beats IN and LEFT JOIN IS NULL, every anti-join pattern, NULL safety, and performance at scale"
-      section="SQL — Module 38"
+      section="SQL — Lesson 38"
       readTime="12–16 min"
       updatedAt="April 2026"
     >
@@ -1042,10 +1042,10 @@ ORDER BY reason, category, unit_price;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 39</strong>, you learn UNION, INTERSECT, and EXCEPT — set operations that combine result sets vertically, with every deduplication, ordering, and column-matching rule you need.
+          In <strong>Lesson 39</strong>, you learn UNION, INTERSECT, and EXCEPT — set operations that combine result sets vertically, with every deduplication, ordering, and column-matching rule you need.
         </p>
         <Link href="/learn/sql/union-intersect-except" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 39 → UNION, INTERSECT, and EXCEPT
+          Lesson 39 → UNION, INTERSECT, and EXCEPT
         </Link>
       </div>
 

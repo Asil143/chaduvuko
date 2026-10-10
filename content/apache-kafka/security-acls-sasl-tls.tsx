@@ -74,7 +74,7 @@ export default function KafkaSecurityACLsSASLTLS() {
     <LearnLayout
       title="Kafka Security: TLS, SASL, and ACLs"
       description="Why an unsecured Kafka cluster is a real risk, and how to close it: encryption in transit with TLS, authenticating clients with SASL/PLAIN, SCRAM, GSSAPI and mTLS, authorizing access with ACLs, and locking a topic down to specific service accounts."
-      section="Apache Kafka — Module 15"
+      section="Apache Kafka — Lesson 15"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -125,11 +125,11 @@ export default function KafkaSecurityACLsSASLTLS() {
           These two problems are solved by two different, composable layers: TLS solves confidentiality
           (and, used as mTLS, can also solve identity). SASL solves identity through a pluggable
           authentication mechanism that runs independently of, or on top of, TLS. ACLs solve permission, once
-          identity is established. This module builds all three up from first principles, in that order,
+          identity is established. This lesson builds all three up from first principles, in that order,
           because each one only makes sense once the layer before it is understood.
         </Para>
         <Callout title="This is defensive configuration, not offense" color={K}>
-          Everything in this module is about correctly configuring encryption and access control on a
+          Everything in this lesson is about correctly configuring encryption and access control on a
           cluster you operate — the same category of work as configuring TLS on a web server or IAM
           policies on a cloud account. None of it is about attacking, bypassing, or extracting data from a
           cluster you do not control.
@@ -545,7 +545,7 @@ kafka-acls.sh --bootstrap-server broker1:9093 --command-config admin.properties 
         <SectionTag text="// Part 08 — Putting the whole stack together" />
         <SectionTitle>The Full Security Stack, Layer by Layer</SectionTitle>
         <Para>
-          A production-grade Kafka deployment stacks every layer covered in this module, each protecting
+          A production-grade Kafka deployment stacks every layer covered in this lesson, each protecting
           against a distinct threat, none of them substituting for the others.
         </Para>
         <Table
@@ -741,7 +741,7 @@ kafka-acls.sh --bootstrap-server broker1:9093 --command-config admin.properties 
         <Para>
           Most organizations running Kafka at any scale do not run one cluster per team. A single shared
           cluster serving many teams is more operationally efficient — fewer clusters to patch, upgrade, and
-          monitor — but it introduces a requirement none of the single-team examples earlier in this module
+          monitor — but it introduces a requirement none of the single-team examples earlier in this lesson
           fully capture: teams on a shared cluster need to be protected from each other, not just from the
           outside world. A misconfigured or misbehaving producer from one team should not be able to read,
           write, or overwhelm another team's topics, even though both are authenticated, legitimate users of
@@ -818,7 +818,7 @@ kafka-acls.sh --bootstrap-server broker1:9093 --command-config admin.properties 
         <SectionTag text="// Part 12 — A pre-production security checklist" />
         <SectionTitle>Before a Cluster Goes Live: A Concrete Checklist</SectionTitle>
         <Para>
-          Every concept in this module has a corresponding, checkable configuration item. Pulling them
+          Every concept in this lesson has a corresponding, checkable configuration item. Pulling them
           together into one ordered checklist is useful precisely because security work is easy to leave
           partially done — TLS gets configured, and the ACL step gets deferred as "we'll add that later,"
           and later never quite arrives before the cluster is already carrying production traffic. Treating
@@ -844,7 +844,7 @@ kafka-acls.sh --bootstrap-server broker1:9093 --command-config admin.properties 
           right rotation cadence, and the right choice between a shared cluster with strong isolation versus
           a dedicated cluster are all judgment calls specific to an organization's actual constraints. Use
           this list to confirm nothing was silently skipped, not as a substitute for understanding why each
-          item matters, which is what the rest of this module covers.
+          item matters, which is what the rest of this lesson covers.
         </Callout>
       </section>
 
@@ -854,7 +854,7 @@ kafka-acls.sh --bootstrap-server broker1:9093 --command-config admin.properties 
         <SectionTag text="// Part 13 — Responding to a suspected credential compromise" />
         <SectionTitle>Incident Response: What to Do When a Kafka Credential May Be Compromised</SectionTitle>
         <Para>
-          Every layer this module has covered — TLS, SASL, ACLs, quotas, rotation — is preventive. It is
+          Every layer this lesson has covered — TLS, SASL, ACLs, quotas, rotation — is preventive. It is
           still worth having a clear, rehearsed answer to a question every one of these layers exists to
           make less likely but cannot make impossible: a specific service's Kafka credential is suspected of
           being exposed — leaked in a log line, committed to a public repository, or extracted from a

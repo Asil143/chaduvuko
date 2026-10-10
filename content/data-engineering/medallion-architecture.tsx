@@ -172,7 +172,7 @@ export default function MedallionArchitectureModule() {
     <LearnLayout
       title="Medallion Architecture — Bronze, Silver, Gold"
       description="What belongs in each layer, the exact transformations at each boundary, dbt and Spark integration, SCD handling, and governing a three-tier lakehouse."
-      section="Data Engineering — Module 30"
+      section="Data Engineering — Lesson 30"
       readTime="65 min"
       updatedAt="August 2026"
     >
@@ -913,7 +913,7 @@ OVERLAP WINDOW CONFIGURATION:
         <SectionTitle>Slowly Changing Dimensions — How Each Layer Handles Them</SectionTitle>
 
         <Para>
-          Module 15 covered SCD patterns in SQL. In the Medallion Architecture,
+          Lesson 15 covered SCD patterns in SQL. In the Medallion Architecture,
           SCDs manifest differently at each layer. Bronze has the complete event
           history including all changes. Silver has the current state. Gold may
           need point-in-time state for historical analysis. The three-layer model
@@ -996,11 +996,11 @@ IMPLEMENTATION DECISION TREE:
         {[
           {
             wrong: '"Bronze is just a staging area — it should be cleaned up or dropped once Silver is built"',
-            right: 'Part 02 is explicit that Bronze\'s value is precisely in being permanent and unmodified — it\'s the only place a Silver bug can be reprocessed from without re-extracting from a source that may no longer have the data. This module\'s Real World section and Interview Prep Q4 both depend on Bronze still existing when a months-old bug is found.',
+            right: 'Part 02 is explicit that Bronze\'s value is precisely in being permanent and unmodified — it\'s the only place a Silver bug can be reprocessed from without re-extracting from a source that may no longer have the data. This lesson\'s Real World section and Interview Prep Q4 both depend on Bronze still existing when a months-old bug is found.',
           },
           {
             wrong: '"If Bronze has 300 million rows and the source only has 10 million, something is broken"',
-            right: 'Part 02\'s data volume reality box addresses this head-on: Bronze accumulates every CDC event (every INSERT, UPDATE, DELETE) while the source only shows current state — a 30x-50x row ratio is the expected shape of an event log versus a state table, not a bug (that specific mismatch IS a real bug pattern, but only when it shows up in Silver, as this module\'s Error Library documents).',
+            right: 'Part 02\'s data volume reality box addresses this head-on: Bronze accumulates every CDC event (every INSERT, UPDATE, DELETE) while the source only shows current state — a 30x-50x row ratio is the expected shape of an event log versus a state table, not a bug (that specific mismatch IS a real bug pattern, but only when it shows up in Silver, as this lesson\'s Error Library documents).',
           },
           {
             wrong: '"Once a source schema change reaches Bronze via mergeSchema, it\'s automatically available in Gold too"',
@@ -1008,7 +1008,7 @@ IMPLEMENTATION DECISION TREE:
           },
           {
             wrong: '"Gold should always be built with dbt\'s materialized=\'incremental\' for efficiency"',
-            right: 'This module\'s Error Library shows the failure mode of applying that rule blindly: an incremental filter keyed on a column that changes on every Silver touch (not just Gold-relevant changes) rebuilds the "delta" every single run anyway. For small Gold aggregates, a full table rebuild is often simpler and just as fast.',
+            right: 'This lesson\'s Error Library shows the failure mode of applying that rule blindly: an incremental filter keyed on a column that changes on every Silver touch (not just Gold-relevant changes) rebuilds the "delta" every single run anyway. For small Gold aggregates, a full table rebuild is often simpler and just as fast.',
           },
           {
             wrong: '"SCD Type 2 should be applied broadly across Silver, just in case Gold needs history later"',
@@ -1223,19 +1223,19 @@ This controlled propagation is why the architecture separates Bronze, Silver, an
           },
           {
             q: 'Not updating the Silver validation allowlist when the source system adds a new valid status or enum value',
-            a: 'This module\'s Real World section and Error Library both show the exact consequence: rows with a legitimately new status get silently rejected to the DLQ, and the resulting revenue gap looks like a mystery until someone checks the DLQ\'s rejection reason.',
+            a: 'This lesson\'s Real World section and Error Library both show the exact consequence: rows with a legitimately new status get silently rejected to the DLQ, and the resulting revenue gap looks like a mystery until someone checks the DLQ\'s rejection reason.',
           },
           {
             q: 'Joining a Gold fact table to a mutable Silver dimension table for historical dates without SCD2',
-            a: 'This module\'s Error Library documents the non-deterministic-Gold-results bug that comes from exactly this — a historical daily revenue figure that changes between runs because the customer dimension it joins to keeps changing underneath it. Part 08\'s decision tree exists to catch this before it becomes a bug.',
+            a: 'This lesson\'s Error Library documents the non-deterministic-Gold-results bug that comes from exactly this — a historical daily revenue figure that changes between runs because the customer dimension it joins to keeps changing underneath it. Part 08\'s decision tree exists to catch this before it becomes a bug.',
           },
           {
             q: 'Configuring a Gold model as incremental without checking that the incremental filter tracks Gold-relevant changes specifically',
-            a: 'Part 06 and this module\'s Error Library both point at the same trap: filtering on a broad timestamp like silver_updated_at (which changes on every Silver touch) makes an "incremental" model reprocess everything on every run, with none of the efficiency the incremental strategy was supposed to provide.',
+            a: 'Part 06 and this lesson\'s Error Library both point at the same trap: filtering on a broad timestamp like silver_updated_at (which changes on every Silver touch) makes an "incremental" model reprocess everything on every run, with none of the efficiency the incremental strategy was supposed to provide.',
           },
           {
             q: 'Scheduling a heavy Bronze OPTIMIZE job without checking what else reads from that table at the same time',
-            a: 'This module\'s Error Library shows OPTIMIZE\'s write lock blocking the Silver MERGE pipeline for hours when the two run concurrently — schedule compaction during a maintenance window, or scope OPTIMIZE to older partitions only, rather than locking the whole table during active hours.',
+            a: 'This lesson\'s Error Library shows OPTIMIZE\'s write lock blocking the Silver MERGE pipeline for hours when the two run concurrently — schedule compaction during a maintenance window, or scope OPTIMIZE to older partitions only, rather than locking the whole table during active hours.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
@@ -1328,10 +1328,10 @@ This controlled propagation is why the architecture separates Bronze, Silver, an
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 31 covers data warehouse internals — how columnar storage makes analytical queries 10-100× faster, and how partitioning, clustering, and distribution affect both performance and cost.
+          Lesson 31 covers data warehouse internals — how columnar storage makes analytical queries 10-100× faster, and how partitioning, clustering, and distribution affect both performance and cost.
         </p>
         <Link href="/learn/data-engineering/warehouse-concepts" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 31 → Data Warehouse Concepts — Columnar Storage and Distribution
+          Lesson 31 → Data Warehouse Concepts — Columnar Storage and Distribution
         </Link>
       </div>
     </LearnLayout>

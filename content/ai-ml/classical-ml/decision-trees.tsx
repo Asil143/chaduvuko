@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Decision Trees — Loan Approval at Capital One — Chaduvuko',
@@ -191,7 +190,6 @@ export default function DecisionTreesPage() {
       readTime="26–34 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='classical-ml' topic='decision-trees' />
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -229,7 +227,7 @@ export default function DecisionTreesPage() {
         <HBox color="#378ADD">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module covers:
+              What this lesson covers:
             </span>
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -258,7 +256,7 @@ export default function DecisionTreesPage() {
         </HBox>
 
         <Callout type="tip">
-          The running example throughout this module is Capital One loan approval —
+          The running example throughout this lesson is Capital One loan approval —
           a binary classification problem: approve or reject.
           Every concept is explained on this real business scenario before
           the code appears. By the end you will have a fully interpretable
@@ -541,7 +539,7 @@ print(f"  Gini reduction: {gini_impurity(y_arr) - best_gini:.4f}")`} />
         <h3 style={S.h3}>Information gain and entropy — the alternative criterion</h3>
 
         <p style={S.p}>
-          Entropy (from information theory — Module 07) measures the same thing
+          Entropy (from information theory — Lesson 07) measures the same thing
           as Gini but using logarithms. Information gain is the reduction in entropy
           from a split. Both Gini and entropy produce very similar trees in practice.
           Gini is slightly faster to compute (no logarithm). Entropy can sometimes
@@ -1059,7 +1057,7 @@ print(f"Actual interest rate:                    {interest_rate_test.iloc[0]:.2f
               fontSize: 14, fontWeight: 700, color: '#378ADD',
               fontFamily: 'var(--font-display)', marginBottom: 7,
             }}>
-              Random Forest (Module 28)
+              Random Forest (Lesson 28)
             </div>
             <p style={{ ...S.ps, marginBottom: 10 }}>
               Train 100–1000 trees, each on a random sample of data
@@ -1081,7 +1079,7 @@ print(f"Actual interest rate:                    {interest_rate_test.iloc[0]:.2f
               fontSize: 14, fontWeight: 700, color: '#D85A30',
               fontFamily: 'var(--font-display)', marginBottom: 7,
             }}>
-              XGBoost / LightGBM (Modules 22–23)
+              XGBoost / LightGBM (Lessons 22–23)
             </div>
             <p style={{ ...S.ps, marginBottom: 10 }}>
               Train shallow trees sequentially, each one correcting the errors
@@ -1106,7 +1104,7 @@ print(f"Actual interest rate:                    {interest_rate_test.iloc[0]:.2f
             computes impurity, and makes predictions, Random Forest and XGBoost
             become straightforward — they are just collections of trees
             combined in different ways. The algorithm you built from scratch
-            in this module IS the algorithm inside every XGBoost model at
+            in this lesson IS the algorithm inside every XGBoost model at
             Stripe, Instacart, and every unicorn running tabular ML.
           </p>
         </HBox>
@@ -1218,7 +1216,7 @@ print("\nModel and decision rules saved for compliance audit.")`} />
 
         <ConceptBox title="Myth: A deeper tree is always a more accurate tree" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            The depth sweep earlier in this module shows exactly why this fails: accuracy improves
+            The depth sweep earlier in this lesson shows exactly why this fails: accuracy improves
             as depth grows from 1 to around 4–5, then reverses — depth=10 hits 99% training
             accuracy but only 83% test accuracy, and an unconstrained tree (depth=None) hits 100%
             training accuracy while test accuracy actually drops to 79%. Past the point where the
@@ -1231,7 +1229,7 @@ print("\nModel and decision rules saved for compliance audit.")`} />
 
         <ConceptBox title="Myth: Choosing Gini vs entropy is an important modelling decision" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            The code comparison earlier in this module makes the actual answer explicit: "Both
+            The code comparison earlier in this lesson makes the actual answer explicit: "Both
             criteria select the same split — just different scales." Gini ranges 0–0.5 for binary
             classification, entropy ranges 0–1 bit, but they rank candidate splits almost
             identically in practice. sklearn defaults to Gini because it skips a logarithm and is
@@ -1373,7 +1371,7 @@ print("\nModel and decision rules saved for compliance audit.")`} />
         <p style={S.p}>
           A single tree overfits, is unstable, and has high variance.
           The fix — discovered in the 1990s — was to train many trees and combine
-          their predictions. Module 28 covers Random Forest: 100–1000 trees,
+          their predictions. Lesson 28 covers Random Forest: 100–1000 trees,
           each trained on a random sample of data and a random subset of features,
           their predictions averaged into something far more powerful and stable
           than any individual tree.
@@ -1391,7 +1389,7 @@ print("\nModel and decision rules saved for compliance audit.")`} />
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Classical ML · Module 28
+              Next — Classical ML · Lesson 28
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

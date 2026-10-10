@@ -160,7 +160,7 @@ const BigOCard = ({
 export default function ComplexityPage() {
   return (
     <LearnLayout
-      title="Unit 01 — Complexity"
+      title="Complexity"
       description="How to measure how fast your code runs and how much memory it uses — the skill that separates good code from great code."
       section="DSA"
       readTime="60 min"
@@ -170,9 +170,7 @@ export default function ComplexityPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'UNIT 01', green: true },
-          { label: 'Prerequisite: Unit 00', green: false },
-          { label: '60 min read', green: false },
+          { label: 'Prerequisite: Lesson 1', green: false },
         ].map((b) => (
           <span key={b.label} style={{
             fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600,
@@ -190,7 +188,7 @@ export default function ComplexityPage() {
         is better? How do you even measure it?
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
-        That is exactly what this unit answers. Complexity is the scoreboard for code.
+        That is exactly what this lesson answers. Complexity is the scoreboard for code.
         It tells you — before you even run the program — how it will behave when the
         data gets big. This is what every interviewer means when they ask
         "what is the time complexity of your solution?"
@@ -764,16 +762,16 @@ export default function ComplexityPage() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Unit 02</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 3</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now have the single most important mental tool in all of DSA — the ability
         to look at any piece of code and judge whether it is efficient or not.
-        Every unit from here uses this language. When we say "arrays give O(1) access"
+        Every lesson from here uses this language. When we say "arrays give O(1) access"
         or "bubble sort is O(n²)", you now know exactly what that means.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Unit 02 we dive into <strong style={{ color: 'var(--text)' }}>Arrays</strong> —
+        In Lesson 3 we dive into <strong style={{ color: 'var(--text)' }}>Arrays</strong> —
         the very first and most fundamental data structure. We will build them from scratch
         in C, understand exactly how they sit in memory, and write the core operations:
         insert, delete, search, and traverse.
@@ -788,7 +786,7 @@ export default function ComplexityPage() {
       }}>
         <div>
           <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>
-            UP NEXT → UNIT 02
+            UP NEXT → LESSON 3
           </div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>
             Arrays — The Foundation of Everything

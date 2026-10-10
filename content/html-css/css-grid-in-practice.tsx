@@ -77,7 +77,7 @@ export default function CssGridInPractice() {
     <LearnLayout
       title="CSS Grid in Practice — Real Layouts"
       description="Real page layouts built with Grid — holy grail layouts, image galleries, and dashboards that would be painful with Flexbox alone."
-      section="HTML & CSS — Module 26"
+      section="HTML & CSS — Lesson 26"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -88,12 +88,12 @@ export default function CssGridInPractice() {
         <SectionTitle>Start From the Wireframe, Not the Properties</SectionTitle>
 
         <Para>
-          The previous module covered every individual Grid property in isolation. Real layouts are
+          The previous lesson covered every individual Grid property in isolation. Real layouts are
           never built by reaching for properties one at a time — they start with a rough wireframe of
-          named regions, and the CSS follows directly from that drawing. This module builds three real,
+          named regions, and the CSS follows directly from that drawing. This lesson builds three real,
           complete layouts end to end: a classic holy grail page shell, a responsive image gallery, and
           a dashboard combining several Grid techniques at once. Each one starts the same way — sketch
-          the regions first, then let <code>grid-template-areas</code> (from the previous module's Part
+          the regions first, then let <code>grid-template-areas</code> (from the previous lesson's Part
           04) turn that sketch directly into CSS.
         </Para>
 
@@ -114,7 +114,7 @@ export default function CssGridInPractice() {
         </Para>
 
         <Callout type="info">
-          Every layout in this module uses real, complete HTML alongside the CSS — not fragments. Copy
+          Every layout in this lesson uses real, complete HTML alongside the CSS — not fragments. Copy
           either example directly into a blank HTML file with a linked stylesheet and it will render
           exactly as described.
         </Callout>
@@ -170,7 +170,7 @@ export default function CssGridInPractice() {
           they size to their own content's height rather than a hardcoded pixel value — genuinely
           important if either region's content (a banner, a multi-line footer) can vary. Third, the
           middle row is <code>1fr</code>, which is what makes it absorb all remaining vertical space and
-          push the footer down, exactly like the fr behaviour from the previous module's Part 02, just
+          push the footer down, exactly like the fr behaviour from the previous lesson's Part 02, just
           applied to the row axis instead of columns.
         </Para>
 
@@ -221,7 +221,7 @@ export default function CssGridInPractice() {
         <SectionTitle>auto-fill / auto-fit + minmax() — A Gallery That Wraps Itself</SectionTitle>
 
         <Para>
-          The previous module introduced <code>repeat(auto-fill, minmax(min, 1fr))</code> as the pattern
+          The previous lesson introduced <code>repeat(auto-fill, minmax(min, 1fr))</code> as the pattern
           for a self-wrapping grid. Here it gets built out into a genuinely complete, real image
           gallery — square thumbnails, consistent gaps, and correct wrapping behaviour at any viewport
           width, without a single media query.
@@ -308,7 +308,7 @@ export default function CssGridInPractice() {
 
         <Para>
           A dashboard is a genuinely good test of whether Grid has actually clicked, because it usually
-          needs several techniques from the previous module working together at once: a page-level shell
+          needs several techniques from the previous lesson working together at once: a page-level shell
           (named areas, exactly like Part 02), a widget area with cards of genuinely different sizes
           (line-based spanning), and individual widgets that are themselves grids or flex containers
           internally (nested layout contexts).
@@ -369,7 +369,7 @@ export default function CssGridInPractice() {
           the widgets inside it) — nesting grids like this is completely normal and is exactly how real
           dashboards are structured, rather than trying to express the entire page as one flat grid.
           Each widget's span (<code>span 2</code>, <code>span 2 / span 2</code>) is set individually,
-          which is precisely the line-based placement technique from the previous module's Part 05,
+          which is precisely the line-based placement technique from the previous lesson's Part 05,
           applied here to build a genuinely irregular, magazine-style grid rather than a uniform table of
           equal cells.
         </Para>
@@ -380,7 +380,7 @@ export default function CssGridInPractice() {
           A single widget's own internal layout — say, a metric card with a label at the top, a large
           number in the middle, and a small trend indicator pinned to the bottom-right — is a completely
           separate layout decision from how the widget is placed on the page. This is a genuinely
-          important idea that the next module in this track is built entirely around: it is extremely
+          important idea that the next lesson in this track is built entirely around: it is extremely
           common, and correct, to use Grid for the page-level and widget-grid structure shown here, while
           using Flexbox for what happens <em>inside</em> each individual widget.
         </Para>
@@ -402,7 +402,7 @@ export default function CssGridInPractice() {
         <SectionTitle>The Browser DevTools Grid Inspector</SectionTitle>
 
         <Para>
-          Every layout in this module is genuinely difficult to get pixel-perfect on the first attempt
+          Every layout in this lesson is genuinely difficult to get pixel-perfect on the first attempt
           purely by reading CSS — real Grid debugging happens visually, in the browser. Chrome, Firefox,
           and Safari all ship a dedicated Grid inspector that overlays line numbers, track sizes, and
           named areas directly on the rendered page.
@@ -488,7 +488,7 @@ export default function CssGridInPractice() {
           <SubSubTitle>The rebuild</SubSubTitle>
 
           <Para>
-            The engineer replaces it with exactly the gallery pattern from Part 03 of this module —{' '}
+            The engineer replaces it with exactly the gallery pattern from Part 03 of this lesson —{' '}
             <code>auto-fit</code> and <code>minmax()</code> — with the minimum column width tuned to the
             actual listing card's comfortable minimum size rather than an arbitrary percentage.
           </Para>
@@ -532,11 +532,11 @@ export default function CssGridInPractice() {
           },
           {
             wrong: '"A dashboard-style layout with irregularly sized cards needs a completely different technique than a simple page shell"',
-            right: 'It is the same grid-template-areas and line-based placement techniques from the previous module, just nested — a page-level shell built from named areas, containing a widget area that is itself a separate grid using span for irregular card sizes.',
+            right: 'It is the same grid-template-areas and line-based placement techniques from the previous lesson, just nested — a page-level shell built from named areas, containing a widget area that is itself a separate grid using span for irregular card sizes.',
           },
           {
             wrong: '"Once you\'re using Grid for a layout, every part of it — down to a single card\'s internals — should also be Grid"',
-            right: 'Using Grid for page-level structure and Flexbox for the internal layout of an individual component (like a card with a label, a value, and a trend indicator) inside a grid cell is extremely common and often the more natural fit — this exact combination is the entire subject of the next module.',
+            right: 'Using Grid for page-level structure and Flexbox for the internal layout of an individual component (like a card with a label, a value, and a trend indicator) inside a grid cell is extremely common and often the more natural fit — this exact combination is the entire subject of the next lesson.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -754,7 +754,7 @@ export default function CssGridInPractice() {
         'grid-template-areas makes responsive reshaping cheap — a media query redeclaring the container\'s columns and area drawing can restructure the entire page without touching the HTML or any individual element\'s rules.',
         'repeat(auto-fit, minmax(min, 1fr)) is the standard pattern for a self-wrapping gallery or card grid — auto-fit collapses empty tracks so existing items stretch to fill the row; auto-fill preserves them as reserved-but-empty.',
         'A dashboard combines named-area page structure with line-based span placement for irregularly sized widgets — and it is completely normal for those widgets to nest their own grid or flex layout internally.',
-        'Grid for page/section structure and Flexbox for a component\'s internal layout is a standard, correct combination — not a compromise, and the exact subject of the next module.',
+        'Grid for page/section structure and Flexbox for a component\'s internal layout is a standard, correct combination — not a compromise, and the exact subject of the next lesson.',
         'The browser DevTools Grid inspector (Chrome, Firefox, Safari all have one) overlays real line numbers, track sizes, and area names directly on the page — it is the fastest way to debug a layout that looks subtly wrong.',
       ]} />
 
@@ -764,8 +764,8 @@ export default function CssGridInPractice() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Grid and Flexbox now both fully in hand — the next module builds the actual decision framework
-          for choosing between them, and shows the pattern this module previewed: using both together in
+          Grid and Flexbox now both fully in hand — the next lesson builds the actual decision framework
+          for choosing between them, and shows the pattern this lesson previewed: using both together in
           the same page.
         </p>
         <Link href="/learn/html-css/flexbox-vs-grid" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>

@@ -77,7 +77,7 @@ export default function ContextManagers() {
     <LearnLayout
       title="Context Managers and the with Statement"
       description="What with is actually doing, and building your own context managers for resource management."
-      section="Python — Module 30"
+      section="Python — Lesson 30"
       readTime="30 min"
       updatedAt="August 2026"
     >
@@ -540,12 +540,12 @@ print(os.getcwd())        # back to the original directory automatically`}</Code
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 31 closes out the Intermediate & Functional Python phase with closures and the LEGB
+          Lesson 31 closes out the Intermediate & Functional Python phase with closures and the LEGB
           scope rule — how Python actually resolves variable names, and the scoping bugs that confuse
           everyone once.
         </p>
         <Link href="/learn/python/closures-scope" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 31 → Closures and Scope — The LEGB Rule
+          Lesson 31 → Closures and Scope — The LEGB Rule
         </Link>
       </div>
     </LearnLayout>

@@ -59,7 +59,7 @@ export default function Module21() {
     <LearnLayout
       title="Penetration Testing — Methodology, Scoping, and Legal Framework"
       description="The five-phase pentest methodology, rules of engagement, scoping, legal authorisation, report writing, and the ethical framework that separates professional testing from criminal hacking."
-      section="Cybersecurity — Module 21"
+      section="Cybersecurity — Lesson 21"
       readTime="32 min"
       updatedAt="May 2026"
     >
@@ -70,10 +70,10 @@ export default function Module21() {
           That difference is everything: it separates a six-figure security career from a federal computer crime conviction.
         </P>
         <P>
-          This module covers what professional penetration testing actually looks like — not just the hacking techniques, but the business context that makes it legal, repeatable, and valuable. You will learn how engagements are scoped and contracted, the five-phase methodology that structures every professional pentest, how findings are documented and communicated, and the certifications that validate your skills in the US job market.
+          This lesson covers what professional penetration testing actually looks like — not just the hacking techniques, but the business context that makes it legal, repeatable, and valuable. You will learn how engagements are scoped and contracted, the five-phase methodology that structures every professional pentest, how findings are documented and communicated, and the certifications that validate your skills in the US job market.
         </P>
         <Callout type="info">
-          The techniques described in this module are legal only when performed with explicit written authorisation on systems you own or are contracted to test. Performing any of these actions against systems without authorisation is a federal crime under the Computer Fraud and Abuse Act (CFAA), regardless of intent.
+          The techniques described in this lesson are legal only when performed with explicit written authorisation on systems you own or are contracted to test. Performing any of these actions against systems without authorisation is a federal crime under the Computer Fraud and Abuse Act (CFAA), regardless of intent.
         </Callout>
       </Part>
 
@@ -579,7 +579,7 @@ APPENDIX
       <Callout type="info">
         Penetration testing methodology gives you the professional framework. In{' '}
         <Link href="/learn/cybersecurity/reconnaissance-osint">
-          Module 22: Reconnaissance and OSINT
+          Lesson 22: Reconnaissance and OSINT
         </Link>
         , you go deep on Phase 1 — the systematic techniques professionals use to map an organisation's attack surface before touching a single target: certificate transparency, DNS enumeration, OSINT frameworks, and building a target profile that drives every subsequent phase.
       </Callout>

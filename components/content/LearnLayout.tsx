@@ -17,10 +17,6 @@ import { getPageMeta, NEXT_PAGES, getNextPages } from '@/data/navigation'
 import { useLessonNav } from '@/components/content/LessonNavContext'
 import { setLessonChrome } from '@/lib/lesson-chrome'
 import { recordLessonVisit, recordQuizPass, setLessonComplete, useProgress } from '@/lib/progress'
-import SQLSectionNav from '@/components/sql/SQLSectionNav'
-import DESectionNav from '@/components/data-engineering/DESectionNav'
-import PythonSectionNav from '@/components/python/PythonSectionNav'
-import HtmlCssSectionNav from '@/components/html-css/HtmlCssSectionNav'
 import { AIML_SECTIONS } from '@/data/aiml-curriculum'
 import { SQL_CURRICULUM } from '@/data/sql-freshcart'
 import { DS_CURRICULUM } from '@/data/datascience-streampulse'
@@ -177,17 +173,11 @@ export function LearnLayout({ children, title, description, section, readTime, u
   const pathname = usePathname()
   const sqlMatch = pathname.match(/^\/learn\/sql\/([^/]+)$/)
   const sqlSlug = sqlMatch ? sqlMatch[1] : null
-  const deMatch = pathname.match(/^\/learn\/data-engineering\/([^/]+)$/)
-  const deSlug = deMatch ? deMatch[1] : null
-  const pyMatch = pathname.match(/^\/learn\/python\/([^/]+)$/)
-  const pySlug = pyMatch ? pyMatch[1] : null
-  const htmlCssMatch = pathname.match(/^\/learn\/html-css\/([^/]+)$/)
-  const htmlCssSlug = htmlCssMatch ? htmlCssMatch[1] : null
   const dsMatch = pathname.match(/^\/learn\/data-science\/([^/]+)$/)
   const dsSlug = dsMatch ? dsMatch[1] : null
   const isAIML = pathname.startsWith('/learn/ai-ml/')
   const aimlModuleNum = isAIML ? getAIMLModuleNum(pathname) : null
-  const displaySection = aimlModuleNum ? `AI/ML — Module ${aimlModuleNum}` : section
+  const displaySection = aimlModuleNum ? `AI/ML — Lesson ${aimlModuleNum}` : section
   const lessonNav = useLessonNav()
   const prev = lessonNav?.prev ?? null
   const next = lessonNav?.next ?? null
@@ -224,14 +214,22 @@ export function LearnLayout({ children, title, description, section, readTime, u
       ) : (
         <ReadingProgress />
       )}
-      <div className="pt-16 min-h-screen" style={{ background: 'var(--bg)' }}>
+      {/* The root layout already pads <main> by 32px; together they clear the 64px header. */}
+      <div className="pt-8 min-h-screen" style={{ background: 'var(--bg)' }}>
 
         {/* Page header */}
         <div className="border-b" style={{ borderColor: 'var(--border)', background: 'var(--bg2)' }}>
           <div className="w-[96%] max-w-[2200px] mx-auto px-4 md:px-6 py-8">
-            {breadcrumbs && (
-              // On lessons the header carries the track and module from lg up.
-              <nav className={`flex items-center gap-1.5 text-xs font-mono mb-4 ${isLesson ? 'lg:hidden' : ''}`} style={{ color: 'var(--muted)' }}>
+            {lessonNav ? (
+              // The header carries the track and module from lg up; below that, this line does.
+              <nav aria-label="Breadcrumb" className="lg:hidden flex items-center gap-1.5 text-xs font-mono mb-4 min-w-0" style={{ color: 'var(--muted)' }}>
+                <Link href={lessonNav.context.trackHref} className="flex-shrink-0" style={{ color: 'var(--accent)' }}>{lessonNav.context.trackTitle}</Link>
+                {lessonNav.context.module && (
+                  <span className="flex items-center gap-1.5 min-w-0"><ChevronRight size={10} className="flex-shrink-0" /><span className="truncate">{lessonNav.context.module}</span></span>
+                )}
+              </nav>
+            ) : breadcrumbs && (
+              <nav className="flex items-center gap-1.5 text-xs font-mono mb-4" style={{ color: 'var(--muted)' }}>
                 <Link href="/" style={{ color: 'var(--accent)' }}>Home</Link>
                 {breadcrumbs.map(bc => (
                   <span key={bc.href} className="flex items-center gap-1.5">
@@ -243,7 +241,8 @@ export function LearnLayout({ children, title, description, section, readTime, u
               </nav>
             )}
             <div className="flex items-center gap-3 flex-wrap mb-2">
-              <span className="section-tag">{displaySection}</span>
+              {/* Lessons show their place once, in the header (breadcrumb below lg). */}
+              {!isLesson && <span className="section-tag">{displaySection}</span>}
               {diff && diffStyle && (
                 <span className="text-xs font-mono px-2.5 py-1 rounded-full"
                   style={{ background: diffStyle.bg, color: diffStyle.color, border: `1px solid ${diffStyle.border}` }}>
@@ -310,10 +309,6 @@ export function LearnLayout({ children, title, description, section, readTime, u
 
               {/* Page content */}
               <div className="prose-chaduvuko">
-                {sqlSlug && <SQLSectionNav slug={sqlSlug} />}
-                {deSlug && <DESectionNav slug={deSlug} />}
-                {pySlug && <PythonSectionNav slug={pySlug} />}
-                {htmlCssSlug && <HtmlCssSectionNav slug={htmlCssSlug} />}
                 {children}
               </div>
 

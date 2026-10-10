@@ -119,7 +119,7 @@ export default function SQLForDEModule() {
     <LearnLayout
       title="SQL for Data Engineers — Beyond the Basics"
       description="Window functions, CTEs, deduplication, NULL handling, and the queries every interview tests."
-      section="Data Engineering — Module 15"
+      section="Data Engineering — Lesson 15"
       readTime="80 min"
       updatedAt="August 2026"
     >
@@ -151,7 +151,7 @@ export default function SQLForDEModule() {
             fontSize: 14, fontWeight: 800, color: 'var(--text)',
             fontFamily: 'var(--font-display)', marginBottom: 14,
           }}>
-            Eight skills this module builds
+            Eight skills this lesson builds
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
             {[
@@ -1225,7 +1225,7 @@ SELECT * FROM orders FETCH FIRST 10 ROWS ONLY;     -- SQL standard`}</CodeBox>
           },
           {
             wrong: '"WHERE status != \'cancelled\' returns every non-cancelled row"',
-            right: 'Part 05 and this module\'s Interview Prep Q4 both walk through the same trap: because NULL != anything evaluates to NULL rather than TRUE, any row where status IS NULL is silently excluded from that filter — the query looks like it means "everything except cancelled" but actually means "everything except cancelled and anything with unknown status."',
+            right: 'Part 05 and this lesson\'s Interview Prep Q4 both walk through the same trap: because NULL != anything evaluates to NULL rather than TRUE, any row where status IS NULL is silently excluded from that filter — the query looks like it means "everything except cancelled" but actually means "everything except cancelled and anything with unknown status."',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
@@ -1268,7 +1268,7 @@ SELECT * FROM orders FETCH FIRST 10 ROWS ONLY;     -- SQL standard`}</CodeBox>
             dashboard. Requirements: daily revenue per store per category, with
             running month-to-date totals, day-over-day change, and store ranking
             within category. This is a complete production dbt model using every
-            pattern from this module.
+            pattern from this lesson.
           </Para>
 
           <SubSubTitle>Base and daily aggregation</SubSubTitle>
@@ -1340,7 +1340,7 @@ SELECT * FROM final
 ORDER BY order_date DESC, category, store_rank_in_category;`}</CodeBox>
 
           <Para>
-            This model uses every major pattern from this module: CTE chain for
+            This model uses every major pattern from this lesson: CTE chain for
             readability and testability, filter pushdown in the base CTE, window
             functions for running totals and rankings, LAG with COALESCE for safe
             day-over-day comparison, and a clean final JOIN to dimension attributes.
@@ -1475,7 +1475,7 @@ Use UNION (without ALL) only when you genuinely want to find the set of distinct
           },
           {
             q: 'Assuming SUM() or AVG() over a column with NULLs is equivalent to treating those NULLs as zero',
-            a: 'Part 05 is explicit that aggregate functions ignore NULLs rather than substituting zero — a revenue total can look "off by a suspiciously small amount" for months before anyone notices, which is exactly the failure mode in this module\'s Error Library\'s first entry.',
+            a: 'Part 05 is explicit that aggregate functions ignore NULLs rather than substituting zero — a revenue total can look "off by a suspiciously small amount" for months before anyone notices, which is exactly the failure mode in this lesson\'s Error Library\'s first entry.',
           },
           {
             q: 'Filtering with a plain != or NOT IN on a column that can contain NULL',
@@ -1483,7 +1483,7 @@ Use UNION (without ALL) only when you genuinely want to find the set of distinct
           },
           {
             q: 'Defaulting to UNION instead of UNION ALL when combining rows from multiple sources',
-            a: 'Part 06 and this module\'s Misconceptions section both flag the same risk — UNION\'s deduplication can silently drop a genuinely distinct record from one source that happens to match another source\'s row on every visible column, which is a real risk when combining payment data from multiple providers.',
+            a: 'Part 06 and this lesson\'s Misconceptions section both flag the same risk — UNION\'s deduplication can silently drop a genuinely distinct record from one source that happens to match another source\'s row on every visible column, which is a real risk when combining payment data from multiple providers.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
@@ -1576,10 +1576,10 @@ Use UNION (without ALL) only when you genuinely want to find the set of distinct
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 16 covers the Linux terminal for data engineers — navigating the file system, processing files with grep, awk, and sed, writing bash scripts, and monitoring running processes.
+          Lesson 16 covers the Linux terminal for data engineers — navigating the file system, processing files with grep, awk, and sed, writing bash scripts, and monitoring running processes.
         </p>
         <Link href="/learn/data-engineering/linux-shell" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 16 → Linux and Shell Scripting for Data Engineers
+          Lesson 16 → Linux and Shell Scripting for Data Engineers
         </Link>
       </div>
     </LearnLayout>

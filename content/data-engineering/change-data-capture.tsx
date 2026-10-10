@@ -119,7 +119,7 @@ export default function CDCModule() {
     <LearnLayout
       title="Change Data Capture (CDC) — Deep Dive"
       description="WAL internals, Debezium architecture, Schema Registry, the Outbox Pattern, event ordering, and operating CDC in production."
-      section="Data Engineering — Module 24"
+      section="Data Engineering — Lesson 24"
       readTime="70 min"
       updatedAt="August 2026"
     >
@@ -130,7 +130,7 @@ export default function CDCModule() {
         <SectionTitle>CDC From First Principles</SectionTitle>
 
         <Para>
-          Module 23 introduced CDC as one of three ingestion patterns. This module
+          Lesson 23 introduced CDC as one of three ingestion patterns. This lesson
           goes much deeper — the internal mechanics of the WAL, how Debezium turns
           binary log records into structured events, the Schema Registry contract
           that prevents breaking changes, the Outbox Pattern that solves dual-write
@@ -154,7 +154,7 @@ export default function CDCModule() {
             fontSize: 14, fontWeight: 800, color: 'var(--text)',
             fontFamily: 'var(--font-display)', marginBottom: 14,
           }}>
-            Eight topics this module covers in depth
+            Eight topics this lesson covers in depth
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
             {[
@@ -183,7 +183,7 @@ export default function CDCModule() {
         </HighlightBox>
 
         <TryThis>
-          Before reading further, try to answer from Module 23 alone: what does
+          Before reading further, try to answer from Lesson 23 alone: what does
           CDC capture that a nightly incremental job on <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>updated_at</code> cannot?
           Keep that answer in mind through Part 06 (ordering) and Part 10&rsquo;s
           Real World case — it&rsquo;s the same gap, seen from two different angles.
@@ -411,7 +411,7 @@ DELIVERY GUARANTEE:
 
         <Output>{`The "\${file:...}" syntax above is genuine Kafka Connect config-provider
 syntax — it resolves the password from a local properties file at runtime,
-not a template bug. This is one of the few places in this module where
+not a template bug. This is one of the few places in this lesson where
 "\${" is correct as written.`}</Output>
 
         <SubSubTitle>Snapshot mode, topic naming, and serialization</SubSubTitle>
@@ -1091,11 +1091,11 @@ FAILURE 5: Schema change breaks the consumer
         {[
           {
             wrong: '"CDC guarantees events arrive at consumers in the order they happened"',
-            right: 'Part 06 draws the line precisely: ordering is guaranteed only within a single Kafka partition for a given primary key — never across tables, never across partitions. This module\'s Interview Prep Q3 walks through exactly this misconception causing an order-cancelled event to be processed before order-delivered.',
+            right: 'Part 06 draws the line precisely: ordering is guaranteed only within a single Kafka partition for a given primary key — never across tables, never across partitions. This lesson\'s Interview Prep Q3 walks through exactly this misconception causing an order-cancelled event to be processed before order-delivered.',
           },
           {
             wrong: '"Schema Registry is optional infrastructure — you can add it later once CDC is stable"',
-            right: 'Part 04 is explicit that without it, any source schema change silently breaks whatever consumer code was written against the old message shape. This module\'s Error Library shows the version of this failure that happens without a Registry catching it first: consumers crash in production with a confusing deserialization error instead of the connector pausing safely.',
+            right: 'Part 04 is explicit that without it, any source schema change silently breaks whatever consumer code was written against the old message shape. This lesson\'s Error Library shows the version of this failure that happens without a Registry catching it first: consumers crash in production with a confusing deserialization error instead of the connector pausing safely.',
           },
           {
             wrong: '"The Outbox Pattern is over-engineering — just publish to Kafka right after the database write"',
@@ -1103,11 +1103,11 @@ FAILURE 5: Schema change breaks the consumer
           },
           {
             wrong: '"A replication slot is Debezium\'s internal bookkeeping, not something to actively monitor"',
-            right: 'Part 09\'s monitoring section and this module\'s Error Library agree: an unmonitored slot doesn\'t just fall behind quietly — the source database itself keeps accumulating WAL until disk fills, which can crash the production database, not merely the CDC pipeline.',
+            right: 'Part 09\'s monitoring section and this lesson\'s Error Library agree: an unmonitored slot doesn\'t just fall behind quietly — the source database itself keeps accumulating WAL until disk fills, which can crash the production database, not merely the CDC pipeline.',
           },
           {
             wrong: '"Since Debezium reads the WAL, before-images are always available for every table automatically"',
-            right: 'This module\'s Interview Prep Q2 and Q5 both flag the actual requirement — PostgreSQL only records full before-images when REPLICA IDENTITY FULL is explicitly set on the table; by default only primary-key columns appear in the before image, which is not enough for audit trails or GDPR erasure verification.',
+            right: 'This lesson\'s Interview Prep Q2 and Q5 both flag the actual requirement — PostgreSQL only records full before-images when REPLICA IDENTITY FULL is explicitly set on the table; by default only primary-key columns appear in the before image, which is not enough for audit trails or GDPR erasure verification.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
@@ -1331,7 +1331,7 @@ The entire pipeline from application deletion to warehouse erasure completes in 
         {[
           {
             q: 'Joining across two CDC topics directly inside the consumer to enforce business logic ordering',
-            a: 'Part 06 is explicit that ordering is only guaranteed within a single Kafka partition for one primary key — never across topics. The correct pattern, used throughout this module, is to let each stream write to its own Silver table and let dbt do the cross-table join in SQL, which is naturally order-independent.',
+            a: 'Part 06 is explicit that ordering is only guaranteed within a single Kafka partition for one primary key — never across topics. The correct pattern, used throughout this lesson, is to let each stream write to its own Silver table and let dbt do the cross-table join in SQL, which is naturally order-independent.',
           },
           {
             q: 'Assuming the before image is always populated for every UPDATE and DELETE event',
@@ -1339,11 +1339,11 @@ The entire pipeline from application deletion to warehouse erasure completes in 
           },
           {
             q: 'Writing plain INSERT statements in a CDC consumer instead of an upsert',
-            a: 'Part 03 is explicit that Debezium is at-least-once delivery — a connector restart can and will re-emit already-published events. This module\'s Error Library shows exactly what that produces with plain INSERT: duplicate rows with the same order_id and different statuses after a restart.',
+            a: 'Part 03 is explicit that Debezium is at-least-once delivery — a connector restart can and will re-emit already-published events. This lesson\'s Error Library shows exactly what that produces with plain INSERT: duplicate rows with the same order_id and different statuses after a restart.',
           },
           {
             q: 'Treating a growing replication slot lag as a Kafka-side problem only',
-            a: 'Part 09\'s monitoring section and this module\'s Error Library both make the same point: the WAL that an unconsumed slot retains lives on the SOURCE PostgreSQL server, not in Kafka — so unresolved lag risks filling the production database\'s own disk, not just delaying the pipeline.',
+            a: 'Part 09\'s monitoring section and this lesson\'s Error Library both make the same point: the WAL that an unconsumed slot retains lives on the SOURCE PostgreSQL server, not in Kafka — so unresolved lag risks filling the production database\'s own disk, not just delaying the pipeline.',
           },
           {
             q: 'Deploying a source schema change (renaming or dropping a column) without coordinating with the CDC team first',
@@ -1440,10 +1440,10 @@ The entire pipeline from application deletion to warehouse erasure completes in 
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 25 builds a complete batch pipeline from scratch — extract, validate, transform, load, checkpoint — with full working Python code and every production decision explained as it is made.
+          Lesson 25 builds a complete batch pipeline from scratch — extract, validate, transform, load, checkpoint — with full working Python code and every production decision explained as it is made.
         </p>
         <Link href="/learn/data-engineering/batch-pipeline-from-scratch" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 25 → Building a Batch Pipeline From Scratch
+          Lesson 25 → Building a Batch Pipeline From Scratch
         </Link>
       </div>
     </LearnLayout>

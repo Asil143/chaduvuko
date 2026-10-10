@@ -173,6 +173,12 @@
     padding-top: 2.5rem;
     border-top: 1px solid var(--border);
   }
+  /* The first heading opens the article; no rule or gap above it. */
+  .prose-chaduvuko > h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
   .prose-chaduvuko h3 {
     font-family: 'Syne', sans-serif;
     font-weight: 600;

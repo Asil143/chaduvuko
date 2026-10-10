@@ -73,7 +73,7 @@ export default function QueryBestPractices() {
     <LearnLayout
       title="Query Best Practices"
       description="Write clean, fast, readable SQL your team will thank you for — SARGability, avoiding SELECT *, NULL handling, and formatting conventions"
-      section="SQL — Module 59"
+      section="SQL — Lesson 59"
       readTime="14–18 min"
       updatedAt="April 2026"
     >
@@ -83,7 +83,7 @@ export default function QueryBestPractices() {
 
       <P>Bad SQL is not just ugly — it is slow, hard to debug, and breaks in unexpected ways when the dataset grows. Most of the worst-performing queries in production share a small set of anti-patterns: functions applied to indexed columns, vague column selection, missing aliases, and ambiguous NULLs. Learning to recognize and avoid these patterns will make your queries 10x faster and your code 10x easier to review.</P>
 
-      <P>This module covers the patterns senior engineers check for in every SQL code review. They are not stylistic preferences — most of them have direct, measurable performance implications.</P>
+      <P>This lesson covers the patterns senior engineers check for in every SQL code review. They are not stylistic preferences — most of them have direct, measurable performance implications.</P>
 
       <SQLPlayground
         initialQuery={`-- The FreshCart dataset we will optimize queries against
@@ -625,7 +625,7 @@ ORDER BY c.loyalty_tier DESC, c.first_name;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Rewrite the following poorly-written query using all best practices from this module: SELECT *, (SELECT COUNT(*) FROM order_items WHERE order_items.order_id = orders.order_id) as item_count FROM orders WHERE strftime('%Y', order_date) = '2024' AND order_status = 'Delivered'. Fix: (1) remove SELECT *, specify needed columns; (2) fix the non-SARGable date filter; (3) replace the correlated COUNT(*) subquery with a JOIN + GROUP BY; (4) use proper aliases and formatting."
+        question="Rewrite the following poorly-written query using all best practices from this lesson: SELECT *, (SELECT COUNT(*) FROM order_items WHERE order_items.order_id = orders.order_id) as item_count FROM orders WHERE strftime('%Y', order_date) = '2024' AND order_status = 'Delivered'. Fix: (1) remove SELECT *, specify needed columns; (2) fix the non-SARGable date filter; (3) replace the correlated COUNT(*) subquery with a JOIN + GROUP BY; (4) use proper aliases and formatting."
         hint="Change strftime('%Y', order_date) = '2024' to order_date >= '2024-01-01' AND order_date < '2025-01-01'. Replace the correlated subquery with JOIN order_items ... GROUP BY. Select specific columns with table-qualified aliases."
         answer={`-- Original (bad):
 -- SELECT *, (SELECT COUNT(*) FROM order_items
@@ -679,10 +679,10 @@ ORDER BY o.order_date DESC, o.total_amount DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 60</strong>, you apply everything to real data analysis — cohort analysis, RFM segmentation, and revenue breakdowns using the full FreshCart dataset.
+          In <strong>Lesson 60</strong>, you apply everything to real data analysis — cohort analysis, RFM segmentation, and revenue breakdowns using the full FreshCart dataset.
         </p>
         <Link href="/learn/sql/sql-for-data-analysis" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 60 → SQL for Data Analysis
+          Lesson 60 → SQL for Data Analysis
         </Link>
       </div>
 

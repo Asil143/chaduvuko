@@ -102,7 +102,7 @@ export default function Subqueries() {
     <LearnLayout
       title="Subqueries"
       description="Queries inside queries — scalar subqueries in SELECT, subqueries in WHERE and FROM, correlated subqueries, and when to use each type versus a JOIN or CTE"
-      section="SQL — Module 36"
+      section="SQL — Lesson 36"
       readTime="14–20 min"
       updatedAt="April 2026"
     >
@@ -112,7 +112,7 @@ export default function Subqueries() {
 
       <P>A subquery is a SELECT statement nested inside another SQL statement. The outer query treats the subquery's result as if it were a table, a single value, or a list — depending on where the subquery appears and what it returns. The database executes the inner query first, then uses the result to evaluate the outer query.</P>
 
-      <P>Subqueries solve a specific class of problem: queries that need data computed from one query in order to filter, compute, or define the scope of another. They are the mechanism for <Hl>composing queries</Hl> — building complex analysis from simpler pieces. Understanding where subqueries can appear and what each placement means is the entire substance of this module.</P>
+      <P>Subqueries solve a specific class of problem: queries that need data computed from one query in order to filter, compute, or define the scope of another. They are the mechanism for <Hl>composing queries</Hl> — building complex analysis from simpler pieces. Understanding where subqueries can appear and what each placement means is the entire substance of this lesson.</P>
 
       <CodeBlock
         label="Subquery anatomy"
@@ -689,7 +689,7 @@ ORDER BY p.category, p.unit_price DESC;`}
 
       <P>Subqueries, JOINs, and CTEs often produce the same result. Choosing between them is about readability, performance, and reuse.</P>
 
-      <P>CTEs (the WITH clause) get their own deep dive in Module 55 — for now, just know a CTE names a subquery so it can be referenced by name later in the query, similar to a derived table.</P>
+      <P>CTEs (the WITH clause) get their own deep dive in Lesson 55 — for now, just know a CTE names a subquery so it can be referenced by name later in the query, similar to a derived table.</P>
 
       <div style={{ overflowX: 'auto', margin: '20px 0 32px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
@@ -1056,10 +1056,10 @@ ORDER BY p.category, total_revenue DESC NULLS LAST;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 37</strong>, you learn correlated subqueries in depth — every pattern, performance implications, and when to rewrite them as window functions or JOINs for production-scale queries.
+          In <strong>Lesson 37</strong>, you learn correlated subqueries in depth — every pattern, performance implications, and when to rewrite them as window functions or JOINs for production-scale queries.
         </p>
         <Link href="/learn/sql/correlated-subqueries" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 37 → Correlated Subqueries
+          Lesson 37 → Correlated Subqueries
         </Link>
       </div>
 

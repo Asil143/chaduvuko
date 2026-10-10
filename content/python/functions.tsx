@@ -77,7 +77,7 @@ export default function Functions() {
     <LearnLayout
       title="Functions — Defining, Parameters, Return Values"
       description="def syntax, parameters vs arguments, default argument values and the mutable-default trap, *args/**kwargs, return values, docstrings, and the basics of scope."
-      section="Python — Module 07"
+      section="Python — Lesson 07"
       readTime="55 min"
       updatedAt="August 2026"
     >
@@ -90,7 +90,7 @@ export default function Functions() {
         <Para>
           A function is a named, reusable block of code. You have already been calling functions
           constantly — <code>print()</code>, <code>len()</code>, <code>range()</code> — without writing
-          them yourself. This module is about writing your own. The motivation is one of the oldest
+          them yourself. This lesson is about writing your own. The motivation is one of the oldest
           ideas in programming, usually shortened to <strong>DRY</strong>: Don&apos;t Repeat Yourself. Any
           time you find yourself copying and pasting a block of logic with only small tweaks, that block
           is a strong candidate to become a function.
@@ -281,7 +281,7 @@ log_event("user_login", "192.168.1.1", "mobile", level="WARNING", user_id=42, re
         <Callout type="info">
           You will use <code>*args</code>/<code>**kwargs</code> more as a reader than a writer at first
           — they show up constantly in library and framework code that needs to accept flexible,
-          forward-compatible arguments (wrapper functions, decorators — covered in full in Module 29 —
+          forward-compatible arguments (wrapper functions, decorators — covered in full in Lesson 29 —
           and many popular libraries you will use later in this track). Recognising the syntax now means
           you will not be confused the first time you see it in someone else&apos;s code.
         </Callout>
@@ -360,7 +360,7 @@ print(result)     # (4, 42)`}</CodeBox>
           creates a tuple — the parentheses around a tuple are usually optional. This "returning multiple
           values" pattern is really just a function returning a tuple, and the caller unpacking it into
           separate names in one line — the same unpacking mechanic you will see formalised for tuples
-          specifically in Module 09.
+          specifically in Lesson 09.
         </Para>
 
         <SubTitle>return exits immediately — code after it in the same block never runs</SubTitle>
@@ -494,7 +494,7 @@ print(counter)         # 2 — the global itself was actually modified`}</CodeBo
           above happens — but in most real code, passing values in as parameters and getting results back
           via <code>return</code> is the better default. Full scope rules — including how nested functions
           resolve names through enclosing scopes — get their own dedicated treatment in the Closures and
-          Scope module (Module 31) later in this track; this is deliberately just the foundation.
+          Scope module (Lesson 31) later in this track; this is deliberately just the foundation.
         </Callout>
       </section>
 
@@ -784,7 +784,7 @@ print(counter)         # 2 — the global itself was actually modified`}</CodeBo
         'A function can only formally return one value, but that value can be a tuple, which Python\'s unpacking syntax makes feel like returning multiple values.',
         'Docstrings are string literals placed as the first line inside a function, accessible via help() and function.__doc__ — unlike a regular comment.',
         'Variables created inside a function are local — they do not exist outside it. Functions can read global variables freely, but need the global keyword to assign to one.',
-        'Full scope rules, including nested functions and closures, get a dedicated module (31) later in this track — this module is deliberately just the foundation.',
+        'Full scope rules, including nested functions and closures, get a dedicated module (31) later in this track — this lesson is deliberately just the foundation.',
       ]} />
 
       {/* ── Next Module CTA ── */}
@@ -793,12 +793,12 @@ print(counter)         # 2 — the global itself was actually modified`}</CodeBo
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 08 covers lists in depth — the workhorse data structure of Python — indexing, slicing,
-          every common method, and the mutability behaviour this module&apos;s mutable-default trap was
+          Lesson 08 covers lists in depth — the workhorse data structure of Python — indexing, slicing,
+          every common method, and the mutability behaviour this lesson&apos;s mutable-default trap was
           really foreshadowing.
         </p>
         <Link href="/learn/python/lists" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 08 → Lists — Creation, Indexing, Methods
+          Lesson 08 → Lists — Creation, Indexing, Methods
         </Link>
       </div>
     </LearnLayout>

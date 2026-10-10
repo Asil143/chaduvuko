@@ -77,7 +77,7 @@ export default function Decorators() {
     <LearnLayout
       title="Decorators — Writing and Using Them"
       description="Functions that wrap functions. How decorators actually work, and writing your own from scratch."
-      section="Python — Module 29"
+      section="Python — Lesson 29"
       readTime="45 min"
       updatedAt="August 2026"
     >
@@ -161,7 +161,7 @@ greet()   # identical output to Part 01`}</CodeBox>
         <Para>
           The <code>loud</code> example above only works on functions that take no arguments and return
           nothing — useless for real code. A proper decorator uses <code>*args</code> and{' '}
-          <code>**kwargs</code> (covered in the previous module) so it can wrap <em>any</em> function
+          <code>**kwargs</code> (covered in the previous lesson) so it can wrap <em>any</em> function
           signature, and it must explicitly return whatever the wrapped function returns.
         </Para>
 
@@ -397,7 +397,7 @@ get_route_info("JFK", "LAX")   # ~0ms  — cache hit, returns the stored result 
             storing results, evicting the oldest entries once <code>maxsize</code> is reached — is
             completely generic and has nothing to do with flight routes specifically.{' '}
             <code>lru_cache</code> is itself just a decorator, written using exactly the pattern covered
-            in this module, and applying it required changing precisely one line, with zero changes to{' '}
+            in this lesson, and applying it required changing precisely one line, with zero changes to{' '}
             <code>get_route_info</code>'s own logic. This is the real payoff of decorators: cross-cutting
             behaviour (caching, logging, timing, retries, access control) added without touching the
             function's actual implementation at all.
@@ -427,7 +427,7 @@ get_route_info("JFK", "LAX")   # ~0ms  — cache hit, returns the stored result 
           },
           {
             wrong: '"A decorator can only wrap a function that takes no arguments, or a fixed signature"',
-            right: 'A properly written decorator using *args and **kwargs in its wrapper works on ANY function signature — the whole point of *args/**kwargs (covered in the previous module) is enabling exactly this kind of fully generic forwarding.',
+            right: 'A properly written decorator using *args and **kwargs in its wrapper works on ANY function signature — the whole point of *args/**kwargs (covered in the previous lesson) is enabling exactly this kind of fully generic forwarding.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -613,11 +613,11 @@ get_route_info("JFK", "LAX")   # ~0ms  — cache hit, returns the stored result 
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 30 covers context managers and the with statement — what with is actually doing under
+          Lesson 30 covers context managers and the with statement — what with is actually doing under
           the hood, and building your own for resource management.
         </p>
         <Link href="/learn/python/context-managers" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 30 → Context Managers and the with Statement
+          Lesson 30 → Context Managers and the with Statement
         </Link>
       </div>
     </LearnLayout>

@@ -59,7 +59,7 @@ export default function Module20() {
     <LearnLayout
       title="Secure Coding — Building Software That Does Not Break Under Attack"
       description="Input validation, output encoding, parameterised queries, secrets management, dependency hygiene, SAST/DAST in CI/CD, and threat modelling — the complete developer security toolkit."
-      section="Cybersecurity — Module 20"
+      section="Cybersecurity — Lesson 20"
       readTime="34 min"
       updatedAt="May 2026"
     >
@@ -71,10 +71,10 @@ export default function Module20() {
         </P>
         <P>
           Security is not a layer you bolt on after the feature is built. It is a set of habits that cost almost nothing when practiced from the start and enormous amounts when ignored.
-          This module teaches those habits: the precise techniques that prevent the vulnerability classes attackers exploit most — SQL injection, XSS, broken authentication, secrets leakage, vulnerable dependencies — and the tooling that catches what human review misses.
+          This lesson teaches those habits: the precise techniques that prevent the vulnerability classes attackers exploit most — SQL injection, XSS, broken authentication, secrets leakage, vulnerable dependencies — and the tooling that catches what human review misses.
         </P>
         <Callout type="info">
-          This module targets developers who want to write secure code and security engineers who review it. No prior security expertise required — every concept builds from first principles.
+          This lesson targets developers who want to write secure code and security engineers who review it. No prior security expertise required — every concept builds from first principles.
         </Callout>
       </Part>
 
@@ -1070,7 +1070,7 @@ def audit_log(event: str, user_id: str | None, details: dict, outcome: str):
       <Callout type="info">
         Secure coding is the defensive foundation — you understand how vulnerabilities are born and prevented. In{' '}
         <Link href="/learn/cybersecurity/penetration-testing-methodology">
-          Module 21: Penetration Testing Methodology
+          Lesson 21: Penetration Testing Methodology
         </Link>
         , you switch to the offensive side: how professional pentesters plan and execute engagements, the five-phase methodology, rules of engagement, scoping, reporting, and the legal and ethical framework that separates authorised security testing from criminal hacking.
       </Callout>

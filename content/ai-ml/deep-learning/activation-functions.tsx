@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Activation Functions and Loss Functions — Chaduvuko',
@@ -178,7 +177,6 @@ export default function ActivationFunctionsPage() {
       readTime="26–34 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="deep-learning" topic="activation-functions" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -960,7 +958,7 @@ print("network capacity is much smaller than the parameter count suggests.")`} /
         <ConceptBox title="Myth: MSE is a safe, general-purpose loss — it always measures 'how wrong' a prediction is, so it works for any task" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
             MSE measures squared distance from a target value, which is the right question for
-            regression and the wrong question for classification. As this module's errors section
+            regression and the wrong question for classification. As this lesson's errors section
             shows directly: MSE on a binary problem is minimised by outputting the class mean (say 0.3
             for a 30% positive rate) for every single input, because that constant genuinely minimises
             average squared error — the loss trains successfully by every metric except the one that
@@ -983,7 +981,7 @@ print("network capacity is much smaller than the parameter count suggests.")`} /
 
         <ConceptBox title="Myth: Once you've chosen a 'good' activation function, the loss function is a secondary detail" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            The two choices are coupled, not independent — this module's entire decision-guide table
+            The two choices are coupled, not independent — this lesson's entire decision-guide table
             exists because getting one right without the other still breaks training. Using GELU in
             every hidden layer does nothing to fix a classifier trained with MSELoss; using the correct
             CrossEntropyLoss does nothing to fix a network that saturates because its output layer
@@ -1078,7 +1076,7 @@ print("network capacity is much smaller than the parameter count suggests.")`} /
         <p style={S.p}>
           You now know what a neuron computes (activation functions)
           and what the network minimises (loss functions).
-          Module 44 covers the final missing piece of the training loop:
+          Lesson 44 covers the final missing piece of the training loop:
           optimisers. SGD takes the same step size for every weight.
           Adam adapts the step size per weight based on gradient history.
           AdamW adds proper weight decay. Momentum accumulates direction.
@@ -1097,7 +1095,7 @@ print("network capacity is much smaller than the parameter count suggests.")`} /
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 44 · Deep Learning
+              Next — Lesson 44 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

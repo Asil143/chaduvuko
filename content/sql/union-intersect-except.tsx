@@ -107,7 +107,7 @@ export default function UnionIntersectExcept() {
     <LearnLayout
       title="UNION, INTERSECT, and EXCEPT"
       description="Combine result sets vertically — stack rows from multiple queries, find common rows, subtract one set from another, and every rule about column matching, deduplication, and ordering"
-      section="SQL — Module 39"
+      section="SQL — Lesson 39"
       readTime="12–16 min"
       updatedAt="April 2026"
     >
@@ -397,7 +397,7 @@ ORDER BY category, brand;`}
       />
 
       <Callout type="info">
-        The UNION ALL + totals pattern is a manual alternative to ROLLUP (covered in Module 28). ROLLUP is more concise for standard hierarchical totals. UNION ALL gives more control when you need custom labels, different formatting, or non-standard aggregation levels.
+        The UNION ALL + totals pattern is a manual alternative to ROLLUP (covered in Lesson 28). ROLLUP is more concise for standard hierarchical totals. UNION ALL gives more control when you need custom labels, different formatting, or non-standard aggregation levels.
       </Callout>
 
       <HR />
@@ -678,7 +678,7 @@ ORDER BY availability, revenue DESC;`}
 
       <H>Full UNION pipeline report — all order statuses in one view</H>
 
-      <P>The query below opens with a <Hl>CTE</Hl> (the WITH clause) — you'll learn CTEs properly in Module 55; for now, just know it names a subquery so it can be referenced by name later in the query.</P>
+      <P>The query below opens with a <Hl>CTE</Hl> (the WITH clause) — you'll learn CTEs properly in Lesson 55; for now, just know it names a subquery so it can be referenced by name later in the query.</P>
 
       <SQLPlayground
         initialQuery={`-- Complete order status summary — one row per status
@@ -1005,10 +1005,10 @@ ORDER BY category;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 40</strong>, you learn derived tables in depth — subqueries in FROM as building blocks for multi-step analytics, the rules for aliasing and referencing, and when a derived table beats a CTE.
+          In <strong>Lesson 40</strong>, you learn derived tables in depth — subqueries in FROM as building blocks for multi-step analytics, the rules for aliasing and referencing, and when a derived table beats a CTE.
         </p>
         <Link href="/learn/sql/derived-tables" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 40 → Derived Tables
+          Lesson 40 → Derived Tables
         </Link>
       </div>
 

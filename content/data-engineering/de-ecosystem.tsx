@@ -123,7 +123,7 @@ export default function DEEcosystemModule() {
     <LearnLayout
       title="The Data Engineering Ecosystem — Map of All the Tools"
       description="Every tool category, what it solves, and how they all connect."
-      section="Data Engineering — Module 04"
+      section="Data Engineering — Lesson 04"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -190,7 +190,7 @@ export default function DEEcosystemModule() {
         </HighlightBox>
 
         <Callout type="info">
-          <strong>What this module is and is not.</strong> This module gives you the complete
+          <strong>What this lesson is and is not.</strong> This lesson gives you the complete
           map — every category, what it solves, which tools belong in it, and how categories
           connect. It is deliberately not a deep tutorial on any single tool. Each category
           gets its own dedicated module or track. Here you are building the mental architecture
@@ -754,7 +754,7 @@ Why the date= prefix matters (Hive-style partitioning):
             <Para>
               Data warehouses are columnar SQL databases engineered for analytical queries.
               They are where Gold layer data lives and where business analysts, dashboards,
-              and BI tools connect. We covered columnar storage in Module 03 — here we
+              and BI tools connect. We covered columnar storage in Lesson 03 — here we
               focus on the architectural differences between warehouses.
             </Para>
 
@@ -1377,7 +1377,7 @@ I would not implement a table format (Delta Lake, Iceberg) or a formal data qual
         {[
           {
             q: 'Trying to learn every tool in every category before applying for jobs',
-            a: 'Part 01\'s hiring-manager framing and this module\'s Misconceptions section both make the same point: a job posting listing twenty tools is testing category understanding, not tool-by-tool memorisation. Pick one representative tool per category (Part 02) that matters for your target roles and go deep on those, not shallow on all twenty.',
+            a: 'Part 01\'s hiring-manager framing and this lesson\'s Misconceptions section both make the same point: a job posting listing twenty tools is testing category understanding, not tool-by-tool memorisation. Pick one representative tool per category (Part 02) that matters for your target roles and go deep on those, not shallow on all twenty.',
           },
           {
             q: 'Reaching for Apache Spark by default because it sounds like the "serious" choice for a resume',
@@ -1393,7 +1393,7 @@ I would not implement a table format (Delta Lake, Iceberg) or a formal data qual
           },
           {
             q: 'Treating object storage and a data warehouse as redundant, and trying to pick only one',
-            a: 'Interview Prep Q3 and this module\'s Misconceptions section both explain why mature platforms use both deliberately — cheap unlimited raw storage in the lake, fast analytical SQL in the warehouse — rather than treating one as strictly superior to the other.',
+            a: 'Interview Prep Q3 and this lesson\'s Misconceptions section both explain why mature platforms use both deliberately — cheap unlimited raw storage in the lake, fast analytical SQL in the warehouse — rather than treating one as strictly superior to the other.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1491,10 +1491,10 @@ I would not implement a table format (Delta Lake, Iceberg) or a formal data qual
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 05 draws permanent, clear boundaries between data engineers, analysts, scientists, and ML engineers — who does what, where each role ends, and which one matches what you want to build.
+          Lesson 05 draws permanent, clear boundaries between data engineers, analysts, scientists, and ML engineers — who does what, where each role ends, and which one matches what you want to build.
         </p>
         <Link href="/learn/data-engineering/de-vs-other-roles" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 05 → Data Engineer vs Analyst vs Scientist vs ML Engineer
+          Lesson 05 → Data Engineer vs Analyst vs Scientist vs ML Engineer
         </Link>
       </div>
     </LearnLayout>

@@ -5,7 +5,7 @@ export default function SemiStructuredData() {
     <LearnLayout
       title="Semi-Structured Data: VARIANT, JSON, FLATTEN"
       description="Load and query JSON in Snowflake with VARIANT, OBJECT, ARRAY, path notation, casting, LATERAL FLATTEN, schema drift handling, and production modeling patterns."
-      section="Snowflake — Module 06"
+      section="Snowflake — Lesson 06"
       readTime="70 min"
       updatedAt="September 2026"
       breadcrumbs={[

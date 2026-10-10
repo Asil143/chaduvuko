@@ -78,7 +78,7 @@ export default function Distinct() {
     <LearnLayout
       title="Removing Duplicates — DISTINCT"
       description="Return only unique values, understand how DISTINCT works across single and multiple columns, its performance cost, and when to use GROUP BY instead"
-      section="SQL — Module 10"
+      section="SQL — Lesson 10"
       readTime="7–10 min"
       updatedAt="April 2026"
     >
@@ -228,7 +228,7 @@ ORDER BY category, sub_category;`}
       <P>Consider DISTINCT city, loyalty_tier on a customers table with 20 rows. There are 7 distinct cities and 4 distinct tiers. The number of distinct combinations is NOT 7 + 4 = 11. It is however many unique city-tier pairs actually appear in the data — some cities might have customers at all four tiers, others might only have Bronze and Silver customers. DISTINCT returns only the combinations that genuinely exist.</P>
 
       <Callout type="info">
-        DISTINCT applies to the entire SELECT list as a unit. You cannot write SELECT DISTINCT city, first_name and expect DISTINCT to only deduplicate on city while returning all first_names. DISTINCT always operates on the full combination of all listed columns. If you want unique cities with one representative name per city, you need GROUP BY — covered in Module 28.
+        DISTINCT applies to the entire SELECT list as a unit. You cannot write SELECT DISTINCT city, first_name and expect DISTINCT to only deduplicate on city while returning all first_names. DISTINCT always operates on the full combination of all listed columns. If you want unique cities with one representative name per city, you need GROUP BY — covered in Lesson 28.
       </Callout>
 
       <HR />
@@ -288,7 +288,7 @@ ORDER BY category;`}
       {/* ── PART 06 ── */}
       <Part n="06" title="COUNT DISTINCT — Counting Unique Values" />
 
-      <P>One of the most common analytical questions is not "what are the unique values?" but "how many unique values are there?" For this, SQL provides <Hl>COUNT(DISTINCT column)</Hl> — it counts the number of distinct non-null values in a column. COUNT() is an aggregate function — it collapses many rows into a single summary value, a fundamentally different kind of query from anything you've written so far; aggregate functions are covered fully in Module 27, but this one is simple enough to use now.</P>
+      <P>One of the most common analytical questions is not "what are the unique values?" but "how many unique values are there?" For this, SQL provides <Hl>COUNT(DISTINCT column)</Hl> — it counts the number of distinct non-null values in a column. COUNT() is an aggregate function — it collapses many rows into a single summary value, a fundamentally different kind of query from anything you've written so far; aggregate functions are covered fully in Lesson 27, but this one is simple enough to use now.</P>
 
       <SQLPlayground
         initialQuery={`-- How many distinct cities do our customers come from?
@@ -388,7 +388,7 @@ GROUP BY city
 ORDER BY city;`}
       />
 
-      <P>When they diverge is when you want to <Hl>calculate something per unique value</Hl>. DISTINCT cannot do this — it only removes duplicates. GROUP BY can aggregate: count how many customers per city, sum revenue per store, find the average price per category. You will learn GROUP BY fully in Module 28, but here is the key distinction:</P>
+      <P>When they diverge is when you want to <Hl>calculate something per unique value</Hl>. DISTINCT cannot do this — it only removes duplicates. GROUP BY can aggregate: count how many customers per city, sum revenue per store, find the average price per category. You will learn GROUP BY fully in Lesson 28, but here is the key distinction:</P>
 
       <CodeBlock
         label="DISTINCT vs GROUP BY — the key difference"
@@ -432,7 +432,7 @@ ORDER BY customer_count DESC;
       <P>Experienced SQL writers know that DISTINCT in a complex query — especially a query with JOINs — is often a sign that something else is wrong. If a JOIN is producing more rows than expected (a fan-out from a one-to-many relationship), adding DISTINCT might mask the problem rather than fix it. Before reaching for DISTINCT, ask: <Hl>why are there duplicates?</Hl> If the answer is "my JOIN is returning more rows than I expect," fix the JOIN rather than hiding the extra rows with DISTINCT.</P>
 
       <Callout type="warning">
-        SELECT DISTINCT in a query with JOIN is a red flag. It often means the JOIN is creating a cartesian product or joining on a non-unique key, producing duplicate rows. DISTINCT hides this but does not fix it — and it adds a significant performance cost. Investigate the source of duplicates and fix the JOIN condition instead. You will learn JOIN in depth in Modules 30–35.
+        SELECT DISTINCT in a query with JOIN is a red flag. It often means the JOIN is creating a cartesian product or joining on a non-unique key, producing duplicate rows. DISTINCT hides this but does not fix it — and it adds a significant performance cost. Investigate the source of duplicates and fix the JOIN condition instead. You will learn JOIN in depth in Lessons 30–35.
       </Callout>
 
       <HR />
@@ -563,12 +563,12 @@ WHERE in_stock = true;`}
       />
 
       <TimeBlock time="11:15 AM" label="Query 3 — brands across multiple categories">
-        Brands that appear in more than one category need a "multi-category" flag in the UI. This requires COUNT DISTINCT per brand — a GROUP BY query (preview of Module 28).
+        Brands that appear in more than one category need a "multi-category" flag in the UI. This requires COUNT DISTINCT per brand — a GROUP BY query (preview of Lesson 28).
       </TimeBlock>
 
       <SQLPlayground
         initialQuery={`-- Brands that appear in more than one category
--- Uses GROUP BY + HAVING (preview of Modules 28-29)
+-- Uses GROUP BY + HAVING (preview of Lessons 28-29)
 SELECT brand, COUNT(DISTINCT category) AS category_count
 FROM products
 WHERE in_stock = true
@@ -701,10 +701,10 @@ ORDER BY city, store_id;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 11</strong>, you master NULL values completely — what NULL means, why it behaves differently from every other value, how it propagates through calculations and comparisons, and every technique for handling it correctly in your queries.
+          In <strong>Lesson 11</strong>, you master NULL values completely — what NULL means, why it behaves differently from every other value, how it propagates through calculations and comparisons, and every technique for handling it correctly in your queries.
         </p>
         <Link href="/learn/sql/null-values" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 11 → Working with NULL Values
+          Lesson 11 → Working with NULL Values
         </Link>
       </div>
 

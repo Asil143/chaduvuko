@@ -77,7 +77,7 @@ export default function CrossBrowserCompatibilityDebugging() {
     <LearnLayout
       title="Cross-Browser Compatibility & Debugging"
       description="Vendor prefixes, feature detection, DevTools workflows, and debugging the CSS bug that only shows up in one browser."
-      section="HTML & CSS — Module 39"
+      section="HTML & CSS — Lesson 39"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -108,7 +108,7 @@ export default function CrossBrowserCompatibilityDebugging() {
         </Para>
 
         <Callout type="info">
-          This module is not a list of "browser X is broken, browser Y is broken" trivia to memorize — it
+          This lesson is not a list of "browser X is broken, browser Y is broken" trivia to memorize — it
           is a set of tools and a workflow (feature detection, DevTools, a systematic debugging process)
           that lets you diagnose a compatibility problem you have never seen before, on a browser
           combination nobody wrote a blog post about. That workflow is the actual skill; specific quirks
@@ -690,7 +690,7 @@ click any number to edit it live and see the layout update instantly.`}</CodeBox
           },
           {
             q: 'Deleting an unfamiliar-looking CSS rule (like a stray min-height: 0) during a cleanup pass without checking why it exists',
-            a: 'A rule that looks like a no-op in the browser you are testing in can be silently load-bearing in another engine — exactly the Safari flex-column fix in this module\'s Real World example. Leave a comment on any browser-specific fix explaining what it targets, and check history/comments before removing anything that looks unexplained.',
+            a: 'A rule that looks like a no-op in the browser you are testing in can be silently load-bearing in another engine — exactly the Safari flex-column fix in this lesson\'s Real World example. Leave a comment on any browser-specific fix explaining what it targets, and check history/comments before removing anything that looks unexplained.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -740,7 +740,7 @@ click any number to edit it live and see the layout update instantly.`}</CodeBox
           },
           {
             error: `An element\'s computed height/width is 0 or unexpectedly collapsed in only one browser, despite explicit CSS sizing rules`,
-            cause: 'Very often a nested-flexbox or nested-grid sizing edge case — a child element failing to inherit or stretch to an ancestor\'s height in one engine due to a missing explicit height/min-height somewhere in the chain, exactly as in this module\'s Real World Safari example.',
+            cause: 'Very often a nested-flexbox or nested-grid sizing edge case — a child element failing to inherit or stretch to an ancestor\'s height in one engine due to a missing explicit height/min-height somewhere in the chain, exactly as in this lesson\'s Real World Safari example.',
             fix: 'Compare the box model diagram for the element across browsers to confirm which ring collapses, then add the missing explicit height or min-height: 0 at the specific level in the chain where the browsers diverge — commented, so the fix is not mistaken for dead code later.',
           },
         ].map((item, i) => (
@@ -795,12 +795,12 @@ click any number to edit it live and see the layout update instantly.`}</CodeBox
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 40 is the capstone of the entire track — building a complete, real, responsive website
+          Lesson 40 is the capstone of the entire track — building a complete, real, responsive website
           end to end, combining Flexbox and Grid layout, responsive images, animations, accessibility, and
           mobile-first breakpoints into one genuine multi-section build.
         </p>
         <Link href="/learn/html-css/building-a-responsive-website" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 40 → Building a Complete Responsive Website
+          Lesson 40 → Building a Complete Responsive Website
         </Link>
       </div>
     </LearnLayout>

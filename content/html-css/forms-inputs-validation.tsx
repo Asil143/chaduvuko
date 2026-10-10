@@ -77,7 +77,7 @@ export default function FormsInputsValidation() {
     <LearnLayout
       title="HTML Forms — Inputs & Validation Basics"
       description="form, every common input type, labels, placeholder, and the built-in validation attributes browsers already give you for free."
-      section="HTML & CSS — Module 08"
+      section="HTML & CSS — Lesson 08"
       readTime="45 min"
       updatedAt="August 2026"
     >
@@ -127,7 +127,7 @@ export default function FormsInputsValidation() {
 <input type="url">       <!-- validates a basic URL shape -->
 <input type="date">      <!-- a native date picker widget -->
 <input type="checkbox">  <!-- boolean toggle -->
-<input type="radio">     <!-- one choice from a group (Part 07 of the next module covers grouping) -->
+<input type="radio">     <!-- one choice from a group (Part 07 of the next lesson covers grouping) -->
 <input type="hidden">    <!-- submitted with the form, never shown or editable by the user -->`}</CodeBox>
 
         <Callout type="warning">
@@ -517,11 +517,11 @@ input:placeholder-shown:invalid {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 09 goes further into forms — select, textarea, fieldset, radio and checkbox groups, and
+          Lesson 09 goes further into forms — select, textarea, fieldset, radio and checkbox groups, and
           the details of how a form actually submits.
         </p>
         <Link href="/learn/html-css/forms-advanced" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 09 → HTML Forms — Advanced
+          Lesson 09 → HTML Forms — Advanced
         </Link>
       </div>
     </LearnLayout>

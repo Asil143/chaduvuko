@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'GANs — Generator vs Discriminator — Chaduvuko',
@@ -178,7 +177,6 @@ export default function GANsPage() {
       readTime="30–40 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="generative-ai" topic="gans-generator-discriminator" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -236,7 +234,7 @@ export default function GANsPage() {
           but remain important for fast inference (no iterative denoising),
           video generation components, and as the conceptual foundation for
           understanding adversarial training. Understanding GANs deeply makes
-          RLHF (Module 64) and adversarial robustness click immediately.
+          RLHF (Lesson 64) and adversarial robustness click immediately.
         </Callout>
       </div>
 
@@ -966,7 +964,7 @@ with torch.no_grad():
             Much of GAN's reputation for instability traces back to the original 2014 formulation with
             naive hyperparameters, not to anything unavoidable about adversarial training itself. DCGAN's
             architectural rules, WGAN-GP's Wasserstein objective, spectral normalisation, and label
-            smoothing collectively make training dramatically more reliable — this module exists
+            smoothing collectively make training dramatically more reliable — this lesson exists
             specifically because the field spent years engineering these stabilisation techniques and
             they work. Instability was a largely solvable problem, not a permanent property of the
             minimax game.
@@ -988,7 +986,7 @@ with torch.no_grad():
           <p style={{ ...S.ps, marginBottom: 0 }}>
             It is close to the opposite. A Discriminator that classifies everything correctly gives the
             Generator essentially zero useful gradient — the vanishing-gradient failure mode covered
-            earlier in this module. Healthy GAN training deliberately keeps the Discriminator somewhat
+            earlier in this lesson. Healthy GAN training deliberately keeps the Discriminator somewhat
             "confused," typically D(x) around 0.6–0.8 rather than 1.0. This runs against the instinct
             that a more accurate classifier is always a better sign, which is exactly why it trips
             people up the first time they read GAN training logs.
@@ -1002,7 +1000,7 @@ with torch.no_grad():
             fight. Each network needs the other to keep improving in order to keep receiving useful
             learning signal itself: if either one "wins" outright and stops providing a meaningful
             gradient to the other, both stop improving. Balance, not victory, is the actual target — the
-            forger-and-detective analogy earlier in this module is making exactly this point.
+            forger-and-detective analogy earlier in this lesson is making exactly this point.
           </p>
         </ConceptBox>
       </div>
@@ -1096,7 +1094,7 @@ with torch.no_grad():
           is a constant risk. Variational Autoencoders take a different path —
           instead of adversarial competition, they use a principled probabilistic
           framework that guarantees a smooth, structured latent space.
-          Module 62 builds a VAE from scratch, derives the ELBO loss,
+          Lesson 62 builds a VAE from scratch, derives the ELBO loss,
           and shows the reparameterisation trick that makes it trainable.
         </p>
 
@@ -1112,7 +1110,7 @@ with torch.no_grad():
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 62 · Generative AI
+              Next — Lesson 62 · Generative AI
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

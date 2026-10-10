@@ -850,7 +850,7 @@ CREATE TABLE products (
                 systematic: for each possible attribute combination (starting from single
                 attributes and growing), compute its attribute closure — if the closure
                 equals all attributes, it is a super key. Then check minimality. This
-                is covered in full depth in Module 06 (Functional Dependencies).
+                is covered in full depth in Lesson 06 (Functional Dependencies).
               </Para>
 
               <CodeBox label="Finding candidate keys from functional dependencies — preview">

@@ -78,7 +78,7 @@ export default function HowDatabasesWork() {
     <LearnLayout
       title="How Databases Work"
       description="Tables, rows, columns, data types, primary keys, foreign keys, constraints — the complete building blocks"
-      section="SQL — Module 02"
+      section="SQL — Lesson 02"
       readTime="10–14 min"
       updatedAt="April 2026"
     >
@@ -342,7 +342,7 @@ FOREIGN KEY (manager_id) REFERENCES employees(employee_id)`}
         </pre>
       </div>
 
-      <P>Notice the last one: employees.manager_id references employees.employee_id — a table referencing itself. This is called a <Hl>self-referencing foreign key</Hl> and it is how org charts and hierarchy data are stored. Emily Johnson (employee_id = 1) is the Store Manager with no manager above her (manager_id = NULL). Marcus Bennett (employee_id = 2) reports to Emily, so his manager_id = 1. You will learn to query this hierarchy using SELF JOINs in Module 34.</P>
+      <P>Notice the last one: employees.manager_id references employees.employee_id — a table referencing itself. This is called a <Hl>self-referencing foreign key</Hl> and it is how org charts and hierarchy data are stored. Emily Johnson (employee_id = 1) is the Store Manager with no manager above her (manager_id = NULL). Marcus Bennett (employee_id = 2) reports to Emily, so his manager_id = 1. You will learn to query this hierarchy using SELF JOINs in Lesson 34.</P>
 
       <HR />
 
@@ -355,7 +355,7 @@ FOREIGN KEY (manager_id) REFERENCES employees(employee_id)`}
       <P>By default, any column can contain NULL — the absence of a value. Adding NOT NULL means the column must always have a real value. Inserting a row without providing a value for a NOT NULL column causes an error. In FreshCart, first_name, last_name, and order_date are NOT NULL — it makes no sense to have a customer without a name or an order without a date.</P>
 
       <H>UNIQUE — no two rows can have the same value</H>
-      <P>The UNIQUE constraint prevents duplicate values in a column across all rows. In FreshCart, the email column on customers is UNIQUE — no two customers can share the same email address. Unlike PRIMARY KEY, a UNIQUE column can contain NULL (and multiple NULLs are allowed, since NULL is not equal to NULL in SQL — more on this surprising behaviour in Module 11).</P>
+      <P>The UNIQUE constraint prevents duplicate values in a column across all rows. In FreshCart, the email column on customers is UNIQUE — no two customers can share the same email address. Unlike PRIMARY KEY, a UNIQUE column can contain NULL (and multiple NULLs are allowed, since NULL is not equal to NULL in SQL — more on this surprising behaviour in Lesson 11).</P>
 
       <H>DEFAULT — the value used when nothing is provided</H>
       <P>The DEFAULT constraint specifies what value the database should use when a row is inserted without providing a value for that column. In FreshCart, loyalty_tier has a DEFAULT of 'Bronze' — when a new customer is added without specifying their tier, they automatically start at Bronze. Defaults keep INSERT statements cleaner and reduce the chance of NULL slipping into columns that should always have a value.</P>
@@ -399,7 +399,7 @@ FOREIGN KEY (manager_id) REFERENCES employees(employee_id)`}
       {/* ── PART 07 ── */}
       <Part n="07" title="The FreshCart Schema — Every Table Examined Line by Line" />
 
-      <P>Now that you understand tables, data types, primary keys, foreign keys, and constraints — let us look at the full FreshCart schema in one place. You will use this schema for every query in every module. Read it carefully and notice how every design decision reflects the rules covered in this module.</P>
+      <P>Now that you understand tables, data types, primary keys, foreign keys, and constraints — let us look at the full FreshCart schema in one place. You will use this schema for every query in every module. Read it carefully and notice how every design decision reflects the rules covered in this lesson.</P>
 
       <SQLPlayground
         initialQuery={`-- Explore the customers table structure
@@ -431,7 +431,7 @@ LIMIT 10;`}
         showSchema={false}
       />
 
-      <P>Notice how the second query uses <Hl>JOIN</Hl> to combine orders with customer names. The order table only stores customer_id — a number. To get the actual name, you join to the customers table using the foreign key relationship. This is the relational model working as designed. You will learn exactly how to write JOINs — including multiple-table JOINs — in Modules 30 through 35.</P>
+      <P>Notice how the second query uses <Hl>JOIN</Hl> to combine orders with customer names. The order table only stores customer_id — a number. To get the actual name, you join to the customers table using the foreign key relationship. This is the relational model working as designed. You will learn exactly how to write JOINs — including multiple-table JOINs — in Lessons 30 through 35.</P>
 
       <HR />
 
@@ -449,7 +449,7 @@ LIMIT 10;`}
       </TimeBlock>
 
       <TimeBlock time="10:30 AM" label="You spot the second problem">
-        The amount column is defined as FLOAT. You have been warned about this earlier in this module — in the "money mistake" section. Floating point arithmetic will introduce rounding errors on financial data. You add a comment: "Change to DECIMAL(12,2). FLOAT is wrong for money — you will eventually get 199.99999999998 instead of 200."
+        The amount column is defined as FLOAT. You have been warned about this earlier in this lesson — in the "money mistake" section. Floating point arithmetic will introduce rounding errors on financial data. You add a comment: "Change to DECIMAL(12,2). FLOAT is wrong for money — you will eventually get 199.99999999998 instead of 200."
       </TimeBlock>
 
       <TimeBlock time="10:45 AM" label="Third problem — missing constraints">
@@ -495,7 +495,7 @@ LIMIT 10;`}
       <IQ q="What is a self-referencing foreign key? Give a real example.">
         <p style={{ margin: '0 0 14px' }}>A self-referencing foreign key is a foreign key in a table that references the primary key of the same table. It is used to represent hierarchical relationships where entities of the same type relate to each other — most commonly parent-child or manager-employee relationships.</p>
         <p style={{ margin: '0 0 14px' }}>In FreshCart's employees table, each employee has an employee_id (primary key) and a manager_id (foreign key). The manager_id column references employees.employee_id — a manager is also an employee. Emily Johnson is the Store Manager with employee_id = 1 and manager_id = NULL (she reports to nobody in this dataset). Marcus Bennett is her Assistant Manager with employee_id = 2 and manager_id = 1 — he reports to Emily. This single foreign key declaration captures the entire org chart with no additional tables.</p>
-        <p style={{ margin: 0 }}>Self-referencing foreign keys appear in: organisational hierarchies (employees and managers), geographic hierarchies (countries containing states containing cities), category trees (a category that has a parent_category_id pointing to another category), and comment threads (a comment with a parent_comment_id pointing to the comment it replies to). You query this structure using a SELF JOIN or, for arbitrary depth, a recursive CTE — covered in Module 34 and Module 56 respectively.</p>
+        <p style={{ margin: 0 }}>Self-referencing foreign keys appear in: organisational hierarchies (employees and managers), geographic hierarchies (countries containing states containing cities), category trees (a category that has a parent_category_id pointing to another category), and comment threads (a comment with a parent_comment_id pointing to the comment it replies to). You query this structure using a SELF JOIN or, for arbitrary depth, a recursive CTE — covered in Lesson 34 and Lesson 56 respectively.</p>
       </IQ>
 
       <HR />
@@ -547,7 +547,7 @@ FROM employees e
 LEFT JOIN employees m ON e.manager_id = m.employee_id
 ORDER BY e.employee_id
 LIMIT 5;`}
-        explanation="This is a SELF JOIN — the employees table is joined to itself using two different aliases (e for employee, m for manager). The JOIN condition matches each employee's manager_id to the employee_id of another row in the same table. Using LEFT JOIN ensures Emily Johnson appears in the results even though her manager_id is NULL — her manager column will show NULL (or 'No manager' if you use COALESCE). An INNER JOIN would exclude her row entirely because there is no matching manager row for NULL. You will learn SELF JOINs in full depth in Module 34."
+        explanation="This is a SELF JOIN — the employees table is joined to itself using two different aliases (e for employee, m for manager). The JOIN condition matches each employee's manager_id to the employee_id of another row in the same table. Using LEFT JOIN ensures Emily Johnson appears in the results even though her manager_id is NULL — her manager column will show NULL (or 'No manager' if you use COALESCE). An INNER JOIN would exclude her row entirely because there is no matching manager row for NULL. You will learn SELF JOINs in full depth in Lesson 34."
       />
 
       <HR />
@@ -572,10 +572,10 @@ LIMIT 5;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 03</strong>, you learn about the three types of databases — Relational, NoSQL, and NewSQL — what problems each one was built to solve, and how to decide which one is right for any situation. This is the context that makes every tool decision in your career make sense.
+          In <strong>Lesson 03</strong>, you learn about the three types of databases — Relational, NoSQL, and NewSQL — what problems each one was built to solve, and how to decide which one is right for any situation. This is the context that makes every tool decision in your career make sense.
         </p>
         <Link href="/learn/sql/types-of-databases" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 03 → Types of Databases
+          Lesson 03 → Types of Databases
         </Link>
       </div>
 

@@ -75,7 +75,7 @@ export default function DbtInterviewSystemDesign() {
     <LearnLayout
       title="dbt Interview and System Design Guide"
       description="The capstone module for the dbt track: full worked system-design interview questions synthesizing project structure, testing, incremental models, CI/CD, and migration strategy, plus a complete vocabulary cheat sheet, common interview traps, and rapid-fire conceptual Q&A."
-      section="dbt — Module 20"
+      section="dbt — Lesson 20"
       readTime="90 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -90,7 +90,7 @@ export default function DbtInterviewSystemDesign() {
         <SectionTitle>You Have Completed All 19 Prior dbt Modules. Here Is How It Comes Together.</SectionTitle>
         <HighlightBox>
           <Para>
-            <strong>This module is different from the previous 19.</strong> It does not introduce new dbt
+            <strong>This lesson is different from the previous 19.</strong> It does not introduce new dbt
             mechanics. It is a synthesis — a place where project structure, testing strategy, incremental
             models, snapshots, macros, CI/CD, and performance all show up together, the way they actually do
             in a real analytics-engineering system-design interview or a real architecture review, instead of
@@ -103,7 +103,7 @@ export default function DbtInterviewSystemDesign() {
             you to arrive at a layered <code>staging → intermediate → marts</code> structure, a specific
             testing strategy, and a specific incremental debugging methodology as the natural consequence of
             reasoning through the problem — not as a memorized fact recited on cue. That is the skill this
-            module builds: taking everything from Modules 01 through 19 and using it to reason through a
+            module builds: taking everything from Lessons 01 through 19 and using it to reason through a
             system from a cold start, out loud, the way an interviewer actually wants to see it happen.
           </Para>
           <Para>
@@ -122,7 +122,7 @@ export default function DbtInterviewSystemDesign() {
         <SectionTag text="// Interview Methodology" />
         <SectionTitle>A Reusable Structure for Any dbt System-Design Prompt</SectionTitle>
         <Para>
-          Every worked example in this module, from Part 01 through Part 12, follows the same structure
+          Every worked example in this lesson, from Part 01 through Part 12, follows the same structure
           deliberately, because that structure is itself the thing interviewers are evaluating — more than
           any single correct answer. Internalizing this shape means a genuinely unfamiliar prompt on
           interview day is still approachable, because the process for attacking it is the same one practiced
@@ -133,7 +133,7 @@ export default function DbtInterviewSystemDesign() {
           rows={[
             ['1. Requirements gathering', 'Ask about team structure, source system count, data volume, freshness needs, and who consumes the output before proposing any folder or model.', 'A design built on assumed requirements that turn out wrong is a design for the wrong problem — interviewers are testing whether you ask, not whether you guess correctly.'],
             ['2. Layering and naming', 'Decide staging, intermediate, and marts boundaries, and justify why each model lives where it does.', 'The layering decision is the single choice with the most downstream consequences in almost any dbt project — interviewers listen closely for how it is justified, not just recited.'],
-            ['3. Materialization strategy', 'Choose view, table, incremental, or ephemeral per model as a deliberate consequence of volume and freshness needs, not a default.', 'This is where "just make everything a table" gets tested directly — see this module\'s interview-traps section.'],
+            ['3. Materialization strategy', 'Choose view, table, incremental, or ephemeral per model as a deliberate consequence of volume and freshness needs, not a default.', 'This is where "just make everything a table" gets tested directly — see this lesson\'s interview-traps section.'],
             ['4. Testing and CI strategy', 'Decide which tests matter most, where singular tests are needed over generic ones, and how CI validates a change before merge.', 'A design with no testing or CI story reads as incomplete even if the modeling layer is otherwise excellent.'],
             ['5. Trade-offs stated out loud', 'Name what the design gives up, not just what it achieves — a staleness window, a migration risk, an operational cost.', 'A design presented with no acknowledged weaknesses reads as either inexperienced or evasive; naming trade-offs unprompted is a strong, deliberately practiced signal.'],
           ]}
@@ -142,7 +142,7 @@ export default function DbtInterviewSystemDesign() {
           Notice this structure never starts with "here's the folder structure" — it starts with questions.
           Interviewers consistently report that the single most common mistake in a system-design interview,
           dbt-specific or otherwise, is a candidate leaping straight to a directory tree before establishing
-          what problem that structure is actually meant to solve. Every worked example in this module opens
+          what problem that structure is actually meant to solve. Every worked example in this lesson opens
           with requirements gathering for exactly this reason, not as a formality.
         </Para>
         <Callout title="Practice narrating, not just solving" color={K}>
@@ -799,7 +799,7 @@ packages:
         </Para>
         <SubTitle>The fix — a snapshot of the reported metric itself, not just the underlying source data</SubTitle>
         <Para>
-          Part 05 of this module covers snapshotting a slowly-changing source table; this problem needs the
+          Part 05 of this lesson covers snapshotting a slowly-changing source table; this problem needs the
           same underlying idea applied one layer higher — snapshotting the daily reported output itself. A
           dedicated model, built once per day and never rebuilt afterward, freezes what was actually reported
           for that day. Any later change to the underlying source data flows into a new day's row, or an
@@ -1073,7 +1073,7 @@ SELECT ...
           grow, and it is exactly the kind of fix that works for a week and quietly erodes once review fatigue
           sets back in. The stronger answer makes the failure mode structurally harder to hit in the first
           place — shifting weight from "a human remembers to check this" to "the system itself catches this
-          automatically," which is the same underlying philosophy Part 03's CI design and this module's
+          automatically," which is the same underlying philosophy Part 03's CI design and this lesson's
           interview-traps section both apply to testing.
         </Para>
         <Table
@@ -1174,7 +1174,7 @@ SELECT ...
             ['severity', 'A test config (error or warn) controlling whether a failing test fails the whole invocation or only surfaces as a non-blocking warning — used to tier test strictness per the layered testing strategy in Part 03.'],
             ['generate_schema_name', 'A macro dbt calls to compute a model\'s actual target schema, commonly overridden so a custom schema config appends to, rather than replaces, the target\'s base schema.'],
             ['dbt build', 'A CLI command that runs models, tests, snapshots, and seeds together in DAG order in one invocation, instead of requiring separate dbt run / dbt test / dbt snapshot commands run independently.'],
-            ['Node selection (--select / --exclude / tag:)', 'The syntax for scoping a dbt invocation to a specific subset of the DAG — by model name, folder path, graph operator (+), or a tag applied in config — used throughout this module for both CI scoping and mixed-cadence scheduling.'],
+            ['Node selection (--select / --exclude / tag:)', 'The syntax for scoping a dbt invocation to a specific subset of the DAG — by model name, folder path, graph operator (+), or a tag applied in config — used throughout this lesson for both CI scoping and mixed-cadence scheduling.'],
             ['Contract (model-level data contract)', 'An explicit, enforced declaration of a model\'s expected column names and types, checked at build time — failing loudly if a model\'s actual output no longer matches what it promised, catching a schema drift before it silently reaches a downstream consumer.'],
             ['Grain', 'The level of uniqueness a single row in a model represents — one row per order, one row per customer per day, etc. — a mismatched grain assumption is a common, hard-to-spot source of silently duplicated or double-counted downstream aggregates.'],
             ['Idempotent (as applied to a dbt run)', 'A property where re-running the exact same model build against the same source data produces the same result every time, with no side effect that accumulates across repeated runs — a core assumption an append-only incremental strategy can violate if run twice against the same new data.'],
@@ -1197,7 +1197,7 @@ SELECT ...
           the command an interviewer might ask you to type or explain.
         </Para>
         <Table
-          headers={['Command', 'What it does in this module\'s worked examples']}
+          headers={['Command', 'What it does in this lesson\'s worked examples']}
           rows={[
             ['dbt run', 'Builds models only, in DAG order — does not run tests or snapshots.'],
             ['dbt test', 'Runs generic and singular tests against already-built models, without rebuilding them.'],
@@ -1315,7 +1315,7 @@ SELECT ...
           },
           {
             q: 'Q10. Why does a schema rename on a source table only require a one-file fix if the project is structured correctly, but a much larger fix otherwise?',
-            a: 'When every downstream model reads a source column only through its one staging model (never the raw source table directly), the staging model is the single place a column rename needs to be absorbed — it aliases the new name back to what downstream models already expect. If any downstream model bypasses staging and reads the source directly, as Part 10 and this module\'s interview-traps section both cover, the same rename now requires hunting down and fixing every one of those bypasses individually.',
+            a: 'When every downstream model reads a source column only through its one staging model (never the raw source table directly), the staging model is the single place a column rename needs to be absorbed — it aliases the new name back to what downstream models already expect. If any downstream model bypasses staging and reads the source directly, as Part 10 and this lesson\'s interview-traps section both cover, the same rename now requires hunting down and fixing every one of those bypasses individually.',
           },
           {
             q: 'Q11. What is the difference between tag: selection and state:modified+ selection, and when would you reach for each?',
@@ -1355,7 +1355,7 @@ SELECT ...
           at least a few of the worked examples by hand, tends to fall apart under a genuinely novel prompt on
           interview day. Vocabulary answers "what is this called"; the worked examples build the actual
           reasoning habit of reaching for the right one of these recurring moves when a new, unfamiliar
-          combination of requirements shows up — which is the harder and more valuable skill this module, and
+          combination of requirements shows up — which is the harder and more valuable skill this lesson, and
           this entire track, was built to leave you with.
         </Para>
       </section>
@@ -1396,7 +1396,7 @@ SELECT ...
             incremental models, snapshots, macros, packages, documentation, hooks, variables and environments,
             performance tuning, CI/CD, and now full system-design synthesis — that is the complete arc of
             what a working analytics engineer actually needs, end to end. Revisit any module as a reference
-            whenever a real project calls for it; the vocabulary table and worked examples in this module are
+            whenever a real project calls for it; the vocabulary table and worked examples in this lesson are
             built specifically to be reused before your next interview, not read once and forgotten.
           </p>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>

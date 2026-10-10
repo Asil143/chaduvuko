@@ -74,7 +74,7 @@ export default function ReplicationLeadersISR() {
     <LearnLayout
       title="Replication, Leaders, and ISR"
       description="Why Kafka replicates partitions, how leader/follower replication and the in-sync replica set actually work, what happens when a leader fails, and how acks, min.insync.replicas, and unclean leader election combine to define your real durability guarantee."
-      section="Apache Kafka — Module 06"
+      section="Apache Kafka — Lesson 06"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -112,7 +112,7 @@ export default function ReplicationLeadersISR() {
             a partition <em>can</em> exist. Whether a specific acknowledged write actually survives a broker
             failure depends on the interaction of <code>acks</code>, <code>min.insync.replicas</code>, the
             in-sync replica set at the moment of the write, and whether unclean leader election is disabled —
-            all covered in this module, in that order.
+            all covered in this lesson, in that order.
           </Para>
         </HighlightBox>
       </section>
@@ -408,7 +408,7 @@ a second follower falls out of the ISR: ISR = [broker-1]  (just the leader)
           leadership, without depending on an external system.
         </Para>
         <Para>
-          You do not need deep Raft internals to work productively with Kafka day to day, and this module
+          You do not need deep Raft internals to work productively with Kafka day to day, and this lesson
           deliberately does not go there — the point to take away is narrower: there is always exactly one
           active controller for the cluster at a time, it is the component that notices a broker has stopped
           sending heartbeats, it is the component that consults the ISR to pick a new leader per Part 05's
@@ -559,7 +559,7 @@ with broker.rack configured (rack-A, rack-B, rack-C):
         <SectionTag text="// Part 10 — Diagnosing replication state from the CLI" />
         <SectionTitle>Reading kafka-topics --describe Correctly, Column by Column</SectionTitle>
         <Para>
-          Every concept in this module — replicas, leader, ISR — shows up directly in the output of
+          Every concept in this lesson — replicas, leader, ISR — shows up directly in the output of
           <code> kafka-topics.sh --describe</code>, which is the first thing worth checking during any
           replication-related incident. Reading it correctly, and knowing exactly what a discrepancy between
           columns means, turns this from a wall of text into a precise diagnostic tool.
@@ -596,8 +596,8 @@ Topic: orders   PartitionCount: 4   ReplicationFactor: 3
         <Para>
           The consumer-groups equivalent tool, <code>kafka-consumer-groups.sh --describe</code>, is unrelated
           to replication but is worth mentioning here because the two are commonly confused: replication
-          health (this module) is about whether a partition's data is durably copied across brokers, while
-          consumer group health (the previous module) is about how far behind a group's readers are. A
+          health (this lesson) is about whether a partition's data is durably copied across brokers, while
+          consumer group health (the previous lesson) is about how far behind a group's readers are. A
           partition can have a perfectly healthy ISR while a consumer group reading it has enormous lag, and
           vice versa — they are orthogonal failure modes that happen to both show up as "something is wrong
           with this topic" from a distance.
@@ -617,7 +617,7 @@ Topic: orders   PartitionCount: 4   ReplicationFactor: 3
         <SectionTag text="// Part 11 — Designing replication settings per topic, not per cluster" />
         <SectionTitle>The Same Cluster Should Rarely Have One Replication Policy for Every Topic</SectionTitle>
         <Para>
-          Every setting covered in this module — replication factor, min.insync.replicas,
+          Every setting covered in this lesson — replication factor, min.insync.replicas,
           unclean.leader.election.enable, acks — can be set per topic (the first three) or per producer (acks),
           not just as a single cluster-wide default. Treating them as a single cluster-wide policy is a common
           simplification that either over-pays for durability on data that doesn't need it, or under-protects

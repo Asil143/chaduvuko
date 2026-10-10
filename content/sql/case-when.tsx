@@ -78,7 +78,7 @@ export default function CaseWhen() {
     <LearnLayout
       title="CASE WHEN — Conditional Logic"
       description="SQL's if-else statement — build custom categories, conditional columns, pivot tables, and handle complex branching logic directly inside any query"
-      section="SQL — Module 16"
+      section="SQL — Lesson 16"
       readTime="12–16 min"
       updatedAt="April 2026"
     >
@@ -308,7 +308,7 @@ ORDER BY payment_type;`}
       {/* ── PART 05 ── */}
       <Part n="05" title="CASE WHEN in WHERE — Complex Conditional Filtering" />
 
-      <P>CASE WHEN can appear in WHERE clauses to express filtering logic that would be extremely complex with AND/OR alone. The first example below also uses JOIN to combine customers with their orders — you'll learn JOIN properly in Module 30; for now, just notice it's matching rows between two tables.</P>
+      <P>CASE WHEN can appear in WHERE clauses to express filtering logic that would be extremely complex with AND/OR alone. The first example below also uses JOIN to combine customers with their orders — you'll learn JOIN properly in Lesson 30; for now, just notice it's matching rows between two tables.</P>
 
       <SQLPlayground
         initialQuery={`-- Different rules for different customer tiers:
@@ -411,7 +411,7 @@ ORDER BY
       {/* ── PART 07 ── */}
       <Part n="07" title="CASE WHEN Inside Aggregate Functions — Conditional Aggregation" />
 
-      <P>This is one of the most powerful SQL patterns — using CASE WHEN inside SUM, COUNT, or AVG to compute <Hl>conditional aggregates</Hl>. Instead of running multiple queries to count different subsets of data, you count all subsets in a single pass through the table. SUM, COUNT, AVG, and GROUP BY are aggregate/grouping tools covered fully in Modules 27–28 — for now, just follow how CASE WHEN slots inside them.</P>
+      <P>This is one of the most powerful SQL patterns — using CASE WHEN inside SUM, COUNT, or AVG to compute <Hl>conditional aggregates</Hl>. Instead of running multiple queries to count different subsets of data, you count all subsets in a single pass through the table. SUM, COUNT, AVG, and GROUP BY are aggregate/grouping tools covered fully in Lessons 27–28 — for now, just follow how CASE WHEN slots inside them.</P>
 
       <H>Conditional COUNT — count rows matching different conditions</H>
 
@@ -494,7 +494,7 @@ ORDER BY month;`}
       <P>CASE WHEN interacts with NULL in two important ways: when testing for NULL inside WHEN conditions, and when the CASE expression itself returns NULL.</P>
 
       <H>Testing for NULL inside CASE</H>
-      <P>Use IS NULL and IS NOT NULL inside WHEN conditions — never = NULL. The same rule from Module 11 applies inside CASE.</P>
+      <P>Use IS NULL and IS NOT NULL inside WHEN conditions — never = NULL. The same rule from Lesson 11 applies inside CASE.</P>
 
       <SQLPlayground
         initialQuery={`-- Correct NULL handling inside CASE
@@ -846,10 +846,10 @@ ORDER BY delivered_revenue DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 18</strong>, you learn about data types in SQL — what types exist, which to use for which data, and how type mismatches cause silent bugs in calculations and comparisons.
+          In <strong>Lesson 18</strong>, you learn about data types in SQL — what types exist, which to use for which data, and how type mismatches cause silent bugs in calculations and comparisons.
         </p>
         <Link href="/learn/sql/data-types" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 18 → SQL Data Types
+          Lesson 18 → SQL Data Types
         </Link>
       </div>
 

@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'MLOps on Cloud — CI/CD for ML — Chaduvuko',
@@ -178,7 +177,6 @@ export default function MLOpsOnCloudPage() {
       readTime="45–58 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="cloud-ml" topic="mlops-on-cloud" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -1149,7 +1147,7 @@ if __name__ == '__main__':
           because that is what the rest of engineering uses, and monitoring from Datadog or Grafana
           because the on-call rotation already lives there. MLOps in practice is integration work
           across tools that were never designed to talk to each other, held together by scripts like
-          the ones in this module.
+          the ones in this lesson.
         </p>
 
         <p style={S.p}>
@@ -1189,7 +1187,7 @@ if __name__ == '__main__':
 
         <p style={S.p}>
           The practical skill this teaches is not "learn SageMaker" or "learn Vertex" — it is
-          learning to write the adapter layer this module's cloud_adapter.py demonstrates, so the
+          learning to write the adapter layer this lesson's cloud_adapter.py demonstrates, so the
           orchestration, CI, and monitoring choices your organisation already made can sit on top of
           whichever vendor training service you use underneath, and so a change in cloud vendor is a
           swapped adapter, not a rewritten pipeline.
@@ -1212,7 +1210,7 @@ if __name__ == '__main__':
             requirements security already mandated. Real stacks end up using the vendor platform for
             the piece it is genuinely good at — usually training compute and the registry — and
             gluing everything else on top with the organisation's existing tools, exactly the pattern
-            the CloudMLAdapter interface in this module is built to support.
+            the CloudMLAdapter interface in this lesson is built to support.
           </p>
         </ConceptBox>
 
@@ -1222,7 +1220,7 @@ if __name__ == '__main__':
             themselves, decide what quality gate a challenger model must clear, how much traffic
             shifts to it on day one, or who gets paged when the gate fails. Those decisions are
             organisational practice, encoded as the specific tolerance values, promotion rules, and
-            rollback thresholds in this module's CI workflows. Two teams running the identical
+            rollback thresholds in this lesson's CI workflows. Two teams running the identical
             SageMaker setup can have completely different MLOps maturity depending on whether those
             practices exist, are enforced automatically, and are actually followed under deadline
             pressure.
@@ -1243,10 +1241,10 @@ if __name__ == '__main__':
 
         <ConceptBox title="Myth: Once a pipeline auto-promotes a model that passes its quality gate, no human needs to look at it again" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            The four-stage pipeline in this module gates on metrics it was told to check — MAE within
+            The four-stage pipeline in this lesson gates on metrics it was told to check — MAE within
             tolerance, p99 latency, error rate. It cannot catch a challenger that is numerically better
             but has learned a new, unintended bias, or one trained on a data window that quietly
-            excluded a whole customer segment. That is exactly why production-promote in this module's
+            excluded a whole customer segment. That is exactly why production-promote in this lesson's
             workflow example runs against a GitHub environment that can require manual approval —
             automating the mechanical checks frees humans to spend their attention on the judgment
             calls the pipeline cannot make, it does not remove the need for that judgment.
@@ -1255,10 +1253,10 @@ if __name__ == '__main__':
 
         <ConceptBox title="Myth: MLOps tooling is mainly about the deployment step — data and feature pipelines are a separate concern" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            The retraining workflow in this module triggers on a schedule or a drift alert precisely
+            The retraining workflow in this lesson triggers on a schedule or a drift alert precisely
             because the data feeding the model changes continuously, and a deployment-only view of
             MLOps would have no mechanism to notice that. In practice, the data collection and
-            cleaning pipelines from earlier modules are just as much a part of the MLOps surface as
+            cleaning pipelines from earlier lessons are just as much a part of the MLOps surface as
             the CI/CD workflow — a schema change upstream or a silent drop in feature freshness breaks
             the model just as thoroughly as a bad deployment, and neither shows up if monitoring only
             watches the serving endpoint.
@@ -1306,7 +1304,7 @@ if __name__ == '__main__':
             compute needs, a single GitHub Actions workflow that runs unit tests and a smoke test on
             every PR, model versions tracked in something as simple as MLflow or even a naming
             convention in cloud storage, and one manual approval step before anything reaches
-            production. The full automated four-stage pipeline in this module is worth building once
+            production. The full automated four-stage pipeline in this lesson is worth building once
             retraining happens often enough that manual promotion is the actual bottleneck — not
             before.
           </p>
@@ -1318,7 +1316,7 @@ if __name__ == '__main__':
             way the gates were never told to check for — a subtle new bias, a data window that
             silently dropped a segment, a metric that looks better only because the evaluation set
             itself drifted. I mitigate this with gradual traffic promotion instead of an instant
-            switch (10 percent, then 50, then 100, as this module's production-promote stage does),
+            switch (10 percent, then 50, then 100, as this lesson's production-promote stage does),
             automatic rollback on any latency or error regression, and a required manual approval gate
             on the production environment so a human reviews the comparison numbers before the last
             step, even though every earlier step is fully automated.
@@ -1346,7 +1344,7 @@ if __name__ == '__main__':
         <span style={S.tag}>Section 12 and the full track — complete</span>
         <h2 style={S.h2}>
           The Cloud ML Platforms section and the entire AI/ML track are complete.
-          Module 80 is your interview preparation — 50 complete ML answers.
+          Lesson 80 is your interview preparation — 50 complete ML answers.
         </h2>
 
         <p style={S.p}>
@@ -1354,7 +1352,7 @@ if __name__ == '__main__':
           Python for ML, Classical ML, Deep Learning, NLP, Computer Vision,
           Generative AI, MLOps, and Cloud ML Platforms. Every concept connects
           to the next. Every module includes working code and real company
-          examples. Module 80 is the capstone — 50 complete answers to the most
+          examples. Lesson 80 is the capstone — 50 complete answers to the most
           common ML engineering interview questions asked at DoorDash, Stripe,
           Amazon, Brex, and every other major tech company.
         </p>
@@ -1371,7 +1369,7 @@ if __name__ == '__main__':
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 80 · Interview Prep
+              Next — Lesson 80 · Interview Prep
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

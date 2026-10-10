@@ -62,7 +62,7 @@ export default function PerformanceTuningModule() {
     <LearnLayout
       title="Performance Tuning — Spark, SQL, and Pipeline Optimisation"
       description="Spark execution model, partitioning, shuffles, broadcast joins, predicate pushdown, SQL query planning, incremental strategies, and diagnosing slow pipelines."
-      section="Data Engineering — Module 43"
+      section="Data Engineering — Lesson 43"
       readTime="70 min"
       updatedAt="August 2026"
     >
@@ -826,15 +826,15 @@ WHEN TO COALESCE: after an aggressive filter, or before writing to reduce
         {[
           {
             wrong: '"Adding more executors / a bigger cluster fixes a slow pipeline"',
-            right: 'Part 01 is explicit that the fix depends on the bottleneck type — more executors barely helps an I/O-bound job that\'s reading 50TB when it needs 500GB (the actual fix, shown in this module\'s Error Library, is correcting the partitioning). Part 08\'s Real World case fixed a 4-hour pipeline down to 22 minutes on the SAME 10-node cluster, with zero added hardware.',
+            right: 'Part 01 is explicit that the fix depends on the bottleneck type — more executors barely helps an I/O-bound job that\'s reading 50TB when it needs 500GB (the actual fix, shown in this lesson\'s Error Library, is correcting the partitioning). Part 08\'s Real World case fixed a 4-hour pipeline down to 22 minutes on the SAME 10-node cluster, with zero added hardware.',
           },
           {
             wrong: '"Broadcast joins are always safe to force on the smaller-looking table"',
-            right: 'Part 04 and this module\'s Error Library both warn about the same failure: broadcasting a table that turns out to be larger than estimated sends that full size to every executor simultaneously, which is exactly how a "small" 800MB table becomes a 16GB OOM. Always verify the actual materialized size before forcing a broadcast hint.',
+            right: 'Part 04 and this lesson\'s Error Library both warn about the same failure: broadcasting a table that turns out to be larger than estimated sends that full size to every executor simultaneously, which is exactly how a "small" 800MB table becomes a 16GB OOM. Always verify the actual materialized size before forcing a broadcast hint.',
           },
           {
             wrong: '"dbt incremental models are always faster than a full rebuild"',
-            right: 'This module\'s Error Library documents the opposite happening: an incremental merge against a 500-million-row table with no clustering on the unique_key took 2 hours, while a full refresh took 45 minutes. Incremental only wins when the target table has physical ordering that makes the merge lookup cheap — Part 06\'s insert_overwrite strategy exists specifically for the cases where merge stops paying off.',
+            right: 'This lesson\'s Error Library documents the opposite happening: an incremental merge against a 500-million-row table with no clustering on the unique_key took 2 hours, while a full refresh took 45 minutes. Incremental only wins when the target table has physical ordering that makes the merge lookup cheap — Part 06\'s insert_overwrite strategy exists specifically for the cases where merge stops paying off.',
           },
           {
             wrong: '"AQE and other automatic optimizations mean manual tuning is obsolete"',
@@ -1048,11 +1048,11 @@ Fifth, check for architectural issues: is the same source data read multiple tim
         {[
           {
             q: 'Reaching for repartition() to fix a slow pipeline without checking whether a shuffle is even the problem',
-            a: 'Part 02\'s Stages-tab walkthrough exists specifically to establish which of the four bottleneck types (Part 01) you\'re actually looking at first — repartitioning a job that\'s I/O bound from a missing partition filter, as this module\'s Error Library shows with the 50TB-scan case, does nothing for the actual cause.',
+            a: 'Part 02\'s Stages-tab walkthrough exists specifically to establish which of the four bottleneck types (Part 01) you\'re actually looking at first — repartitioning a job that\'s I/O bound from a missing partition filter, as this lesson\'s Error Library shows with the 50TB-scan case, does nothing for the actual cause.',
           },
           {
             q: 'Forcing a broadcast hint on a table without checking its actual materialized size first',
-            a: 'Part 04 and this module\'s Error Library both describe the same failure: Spark\'s size estimate can be stale or simply wrong (often because table statistics haven\'t been refreshed), and broadcasting a table that turns out to be 800MB sends that size to every single executor — that\'s how a "small table" optimization becomes a 16GB OOM.',
+            a: 'Part 04 and this lesson\'s Error Library both describe the same failure: Spark\'s size estimate can be stale or simply wrong (often because table statistics haven\'t been refreshed), and broadcasting a table that turns out to be 800MB sends that size to every single executor — that\'s how a "small table" optimization becomes a 16GB OOM.',
           },
           {
             q: 'Leaving spark.sql.shuffle.partitions at its default of 200 regardless of data size',
@@ -1060,7 +1060,7 @@ Fifth, check for architectural issues: is the same source data read multiple tim
           },
           {
             q: 'Treating every dbt model change as safe to ship without checking whether merge vs insert_overwrite still fits the update pattern',
-            a: 'Part 06 is explicit that the wrong incremental strategy for a table\'s actual update pattern is exactly how this module\'s Error Library case ends up 2 hours slower than a full refresh — merge against an unclustered 500M-row table has no physical shortcut to lean on, while insert_overwrite would have replaced only the affected date partitions.',
+            a: 'Part 06 is explicit that the wrong incremental strategy for a table\'s actual update pattern is exactly how this lesson\'s Error Library case ends up 2 hours slower than a full refresh — merge against an unclustered 500M-row table has no physical shortcut to lean on, while insert_overwrite would have replaced only the affected date partitions.',
           },
           {
             q: 'Reading the same source table twice in one pipeline run because two downstream models both need it',
@@ -1143,10 +1143,10 @@ Fifth, check for architectural issues: is the same source data read multiple tim
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 44 covers DataOps and CI/CD for data pipelines — how to test pipeline changes before they hit production, staging environment design, rollback strategies, and automated deployment patterns.
+          Lesson 44 covers DataOps and CI/CD for data pipelines — how to test pipeline changes before they hit production, staging environment design, rollback strategies, and automated deployment patterns.
         </p>
         <Link href="/learn/data-engineering/cicd-pipelines" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 44 → DataOps and CI/CD for Data Pipelines
+          Lesson 44 → DataOps and CI/CD for Data Pipelines
         </Link>
       </div>
     </LearnLayout>

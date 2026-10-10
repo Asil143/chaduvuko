@@ -127,7 +127,7 @@ export default function WhatIsDataEngineeringModule() {
     <LearnLayout
       title="What is Data Engineering?"
       description="The role, the lifecycle, what DEs actually do, and how to break in."
-      section="Data Engineering — Module 02"
+      section="Data Engineering — Lesson 02"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -1075,7 +1075,7 @@ Throughout this, I would communicate the timeline and trade-offs clearly to the 
         {[
           {
             q: 'Describing data engineering to others (or to yourself) purely in terms of tools rather than the underlying job',
-            a: 'This module\'s Misconceptions section and Part 04 both make the same point from different angles — leading with "I use Spark and Airflow" instead of "I build and maintain systems that move data reliably" (Part 01\'s actual definition) obscures the job\'s real substance and makes every new tool feel like starting over.',
+            a: 'This lesson\'s Misconceptions section and Part 04 both make the same point from different angles — leading with "I use Spark and Airflow" instead of "I build and maintain systems that move data reliably" (Part 01\'s actual definition) obscures the job\'s real substance and makes every new tool feel like starting over.',
           },
           {
             q: 'Assuming a pipeline is "done" once it passes its first successful run',
@@ -1091,7 +1091,7 @@ Throughout this, I would communicate the timeline and trade-offs clearly to the 
           },
           {
             q: 'Assuming a non-CS or non-IT background is a disqualifying gap rather than a different kind of asset',
-            a: 'Part 07\'s "Breaking in from a non-IT background" section and this module\'s Misconceptions section both push back on this directly — domain knowledge from another field is named as a genuine competitive advantage for a data engineer, not a deficiency to compensate for.',
+            a: 'Part 07\'s "Breaking in from a non-IT background" section and this lesson\'s Misconceptions section both push back on this directly — domain knowledge from another field is named as a genuine competitive advantage for a data engineer, not a deficiency to compensate for.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1191,10 +1191,10 @@ Throughout this, I would communicate the timeline and trade-offs clearly to the 
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 03 traces data from the moment a user places an order all the way to the dashboard a business leader reads the next morning — the complete end-to-end story.
+          Lesson 03 traces data from the moment a user places an order all the way to the dashboard a business leader reads the next morning — the complete end-to-end story.
         </p>
         <Link href="/learn/data-engineering/how-data-moves" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 03 → How Data Moves Through a Company
+          Lesson 03 → How Data Moves Through a Company
         </Link>
       </div>
     </LearnLayout>

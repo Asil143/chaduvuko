@@ -74,7 +74,7 @@ export default function MonitoringObservability() {
     <LearnLayout
       title="Monitoring and Observability"
       description="Why Kafka needs monitoring beyond generic host metrics: the critical broker, producer, and consumer metrics, how they are exposed via JMX and scraped by Prometheus, setting alert thresholds that catch real problems, and diagnosing a real consumer lag incident step by step."
-      section="Apache Kafka — Module 16"
+      section="Apache Kafka — Lesson 16"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -105,7 +105,7 @@ export default function MonitoringObservability() {
         </Para>
         <HighlightBox>
           <Para>
-            <strong>The mental model shift this module asks for:</strong> a healthy-looking host does not
+            <strong>The mental model shift this lesson asks for:</strong> a healthy-looking host does not
             mean a healthy cluster. The signals that actually predict a Kafka incident — before it becomes
             visible to end users — are broker replication state, consumer lag, and controller stability.
             These are covered in Parts 02 through 04, and they are the metrics worth building dashboards and
@@ -116,7 +116,7 @@ export default function MonitoringObservability() {
           Teams that monitor only host-level metrics for Kafka tend to discover problems the same way: a
           downstream consumer starts complaining about stale or missing data, and only then does anyone look
           at Kafka-specific metrics and find a replication or lag problem that had been building for hours.
-          The metrics in this module are what let you find that same problem in minutes, before a downstream
+          The metrics in this lesson are what let you find that same problem in minutes, before a downstream
           team notices anything.
         </Callout>
       </section>
@@ -797,7 +797,7 @@ Error budget: 1% of orders over 30 days may exceed 5,000 ms
           A product manager or a downstream team lead is unlikely to have an opinion about under-replicated
           partition counts, and shouldn't need one. They can absolutely have an informed opinion about
           "99% of orders processed within 5 seconds" and whether that bar is the right one for the business.
-          SLOs are what let the deep, component-level metrics in this module stay an engineering concern
+          SLOs are what let the deep, component-level metrics in this lesson stay an engineering concern
           while still connecting directly to a number everyone can discuss together.
         </Callout>
       </section>
@@ -812,7 +812,7 @@ Error budget: 1% of orders over 30 days may exceed 5,000 ms
           incidents" is usually a handful of specific, checkable items that are easy to defer. A cluster with
           a Grafana dashboard already open in a browser tab can still be missing the one alert that would
           have caught the incident that eventually happens. This checklist pulls together the concrete,
-          verifiable items from this module into a single pre-production pass.
+          verifiable items from this lesson into a single pre-production pass.
         </Para>
         <Table
           headers={['Checklist item', 'Confirms', 'Reference']}
@@ -890,7 +890,7 @@ Error budget: 1% of orders over 30 days may exceed 5,000 ms
         </CodeBox>
         <SubTitle>What is reasonable to automate, and what still needs a human</SubTitle>
         <Para>
-          Some responses in this module are safe to automate because they are low-risk and clearly correct
+          Some responses in this lesson are safe to automate because they are low-risk and clearly correct
           regardless of root cause; others genuinely need a human to interpret the situation before acting,
           because the "fix" depends entirely on which branch of the runbook the investigation lands on.
         </Para>
@@ -968,7 +968,7 @@ Error budget: 1% of orders over 30 days may exceed 5,000 ms
             intermittent lag spikes that always resolve within a few minutes. Per Part 09's alerting
             guidance, the on-call rotation had originally configured an alert on any nonzero lag and was
             getting paged several times a week for spikes that self-resolved — after switching to a
-            sustained-slope condition modeled on this module's approach, the noisy alerts stop firing, and
+            sustained-slope condition modeled on this lesson's approach, the noisy alerts stop firing, and
             when a genuine, non-self-resolving lag incident happens weeks later, it is caught immediately
             because the team still trusts the alert.
           </Para>
@@ -1030,7 +1030,7 @@ Consumer lag is often collected slightly differently, since it depends on the re
           },
           {
             q: 'Q5. Why should active controller count be monitored, and what does a value other than 1 actually indicate?',
-            a: `A Kafka cluster is designed to always have exactly one broker acting as the controller — the one responsible for cluster-wide coordination like electing new partition leaders and propagating metadata changes, as this track's earlier module on brokers covers. ActiveControllerCount reports 1 on whichever broker currently holds that role and 0 everywhere else, so the cluster-wide sum should always equal exactly 1.
+            a: `A Kafka cluster is designed to always have exactly one broker acting as the controller — the one responsible for cluster-wide coordination like electing new partition leaders and propagating metadata changes, as this track's earlier lesson on brokers covers. ActiveControllerCount reports 1 on whichever broker currently holds that role and 0 everywhere else, so the cluster-wide sum should always equal exactly 1.
 
 A sum of 0 means no broker currently believes it's the controller — cluster coordination is stalled, and leadership changes for any partition can't be processed until a new controller is elected, which is a serious, actionable condition.
 

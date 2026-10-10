@@ -59,7 +59,7 @@ export default function Module22() {
     <LearnLayout
       title="Reconnaissance — OSINT and Footprinting"
       description="Passive and active reconnaissance techniques used by professional penetration testers: DNS enumeration, certificate transparency, Shodan, Google dorks, theHarvester, Maltego, and building a complete target profile."
-      section="Cybersecurity — Module 22"
+      section="Cybersecurity — Lesson 22"
       readTime="31 min"
       updatedAt="May 2026"
     >
@@ -71,7 +71,7 @@ export default function Module22() {
           The defining characteristic of professional recon is being <Hl>systematic</Hl>. Amateurs get distracted by the first interesting thing they find. Professionals build a complete picture methodically, because the most valuable attack path is often not the obvious one — it is the forgotten dev server, the employee who reused their LinkedIn password, or the S3 bucket named after an internal project.
         </P>
         <Callout type="info">
-          This module covers techniques used by penetration testers during authorised engagements and by defenders building attack surface inventories. These same techniques are used by threat actors — which is why defenders must understand them.
+          This lesson covers techniques used by penetration testers during authorised engagements and by defenders building attack surface inventories. These same techniques are used by threat actors — which is why defenders must understand them.
         </Callout>
       </Part>
 
@@ -488,7 +488,7 @@ P3: app.acmecorp.com — full testing through Cloudflare WAF`}</Block>
       <Part>
         <H>Defensive Use — Attack Surface Management</H>
         <P>
-          Everything in this module is exactly what a defender should do to their own infrastructure before attackers do it for them. <Hl>Attack Surface Management (ASM)</Hl> is the practice of continuously discovering and inventorying your own external-facing assets.
+          Everything in this lesson is exactly what a defender should do to their own infrastructure before attackers do it for them. <Hl>Attack Surface Management (ASM)</Hl> is the practice of continuously discovering and inventorying your own external-facing assets.
         </P>
         <P>
           Many breaches start with an asset the security team did not know existed: a forgotten dev environment, an S3 bucket from an acquired company, an intern's test server that got added to a wildcard DNS record. Organisations typically discover 30–40% more external assets when they run a recon exercise against themselves than they have in their official asset inventory.
@@ -592,7 +592,7 @@ P3: app.acmecorp.com — full testing through Cloudflare WAF`}</Block>
       <Callout type="info">
         Reconnaissance maps the attack surface. In{' '}
         <Link href="/learn/cybersecurity/scanning-enumeration">
-          Module 23: Scanning and Enumeration
+          Lesson 23: Scanning and Enumeration
         </Link>
         , you move to active interaction: systematic port scanning techniques, service fingerprinting, vulnerability scanning with Nessus and Nuclei, and building the vulnerability hypothesis list that drives exploitation.
       </Callout>

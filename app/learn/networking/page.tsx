@@ -32,7 +32,7 @@ export default function NetworkingTrackPage() {
   return (
     <LearnLayout
       title="Networking Fundamentals — Zero to Advanced"
-      description="From what a packet is to subnetting, routing, DNS, TCP, and firewalls — 35 live modules, no prerequisites"
+      description="From what a packet is to subnetting, routing, DNS, TCP, and firewalls — 35 live lessons, no prerequisites"
       section="Networking"
       readTime="Self-paced"
       updatedAt="May 2026"
@@ -78,7 +78,7 @@ export default function NetworkingTrackPage() {
         marginBottom: 36,
       }}>
         {[
-          { value: `${allModules.length}`, label: 'Modules'        },
+          { value: `${allModules.length}`, label: 'Lessons'        },
           { value: `${NETWORKING_CURRICULUM.length}`, label: 'Sections'        },
           { value: `${totalTopics}+`,      label: 'Topics covered'  },
           { value: `${totalHours}h`,       label: 'Total content'   },
@@ -109,7 +109,7 @@ export default function NetworkingTrackPage() {
       }}>
         <strong style={{ color: N }}>This course builds the networking foundation every security professional needs.</strong>{' '}
         You will understand how packets move from your keyboard to a server on the other side of the planet —
-        every hop, every protocol, every layer. Module 01 assumes zero prior knowledge.
+        every hop, every protocol, every layer. Lesson 01 assumes zero prior knowledge.
         The live modules build from packets and layers through routing, transport protocols, application protocols, and network security.
       </div>
 
@@ -191,7 +191,7 @@ export default function NetworkingTrackPage() {
               35 Live Modules. Packets to Network Security.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
-              Follow in order. Each module builds on the last. Module 01 assumes you know nothing —
+              Follow in order. Each module builds on the last. Lesson 01 assumes you know nothing —
               the advanced modules end with protocols and defenses used by professional network engineers and security researchers.
             </p>
           </div>

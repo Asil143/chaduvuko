@@ -327,7 +327,7 @@ export default function NetworkAttacksPage() {
     <LearnLayout
       title="Network Attacks"
       description="From ARP spoofing to BGP hijacking, from SYN floods to SSL stripping: how attacks exploit protocol design, and what defenders can do about it."
-      section="Networking Fundamentals — Module 33"
+      section="Networking Fundamentals — Lesson 33"
       readTime="30–42 min"
       updatedAt="May 2026"
     >
@@ -343,7 +343,7 @@ export default function NetworkAttacksPage() {
         Network attacks exploit the gap between protocol design assumptions and deployment reality. Understanding these attacks is not about learning to cause harm — it is about understanding why security controls work, where they fail, and how to build systems that survive hostile environments.
       </Para>
       <Warn>
-        This module covers attack techniques for defensive and educational purposes. Understanding how attacks work is essential for designing effective defenses, conducting authorized penetration tests, and passing security certifications (CISSP, CEH, OSCP). Do not use this knowledge to attack systems you do not own or do not have explicit written permission to test.
+        This lesson covers attack techniques for defensive and educational purposes. Understanding how attacks work is essential for designing effective defenses, conducting authorized penetration tests, and passing security certifications (CISSP, CEH, OSCP). Do not use this knowledge to attack systems you do not own or do not have explicit written permission to test.
       </Warn>
       <WowBox>
         The original TCP specification (RFC 793, 1981) contains no mention of security. IP (RFC 791) was designed to route packets to their destination, not to verify they came from where they claim. ARP (RFC 826, 1982) explicitly states it has no authentication mechanism. These were not oversights — they were deliberate tradeoffs for simplicity in a trusted environment. The problem is that the environment changed.

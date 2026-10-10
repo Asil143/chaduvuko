@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     'A complete framework for designing any data system from scratch — capacity estimation, storage selection, pipeline architecture, trade-off analysis, and five complete worked designs you will encounter in real interviews and real jobs.',
 }
 
-/* ── Local components (Module 37 style) ─────────────────────────────────── */
+/* ── Local components (Lesson 37 style) ─────────────────────────────────── */
 
 const SectionTag = ({ text }: { text: string }) => (
   <div style={{
@@ -198,7 +198,7 @@ export default function SystemDesignDEModule() {
     <LearnLayout
       title="Data Engineering System Design"
       description="A complete framework for designing any data system from scratch — capacity estimation, storage selection, pipeline architecture, trade-off analysis, and five complete worked designs."
-      section="Data Engineering — Module 46"
+      section="Data Engineering — Lesson 46"
       readTime="80 min"
       updatedAt="August 2026"
     >
@@ -257,7 +257,7 @@ export default function SystemDesignDEModule() {
         </HighlightBox>
 
         <Para>
-          This module gives you a repeatable framework — a set of steps you run
+          This lesson gives you a repeatable framework — a set of steps you run
           through for any system design question — and then walks through five
           complete designs that cover the most common patterns you will encounter
           in interviews at top tech companies.
@@ -619,7 +619,7 @@ Conclusion:            this is a compute-trivial, throughput-trivial workload �
 
         <SubTitle>3 — Consistency vs availability</SubTitle>
         <Para>
-          As covered in Module 42 — during a network partition, you choose between
+          As covered in Lesson 42 — during a network partition, you choose between
           refusing requests (consistent, unavailable) or responding with potentially
           stale data (available, inconsistent). Outside of partitions, there is the
           latency vs consistency trade-off: strongly consistent reads take longer
@@ -1490,14 +1490,14 @@ spark.sql("""
           },
           {
             q: 'Q3. You don\'t know the exact API of a tool you\'ve named (say, the precise Kafka Streams DSL used in Design 5, Part 10). How do you handle that in the interview?',
-            a: `I'd state the concept and the intent clearly, and be upfront that I'm approximating the exact syntax. Design 5's Kafka Streams topology in this module is a good model for this — it names the operations (filter, groupBy, windowedBy, count) and what they accomplish, without claiming production-perfect syntax. Interviewers are evaluating whether I understand what a windowed aggregation does and why it's the right tool for a 1-minute rolling count, not whether I have the Java API memorised. Pretending false precision is worse than admitting "the exact method signature might be slightly off, but conceptually this is a tumbling window aggregation grouped by city."`,
+            a: `I'd state the concept and the intent clearly, and be upfront that I'm approximating the exact syntax. Design 5's Kafka Streams topology in this lesson is a good model for this — it names the operations (filter, groupBy, windowedBy, count) and what they accomplish, without claiming production-perfect syntax. Interviewers are evaluating whether I understand what a windowed aggregation does and why it's the right tool for a 1-minute rolling count, not whether I have the Java API memorised. Pretending false precision is worse than admitting "the exact method signature might be slightly off, but conceptually this is a tumbling window aggregation grouped by city."`,
           },
           {
             q: 'Q4. How is a system design interview actually different from a coding interview, in terms of what\'s being evaluated?',
-            a: `A coding interview evaluates whether you can produce a correct, working solution to a well-defined problem. A system design interview evaluates judgment under ambiguity — per Part 01, whether you ask the right questions, articulate trade-offs, and anticipate failure modes for a problem that is deliberately underspecified. There's rarely one "correct" architecture; Designs 1–5 in this module each name a specific set of requirements that justify a specific set of choices, and a different requirements profile would justify different tools entirely. The evaluation is on the reasoning chain from requirements to numbers to architecture to failure modes — not on whether you happened to name the same tools the interviewer had in mind.`,
+            a: `A coding interview evaluates whether you can produce a correct, working solution to a well-defined problem. A system design interview evaluates judgment under ambiguity — per Part 01, whether you ask the right questions, articulate trade-offs, and anticipate failure modes for a problem that is deliberately underspecified. There's rarely one "correct" architecture; Designs 1–5 in this lesson each name a specific set of requirements that justify a specific set of choices, and a different requirements profile would justify different tools entirely. The evaluation is on the reasoning chain from requirements to numbers to architecture to failure modes — not on whether you happened to name the same tools the interviewer had in mind.`,
           },
           {
-            q: 'Q5. What is the single biggest signal that separates a strong system design answer from a weak one, across all five designs in this module?',
+            q: 'Q5. What is the single biggest signal that separates a strong system design answer from a weak one, across all five designs in this lesson?',
             a: `Proactive identification of hard problems, stated before the interviewer has to ask. Every one of the five designs in Parts 06–10 ends with a "Hard problems" section that the candidate would be expected to raise unprompted — deduplication in Design 1, PII masking in Design 2, training-serving skew in Design 3, idempotent backfill in Design 4, window accuracy in Design 5. A weak candidate presents a happy-path architecture and waits to be probed. A strong candidate says, essentially, "here is my design, and here are the two or three things I know will break it, and here is how I'd handle each" — without being asked. Part 01 calls this "failure mode awareness" and it is consistently the differentiator between candidates who pass and candidates who don't, more than any specific tool choice.`,
           },
         ].map((item, i) => (
@@ -1583,10 +1583,10 @@ spark.sql("""
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 47 is 60 complete interview answers across Python, SQL, pipelines, data modelling, architecture, system design, and behavioural questions — written at senior engineer depth and ready to use.
+          Lesson 47 is 60 complete interview answers across Python, SQL, pipelines, data modelling, architecture, system design, and behavioural questions — written at senior engineer depth and ready to use.
         </p>
         <Link href="/learn/data-engineering/de-interview-questions" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 47 → Interview Prep — 60 Complete Answers
+          Lesson 47 → Interview Prep — 60 Complete Answers
         </Link>
       </div>
     </LearnLayout>

@@ -74,7 +74,7 @@ export default function SourcesAndRef() {
     <LearnLayout
       title="Sources, ref(), and the Dependency Graph"
       description="What a dbt source actually is, why you declare raw tables instead of hardcoding them, source freshness checks, how ref() mechanically resolves models across environments, and how dbt statically builds its DAG from ref()/source() calls."
-      section="dbt — Module 05"
+      section="dbt — Lesson 05"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -87,7 +87,7 @@ export default function SourcesAndRef() {
         <SectionTag text="// Part 01 — What a source actually is" />
         <SectionTitle>A Source Is Raw Data dbt Reads, Never Data dbt Creates</SectionTitle>
         <Para>
-          The previous module showed dbt models as SELECT statements saved to `.sql` files, each one
+          The previous lesson showed dbt models as SELECT statements saved to `.sql` files, each one
           building on another. But every dependency chain has to start somewhere — a model's SELECT has to
           read from a table that already exists in the warehouse before dbt ever ran. That starting table is
           a <strong>source</strong>. A source is a named reference, declared in a `.yml` file, to a raw table
@@ -105,7 +105,7 @@ export default function SourcesAndRef() {
         </Para>
         <HighlightBox>
           <Para>
-            <strong>The confusion this module exists to prevent:</strong> new dbt users frequently assume
+            <strong>The confusion this lesson exists to prevent:</strong> new dbt users frequently assume
             declaring something in `sources.yml` somehow creates or manages that table, the same way defining
             a model creates a table or view. It does not. Declaring a source is closer to writing down an
             address — it is documentation and a machine-readable pointer to something that is already there,
@@ -500,7 +500,7 @@ dbt build --select state:modified+    # anything changed since a saved manifest,
         <SectionTag text="// Part 07 — The full worked example" />
         <SectionTitle>A Complete Source-to-Staging-to-Mart Chain, End to End</SectionTitle>
         <Para>
-          Putting everything in this module together: a full, runnable three-model chain, starting from a raw
+          Putting everything in this lesson together: a full, runnable three-model chain, starting from a raw
           source table nobody at the dbt layer built, through a staging model, to a mart a BI tool would
           actually query.
         </Para>
@@ -653,7 +653,7 @@ models:
         <SectionTag text="// Part 09 — Visualizing the graph" />
         <SectionTitle>dbt docs generate — Seeing the DAG You Built From ref() and source()</SectionTitle>
         <Para>
-          Everything this module has covered so far — sources declared in YAML, models chained together with
+          Everything this lesson has covered so far — sources declared in YAML, models chained together with
           `ref()`, the DAG derived by static parsing — culminates in a single command:
           `dbt docs generate` followed by `dbt docs serve`. This builds a static documentation site with an
           interactive lineage graph, rendering every node your project's `ref()` and `source()` calls
@@ -672,7 +672,7 @@ dbt docs serve`}
 14:22:03  To access from a remote machine, you must specify the --host flag`}
         </Output>
         <Para>
-          Opening the served site and clicking into the lineage graph shows exactly the picture this module
+          Opening the served site and clicking into the lineage graph shows exactly the picture this lesson
           built by hand in Part 05's worked example — `raw.orders` (rendered distinctly as a source, not a
           model) with an arrow into `stg_orders`, an arrow into `fct_orders`, an arrow into `daily_revenue`.
           Every arrow in that rendered graph corresponds to one `ref()` or `source()` call somewhere in the
@@ -699,7 +699,7 @@ dbt docs serve`}
           still produces a lineage graph with real gaps in it — `dbt docs generate` cannot show a dependency
           it was never told about through a tracked function call. Treating the generated graph as a
           correctness check on your own project's `ref()`/`source()` usage, not just a pretty diagram to show
-          stakeholders, is one of the more useful habits this module can leave you with.
+          stakeholders, is one of the more useful habits this lesson can leave you with.
         </Callout>
       </section>
 
@@ -788,7 +788,7 @@ WHERE charge_id IS NOT NULL`}
         <SectionTitle>Sources Can Carry Tests Too, Not Just Models</SectionTitle>
         <Para>
           It is easy to assume tests only belong on models, since that is where most of a project's YAML
-          testing lives. But the same generic tests covered in Module 08 of this track (Testing: Generic and
+          testing lives. But the same generic tests covered in Lesson 08 of this track (Testing: Generic and
           Singular Tests) — `unique`, `not_null`, `accepted_values`, `relationships` — can be attached directly
           to a source's columns, as
           shown briefly in Part 08. This matters because it lets you catch a problem in the raw data itself,

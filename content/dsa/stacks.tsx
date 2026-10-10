@@ -117,7 +117,7 @@ const StackVisual = ({ items, topLabel }: { items: { val: string; highlight?: bo
 export default function StacksPage() {
   return (
     <LearnLayout
-      title="Unit 06 — Stacks"
+      title="Stacks"
       description="Last In, First Out. The data structure behind undo/redo, function calls, browser history, and expression evaluation. Built using arrays and linked lists."
       section="DSA"
       readTime="60 min"
@@ -127,9 +127,7 @@ export default function StacksPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'UNIT 06', green: true },
-          { label: 'Prerequisite: Units 02 + 05', green: false },
-          { label: '60 min read', green: false },
+          { label: 'Prerequisite: Lessons 3 + 6', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -146,7 +144,7 @@ export default function StacksPage() {
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         Every time you press Ctrl+Z to undo, every time your browser goes back a page,
         every time a function calls another function — a stack is working underneath.
-        In this unit we build stacks two ways, learn all four operations, and solve
+        In this lesson we build stacks two ways, learn all four operations, and solve
         the classic problems that make stacks a staple of every coding interview.
       </p>
 
@@ -848,7 +846,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Unit 07</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 8</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now understand stacks completely — the LIFO rule, all four operations,
@@ -856,7 +854,7 @@ int main() {
         the call stack that powers every program you have ever run.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Unit 07 we cover <strong style={{ color: 'var(--text)' }}>Queues</strong> —
+        In Lesson 8 we cover <strong style={{ color: 'var(--text)' }}>Queues</strong> —
         the other side of the coin. Where stacks are LIFO, queues are FIFO:
         First In, First Out. Think of a ticket counter line — the person who
         arrives first gets served first. Queues power CPU scheduling,
@@ -865,7 +863,7 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → UNIT 07</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 8</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Queues — First In, First Out</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Enqueue, dequeue, circular queue, priority queue — explained simply.</div>
         </div>

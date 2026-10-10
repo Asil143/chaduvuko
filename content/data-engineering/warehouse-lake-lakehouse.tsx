@@ -176,7 +176,7 @@ export default function WarehouseLakeLakehouseModule() {
     <LearnLayout
       title="Data Warehouse vs Data Lake vs Lakehouse"
       description="Three answers to where we store data — the honest trade-offs and how to choose."
-      section="Data Engineering — Module 11"
+      section="Data Engineering — Lesson 11"
       readTime="55 min"
       updatedAt="August 2026"
     >
@@ -713,7 +713,7 @@ Transaction log entry (JSON):
           If you have access to a Delta or Iceberg table, check its retention
           configuration — Delta's default VACUUM retention, or Iceberg's
           expire_snapshots settings. Confirm the retention window is longer than
-          the longest-running pipeline that reads from it. This module's Error
+          the longest-running pipeline that reads from it. This lesson's Error
           Library shows what happens when it isn't.
         </TryThis>
 
@@ -1011,7 +1011,7 @@ SITUATION 4: Regulated industry (banking, healthcare, insurance)
           },
           {
             wrong: '"Delta Lake and Iceberg give you time travel, so you never have to worry about losing old data to cleanup jobs"',
-            right: 'This module\'s Error Library shows two separate incidents from the opposite assumption — Delta VACUUM deleting files an active job was still reading, and Iceberg expire_snapshots removing a snapshot a downstream pipeline needed. Retention is finite and must be configured deliberately, not assumed safe by default.',
+            right: 'This lesson\'s Error Library shows two separate incidents from the opposite assumption — Delta VACUUM deleting files an active job was still reading, and Iceberg expire_snapshots removing a snapshot a downstream pipeline needed. Retention is finite and must be configured deliberately, not assumed safe by default.',
           },
           {
             wrong: '"Schema-on-read means you never have to think about schema"',
@@ -1223,19 +1223,19 @@ Expected outcome: keep 12 TB in Snowflake at $480/month, move 42 TB to S3 Delta 
         {[
           {
             q: 'Running VACUUM (or Iceberg\'s expire_snapshots) with a short or disabled retention window',
-            a: 'This module\'s Error Library shows the direct consequence twice — a Delta VACUUM deleting files an active Spark job was still reading, and an Iceberg snapshot expiring while a downstream pipeline still referenced it. Part 04\'s TryThis is exactly this check: confirm retention is longer than the longest job that reads the table before touching the default.',
+            a: 'This lesson\'s Error Library shows the direct consequence twice — a Delta VACUUM deleting files an active Spark job was still reading, and an Iceberg snapshot expiring while a downstream pipeline still referenced it. Part 04\'s TryThis is exactly this check: confirm retention is longer than the longest job that reads the table before touching the default.',
           },
           {
             q: 'Writing to a plain S3 data lake with no table format and assuming a completed pipeline run wrote everything it should have',
-            a: 'This module\'s Error Library shows silent data loss from exactly this gap — a pipeline failed partway, left some partitions complete and others incomplete, and the query engine had no way to know the write was unfinished since there\'s no transaction log to consult. Migrating to Delta Lake or Iceberg (Part 04) fixes this at the architecture level; a row-count validation step catches it in the meantime.',
+            a: 'This lesson\'s Error Library shows silent data loss from exactly this gap — a pipeline failed partway, left some partitions complete and others incomplete, and the query engine had no way to know the write was unfinished since there\'s no transaction log to consult. Migrating to Delta Lake or Iceberg (Part 04) fixes this at the architecture level; a row-count validation step catches it in the meantime.',
           },
           {
             q: 'Running two Spark jobs against the same Delta table at the same time without checking whether their writes could conflict',
-            a: 'This module\'s Error Library shows the DeltaAnalysisException that results — Delta\'s optimistic concurrency control detects the conflict and refuses the second write rather than silently corrupting data. That\'s the correct behavior, but it means concurrent writers to the same table need to be serialised or partitioned apart, not assumed safe by default.',
+            a: 'This lesson\'s Error Library shows the DeltaAnalysisException that results — Delta\'s optimistic concurrency control detects the conflict and refuses the second write rather than silently corrupting data. That\'s the correct behavior, but it means concurrent writers to the same table need to be serialised or partitioned apart, not assumed safe by default.',
           },
           {
             q: 'Querying a large Snowflake table repeatedly without a clustering key that matches the actual filter pattern',
-            a: 'This module\'s Error Library shows a single query that scanned 4.2 TB and cost $1,694 from exactly this gap — no clustering key aligned with the WHERE clause, so Snowflake had nothing to prune against. Check the query profile for partition pruning percentage before assuming a slow, expensive query is just "how big data is."',
+            a: 'This lesson\'s Error Library shows a single query that scanned 4.2 TB and cost $1,694 from exactly this gap — no clustering key aligned with the WHERE clause, so Snowflake had nothing to prune against. Check the query profile for partition pruning percentage before assuming a slow, expensive query is just "how big data is."',
           },
           {
             q: 'Treating "storage is cheap" as a reason to skip tiering — leaving cold, rarely-queried data in the warehouse indefinitely',
@@ -1335,10 +1335,10 @@ Expected outcome: keep 12 TB in Snowflake at $480/month, move 42 TB to S3 Delta 
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 12 covers the building blocks of every database — schemas, tables, primary keys, foreign keys, and indexes — at the depth that separates engineers who can design from engineers who can only query.
+          Lesson 12 covers the building blocks of every database — schemas, tables, primary keys, foreign keys, and indexes — at the depth that separates engineers who can design from engineers who can only query.
         </p>
         <Link href="/learn/data-engineering/schemas-tables-keys" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 12 → Schemas, Tables, Keys and Indexes
+          Lesson 12 → Schemas, Tables, Keys and Indexes
         </Link>
       </div>
     </LearnLayout>

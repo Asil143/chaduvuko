@@ -81,7 +81,7 @@ export default function SQLCheatSheet() {
             SQL Cheat Sheet
           </h1>
           <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 500, margin: 0 }}>
-            Every syntax pattern from all 62 modules, on one page. Bookmark this before your interview.
+            Every syntax pattern from all 62 lessons, on one page. Bookmark this before your interview.
           </p>
         </div>
 
@@ -174,7 +174,7 @@ export default function SQLCheatSheet() {
         }}>
           <div>
             <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>Ready to go deeper?</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>Start from Module 01 and learn every concept with real queries and the FreshCart database.</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>Start from Lesson 01 and learn every concept with real queries and the FreshCart database.</div>
           </div>
           <Link href="/learn/sql/what-is-a-database" style={{
             background: SQL_COLOR, color: '#000',

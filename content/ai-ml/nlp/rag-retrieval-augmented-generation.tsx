@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import {Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'RAG — Retrieval-Augmented Generation — Chaduvuko',
@@ -178,7 +177,6 @@ export default function RAGPage() {
       readTime="40–52 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="nlp" topic="rag-retrieval-augmented-generation" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -1103,7 +1101,7 @@ for s in result['sources']:
         <h2 style={S.h2}>Running RAG in production — re-indexing pipelines, embedding versions, and quality drift</h2>
 
         <p style={S.p}>
-          The RAG pipeline built in this module runs once: load documents, embed, index, query.
+          The RAG pipeline built in this lesson runs once: load documents, embed, index, query.
           A production knowledge base changes constantly — new support articles, edited pricing
           pages, deprecated policies — and the index has to keep up without ever serving a query
           against a stale or partially-rebuilt index. The two problems that dominate a real RAG
@@ -1398,7 +1396,7 @@ print("customer-visible wrong answers.")`} />
           also depends heavily on how the prompt is structured.
           Zero-shot, few-shot, chain-of-thought, ReAct —
           each prompting pattern consistently improves LLM outputs
-          for different task types. Module 53 covers the patterns
+          for different task types. Lesson 53 covers the patterns
           that actually work in production with real before/after examples.
         </p>
 
@@ -1414,7 +1412,7 @@ print("customer-visible wrong answers.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 53 · NLP
+              Next — Lesson 53 · NLP
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

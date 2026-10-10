@@ -77,7 +77,7 @@ export default function CsvJson() {
     <LearnLayout
       title="Working with CSV and JSON"
       description="The csv and json modules in depth — DictReader/DictWriter, quoting and delimiter edge cases, JSON type mapping, nested data, and a full worked pipeline."
-      section="Python — Module 16"
+      section="Python — Lesson 16"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -391,7 +391,7 @@ json.dumps(data)
 data = {"tags": list({"python", "backend", "api"})}
 json.dumps(data)   # works — but the result, once read back, is a list, not a set`}</CodeBox>
 
-        <SubTitle>Float precision — the same imprecision from Module 02, now serialized</SubTitle>
+        <SubTitle>Float precision — the same imprecision from Lesson 02, now serialized</SubTitle>
 
         <Para>
           JSON numbers are text in the file, parsed into Python <code>float</code> objects on load —
@@ -492,7 +492,7 @@ print(json.dumps(data, indent=2))
 
         <Para>
           Now a complete, realistic example: reading a CSV of individual order line items and writing
-          out a JSON summary grouped by customer — combining everything from this module, including{' '}
+          out a JSON summary grouped by customer — combining everything from this lesson, including{' '}
           <code>DictReader</code>, nested structure-building, and <code>Decimal</code>-aware totals.
         </Para>
 
@@ -544,7 +544,7 @@ with open("customer_summary.json", "w", encoding="utf-8") as f:
 # }`}</CodeBox>
 
         <Para>
-          Every design decision in that pipeline traces back to earlier parts of this module:{' '}
+          Every design decision in that pipeline traces back to earlier parts of this lesson:{' '}
           <code>DictReader</code> for column-name access (Part 03), <code>Decimal</code> instead of{' '}
           <code>float</code> for money, and explicitly converting the set and the <code>Decimal</code>{' '}
           to JSON-safe types before serializing (Part 06), rather than letting <code>json.dump</code>{' '}
@@ -851,12 +851,12 @@ def export_rows(records, f):
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 17 covers exception handling in full — try/except/else/finally, the exception
+          Lesson 17 covers exception handling in full — try/except/else/finally, the exception
           hierarchy, custom exceptions, and how to make programs fail safely instead of silently, which
-          matters immediately for the file and data parsing work covered in this module.
+          matters immediately for the file and data parsing work covered in this lesson.
         </p>
         <Link href="/learn/python/exception-handling" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 17 → Exception Handling
+          Lesson 17 → Exception Handling
         </Link>
       </div>
     </LearnLayout>

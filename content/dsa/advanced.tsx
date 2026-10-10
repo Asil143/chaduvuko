@@ -100,7 +100,7 @@ const TopicHeader = ({ num, name, tagline, time, space, color = 'var(--green)' }
 export default function AdvancedPage() {
   return (
     <LearnLayout
-      title="Unit 19 — Advanced Topics"
+      title="Advanced Topics"
       description="The final level. Segment Trees, Fenwick Trees, Tries, Union-Find, Sliding Window, Two Pointers, and Bit Manipulation — the techniques that separate good engineers from great ones in product company interviews."
       section="DSA"
       readTime="180 min"
@@ -110,9 +110,7 @@ export default function AdvancedPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'UNIT 19', green: true },
           { label: 'Prerequisite: All previous units', green: false },
-          { label: '180 min read', green: false },
           { label: 'Final Unit 🎓', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
@@ -122,7 +120,7 @@ export default function AdvancedPage() {
       </div>
 
       <p style={{ fontSize: 16, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
-        You have come a long way. From understanding what a variable is in Unit 00 to
+        You have come a long way. From understanding what a variable is in Lesson 1 to
         implementing graphs, dynamic programming, and backtracking — you now have a stronger
         DSA foundation than most working engineers. This final unit covers the advanced
         techniques that appear in senior-level interviews and competitive programming:
@@ -662,7 +660,7 @@ int main() {
           Two pointers start at opposite ends of a sorted array and move toward each other.
           At each step, comparing their sum to the target tells you which pointer to move —
           eliminating one element from consideration per step. The result is O(n) instead of
-          O(n²) brute force. Also applies to linked list cycle detection (Unit 05 — that was
+          O(n²) brute force. Also applies to linked list cycle detection (Lesson 6 — that was
           also two pointers: the slow and fast pointer).
         </p>
       </div>

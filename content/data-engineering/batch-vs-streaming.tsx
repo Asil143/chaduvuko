@@ -172,7 +172,7 @@ export default function BatchVsStreamingModule() {
     <LearnLayout
       title="Batch vs Streaming vs Micro-Batch"
       description="When each processing model is right, the trade-offs nobody talks about, and how modern systems blend all three."
-      section="Data Engineering — Module 21"
+      section="Data Engineering — Lesson 21"
       readTime="55 min"
       updatedAt="August 2026"
     >
@@ -198,7 +198,7 @@ export default function BatchVsStreamingModule() {
           updates the real-time delivery tracking dashboard (streaming), and an
           hourly Spark job that updates customer segmentation (micro-batch).
           Understanding when each model is appropriate — not which one to use
-          everywhere — is the skill this module builds.
+          everywhere — is the skill this lesson builds.
         </Para>
 
         <HighlightBox>
@@ -950,7 +950,7 @@ MODERN HYBRID (2022–present, most practical):
           },
           {
             wrong: '"Using processing time instead of event time for windowing is a minor implementation detail"',
-            right: 'Part 03\'s event-time section and this module\'s Error Library both treat this as a correctness bug, not a style choice — windowing on processing time silently miscounts events that arrived late relative to when they actually happened, which is exactly the kind of error that goes unnoticed until someone reconciles against a known-correct total.',
+            right: 'Part 03\'s event-time section and this lesson\'s Error Library both treat this as a correctness bug, not a style choice — windowing on processing time silently miscounts events that arrived late relative to when they actually happened, which is exactly the kind of error that goes unnoticed until someone reconciles against a known-correct total.',
           },
           {
             wrong: '"The Lambda architecture (separate batch and streaming layers) is still the standard way to get both speed and accuracy"',
@@ -1148,11 +1148,11 @@ The one thing I would add is a data quality check: alert if the number of delive
         {[
           {
             q: 'Defaulting to Kafka + Flink for a dashboard that only needs to refresh every few minutes',
-            a: 'Part 07\'s Question 1 and this module\'s Real World scenario both make the same point with FreshCart\'s operations dashboard: a 5-minute micro-batch trigger meets the actual latency need at a fraction of the operational complexity and cost of an always-on streaming cluster.',
+            a: 'Part 07\'s Question 1 and this lesson\'s Real World scenario both make the same point with FreshCart\'s operations dashboard: a 5-minute micro-batch trigger meets the actual latency need at a fraction of the operational complexity and cost of an always-on streaming cluster.',
           },
           {
             q: 'Windowing a streaming aggregation on Kafka\'s message arrival timestamp instead of the event\'s own timestamp field',
-            a: 'Part 03\'s event-time section and this module\'s Error Library are explicit that this silently double-counts or misattributes events that arrived late relative to when they actually happened — always window on event_time from the payload, never on processing time.',
+            a: 'Part 03\'s event-time section and this lesson\'s Error Library are explicit that this silently double-counts or misattributes events that arrived late relative to when they actually happened — always window on event_time from the payload, never on processing time.',
           },
           {
             q: 'Using a very large watermark to "solve" data that can be hours late',
@@ -1160,11 +1160,11 @@ The one thing I would add is a data quality check: alert if the number of delive
           },
           {
             q: 'Using NOW() or CURRENT_TIMESTAMP inside a batch pipeline\'s extraction query instead of a fixed run_date parameter',
-            a: 'This module\'s Error Library shows exactly what breaks: a reprocessing run days later computes a different time window than the original run did, because the "last 24 hours" is relative to whenever the pipeline happens to execute. Parameterize with an explicit date and compute all boundaries from it.',
+            a: 'This lesson\'s Error Library shows exactly what breaks: a reprocessing run days later computes a different time window than the original run did, because the "last 24 hours" is relative to whenever the pipeline happens to execute. Parameterize with an explicit date and compute all boundaries from it.',
           },
           {
             q: 'Leaving a streaming job stopped for longer than the source Kafka topic\'s retention period',
-            a: 'This module\'s Error Library documents the resulting StreamingQueryException — Kafka deletes old log segments on schedule regardless of whether a consumer has read them, so a paused job can come back to find its checkpoint offset points at messages that no longer exist.',
+            a: 'This lesson\'s Error Library documents the resulting StreamingQueryException — Kafka deletes old log segments on schedule regardless of whether a consumer has read them, so a paused job can come back to find its checkpoint offset points at messages that no longer exist.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
@@ -1257,10 +1257,10 @@ The one thing I would add is a data quality check: alert if the number of delive
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 22 covers ETL and ELT — why ETL dominated for 30 years, why modern lakehouses shifted to ELT, and the specific situations where transforming before loading is still the right answer.
+          Lesson 22 covers ETL and ELT — why ETL dominated for 30 years, why modern lakehouses shifted to ELT, and the specific situations where transforming before loading is still the right answer.
         </p>
         <Link href="/learn/data-engineering/etl-vs-elt" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 22 → ETL vs ELT — History, Difference, When to Use Each
+          Lesson 22 → ETL vs ELT — History, Difference, When to Use Each
         </Link>
       </div>
     </LearnLayout>

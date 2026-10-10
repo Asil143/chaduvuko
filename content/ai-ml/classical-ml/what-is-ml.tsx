@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'What is Machine Learning? — Chaduvuko',
@@ -100,7 +99,6 @@ export default function WhatIsMLPage() {
       readTime="18–22 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="classical-ml" topic="what-is-ml" />
 
       {/* ── SECTION 1: The problem ─────────────────────────────────────────── */}
       <div style={sec}>

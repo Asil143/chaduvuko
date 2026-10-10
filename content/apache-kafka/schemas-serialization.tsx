@@ -74,7 +74,7 @@ export default function SchemasSerialization() {
     <LearnLayout
       title="Serialization and Schema Design"
       description="Why raw, unvalidated JSON breaks production Kafka pipelines at scale, how Avro and Protobuf compare to JSON, what a Schema Registry actually does, and the backward/forward compatibility rules that let producers and consumers evolve independently without breaking each other."
-      section="Apache Kafka — Module 10"
+      section="Apache Kafka — Lesson 10"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -136,11 +136,11 @@ export default function SchemasSerialization() {
           the correctness risk above to make JSON a genuinely worse default than most teams realize at Kafka
           scale.
         </Para>
-        <Callout title="This module's real subject is contracts between teams" color={K}>
+        <Callout title="This lesson's real subject is contracts between teams" color={K}>
           Serialization format and schema management sound like a narrow technical detail, but the actual
           problem they solve is organizational: once a topic has producers and consumers owned by different
           teams, or even just different services deployed on different schedules, someone has to enforce that
-          a change on one side does not silently break the other. That is what the rest of this module is
+          a change on one side does not silently break the other. That is what the rest of this lesson is
           about.
         </Callout>
       </section>
@@ -498,7 +498,7 @@ order = avro_decode(payload, schema)`}
           a production outage back to a schema diff from three deploys ago.
         </Callout>
         <Para>
-          The single highest-leverage habit this module can leave you with: before merging any change to a
+          The single highest-leverage habit this lesson can leave you with: before merging any change to a
           schema that already has production consumers, ask explicitly which compatibility guarantee the
           change needs to preserve, and verify the new schema actually satisfies it — ideally enforced
           automatically by the registry rejecting an incompatible registration, rather than relying on a
@@ -630,7 +630,7 @@ value: [magic byte][schema id][avro bytes] # schema-registry-backed binary paylo
           A topic already in production, carrying JSON, rarely gets to switch to Avro or Protobuf in one
           atomic step — existing consumers are still reading the old format, retention means old JSON records
           are still sitting in the log, and a coordinated all-at-once cutover across every producer and
-          consumer is exactly the kind of fragile, synchronized deploy this module has been arguing against
+          consumer is exactly the kind of fragile, synchronized deploy this lesson has been arguing against
           throughout. The practical pattern most teams use instead is a new topic rather than an in-place
           format change: create a new topic with the new serialization format and registry-enforced schema
           from the start, have producers dual-write to both the old and new topics for a transition period,
@@ -803,10 +803,10 @@ if response.is_compatible == false:
         <SectionTag text="// Part 11 — A decision checklist for a new topic's schema" />
         <SectionTitle>Turning This Module Into a Repeatable Checklist</SectionTitle>
         <Para>
-          As with delivery semantics, the value of everything covered in this module comes from applying it
+          As with delivery semantics, the value of everything covered in this lesson comes from applying it
           consistently, not from understanding it once and then defaulting back to habit on the next topic. A
           short, concrete checklist run before a new topic (or a schema-changing pull request) ships turns
-          this module's reasoning into a repeatable practice rather than something re-derived, inconsistently,
+          this lesson's reasoning into a repeatable practice rather than something re-derived, inconsistently,
           by whoever happens to be building the next pipeline.
         </Para>
         <SubTitle>Before a new topic's first schema is registered</SubTitle>
@@ -847,7 +847,7 @@ Is this a rename or repurpose of an existing field? [ ] no
 Consuming teams notified of this change, if the topic has multiple consumers? [ ] yes [ ] n/a`}
         </CodeBox>
         <Callout title="The checklist is cheaper than the incident it prevents" color="#22c55e">
-          Every item on this list maps directly to a specific failure mode covered earlier in this module —
+          Every item on this list maps directly to a specific failure mode covered earlier in this lesson —
           a required field with no default (Part 04, Part 05), a rename that silently breaks a reader (Part
           07), a compatible-but-misleading default (Part 10), a fragile synchronized format cutover (Part 08).
           None of them are expensive to check individually. The expense comes from skipping the check
@@ -861,7 +861,7 @@ Consuming teams notified of this change, if the topic has multiple consumers? [ 
         <SectionTag text="// Part 12 — Schema enforcement has real, worthwhile overhead too" />
         <SectionTitle>Weigh the Real Cost of Strict Schemas Against What They Actually Buy</SectionTitle>
         <Para>
-          It would be easy to close this module concluding that every topic should use a strictly enforced,
+          It would be easy to close this lesson concluding that every topic should use a strictly enforced,
           fully-compatible binary schema from day one, since the failure modes JSON invites (Part 01) are
           genuinely serious. But schema enforcement is not free, and pretending otherwise leads to the same
           mistake in the opposite direction as under-investing in schemas — over-engineering a topic that
@@ -931,7 +931,7 @@ Consuming teams notified of this change, if the topic has multiple consumers? [ 
           ]}
         />
         <Callout title="Keep this table, forget the rest if you must" color={K}>
-          If only one part of this module survives in memory a year from now, this table is the one worth
+          If only one part of this lesson survives in memory a year from now, this table is the one worth
           keeping — it is the practical index back into everything else, and every row points to the specific
           rule, worked example, or failure mode that explains it in full.
         </Callout>
@@ -1056,7 +1056,7 @@ The fix that prevents this from ever shipping is a Schema Registry configured wi
 
 Between Avro and Protobuf specifically, I'd weight ecosystem fit heavily — if the org already uses Protobuf for gRPC service communication, reusing those same schemas and generated code avoids maintaining two parallel schema systems; if the org is already deep in a Hadoop/Spark/Confluent-centric data platform, Avro is usually the more natively supported choice across that tooling. Either is a defensible default in isolation; the more important decision is picking one over raw JSON at all for anything with real longevity.
 
-For compatibility mode, the deciding factor is how many independently-deployed consumers the topic has and how tightly they need to move in lockstep with the producer. A topic with a single, tightly-coupled consumer deployed alongside its producer can get away with looser rules. A topic like the Affirm example in this module's real-world section — a dozen independent downstream teams on their own release schedules — needs FULL compatibility set explicitly at topic creation, specifically so no team is ever blocked waiting on another team's deploy to safely ship a schema change.`,
+For compatibility mode, the deciding factor is how many independently-deployed consumers the topic has and how tightly they need to move in lockstep with the producer. A topic with a single, tightly-coupled consumer deployed alongside its producer can get away with looser rules. A topic like the Affirm example in this lesson's real-world section — a dozen independent downstream teams on their own release schedules — needs FULL compatibility set explicitly at topic creation, specifically so no team is ever blocked waiting on another team's deploy to safely ship a schema change.`,
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>

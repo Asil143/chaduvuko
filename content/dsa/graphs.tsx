@@ -110,7 +110,7 @@ const GEdge = ({ x1, y1, x2, y2, weight, directed, color = 'var(--border)' }: { 
 export default function GraphsPage() {
   return (
     <LearnLayout
-      title="Unit 15 — Graphs"
+      title="Graphs"
       description="Nodes connected by edges in any direction. Maps, social networks, flight routes, dependency graphs — every complex relationship is a graph. BFS, DFS, Dijkstra's, topological sort — all from scratch."
       section="DSA"
       readTime="120 min"
@@ -120,9 +120,7 @@ export default function GraphsPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'UNIT 15', green: true },
-          { label: 'Prerequisite: Units 05 + 07 + 14', green: false },
-          { label: '120 min read', green: false },
+          { label: 'Prerequisite: Lessons 6 + 8 + 14', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -140,7 +138,7 @@ export default function GraphsPage() {
         data structure in computer science.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
-        In this unit we build graphs from scratch, implement BFS and DFS,
+        In this lesson we build graphs from scratch, implement BFS and DFS,
         find shortest paths with Dijkstra's algorithm, detect cycles,
         and sort dependencies with topological sort — all in C.
       </p>
@@ -450,7 +448,7 @@ int main() {
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 20 }}>
         BFS explores a graph <strong style={{ color: 'var(--green)' }}>level by level</strong> —
         all neighbours at distance 1 first, then distance 2, then distance 3, and so on.
-        It uses a <strong>queue</strong> — exactly like level order traversal of a tree from Unit 11.
+        It uses a <strong>queue</strong> — exactly like level order traversal of a tree from Lesson 12.
         BFS finds the <strong>shortest path</strong> in an unweighted graph —
         the first time it reaches a node, it has found the fewest-step route.
       </p>
@@ -1085,7 +1083,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Unit 16</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 17</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now understand graphs completely — types, representations, BFS, DFS, cycle detection,
@@ -1094,7 +1092,7 @@ int main() {
         and build system on earth.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Unit 16 we cover <strong style={{ color: 'var(--text)' }}>Dynamic Programming</strong> —
+        In Lesson 17 we cover <strong style={{ color: 'var(--text)' }}>Dynamic Programming</strong> —
         the hardest and most rewarding topic in all of DSA. Remember what you already computed
         so you never compute it twice. We go from naive recursion to memoization to tabulation,
         solving the knapsack, LCS, coin change, and edit distance problems from first principles.
@@ -1102,7 +1100,7 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → UNIT 16</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 17</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Dynamic Programming — Remember, Don't Recompute</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Memoization, tabulation, knapsack, LCS, coin change, edit distance — in C.</div>
         </div>

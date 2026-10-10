@@ -77,7 +77,7 @@ export default function MultithreadingMultiprocessing() {
     <LearnLayout
       title="Multithreading and Multiprocessing Basics"
       description="Concurrency vs parallelism, the GIL explained honestly, threading for I/O-bound work, multiprocessing for CPU-bound work, and a clear decision framework."
-      section="Python — Module 34"
+      section="Python — Lesson 34"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -88,7 +88,7 @@ export default function MultithreadingMultiprocessing() {
         <SectionTitle>Two Different Ideas That Get Used Interchangeably — And Shouldn&apos;t</SectionTitle>
 
         <Para>
-          Before touching any code, this module needs one distinction to be genuinely solid, because
+          Before touching any code, this lesson needs one distinction to be genuinely solid, because
           almost every confusing explanation of threading and the GIL online skips it: <strong>concurrency
           </strong> and <strong>parallelism</strong> are not the same thing, even though they sound like
           synonyms.
@@ -112,7 +112,7 @@ Parallelism:  doing many things at once (execution)
 # A multi-core machine can be both.`}</CodeBox>
 
         <Para>
-          This distinction is the reason this module exists as one topic instead of two. Python's{' '}
+          This distinction is the reason this lesson exists as one topic instead of two. Python's{' '}
           <code>threading</code> module gives you concurrency — genuinely useful for a specific kind of
           workload, covered in Part 03 onward — but, because of the Global Interpreter Lock covered next,
           it does not give you true parallelism for Python code itself. Python's{' '}
@@ -154,7 +154,7 @@ Parallelism:  doing many things at once (execution)
 # Python bytecode at any given moment — the other 7 are waiting their turn.`}</CodeBox>
 
         <Callout type="warning">
-          <strong>This is the single most important fact in this module.</strong> Threading in Python
+          <strong>This is the single most important fact in this lesson.</strong> Threading in Python
           does not give you parallel execution of Python code, no matter how many CPU cores the machine
           has. This surprises engineers coming from Java or C++, where threads genuinely run in parallel
           across cores by default. Understanding exactly why threading is still useful despite this — the
@@ -188,7 +188,7 @@ Parallelism:  doing many things at once (execution)
           executes Python bytecode at any given instant.
         </Para>
 
-        <CodeBox label="I/O-bound vs CPU-bound — the distinction that decides everything in this module">{`I/O-BOUND:   most of the time is spent WAITING — network calls, file reads,
+        <CodeBox label="I/O-bound vs CPU-bound — the distinction that decides everything in this lesson">{`I/O-BOUND:   most of the time is spent WAITING — network calls, file reads,
              database queries, waiting on user input. Threading helps a lot here.
 
 CPU-BOUND:   most of the time is spent COMPUTING — number crunching, image
@@ -395,7 +395,7 @@ if __name__ == "__main__":
 
         <Para>
           The trade-off: separate processes do not share memory the way threads do. Passing data between
-          processes involves serializing it (similar in spirit to the JSON serialization from Module 16)
+          processes involves serializing it (similar in spirit to the JSON serialization from Lesson 16)
           and sending it across a process boundary, which has real overhead. This is exactly why
           multiprocessing is worth its cost specifically for CPU-bound work — the parallel speedup has to
           be large enough to be worth the process-creation and data-passing overhead, which is not
@@ -415,7 +415,7 @@ if __name__ == "__main__":
         </Para>
 
         <CodeBox label="The decision framework">{`Is the work I/O-bound (mostly WAITING on something external)?
-    → threading, OR asyncio (Module 35 — often the better modern choice
+    → threading, OR asyncio (Lesson 35 — often the better modern choice
       for large numbers of concurrent I/O operations)
 
 Is the work CPU-bound (mostly COMPUTING)?
@@ -428,8 +428,8 @@ Is the work a mix, or genuinely small-scale?
       (race conditions, deadlocks) that are not worth paying for prematurely.`}</CodeBox>
 
         <Para>
-          This module deliberately mentions <code>asyncio</code> without covering it in depth — that is
-          the entire subject of Module 35, immediately next in this track. The short version worth
+          This lesson deliberately mentions <code>asyncio</code> without covering it in depth — that is
+          the entire subject of Lesson 35, immediately next in this track. The short version worth
           knowing now: for a very large number of concurrent I/O-bound operations (hundreds or thousands
           of simultaneous network requests, for example), <code>asyncio</code> generally scales better
           than one OS thread per operation, because threads have real memory and scheduling overhead that
@@ -489,7 +489,7 @@ Is the work a mix, or genuinely small-scale?
             An engineer, having read that "threading speeds things up," rewrites the job to process
             records across 8 threads. The result: almost no improvement — maybe 2-3% faster, well within
             normal run-to-run variance. Confused, the team investigates and lands squarely on Part 02 of
-            this module: the text-cleaning routine is <strong>CPU-bound</strong>, not I/O-bound. There is
+            this lesson: the text-cleaning routine is <strong>CPU-bound</strong>, not I/O-bound. There is
             no waiting for the GIL to release during — it is pure computation, start to finish — so eight
             threads compete for the same single GIL and effectively run one at a time regardless of
             thread count.
@@ -726,7 +726,7 @@ Is the work a mix, or genuinely small-scale?
         'A race condition happens when threads read/modify shared data at overlapping times without synchronization — use threading.Lock (via a "with" block) to make a read-modify-write sequence atomic.',
         'multiprocessing achieves real parallelism by running separate OS processes, each with its own interpreter and GIL — the right tool for CPU-bound work, at the cost of serialization overhead for passing data between processes.',
         'Always wrap multiprocessing.Pool/Process creation in if __name__ == "__main__": to avoid runaway process spawning on platforms using the spawn start method.',
-        'Decision framework: I/O-bound → threading or asyncio (Module 35). CPU-bound → multiprocessing. Measure before reaching for either — concurrency adds real complexity.',
+        'Decision framework: I/O-bound → threading or asyncio (Lesson 35). CPU-bound → multiprocessing. Measure before reaching for either — concurrency adds real complexity.',
       ]} />
 
       {/* ── Next Module CTA ── */}
@@ -735,12 +735,12 @@ Is the work a mix, or genuinely small-scale?
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 35 covers async Python — coroutines, the event loop, and asyncio — the modern approach
-          to handling large numbers of concurrent I/O-bound operations that this module referenced but
+          Lesson 35 covers async Python — coroutines, the event loop, and asyncio — the modern approach
+          to handling large numbers of concurrent I/O-bound operations that this lesson referenced but
           did not fully cover.
         </p>
         <Link href="/learn/python/async-python" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 35 → Async Python — asyncio, async/await
+          Lesson 35 → Async Python — asyncio, async/await
         </Link>
       </div>
     </LearnLayout>

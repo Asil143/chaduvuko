@@ -69,7 +69,7 @@ export default function WhatIsDataScience() {
     <LearnLayout
       title="What is Data Science?"
       description="The definition that actually explains it, the DS lifecycle, and why Netflix, Spotify, Swiggy, and every subscription business on earth runs on this discipline"
-      section="Data Science — Module 01"
+      section="Data Science — Lesson 01"
       readTime="10–14 min"
       updatedAt="July 2026"
     >
@@ -93,7 +93,7 @@ export default function WhatIsDataScience() {
 
       <P><Hl>"Sometimes building a model that predicts what happens next"</Hl> — not every data science project ends in a machine learning model. Many end in a dashboard, a report, or a single well-supported recommendation. But when prediction is the goal — will this subscriber cancel next month, will this customer click this recommendation — that is where regression, classification, and the rest of predictive modeling come in, covered later in this course.</P>
 
-      <P>Put together: data science is not one skill. It is cleaning (Modules 19–23), wrangling (Modules 24–29), statistics (Modules 39–44), visualization (Modules 35–38), and modeling (Modules 45–49) — all aimed at a single outcome: a decision someone can actually act on.</P>
+      <P>Put together: data science is not one skill. It is cleaning (Lessons 19–23), wrangling (Lessons 24–29), statistics (Lessons 39–44), visualization (Lessons 35–38), and modeling (Lessons 45–49) — all aimed at a single outcome: a decision someone can actually act on.</P>
 
       <HR />
 
@@ -130,7 +130,7 @@ export default function WhatIsDataScience() {
       {/* ── PART 03 ── */}
       <Part n="03" title="Data Scientist vs Data Analyst vs ML Engineer vs Data Engineer" />
 
-      <P>These four titles get confused constantly because the boundaries genuinely blur at most companies. Here is the honest breakdown — you will go deeper in Module 03.</P>
+      <P>These four titles get confused constantly because the boundaries genuinely blur at most companies. Here is the honest breakdown — you will go deeper in Lesson 03.</P>
 
       <div style={{ overflowX: 'auto', margin: '20px 0 28px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
@@ -214,7 +214,7 @@ export default function WhatIsDataScience() {
           { co: 'Swiggy / Zomato', color: '#fc8019', what: 'Delivery time prediction', why: 'A regression model predicts exact delivery windows from historical order, traffic, and restaurant prep-time data — shown to you before you order.' },
           { co: 'Ola / Uber', color: '#0ea5e9', what: 'Dynamic pricing', why: 'Surge pricing is a live model balancing rider demand against available driver supply in a specific zone, updated every few minutes.' },
           { co: 'Flipkart / Amazon', color: '#f59e0b', what: 'Demand forecasting', why: 'Statistical forecasting models decide how much inventory to stock at each warehouse before a sale event, based on historical demand curves.' },
-          { co: 'Any subscription app', color: C, what: 'Churn prediction', why: 'A classification model flags subscribers likely to cancel next month — the exact analysis you will build yourself in Module 47 using StreamPulse.' },
+          { co: 'Any subscription app', color: C, what: 'Churn prediction', why: 'A classification model flags subscribers likely to cancel next month — the exact analysis you will build yourself in Lesson 47 using StreamPulse.' },
         ].map(item => (
           <div key={item.co} style={{ background: 'var(--surface)', border: `1px solid ${item.color}25`, borderRadius: 10, padding: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
@@ -236,8 +236,8 @@ export default function WhatIsDataScience() {
       {/* ── PART 06 ── */}
       <Part n="06" title="The StreamPulse Dataset — Your Data for All 53 Modules" />
 
-      <P>Every single module in this course — from Module 01 to Module 53 — uses the same dataset: <Hl>StreamPulse</Hl>. A fictional video streaming service with subscribers across 8 countries, a 20-title catalog spanning Movies and Series, and realistic engagement, billing, and churn behavior.</P>
-      <P>You will know these five tables so well by Module 53 that you could describe every column from memory. That depth of familiarity is intentional — every line of pandas you write will feel meaningful, not academic.</P>
+      <P>Every single module in this course — from Lesson 01 to Lesson 53 — uses the same dataset: <Hl>StreamPulse</Hl>. A fictional video streaming service with subscribers across 8 countries, a 20-title catalog spanning Movies and Series, and realistic engagement, billing, and churn behavior.</P>
+      <P>You will know these five tables so well by Lesson 53 that you could describe every column from memory. That depth of familiarity is intentional — every line of pandas you write will feel meaningful, not academic.</P>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 12, margin: '24px 0 32px' }}>
         {[
@@ -277,7 +277,7 @@ export default function WhatIsDataScience() {
       <P>Try changing <Hl>head()</Hl> to <Hl>head(10)</Hl> and click Run again. That is your first pandas experiment — you just inspected a live DataFrame.</P>
 
       <PyPlayground
-        initialCode={`# Average watch time by device — one line of pandas\n# (You will understand every part of this by Module 25)\nwatch_history.groupby('device')['minutes_watched'].mean().round(1)`}
+        initialCode={`# Average watch time by device — one line of pandas\n# (You will understand every part of this by Lesson 25)\nwatch_history.groupby('device')['minutes_watched'].mean().round(1)`}
         height={140}
         showSchema={false}
       />
@@ -304,19 +304,19 @@ export default function WhatIsDataScience() {
       </TimeBlock>
 
       <TimeBlock time="9:15 — 10:30 AM" label="Pull, clean, and explore">
-        You pull the subscriptions and users tables, join them on user_id, and immediately notice 4 rows with a missing cancel_reason even though status is "cancelled" — a data quality issue you flag to the data engineering team while working around it for now (Module 19 covers exactly this).
+        You pull the subscriptions and users tables, join them on user_id, and immediately notice 4 rows with a missing cancel_reason even though status is "cancelled" — a data quality issue you flag to the data engineering team while working around it for now (Lesson 19 covers exactly this).
       </TimeBlock>
 
       <TimeBlock time="10:30 — 11:30 AM" label="Test the actual hypothesis">
-        You group by referral_source and plan, calculate the cancellation rate for each combination, and run a quick statistical test (Module 42) to check whether the difference for Paid Ad + Premium is larger than you would expect from random noise alone. It is — but only barely significant, given the small sample size.
+        You group by referral_source and plan, calculate the cancellation rate for each combination, and run a quick statistical test (Lesson 42) to check whether the difference for Paid Ad + Premium is larger than you would expect from random noise alone. It is — but only barely significant, given the small sample size.
       </TimeBlock>
 
       <TimeBlock time="11:45 AM" label="Communicate the honest result">
-        You do not report "Paid Ads causes churn" — correlation is not causation, and you say so. You report the actual pattern, the sample size caveat, and one concrete recommendation: run a controlled A/B test (Module 44) on the Paid Ad onboarding flow before spending budget assuming the effect is real.
+        You do not report "Paid Ads causes churn" — correlation is not causation, and you say so. You report the actual pattern, the sample size caveat, and one concrete recommendation: run a controlled A/B test (Lesson 44) on the Paid Ad onboarding flow before spending budget assuming the effect is real.
       </TimeBlock>
 
       <TimeBlock time="2:00 PM" label="Back to the longer-term project">
-        You return to the churn prediction model (Module 47) you have been building over the past two weeks — this morning's finding becomes one candidate feature to test in it.
+        You return to the churn prediction model (Lesson 47) you have been building over the past two weeks — this morning's finding becomes one candidate feature to test in it.
       </TimeBlock>
 
       <ProTip>
@@ -348,7 +348,7 @@ export default function WhatIsDataScience() {
 
       <IQ q="Give an example of a data science project that does not involve machine learning.">
         <p style={{ margin: '0 0 14px' }}>A cohort retention analysis. Suppose StreamPulse wants to know how subscriber retention differs between users who signed up in January versus March. This requires no machine learning model at all: it requires grouping subscribers by signup month (a cohort), calculating what percentage of each cohort is still active at 30, 60, and 90 days, and visualizing the resulting retention curves.</p>
-        <p style={{ margin: '0 0 14px' }}>The output — a clear chart showing that the March cohort retains 15% better than January, likely correlated with a pricing change that took effect in February — is a fully legitimate, high-value data science deliverable built entirely from pandas, groupby aggregation, and a well-chosen chart. This exact analysis is covered as a full case study in Module 51.</p>
+        <p style={{ margin: '0 0 14px' }}>The output — a clear chart showing that the March cohort retains 15% better than January, likely correlated with a pricing change that took effect in February — is a fully legitimate, high-value data science deliverable built entirely from pandas, groupby aggregation, and a well-chosen chart. This exact analysis is covered as a full case study in Lesson 51.</p>
         <p style={{ margin: 0 }}>Machine learning is one tool in the data science toolbox, appropriate when the goal is genuinely predictive — "will this specific user churn" rather than "how did this group behave historically." Reaching for a model when a groupby and a chart would answer the question just as well is a common junior mistake, not a sign of rigor.</p>
       </IQ>
 
@@ -400,7 +400,7 @@ export default function WhatIsDataScience() {
         question="Using the preloaded StreamPulse DataFrames, write one line of pandas that returns the average imdb_rating for each genre in the titles table, so you can see which genre StreamPulse's catalog rates highest."
         hint="You need a groupby on the 'genre' column, then select the 'imdb_rating' column, then call an aggregation like .mean()."
         answer={`titles.groupby('genre')['imdb_rating'].mean().round(2)`}
-        explanation="This is the split-apply-combine pattern you will formally learn in Module 24: groupby('genre') splits the titles table into one group per genre, ['imdb_rating'].mean() calculates the average rating within each group, and pandas combines the results back into a single Series indexed by genre. The same one-line pattern scales to millions of rows exactly the way it works here on 20."
+        explanation="This is the split-apply-combine pattern you will formally learn in Lesson 24: groupby('genre') splits the titles table into one group per genre, ['imdb_rating'].mean() calculates the average rating within each group, and pandas combines the results back into a single Series indexed by genre. The same one-line pattern scales to millions of rows exactly the way it works here on 20."
       />
 
       <HR />
@@ -427,10 +427,10 @@ export default function WhatIsDataScience() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          <strong>Module 02</strong> walks through the data science workflow in full depth — how a vague business question becomes a precise, answerable one, and exactly what happens at each of the six lifecycle stages on a real project. More modules are being added to this track regularly.
+          <strong>Lesson 02</strong> walks through the data science workflow in full depth — how a vague business question becomes a precise, answerable one, and exactly what happens at each of the six lifecycle stages on a real project. More modules are being added to this track regularly.
         </p>
         <Link href="/learn/data-science/data-science-workflow" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 02 → The Data Science Workflow
+          Lesson 02 → The Data Science Workflow
         </Link>
       </div>
 

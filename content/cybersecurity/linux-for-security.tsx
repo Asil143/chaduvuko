@@ -69,7 +69,7 @@ export default function LinuxForSecurity() {
     <LearnLayout
       title="Linux for Security Engineers"
       description="File permissions, processes, users, logs, and the commands every security professional uses daily. The OS that runs the internet."
-      section="Cybersecurity — Module 03"
+      section="Cybersecurity — Lesson 03"
       readTime="30 min"
       updatedAt="May 2026"
     >
@@ -82,7 +82,7 @@ export default function LinuxForSecurity() {
       <P>Security tools — nmap, Wireshark, Metasploit, Burp Suite, most SIEM agents, most EDR agents — are built primarily for Linux. The command line is not an anachronism. It is the control plane for production systems. A security engineer who cannot navigate a Linux terminal comfortably is limited to tools that provide a GUI, which excludes most professional security work.</P>
 
       <div style={{ background: `${C}08`, border: `1px solid ${C}25`, borderLeft: `4px solid ${C}`, borderRadius: '0 10px 10px 0', padding: '20px 24px', margin: '4px 0 24px' }}>
-        <P>This module focuses on Linux specifically from the security perspective — not general Linux administration. You will learn the concepts and commands that appear on real incident response engagements, penetration tests, and security configurations. Each section explains both how attackers exploit Linux and how defenders use it to detect and respond.</P>
+        <P>This lesson focuses on Linux specifically from the security perspective — not general Linux administration. You will learn the concepts and commands that appear on real incident response engagements, penetration tests, and security configurations. Each section explains both how attackers exploit Linux and how defenders use it to detect and respond.</P>
       </div>
 
       <HR />
@@ -659,10 +659,10 @@ $ modinfo <module_name>         # Details about a specific module`}</Block>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 04</strong>, you go inside the math that protects everything — cryptography. How AES actually works, why RSA is hard to break, what a digital signature proves, and which algorithms are broken in practice. Security engineers who understand crypto make better design decisions than those who treat it as a black box.
+          In <strong>Lesson 04</strong>, you go inside the math that protects everything — cryptography. How AES actually works, why RSA is hard to break, what a digital signature proves, and which algorithms are broken in practice. Security engineers who understand crypto make better design decisions than those who treat it as a black box.
         </p>
         <Link href="/learn/cybersecurity/cryptography-fundamentals" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 04 → Cryptography From Scratch
+          Lesson 04 → Cryptography From Scratch
         </Link>
       </div>
 

@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'PCA — Dimensionality Reduction — Chaduvuko',
@@ -178,7 +177,6 @@ export default function PCAPage() {
       readTime="26–34 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="classical-ml" topic="pca" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -238,7 +236,7 @@ export default function PCAPage() {
         </AnalogyBox>
 
         <Callout type="tip">
-          PCA is built on eigenvalues and eigenvectors from Module 06.
+          PCA is built on eigenvalues and eigenvectors from Lesson 06.
           If you have not read that module, the maths here will be opaque.
           The intuition: PCA finds the eigenvectors of the covariance matrix.
           Those eigenvectors are the principal components — the natural axes
@@ -1353,7 +1351,7 @@ print("\nProduction bundle saved: /tmp/amazon_pca_segments.pkl")`} />
 
       <KeyTakeaways
         items={[
-          'PCA finds the directions of maximum variance in high-dimensional data (principal components) and projects the data onto the top k of them. The result is a lower-dimensional representation that preserves most of the information. It is built on the eigendecomposition of the covariance matrix from Module 06.',
+          'PCA finds the directions of maximum variance in high-dimensional data (principal components) and projects the data onto the top k of them. The result is a lower-dimensional representation that preserves most of the information. It is built on the eigendecomposition of the covariance matrix from Lesson 06.',
           'Always standardise before PCA. Features with large absolute values (like price in dollars) dominate the covariance matrix and hijack all principal components. StandardScaler before PCA is mandatory, not optional.',
           'Explained variance ratio is the key output. Each component has a fraction of total variance it captures. Sum them cumulatively and stop at 95% — that is how many components to keep. Use PCA(n_components=0.95) to let sklearn pick k automatically.',
           'PCA must be fit inside each cross-validation fold. Fitting on the full dataset before splitting leaks test set information into the covariance matrix. Always use Pipeline([("scaler", StandardScaler()), ("pca", PCA()), ("model", model)]) and pass the whole pipeline to cross_val_score.',

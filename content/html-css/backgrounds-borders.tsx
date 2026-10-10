@@ -77,7 +77,7 @@ export default function BackgroundsBorders() {
     <LearnLayout
       title="Backgrounds & Borders"
       description="background-color/image/position/size/repeat and the background shorthand, linear-gradient() and radial-gradient() syntax, border-radius including elliptical corners, and box-shadow — inset, multiple stacked shadows, and blur/spread."
-      section="HTML & CSS — Module 22"
+      section="HTML & CSS — Lesson 22"
       readTime="30 min"
       updatedAt="August 2026"
     >
@@ -788,12 +788,12 @@ export default function BackgroundsBorders() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 23 opens the CSS Layout phase — Flexbox, the complete guide. The main-axis vs cross-axis
+          Lesson 23 opens the CSS Layout phase — Flexbox, the complete guide. The main-axis vs cross-axis
           mental model, justify-content, align-items, flex-wrap, and exactly how flex-grow/shrink/basis
           distribute space, worked through with real numeric examples.
         </p>
         <Link href="/learn/html-css/flexbox-complete-guide" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 23 → Flexbox — The Complete Guide
+          Lesson 23 → Flexbox — The Complete Guide
         </Link>
       </div>
     </LearnLayout>

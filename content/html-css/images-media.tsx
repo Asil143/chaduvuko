@@ -77,7 +77,7 @@ export default function ImagesMedia() {
     <LearnLayout
       title="Images and Media"
       description="img, alt text, figure/figcaption, audio, video, and the source element — plus lazy loading and why alt text is never optional."
-      section="HTML & CSS — Module 05"
+      section="HTML & CSS — Lesson 05"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -461,7 +461,7 @@ export default function ImagesMedia() {
         </Para>
 
         <Callout type="info">
-          This module covers <code>loading=&quot;lazy&quot;</code> only as a preview — the full picture
+          This lesson covers <code>loading=&quot;lazy&quot;</code> only as a preview — the full picture
           of responsive, performant images (including <code>srcset</code>, <code>sizes</code>, and the{' '}
           <code>{`<picture>`}</code> element for serving different image files to different screens) is
           covered in complete depth in the Responsive Images & Performance module, later in this track.
@@ -767,11 +767,11 @@ export default function ImagesMedia() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 06 covers HTML lists — ul, ol, and the often-overlooked dl — including exactly when list
+          Lesson 06 covers HTML lists — ul, ol, and the often-overlooked dl — including exactly when list
           order genuinely matters, correct nesting, and the mistakes that produce invalid markup.
         </p>
         <Link href="/learn/html-css/lists" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 06 → Lists — ul, ol, dl
+          Lesson 06 → Lists — ul, ol, dl
         </Link>
       </div>
     </LearnLayout>

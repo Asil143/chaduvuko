@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Dot Product and Similarity — Chaduvuko',
@@ -211,7 +210,6 @@ export default function DotProductSimilarityPage() {
       readTime="22–28 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="math-foundations" topic="dot-product-similarity" />
 
       {/* ══ SECTION 1 — START WITH PLAIN ENGLISH ══════════════════════════════ */}
       <div style={S.sec}>
@@ -299,7 +297,7 @@ export default function DotProductSimilarityPage() {
           This is all the dot product is — a way to measure how much two lists of
           numbers "point in the same direction." If they agree on what is high and
           what is low, the result is large. If they disagree, the result is small.
-          Everything else in this module is just making this idea precise.
+          Everything else in this lesson is just making this idea precise.
         </Callout>
       </div>
 
@@ -307,11 +305,11 @@ export default function DotProductSimilarityPage() {
 
       {/* ══ SECTION 2 — WHAT IS A VECTOR (RECAP) ═══════════════════════════════ */}
       <div style={S.sec}>
-        <span style={S.tag}>Quick recap — Module 03</span>
+        <span style={S.tag}>Quick recap — Lesson 03</span>
         <h2 style={S.h2}>A vector is just a list of numbers — each number has a meaning</h2>
 
         <p style={S.p}>
-          From Module 03 you know that a vector is an ordered list of numbers.
+          From Lesson 03 you know that a vector is an ordered list of numbers.
           But the key insight people miss is that in ML, <em>position matters</em>.
           The first number always means the same thing. The second number always
           means the same thing. This is what makes comparison meaningful —
@@ -728,7 +726,7 @@ for i, row_label in enumerate(labels):
           This is not just a mathematical curiosity. The dot product is
           the computational engine inside neural networks, transformers,
           and recommendation systems. Once you understand it here,
-          you will recognise it immediately in those later modules.
+          you will recognise it immediately in those later lessons.
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24 }}>
@@ -749,7 +747,7 @@ for i, row_label in enumerate(labels):
               <strong style={{ color: '#7F77DD' }}> Query · Key</strong> — a dot product
               between what a word is "looking for" (Query) and what other words "offer" (Key).
               The result tells the model how much each word should pay attention to
-              every other word in the sentence. Module 47 covers this in full.
+              every other word in the sentence. Lesson 47 covers this in full.
             </p>
           </StepBox>
 
@@ -760,7 +758,7 @@ for i, row_label in enumerate(labels):
               Finding the most similar products is finding the vectors with the
               highest cosine similarity to your query vector.
               This is called approximate nearest neighbour search and it runs
-              billions of dot products per second. Module 51 (RAG) is built entirely on this.
+              billions of dot products per second. Lesson 51 (RAG) is built entirely on this.
             </p>
           </StepBox>
         </div>
@@ -1059,7 +1057,7 @@ print("  Step 4: return top-k most similar products")`} />
         <ErrorBlock
           error="Similarity scores are unexpectedly low — similar items score below 0.3"
           cause="Features are on very different scales and you have not normalised the vectors. A feature with values in the thousands (like price in dollars) will dominate the dot product completely, making all other features irrelevant. The direction of the vector is completely distorted by the large-scale feature."
-          fix="Always normalise or standardise your feature vectors before computing similarity. Use sklearn's normalize(X, norm='l2') to convert to unit vectors, or StandardScaler() to bring all features to zero mean and unit variance. This is exactly why Module 17 (Feature Scaling) comes before similarity-based algorithms."
+          fix="Always normalise or standardise your feature vectors before computing similarity. Use sklearn's normalize(X, norm='l2') to convert to unit vectors, or StandardScaler() to bring all features to zero mean and unit variance. This is exactly why Lesson 17 (Feature Scaling) comes before similarity-based algorithms."
         />
       </div>
 
@@ -1079,7 +1077,7 @@ print("  Step 4: return top-k most similar products")`} />
             deliberate design choice made by the model, not a mathematical law. Feed the dot product two
             un-normalised vectors — raw term-frequency counts, unscaled user activity vectors — and it
             reverts to being dominated by magnitude, exactly the active-vs-casual-user problem covered
-            earlier in this module.
+            earlier in this lesson.
           </p>
         </ConceptBox>
 
@@ -1218,7 +1216,7 @@ print("  Step 4: return top-k most similar products")`} />
           But what if you want to understand the overall structure of a dataset —
           which directions explain the most variation? Which features are really
           independent and which are just reflections of each other?
-          That requires Module 06: Eigenvalues and Eigenvectors —
+          That requires Lesson 06: Eigenvalues and Eigenvectors —
           the mathematical foundation of PCA, the most common dimensionality
           reduction technique in production ML.
         </p>
@@ -1235,7 +1233,7 @@ print("  Step 4: return top-k most similar products")`} />
               textTransform: 'uppercase' as const, color: '#7F77DD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 06 · Math Foundations
+              Next — Lesson 06 · Math Foundations
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

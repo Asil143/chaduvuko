@@ -29,7 +29,7 @@ export default function DataScienceTrackPage() {
   return (
     <LearnLayout
       title="Data Science — Zero to Advanced"
-      description="Python, NumPy, pandas, statistics, and predictive modeling — 53 modules, one live in-browser dataset, no prerequisites"
+      description="Python, NumPy, pandas, statistics, and predictive modeling — 53 lessons, one live in-browser dataset, no prerequisites"
       section="Data Science"
       readTime="Self-paced"
       updatedAt="July 2026"
@@ -75,7 +75,7 @@ export default function DataScienceTrackPage() {
         marginBottom: 36,
       }}>
         {[
-          { value: `${allModules.length}`, label: 'Modules'       },
+          { value: `${allModules.length}`, label: 'Lessons'       },
           { value: '11',                   label: 'Sections'       },
           { value: `${totalTopics}+`,      label: 'Topics covered' },
           { value: `${totalHours}h`,       label: 'Total content'  },
@@ -107,7 +107,7 @@ export default function DataScienceTrackPage() {
         <strong style={{ color: DS }}>This track teaches data science from first principles.</strong>{' '}
         Every concept is introduced with a real dataset, practiced immediately in a live Python
         notebook running in your browser, and connected to a real job context. You write real
-        pandas from Module 01 — no setup, no install, no account required.
+        pandas from Lesson 01 — no setup, no install, no account required.
       </div>
 
       {/* ── 4 Special Features ──────────────────────────────────────────── */}
@@ -118,9 +118,9 @@ export default function DataScienceTrackPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
           {[
             { icon: '▶', title: 'Live Python Playground', desc: 'Run real pandas code in your browser — no install, no account. Uses Pyodide with the StreamPulse dataset preloaded.', color: DS, href: '/learn/data-science/what-is-data-science' },
-            { icon: '◎', title: 'Try It Challenges',     desc: "Every module ends with a practice question. Reveal the answer and explanation when you're ready.",                                  color: '#10b981', href: '/learn/data-science/what-is-data-science' },
+            { icon: '◎', title: 'Try It Challenges',     desc: "Every lesson ends with a practice question. Reveal the answer and explanation when you're ready.",                                  color: '#10b981', href: '/learn/data-science/what-is-data-science' },
             { icon: '📈', title: 'Real Charts, Live',     desc: 'Matplotlib and seaborn figures render right in the playground — you build the chart, not just read about it.',                     color: '#ec4899', href: '/learn/data-science/what-is-data-science' },
-            { icon: '≡', title: 'One Dataset, 53 Modules', desc: 'StreamPulse — a fictional streaming service — is used from your first line of pandas to your final capstone project.',            color: '#f97316', href: '/learn/data-science/what-is-data-science' },
+            { icon: '≡', title: 'One Dataset, 53 Lessons', desc: 'StreamPulse — a fictional streaming service — is used from your first line of pandas to your final capstone project.',            color: '#f97316', href: '/learn/data-science/what-is-data-science' },
           ].map(f => (
             <div key={f.title} style={{
               background: 'var(--surface)',
@@ -203,11 +203,11 @@ export default function DataScienceTrackPage() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              53 Modules. Zero to Advanced.
+              53 Lessons. Zero to Advanced.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
-              Follow in order. Each module builds on the last. Module 01 assumes you know nothing —
-              Module 53 ends with a portfolio-ready capstone project and interview prep.
+              Follow in order. Each module builds on the last. Lesson 01 assumes you know nothing —
+              Lesson 53 ends with a portfolio-ready capstone project and interview prep.
             </p>
           </div>
 
@@ -432,7 +432,7 @@ export default function DataScienceTrackPage() {
           color: 'var(--text)', fontFamily: 'var(--font-display)',
           letterSpacing: '-1px', marginBottom: 12,
         }}>
-          Start with Module 01. No setup required.
+          Start with Lesson 01. No setup required.
         </h3>
         <p style={{
           fontSize: 14, color: 'var(--muted)', lineHeight: 1.7,
@@ -447,7 +447,7 @@ export default function DataScienceTrackPage() {
             color: '#fff', fontWeight: 700, fontSize: 13,
             borderRadius: 8, padding: '10px 24px', textDecoration: 'none',
           }}>
-            Start Module 01 →
+            Start Lesson 01 →
           </Link>
         </div>
       </div>

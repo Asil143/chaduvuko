@@ -69,7 +69,7 @@ export default function HowTheInternetWorks() {
     <LearnLayout
       title="How the Internet Works — A Security Engineer's View"
       description="TCP/IP, DNS, HTTP, TLS — every layer's attack surfaces explained from first principles. What happens in the network when you type a URL."
-      section="Cybersecurity — Module 02"
+      section="Cybersecurity — Lesson 02"
       readTime="28 min"
       updatedAt="May 2026"
     >
@@ -79,7 +79,7 @@ export default function HowTheInternetWorks() {
 
       <P>Security tools — firewalls, IDS systems, packet capture, network monitoring — all operate at the network layer. An attacker who understands TCP/IP can craft packets that evade detection. A defender who does not understand TCP/IP cannot interpret what those tools are telling them. Network literacy is not optional background knowledge for a security engineer. It is the foundation everything else is built on.</P>
 
-      <P>This module answers one question from first principles: <Hl>what happens when you type https://bank.example.com into a browser?</Hl> Every step in that journey — DNS resolution, TCP connection, TLS handshake, HTTP request, HTTP response — is an attack surface. By the end, you will know exactly where attackers intercept, redirect, forge, and eavesdrop on network traffic.</P>
+      <P>This lesson answers one question from first principles: <Hl>what happens when you type https://bank.example.com into a browser?</Hl> Every step in that journey — DNS resolution, TCP connection, TLS handshake, HTTP request, HTTP response — is an attack surface. By the end, you will know exactly where attackers intercept, redirect, forge, and eavesdrop on network traffic.</P>
 
       <div style={{ background: `${C}08`, border: `1px solid ${C}25`, borderLeft: `4px solid ${C}`, borderRadius: '0 10px 10px 0', padding: '20px 24px', margin: '4px 0 24px' }}>
         <P>The internet is not a single network. It is a collection of autonomous systems — networks owned by ISPs, universities, governments, and companies — that agree to route packets between each other using a shared set of protocols. Those protocols were designed in the 1970s and 1980s with trust, not security, as the primary design goal. Security was retrofitted on top. This is why so many fundamental attacks still work.</P>
@@ -606,10 +606,10 @@ Set-Cookie: session=abc123; HttpOnly; Secure; SameSite=Strict    ← protect coo
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 03</strong>, you get hands-on with the operating system every security professional lives in — Linux. File permissions, processes, users, logs, and the specific commands that appear on every incident response and penetration test engagement.
+          In <strong>Lesson 03</strong>, you get hands-on with the operating system every security professional lives in — Linux. File permissions, processes, users, logs, and the specific commands that appear on every incident response and penetration test engagement.
         </p>
         <Link href="/learn/cybersecurity/linux-for-security" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 03 → Linux for Security Engineers
+          Lesson 03 → Linux for Security Engineers
         </Link>
       </div>
 

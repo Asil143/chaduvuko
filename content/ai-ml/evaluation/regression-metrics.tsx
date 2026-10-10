@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Regression Metrics — MAE, RMSE, R² — Chaduvuko',
@@ -178,7 +177,6 @@ export default function RegressionMetricsPage() {
       readTime="22–28 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="evaluation" topic="regression-metrics" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -882,7 +880,7 @@ for idx in worst_idx:
             high-value items but does not want a handful of outliers to dominate training entirely
             might use a Huber loss, which behaves like squared error for small residuals and like
             absolute error for large ones — a training-time compromise that mirrors the same
-            MAE-versus-RMSE tradeoff this module covers for evaluation.
+            MAE-versus-RMSE tradeoff this lesson covers for evaluation.
           </p>
         </ConceptBox>
 
@@ -955,7 +953,7 @@ print("between cheap, high-volume items and rare, high-value ones.")`} />
             model with R²=0.92 on delivery times ranging from 10 to 120 minutes is explaining 92% of
             a large variance — but the remaining 8% unexplained can still translate into an MAE of 8
             minutes, which may be operationally unacceptable even though the R² number looks
-            excellent. This module's own guidance is explicit about this: report MAE or RMSE in the
+            excellent. This lesson's own guidance is explicit about this: report MAE or RMSE in the
             target's real units alongside R², because R² alone tells you nothing about whether the
             typical error is 30 seconds or 30 minutes.
           </p>
@@ -980,7 +978,7 @@ print("between cheap, high-volume items and rare, high-value ones.")`} />
             systematic bias by construction. A model can post an excellent overall MAE of 4.2
             minutes while being consistently 15 minutes late specifically for long-distance orders,
             or systematically biased for one customer segment — the aggregate number simply blends
-            the good predictions with the bad ones. This is exactly why this module's residual
+            the good predictions with the bad ones. This is exactly why this lesson's residual
             analysis section exists: checking the mean residual, MAE by distance bucket, and MAE by
             delivery-time bucket separately is the only way to catch a model that looks fine in
             aggregate but is quietly failing a subgroup that never shows up in the headline metric.
@@ -1099,10 +1097,10 @@ print("between cheap, high-volume items and rare, high-value ones.")`} />
         </p>
 
         <p style={S.p}>
-          Section 7 — Deep Learning — begins with Module 41.
+          Section 7 — Deep Learning — begins with Lesson 41.
           Everything changes: instead of hand-crafted features,
           the model learns its own representations from raw data.
-          Module 41 builds a neural network from scratch in NumPy —
+          Lesson 41 builds a neural network from scratch in NumPy —
           forward pass, backpropagation, gradient descent —
           before introducing PyTorch.
         </p>
@@ -1119,7 +1117,7 @@ print("between cheap, high-volume items and rare, high-value ones.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 41 · Deep Learning
+              Next — Lesson 41 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

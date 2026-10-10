@@ -77,7 +77,7 @@ export default function IOFormatting() {
     <LearnLayout
       title="Input/Output & f-string Formatting"
       description="input() mechanics, reading multiple values from one line, and print() in real depth — sep, end, file, and flush — plus stdout vs stderr and print-based debugging."
-      section="Python — Module 10"
+      section="Python — Lesson 10"
       readTime="45 min"
       updatedAt="August 2026"
     >
@@ -196,12 +196,12 @@ print(a + b)`}</CodeBox>
           The Strings module covered f-strings thoroughly — embedding expressions directly inside a
           string with <code>f&quot;...{'{'}expression{'}'}...&quot;</code>, format specs for decimal
           places, padding, thousands separators, and percentages, and the debugging shorthand{' '}
-          <code>f&quot;{'{'}value=&#125;&quot;</code>. This module deliberately does not repeat any of
+          <code>f&quot;{'{'}value=&#125;&quot;</code>. This lesson deliberately does not repeat any of
           that ground — if any of it sounds unfamiliar, it is worth a quick trip back to Parts 05 and 06
-          of the Strings module before continuing. What this module adds instead is everything{' '}
+          of the Strings module before continuing. What this lesson adds instead is everything{' '}
           <em>around</em> formatting — actually getting values in via <code>input()</code>, and actually
           getting formatted output onto the screen (or somewhere else entirely) correctly via{' '}
-          <code>print()</code>, which is the real subject of the rest of this module.
+          <code>print()</code>, which is the real subject of the rest of this lesson.
         </Para>
 
         <CodeBox label="A one-line reminder of what f-strings already cover, in full, back in the Strings module">{`name = "Maria"
@@ -519,7 +519,7 @@ print(f"ERROR: package {package_id} failed barcode validation", file=sys.stderr,
           },
           {
             wrong: '"print() debugging is something you graduate out of once you\'re experienced"',
-            right: 'Experienced engineers use it constantly for small, quick questions — it is fast and requires no setup. What changes with experience is recognising its limits: it needs a source-code edit and a re-run for every new question, and it does not scale to large codebases or intermittent bugs, which is exactly where a real debugger (covered in a dedicated later module) becomes worth the setup cost.',
+            right: 'Experienced engineers use it constantly for small, quick questions — it is fast and requires no setup. What changes with experience is recognising its limits: it needs a source-code edit and a re-run for every new question, and it does not scale to large codebases or intermittent bugs, which is exactly where a real debugger (covered in a dedicated later lesson) becomes worth the setup cost.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -702,7 +702,7 @@ print(f"ERROR: package {package_id} failed barcode validation", file=sys.stderr,
       <KeyTakeaways items={[
         'input() always returns a str, with no exceptions — convert immediately with int() or float() at the point of input if a number is needed.',
         '.split() on the result of input(), combined with unpacking, is the standard way to read several values from one line: name, age = input().split().',
-        'f-string format specs were covered in full in the Strings module — this module deliberately did not repeat that ground, only briefly recapped it.',
+        'f-string format specs were covered in full in the Strings module — this lesson deliberately did not repeat that ground, only briefly recapped it.',
         'print()\'s sep controls what goes between multiple arguments (default: a space); end controls what follows the whole call (default: a newline).',
         'print() writes to stdout by default; file=sys.stderr redirects it to the error stream — a distinction that matters once output is redirected or piped, common in real production tooling.',
         'Output is often buffered for performance; flush=True forces it to appear immediately, which matters for live-updating output and real-time monitoring.',
@@ -716,12 +716,12 @@ print(f"ERROR: package {package_id} failed barcode validation", file=sys.stderr,
           Phase 1 complete — Phase 2 starts next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          That completes Phase 1 — Python Foundations. Module 11 opens Phase 2 (Core Data Structures &amp;
+          That completes Phase 1 — Python Foundations. Lesson 11 opens Phase 2 (Core Data Structures &amp;
           Logic) with dictionaries — the most-used data structure in real Python code — covering
           key-value storage, iteration patterns, and performance characteristics.
         </p>
         <Link href="/learn/python/dictionaries" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 11 → Dictionaries
+          Lesson 11 → Dictionaries
         </Link>
       </div>
     </LearnLayout>

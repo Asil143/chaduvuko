@@ -74,7 +74,7 @@ export default function Documentation() {
     <LearnLayout
       title="Documentation: Descriptions, Doc Blocks, and dbt Docs"
       description="Model and column descriptions in schema.yml, reusable doc blocks with the doc() function, generating and serving the dbt docs site, the auto-generated DAG lineage graph, meta fields and tags, and documentation as a team habit instead of an afterthought."
-      section="dbt — Module 09"
+      section="dbt — Lesson 09"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -118,7 +118,7 @@ export default function Documentation() {
         </HighlightBox>
 
         <Para>
-          This module covers three layers of dbt documentation: descriptions written directly in
+          This lesson covers three layers of dbt documentation: descriptions written directly in
           <code>schema.yml</code> at the model and column level (Part 02), doc blocks for longer,
           reusable prose that would be unwieldy to repeat inline (Part 03), and the generated docs site
           itself — including the DAG visualization, which is arguably the single most valuable piece of
@@ -305,7 +305,7 @@ is refunded gets order_status = refunded, it does not revert to delivered.
           Both <code>fct_orders.customer_id</code> and <code>dim_customers.customer_id</code> now show the
           identical, complete explanation on the docs site — updated in exactly one place, the
           <code>.md</code> file, the next time the definition needs to change. This is the same DRY
-          principle Part 04 of the next module applies to SQL logic via macros, applied here to
+          principle Part 04 of the next lesson applies to SQL logic via macros, applied here to
           documentation text instead.
         </Para>
 
@@ -633,7 +633,7 @@ $ dbt build --select tag:core+`}
         <SectionTitle>Fully Documenting fct_subscriptions From Scratch</SectionTitle>
 
         <Para>
-          Putting every piece of this module together: a mart-layer model, fully documented, with a
+          Putting every piece of this lesson together: a mart-layer model, fully documented, with a
           model-level description, column-level descriptions, a reused doc block from a related staging
           model, and a <code>meta</code> ownership tag.
         </Para>
@@ -703,7 +703,7 @@ models:
           Monthly recurring revenue attributable to this subscription, in
           cents, at its current plan tier. Annual plans are normalized to
           a monthly figure by dividing by 12 — see the mrr_normalization
-          macro covered in the next module for exactly how this
+          macro covered in the next lesson for exactly how this
           normalization is computed.
 
       - name: subscription_status
@@ -743,7 +743,7 @@ models:
         <SectionTitle>exposures: — Declaring What Actually Consumes a Model's Output</SectionTitle>
 
         <Para>
-          Everything so far in this module documents the project's own internals — models, sources, and the
+          Everything so far in this lesson documents the project's own internals — models, sources, and the
           dependencies between them. The lineage graph in Part 05 is complete on the input side: it shows
           every upstream table a model reads from. It says nothing at all about the output side — what
           actually consumes <code>fct_orders</code> once dbt is done building it. A Looker dashboard, a

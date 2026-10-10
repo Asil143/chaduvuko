@@ -77,7 +77,7 @@ export default function ReadingWritingFiles() {
     <LearnLayout
       title="Reading & Writing Files"
       description="open(), file modes, the with statement, reading strategies for files of any size, encoding, and pathlib — the modern, portable way to work with paths."
-      section="Python — Module 15"
+      section="Python — Lesson 15"
       readTime="45 min"
       updatedAt="August 2026"
     >
@@ -101,7 +101,7 @@ f.close()
 print(contents)`}</CodeBox>
 
         <Para>
-          That example works, but it has a real problem this module will fix in the next Part. First,
+          That example works, but it has a real problem this lesson will fix in the next Part. First,
           the modes. Every mode is a one- or two-character string, and getting the wrong one is one of
           the most common ways beginners accidentally destroy data they meant to keep.
         </Para>
@@ -248,7 +248,7 @@ with open("log.txt") as f:
           regardless of file size, reads naturally, and is what you will see in essentially all
           production Python code that processes files line by line. Reach for <code>.read()</code> only
           when you genuinely need the whole file as one string (e.g. passing it to{' '}
-          <code>json.loads()</code>, covered in the next module) — and only when you are confident the
+          <code>json.loads()</code>, covered in the next lesson) — and only when you are confident the
           file is small enough for that to be safe.
         </Callout>
 
@@ -836,12 +836,12 @@ output_dir.mkdir(parents=True, exist_ok=True)
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 16 builds directly on everything in this module — the csv and json modules for reading
+          Lesson 16 builds directly on everything in this lesson — the csv and json modules for reading
           and writing the two formats every real Python script eventually touches, including the gotchas
           that break real data pipelines.
         </p>
         <Link href="/learn/python/csv-json" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 16 → Working with CSV and JSON
+          Lesson 16 → Working with CSV and JSON
         </Link>
       </div>
     </LearnLayout>

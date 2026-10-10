@@ -74,7 +74,7 @@ export default function TestingBasics() {
     <LearnLayout
       title="Testing: Generic and Singular Tests"
       description="Generic tests versus singular tests, the four built-in generic tests and their exact YAML syntax, how a generic test actually works as a parameterized SQL query, writing custom generic and singular tests, and where in the DAG to place each kind of test."
-      section="dbt — Module 08"
+      section="dbt — Lesson 08"
       readTime="65 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -244,7 +244,7 @@ export default function TestingBasics() {
         <Para>
           The four generic tests covered above ship with dbt itself and need no extra installation. Beyond
           them, the widely used <code>dbt_utils</code> package (a common addition to almost every real
-          project, covered in a later module on packages) adds several more generic tests that fill common
+          project, covered in a later lesson on packages) adds several more generic tests that fill common
           gaps — most notably <code>accepted_range</code>, for asserting a numeric column falls within a
           min/max bound, and <code>unique_combination_of_columns</code>, for asserting that a combination
           of several columns together is unique even though no single one of them is.
@@ -876,7 +876,7 @@ models:
           raw data is arriving on the schedule it's supposed to, not just whether it's structurally valid
           once it arrives. Building a complete, layered test strategy across an entire project — deciding
           exactly which tests belong at which layer, and how to triage a large volume of test failures — is
-          its own discipline, covered in a later module in this track.
+          its own discipline, covered in a later lesson in this track.
         </Callout>
 
         <SubTitle>Intermediate-layer tests — a middle ground, used more sparingly</SubTitle>

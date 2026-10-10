@@ -52,7 +52,7 @@ export default function Module38() {
     <LearnLayout
       title="Bug Bounty Hunting — From Beginner to First Valid Report"
       description="Earn money finding real vulnerabilities. Learn how to choose programmes, build a recon workflow, escalate findings into high-severity reports, and develop a reputation on HackerOne and Bugcrowd."
-      section="Cybersecurity — Module 38"
+      section="Cybersecurity — Lesson 38"
       readTime="36 min"
       updatedAt="May 2026"
     >
@@ -719,8 +719,8 @@ On grey areas — when in doubt, ask:
       ]} />
 
       <Callout type="info">
-        <strong>Up Next — Module 39: Home Lab Setup</strong><br />
-        Module 39 is your practical guide to building a cybersecurity home lab from scratch. You will set up a virtualisation environment, build a realistic vulnerable network with Active Directory, deploy security tools (SIEM, IDS, EDR), and create a safe space to practise every technique from this course without legal risk.
+        <strong>Up Next — Lesson 39: Home Lab Setup</strong><br />
+        Lesson 39 is your practical guide to building a cybersecurity home lab from scratch. You will set up a virtualisation environment, build a realistic vulnerable network with Active Directory, deploy security tools (SIEM, IDS, EDR), and create a safe space to practise every technique from this course without legal risk.
       </Callout>
 
     </LearnLayout>

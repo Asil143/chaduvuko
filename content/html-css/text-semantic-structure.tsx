@@ -77,7 +77,7 @@ export default function TextSemanticStructure() {
     <LearnLayout
       title="Text Elements & Semantic Structure"
       description="Headings, paragraphs, and the semantic tags — header, nav, main, section, article, aside, footer — that give a page real meaning."
-      section="HTML & CSS — Module 03"
+      section="HTML & CSS — Lesson 03"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -739,12 +739,12 @@ export default function TextSemanticStructure() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 04 covers the anchor tag in full — every href value type, the security implications of{' '}
+          Lesson 04 covers the anchor tag in full — every href value type, the security implications of{' '}
           target=&quot;_blank&quot;, linking to a specific point within a page, and building a real,
           semantic navigation menu.
         </p>
         <Link href="/learn/html-css/links-navigation" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 04 → Links and Navigation
+          Lesson 04 → Links and Navigation
         </Link>
       </div>
     </LearnLayout>

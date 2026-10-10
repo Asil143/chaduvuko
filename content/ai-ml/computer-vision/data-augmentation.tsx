@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Data Augmentation — Training on Limited Image Data — Chaduvuko',
@@ -178,7 +177,6 @@ export default function DataAugmentationPage() {
       readTime="22–28 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="computer-vision" topic="data-augmentation" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -802,7 +800,7 @@ for i, t in enumerate(tensors):
 
         <p style={S.p}>
           For plain image classification, torchvision.transforms.Compose is
-          genuinely enough — every example above in this module uses it.
+          genuinely enough — every example above in this lesson uses it.
           The moment a task has structured labels attached to the image —
           bounding boxes for detection, masks for segmentation, keypoints
           for pose estimation — torchvision's transforms stop being enough,
@@ -900,7 +898,7 @@ print("entire reason to use bbox_params instead of a plain torchvision Compose."
 
         <ConceptBox title="Myth: Standard augmentations like flip, rotate, and crop are safe to apply to any image dataset" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            As this module's geometric augmentations section notes, a horizontal flip is only
+            As this lesson's geometric augmentations section notes, a horizontal flip is only
             label-preserving when left-right orientation genuinely does not matter for the task.
             It silently corrupts labels for text-containing images, since flipped text is
             unreadable and a model trained on it learns nothing useful about real text. It is
@@ -915,7 +913,7 @@ print("entire reason to use bbox_params instead of a plain torchvision Compose."
         <ConceptBox title="Myth: More augmentation is always better regularisation" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
             Past a certain point, aggressive augmentation stops teaching invariance and starts
-            destroying the training signal — this module's errors section shows RandomResizedCrop
+            destroying the training signal — this lesson's errors section shows RandomResizedCrop
             with scale=(0.05, 1.0) sometimes handing the model 5% of a product photo as its entire
             input, which is not enough to learn from. There is a second, subtler failure: a model
             can effectively overfit to the augmentation pipeline itself, picking up on artifacts a
@@ -927,7 +925,7 @@ print("entire reason to use bbox_params instead of a plain torchvision Compose."
 
         <ConceptBox title="Myth: Because augmentation only happens at training time, it has no role at inference" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            This module's callout that augmentation is applied only during training refers to
+            This lesson's callout that augmentation is applied only during training refers to
             avoiding random transforms on the validation set so metrics stay comparable between
             runs — it is not the whole story about augmentation and inference. Test-time
             augmentation (TTA) applies several augmented views of the same input image at
@@ -941,7 +939,7 @@ print("entire reason to use bbox_params instead of a plain torchvision Compose."
 
         <ConceptBox title="Myth: Once you pick the right augmentation policy, it stays right regardless of dataset size" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            The augmentation strategy section of this module is explicit that the right policy
+            The augmentation strategy section of this lesson is explicit that the right policy
             scales inversely with how much data you have. Under 1,000 images, heavy augmentation
             is close to mandatory — it is the main defence against overfitting when there simply
             are not enough unique examples. Past 100,000 images, that same heavy policy actively
@@ -1048,7 +1046,7 @@ print("entire reason to use bbox_params instead of a plain torchvision Compose."
           Classification predicts one label for the entire image.
           Object detection predicts the location and class of every
           object in the image — drawing bounding boxes around each one.
-          Module 57 covers YOLO — the fastest object detection architecture —
+          Lesson 57 covers YOLO — the fastest object detection architecture —
           and the key concepts: anchor boxes, IoU, non-maximum suppression.
           The same augmentation techniques apply but with an important twist:
           geometric augmentations must also transform the bounding box coordinates.
@@ -1066,7 +1064,7 @@ print("entire reason to use bbox_params instead of a plain torchvision Compose."
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 57 · Computer Vision
+              Next — Lesson 57 · Computer Vision
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

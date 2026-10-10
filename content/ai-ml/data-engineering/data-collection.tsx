@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Data Collection — APIs, SQL, Files and Scraping — Chaduvuko',
@@ -175,7 +174,6 @@ export default function DataCollectionPage() {
       readTime="50–62 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='data-engineering' topic='data-collection' />
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -202,7 +200,7 @@ export default function DataCollectionPage() {
         </p>
 
         <p style={S.p}>
-          This module covers every major data source an ML engineer encounters —
+          This lesson covers every major data source an ML engineer encounters —
           with real error handling, pagination, retry logic, and performance
           patterns that make the difference between a pipeline that works once
           and one that runs reliably every day.
@@ -211,7 +209,7 @@ export default function DataCollectionPage() {
         <HBox color="#1D9E75">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module covers:
+              What this lesson covers:
             </span>
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -241,7 +239,7 @@ export default function DataCollectionPage() {
         </HBox>
 
         <Callout type="tip">
-          Install the libraries used in this module before starting:
+          Install the libraries used in this lesson before starting:
           {' '}<span style={S.code as React.CSSProperties}>pip install requests httpx pandas sqlalchemy
           pyarrow boto3 google-cloud-storage beautifulsoup4 playwright kafka-python</span>.
           You don't need real API credentials to follow along — every example
@@ -1696,7 +1694,7 @@ if df_weather is not None:
         <h2 style={S.h2}>Production data collection is four separate systems, not one script</h2>
 
         <p style={S.p}>
-          Everything in this module — pagination, retry logic, chunked SQL reads, scraping — is the
+          Everything in this lesson — pagination, retry logic, chunked SQL reads, scraping — is the
           mechanics. In a real company, those mechanics get wired into four distinct collection
           systems that rarely share code, because they solve different problems on different
           timelines. Understanding which system a given dataset comes from tells you what kind of
@@ -1707,7 +1705,7 @@ if df_weather is not None:
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[
               { system: 'Event logging (app instrumentation)', color: '#378ADD', desc: 'Product and mobile engineers fire events (order_placed, screen_viewed) through a client SDK into Kafka or Segment. The ML team does not own this instrumentation — a renamed event field upstream silently breaks a feature pipeline downstream with no warning.' },
-              { system: 'Third-party APIs', color: '#7b61ff', desc: 'Weather, payments, mapping, and enrichment vendors (Stripe, Google Maps, credit bureaus). These come with rate limits, paid tiers, and API versions that change on the vendor’s schedule, not yours — the retry and pagination code in this module exists mainly for this category.' },
+              { system: 'Third-party APIs', color: '#7b61ff', desc: 'Weather, payments, mapping, and enrichment vendors (Stripe, Google Maps, credit bureaus). These come with rate limits, paid tiers, and API versions that change on the vendor’s schedule, not yours — the retry and pagination code in this lesson exists mainly for this category.' },
               { system: 'Labeling vendors', color: '#1D9E75', desc: 'For supervised tasks without a natural label (fraud review outcomes, content moderation categories), companies send raw examples to Scale AI, Labelbox, or an internal annotation team and get labels back days or weeks later — on a completely different cadence than the raw data collection.' },
               { system: 'Internal warehouse / lake queries', color: '#D85A30', desc: 'SQL against the production replica or a warehouse table someone else’s pipeline populated. This is the "easy" source, but it inherits every upstream data quality problem invisibly — you are trusting a pipeline you did not build and often cannot see.' },
             ].map((item) => (
@@ -1742,7 +1740,7 @@ if df_weather is not None:
             who requests new events and reviews schemas. Third-party API integrations are typically
             owned directly by whichever data engineer built the pipeline, since they carry the retry
             and rate-limit logic. Labeling vendor relationships are frequently owned by a dedicated
-            data operations or annotation team, not by ML engineers at all. The skill this module
+            data operations or annotation team, not by ML engineers at all. The skill this lesson
             teaches — reliable pagination, retries, and validation — is what lets one ML engineer
             safely consume data from all four without needing to own any of them end to end.
           </p>
@@ -1771,7 +1769,7 @@ if df_weather is not None:
         <ConceptBox title="Myth: Data collection is a one-time task you complete before modeling starts" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
             A model trained once on a static export is already stale the moment user behaviour,
-            pricing, or the product itself changes. Every pipeline in this module — the pagination
+            pricing, or the product itself changes. Every pipeline in this lesson — the pagination
             loops, the retry logic, the DataCollector class with checkpointing — is built to run
             repeatedly on a schedule, not once. Production data collection is closer to a standing
             service than a script: it runs daily or hourly, indefinitely, for as long as the model it
@@ -1786,7 +1784,7 @@ if df_weather is not None:
             The warehouse gives every table the same clean tabular appearance regardless of how
             reliable its upstream source actually is. Before trusting a table, it is worth finding out
             who owns the pipeline that fills it, how often it runs, and whether anyone monitors it —
-            the same question this module asks about your own collection code applies just as much to
+            the same question this lesson asks about your own collection code applies just as much to
             data someone else already collected for you.
           </p>
         </ConceptBox>
@@ -1795,7 +1793,7 @@ if df_weather is not None:
           <p style={{ ...S.ps, marginBottom: 0 }}>
             Third-party APIs change response schemas, deprecate fields, tighten rate limits, and
             occasionally shut down entirely, usually with a changelog email nobody on the ML team is
-            subscribed to. The retry and error-handling code in this module protects against transient
+            subscribed to. The retry and error-handling code in this lesson protects against transient
             failures — a dropped connection, a momentary 500 — but it does nothing against a vendor
             silently renaming a field or changing units. That requires an explicit validation step
             that checks the shape of what came back, not just whether the request succeeded.
@@ -1880,7 +1878,7 @@ if df_weather is not None:
             Ideally I find out from an automated schema check that runs immediately after every
             collection run and fails loudly the moment a field disappears, a type changes, or values
             fall outside an expected range — the same principle as the response validation shown in
-            this module's retry logic, extended to check structure, not just HTTP status. Without that
+            this lesson's retry logic, extended to check structure, not just HTTP status. Without that
             check in place, the realistic failure mode is discovering it downstream when a training
             job crashes or a feature is unexpectedly null. Once caught, I would pin the pipeline to
             whatever version of the API contract still works, patch the parsing code, and use the
@@ -1908,7 +1906,7 @@ if df_weather is not None:
         </p>
 
         <p style={S.p}>
-          Module 16 moves to data cleaning and validation — the step that comes
+          Lesson 16 moves to data cleaning and validation — the step that comes
           after collection. Raw data from any of these sources will have nulls,
           wrong types, duplicate records, schema drift, and outliers.
           Cleaning it systematically — with validation rules that catch problems
@@ -1928,7 +1926,7 @@ if df_weather is not None:
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 16 · Data Engineering
+              Next — Lesson 16 · Data Engineering
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

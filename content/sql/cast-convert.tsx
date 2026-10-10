@@ -93,7 +93,7 @@ export default function CastConvert() {
     <LearnLayout
       title="CAST and Type Conversion"
       description="Converting between data types — CAST, :: shorthand, implicit vs explicit casting, TRY_CAST for safe conversion, and every coercion rule that prevents silent errors in production queries"
-      section="SQL — Module 44"
+      section="SQL — Lesson 44"
       readTime="10–14 min"
       updatedAt="April 2026"
     >
@@ -809,7 +809,7 @@ FROM (VALUES
     - CAST(total_amount AS INTEGER)                     AS round_vs_trunc_diff,
 
   -- Percentage of max order — NULLIF protects divide by zero
-  -- This uses a window function (OVER (...)) — covered fully in Module 52.
+  -- This uses a window function (OVER (...)) — covered fully in Lesson 52.
   ROUND(
     CAST(total_amount AS REAL)
     / NULLIF(MAX(CAST(total_amount AS REAL)) OVER (), 0) * 100
@@ -851,10 +851,10 @@ ORDER BY total_amount DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 45</strong>, you learn Views — virtual tables defined by a query, stored in the database schema, and queryable like real tables. Covers creation, updating, security, and when views outperform repeated CTEs.
+          In <strong>Lesson 45</strong>, you learn Views — virtual tables defined by a query, stored in the database schema, and queryable like real tables. Covers creation, updating, security, and when views outperform repeated CTEs.
         </p>
         <Link href="/learn/sql/views" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 45 → Views
+          Lesson 45 → Views
         </Link>
       </div>
 

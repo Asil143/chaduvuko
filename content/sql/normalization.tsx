@@ -95,7 +95,7 @@ export default function Normalization() {
     <LearnLayout
       title="Normalisation"
       description="Design relational schemas that eliminate redundancy, prevent update anomalies, and stay consistent — 1NF through 3NF explained with real FreshCart examples"
-      section="SQL — Module 26"
+      section="SQL — Lesson 26"
       readTime="20–26 min"
       updatedAt="April 2026"
     >
@@ -258,7 +258,7 @@ CREATE TABLE customers (
 -- Each address component queryable independently`}
       />
 
-      <P>This query uses <Hl>JOIN</Hl> to combine rows from related tables — you'll learn JOIN fully in Modules 30-31. For now: JOIN combines rows from related tables using a matching key column (here, order_id and product_id link the three tables together).</P>
+      <P>This query uses <Hl>JOIN</Hl> to combine rows from related tables — you'll learn JOIN fully in Lessons 30-31. For now: JOIN combines rows from related tables using a matching key column (here, order_id and product_id link the three tables together).</P>
 
       <SQLPlayground
         initialQuery={`-- FreshCart is already in 1NF
@@ -1019,10 +1019,10 @@ CREATE TABLE appointments (
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 27</strong>, you learn aggregate functions — COUNT, SUM, AVG, MIN, MAX — the tools that turn raw rows into business metrics. This is where SQL becomes the language of analytics.
+          In <strong>Lesson 27</strong>, you learn aggregate functions — COUNT, SUM, AVG, MIN, MAX — the tools that turn raw rows into business metrics. This is where SQL becomes the language of analytics.
         </p>
         <Link href="/learn/sql/aggregate-functions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 27 → Aggregate Functions
+          Lesson 27 → Aggregate Functions
         </Link>
       </div>
 

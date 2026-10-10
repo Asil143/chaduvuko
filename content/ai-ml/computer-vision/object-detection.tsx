@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Object Detection — YOLO and Feature Pyramids — Chaduvuko',
@@ -178,7 +177,6 @@ export default function ObjectDetectionPage() {
       readTime="36–46 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="computer-vision" topic="object-detection" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -225,7 +223,7 @@ export default function ObjectDetectionPage() {
         </AnalogyBox>
 
         <Callout type="tip">
-          This module covers the concepts and key algorithms from scratch
+          This lesson covers the concepts and key algorithms from scratch
           (IoU, NMS, anchor boxes) then shows production usage with
           Ultralytics YOLOv8 — the standard library used in most
           ML teams for real-time detection.
@@ -1126,7 +1124,7 @@ for m in pick_model(latency_budget_ms=100, min_map=50.0):
           it assigns a class label to every single pixel in the image.
           Instead of "there is a person at coordinates (100, 200)–(180, 400)"
           it produces "every pixel that belongs to a person, exactly."
-          Module 58 covers U-Net — the architecture that powers
+          Lesson 58 covers U-Net — the architecture that powers
           medical image segmentation — and how skip connections
           preserve fine spatial detail lost during downsampling.
         </p>
@@ -1143,7 +1141,7 @@ for m in pick_model(latency_budget_ms=100, min_map=50.0):
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 58 · Computer Vision
+              Next — Lesson 58 · Computer Vision
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

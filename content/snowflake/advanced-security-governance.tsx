@@ -5,7 +5,7 @@ export default function AdvancedSecurityGovernance() {
     <LearnLayout
       title="Advanced Security and Governance"
       description="Masking policies, row access policies, object tagging, classification, access history, and how they build on RBAC to protect sensitive data at query time."
-      section="Snowflake — Module 15"
+      section="Snowflake — Lesson 15"
       readTime="65 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -27,7 +27,7 @@ export default function AdvancedSecurityGovernance() {
           different audiences differently, without duplicating the table.
         </Para>
         <Para>
-          This module covers four features that sit on top of RBAC: masking policies (hide or transform
+          This lesson covers four features that sit on top of RBAC: masking policies (hide or transform
           column values based on who is asking), row access policies (filter which rows are visible based on
           who is asking), object tagging (classify data so governance and cost tooling can reason about it),
           and access history (prove after the fact who actually read or wrote what).
@@ -299,7 +299,7 @@ WHERE tag_name = 'DATA_CLASSIFICATION'
           Classification results are suggestions for a human or process to review and act on. Running
           classification does not, by itself, apply a masking policy, a row access policy, or a tag to
           anything. You still have to review the suggestions and explicitly apply the governance controls
-          covered in this module. Treat classification as a discovery aid that speeds up the audit — not as a
+          covered in this lesson. Treat classification as a discovery aid that speeds up the audit — not as a
           policy engine that protects data on its own.
         </Callout>
         <CodeBox label="Conceptual classification workflow">{`-- 1. Run classification (via Snowsight UI or the classification system procedures)

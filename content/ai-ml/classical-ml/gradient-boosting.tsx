@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Gradient Boosting — How XGBoost and LightGBM Work — Chaduvuko',
@@ -178,7 +177,6 @@ export default function GradientBoostingPage() {
       readTime="30–40 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="classical-ml" topic="gradient-boosting" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -695,7 +693,7 @@ print(f"Test MAE:    {best_test:.4f} min")`} />
 
         <p style={S.p}>
           The word "gradient" in gradient boosting is not just marketing.
-          It connects directly to gradient descent from Module 07.
+          It connects directly to gradient descent from Lesson 07.
           When the loss function is mean squared error, the residuals
           <em> y − ŷ </em>are exactly the negative gradient of the loss
           with respect to the predictions. So fitting a tree on residuals
@@ -1139,7 +1137,7 @@ for i, (_, row) in enumerate(new_orders.iterrows()):
           <p style={{ ...S.ps, marginBottom: 0 }}>
             Lower learning rate paired with more trees does generally improve test performance, but it is
             not a free lunch — it is a straight trade of training compute for a small accuracy gain, with
-            diminishing returns. The learning-rate sweep earlier in this module needed 2,000 trees at
+            diminishing returns. The learning-rate sweep earlier in this lesson needed 2,000 trees at
             lr=0.01 to match what 50 trees did at lr=0.3 — a 40× increase in training cost for a modest
             MAE improvement. Past some point, additional trees stop helping regardless of how small the
             learning rate is, which is exactly why you tune both together with cross-validation and let
@@ -1270,7 +1268,7 @@ for i, (_, row) in enumerate(new_orders.iterrows()):
           Gradient boosting is the concept. XGBoost is the implementation that
           won every Kaggle competition from 2016–2019 and is still deployed
           at most fintech companies today.
-          Module 30 covers XGBoost in practice — regularisation parameters,
+          Lesson 30 covers XGBoost in practice — regularisation parameters,
           early stopping with a validation set, SHAP values for explaining
           individual predictions, and a complete end-to-end workflow.
         </p>
@@ -1287,7 +1285,7 @@ for i, (_, row) in enumerate(new_orders.iterrows()):
               textTransform: 'uppercase' as const, color: '#D85A30',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 30 · Classical ML
+              Next — Lesson 30 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

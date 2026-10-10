@@ -77,13 +77,13 @@ export default function DebuggingTechniques() {
     <LearnLayout
       title="Debugging Techniques and Tools"
       description="Reading a traceback the right way, the real limits of print debugging, pdb, VS Code's debugger, and a full worked debugging session."
-      section="Python — Module 39"
+      section="Python — Lesson 39"
       readTime="50 min"
       updatedAt="August 2026"
     >
 
       <Para>
-        This module opens <strong>Phase 6 — Production &amp; Career Readiness</strong>, the final phase
+        This lesson opens <strong>Phase 6 — Production &amp; Career Readiness</strong>, the final phase
         of this curriculum. Everything up to this point has been about writing Python that works. Phase
         6 is about the skills that turn "it works on my machine" into a professional habit: debugging
         systematically instead of guessing, logging instead of printing, packaging instead of copy-pasting
@@ -175,7 +175,7 @@ AttributeError: 'int' object has no attribute 'strip'`}</CodeBox>
           <code>print()</code> calls to check a value at a specific point is fast, requires no setup, and
           is genuinely the right tool for a huge fraction of bugs — especially small scripts and quick
           "what is actually in this variable right now" questions. You already used this technique
-          constantly in the Formatting module (Module 10) when inspecting values with f-strings during
+          constantly in the Formatting module (Lesson 10) when inspecting values with f-strings during
           development.
         </Para>
 
@@ -214,7 +214,7 @@ AttributeError: 'int' object has no attribute 'strip'`}</CodeBox>
 
         <Para>
           One genuine upgrade from raw <code>print()</code> that costs almost nothing is Python&apos;s
-          built-in <code>logging</code> module, which the very next module in this track covers in full
+          built-in <code>logging</code> module, which the very next lesson in this track covers in full
           depth. For now, it&apos;s worth knowing it exists as the natural next step once
           debug-<code>print</code>s start accumulating in a file you intend to keep.
         </Para>
@@ -299,7 +299,7 @@ def calculate_discount(price, percent):
         <SectionTitle>VS Code&apos;s Debugger — pdb&apos;s Power, Without the Prompt</SectionTitle>
 
         <Para>
-          Back in Module 01, you set up VS Code with the Python extension as this track&apos;s recommended
+          Back in Lesson 01, you set up VS Code with the Python extension as this track&apos;s recommended
           editor. That same extension ships a full graphical debugger built directly on top of the same
           debugging protocol <code>pdb</code> uses conceptually — but instead of typing commands at a text
           prompt, you click in the left margin next to a line number to set a <strong>breakpoint</strong>,
@@ -562,7 +562,7 @@ IndexError: list index out of range`}</CodeBox>
 
           <Para>
             Half-asleep, the engineer&apos;s first instinct is to start reading from <code>main()</code>{' '}
-            at the top of the traceback. Remembering Part 01 of this module, they force themselves to
+            at the top of the traceback. Remembering Part 01 of this lesson, they force themselves to
             start at the bottom instead: <code>IndexError: list index out of range</code>, on the line{' '}
             <code>sorted(...)[0]</code>. Indexing <code>[0]</code> into an empty sorted list is the exact
             cause — <code>drivers</code> was empty when <code>pick_driver</code> ran, meaning every
@@ -586,7 +586,7 @@ IndexError: list index out of range`}</CodeBox>
             The fix — falling back to the nearest adjacent zone&apos;s drivers when a zone has none
             assigned yet — ships before 4 a.m., routes generate on time, and the engineer writes up the
             incident the next morning. The lesson they take from it, and repeat to the next new hire on
-            their team months later, is almost word for word Part 01 of this module: read the traceback
+            their team months later, is almost word for word Part 01 of this lesson: read the traceback
             from the bottom, and confirm your hypothesis with a real pause-and-inspect before editing code
             at 2 a.m. under pressure.
           </Para>
@@ -699,7 +699,7 @@ IndexError: list index out of range`}</CodeBox>
           },
           {
             q: 'Leaving debug print() statements in committed code',
-            a: 'A stray "DEBUG: ..." print left in production code is a common, avoidable code review flag. Delete debug prints before committing, or better, use proper logging (next module) that can be turned on and off without editing code.',
+            a: 'A stray "DEBUG: ..." print left in production code is a common, avoidable code review flag. Delete debug prints before committing, or better, use proper logging (next lesson) that can be turned on and off without editing code.',
           },
           {
             q: 'Setting a breakpoint() and then continuing past it without inspecting anything',
@@ -812,11 +812,11 @@ IndexError: list index out of range`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 40 covers logging — why print() genuinely is not logging, the logging module, log levels,
+          Lesson 40 covers logging — why print() genuinely is not logging, the logging module, log levels,
           and configuring a logger the way real production services do it.
         </p>
         <Link href="/learn/python/logging-best-practices" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 40 → Logging Best Practices
+          Lesson 40 → Logging Best Practices
         </Link>
       </div>
     </LearnLayout>

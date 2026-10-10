@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Random Forest — Instacart Stock Prediction — Chaduvuko',
@@ -191,7 +190,6 @@ export default function RandomForestPage() {
       readTime="22–28 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='classical-ml' topic='random-forest' />
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -231,7 +229,7 @@ export default function RandomForestPage() {
         <HBox color="#378ADD">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module covers:
+              What this lesson covers:
             </span>
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -1115,7 +1113,7 @@ for i, (r, d) in enumerate(zip(risk, decision)):
             almost nothing while multiplying training time, memory, and inference latency linearly.
             For the Instacart stock-out model, 300 trees might already capture 99% of the achievable
             OOB AUC that 3,000 trees provide, while a request serving 3,000 trees is far slower to
-            score. The right practice is exactly what this module's tuning section showed: plot OOB
+            score. The right practice is exactly what this lesson's tuning section showed: plot OOB
             error against n_estimators and stop near the elbow, not add trees indefinitely because
             "more can't hurt."
           </p>
@@ -1137,7 +1135,7 @@ for i, (r, d) in enumerate(zip(risk, decision)):
 
         <ConceptBox title="Myth: Feature importance tells you which features are truly predictive of the outcome" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            This module already covered one bias — MDI favours high-cardinality features. There is a
+            This lesson already covered one bias — MDI favours high-cardinality features. There is a
             second bias that trips people up even after switching to permutation importance:
             correlated features split credit unpredictably. If days_of_stock and avg_daily_sale are
             correlated, the forest can split on either at any node — whichever gets picked first
@@ -1158,7 +1156,7 @@ for i, (r, d) in enumerate(zip(risk, decision)):
             itself drives model selection — trying twenty hyperparameter combinations and picking
             whichever produces the best OOB number — you are implicitly fitting to that score the same
             way repeatedly checking a validation set overfits to it. You still need a genuinely
-            untouched test set to confirm the winner generalises, exactly why this module's own
+            untouched test set to confirm the winner generalises, exactly why this lesson's own
             pipeline keeps a separate X_test even with oob_score=True enabled.
           </p>
         </ConceptBox>
@@ -1278,7 +1276,7 @@ for i, (r, d) in enumerate(zip(risk, decision)):
           specifically to correct the errors of all previous trees.
           This sequential error correction is why XGBoost and LightGBM
           consistently outperform Random Forest on most tabular benchmarks.
-          Module 22 explains how it works from scratch.
+          Lesson 22 explains how it works from scratch.
         </p>
 
         <div style={{
@@ -1293,7 +1291,7 @@ for i, (r, d) in enumerate(zip(risk, decision)):
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Classical ML · Module 22
+              Next — Classical ML · Lesson 22
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

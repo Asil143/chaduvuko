@@ -150,7 +150,7 @@ export default function PythonForDEModule() {
     <LearnLayout
       title="Python for Data Engineering"
       description="File I/O at scale, error handling, structured logging, generators, config management, and writing testable pipeline code — built around one running pipeline."
-      section="Data Engineering — Module 14"
+      section="Data Engineering — Lesson 14"
       readTime="80 min"
       updatedAt="August 2026"
     >
@@ -170,7 +170,7 @@ export default function PythonForDEModule() {
         </Para>
 
         <Para>
-          This module is built around one running example: <strong>FreshCart</strong>,
+          This lesson is built around one running example: <strong>FreshCart</strong>,
           a 10-store grocery chain. Every night, each store&rsquo;s point-of-sale system
           drops an orders export into blob storage — anywhere from 50 MB on a slow
           Tuesday to 6 GB on the Saturday before Thanksgiving. Your job is to build
@@ -183,12 +183,12 @@ export default function PythonForDEModule() {
             fontSize: 14, fontWeight: 800, color: 'var(--text)',
             fontFamily: 'var(--font-display)', marginBottom: 14,
           }}>
-            The six skills this module builds — all inside one pipeline
+            The six skills this lesson builds — all inside one pipeline
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
             {[
               { num: '01', name: 'File I/O at scale', desc: 'Reading FreshCart’s 6 GB store exports without loading them entirely into memory.' },
-              { num: '02', name: 'REST API calls', desc: 'A light touch on auth, pagination, and rate limits — Module 18 goes deep on this.' },
+              { num: '02', name: 'REST API calls', desc: 'A light touch on auth, pagination, and rate limits — Lesson 18 goes deep on this.' },
               { num: '03', name: 'Error handling & retries', desc: 'Distinguishing transient from permanent failures, retrying correctly.' },
               { num: '04', name: 'Structured logging', desc: 'Writing logs that are searchable, parseable, and useful at 3 AM.' },
               { num: '05', name: 'Generators', desc: 'Chaining read → validate → transform → load with constant memory.' },
@@ -382,7 +382,7 @@ df_iter = pd.read_csv('s3://freshcart-orders/store_014_2026-03-21.csv', chunksiz
           to make that call correctly. Auth, pagination, and rate limiting each get a
           full, much deeper treatment in{' '}
           <Link href="/learn/data-engineering/working-with-apis" style={{ color: 'var(--accent)' }}>
-            Module 18 — Working with APIs
+            Lesson 18 — Working with APIs
           </Link>{' '}
           — this is the light version you need before you get there.
         </Para>
@@ -454,7 +454,7 @@ def fetch_refund_with_retry(order_id: int, max_attempts: int = 4) -> dict:
     raise RuntimeError(f"Gave up fetching refund {order_id} after {max_attempts} attempts")`}</CodeBox>
 
         <Callout type="tip">
-          Everything above is the minimum viable version. Module 18 builds a real
+          Everything above is the minimum viable version. Lesson 18 builds a real
           OAuth2 client-credentials flow with token caching, four different
           pagination styles (offset, cursor, next-URL, checkpointed), and a
           production-grade token-bucket rate limiter. Come back to it once this
@@ -979,7 +979,7 @@ def test_fetch_refund_handles_timeout(mock_get):
         <TryThis>
           Take the untestable <code>process_orders()</code> above and split it into
           a pure function plus two thin I/O wrappers yourself, before scrolling back
-          up to see how this module did it. The exercise is in noticing which lines
+          up to see how this lesson did it. The exercise is in noticing which lines
           are &ldquo;business rule&rdquo; and which are &ldquo;talks to something external&rdquo;.
         </TryThis>
       </section>
@@ -1109,7 +1109,7 @@ order_id
         <SectionTitle>Assembling the Complete FreshCart Nightly Orders Pipeline</SectionTitle>
 
         <Para>
-          Every part of this module built one piece. Here is what it looks like
+          Every part of this lesson built one piece. Here is what it looks like
           assembled into the pipeline that actually runs at 2 AM against all 10
           stores — config and logging from Parts 05 and 07, the chunked reader from
           Part 02, the generator chain from Part 06, validation from Part 09, and
@@ -1424,7 +1424,7 @@ For completeness verification, I would reconcile against an authoritative total 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
       <KeyTakeaways items={[
         'Never load large files entirely into memory. Use pd.read_csv(chunksize=100_000) to process in chunks, or use PyArrow datasets for columnar projection and predicate pushdown. Memory usage should be constant regardless of file size.',
-        'API calls need three things beyond a simple GET: authentication read from environment variables (never hardcoded), pagination that follows the API’s cursor or next-URL, and rate-limit handling that respects 429 responses. This module covers the minimum version — Module 18 covers all three in much more depth.',
+        'API calls need three things beyond a simple GET: authentication read from environment variables (never hardcoded), pagination that follows the API’s cursor or next-URL, and rate-limit handling that respects 429 responses. This lesson covers the minimum version — Lesson 18 covers all three in much more depth.',
         'Distinguish transient from permanent errors before deciding whether to retry. Transient errors (timeouts, 503, connection reset) should be retried with exponential backoff and jitter. Permanent errors (validation failures, 401, 404) should fail immediately — retrying wastes time and can cause harm.',
         'Exponential backoff with jitter prevents thundering herds: multiple pipeline instances that fail simultaneously retry at slightly different times, spreading load instead of all hitting the recovered system at once.',
         'Structured logging (JSON output with defined fields) makes logs searchable and alertable in log management tools. Every log entry should include a run_id and relevant metrics. Never log PII or secrets. Never use print() in pipeline code.',
@@ -1442,10 +1442,10 @@ For completeness verification, I would reconcile against an authoritative total 
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 15 covers SQL at the data engineering level — window functions, complex CTEs, deduplication patterns, and the advanced queries that every real DE interview actually tests.
+          Lesson 15 covers SQL at the data engineering level — window functions, complex CTEs, deduplication patterns, and the advanced queries that every real DE interview actually tests.
         </p>
         <Link href="/learn/data-engineering/sql-for-de" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 15 → SQL for Data Engineers — Beyond the Basics
+          Lesson 15 → SQL for Data Engineers — Beyond the Basics
         </Link>
       </div>
     </LearnLayout>

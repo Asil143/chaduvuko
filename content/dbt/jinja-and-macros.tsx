@@ -74,7 +74,7 @@ export default function JinjaAndMacros() {
     <LearnLayout
       title="Jinja and Macros: Templating SQL"
       description="What Jinja is and why dbt uses it, control flow inside a model with if and for, writing reusable macros, a worked cents_to_dollars macro and the generate_schema_name override, whitespace control, debugging with dbt compile, and the anti-pattern of over-templated SQL."
-      section="dbt — Module 10"
+      section="dbt — Lesson 10"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -775,7 +775,7 @@ from analytics.stg_orders`}
         <SectionTitle>When Jinja Makes SQL Harder to Read, Not Easier</SectionTitle>
 
         <Para>
-          Everything in this module is a genuine capability, and every capability can be overused. The
+          Everything in this lesson is a genuine capability, and every capability can be overused. The
           specific failure mode worth naming directly: a model wrapped in so many nested loops, conditionals,
           and macro calls that a new team member opening the file cannot tell what SQL actually runs without
           mentally executing the Jinja first — effectively reverse-engineering a small interpreter by eye
@@ -805,7 +805,7 @@ group by {{ generate_group_by_list(dimensions) }}`}
         </CodeBox>
 
         <Para>
-          Nothing here is individually wrong — every construct is a legitimate feature from this module.
+          Nothing here is individually wrong — every construct is a legitimate feature from this lesson.
           Stacked together, though, none of the actual business logic is visible in the file at all: what
           columns this model produces, what it filters on, and how it aggregates are all deferred to other
           macros and functions the reader has to go find and read separately, several layers deep, before
@@ -882,7 +882,7 @@ macros:
           This documentation shows up on the generated dbt docs site exactly like a model or column
           description would, and it is picked up automatically the next time <code>dbt docs generate</code>
           runs — no separate step, no separate tooling, just one more entry in the same YAML-driven
-          documentation system covered in depth in the previous module.
+          documentation system covered in depth in the previous lesson.
         </Para>
 
         <SubTitle>Where macros live in a growing project</SubTitle>

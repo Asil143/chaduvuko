@@ -78,7 +78,7 @@ export default function Delete() {
     <LearnLayout
       title="DELETE — Removing Rows"
       description="Remove rows from tables safely — DELETE vs TRUNCATE, soft delete patterns, cascade deletes, referential integrity, and why SELECT before DELETE is non-negotiable"
-      section="SQL — Module 22"
+      section="SQL — Lesson 22"
       readTime="10–14 min"
       updatedAt="April 2026"
     >
@@ -834,10 +834,10 @@ WHERE email LIKE '%@test.freshmart.com';`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 23</strong>, you learn constraints in depth — NOT NULL, UNIQUE, CHECK, PRIMARY KEY, FOREIGN KEY, and how to add, modify, and drop constraints on existing tables using ALTER TABLE.
+          In <strong>Lesson 23</strong>, you learn constraints in depth — NOT NULL, UNIQUE, CHECK, PRIMARY KEY, FOREIGN KEY, and how to add, modify, and drop constraints on existing tables using ALTER TABLE.
         </p>
         <Link href="/learn/sql/constraints" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 23 → Constraints
+          Lesson 23 → Constraints
         </Link>
       </div>
 

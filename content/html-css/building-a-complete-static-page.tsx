@@ -77,7 +77,7 @@ export default function BuildingACompleteStaticPage() {
     <LearnLayout
       title="Building a Complete Static Page"
       description="A full project pulling structure, semantics, media, and forms together into one real, complete HTML page — start to finish."
-      section="HTML & CSS — Module 16 (Capstone)"
+      section="HTML & CSS — Lesson 16 (Capstone)"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -85,14 +85,14 @@ export default function BuildingACompleteStaticPage() {
       {/* ── Intro ── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// The Phase 2 Capstone" />
-        <SectionTitle>Everything From Modules 1–15, in One Real Page</SectionTitle>
+        <SectionTitle>Everything From Lessons 1–15, in One Real Page</SectionTitle>
         <Para>
-          This module is different from the previous 15 — instead of introducing a new topic, it builds
+          This lesson is different from the previous 15 — instead of introducing a new topic, it builds
           one complete, real page from start to finish: a small local business landing page (a
           fictional coffee roastery), combining document structure, semantic sectioning, images,
           navigation, a contact form, and metadata into a single genuine build. Every technique used
-          here was already covered in an earlier module — this is deliberately a synthesis, not new
-          material, and each section below names exactly which earlier module it draws from.
+          here was already covered in an earlier lesson — this is deliberately a synthesis, not new
+          material, and each section below names exactly which earlier lesson it draws from.
         </Para>
       </section>
 
@@ -107,7 +107,7 @@ export default function BuildingACompleteStaticPage() {
           Before writing a single tag, sketch the page's actual sections: a header with navigation, a
           hero introduction, an "About" section, a "Menu" section with a list of offerings, a contact
           section with a real form, and a footer. This maps directly onto the semantic landmark elements
-          from Module 3 — deciding the sections BEFORE writing markup is what keeps the result genuinely
+          from Lesson 3 — deciding the sections BEFORE writing markup is what keeps the result genuinely
           semantic instead of div-soup with classes bolted on afterward.
         </Para>
 
@@ -125,9 +125,9 @@ footer (copyright + secondary links)`}</CodeBox>
       {/* ── Part 02 ── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 02 — The Document Skeleton" />
-        <SectionTitle>Starting From Module 2's Foundation</SectionTitle>
+        <SectionTitle>Starting From Lesson 2's Foundation</SectionTitle>
 
-        <CodeBox label="The full document shell — DOCTYPE, head, and metadata from Modules 2 and 13">{`<!DOCTYPE html>
+        <CodeBox label="The full document shell — DOCTYPE, head, and metadata from Lessons 2 and 13">{`<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -142,9 +142,9 @@ footer (copyright + secondary links)`}</CodeBox>
 </html>`}</CodeBox>
 
         <Para>
-          Every piece here traces back to an earlier module: the DOCTYPE and lang attribute (Module 2),
-          the charset and viewport meta tags (Modules 2 and 13), and the title/description tags that
-          determine how this page appears in search results and browser tabs (Module 13).
+          Every piece here traces back to an earlier lesson: the DOCTYPE and lang attribute (Lesson 2),
+          the charset and viewport meta tags (Lessons 2 and 13), and the title/description tags that
+          determine how this page appears in search results and browser tabs (Lesson 13).
         </Para>
       </section>
 
@@ -153,7 +153,7 @@ footer (copyright + secondary links)`}</CodeBox>
       {/* ── Part 03 ── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 03 — Header and Navigation" />
-        <SectionTitle>Building From Modules 3 and 4</SectionTitle>
+        <SectionTitle>Building From Lessons 3 and 4</SectionTitle>
 
         <CodeBox label="A real semantic header, using landmark elements and a proper nav list">{`<header>
   <a href="/" class="logo">Fernwood Coffee Roastery</a>
@@ -168,9 +168,9 @@ footer (copyright + secondary links)`}</CodeBox>
 
         <Para>
           The <code>&lt;nav&gt;</code> landmark and the <code>&lt;ul&gt;</code> list structure inside it
-          are exactly the pattern from Module 3 (semantic structure) and Module 4 (links & navigation) —
+          are exactly the pattern from Lesson 3 (semantic structure) and Lesson 4 (links & navigation) —
           the in-page <code>#about</code>/<code>#menu</code>/<code>#contact</code> links use the anchor
-          links technique from Module 4, targeting the <code>id</code> attributes each section below
+          links technique from Lesson 4, targeting the <code>id</code> attributes each section below
           will carry.
         </Para>
       </section>
@@ -180,7 +180,7 @@ footer (copyright + secondary links)`}</CodeBox>
       {/* ── Part 04 ── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 04 — The Hero and About Sections" />
-        <SectionTitle>Text Hierarchy From Module 3, Images From Module 5</SectionTitle>
+        <SectionTitle>Text Hierarchy From Lesson 3, Images From Lesson 5</SectionTitle>
 
         <CodeBox label="The hero — the one-and-only h1 on the page">{`<main>
   <section aria-labelledby="hero-heading">
@@ -201,12 +201,12 @@ footer (copyright + secondary links)`}</CodeBox>
 
         <Callout type="tip">
           <strong>Notice there is exactly one h1 on the entire page</strong> — a direct application of
-          the heading-hierarchy rule from Module 3. Every section below uses h2 for its own heading,
+          the heading-hierarchy rule from Lesson 3. Every section below uses h2 for its own heading,
           maintaining a single, sensible document outline from top to bottom.
         </Callout>
 
         <Para>
-          The image follows the complete pattern from Module 5: real, descriptive <code>alt</code> text
+          The image follows the complete pattern from Lesson 5: real, descriptive <code>alt</code> text
           (not decorative — this image genuinely conveys information), explicit{' '}
           <code>width</code>/<code>height</code> to prevent layout shift, wrapped in{' '}
           <code>figure</code>/<code>figcaption</code> for a captioned image, and{' '}
@@ -219,7 +219,7 @@ footer (copyright + secondary links)`}</CodeBox>
       {/* ── Part 05 ── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 05 — The Menu Section" />
-        <SectionTitle>A Real Content List, From Module 6</SectionTitle>
+        <SectionTitle>A Real Content List, From Lesson 6</SectionTitle>
 
         <CodeBox label="An unordered list used for genuinely unordered content — the menu items">{`<section id="menu" aria-labelledby="menu-heading">
   <h2 id="menu-heading">This Week's Roast</h2>
@@ -241,7 +241,7 @@ footer (copyright + secondary links)`}</CodeBox>
 
         <Para>
           <code>&lt;ul&gt;</code> is the correct choice here (rather than <code>&lt;ol&gt;</code>)
-          because this week's roast list has no meaningful order — Module 6's core distinction between
+          because this week's roast list has no meaningful order — Lesson 6's core distinction between
           the two list types applied directly to a real decision.
         </Para>
       </section>
@@ -251,7 +251,7 @@ footer (copyright + secondary links)`}</CodeBox>
       {/* ── Part 06 ── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 06 — The Contact Form" />
-        <SectionTitle>A Genuinely Accessible Form, From Modules 8, 9 and 10</SectionTitle>
+        <SectionTitle>A Genuinely Accessible Form, From Lessons 8, 9 and 10</SectionTitle>
 
         <CodeBox label="A real, working contact form">{`<section id="contact" aria-labelledby="contact-heading">
   <h2 id="contact-heading">Get in Touch</h2>
@@ -279,10 +279,10 @@ footer (copyright + secondary links)`}</CodeBox>
 </section>`}</CodeBox>
 
         <Para>
-          Every field is correctly labeled (Module 8), the reason-for-contact question uses a real{' '}
-          <code>fieldset</code>/<code>legend</code>-grouped radio set (Module 9), and every input that
+          Every field is correctly labeled (Lesson 8), the reason-for-contact question uses a real{' '}
+          <code>fieldset</code>/<code>legend</code>-grouped radio set (Lesson 9), and every input that
           matters for the business to receive has a <code>name</code> attribute — the single most common
-          real mistake flagged in Module 8's own Real World example, deliberately avoided here.
+          real mistake flagged in Lesson 8's own Real World example, deliberately avoided here.
         </Para>
       </section>
 
@@ -305,7 +305,7 @@ footer (copyright + secondary links)`}</CodeBox>
 </main>`}</CodeBox>
 
         <Para>
-          The <code>&amp;copy;</code> entity here is a direct callback to Module 14 — a literal{' '}
+          The <code>&amp;copy;</code> entity here is a direct callback to Lesson 14 — a literal{' '}
           <code>©</code> character can be typed directly in most editors today, but the entity form
           remains common in real production code and is always guaranteed to render correctly regardless
           of the file's declared encoding.
@@ -317,10 +317,10 @@ footer (copyright + secondary links)`}</CodeBox>
       {/* ── Part 08 ── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 08 — Validating the Result" />
-        <SectionTitle>Checking the Finished Page Against Module 15</SectionTitle>
+        <SectionTitle>Checking the Finished Page Against Lesson 15</SectionTitle>
 
         <Para>
-          With the full page assembled, running it through the W3C Markup Validator (Module 15) is the
+          With the full page assembled, running it through the W3C Markup Validator (Lesson 15) is the
           final step before considering it done — checking for unclosed tags, duplicate IDs (a real risk
           here, since both the header and footer navigation reuse similar list structures), and any
           invalid nesting introduced while assembling the sections.
@@ -332,7 +332,7 @@ footer (copyright + secondary links)`}</CodeBox>
           <code>about-heading</code>, <code>menu-heading</code>, <code>contact-heading</code>,{' '}
           <code>contact-name</code>, <code>contact-email</code>, <code>contact-message</code> — a quick
           scan (or the validator) confirms none collide, which matters because a duplicate ID breaks{' '}
-          <code>label for</code> associations silently, exactly as covered in Module 8.
+          <code>label for</code> associations silently, exactly as covered in Lesson 8.
         </Callout>
       </section>
 
@@ -366,14 +366,14 @@ footer (copyright + secondary links)`}</CodeBox>
 
           <Para>
             A freelance developer is hired to build a landing page for a local bakery — genuinely the
-            same shape of project as this module's build. The client later asks why their site ranks
+            same shape of project as this lesson's build. The client later asks why their site ranks
             reasonably well in local Google searches despite having no marketing budget at all.
           </Para>
 
           <SubSubTitle>What actually drove that result</SubSubTitle>
 
           <Para>
-            The exact fundamentals from this module — a single clear h1, a real semantic document
+            The exact fundamentals from this lesson — a single clear h1, a real semantic document
             structure search engines can parse confidently, a proper <code>meta description</code>, and
             real descriptive alt text on every image — are themselves meaningful, genuine SEO signals,
             with zero paid marketing involved. The developer's own explanation to the client: "there's no
@@ -400,7 +400,7 @@ footer (copyright + secondary links)`}</CodeBox>
             right: 'A browser silently tolerates a huge range of invalid HTML (unclosed tags, duplicate IDs) by guessing what was intended — the page can look fine while still breaking label associations or confusing assistive technology, exactly the kind of bug the validator catches that visual inspection cannot.',
           },
           {
-            wrong: '"Combining every technique from earlier modules automatically produces good code if each piece was correct individually"',
+            wrong: '"Combining every technique from earlier lessons automatically produces good code if each piece was correct individually"',
             right: 'Individually correct pieces can still combine badly — a duplicate id reused between the header and footer nav lists is a real risk that only shows up when the WHOLE page is assembled, not when any single section was tested alone.',
           },
           {
@@ -571,10 +571,10 @@ footer (copyright + secondary links)`}</CodeBox>
       {/* ── Key Takeaways ── */}
       <KeyTakeaways items={[
         'A real page starts with planning its sections BEFORE writing markup — that planning is what keeps the result genuinely semantic instead of div-soup with classes added afterward.',
-        'Every technique in this build traces back to an earlier module: document structure (Module 2), semantic sectioning (Module 3), navigation (Module 4), images (Module 5), lists (Module 6), forms (Modules 8-9), entities (Module 14), and metadata (Module 13).',
+        'Every technique in this build traces back to an earlier lesson: document structure (Lesson 2), semantic sectioning (Lesson 3), navigation (Lesson 4), images (Lesson 5), lists (Lesson 6), forms (Lessons 8-9), entities (Lesson 14), and metadata (Lesson 13).',
         'Exactly one h1 per page, with h2/h3 used consistently for every section\'s own heading, keeps the document outline sensible from top to bottom.',
         'Every form field needs both a real associated label AND a name attribute — the single most common real-world mistake this build deliberately avoids.',
-        'Validating the finished page (Module 15) — especially checking for duplicate IDs — is the correct final step before considering a real build done.',
+        'Validating the finished page (Lesson 15) — especially checking for duplicate IDs — is the correct final step before considering a real build done.',
         'Strong semantic HTML fundamentals are themselves a genuine, free SEO signal — not a separate technique layered on top afterward.',
       ]} />
 
@@ -588,7 +588,7 @@ footer (copyright + secondary links)`}</CodeBox>
           selectors, and the cascade.
         </p>
         <Link href="/learn/html-css/what-is-css-syntax-selectors-cascade" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 17 → What is CSS? Syntax, Selectors &amp; the Cascade
+          Lesson 17 → What is CSS? Syntax, Selectors &amp; the Cascade
         </Link>
       </div>
     </LearnLayout>

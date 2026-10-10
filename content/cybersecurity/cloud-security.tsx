@@ -59,7 +59,7 @@ export default function Module18() {
     <LearnLayout
       title="Cloud Security — Shared Responsibility, IAM, and Cloud Misconfigurations"
       description="The shared responsibility model, cloud IAM from first principles, the most dangerous cloud misconfigurations, SSRF to metadata theft, and cloud-native detection tools."
-      section="Cybersecurity — Module 18"
+      section="Cybersecurity — Lesson 18"
       readTime="43 min"
       updatedAt="May 2026"
     >
@@ -68,7 +68,7 @@ export default function Module18() {
           Cloud security is not "IT security but in the cloud." It's a fundamentally different security model with different trust boundaries, different attack surfaces, and different tooling. The shared responsibility model means the cloud provider secures the infrastructure, but the <Hl>customer is responsible for their own data, IAM configuration, and application security</Hl>. The majority of cloud breaches are caused by customer-side misconfigurations, not cloud provider vulnerabilities.
         </P>
         <P>
-          This module covers the cloud security model from first principles across AWS, Azure, and GCP: how IAM works and what least privilege means in a cloud context, the top cloud misconfigurations (public S3 buckets, over-permissive roles, exposed metadata services, insecure security groups), how SSRF attacks steal cloud credentials from the metadata service, and how cloud-native tools (AWS GuardDuty, Azure Defender, GCP Security Command Center) detect threats.
+          This lesson covers the cloud security model from first principles across AWS, Azure, and GCP: how IAM works and what least privilege means in a cloud context, the top cloud misconfigurations (public S3 buckets, over-permissive roles, exposed metadata services, insecure security groups), how SSRF attacks steal cloud credentials from the metadata service, and how cloud-native tools (AWS GuardDuty, Azure Defender, GCP Security Command Center) detect threats.
         </P>
       </Part>
 
@@ -711,13 +711,13 @@ scout aws --report-dir ./scout_results
 
       <div style={{ background: 'var(--code-bg)', borderRadius: 12, padding: '28px 32px', marginTop: 40 }}>
         <div style={{ fontSize: 13, color: C, fontWeight: 700, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
-          Up Next — Module 19
+          Up Next — Lesson 19
         </div>
         <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--heading)', marginBottom: 12 }}>
           API and Container Security
         </div>
         <p style={{ ...s.p, marginBottom: 20 }}>
-          In Module 19, you learn the security model of modern application infrastructure: REST and GraphQL API vulnerabilities, JWT attacks, OAuth misconfigurations, Docker container security (escape techniques and defences), Kubernetes RBAC and network policies, and supply chain security for container images.
+          In Lesson 19, you learn the security model of modern application infrastructure: REST and GraphQL API vulnerabilities, JWT attacks, OAuth misconfigurations, Docker container security (escape techniques and defences), Kubernetes RBAC and network policies, and supply chain security for container images.
         </p>
         <Link
           href="/learn/cybersecurity/api-container-security"
@@ -732,7 +732,7 @@ scout aws --report-dir ./scout_results
             textDecoration: 'none',
           }}
         >
-          Continue to Module 19 →
+          Continue to Lesson 19 →
         </Link>
       </div>
     </LearnLayout>

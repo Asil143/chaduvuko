@@ -116,7 +116,7 @@ const ProblemHeader = ({ num, title, naive, dp }: { num: string; title: string; 
 export default function DynamicProgrammingPage() {
   return (
     <LearnLayout
-      title="Unit 16 — Dynamic Programming"
+      title="Dynamic Programming"
       description="Remember what you already computed so you never compute it twice. The technique that turns exponential problems into polynomial ones. From naive recursion to memoization to tabulation — built from scratch."
       section="DSA"
       readTime="150 min"
@@ -126,9 +126,7 @@ export default function DynamicProgrammingPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'UNIT 16', green: true },
-          { label: 'Prerequisite: Unit 08 — Recursion', green: false },
-          { label: '150 min read', green: false },
+          { label: 'Prerequisite: Lesson 9 — Recursion', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -144,7 +142,7 @@ export default function DynamicProgrammingPage() {
         fails, and then showing how DP fixes it with one simple insight.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
-        By the end of this unit you will solve the knapsack problem, longest common
+        By the end of this lesson you will solve the knapsack problem, longest common
         subsequence, coin change, and edit distance — the four most important DP problems
         in all of computer science — completely from scratch.
       </p>
@@ -230,7 +228,7 @@ export default function DynamicProgrammingPage() {
       </p>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 20 }}>
-        Let us use Fibonacci from Unit 08. The naive version recomputed the same values
+        Let us use Fibonacci from Lesson 9. The naive version recomputed the same values
         exponentially. Watch what happens when we add a memo array.
       </p>
 
@@ -1017,7 +1015,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Unit 17</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 18</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now understand Dynamic Programming completely — the two conditions, memoization,
@@ -1025,7 +1023,7 @@ int main() {
         The 5-step framework will help you tackle any new DP problem you encounter.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Unit 17 we cover <strong style={{ color: 'var(--text)' }}>Greedy Algorithms</strong> —
+        In Lesson 18 we cover <strong style={{ color: 'var(--text)' }}>Greedy Algorithms</strong> —
         always pick the locally best option at each step. Sometimes that is enough to get
         the global optimum. We cover activity selection, fractional knapsack, and Huffman coding,
         and explain exactly when greedy works and when it fails.
@@ -1033,7 +1031,7 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → UNIT 17</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 18</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Greedy Algorithms — Always Pick the Best Now</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Activity selection, fractional knapsack, Huffman coding — when greedy works and when it fails.</div>
         </div>

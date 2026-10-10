@@ -273,7 +273,7 @@ export default function SnmpAndSyslogPage() {
     <LearnLayout
       title="SNMP and Syslog"
       description="From community strings to SNMPv3 authPriv, from syslog UDP to structured logging pipelines: how networks tell you when something goes wrong — and how to actually listen."
-      section="Networking Fundamentals — Module 31"
+      section="Networking Fundamentals — Lesson 31"
       readTime="28–38 min"
       updatedAt="May 2026"
     >

@@ -79,7 +79,7 @@ export default function Module10() {
     <LearnLayout
       title="Network Attacks — MITM, Sniffing, ARP Poisoning, DNS Hijacking"
       description="How attackers intercept, spoof, and abuse protocol-level weaknesses at the network layer — and how defenders detect and stop them."
-      section="Cybersecurity — Module 10"
+      section="Cybersecurity — Lesson 10"
       readTime="42 min"
       updatedAt="May 2026"
     >
@@ -88,7 +88,7 @@ export default function Module10() {
           Every packet that crosses a network trusts the infrastructure beneath it. ARP tables assume other devices are honest. DNS answers assume resolvers haven't been poisoned. BGP routes assume peers announce their own prefixes. TCP sessions assume nobody is watching the sequence numbers. These assumptions are decades old, designed for a cooperative academic network — and attackers have been exploiting them ever since.
         </P>
         <P>
-          This module goes to the wire. You'll understand exactly how a <Hl>Man-in-the-Middle attack</Hl> positions itself between two hosts, how <Hl>ARP poisoning</Hl> works at the Ethernet frame level, how DNS and BGP hijacking redirect entire networks, and what the capture looks like in Wireshark when it happens. By the end, you'll know how to detect these attacks and what controls actually stop them.
+          This lesson goes to the wire. You'll understand exactly how a <Hl>Man-in-the-Middle attack</Hl> positions itself between two hosts, how <Hl>ARP poisoning</Hl> works at the Ethernet frame level, how DNS and BGP hijacking redirect entire networks, and what the capture looks like in Wireshark when it happens. By the end, you'll know how to detect these attacks and what controls actually stop them.
         </P>
       </Part>
 
@@ -732,13 +732,13 @@ interface GigabitEthernet0/2         # Client port
 
       <div style={{ background: 'var(--code-bg)', borderRadius: 12, padding: '28px 32px', marginTop: 40 }}>
         <div style={{ fontSize: 13, color: C, fontWeight: 700, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
-          Up Next — Module 11
+          Up Next — Lesson 11
         </div>
         <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--heading)', marginBottom: 12 }}>
           Malware Types and Behavior
         </div>
         <p style={{ ...s.p, marginBottom: 20 }}>
-          In Module 11, you go inside the malware. How ransomware encrypts files and why paying doesn't guarantee recovery. How rootkits hide from the operating system at ring-0. How Remote Access Trojans (RATs) establish C2 channels, how worms self-replicate across networks, and how modern EDR tools detect each family based on behavioral signatures rather than file hashes.
+          In Lesson 11, you go inside the malware. How ransomware encrypts files and why paying doesn't guarantee recovery. How rootkits hide from the operating system at ring-0. How Remote Access Trojans (RATs) establish C2 channels, how worms self-replicate across networks, and how modern EDR tools detect each family based on behavioral signatures rather than file hashes.
         </p>
         <Link
           href="/learn/cybersecurity/malware-types-behavior"
@@ -753,7 +753,7 @@ interface GigabitEthernet0/2         # Client port
             textDecoration: 'none',
           }}
         >
-          Continue to Module 11 →
+          Continue to Lesson 11 →
         </Link>
       </div>
     </LearnLayout>

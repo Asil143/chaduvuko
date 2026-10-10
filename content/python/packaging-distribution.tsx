@@ -77,7 +77,7 @@ export default function PackagingDistribution() {
     <LearnLayout
       title="Packaging and Distributing Python Projects"
       description="Project structure, pyproject.toml as the modern standard, building wheels and sdists, semantic versioning, and publishing a real package to PyPI."
-      section="Python — Module 41"
+      section="Python — Lesson 41"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -110,9 +110,9 @@ export default function PackagingDistribution() {
         <Para>
           The reason this matters here: everything from Part 02 onward — <code>pyproject.toml</code>,
           building wheels, publishing to PyPI — exists specifically to support the library case, or an
-          application specifically meant to be installed as a reusable command (which Module 44,
+          application specifically meant to be installed as a reusable command (which Lesson 44,
           immediately after this one, builds end to end). If you are only ever going to run{' '}
-          <code>python app.py</code> yourself, you genuinely do not need most of this module. The moment
+          <code>python app.py</code> yourself, you genuinely do not need most of this lesson. The moment
           someone else needs to <code>pip install</code> your code, or you need to reuse it across
           multiple projects without copy-pasting files, packaging becomes the right tool.
         </Para>
@@ -228,7 +228,7 @@ Homepage = "https://github.com/yourname/orderkit"`}</CodeBox>
           <code>[project]</code> table is metadata: name, version, description, and crucially,{' '}
           <strong>dependencies</strong> — every third-party package this project needs to run, with version
           constraints, replacing what used to live in a separate <code>requirements.txt</code> for a
-          library&apos;s own declared dependencies (Module 18 covered <code>requirements.txt</code> for
+          library&apos;s own declared dependencies (Lesson 18 covered <code>requirements.txt</code> for
           pinning an application&apos;s exact environment — this is the equivalent concept for a
           publishable library&apos;s stated, flexible requirements). <code>[project.optional-dependencies]</code>{' '}
           declares extra dependency groups, like packages only needed for running tests, that are not
@@ -409,13 +409,13 @@ orderkit = "orderkit.cli:main"
 
         <CodeBox label="The function it points at — orderkit/cli.py">{`def main():
     print("orderkit CLI running")
-    # real argument parsing goes here — covered in full in Module 44`}</CodeBox>
+    # real argument parsing goes here — covered in full in Lesson 44`}</CodeBox>
 
         <Para>
           After installing this package (<code>pip install .</code> during development, or{' '}
           <code>pip install orderkit</code> once published), a genuine new command called{' '}
           <code>orderkit</code> becomes available directly in the shell — no <code>python</code> prefix,
-          no remembering which file to run. This is exactly the mechanism Module 44, immediately after
+          no remembering which file to run. This is exactly the mechanism Lesson 44, immediately after
           this one, relies on to turn a complete CLI tool built with <code>argparse</code> into something
           installed and runnable as a real, first-class command rather than a script someone has to locate
           and invoke manually.
@@ -697,7 +697,7 @@ orderkit = "orderkit.cli:main"
 
       {/* ── Key Takeaways ── */}
       <KeyTakeaways items={[
-        'Applications are run; libraries are imported and reused. Most of this module targets the reuse case — the moment code is shared across more than one project.',
+        'Applications are run; libraries are imported and reused. Most of this lesson targets the reuse case — the moment code is shared across more than one project.',
         'The src/ layout prevents tests from accidentally importing an uninstalled local copy instead of the real installed package — the reason most professionally maintained packages use it.',
         'pyproject.toml is the modern, static, standardized replacement for setup.py — declaring the build system, metadata, and dependencies without requiring any code execution to read it.',
         'python -m build produces two artifacts: a wheel (pre-built, fast to install) and an sdist (source, built on install, used as a fallback).',
@@ -713,11 +713,11 @@ orderkit = "orderkit.cli:main"
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 42 covers performance — measuring before optimizing, profiling with cProfile, and the
+          Lesson 42 covers performance — measuring before optimizing, profiling with cProfile, and the
           practical Big O traps that show up constantly in real Python code.
         </p>
         <Link href="/learn/python/performance-profiling" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 42 → Python Performance — Profiling and Optimisation
+          Lesson 42 → Python Performance — Profiling and Optimisation
         </Link>
       </div>
     </LearnLayout>

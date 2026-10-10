@@ -5,7 +5,7 @@ export default function SnowflakeProject() {
     <LearnLayout
       title="End-to-End Snowflake Project"
       description="A full capstone build: raw ingestion, semi-structured JSON, idempotent Bronze/Silver/Gold pipelines, streams and tasks, masking and row access policies, time travel recovery, clustering, resource monitors, and monitoring — one orders analytics platform synthesizing the whole track."
-      section="Snowflake — Module 19"
+      section="Snowflake — Lesson 19"
       readTime="120 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -24,7 +24,7 @@ export default function SnowflakeProject() {
             performance, ELT and the medallion architecture, MERGE and idempotency, time travel and
             zero-copy cloning, Snowpipe, streams and tasks, dynamic tables, data sharing, governance with
             masking and row access policies, clustering and performance tuning, cost management, dbt on
-            Snowflake, and production operations. This module is where all of that stops being separate
+            Snowflake, and production operations. This lesson is where all of that stops being separate
             topics and becomes one system.
           </Para>
           <Para>
@@ -33,7 +33,7 @@ export default function SnowflakeProject() {
             naming the specific module and concept behind every step as you go.
           </Para>
         </HighlightBox>
-        <Callout title="How to use this module">
+        <Callout title="How to use this lesson">
           Do not just read the SQL. Treat this as a build you could actually run: create the objects, load
           the sample data, break something on purpose, and use the recovery steps. The value of a capstone is
           in seeing how the pieces you learned separately actually depend on each other.
@@ -58,7 +58,7 @@ export default function SnowflakeProject() {
           below.
         </Para>
         <Table
-          headers={['Layer', 'Contents', 'Refresh pattern', 'Concepts from earlier modules']}
+          headers={['Layer', 'Contents', 'Refresh pattern', 'Concepts from earlier lessons']}
           rows={[
             ['RAW', 'Untouched JSON order files, CSV customer/product extracts, full audit metadata.', 'Continuous via Snowpipe + nightly batch COPY.', 'Stages, file formats, COPY INTO, Snowpipe.'],
             ['SILVER', 'Deduplicated, typed, flattened, one-row-per-entity tables.', 'Incremental via stream + task MERGE.', 'VARIANT/FLATTEN, MERGE idempotency, streams and tasks.'],
@@ -560,7 +560,7 @@ ALTER WAREHOUSE WH_BI_S SET RESOURCE_MONITOR = NORTHWIND_MONTHLY_MONITOR;`}
         <SectionTag text="// Part 12 — Monitoring and alerting the pipeline" />
         <SectionTitle>Build Phase 11: Monitor the Whole Pipeline End to End</SectionTitle>
         <Para>
-          The final build phase wires up the production operations patterns from the previous module: task
+          The final build phase wires up the production operations patterns from the previous lesson: task
           history monitoring, a freshness alert on the Gold layer, and a small operational dashboard so the
           on-call rotation can answer "is Northwind Retail's data platform healthy?" without guessing.
         </Para>
@@ -768,7 +768,7 @@ ORDER BY 1 DESC;
         <SectionTag text="// Part 15 — Documentation and handoff" />
         <SectionTitle>Build Phase 13: A Runbook So the Next Person Doesn't Have to Reverse-Engineer This</SectionTitle>
         <Para>
-          A pipeline only this module's author understands is a pipeline that breaks at 2 a.m. with nobody
+          A pipeline only this lesson's author understands is a pipeline that breaks at 2 a.m. with nobody
           able to fix it. The last build phase is not code at all — it is the lightweight runbook that ties
           together every table, every refresh mechanism, and every alert built above into something an
           on-call engineer who did not build this platform can actually use.
@@ -897,7 +897,7 @@ ORDER BY 1 DESC;
           None of these failures are exotic. They are the ordinary, expected failure modes of any real data
           platform: redelivered files, bad rows, bad queries, access drift, silent staleness, unwatched test
           failures, and lost institutional knowledge. The difference between a fragile pipeline and a
-          production-ready one is whether these were designed for in advance, which is exactly what modules 8
+          production-ready one is whether these were designed for in advance, which is exactly what lessons 8
           (idempotency), 9 (time travel), 15 (governance), and 18 (operations) were teaching.
         </Callout>
       </section>

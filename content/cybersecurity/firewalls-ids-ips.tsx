@@ -59,7 +59,7 @@ export default function Module30() {
     <LearnLayout
       title="Firewalls, IDS, and IPS — How Network Detection Actually Works"
       description="Stateful vs next-generation firewalls, intrusion detection and prevention systems, WAF architecture, firewall rule design, detection signatures, and tuning detection to catch real attacks without drowning in false positives."
-      section="Cybersecurity — Module 30"
+      section="Cybersecurity — Lesson 30"
       readTime="31 min"
       updatedAt="May 2026"
     >
@@ -68,7 +68,7 @@ export default function Module30() {
           Network security controls are the oldest and most widely deployed layer of defence. They are also widely misunderstood: a firewall that allows all outbound traffic, an IDS generating 50,000 alerts per day that nobody reviews, and a WAF in detection-only mode are security theatre, not security. Understanding how these controls actually work — and how to configure them to be effective — is foundational defensive knowledge.
         </P>
         <P>
-          The offensive modules showed you what attackers do when they encounter these controls: use allowed protocols (HTTPS for C2), live off the land with signed binaries to evade IDS signatures, and pivot through segments with no east-west inspection. This module teaches you how defenders close those gaps.
+          The offensive modules showed you what attackers do when they encounter these controls: use allowed protocols (HTTPS for C2), live off the land with signed binaries to evade IDS signatures, and pivot through segments with no east-west inspection. This lesson teaches you how defenders close those gaps.
         </P>
       </Part>
 
@@ -370,7 +370,7 @@ TARGET METRICS:
       <Callout type="info">
         Firewalls and IDS generate raw events. In{' '}
         <Link href="/learn/cybersecurity/siem-log-analysis">
-          Module 31: SIEM and Log Analysis
+          Lesson 31: SIEM and Log Analysis
         </Link>
         , you learn how to centralise those events, write detection rules that find real attacks in massive log volumes, build investigation workflows, and triage alerts from initial signal through to confirmed finding.
       </Callout>

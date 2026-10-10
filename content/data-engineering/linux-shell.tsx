@@ -190,7 +190,7 @@ export default function LinuxShellModule() {
     <LearnLayout
       title="Linux and Shell Scripting for Data Engineers"
       description="The commands and scripts every DE uses daily — files, processes, cron, log analysis, and bash — taught through one running investigation, not a command dump."
-      section="Data Engineering — Module 16"
+      section="Data Engineering — Lesson 16"
       readTime="70 min"
       updatedAt="August 2026"
     >
@@ -213,7 +213,7 @@ export default function LinuxShellModule() {
           Linux proficiency for a data engineer is not about memorising every command.
           It is about being comfortable in a terminal, knowing which tools solve which
           problems, and being able to write shell scripts that automate the repetitive
-          operational tasks that surround every data pipeline. This module is built
+          operational tasks that surround every data pipeline. This lesson is built
           around a single thread you will follow the whole way through: a real orders
           pipeline for a company called FreshCart, and every tool introduced along
           the way is one you will actually use on it — not a detached command reference
@@ -225,13 +225,13 @@ export default function LinuxShellModule() {
             fontSize: 14, fontWeight: 800, color: 'var(--text)',
             fontFamily: 'var(--font-display)', marginBottom: 14,
           }}>
-            What this module builds toward
+            What this lesson builds toward
           </div>
           <Para>
             By the end, you will have written a complete, production-grade bash
             wrapper script for the FreshCart orders pipeline — piece by piece, understanding
             every line — and diagnosed a real 6:47 AM pipeline failure end to end using
-            nothing but the commands from this module.
+            nothing but the commands from this lesson.
           </Para>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
             {[
@@ -400,7 +400,7 @@ find /tmp -name "*.tmp" -mtime +7 -delete    # delete .tmp files older than 7 da
           every file inside it, and piping through <code>sort -rh</code> (reverse,
           human-readable-numeric) puts the biggest consumer first. You can repeat this
           one level deeper on whichever directory turns out to be the culprit — that
-          exact drill-down is exactly how the 7 AM incident later in this module gets
+          exact drill-down is exactly how the 7 AM incident later in this lesson gets
           solved.
         </Para>
 
@@ -785,7 +785,7 @@ sed -n '10,20p' pipeline.log              # print ONLY lines 10 through 20`}</Co
         <Para>
           Two hours and fourteen minutes for a job that should finish in thirty is
           a real signal, not a coincidence — this is the exact reading that kicks
-          off the diagnosis in the Real World section later in this module.
+          off the diagnosis in the Real World section later in this lesson.
         </Para>
 
         <SubSubTitle>Killing a process — and why the signal you send matters</SubSubTitle>
@@ -978,7 +978,7 @@ crontab -l      # list what's currently scheduled`}</CodeBox>
           output redirected to a real log file so a failure leaves a trace instead
           of vanishing. This exact gap — a script that runs fine by hand but fails
           silently under cron — is common enough that it gets its own dedicated
-          explanation later in this module.
+          explanation later in this lesson.
         </Para>
 
         <SubSubTitle>Debugging a cron job that "isn't running"</SubSubTitle>
@@ -1005,7 +1005,7 @@ grep CRON /var/log/syslog | tail -20     # what has cron actually attempted?`}</
           Bash scripts wrap a pipeline with the operational logic Python alone
           doesn't handle well: checking preconditions, logging, alerting on failure,
           preventing duplicate runs. Every production pipeline is wrapped in at
-          least a basic bash script — the rest of this module builds one, piece
+          least a basic bash script — the rest of this lesson builds one, piece
           by piece.
         </Para>
 
@@ -1210,7 +1210,7 @@ set +a              # stop auto-exporting`}</CodeBox>
         <SectionTitle>Assembling Everything Into One Real Pipeline Wrapper</SectionTitle>
 
         <Para>
-          Every tool in this module so far has been a piece. Now they come together —
+          Every tool in this lesson so far has been a piece. Now they come together —
           the same FreshCart orders pipeline, wrapped in a real production-grade
           bash script, built up one addition at a time so each piece is understood
           before the next one lands on top of it.
@@ -1326,7 +1326,7 @@ main "$@"`}</CodeBox>
           with that exact message if the variable is unset — a one-line, readable
           precondition check. Notice this step also calls{' '}
           <code>check_disk_space</code>, the exact function written in Part 10 — the
-          whole script is built from pieces this module already taught, not new
+          whole script is built from pieces this lesson already taught, not new
           syntax appearing out of nowhere.
         </Para>
 
@@ -1370,7 +1370,7 @@ main "$@"`}</CodeBox>
           <Para>
             You receive a PagerDuty alert at 6:47 AM: "orders_pipeline has not
             completed by 06:45 AM SLA." You SSH into <code>pipeline-01</code> — the
-            exact server from Part 02. Every command below is one this module
+            exact server from Part 02. Every command below is one this lesson
             already taught you.
           </Para>
 
@@ -1428,7 +1428,7 @@ echo "Restarted with PID $!"`}</CodeBox>
 
           <Para>
             Total time from alert to resolution: 22 minutes, and every command used
-            was already covered in this module. A data engineer who knows these
+            was already covered in this lesson. A data engineer who knows these
             tools reaches root cause in minutes. One who does not might spend hours
             opening tickets and waiting for escalations instead.
           </Para>
@@ -1652,7 +1652,7 @@ Fifth, spot-check a numeric column for bad values: awk -F',' 'NR>1 {print $3}' o
       <KeyTakeaways items={[
         'du -sh /path/* | sort -rh and df -h are the first two commands to run whenever a pipeline behaves strangely — a nearly-full disk causes symptoms that look like almost anything else.',
         'Permissions are three groups of rwx (owner, group, others). 755 for scripts, 644 for configs, 600 for secrets. Diagnose "Permission denied" with ls -lah plus id, not guessing.',
-        'cut | sort | uniq -c | sort -rn is the single highest-value pipe in this module — it turns any column into a ranked frequency count without writing any Python.',
+        'cut | sort | uniq -c | sort -rn is the single highest-value pipe in this lesson — it turns any column into a ranked frequency count without writing any Python.',
         'Always send SIGTERM (plain kill) before SIGKILL (kill -9). SIGKILL gives a process no chance to close files or connections cleanly — a parquet file mid-write is left corrupted.',
         'Every production bash script starts with set -euo pipefail as its second line — but know its real gaps: it does not fire inside if conditions, before ||/&&, or in most subshells.',
         'Cron runs in a minimal environment: no .bashrc, a stripped PATH, $HOME as the working directory. Use absolute paths, source environment files explicitly, and always redirect output.',
@@ -1666,10 +1666,10 @@ Fifth, spot-check a numeric column for bad values: awk -F',' 'NR>1 {print $3}' o
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 17 covers Git for data teams — branching strategies, managing large data files, pre-commit hooks, and the workflows that keep teams moving without stepping on each other.
+          Lesson 17 covers Git for data teams — branching strategies, managing large data files, pre-commit hooks, and the workflows that keep teams moving without stepping on each other.
         </p>
         <Link href="/learn/data-engineering/git-for-data" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 17 → Git and Version Control for Data Projects
+          Lesson 17 → Git and Version Control for Data Projects
         </Link>
       </div>
     </LearnLayout>

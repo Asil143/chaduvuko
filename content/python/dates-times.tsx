@@ -77,7 +77,7 @@ export default function DatesTimes() {
     <LearnLayout
       title="Working with Dates and Times"
       description="The datetime module in depth — creating and formatting dates, naive vs timezone-aware datetimes, zoneinfo, and a real scheduling example."
-      section="Python — Module 33"
+      section="Python — Lesson 33"
       readTime="45 min"
       updatedAt="August 2026"
     >
@@ -93,14 +93,14 @@ export default function DatesTimes() {
           needs to say "this happened at 9am Eastern" correctly regardless of where the server
           physically runs. And nearly every engineer, at some point, ships a date/time bug that only
           shows up for users in a specific timezone, or only around a Daylight Saving Time transition, or
-          only when a server's clock is set to UTC instead of local time. This module exists to get you
+          only when a server's clock is set to UTC instead of local time. This lesson exists to get you
           past that first bug before it happens in production, not after.
         </Para>
 
         <Para>
           Python's standard library ships a genuinely solid toolkit for this: the <code>datetime</code>{' '}
           module for representing points in time and durations, and — since Python 3.9 — the{' '}
-          <code>zoneinfo</code> module for correct, IANA-database-backed timezone handling. This module
+          <code>zoneinfo</code> module for correct, IANA-database-backed timezone handling. This lesson
           builds both up from first principles, spends real time on the naive-vs-aware distinction
           (because it is the single biggest source of real bugs), and ends with a worked scheduling
           example across US timezones.
@@ -255,7 +255,7 @@ print(parsed)                                         # datetime.datetime(2026, 
           just a collection of numbers (year, month, day, hour, minute, second) with no notion of{' '}
           <em>where on Earth</em> or relative to what reference point those numbers apply. A{' '}
           <strong>timezone-aware</strong> <code>datetime</code> carries that information explicitly.{' '}
-          <code>datetime.now()</code>, used casually in the first example of this module, returns a{' '}
+          <code>datetime.now()</code>, used casually in the first example of this lesson, returns a{' '}
           naive datetime — which is exactly why it deserves a section of its own here.
         </Para>
 
@@ -797,12 +797,12 @@ print(result["reminder_local_display"])    # 2026-08-13 09:00:00-06:00 — 9am t
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 34 covers multithreading and multiprocessing — the Global Interpreter Lock, when
+          Lesson 34 covers multithreading and multiprocessing — the Global Interpreter Lock, when
           threads genuinely help despite it, and when you need real parallelism with separate processes
           instead.
         </p>
         <Link href="/learn/python/multithreading-multiprocessing" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 34 → Multithreading and Multiprocessing Basics
+          Lesson 34 → Multithreading and Multiprocessing Basics
         </Link>
       </div>
     </LearnLayout>

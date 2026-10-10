@@ -77,7 +77,7 @@ export default function IteratorsIterables() {
     <LearnLayout
       title="Iterators and Iterables — Building Your Own"
       description="What Python actually does when you write a for loop, the iterable vs iterator protocols, and how to build your own iterator class."
-      section="Python — Module 27"
+      section="Python — Lesson 27"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -88,7 +88,7 @@ export default function IteratorsIterables() {
         <SectionTitle>What Makes an Object Iterable — __iter__</SectionTitle>
 
         <Para>
-          Since Module 06, you have written dozens of <code>for</code> loops over lists, strings,
+          Since Lesson 06, you have written dozens of <code>for</code> loops over lists, strings,
           dicts, and ranges without asking what actually makes those objects loop-able in the first
           place. The answer is a specific, well-defined contract: an object is <strong>iterable</strong>{' '}
           if it implements a method called <code>__iter__</code>, which returns an{' '}
@@ -194,7 +194,7 @@ while True:
     print(item)`}</CodeBox>
 
         <Para>
-          This is the single most important idea in this module: <code>for item in something:</code>{' '}
+          This is the single most important idea in this lesson: <code>for item in something:</code>{' '}
           is entirely built out of two simpler operations you can perform yourself — call{' '}
           <code>iter()</code> on the iterable once to get an iterator, then call <code>next()</code>{' '}
           on that iterator repeatedly until it raises <code>StopIteration</code>, which the{' '}
@@ -283,7 +283,7 @@ for business_day in schedule:
           <code>__next__</code> directly on the same class and have <code>__iter__</code> simply{' '}
           <code>return self</code>, exactly as the earlier <code>Countdown</code> example in Part 02
           did. The two-class split in the example above is the more robust, general-purpose pattern —
-          and it is what the Generators module (Module 28) will show you how to get almost for free,
+          and it is what the Generators module (Lesson 28) will show you how to get almost for free,
           without writing either class by hand.
         </Para>
       </section>
@@ -302,7 +302,7 @@ for business_day in schedule:
           <strong>new</strong> iterator, starting fresh from the beginning. But if you get hold of an{' '}
           <strong>iterator</strong> directly — by calling <code>iter()</code> yourself, or by using
           something that is only an iterator to begin with, like <code>map()</code> or{' '}
-          <code>filter()</code> from Module 26 — it remembers its position, and once exhausted, it stays
+          <code>filter()</code> from Lesson 26 — it remembers its position, and once exhausted, it stays
           exhausted forever.
         </Para>
 
@@ -494,7 +494,7 @@ process(42)            # "Processing single value: 42" — caught the TypeError 
             This is a bug class that a compiler or a type checker cannot catch for you, because both
             versions of the code are entirely type-correct — an iterator really does support{' '}
             <code>for</code> and really can be passed to <code>sum()</code>. The only way to catch it is
-            understanding, at the level covered in this module, exactly which objects are reusable
+            understanding, at the level covered in this lesson, exactly which objects are reusable
             iterables and which are single-pass iterators.
           </Para>
         </div>
@@ -659,8 +659,8 @@ process(42)            # "Processing single value: 42" — caught the TypeError 
           },
           {
             error: `RuntimeError: generator raised StopIteration`,
-            cause: 'A StopIteration accidentally escaped from inside a generator function\'s body (covered in the next module) instead of being used as a normal loop-ending signal — Python 3.7+ converts this specific case into a RuntimeError to prevent it from silently and incorrectly ending an enclosing loop.',
-            fix: 'Never raise StopIteration manually inside a generator function. Use a plain "return" statement to end a generator early instead — covered in full in Module 28.',
+            cause: 'A StopIteration accidentally escaped from inside a generator function\'s body (covered in the next lesson) instead of being used as a normal loop-ending signal — Python 3.7+ converts this specific case into a RuntimeError to prevent it from silently and incorrectly ending an enclosing loop.',
+            fix: 'Never raise StopIteration manually inside a generator function. Use a plain "return" statement to end a generator early instead — covered in full in Lesson 28.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -714,12 +714,12 @@ process(42)            # "Processing single value: 42" — caught the TypeError 
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 28 shows you how to get everything you just built by hand in DateRangeIterator almost
+          Lesson 28 shows you how to get everything you just built by hand in DateRangeIterator almost
           for free — generators and the yield keyword, Python&apos;s shortcut for writing iterators
           without writing a single __next__ method.
         </p>
         <Link href="/learn/python/generators-yield" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 28 → Generators and yield
+          Lesson 28 → Generators and yield
         </Link>
       </div>
     </LearnLayout>

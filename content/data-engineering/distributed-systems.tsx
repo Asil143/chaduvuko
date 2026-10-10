@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     'CAP theorem applied to real data systems, consistency models, replication strategies, partitioning and sharding, distributed joins, fault tolerance and delivery semantics, consensus protocols, and the Saga pattern — explained for data engineers, not distributed systems PhDs.',
 }
 
-/* ── Local components (Module 37 style) ─────────────────────────────────── */
+/* ── Local components (Lesson 37 style) ─────────────────────────────────── */
 
 const SectionTag = ({ text }: { text: string }) => (
   <div style={{
@@ -172,7 +172,7 @@ export default function DistributedSystemsModule() {
     <LearnLayout
       title="Distributed Systems for Data Engineers"
       description="CAP theorem applied to real data systems, consistency models, replication strategies, partitioning and sharding, distributed joins, fault tolerance and delivery semantics, consensus protocols, and the Saga pattern — explained for data engineers, not distributed systems PhDs."
-      section="Data Engineering — Module 42"
+      section="Data Engineering — Lesson 42"
       readTime="65 min"
       updatedAt="August 2026"
     >
@@ -202,8 +202,8 @@ export default function DistributedSystemsModule() {
 
         <HighlightBox>
           <Para>
-            <strong>What this module covers and what it deliberately does not:</strong>
-            This module covers the concepts a data engineer needs to make correct
+            <strong>What this lesson covers and what it deliberately does not:</strong>
+            This lesson covers the concepts a data engineer needs to make correct
             architectural decisions and debug distributed failures — CAP theorem,
             consistency models, replication, partitioning, joins, fault tolerance,
             and consensus. It does not cover implementing a distributed database
@@ -1389,7 +1389,7 @@ def write_order_count(date: str, count: int, pipeline_run_id: str):
             INSERT), delivery semantics (at-least-once delivery with idempotent
             consumers = exactly-once behaviour), and partition strategy
             (what is the partition key, how do you avoid hot partitions).
-            Every one of these is covered in this module and the modules before it.
+            Every one of these is covered in this lesson and the modules before it.
           </Para>
         </HighlightBox>
       </section>
@@ -1475,15 +1475,15 @@ Sagas trade strict, immediate consistency for eventual consistency and no cross-
           },
           {
             q: 'Choosing a partition key without checking its cardinality and write distribution first',
-            a: 'Part 05\'s hash-partitioning section shows a low-cardinality key (like payment_method) or a monotonically increasing key (like a raw timestamp) creates a hot partition even with plenty of total partitions available. Check the key\'s real-world distribution before committing to it, per this module\'s Misconceptions section.',
+            a: 'Part 05\'s hash-partitioning section shows a low-cardinality key (like payment_method) or a monotonically increasing key (like a raw timestamp) creates a hot partition even with plenty of total partitions available. Check the key\'s real-world distribution before committing to it, per this lesson\'s Misconceptions section.',
           },
           {
             q: 'Reaching for salting before checking whether a broadcast join would eliminate the shuffle entirely',
-            a: 'Part 06 and this module\'s Try This after the salting example both point out that broadcast joins are the first thing to check for skew symptoms if one side of the join is small — salting is a large-to-large-join fix, and applying it when a broadcast would work is unnecessary complexity.',
+            a: 'Part 06 and this lesson\'s Try This after the salting example both point out that broadcast joins are the first thing to check for skew symptoms if one side of the join is small — salting is a large-to-large-join fix, and applying it when a broadcast would work is unnecessary complexity.',
           },
           {
             q: 'Trusting wall-clock timestamps from different machines to establish a strict order of events',
-            a: 'Part 10 and this module\'s Misconceptions section both show clock skew of 10-100ms is normal even with NTP, which is enough to reorder events at realistic throughput. Use a logical clock, a monotonic offset, or an explicit watermark for anything where order must be provably correct.',
+            a: 'Part 10 and this lesson\'s Misconceptions section both show clock skew of 10-100ms is normal even with NTP, which is enough to reorder events at realistic throughput. Use a logical clock, a monotonic offset, or an explicit watermark for anything where order must be provably correct.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1577,10 +1577,10 @@ Sagas trade strict, immediate consistency for eventual consistency and no cross-
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 43 covers performance tuning — how to identify whether a pipeline is I/O bound, CPU bound, or network bound, and the specific techniques for fixing each bottleneck type without rebuilding everything.
+          Lesson 43 covers performance tuning — how to identify whether a pipeline is I/O bound, CPU bound, or network bound, and the specific techniques for fixing each bottleneck type without rebuilding everything.
         </p>
         <Link href="/learn/data-engineering/performance-tuning" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 43 → Performance Tuning and Cost Optimisation
+          Lesson 43 → Performance Tuning and Cost Optimisation
         </Link>
       </div>
     </LearnLayout>

@@ -606,7 +606,7 @@ export default function NetworkTypesTopologies() {
       </Para>
 
       <Para>
-        This module gives you two frameworks for classifying and designing networks. The first is <Accent>network type</Accent> — how geographically large is this network, and who owns it? The second is <Accent>topology</Accent> — what shape does the physical wiring take, and how does that shape determine resilience, cost, and scale? These are not academic classifications. They are the vocabulary you need to design networks that survive reality.
+        This lesson gives you two frameworks for classifying and designing networks. The first is <Accent>network type</Accent> — how geographically large is this network, and who owns it? The second is <Accent>topology</Accent> — what shape does the physical wiring take, and how does that shape determine resilience, cost, and scale? These are not academic classifications. They are the vocabulary you need to design networks that survive reality.
       </Para>
 
       <WowBox emoji="🎯" title="The two questions every network designer must answer">

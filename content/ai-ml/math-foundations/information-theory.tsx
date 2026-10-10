@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Information Theory — Entropy, Cross-Entropy and KL Divergence — Chaduvuko',
@@ -169,7 +168,6 @@ export default function InformationTheoryPage() {
       readTime="26–34 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='math-foundations' topic='information-theory' />
 
       {/* ══ SECTION 1 — THE HOOK ═══════════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -196,8 +194,8 @@ export default function InformationTheoryPage() {
         </p>
 
         <p style={S.p}>
-          Module 06 introduced entropy, cross-entropy, and KL divergence briefly
-          as they connect to probability and loss functions. This module goes
+          Lesson 06 introduced entropy, cross-entropy, and KL divergence briefly
+          as they connect to probability and loss functions. This lesson goes
           much deeper — building from the very first principle (what is information?)
           all the way to mutual information, Jensen-Shannon divergence, and
           how information theory shapes model evaluation and feature selection.
@@ -206,7 +204,7 @@ export default function InformationTheoryPage() {
         <HBox color="#7F77DD">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module adds beyond Module 06:
+              What this lesson adds beyond Lesson 06:
             </span>
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -232,7 +230,7 @@ export default function InformationTheoryPage() {
         </HBox>
 
         <Callout type="tip">
-          This module is more conceptual than the previous ones. The goal is
+          This lesson is more conceptual than the previous ones. The goal is
           not to memorise formulas but to develop an intuition for what
           information means quantitatively. That intuition will make every
           loss function and every evaluation metric click into place.
@@ -898,7 +896,7 @@ print("(1.0 = perfect, 0.0 = random)")`} />
         <h2 style={S.h2}>KL divergence — a deep dive into asymmetry and meaning</h2>
 
         <p style={S.p}>
-          Module 06 introduced KL divergence as a measure of how different
+          Lesson 06 introduced KL divergence as a measure of how different
           two distributions are. This section goes deeper — particularly on
           the asymmetry property, which has practical consequences
           in how you use it in ML.
@@ -1535,7 +1533,7 @@ for imp in implications:
         </div>
 
         <Callout type="info">
-          The math foundations section (Modules 03–07) is now complete.
+          The math foundations section (Lessons 03–07) is now complete.
           Vectors and matrices gave you the data structures.
           Matrix multiplication gave you the core operation.
           Derivatives and gradients gave you the learning mechanism.
@@ -1632,7 +1630,7 @@ feature_drift_report(train_order_value, prod_order_value_stable,  "order_value (
 feature_drift_report(train_order_value, prod_order_value_drifted, "order_value (drifted)")
 
 # This is exactly the check tools like Evidently, WhyLabs, and Arize run
-# under the hood — the same Jensen-Shannon divergence this module derives
+# under the hood — the same Jensen-Shannon divergence this lesson derives
 # from first principles, just wired into a dashboard and an alert.`} />
       </div>
 
@@ -1649,7 +1647,7 @@ feature_drift_report(train_order_value, prod_order_value_drifted, "order_value (
             confidence is justified. A model can output [0.98, 0.01, 0.01] —
             very low entropy, very confident — while being completely wrong
             about which class is correct. This is exactly the "confident but
-            wrong" scenario this module walks through with model_wrong: low
+            wrong" scenario this lesson walks through with model_wrong: low
             entropy tells you the model committed strongly to an answer; it
             tells you nothing about whether that answer is the right one.
             Confidence and correctness are measured by entropy and accuracy
@@ -1808,7 +1806,7 @@ feature_drift_report(train_order_value, prod_order_value_drifted, "order_value (
         </p>
 
         <p style={S.p}>
-          Module 08 starts the Programming Ecosystem section.
+          Lesson 08 starts the Programming Ecosystem section.
           It covers Python specifically for ML — not syntax basics,
           but the patterns professional ML engineers actually use:
           NumPy vectorisation, Pandas for data manipulation, Matplotlib
@@ -1829,7 +1827,7 @@ feature_drift_report(train_order_value, prod_order_value_drifted, "order_value (
               textTransform: 'uppercase' as const, color: '#888888',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 08 · Programming Ecosystem
+              Next — Lesson 08 · Programming Ecosystem
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

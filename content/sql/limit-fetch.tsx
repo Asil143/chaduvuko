@@ -78,7 +78,7 @@ export default function LimitFetch() {
     <LearnLayout
       title="Limiting Results — LIMIT / OFFSET"
       description="Control exactly how many rows come back, implement pagination, and understand the performance implications of LIMIT on large tables"
-      section="SQL — Module 09"
+      section="SQL — Lesson 09"
       readTime="8–12 min"
       updatedAt="April 2026"
     >
@@ -88,7 +88,7 @@ export default function LimitFetch() {
 
       <P>Every query you have written so far returns every row that satisfies the WHERE condition. On the FreshCart database with 20 customers and 30 orders, that is fine. In a real production database at DoorDash, Amazon, or Stripe, the equivalent tables have tens of millions of rows. Returning all of them in a single query is not just slow — it can crash your application, exhaust database memory, and bring down services for other users.</P>
 
-      <P>LIMIT is the clause that says: <Hl>"Stop after you have returned N rows."</Hl> It is one of the most important performance tools in SQL. Combined with ORDER BY from Module 08, LIMIT lets you efficiently answer questions like:</P>
+      <P>LIMIT is the clause that says: <Hl>"Stop after you have returned N rows."</Hl> It is one of the most important performance tools in SQL. Combined with ORDER BY from Lesson 08, LIMIT lets you efficiently answer questions like:</P>
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', margin: '20px 0 28px' }}>
         {[
@@ -606,7 +606,7 @@ FROM products
 WHERE in_stock = true
   AND (:category IS NULL OR category = :category)
 -- CASE WHEN picks which column/direction to sort by based on :sort_by —
--- CASE WHEN itself is covered fully in Module 16
+-- CASE WHEN itself is covered fully in Lesson 16
 ORDER BY
   CASE WHEN :sort_by = 'price_asc'  THEN unit_price END ASC,
   CASE WHEN :sort_by = 'price_desc' THEN unit_price END DESC
@@ -748,10 +748,10 @@ LIMIT 4 OFFSET 4;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 10</strong>, you learn DISTINCT — how to remove duplicate rows from your results, when to use it, and the performance cost it carries on large tables.
+          In <strong>Lesson 10</strong>, you learn DISTINCT — how to remove duplicate rows from your results, when to use it, and the performance cost it carries on large tables.
         </p>
         <Link href="/learn/sql/distinct" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 10 → Removing Duplicates — DISTINCT
+          Lesson 10 → Removing Duplicates — DISTINCT
         </Link>
       </div>
 

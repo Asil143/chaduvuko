@@ -78,7 +78,7 @@ export default function Aliases() {
     <LearnLayout
       title="Renaming Columns — AS (Aliases)"
       description="Give columns and tables readable names, understand where aliases can and cannot be used, and write queries that communicate clearly to every reader"
-      section="SQL — Module 13"
+      section="SQL — Lesson 13"
       readTime="7–10 min"
       updatedAt="April 2026"
     >
@@ -314,7 +314,7 @@ ORDER BY margin_pct DESC;   -- works: ORDER BY runs after SELECT`}
       />
 
       <H>GROUP BY — database-dependent</H>
-      <P>GROUP BY executes before SELECT in the logical order, so technically aliases should not be available. However, MySQL and SQLite (this playground) allow GROUP BY to reference SELECT aliases as a convenience extension. PostgreSQL follows the standard strictly — GROUP BY cannot use SELECT aliases. Always repeat the expression in GROUP BY for cross-database compatibility. (GROUP BY itself is taught properly in Module 28 — the point here is only how it interacts with aliases.)</P>
+      <P>GROUP BY executes before SELECT in the logical order, so technically aliases should not be available. However, MySQL and SQLite (this playground) allow GROUP BY to reference SELECT aliases as a convenience extension. PostgreSQL follows the standard strictly — GROUP BY cannot use SELECT aliases. Always repeat the expression in GROUP BY for cross-database compatibility. (GROUP BY itself is taught properly in Lesson 28 — the point here is only how it interacts with aliases.)</P>
 
       <CodeBlock
         label="GROUP BY — safe cross-database approach"
@@ -340,7 +340,7 @@ ORDER BY order_month;`}
       {/* ── PART 05 ── */}
       <Part n="05" title="Table Aliases — Shorter Names for Tables" />
 
-      <P>Aliases are not just for columns — you can also alias <Hl>tables</Hl>. Table aliases give a table a short name for the duration of the query. This is most useful in JOIN queries where you reference the same table multiple times, or when table names are long and repetitive. (You'll learn JOIN properly in Module 30 — for now, just notice the alias syntax, AS c and AS o, which is what matters here.)</P>
+      <P>Aliases are not just for columns — you can also alias <Hl>tables</Hl>. Table aliases give a table a short name for the duration of the query. This is most useful in JOIN queries where you reference the same table multiple times, or when table names are long and repetitive. (You'll learn JOIN properly in Lesson 30 — for now, just notice the alias syntax, AS c and AS o, which is what matters here.)</P>
 
       <CodeBlock
         label="Table alias syntax"
@@ -688,7 +688,7 @@ ORDER BY margin_pct DESC;`}
       <Err
         msg="ERROR: column 'profit' does not exist — WHERE profit > 50"
         cause="You used a SELECT alias in a WHERE clause. WHERE executes before SELECT in the logical execution order, so when WHERE evaluates 'profit > 50', the alias 'profit' has not been defined yet — it will be defined later during SELECT. The database sees 'profit' in WHERE and looks for a column with that name in the table, finds none, and throws a column-not-found error."
-        fix="Repeat the full expression in WHERE: WHERE (unit_price - cost_price) > 50. Do not use the alias. The alias is only available in ORDER BY (which runs after SELECT). If you find yourself repeating a complex expression many times, consider using a CTE (WITH clause, Module 55) or a subquery to define the calculation once and reference the alias in the outer query."
+        fix="Repeat the full expression in WHERE: WHERE (unit_price - cost_price) > 50. Do not use the alias. The alias is only available in ORDER BY (which runs after SELECT). If you find yourself repeating a complex expression many times, consider using a CTE (WITH clause, Lesson 55) or a subquery to define the calculation once and reference the alias in the outer query."
       />
 
       <Err
@@ -734,7 +734,7 @@ FROM stores AS s
 JOIN orders AS o ON s.store_id = o.store_id
 GROUP BY s.store_id, s.city
 ORDER BY delivered_revenue DESC;`}
-        explanation="This query demonstrates all alias types working together. Table aliases (s for stores, o for orders) shorten column references throughout. Column aliases (store, total_orders, delivered_revenue, avg_order_value) give every output column a meaningful name. The subquery-like CASE inside SUM conditionally sums only delivered order amounts — a pattern called a conditional aggregate that you will learn formally in Module 27. ORDER BY delivered_revenue uses the SELECT alias correctly because ORDER BY runs after SELECT. GROUP BY repeats the full column references (s.store_id, s.city) rather than using aliases, which is the safe cross-database approach."
+        explanation="This query demonstrates all alias types working together. Table aliases (s for stores, o for orders) shorten column references throughout. Column aliases (store, total_orders, delivered_revenue, avg_order_value) give every output column a meaningful name. The subquery-like CASE inside SUM conditionally sums only delivered order amounts — a pattern called a conditional aggregate that you will learn formally in Lesson 27. ORDER BY delivered_revenue uses the SELECT alias correctly because ORDER BY runs after SELECT. GROUP BY repeats the full column references (s.store_id, s.city) rather than using aliases, which is the safe cross-database approach."
       />
 
       <HR />
@@ -759,10 +759,10 @@ ORDER BY delivered_revenue DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 14</strong>, you learn pattern matching with LIKE and wildcards — finding rows that match a pattern rather than an exact value. This is how you search for emails by domain, product names by brand prefix, or any partial text match.
+          In <strong>Lesson 14</strong>, you learn pattern matching with LIKE and wildcards — finding rows that match a pattern rather than an exact value. This is how you search for emails by domain, product names by brand prefix, or any partial text match.
         </p>
         <Link href="/learn/sql/like-wildcards" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 14 → Pattern Matching — LIKE & Wildcards
+          Lesson 14 → Pattern Matching — LIKE & Wildcards
         </Link>
       </div>
 

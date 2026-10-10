@@ -101,7 +101,7 @@ const VEdge = () => <div style={{ width: 2, height: 14, background: 'var(--borde
 export default function HeapsPage() {
   return (
     <LearnLayout
-      title="Unit 13 — Heaps"
+      title="Heaps"
       description="A special complete binary tree where the parent is always larger or smaller than its children. Always balanced, always O(log n), powers priority queues and heap sort."
       section="DSA"
       readTime="75 min"
@@ -111,9 +111,7 @@ export default function HeapsPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'UNIT 13', green: true },
-          { label: 'Prerequisite: Unit 12 — BST', green: false },
-          { label: '75 min read', green: false },
+          { label: 'Prerequisite: Lesson 13 — BST', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -761,7 +759,7 @@ int main() {
       <SectionTitle>Priority Queue Using a Heap</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 20 }}>
-        In Unit 07 we built a priority queue using a simple array that searched
+        In Lesson 8 we built a priority queue using a simple array that searched
         for the highest priority element in O(n). A heap-based priority queue
         does all the same things in O(log n) — dramatically faster at scale.
         This is the real-world implementation used in every production system.
@@ -771,7 +769,7 @@ int main() {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
           <thead>
             <tr>
-              {['Operation', 'Array-based (Unit 07)', 'Heap-based', 'Why better'].map((h) => (
+              {['Operation', 'Array-based (Lesson 8)', 'Heap-based', 'Why better'].map((h) => (
                 <th key={h} style={{ textAlign: 'left', padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: 11, background: 'var(--surface)' }}>{h}</th>
               ))}
             </tr>
@@ -888,7 +886,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Unit 14</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 15</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now understand heaps completely — the heap property, the array representation,
@@ -896,7 +894,7 @@ int main() {
         heap sort, and why heaps are the foundation of every production priority queue.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Unit 14 we cover <strong style={{ color: 'var(--text)' }}>Hashing</strong> —
+        In Lesson 15 we cover <strong style={{ color: 'var(--text)' }}>Hashing</strong> —
         the technique behind O(1) lookup. Hash tables power database indexes,
         caches, language runtimes, and almost every fast system you have ever used.
         We build one from scratch in C and understand every design decision.
@@ -904,7 +902,7 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → UNIT 14</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 15</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Hashing — O(1) Lookup</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Hash functions, collisions, chaining, open addressing — built in C.</div>
         </div>

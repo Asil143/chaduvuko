@@ -77,7 +77,7 @@ export default function FlexboxCompleteGuide() {
     <LearnLayout
       title="Flexbox — The Complete Guide"
       description="flex-direction and the main-axis vs cross-axis mental model, justify-content, align-items, align-content, flex-wrap, and flex-grow/flex-shrink/flex-basis worked through with real numeric examples."
-      section="HTML & CSS — Module 23"
+      section="HTML & CSS — Lesson 23"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -88,7 +88,7 @@ export default function FlexboxCompleteGuide() {
         <SectionTitle>The Main Axis and Cross Axis — The Single Most Important Idea in Flexbox</SectionTitle>
 
         <Para>
-          Everything in Flexbox — every property covered in this module — only makes sense once one idea
+          Everything in Flexbox — every property covered in this lesson — only makes sense once one idea
           is genuinely internalized: turning an element into a flex container creates{' '}
           <strong>two axes</strong>, and every alignment property in Flexbox refers to one of those two
           axes, never to literal "horizontal" or "vertical." Get this backwards and every Flexbox property
@@ -230,7 +230,7 @@ not a theoretical one.
           people the first time — flex items with no explicit height, inside a row-direction flex
           container, automatically stretch to match the tallest sibling&apos;s height unless{' '}
           <code>align-items</code> is set to something else. This is precisely the mechanism behind the
-          "equal-height cards" pattern covered fully in the next module, and it happens with zero extra
+          "equal-height cards" pattern covered fully in the next lesson, and it happens with zero extra
           CSS beyond <code>display: flex</code> itself.
         </Callout>
 
@@ -755,12 +755,12 @@ item-c: 300 - 133 = 167px  (rounding — actual browser math is more precise)
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 24 takes every property from this module and applies it to real UI patterns — a
+          Lesson 24 takes every property from this lesson and applies it to real UI patterns — a
           responsive navbar, an equal-height card grid, the single-container centering reflex, a sticky
           footer layout, and the gap property.
         </p>
         <Link href="/learn/html-css/flexbox-in-practice" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 24 → Flexbox in Practice — Real Layouts
+          Lesson 24 → Flexbox in Practice — Real Layouts
         </Link>
       </div>
     </LearnLayout>

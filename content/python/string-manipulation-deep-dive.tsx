@@ -77,19 +77,19 @@ export default function StringManipulationDeepDive() {
     <LearnLayout
       title="String Manipulation Deep Dive"
       description="Parsing messy real-world text, cleaning and normalising data, alignment and padding, textwrap, string.Template vs f-strings, and a full log-line parsing example."
-      section="Python — Module 14"
+      section="Python — Lesson 14"
       readTime="45 min"
       updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}
       <section style={{ marginBottom: 64 }}>
-        <SectionTag text="// Part 01 — Building On Module 04" />
+        <SectionTag text="// Part 01 — Building On Lesson 04" />
         <SectionTitle>Beyond Indexing, Slicing, and f-strings</SectionTitle>
 
         <Para>
-          Module 04 covered string fundamentals in depth — indexing, slicing, immutability, the core
-          methods, Unicode, encoding, and f-strings. This module assumes all of that is solid ground and
+          Lesson 04 covered string fundamentals in depth — indexing, slicing, immutability, the core
+          methods, Unicode, encoding, and f-strings. This lesson assumes all of that is solid ground and
           does not re-teach it. What it covers instead is the layer above the fundamentals: what you
           actually do with strings once real, messy data is involved — parsing text into structured
           pieces, cleaning up the inconsistencies that real-world text always has, formatting output for
@@ -98,10 +98,10 @@ export default function StringManipulationDeepDive() {
         </Para>
 
         <Para>
-          If Module 04 was about the mechanics of a single string, this module is about strings as{' '}
+          If Lesson 04 was about the mechanics of a single string, this lesson is about strings as{' '}
           <strong>data</strong> — log lines, CSV-like text, user-submitted form fields, report output.
           This is also where Python string work starts to overlap meaningfully with the data-parsing
-          skills used throughout data engineering, which is why nearly every example in this module
+          skills used throughout data engineering, which is why nearly every example in this lesson
           uses text that looks like something a real production system would actually produce.
         </Para>
       </section>
@@ -114,7 +114,7 @@ export default function StringManipulationDeepDive() {
         <SectionTitle>Splitting on Multiple Delimiters, and a First Look at re.split</SectionTitle>
 
         <Para>
-          Module 04&apos;s <code>.split()</code> handles the simple case well — splitting on a single,
+          Lesson 04&apos;s <code>.split()</code> handles the simple case well — splitting on a single,
           consistent delimiter. Real-world text is rarely that clean. A single line might use commas in
           some places and semicolons in others, or mix single and multiple spaces inconsistently.
         </Para>
@@ -144,7 +144,7 @@ print(parts)   # ['Denver', 'CO', '80202']`}</CodeBox>
           than a literal string.
         </Para>
 
-        <CodeBox label="re.split() — a brief preview; full regex depth is Module 32">{`import re
+        <CodeBox label="re.split() — a brief preview; full regex depth is Lesson 32">{`import re
 
 line = "Denver, CO; 80202   99205"
 
@@ -154,11 +154,11 @@ parts = [p for p in parts if p]   # drop any empty strings left behind
 print(parts)   # ['Denver', 'CO', '80202', '99205']`}</CodeBox>
 
         <Callout type="info">
-          This module deliberately keeps regex light — just enough to recognise{' '}
+          This lesson deliberately keeps regex light — just enough to recognise{' '}
           <code>re.split()</code> as an option when plain <code>.split()</code>/<code>.replace()</code>{' '}
           genuinely cannot express what you need. Full regular expression syntax — character classes,
           groups, quantifiers, and the rest of the <code>re</code> module — gets its own complete
-          treatment in Module 32, later in this track.
+          treatment in Lesson 32, later in this track.
         </Callout>
       </section>
 
@@ -212,7 +212,7 @@ else:
     print("Not found")`}</CodeBox>
 
         <Callout type="warning">
-          <strong>.lower() is not always sufficient for text beyond plain English.</strong> As Module 04
+          <strong>.lower() is not always sufficient for text beyond plain English.</strong> As Lesson 04
           covered when discussing Unicode, some characters have case-folding behaviour that{' '}
           <code>.lower()</code> does not fully capture (the German <code>ß</code> is the textbook
           example). For case-insensitive comparison across a wide range of languages,{' '}
@@ -279,8 +279,8 @@ print(order_id)   # "ORD-00007"`}</CodeBox>
 
         <Callout type="tip">
           For anything beyond simple fixed-width padding — controlling decimal places, thousands
-          separators, or percentage formatting — f-string format specifiers (covered in Module 04 and
-          Module 10) are usually the better tool: <code>f&quot;{`{salary:>10,}`}&quot;</code> right-aligns
+          separators, or percentage formatting — f-string format specifiers (covered in Lesson 04 and
+          Lesson 10) are usually the better tool: <code>f&quot;{`{salary:>10,}`}&quot;</code> right-aligns
           a number to width 10 <em>and</em> adds thousands separators in one step, something{' '}
           <code>.rjust()</code> alone cannot do.
         </Callout>
@@ -395,7 +395,7 @@ sneaky_template = Template("Hello $name, here is a secret: \${__import__('os').s
         <SectionTitle>Parsing a Messy Real-World Log Line</SectionTitle>
 
         <Para>
-          This example ties together nearly every technique from this module against one realistic
+          This example ties together nearly every technique from this lesson against one realistic
           target: a raw log line from a web server, in the kind of loosely-structured format real
           logging systems actually produce.
         </Para>
@@ -403,7 +403,7 @@ sneaky_template = Template("Hello $name, here is a secret: \${__import__('os').s
         <CodeBox label="The raw input">{`log_line = "  2026-08-14T09:14:02Z   [ERROR]  api-gateway  ;  user_id=4821 ; message = Payment failed: card DECLINED  \\n"`}</CodeBox>
 
         <Para>
-          This single line has almost every real-world text problem this module has covered: leading
+          This single line has almost every real-world text problem this lesson has covered: leading
           and trailing whitespace, inconsistent spacing around delimiters, a mix of semicolons and
           key=value pairs, and a trailing newline. Parsing it into structured data means combining
           cleaning, splitting, and normalisation in sequence.
@@ -470,7 +470,7 @@ print(result)
 #  'user_id': '4821', 'message': 'Payment failed: card DECLINED'}`}</CodeBox>
 
         <Para>
-          The result is exactly the flat-dict-per-record shape from Module 13 — this{' '}
+          The result is exactly the flat-dict-per-record shape from Lesson 13 — this{' '}
           <code>parse_log_line()</code> function is precisely the "normalize once, at the boundary"
           pattern from that module&apos;s Part 07, applied to text instead of nested JSON. Every other
           function that processes logs downstream can now work with clean dicts and never touch a raw
@@ -726,7 +726,7 @@ def build_reminder(template_text, patient_name, appointment_date):
           {
             error: `AttributeError: 'NoneType' object has no attribute 'group' (from a regex match)`,
             cause: 'Calling .group() directly on the result of re.search() or re.match() when the pattern did not actually match anything, since both return None on no match rather than raising.',
-            fix: 'Always check the match object before calling methods on it: match = re.search(pattern, text); if match: match.group(). This becomes second nature once Module 32 covers regex in full.',
+            fix: 'Always check the match object before calling methods on it: match = re.search(pattern, text); if match: match.group(). This becomes second nature once Lesson 32 covers regex in full.',
           },
           {
             error: `IndexError: list index out of range (after re.split or str.split)`,
@@ -769,7 +769,7 @@ def build_reminder(template_text, patient_name, appointment_date):
 
       {/* ── Key Takeaways ── */}
       <KeyTakeaways items={[
-        'For delimiters beyond a single fixed string, re.split() splits on a pattern — a light preview of the regex module covered fully in Module 32.',
+        'For delimiters beyond a single fixed string, re.split() splits on a pattern — a light preview of the regex module covered fully in Lesson 32.',
         '.strip() removes all leading/trailing whitespace (spaces, tabs, newlines) by default, or an explicit set of characters when given an argument.',
         'Always normalise case (.lower() or the more thorough .casefold()) and strip whitespace before comparing human-entered text — invisible formatting differences are a constant source of "why doesn\'t this match" bugs.',
         '.ljust(), .rjust(), .center(), and .zfill() produce fixed-width, aligned output for reports and IDs; f-string format specifiers handle more advanced formatting like thousands separators.',
@@ -785,12 +785,12 @@ def build_reminder(template_text, patient_name, appointment_date):
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 15 moves from text you already have in memory to text (and binary data) that lives on
+          Lesson 15 moves from text you already have in memory to text (and binary data) that lives on
           disk — file handles, context managers, read/write modes, and the mistakes that cause silent
           data loss.
         </p>
         <Link href="/learn/python/reading-writing-files" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 15 → Reading &amp; Writing Files
+          Lesson 15 → Reading &amp; Writing Files
         </Link>
       </div>
     </LearnLayout>

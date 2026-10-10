@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Feature Scaling — Standardisation and Normalisation — Chaduvuko',
@@ -175,7 +174,6 @@ export default function FeatureScalingPage() {
       readTime="30–38 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='data-engineering' topic='feature-scaling' />
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -206,7 +204,7 @@ export default function FeatureScalingPage() {
 
         <p style={S.p}>
           Feature scaling solves this by transforming all features to a common scale
-          before training. This module shows you exactly what each scaler does
+          before training. This lesson shows you exactly what each scaler does
           mathematically, which algorithms need it, and how to apply it correctly
           inside a sklearn Pipeline without leaking test information.
         </p>
@@ -214,7 +212,7 @@ export default function FeatureScalingPage() {
         <HBox color="#378ADD">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module covers:
+              What this lesson covers:
             </span>
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -242,7 +240,7 @@ export default function FeatureScalingPage() {
         </HBox>
 
         <Callout type="tip">
-          The single most important rule in this module:
+          The single most important rule in this lesson:
           fit the scaler on training data only, then transform both training and test.
           Fitting on the full dataset leaks test statistics into training — a subtle
           but real form of data leakage. Using a sklearn Pipeline enforces this rule automatically.
@@ -1283,7 +1281,7 @@ print("     Fix: always scale y when using neural networks")`} />
         </p>
 
         <p style={S.p}>
-          The distance-based-versus-tree-based distinction from this module shows up
+          The distance-based-versus-tree-based distinction from this lesson shows up
           constantly in how teams design a pipeline. A team that only ever ships gradient
           boosted trees can often skip scaling entirely and simplify their feature pipeline.
           A team that swaps between linear models, SVMs, and trees during experimentation
@@ -1522,9 +1520,9 @@ print(f"Prediction for live request: {prediction[0]:.1f} min")
         </p>
 
         <p style={S.p}>
-          Module 18 builds your first complete ML model from scratch:
-          linear regression. You'll see how the scaled features from this module
-          feed directly into the gradient descent update from Module 05,
+          Lesson 18 builds your first complete ML model from scratch:
+          linear regression. You'll see how the scaled features from this lesson
+          feed directly into the gradient descent update from Lesson 05,
           and how regularisation (Ridge and Lasso) prevents overfitting —
           with the coefficients directly interpretable as feature importance.
         </p>
@@ -1541,7 +1539,7 @@ print(f"Prediction for live request: {prediction[0]:.1f} min")
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 18 · Classical ML
+              Next — Lesson 18 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

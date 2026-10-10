@@ -77,7 +77,7 @@ export default function ControlFlow() {
     <LearnLayout
       title="Control Flow — if / elif / else"
       description="How Python evaluates truthiness, every form of conditional logic, structural pattern matching, and real readability patterns."
-      section="Python — Module 05"
+      section="Python — Lesson 05"
       readTime="55 min"
       updatedAt="August 2026"
     >
@@ -498,7 +498,7 @@ else:
           <SubSubTitle>What the reviewer flags</SubSubTitle>
 
           <Para>
-            Three separate issues, each directly traceable to earlier parts of this module: the deep
+            Three separate issues, each directly traceable to earlier parts of this lesson: the deep
             nesting is a textbook case for guard clauses (Part 04); every <code>== True</code>{' '}
             comparison should simply be the condition itself, since <code>shipment.is_delivered</code>{' '}
             is already a boolean (a truthiness-check idiom, Part 02); and the logic can be flattened
@@ -741,7 +741,7 @@ else:
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 06 (Loops) and the rest of the Python Foundations phase are being written now and will
+          Lesson 06 (Loops) and the rest of the Python Foundations phase are being written now and will
           go live soon. In the meantime, browse the full 46-module curriculum below.
         </p>
         <Link href="/learn/python" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>

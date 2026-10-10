@@ -79,7 +79,7 @@ export default function Module12() {
     <LearnLayout
       title="Authentication Attacks — Credential Theft, Pass-the-Hash, Kerberoasting"
       description="How attackers steal and abuse credentials without ever cracking passwords — Pass-the-Hash, Kerberoasting, credential stuffing, and token theft."
-      section="Cybersecurity — Module 12"
+      section="Cybersecurity — Lesson 12"
       readTime="43 min"
       updatedAt="May 2026"
     >
@@ -88,7 +88,7 @@ export default function Module12() {
           Most enterprise breaches don't involve cracking passwords. They involve stealing the authentication material itself — the hash, the ticket, the token — and reusing it. The attacker never needs to know the actual password if they can authenticate <Hl>as the password</Hl>. This is the insight behind Pass-the-Hash, Pass-the-Ticket, and token theft: authentication protocols were designed to prove you know the secret, but implementation details often allow you to prove it without actually knowing it.
         </P>
         <P>
-          This module covers the full spectrum of authentication attacks: how Windows NTLM and Kerberos authentication works and where each is exploitable, how credential stuffing turns breach databases into access, how MFA can be bypassed, and what defences work at the protocol level versus the policy level. By the end, you'll understand why Active Directory environments are so hard to defend once an attacker has a foothold.
+          This lesson covers the full spectrum of authentication attacks: how Windows NTLM and Kerberos authentication works and where each is exploitable, how credential stuffing turns breach databases into access, how MFA can be bypassed, and what defences work at the protocol level versus the policy level. By the end, you'll understand why Active Directory environments are so hard to defend once an attacker has a foothold.
         </P>
       </Part>
 
@@ -745,13 +745,13 @@ Mistakes that enabled this:
 
       <div style={{ background: 'var(--code-bg)', borderRadius: 12, padding: '28px 32px', marginTop: 40 }}>
         <div style={{ fontSize: 13, color: C, fontWeight: 700, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
-          Up Next — Module 13
+          Up Next — Lesson 13
         </div>
         <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--heading)', marginBottom: 12 }}>
           Vulnerabilities and Exploits
         </div>
         <p style={{ ...s.p, marginBottom: 20 }}>
-          In Module 13, you learn the language of vulnerabilities: CVE IDs, CVSS scores, CWE classifications, and the full patch lifecycle from disclosure to exploitation. How zero-days are discovered and sold. Why organisations consistently fail to patch critical vulnerabilities before they're exploited. And how to run a vulnerability management program that prioritises by actual risk rather than CVSS score alone.
+          In Lesson 13, you learn the language of vulnerabilities: CVE IDs, CVSS scores, CWE classifications, and the full patch lifecycle from disclosure to exploitation. How zero-days are discovered and sold. Why organisations consistently fail to patch critical vulnerabilities before they're exploited. And how to run a vulnerability management program that prioritises by actual risk rather than CVSS score alone.
         </p>
         <Link
           href="/learn/cybersecurity/vulnerabilities-and-exploits"
@@ -766,7 +766,7 @@ Mistakes that enabled this:
             textDecoration: 'none',
           }}
         >
-          Continue to Module 13 →
+          Continue to Lesson 13 →
         </Link>
       </div>
     </LearnLayout>

@@ -123,7 +123,7 @@ export default function DataTypesStructuredModule() {
     <LearnLayout
       title="Structured, Semi-Structured and Unstructured Data"
       description="The three categories every data engineer works with — what each demands from your pipeline."
-      section="Data Engineering — Module 07"
+      section="Data Engineering — Lesson 07"
       readTime="45 min"
       updatedAt="August 2026"
     >
@@ -147,7 +147,7 @@ export default function DataTypesStructuredModule() {
           Every data source you will ever encounter belongs to one of three categories.
           The moment you identify which category a new data source belongs to, you know
           which tools to reach for, which ingestion approach to use, and which
-          complications to expect. That pattern recognition is what this module builds.
+          complications to expect. That pattern recognition is what this lesson builds.
         </Para>
 
         <HighlightBox>
@@ -1097,11 +1097,11 @@ Call recording pipeline:
         {[
           {
             wrong: '"A CSV file with a header row is structured data, the same way a database table is"',
-            right: 'Part 02\'s CSV trap section is direct about this: a CSV\'s "structure" is a visual convention, not an enforced contract — nothing stops a wrong column count, a text value in a numeric field, or an ambiguous empty cell. This module\'s Error Library shows the exact failure this produces (ValueError converting a vendor\'s "N/A" to a float).',
+            right: 'Part 02\'s CSV trap section is direct about this: a CSV\'s "structure" is a visual convention, not an enforced contract — nothing stops a wrong column count, a text value in a numeric field, or an ambiguous empty cell. This lesson\'s Error Library shows the exact failure this produces (ValueError converting a vendor\'s "N/A" to a float).',
           },
           {
             wrong: '"If a JSON field was present in the last 10,000 records, it\'s safe to access it directly"',
-            right: 'Part 03 is explicit that semi-structured data can change its shape at any time with no warning at the source — this module\'s Error Library shows exactly this failure (a KeyError on a promo_code field that\'s optional, not guaranteed), which is why .get() with a default is the standing rule, not a defensive-coding nicety.',
+            right: 'Part 03 is explicit that semi-structured data can change its shape at any time with no warning at the source — this lesson\'s Error Library shows exactly this failure (a KeyError on a promo_code field that\'s optional, not guaranteed), which is why .get() with a default is the standing rule, not a defensive-coding nicety.',
           },
           {
             wrong: '"Deeply flattening every nested JSON field into its own column is always the more analyst-friendly choice"',
@@ -1310,19 +1310,19 @@ Fourth, when storage cost of the repeated keys is a concern. JSON stores keys wi
         {[
           {
             q: 'Trusting a vendor CSV\'s header row and column count without validating the actual rows',
-            a: 'Part 02\'s CSV trap section shows the full range of what "looks structured" hides — wrong column counts, text where numbers are expected, ambiguous nulls, unquoted delimiters inside a field. This module\'s Error Library shows the concrete failure: a "N/A" null indicator crashing a float conversion nobody expected to fail.',
+            a: 'Part 02\'s CSV trap section shows the full range of what "looks structured" hides — wrong column counts, text where numbers are expected, ambiguous nulls, unquoted delimiters inside a field. This lesson\'s Error Library shows the concrete failure: a "N/A" null indicator crashing a float conversion nobody expected to fail.',
           },
           {
             q: 'Using direct key access (dict[\'field\']) on JSON instead of .get() with a default',
-            a: 'Part 03 and this module\'s Error Library are explicit about why this is fragile — an optional field that\'s simply absent (not null, absent) raises a KeyError the moment one record doesn\'t include it, which is a when, not an if, for any real-world JSON API.',
+            a: 'Part 03 and this lesson\'s Error Library are explicit about why this is fragile — an optional field that\'s simply absent (not null, absent) raises a KeyError the moment one record doesn\'t include it, which is a when, not an if, for any real-world JSON API.',
           },
           {
             q: 'Joining a semi-structured document store to a fact table without checking cardinality first',
-            a: 'This module\'s Error Library documents exactly this: joining orders to a product catalogue stored as one document per variant (not one per SKU) triples the row count silently, because nothing enforced that each product_id maps to exactly one catalogue row.',
+            a: 'This lesson\'s Error Library documents exactly this: joining orders to a product catalogue stored as one document per variant (not one per SKU) triples the row count silently, because nothing enforced that each product_id maps to exactly one catalogue row.',
           },
           {
             q: 'Assuming OCR output is reliable text without checking a confidence score',
-            a: 'This module\'s Error Library shows garbled OCR output from a low-resolution or skewed scan being stored as if it were trustworthy data. Image pre-processing (deskew, contrast, upscaling) plus logging the confidence score alongside the extracted text is what lets downstream consumers know when to distrust a result.',
+            a: 'This lesson\'s Error Library shows garbled OCR output from a low-resolution or skewed scan being stored as if it were trustworthy data. Image pre-processing (deskew, contrast, upscaling) plus logging the confidence score alongside the extracted text is what lets downstream consumers know when to distrust a result.',
           },
           {
             q: 'Storing unstructured data with no metadata extraction, planning to "deal with it later" once an ML pipeline exists',
@@ -1421,10 +1421,10 @@ Fourth, when storage cost of the repeated keys is a concern. JSON stores keys wi
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 08 covers every major data format — not just what each one is, but what it costs in storage and compute, and what breaks when you choose the wrong format for your workload.
+          Lesson 08 covers every major data format — not just what each one is, but what it costs in storage and compute, and what breaks when you choose the wrong format for your workload.
         </p>
         <Link href="/learn/data-engineering/data-formats" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 08 → Data Formats — CSV, JSON, Parquet, Avro, ORC
+          Lesson 08 → Data Formats — CSV, JSON, Parquet, Avro, ORC
         </Link>
       </div>
     </LearnLayout>

@@ -219,7 +219,7 @@ export default function StorageFileOrganization() {
           Reading 1 MB as 256 random 4KB reads takes about 1.25 seconds — 125× slower.
           On NVMe SSDs, the gap is smaller but still significant (sequential bandwidth
           is 5–10× higher than random access throughput). Every data structure
-          and file organisation decision in this module is ultimately about this principle.
+          and file organisation decision in this lesson is ultimately about this principle.
         </Para>
 
         <CodeBox label="The cost gap — sequential vs random I/O in numbers">
@@ -1130,7 +1130,7 @@ SHOW checkpoint_timeout;            -- default: 5min (checkpoint at least every 
         <Para>
           This is the checklist a data engineer or DBA runs when setting up or tuning
           a PostgreSQL instance for production workloads. Every item connects to a
-          concept from this module.
+          concept from this lesson.
         </Para>
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>

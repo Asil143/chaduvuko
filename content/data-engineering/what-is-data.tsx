@@ -127,7 +127,7 @@ export default function WhatIsDataModule() {
     <LearnLayout
       title="What is Data? How Computers Store Information"
       description="The foundation of everything — bits, bytes, files, and why data needs engineers."
-      section="Data Engineering — Module 01"
+      section="Data Engineering — Lesson 01"
       readTime="55 min"
       updatedAt="August 2026"
     >
@@ -951,7 +951,7 @@ Best for:                           Best for:
           </Para>
 
           <Para>
-            This is why Module 01 starts here. Not with tools. Not with the cloud. With the
+            This is why Lesson 01 starts here. Not with tools. Not with the cloud. With the
             foundation. Because the data engineer who understands data deeply writes pipelines
             that do not break at 3am.
           </Para>
@@ -1090,7 +1090,7 @@ Practically, this means: preserving source timestamps so analysts know when even
         {[
           {
             q: 'Treating "it looks right on screen" as proof that two pieces of text are actually identical',
-            a: 'Part 04\'s text-encoding section and this module\'s Misconceptions section ("Text is just text") both explain why this assumption fails — encoding differences, invisible characters, and different Unicode representations of the same visible character can make two strings look identical while being different bytes, silently breaking joins and lookups.',
+            a: 'Part 04\'s text-encoding section and this lesson\'s Misconceptions section ("Text is just text") both explain why this assumption fails — encoding differences, invisible characters, and different Unicode representations of the same visible character can make two strings look identical while being different bytes, silently breaking joins and lookups.',
           },
           {
             q: 'Choosing an integer type (or not thinking about it at all) without checking whether the values could exceed its range',
@@ -1212,10 +1212,10 @@ Practically, this means: preserving source timestamps so analysts know when even
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 02 introduces data engineering as a role — what data engineers actually build, why companies hire them, and what a real day in the life looks like from morning standup to deployment.
+          Lesson 02 introduces data engineering as a role — what data engineers actually build, why companies hire them, and what a real day in the life looks like from morning standup to deployment.
         </p>
         <Link href="/learn/data-engineering/what-is-data-engineering" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 02 → What is Data Engineering?
+          Lesson 02 → What is Data Engineering?
         </Link>
       </div>
     </LearnLayout>

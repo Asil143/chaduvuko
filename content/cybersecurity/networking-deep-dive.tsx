@@ -59,7 +59,7 @@ export default function Module15() {
     <LearnLayout
       title="Networking Deep Dive — Subnets, Routing, Firewalls, VPNs, Zero Trust"
       description="How packets move, how firewalls make decisions, how VPNs work under the hood, and why zero-trust architecture makes the traditional perimeter obsolete."
-      section="Cybersecurity — Module 15"
+      section="Cybersecurity — Lesson 15"
       readTime="41 min"
       updatedAt="May 2026"
     >
@@ -68,7 +68,7 @@ export default function Module15() {
           Networking is the substrate of every security problem. Firewalls make decisions based on IP addresses and port numbers. VPNs extend trust across untrusted networks. Network segmentation limits lateral movement after a breach. Zero Trust replaces the network perimeter with identity and device posture checks. You cannot design or operate any of these without understanding how packets actually move.
         </P>
         <P>
-          This module builds on Module 02 (how the internet works) and Module 10 (network attacks) to go deeper: <Hl>subnetting and CIDR</Hl>, <Hl>stateful vs stateless firewalls</Hl>, <Hl>NAT and its security implications</Hl>, <Hl>IPSec and WireGuard VPN mechanics</Hl>, <Hl>network segmentation patterns</Hl>, and the <Hl>Zero Trust architecture</Hl> model. By the end you'll be able to read firewall rule sets, design segmentation for a corporate network, and explain why "trust but verify" died as a security model.
+          This lesson builds on Lesson 02 (how the internet works) and Lesson 10 (network attacks) to go deeper: <Hl>subnetting and CIDR</Hl>, <Hl>stateful vs stateless firewalls</Hl>, <Hl>NAT and its security implications</Hl>, <Hl>IPSec and WireGuard VPN mechanics</Hl>, <Hl>network segmentation patterns</Hl>, and the <Hl>Zero Trust architecture</Hl> model. By the end you'll be able to read firewall rule sets, design segmentation for a corporate network, and explain why "trust but verify" died as a security model.
         </P>
       </Part>
 
@@ -659,13 +659,13 @@ IDS/IPS placement:
 
       <div style={{ background: 'var(--code-bg)', borderRadius: 12, padding: '28px 32px', marginTop: 40 }}>
         <div style={{ fontSize: 13, color: C, fontWeight: 700, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
-          Up Next — Module 16
+          Up Next — Lesson 16
         </div>
         <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--heading)', marginBottom: 12 }}>
           Linux Hardening
         </div>
         <p style={{ ...s.p, marginBottom: 20 }}>
-          In Module 16, you systematically harden a Linux server. Minimal install, user privilege management, SSH hardening, mandatory access controls (SELinux/AppArmor), kernel security parameters, audit logging, and automated compliance checking with tools like Lynis and OpenSCAP. You'll work through a CIS Benchmark checklist and understand which controls matter most for servers exposed to the internet.
+          In Lesson 16, you systematically harden a Linux server. Minimal install, user privilege management, SSH hardening, mandatory access controls (SELinux/AppArmor), kernel security parameters, audit logging, and automated compliance checking with tools like Lynis and OpenSCAP. You'll work through a CIS Benchmark checklist and understand which controls matter most for servers exposed to the internet.
         </p>
         <Link
           href="/learn/cybersecurity/linux-hardening"
@@ -680,7 +680,7 @@ IDS/IPS placement:
             textDecoration: 'none',
           }}
         >
-          Continue to Module 16 →
+          Continue to Lesson 16 →
         </Link>
       </div>
     </LearnLayout>

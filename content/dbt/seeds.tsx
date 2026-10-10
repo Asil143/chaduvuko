@@ -74,7 +74,7 @@ export default function Seeds() {
     <LearnLayout
       title="Seeds: Loading Static Reference Data"
       description="What a dbt seed actually is, the CSV-in-warehouse-out model, what seeds are genuinely good for versus what they are not, column type overrides with seed-column-types, dbt seed versus dbt seed --full-refresh, and a full worked country-region lookup example."
-      section="dbt — Module 12"
+      section="dbt — Lesson 12"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -614,7 +614,7 @@ AP1|Asia Pacific|true`}
           rows={[
             ['Seed', 'A file you write and commit yourself — no upstream system produces it.', 'Rarely, and only when a person deliberately edits the file.', 'Small, static, human-curated reference data (Part 02).'],
             ['Source', 'An external system\'s own tables, landed into the warehouse by a separate ingestion tool.', 'Whenever the ingestion tool runs — often continuously or on a tight schedule.', 'Any data an operational system already owns and produces on its own.'],
-            ['Snapshot', 'An existing dbt source or model, captured over time to preserve its history.', 'Every time the snapshot runs, recording what changed since the last capture.', 'Tracking how a mutable table\'s rows changed over time — the concern of the next module in this track.'],
+            ['Snapshot', 'An existing dbt source or model, captured over time to preserve its history.', 'Every time the snapshot runs, recording what changed since the last capture.', 'Tracking how a mutable table\'s rows changed over time — the concern of the next lesson in this track.'],
           ]}
         />
 

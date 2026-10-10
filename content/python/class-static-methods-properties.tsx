@@ -77,7 +77,7 @@ export default function ClassStaticMethodsProperties() {
     <LearnLayout
       title="Class Methods, Static Methods and Properties"
       description="@classmethod, @staticmethod, and @property — what each is actually for, with real examples of when to reach for each."
-      section="Python — Module 23"
+      section="Python — Lesson 23"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -554,11 +554,11 @@ r.width = -3        # ValueError: width must be positive`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 24 closes out the Object-Oriented Python phase with abstract base classes — enforcing a
+          Lesson 24 closes out the Object-Oriented Python phase with abstract base classes — enforcing a
           contract across subclasses with Python's abc module.
         </p>
         <Link href="/learn/python/abstract-base-classes" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 24 → Abstract Base Classes and Interfaces
+          Lesson 24 → Abstract Base Classes and Interfaces
         </Link>
       </div>
     </LearnLayout>

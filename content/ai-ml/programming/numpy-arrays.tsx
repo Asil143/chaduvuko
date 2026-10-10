@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'NumPy Arrays and Broadcasting — Chaduvuko',
@@ -175,7 +174,6 @@ export default function NumpyArraysPage() {
       readTime="40–52 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='programming' topic='numpy-arrays' />
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -212,7 +210,7 @@ export default function NumpyArraysPage() {
         <HBox color="#888888">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module covers:
+              What this lesson covers:
             </span>
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -242,7 +240,7 @@ export default function NumpyArraysPage() {
         </HBox>
 
         <Callout type="tip">
-          The single most important habit this module builds: when you find yourself
+          The single most important habit this lesson builds: when you find yourself
           writing a for loop over array elements, stop and ask "can I express this
           as a NumPy operation?" The answer is almost always yes, and the NumPy
           version is typically 100–10,000× faster.
@@ -1220,7 +1218,7 @@ print(f"X_train[0,0] unchanged: {X_train[0,0]:.4f} == {original_val:.4f}")`} />
 
         <p style={S.p}>
           The <span style={S.code as React.CSSProperties}>np.linalg</span> module implements
-          the linear algebra operations from Modules 03 and 04 in fast,
+          the linear algebra operations from Lessons 03 and 04 in fast,
           numerically stable C code. You'll use this whenever you implement
           algorithms from scratch or need to analyse a model's weight matrices.
         </p>
@@ -1441,7 +1439,7 @@ print(f"\nSplit: train={len(X_tr)} val={len(X_v)} test={len(X_te)}")`} />
           its details behind higher-level operations. That does not make NumPy a stepping
           stone you leave behind — it means the places where you drop back down to raw NumPy
           directly, in real production code, are specific and predictable, and every one of
-          them relies on exactly the skills built in this module: vectorisation, broadcasting,
+          them relies on exactly the skills built in this lesson: vectorisation, broadcasting,
           and knowing when an array is a view versus a copy.
         </p>
 
@@ -1597,7 +1595,7 @@ print(f"\nKept box indices after NMS: {kept}")   # overlapping duplicate boxes r
             Vectorised code is almost always faster, but it frequently uses more memory, not
             less, because it often has to materialise an intermediate array holding every
             element of a computation at once, rather than processing one element at a time and
-            discarding it. The pairwise-distance broadcasting pattern in this module is a
+            discarding it. The pairwise-distance broadcasting pattern in this lesson is a
             direct example: expanding two arrays to compute all pairwise differences at once
             creates a full three-dimensional intermediate array, which can be enormous for
             large inputs even though the final result is comparatively small. Vectorisation
@@ -1612,7 +1610,7 @@ print(f"\nKept box indices after NMS: {kept}")   # overlapping duplicate boxes r
             By default NumPy is deliberately quiet about a wide range of numerically dangerous
             situations: integer overflow silently wraps around instead of raising an error,
             and a float32 array casts down from float64 by truncating precision without any
-            warning at all. Even the NaN-producing operations covered in this module's errors
+            warning at all. Even the NaN-producing operations covered in this lesson's errors
             section only emit a RuntimeWarning, not an exception, and warnings are easy to miss
             in a busy training log. Catching these problems requires deliberately opting in —
             checking with np.isnan(arr).any(), watching dtype ranges explicitly, or using
@@ -1710,11 +1708,11 @@ print(f"\nKept box indices after NMS: {kept}")   # overlapping duplicate boxes r
           of this track is either a NumPy operation, a thin wrapper around NumPy,
           or a GPU-accelerated version of a NumPy operation.
           The indexing patterns, broadcasting rules, and vectorisation habits
-          from this module apply everywhere — in Pandas, in sklearn, in PyTorch.
+          from this lesson apply everywhere — in Pandas, in sklearn, in PyTorch.
         </p>
 
         <p style={S.p}>
-          Module 10 moves to Pandas — the library built on top of NumPy
+          Lesson 10 moves to Pandas — the library built on top of NumPy
           that adds column names, mixed data types, and the data manipulation
           operations you need for real ML datasets: groupby, merge, pivot,
           handling missing values, and reading from CSV, SQL, and Parquet files.
@@ -1732,7 +1730,7 @@ print(f"\nKept box indices after NMS: {kept}")   # overlapping duplicate boxes r
               textTransform: 'uppercase' as const, color: '#888888',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 10 · Programming Ecosystem
+              Next — Lesson 10 · Programming Ecosystem
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

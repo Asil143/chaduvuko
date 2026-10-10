@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import  { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'LLM Agents and Tool Use — Chaduvuko',
@@ -178,7 +177,6 @@ export default function LLMAgentsPage() {
       readTime="36–46 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="nlp" topic="llm-agents-and-tool-use" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -190,7 +188,7 @@ export default function LLMAgentsPage() {
         </h2>
 
         <p style={S.p}>
-          Module 53 showed ReAct as a prompting pattern — manually parsing
+          Lesson 53 showed ReAct as a prompting pattern — manually parsing
           tool calls from LLM text output. That works but is fragile.
           Modern LLM APIs support native function calling: you define tools
           as JSON schemas, the LLM returns a structured tool call object
@@ -227,7 +225,7 @@ export default function LLMAgentsPage() {
         </AnalogyBox>
 
         <Callout type="tip">
-          This module uses the Groq API for the LLM and implements
+          This lesson uses the Groq API for the LLM and implements
           function calling from scratch before showing the OpenAI-compatible
           API format. Install: <span style={S.code as React.CSSProperties}>pip install groq</span>.
           The function calling format is identical across Groq, OpenAI, and Anthropic's
@@ -446,7 +444,7 @@ run_agent("I'm merchant MID789. How much will I pay in fees for a $50,000 intern
               type: 'Semantic (vector memory)',
               color: '#D85A30',
               what: 'Past conversations and documents stored as embeddings. Retrieve by semantic similarity.',
-              limit: 'Retrieval quality depends on embedding quality and chunking strategy (Module 52).',
+              limit: 'Retrieval quality depends on embedding quality and chunking strategy (Lesson 52).',
               impl: 'Embed conversation turns. Store in FAISS/Chroma. Query with current message to find relevant history.',
             },
           ].map((item) => (
@@ -1181,7 +1179,7 @@ print("  Repeated identical tool call (3x) → run killed, on-call alerted")`} /
             A workflow (or chain) has its control flow fixed by the developer ahead of time: step
             one always runs, then step two, then step three, regardless of what step one returns —
             the orchestrator code decides the sequence. An agent has its control flow decided by
-            the LLM at runtime: the multi-agent orchestrator in this module writes a plan and can
+            the LLM at runtime: the multi-agent orchestrator in this lesson writes a plan and can
             route to a different specialist, skip a step, or loop back depending on what a
             previous specialist found. Workflows are more predictable and cheaper to run; agents
             are more flexible but strictly less predictable, because the same input can
@@ -1194,7 +1192,7 @@ print("  Repeated identical tool call (3x) → run killed, on-call alerted")`} /
           <p style={{ ...S.ps, marginBottom: 0 }}>
             Nothing about the agent loop guarantees this. Left unmanaged, an LLM that gets an
             error or an empty result from a tool frequently retries the identical call rather than
-            changing strategy — this module's errors section covers exactly this failure mode.
+            changing strategy — this lesson's errors section covers exactly this failure mode.
             Self-correction only happens because you engineer it: tracking (tool_name, args) pairs
             already tried, injecting an explicit message when a repeat is detected, returning
             structured error types the model can reason about instead of opaque failures, and
@@ -1278,7 +1276,7 @@ print("  Repeated identical tool call (3x) → run killed, on-call alerted")`} /
             debug than an agent, because its control flow doesn't depend on an LLM's per-step
             judgment. Reach for an agent when the right next step genuinely depends on what a
             previous step returned in a way you can't enumerate in advance — like the multi-agent
-            dispute system in this module, where whether compliance needs to flag risk depends on
+            dispute system in this lesson, where whether compliance needs to flag risk depends on
             what the transaction lookup actually found. The rule of thumb: use the least autonomous
             architecture that gets the job done, since every increment of autonomy trades
             predictability and cost control for flexibility.
@@ -1299,7 +1297,7 @@ print("  Repeated identical tool call (3x) → run killed, on-call alerted")`} /
           You have completed the full NLP section: tokenisation, BERT,
           PEFT/LoRA, RAG, prompt engineering, and agents.
           Section 9 goes deeper into computer vision beyond the CNNs
-          of Module 46 — image fundamentals, data augmentation,
+          of Lesson 46 — image fundamentals, data augmentation,
           object detection with YOLO, and semantic segmentation.
           Every module builds directly on the deep learning foundation
           from Section 7.

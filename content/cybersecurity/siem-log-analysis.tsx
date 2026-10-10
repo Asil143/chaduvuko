@@ -59,7 +59,7 @@ export default function Module31() {
     <LearnLayout
       title="SIEM and Log Analysis — Finding Attacks in the Noise"
       description="Log sources, centralised collection architecture, SIEM query languages (Splunk SPL, Elastic KQL, Sentinel KQL), detection rule writing, alert triage methodology, and the essential Windows Event IDs that every SOC analyst must know."
-      section="Cybersecurity — Module 31"
+      section="Cybersecurity — Lesson 31"
       readTime="34 min"
       updatedAt="May 2026"
     >
@@ -416,7 +416,7 @@ Decision: TRUE POSITIVE — active credential compromise
       <Callout type="info">
         Detection identifies active attacks. In{' '}
         <Link href="/learn/cybersecurity/vulnerability-management">
-          Module 32: Vulnerability Management
+          Lesson 32: Vulnerability Management
         </Link>
         , you learn the systematic process for finding, prioritising, tracking, and remediating vulnerabilities before attackers exploit them — scanning programmes, risk-based prioritisation frameworks, SLA management, and how to run a VM programme that actually reduces risk rather than generating reports.
       </Callout>

@@ -78,7 +78,7 @@ export default function InnerJoin() {
     <LearnLayout
       title="INNER JOIN"
       description="Master the most-used JOIN — two-table joins, three and four-table chains, joining on expressions, aggregate queries with joins, and every production pattern you will write daily"
-      section="SQL — Module 31"
+      section="SQL — Lesson 31"
       readTime="14–18 min"
       updatedAt="April 2026"
     >
@@ -527,11 +527,11 @@ LIMIT 10;`}
       {/* ── PART 08 ── */}
       <Part n="08" title="INNER JOIN with CTEs — Readable Multi-Step Queries" />
 
-      <P>CTEs (Common Table Expressions) define named intermediate results that can be joined like regular tables. For complex multi-step analytics, CTEs make the logic readable and maintainable — each step builds on the previous. This is your first use of the <Hl>WITH</Hl> keyword in this track — CTEs are covered in full depth in Module 55; for now, read each one as a temporary named result you can SELECT from and JOIN like any other table. The example below also uses a window function (<Hl>ROW_NUMBER() OVER (...)</Hl>), covered in full depth in Module 52 — the inline comment explains just enough to follow along.</P>
+      <P>CTEs (Common Table Expressions) define named intermediate results that can be joined like regular tables. For complex multi-step analytics, CTEs make the logic readable and maintainable — each step builds on the previous. This is your first use of the <Hl>WITH</Hl> keyword in this track — CTEs are covered in full depth in Lesson 55; for now, read each one as a temporary named result you can SELECT from and JOIN like any other table. The example below also uses a window function (<Hl>ROW_NUMBER() OVER (...)</Hl>), covered in full depth in Lesson 52 — the inline comment explains just enough to follow along.</P>
 
       <SQLPlayground
         initialQuery={`-- CTE-based: top customers per loyalty tier
--- WITH defines a CTE: a named temporary result you can query like a table (full depth in Module 55)
+-- WITH defines a CTE: a named temporary result you can query like a table (full depth in Lesson 55)
 WITH customer_spend AS (
   -- Step 1: compute total spend per customer
   SELECT
@@ -551,7 +551,7 @@ ranked AS (
     c.city,
     cs.order_count,
     cs.total_spend,
-    -- Window function: numbers rows 1, 2, 3... within each PARTITION BY group (full depth in Module 52)
+    -- Window function: numbers rows 1, 2, 3... within each PARTITION BY group (full depth in Lesson 52)
     ROW_NUMBER() OVER (
       PARTITION BY c.loyalty_tier
       ORDER BY cs.total_spend DESC
@@ -828,7 +828,7 @@ top_category AS (
   -- SQLite has no DISTINCT ON (that is PostgreSQL-only syntax) — use
   -- ROW_NUMBER() OVER (PARTITION BY ...) to rank categories within each
   -- store, then keep only rn = 1 (the window function pattern from Part 08,
-  -- full depth in Module 52)
+  -- full depth in Lesson 52)
   SELECT store_id, top_category, category_revenue
   FROM (
     SELECT
@@ -904,7 +904,7 @@ ORDER BY ss.total_revenue DESC;`}
       <IQ q="How would you find the top-selling product for each store using INNER JOIN?">
         <p style={{ margin: '0 0 14px' }}>Finding the top seller per store is a "top N per group" problem. The approach requires computing revenue per (store, product) combination, then selecting the product with the highest revenue within each store group.</p>
         <p style={{ margin: '0 0 14px' }}>Step 1 — compute revenue per store per product: SELECT o.store_id, p.product_id, p.product_name, SUM(oi.line_total) AS revenue FROM orders AS o JOIN order_items AS oi ON o.order_id = oi.order_id JOIN products AS p ON oi.product_id = p.product_id WHERE o.order_status = 'Delivered' GROUP BY o.store_id, p.product_id, p.product_name. This gives one row per (store, product) pair with total revenue.</p>
-        <p style={{ margin: 0 }}>Step 2 — select the top product per store. The cleanest approach uses ROW_NUMBER() window function: wrap Step 1 in a CTE or subquery, add ROW_NUMBER() OVER (PARTITION BY store_id ORDER BY revenue DESC) AS rn, then filter WHERE rn = 1 in the outer query. This assigns rank 1 to the highest-revenue product within each store and returns only those. An alternative without window functions: join the Step 1 result to a subquery that finds MAX(revenue) per store, matching on both store_id and revenue = max_revenue. The ROW_NUMBER approach is cleaner and handles ties more explicitly (ROW_NUMBER picks one; DENSE_RANK preserves ties). Window functions are covered in depth in Module 52.</p>
+        <p style={{ margin: 0 }}>Step 2 — select the top product per store. The cleanest approach uses ROW_NUMBER() window function: wrap Step 1 in a CTE or subquery, add ROW_NUMBER() OVER (PARTITION BY store_id ORDER BY revenue DESC) AS rn, then filter WHERE rn = 1 in the outer query. This assigns rank 1 to the highest-revenue product within each store and returns only those. An alternative without window functions: join the Step 1 result to a subquery that finds MAX(revenue) per store, matching on both store_id and revenue = max_revenue. The ROW_NUMBER approach is cleaner and handles ties more explicitly (ROW_NUMBER picks one; DENSE_RANK preserves ties). Window functions are covered in depth in Lesson 52.</p>
       </IQ>
 
       <HR />
@@ -970,7 +970,7 @@ JOIN orders      AS o  ON oi.order_id  = o.order_id
 WHERE o.order_status = 'Delivered'
 GROUP BY p.category
 ORDER BY total_revenue DESC;`}
-        explanation="The three-table chain joins products to order_items (each item has a product) then to orders (each item belongs to an order). WHERE filters before grouping — only delivered order rows participate. GROUP BY category collapses all items within each category. COUNT(DISTINCT p.product_id) counts unique products in the category that were actually sold — not all products in the category. COUNT(DISTINCT o.order_id) counts distinct orders containing this category — not item rows. SUM(oi.line_total) is the correct revenue aggregate — summing item-level line totals, not the order-level total_amount which would fan-out. The revenue_share_pct uses a scalar subquery: (SELECT SUM(oi2.line_total) FROM order_items AS oi2 JOIN orders AS o2 ON oi2.order_id = o2.order_id WHERE o2.order_status = 'Delivered') runs once, independent of the outer GROUP BY, and returns the single grand-total number for all delivered revenue — every category row then divides by that same fixed total. This is the subquery-in-a-calculated-expression pattern from Part 07, applied here instead of a window function. A window function like SUM(...) OVER () can do this same 'percent of total' calculation more concisely, but it is not covered until Module 52 — the scalar subquery gets you the identical result with what you already know."
+        explanation="The three-table chain joins products to order_items (each item has a product) then to orders (each item belongs to an order). WHERE filters before grouping — only delivered order rows participate. GROUP BY category collapses all items within each category. COUNT(DISTINCT p.product_id) counts unique products in the category that were actually sold — not all products in the category. COUNT(DISTINCT o.order_id) counts distinct orders containing this category — not item rows. SUM(oi.line_total) is the correct revenue aggregate — summing item-level line totals, not the order-level total_amount which would fan-out. The revenue_share_pct uses a scalar subquery: (SELECT SUM(oi2.line_total) FROM order_items AS oi2 JOIN orders AS o2 ON oi2.order_id = o2.order_id WHERE o2.order_status = 'Delivered') runs once, independent of the outer GROUP BY, and returns the single grand-total number for all delivered revenue — every category row then divides by that same fixed total. This is the subquery-in-a-calculated-expression pattern from Part 07, applied here instead of a window function. A window function like SUM(...) OVER () can do this same 'percent of total' calculation more concisely, but it is not covered until Lesson 52 — the scalar subquery gets you the identical result with what you already know."
       />
 
       <HR />
@@ -995,10 +995,10 @@ ORDER BY total_revenue DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 32</strong>, you learn LEFT and RIGHT JOINs in full depth — every pattern for keeping unmatched rows, the IS NULL filter idiom, optional relationships, and when to choose LEFT over INNER.
+          In <strong>Lesson 32</strong>, you learn LEFT and RIGHT JOINs in full depth — every pattern for keeping unmatched rows, the IS NULL filter idiom, optional relationships, and when to choose LEFT over INNER.
         </p>
         <Link href="/learn/sql/left-right-join" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 32 → LEFT and RIGHT JOIN
+          Lesson 32 → LEFT and RIGHT JOIN
         </Link>
       </div>
 

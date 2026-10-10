@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Transfer Learning — Fine-Tuning Pretrained Vision Models — Chaduvuko',
@@ -178,7 +177,6 @@ export default function TransferLearningPage() {
       readTime="30–40 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="computer-vision" topic="transfer-learning" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -191,8 +189,8 @@ export default function TransferLearningPage() {
         </h2>
 
         <p style={S.p}>
-          Module 46 introduced the concept — take a pretrained backbone,
-          replace the classifier head, fine-tune. This module goes deep
+          Lesson 46 introduced the concept — take a pretrained backbone,
+          replace the classifier head, fine-tune. This lesson goes deep
           on everything that matters in practice: which layers to freeze,
           which learning rates to use per layer group, how to choose
           the right backbone for your constraints, and when feature
@@ -827,7 +825,7 @@ print("Exported: meesho_classifier.pt + meesho_classifier.onnx")`} />
                 data: '1,000–50,000 images', domain: 'Close to ImageNet',
                 strategy: 'Partial fine-tuning — unfreeze layer3/layer4, differential lr',
                 color: '#1D9E75',
-                real: 'The Shopify product classifier built earlier in this module — 2,400 labelled images across 6 categories, the standard production recipe.',
+                real: 'The Shopify product classifier built earlier in this lesson — 2,400 labelled images across 6 categories, the standard production recipe.',
               },
               {
                 data: 'Any size', domain: 'Far from ImageNet (medical, satellite, microscopy)',

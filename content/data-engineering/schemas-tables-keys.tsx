@@ -176,7 +176,7 @@ export default function SchemasTablesKeysModule() {
     <LearnLayout
       title="Schemas, Tables, Keys and Indexes — The Building Blocks"
       description="The foundation of every database — what each concept is and why it matters."
-      section="Data Engineering — Module 12"
+      section="Data Engineering — Lesson 12"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -203,7 +203,7 @@ export default function SchemasTablesKeysModule() {
         </Para>
 
         <Para>
-          This module builds a complete, precise mental model of every database
+          This lesson builds a complete, precise mental model of every database
           building block: what it is, how it works internally, what happens when
           it is missing, and what the best practice is. By the end, you will read
           a database schema the way a senior engineer reads it — seeing not just
@@ -224,7 +224,7 @@ export default function SchemasTablesKeysModule() {
               { num: '03', name: 'Data Types', desc: 'The rules that govern what values each column can hold.' },
               { num: '04', name: 'Keys', desc: 'The identifiers and relationships that connect tables and enforce uniqueness.' },
               { num: '05', name: 'Constraints', desc: 'The rules that enforce data integrity at the database level.' },
-              { num: '06', name: 'Indexes', desc: 'The structures that make queries fast — covered in depth in Module 09.' },
+              { num: '06', name: 'Indexes', desc: 'The structures that make queries fast — covered in depth in Lesson 09.' },
             ].map((item) => (
               <div key={item.num} style={{
                 background: 'var(--bg2)', border: '1px solid var(--border)',
@@ -261,7 +261,7 @@ export default function SchemasTablesKeysModule() {
 
         <Para>
           We will cover all three meanings because you will encounter all three in
-          a data engineering career. For this module, we focus primarily on the first
+          a data engineering career. For this lesson, we focus primarily on the first
           two — the database-level schema and the table-level schema definition.
         </Para>
 
@@ -1143,7 +1143,7 @@ FROM landing.orders_raw;`}</CodeBox>
           },
           {
             wrong: '"A table doesn\'t strictly need a primary key if the pipeline never updates existing rows"',
-            right: 'Part 04\'s primary key section and this module\'s Error Library both show the problem isn\'t update targeting alone — without a PK, duplicate inserts from pipeline reruns are invisible, and any JOIN from another table produces silent fan-out the moment the same ID appears twice.',
+            right: 'Part 04\'s primary key section and this lesson\'s Error Library both show the problem isn\'t update targeting alone — without a PK, duplicate inserts from pipeline reruns are invisible, and any JOIN from another table produces silent fan-out the moment the same ID appears twice.',
           },
           {
             wrong: '"3NF is the correct design everywhere — denormalising is just cutting corners"',
@@ -1362,11 +1362,11 @@ Third, DECIMAL type correction if financial amounts are stored as FLOAT. The flo
         {[
           {
             q: 'Storing money as FLOAT "because it\'s just easier" than dealing with DECIMAL precision arguments',
-            a: 'Part 03 and this module\'s Error Library both show where this ends: reconciliation reports disagree with the payment processor by fractions of a cent that grow with transaction volume, and the root cause traces back to a type choice from day one. Default to DECIMAL(p,s) for every monetary column — there is no scenario in this module where FLOAT is the right call for money.',
+            a: 'Part 03 and this lesson\'s Error Library both show where this ends: reconciliation reports disagree with the payment processor by fractions of a cent that grow with transaction volume, and the root cause traces back to a type choice from day one. Default to DECIMAL(p,s) for every monetary column — there is no scenario in this lesson where FLOAT is the right call for money.',
           },
           {
             q: 'Skipping NOT NULL because "the application already validates required fields"',
-            a: 'Part 05\'s constraint table and this module\'s Error Library both show the gap: a pipeline bug, not the application, is what actually inserts the NULL — and SUM/AVG silently exclude those NULL rows rather than erroring, so the metric looks plausible while quietly being wrong. Database-level NOT NULL catches what pipeline code alone cannot.',
+            a: 'Part 05\'s constraint table and this lesson\'s Error Library both show the gap: a pipeline bug, not the application, is what actually inserts the NULL — and SUM/AVG silently exclude those NULL rows rather than erroring, so the metric looks plausible while quietly being wrong. Database-level NOT NULL catches what pipeline code alone cannot.',
           },
           {
             q: 'Choosing a natural key like email as the primary key instead of a surrogate key',
@@ -1374,7 +1374,7 @@ Third, DECIMAL type correction if financial amounts are stored as FLOAT. The flo
           },
           {
             q: 'Assuming a foreign key constraint declared in a Snowflake or BigQuery table is actually enforced',
-            a: 'Part 05\'s warehouse Callout and this module\'s Error Library are both direct: cloud warehouse FK/UNIQUE/PK constraints are documentation and optimiser hints only. A pipeline can insert orphaned foreign keys or duplicate "primary keys" with zero errors. dbt relationship and unique tests are the actual enforcement layer — the DDL constraint alone gives false confidence.',
+            a: 'Part 05\'s warehouse Callout and this lesson\'s Error Library are both direct: cloud warehouse FK/UNIQUE/PK constraints are documentation and optimiser hints only. A pipeline can insert orphaned foreign keys or duplicate "primary keys" with zero errors. dbt relationship and unique tests are the actual enforcement layer — the DDL constraint alone gives false confidence.',
           },
           {
             q: 'Treating audit columns (ingested_at, pipeline_run_id) as unnecessary overhead since they aren\'t business data',
@@ -1474,10 +1474,10 @@ Third, DECIMAL type correction if financial amounts are stored as FLOAT. The flo
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 13 explains ACID properties and transactions — what each guarantee means in practice, and exactly what breaks in each real failure scenario when those guarantees are violated.
+          Lesson 13 explains ACID properties and transactions — what each guarantee means in practice, and exactly what breaks in each real failure scenario when those guarantees are violated.
         </p>
         <Link href="/learn/data-engineering/acid-transactions" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 13 → ACID Properties and Transactions
+          Lesson 13 → ACID Properties and Transactions
         </Link>
       </div>
     </LearnLayout>

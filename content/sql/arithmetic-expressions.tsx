@@ -78,7 +78,7 @@ export default function ArithmeticExpressions() {
     <LearnLayout
       title="Column Calculations — Arithmetic & Expressions"
       description="Do math directly inside SQL — operators, precedence, integer division, ROUND, MOD, and building computed columns that power real business analytics"
-      section="SQL — Module 12"
+      section="SQL — Lesson 12"
       readTime="8–12 min"
       updatedAt="April 2026"
     >
@@ -216,7 +216,7 @@ ORDER BY margin_pct DESC;`}
       />
 
       <Callout type="info">
-        This uses CASE WHEN, covered formally in Module 16 — for now, just know it evaluates conditions in order and returns the value tied to the first one that matches, like an if/else chain.
+        This uses CASE WHEN, covered formally in Lesson 16 — for now, just know it evaluates conditions in order and returns the value tied to the first one that matches, like an if/else chain.
       </Callout>
 
       <SQLPlayground
@@ -462,7 +462,7 @@ ABS(-3.14)  -- 3.14
       />
 
       <Callout type="info">
-        AVG(unit_price) OVER () is a window function — covered fully in Module 52. For now: it computes the average across all rows without collapsing them into one row, unlike a plain GROUP BY aggregate.
+        AVG(unit_price) OVER () is a window function — covered fully in Lesson 52. For now: it computes the average across all rows without collapsing them into one row, unlike a plain GROUP BY aggregate.
       </Callout>
 
       <SQLPlayground
@@ -520,7 +520,7 @@ ORDER BY total_amount DESC;`}
       />
 
       <Callout type="info">
-        (SELECT MIN(salary) FROM employees) is a subquery — covered fully in Module 36. For now: it's a query nested inside another query, run first, whose single result is used like a value in the outer query.
+        (SELECT MIN(salary) FROM employees) is a subquery — covered fully in Lesson 36. For now: it's a query nested inside another query, run first, whose single result is used like a value in the outer query.
       </Callout>
 
       <SQLPlayground
@@ -708,7 +708,7 @@ ORDER BY salary DESC;`}
       {/* ── PART 09 ── */}
       <Part n="09" title="Arithmetic Across Multiple Tables — Using Joins" />
 
-      <P>The most powerful arithmetic queries combine data from multiple tables. You will learn JOINs in depth from Module 30, but here is a preview of how arithmetic works across joined tables — building revenue calculations that span orders, items, and products.</P>
+      <P>The most powerful arithmetic queries combine data from multiple tables. You will learn JOINs in depth from Lesson 30, but here is a preview of how arithmetic works across joined tables — building revenue calculations that span orders, items, and products.</P>
 
       <SQLPlayground
         initialQuery={`-- Revenue per product: join order_items to products
@@ -904,10 +904,10 @@ ORDER BY margin_pct DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 13</strong>, you learn aliases — giving columns and tables readable names with the AS keyword. Aliases make complex queries readable and are the foundation of every clean, maintainable SQL query you will ever write.
+          In <strong>Lesson 13</strong>, you learn aliases — giving columns and tables readable names with the AS keyword. Aliases make complex queries readable and are the foundation of every clean, maintainable SQL query you will ever write.
         </p>
         <Link href="/learn/sql/aliases" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 13 → Renaming Columns — AS (Aliases)
+          Lesson 13 → Renaming Columns — AS (Aliases)
         </Link>
       </div>
 

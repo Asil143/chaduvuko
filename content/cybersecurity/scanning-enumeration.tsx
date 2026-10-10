@@ -59,7 +59,7 @@ export default function Module23() {
     <LearnLayout
       title="Scanning and Enumeration"
       description="Systematic port scanning with nmap, service fingerprinting, vulnerability scanning with Nessus and Nuclei, web directory enumeration, SMB/LDAP enumeration, and building the vulnerability hypothesis list."
-      section="Cybersecurity — Module 23"
+      section="Cybersecurity — Lesson 23"
       readTime="33 min"
       updatedAt="May 2026"
     >
@@ -549,7 +549,7 @@ Generated: 2026-05-01
       <Callout type="info">
         You have the target mapped and the vulnerability hypotheses formed. In{' '}
         <Link href="/learn/cybersecurity/exploitation-techniques">
-          Module 24: Exploitation Techniques
+          Lesson 24: Exploitation Techniques
         </Link>
         , you put those hypotheses to the test — using Metasploit, manual exploit development, and service-specific techniques to gain initial access and demonstrate real impact.
       </Callout>

@@ -172,7 +172,7 @@ export default function FilesAtScaleModule() {
     <LearnLayout
       title="Working with Files at Scale"
       description="File organisation, compression, partitioning, the small file problem, and format conversion pipelines."
-      section="Data Engineering — Module 19"
+      section="Data Engineering — Lesson 19"
       readTime="65 min"
       updatedAt="August 2026"
     >
@@ -193,7 +193,7 @@ export default function FilesAtScaleModule() {
         </Para>
 
         <Para>
-          This module covers the file engineering that sits between &ldquo;I know
+          This lesson covers the file engineering that sits between &ldquo;I know
           Parquet exists&rdquo; and &ldquo;I can design a file layer that scales to petabytes
           and still serves fast queries.&rdquo; These decisions are made once and lived
           with for years — getting them right matters.
@@ -204,7 +204,7 @@ export default function FilesAtScaleModule() {
             fontSize: 14, fontWeight: 800, color: 'var(--text)',
             fontFamily: 'var(--font-display)', marginBottom: 14,
           }}>
-            Seven topics this module covers
+            Seven topics this lesson covers
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
             {[
@@ -1305,11 +1305,11 @@ Fifth, check for missing or stale statistics. Query optimisers use column statis
           },
           {
             q: 'Letting a new partition column slip in without checking its cardinality first',
-            a: 'This module\'s Real World section exists because someone added minute alongside date in a Spark partitionBy call — a one-line change that turned 1,095 partitions into 1.5 million. Before adding any column to partitionBy, ask how many distinct values it has and whether queries actually filter on it.',
+            a: 'This lesson\'s Real World section exists because someone added minute alongside date in a Spark partitionBy call — a one-line change that turned 1,095 partitions into 1.5 million. Before adding any column to partitionBy, ask how many distinct values it has and whether queries actually filter on it.',
           },
           {
             q: 'Assuming a .gz file behaves like a Parquet file because "it\'s compressed either way"',
-            a: 'Compression ratio and splittability are unrelated properties (see this module\'s Misconceptions). A gzip-compressed CSV cannot be split across Spark executors regardless of how well it compresses — only Parquet\'s row-group structure (or Avro\'s block structure) makes a file genuinely parallel to read.',
+            a: 'Compression ratio and splittability are unrelated properties (see this lesson\'s Misconceptions). A gzip-compressed CSV cannot be split across Spark executors regardless of how well it compresses — only Parquet\'s row-group structure (or Avro\'s block structure) makes a file genuinely parallel to read.',
           },
           {
             q: 'Writing a format-conversion pipeline without an explicit target schema',
@@ -1413,10 +1413,10 @@ Fifth, check for missing or stale statistics. Query optimisers use column statis
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 20 introduces the data pipeline — its anatomy from ingestion to serving, the design principles that separate maintainable pipelines from ones that break every week, and the anti-patterns that look reasonable until production.
+          Lesson 20 introduces the data pipeline — its anatomy from ingestion to serving, the design principles that separate maintainable pipelines from ones that break every week, and the anti-patterns that look reasonable until production.
         </p>
         <Link href="/learn/data-engineering/what-is-a-pipeline" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 20 → What is a Data Pipeline?
+          Lesson 20 → What is a Data Pipeline?
         </Link>
       </div>
     </LearnLayout>

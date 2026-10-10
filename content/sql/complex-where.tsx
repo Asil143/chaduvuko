@@ -78,7 +78,7 @@ export default function ComplexWhere() {
     <LearnLayout
       title="Complex WHERE — Combining Conditions"
       description="Mastering brackets, operator precedence, AND vs OR logic, multi-layer filters, and building WHERE clauses that express any business rule precisely"
-      section="SQL — Module 17"
+      section="SQL — Lesson 17"
       readTime="10–14 min"
       updatedAt="April 2026"
     >
@@ -86,11 +86,11 @@ export default function ComplexWhere() {
       {/* ── PART 01 ── */}
       <Part n="01" title="When Simple Conditions Are Not Enough" />
 
-      <P>Module 06 taught you the WHERE clause with a single condition. Module 07 introduced AND, OR, and NOT. By now you have used them across dozens of queries. But real production queries combine all of these — often with four, five, or six conditions across multiple operators — and the way you structure those conditions determines whether your query is correct, readable, and maintainable.</P>
+      <P>Lesson 06 taught you the WHERE clause with a single condition. Lesson 07 introduced AND, OR, and NOT. By now you have used them across dozens of queries. But real production queries combine all of these — often with four, five, or six conditions across multiple operators — and the way you structure those conditions determines whether your query is correct, readable, and maintainable.</P>
 
-      <P>This module is about mastering the WHERE clause at the level required for production analytics work. Not just making queries that return results — making queries that return <Hl>exactly the right results</Hl>, are <Hl>immediately readable</Hl> by anyone on your team, and <Hl>do not break</Hl> when data or requirements change.</P>
+      <P>This lesson is about mastering the WHERE clause at the level required for production analytics work. Not just making queries that return results — making queries that return <Hl>exactly the right results</Hl>, are <Hl>immediately readable</Hl> by anyone on your team, and <Hl>do not break</Hl> when data or requirements change.</P>
 
-      <P>The three skills this module builds:</P>
+      <P>The three skills this lesson builds:</P>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12, margin: '20px 0 32px' }}>
         {[
@@ -390,7 +390,7 @@ WHERE city NOT IN ('Seattle', 'New York');
       {/* ── PART 06 ── */}
       <Part n="06" title="Translating Business Rules Into WHERE Clauses" />
 
-      <P>The most valuable skill in this module is the ability to read a business requirement written in plain English and translate it directly into a correctly structured WHERE clause. Here is the systematic process.</P>
+      <P>The most valuable skill in this lesson is the ability to read a business requirement written in plain English and translate it directly into a correctly structured WHERE clause. Here is the systematic process.</P>
 
       <H>Step 1 — identify the entities and their conditions</H>
       <P>Read the requirement and underline every condition. Each condition becomes a comparison expression. The words "and", "or", and "not" become AND, OR, and NOT. The words "either...or", "any of", and "one of" indicate OR. The words "both", "all of", "must also" indicate AND.</P>
@@ -980,10 +980,10 @@ ORDER BY
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 18</strong>, you learn SQL data types — what types exist, which to use for each situation, and how wrong type choices cause silent bugs in calculations, comparisons, and joins.
+          In <strong>Lesson 18</strong>, you learn SQL data types — what types exist, which to use for each situation, and how wrong type choices cause silent bugs in calculations, comparisons, and joins.
         </p>
         <Link href="/learn/sql/data-types" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 18 → SQL Data Types
+          Lesson 18 → SQL Data Types
         </Link>
       </div>
 

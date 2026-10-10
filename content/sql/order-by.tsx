@@ -78,7 +78,7 @@ export default function OrderBy() {
     <LearnLayout
       title="Sorting Results — ORDER BY"
       description="Control exactly how your results come back — ascending, descending, multiple columns, NULL handling, and sorting by expressions"
-      section="SQL — Module 08"
+      section="SQL — Lesson 08"
       readTime="8–12 min"
       updatedAt="April 2026"
     >
@@ -421,7 +421,7 @@ ORDER BY salary DESC, hire_date ASC;`}
       <P>Sorting 500 million rows to present them in order is extremely expensive. In production, ORDER BY on a large table without LIMIT should always be paired with a WHERE clause that filters the rows down first, or be used only in reporting contexts where the user explicitly requested a sorted export.</P>
 
       <ProTip>
-        In production SQL, ORDER BY is almost always combined with LIMIT — "give me the top 10 highest-value orders" or "the 5 most recent customers." Sorting the entire result set to return all rows in order is expensive. Sorting to find the top N rows is efficient when combined with LIMIT. You will learn LIMIT in Module 09 — use the two together from that point forward.
+        In production SQL, ORDER BY is almost always combined with LIMIT — "give me the top 10 highest-value orders" or "the 5 most recent customers." Sorting the entire result set to return all rows in order is expensive. Sorting to find the top N rows is efficient when combined with LIMIT. You will learn LIMIT in Lesson 09 — use the two together from that point forward.
       </ProTip>
 
       <HR />
@@ -526,7 +526,7 @@ ORDER BY salary DESC;`}
         label="Top categories by revenue (adapted for FreshCart)"
         code={`-- Category revenue ranked highest to lowest
 -- Uses JOIN and GROUP BY/aggregates ahead of the curriculum here —
--- covered fully in Modules 27-30, just follow the ORDER BY for now
+-- covered fully in Lessons 27-30, just follow the ORDER BY for now
 SELECT
   category,
   COUNT(oi.item_id)        AS total_items_sold,
@@ -544,7 +544,7 @@ ORDER BY total_revenue DESC;`}
       <CodeBlock
         label="Stores sorted by gap to monthly target"
         code={`-- Stores with largest gap to target first
--- (This uses concepts from upcoming modules — preview only)
+-- (This uses concepts from upcoming lessons — preview only)
 SELECT
   store_id,
   store_name,
@@ -696,10 +696,10 @@ ORDER BY category ASC, unit_price DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 09</strong>, you add LIMIT and OFFSET — controlling exactly how many rows come back and implementing pagination. Combined with ORDER BY from this module, LIMIT is how you build every "top 10," "most recent," and "next page" feature.
+          In <strong>Lesson 09</strong>, you add LIMIT and OFFSET — controlling exactly how many rows come back and implementing pagination. Combined with ORDER BY from this lesson, LIMIT is how you build every "top 10," "most recent," and "next page" feature.
         </p>
         <Link href="/learn/sql/limit-fetch" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 09 → Limiting Results — LIMIT / OFFSET
+          Lesson 09 → Limiting Results — LIMIT / OFFSET
         </Link>
       </div>
 

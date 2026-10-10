@@ -77,7 +77,7 @@ export default function Operators() {
     <LearnLayout
       title="Operators — Arithmetic, Comparison, Logical"
       description="Every operator Python has, what it does under the hood, and the precedence rules that cause real bugs."
-      section="Python — Module 03"
+      section="Python — Lesson 03"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -274,7 +274,7 @@ if user is not None and user.name == "Maria":
 "a" in {"a": 1, "b": 2}          # True — checks keys`}</CodeBox>
 
         <Para>
-          You already met <code>is</code> and <code>is not</code> briefly in the previous module — the
+          You already met <code>is</code> and <code>is not</code> briefly in the previous lesson — the
           identity operators, checking whether two names point at the exact same object rather than
           merely equal values. They matter enough to restate here in the context of operators
           specifically: reserve them for <code>None</code>/<code>True</code>/<code>False</code> checks,
@@ -505,7 +505,7 @@ if (n := random.randint(1, 10)) > 5:
           },
           {
             wrong: '"is and == are interchangeable for checking equality"',
-            right: 'is checks identity (the same object in memory); == checks value equality. They coincidentally agree for small cached integers, which is exactly what makes this misconception dangerous — see Module 02\'s deep dive on CPython\'s small-integer cache.',
+            right: 'is checks identity (the same object in memory); == checks value equality. They coincidentally agree for small cached integers, which is exactly what makes this misconception dangerous — see Lesson 02\'s deep dive on CPython\'s small-integer cache.',
           },
           {
             wrong: '"Parentheses around and/or are just extra characters that don\'t change anything"',
@@ -700,11 +700,11 @@ if (n := random.randint(1, 10)) > 5:
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 04 is a deep dive into strings — indexing, slicing, the methods you will use
+          Lesson 04 is a deep dive into strings — indexing, slicing, the methods you will use
           constantly, and f-strings done properly.
         </p>
         <Link href="/learn/python/strings" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 04 → Strings
+          Lesson 04 → Strings
         </Link>
       </div>
     </LearnLayout>

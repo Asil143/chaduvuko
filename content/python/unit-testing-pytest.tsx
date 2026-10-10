@@ -77,7 +77,7 @@ export default function UnitTestingPytest() {
     <LearnLayout
       title="Unit Testing with pytest"
       description="Writing tests that actually catch bugs — fixtures, assertions, mocking, and testing as a habit, not an afterthought."
-      section="Python — Module 38"
+      section="Python — Lesson 38"
       readTime="45 min"
       updatedAt="August 2026"
     >
@@ -643,11 +643,11 @@ def test_dosage_calculation(weight_kg, drug, expected_mg):
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 39 begins the final phase, Production &amp; Career Readiness, with systematic debugging
+          Lesson 39 begins the final phase, Production &amp; Career Readiness, with systematic debugging
           techniques — going beyond print statements to pdb and reading tracebacks like a senior engineer.
         </p>
         <Link href="/learn/python/debugging-techniques" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 39 → Debugging Techniques and Tools
+          Lesson 39 → Debugging Techniques and Tools
         </Link>
       </div>
     </LearnLayout>

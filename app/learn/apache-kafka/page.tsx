@@ -81,8 +81,8 @@ export default function ApacheKafkaTrackPage() {
         marginBottom: 36,
       }}>
         {[
-          { value: `${liveModules.length}`, label: 'Live modules' },
-          { value: `${queuedModules}`, label: 'Queued modules' },
+          { value: `${liveModules.length}`, label: 'Live lessons' },
+          { value: `${queuedModules}`, label: 'Queued lessons' },
           { value: `${KAFKA_CURRICULUM.length}`, label: 'Sections' },
           { value: `${totalTopics}+`, label: 'Concepts covered' },
           { value: `${totalHours}h`, label: 'Total reading' },
@@ -159,7 +159,7 @@ export default function ApacheKafkaTrackPage() {
             fontFamily: 'var(--font-display)',
             marginBottom: 6,
           }}>
-            {liveModules.length} Live Modules. {queuedModules} Advanced Modules Queued.
+            {liveModules.length} Live Lessons. {queuedModules} Advanced Lessons Queued.
           </h2>
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 620, margin: 0 }}>
             Follow in order. Each module begins with a simple explanation, then adds the production detail engineers need.

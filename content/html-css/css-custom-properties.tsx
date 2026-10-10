@@ -77,7 +77,7 @@ export default function CssCustomProperties() {
     <LearnLayout
       title="CSS Custom Properties (Variables)"
       description="Native CSS variables — scoping, fallbacks, and using them to build a real, maintainable design system without a preprocessor."
-      section="HTML & CSS — Module 30"
+      section="HTML & CSS — Lesson 30"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -884,7 +884,7 @@ applyCustomerBranding()
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          With variables in place, the next module covers CSS transitions — how to make state changes
+          With variables in place, the next lesson covers CSS transitions — how to make state changes
           feel smooth, which properties animate cheaply versus expensively, and the timing functions that
           control how motion feels.
         </p>

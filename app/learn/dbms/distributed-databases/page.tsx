@@ -1071,7 +1071,7 @@ N1,N2,N3 → C: "ACK"
 
         <Para>
           This is the kind of system design question asked at every senior engineer and
-          data engineering interview. Every decision maps directly to a concept in this module.
+          data engineering interview. Every decision maps directly to a concept in this lesson.
         </Para>
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>

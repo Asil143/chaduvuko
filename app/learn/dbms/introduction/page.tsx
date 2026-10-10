@@ -446,7 +446,7 @@ CREATE POLICY team_access ON employees
                 A database handles concurrent access through <strong style={{ color: 'var(--text)' }}>locks,
                 transactions, and isolation levels</strong> — mechanisms specifically designed to ensure
                 that concurrent operations produce correct results. These are covered in depth in
-                Module 10 (Concurrency Control).
+                Lesson 10 (Concurrency Control).
               </Para>
             </div>
           </div>
@@ -1177,7 +1177,7 @@ CREATE POLICY team_access ON employees
 
           <div style={{ marginTop: 20, background: 'rgba(0,230,118,0.05)', border: '1px solid rgba(0,230,118,0.15)', borderRadius: 8, padding: '16px 18px' }}>
             <div style={{ fontSize: 13, color: 'var(--text2)', lineHeight: 1.85, fontFamily: 'Inter, sans-serif' }}>
-              The senior engineer's answer is informed by everything in this module: understanding
+              The senior engineer's answer is informed by everything in this lesson: understanding
               what different database types are optimised for (RDBMS vs Key-Value vs Time-Series),
               how MVCC works and why it matters for concurrency, what ACID means in a financial context,
               and what operational considerations (read replicas, JSON support, row-level security)
@@ -1330,7 +1330,7 @@ SELECT * FROM user_preferences WHERE user_id = 42;
           ======================================== */}
       <section style={{ marginBottom: 72 }}>
         <SectionTag text="// Part 12 — The Journey Ahead" />
-        <SectionTitle>Your Complete Learning Roadmap — 20 Modules, Zero Gaps</SectionTitle>
+        <SectionTitle>Your Complete Learning Roadmap — 20 Lessons, Zero Gaps</SectionTitle>
 
         <Para>
           Every module in this track is sequenced deliberately. Each one builds on the previous.

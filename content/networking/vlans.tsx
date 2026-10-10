@@ -345,7 +345,7 @@ export default function VLANsModule() {
     <LearnLayout
       title="VLANs — Virtual Network Segmentation"
       description="VLANs let you carve one physical switch fabric into multiple isolated broadcast domains. The foundation of every secure, scalable enterprise network — from the office to hyperscale data centers."
-      section="Networking Fundamentals — Module 10"
+      section="Networking Fundamentals — Lesson 10"
       readTime="22–30 min"
       updatedAt="May 2026"
     >

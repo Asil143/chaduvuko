@@ -498,7 +498,7 @@ export default function NatAndDhcp() {
     <LearnLayout
       title="NAT and DHCP"
       description="A deep-dive into how NAT stretches IPv4 address space across billions of devices, how DHCP automates address assignment, and the subtle failure modes and security implications lurking beneath both protocols."
-      section="Networking Fundamentals — Module 18"
+      section="Networking Fundamentals — Lesson 18"
       readTime="22–30 min"
       updatedAt="May 2026"
     >

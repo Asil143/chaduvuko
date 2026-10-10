@@ -172,7 +172,7 @@ export default function WhatIsAPipelineModule() {
     <LearnLayout
       title="What is a Data Pipeline? Anatomy and Design Principles"
       description="The anatomy of every pipeline, the design principles that make them reliable, and the patterns that separate good from fragile."
-      section="Data Engineering — Module 20"
+      section="Data Engineering — Lesson 20"
       readTime="65 min"
       updatedAt="August 2026"
     >
@@ -316,7 +316,7 @@ save_checkpoint(current_run)   # advance ONLY after a successful write`}</CodeBo
 
         <Output>{`# four pitfalls this pattern has to account for:
 1. Late-arriving data past the window       → overlap by 30 min, upsert at destination
-2. Deletes are invisible to incremental SQL → use CDC (Module 24)
+2. Deletes are invisible to incremental SQL → use CDC (Lesson 24)
 3. Clock skew between pipeline and source   → use the source DB's own NOW()
 4. No updated_at column at all              → use max(id) watermark, or full extract`}</Output>
 
@@ -537,7 +537,7 @@ UPDATE 0
         ))}
 
         <TryThis>
-          Take the fragile pipeline in this module&rsquo;s Real World section below
+          Take the fragile pipeline in this lesson&rsquo;s Real World section below
           before you get there — just the five-line snippet — and name which of
           these eight principles each of its five problems violates. Then check
           your answers against the actual breakdown.
@@ -884,7 +884,7 @@ $ echo $?
         {[
           {
             wrong: '"A pipeline that runs without errors is a working pipeline"',
-            right: 'This module\'s Real World fragile pipeline and its Error Library both show the opposite: dropna() silently deletes rows, a bad filter silently excludes a category, and the run still reports success. The most dangerous failure mode in a pipeline produces no error at all — Part 06\'s row-count and value-range monitoring exists specifically to catch what "no error" doesn\'t.',
+            right: 'This lesson\'s Real World fragile pipeline and its Error Library both show the opposite: dropna() silently deletes rows, a bad filter silently excludes a category, and the run still reports success. The most dangerous failure mode in a pipeline produces no error at all — Part 06\'s row-count and value-range monitoring exists specifically to catch what "no error" doesn\'t.',
           },
           {
             wrong: '"ETL and ELT are basically the same thing with the letters reordered"',
@@ -1099,7 +1099,7 @@ The distinction matters practically: a pipeline can exist without a DAG (a cron 
           },
           {
             q: 'Treating "the pipeline finished without an exception" as proof it worked correctly',
-            a: 'This module\'s Real World and Error Library both show pipelines that ran cleanly to completion while silently deleting or filtering out rows. Absence of an exception is not evidence of correctness — a row-count check comparing output to source is.',
+            a: 'This lesson\'s Real World and Error Library both show pipelines that ran cleanly to completion while silently deleting or filtering out rows. Absence of an exception is not evidence of correctness — a row-count check comparing output to source is.',
           },
           {
             q: 'Picking ETL or ELT by habit rather than by where the transformation actually needs to happen',
@@ -1203,10 +1203,10 @@ The distinction matters practically: a pipeline can exist without a DAG (a cron 
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 21 covers the three processing models — batch, streaming, and micro-batch — with real latency and throughput numbers so you can match the right model to any business requirement.
+          Lesson 21 covers the three processing models — batch, streaming, and micro-batch — with real latency and throughput numbers so you can match the right model to any business requirement.
         </p>
         <Link href="/learn/data-engineering/batch-vs-streaming" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 21 → Batch vs Streaming vs Micro-Batch
+          Lesson 21 → Batch vs Streaming vs Micro-Batch
         </Link>
       </div>
     </LearnLayout>

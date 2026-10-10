@@ -74,7 +74,7 @@ export default function PerformanceTuning() {
     <LearnLayout
       title="Performance Tuning"
       description="Tuning Kafka for real throughput and latency targets: producer batching and compression trade-offs, broker page-cache and thread sizing, consumer fetch tuning, disk and filesystem choices, network settings, JVM heap sizing, and a real benchmarking methodology."
-      section="Apache Kafka — Module 17"
+      section="Apache Kafka — Lesson 17"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -88,7 +88,7 @@ export default function PerformanceTuning() {
         <SectionTitle>Every Kafka Tuning Knob Is Trading Latency for Throughput, or the Reverse</SectionTitle>
         <Para>
           The monitoring module taught you how to see when something is wrong — under-replicated partitions,
-          rising retry rate, growing consumer lag. This module is about what to actually change once you know
+          rising retry rate, growing consumer lag. This lesson is about what to actually change once you know
           a system is underperforming, and just as importantly, what target you are tuning toward in the first
           place. Almost every setting covered here sits on one axis: latency versus throughput. Nothing is free.
           A change that makes the system faster in aggregate almost always makes some individual record slower,
@@ -118,22 +118,22 @@ export default function PerformanceTuning() {
         </HighlightBox>
         <Para>
           Every section below names which side of this trade-off a setting pushes you toward. Keep that frame
-          in mind — the goal of this module is not to memorize "good" values, because there are no universally
+          in mind — the goal of this lesson is not to memorize "good" values, because there are no universally
           good values. The goal is to understand which lever moves which needle, so you can pick values that
           match your actual workload.
         </Para>
         <Para>
           It is worth naming the cost of tuning carelessly up front, because it motivates the discipline the
-          rest of this module asks for. A change to <code>linger.ms</code> or <code>compression.type</code>
+          rest of this lesson asks for. A change to <code>linger.ms</code> or <code>compression.type</code>
           applied to the wrong producer can silently regress user-facing latency for weeks before anyone
           notices, because the symptom shows up in an unrelated API's own latency dashboard, not in any
           Kafka-specific metric. A JVM heap increased "to be safe" can quietly degrade an entire cluster's read
           performance and occasionally spike replication lag, without a single broker log line announcing the
-          cause. Every recommendation in this module comes with a specific reason attached — read the reasoning,
+          cause. Every recommendation in this lesson comes with a specific reason attached — read the reasoning,
           not just the recommended value, before applying it to a system you are responsible for.
         </Para>
         <Callout title="Tune the bottleneck, not the first knob you find" color={K}>
-          Before changing any setting in this module, confirm — using the metrics from the monitoring module —
+          Before changing any setting in this lesson, confirm — using the metrics from the monitoring module —
           which part of the pipeline is actually the bottleneck. Doubling <code>batch.size</code> does nothing
           if your producer is CPU-bound on compression. Raising <code>fetch.min.bytes</code> does nothing if
           your consumer's processing logic, not the fetch itself, is the slow part. Measure first, per Part 09.
@@ -141,7 +141,7 @@ export default function PerformanceTuning() {
         <SubTitle>A quick map from symptom to likely cause</SubTitle>
         <Para>
           Before diving into the individual settings, it helps to have a rough map from an observed symptom to
-          which part of this module is likely to contain the fix — this is not a substitute for the monitoring
+          which part of this lesson is likely to contain the fix — this is not a substitute for the monitoring
           module's diagnostic process, but a starting point for where to look first.
         </Para>
         <Table
@@ -164,7 +164,7 @@ export default function PerformanceTuning() {
         <SectionTag text="// Part 02 — Producer Throughput Tuning" />
         <SectionTitle>batch.size, linger.ms, buffer.memory, and compression.type</SectionTitle>
         <Para>
-          The producer's batching mechanics were introduced in Module 03: records accumulate into a batch per
+          The producer's batching mechanics were introduced in Lesson 03: records accumulate into a batch per
           partition, and the batch is sent when it hits <code>batch.size</code> bytes or <code>linger.ms</code>
           milliseconds elapse, whichever comes first. Tuning throughput on the producer side is mostly about
           deliberately widening that batch rather than accepting whatever falls out of default settings.
@@ -180,7 +180,7 @@ export default function PerformanceTuning() {
         </Para>
         <SubTitle>linger.ms — deliberately delaying a send to let a batch fill</SubTitle>
         <Para>
-          Module 03 covered <code>linger.ms</code> as the throughput knob it is: a value of 0 sends immediately
+          Lesson 03 covered <code>linger.ms</code> as the throughput knob it is: a value of 0 sends immediately
           whenever the network is free, and a value of 10-50ms lets more records accumulate first. For this
           module's purposes, the operational guidance is to set <code>linger.ms</code> based on the workload
           classification from Part 01 — near 0 for latency-sensitive paths, 10-100ms for throughput-oriented
@@ -217,7 +217,7 @@ worst_case_memory = 2,000 * 32 KB = 64 MB
         </CodeBox>
         <SubTitle>compression.type — trading CPU for network and disk</SubTitle>
         <Para>
-          Module 03 introduced the four common codecs at a glance. Here is the trade-off in more operational
+          Lesson 03 introduced the four common codecs at a glance. Here is the trade-off in more operational
           depth, because compression is one of the highest-leverage settings for throughput-bound pipelines
           and one of the easiest to get wrong for latency-bound ones.
         </Para>
@@ -237,7 +237,7 @@ worst_case_memory = 2,000 * 32 KB = 64 MB
           record level matters so much: a bigger batch, built by a higher <code>linger.ms</code>/<code>batch.size</code>,
           compresses to a meaningfully better ratio than the same records compressed individually, because
           repeated JSON keys and similar field values across many records in one batch compress well together.
-          This is the concrete mechanism behind the guidance from Module 03 that batching and compression
+          This is the concrete mechanism behind the guidance from Lesson 03 that batching and compression
           settings reinforce each other and should be tuned together, not independently.
         </Para>
         <Callout title="zstd is usually the right default in 2026" color="#22c55e">
@@ -349,7 +349,7 @@ num.network.threads = 6   # doubled from default given connection count
 #   -> less recent log data stays cached in RAM
 #   -> more reads fall through to physical disk
 #   -> a 32 GB heap also means longer, more disruptive GC pauses
-#      (see the consumer session-timeout GC discussion in Module 03)
+#      (see the consumer session-timeout GC discussion in Lesson 03)
 #      GC pauses on a broker can delay replication and request handling
 
 # GOOD: JVM heap set to 6 GB, the rest left to the OS
@@ -420,7 +420,7 @@ num.network.threads = 6   # doubled from default given connection count
         <SectionTag text="// Part 04 — Consumer Throughput Tuning" />
         <SectionTitle>fetch.min.bytes, fetch.max.wait.ms, and max.partition.fetch.bytes</SectionTitle>
         <Para>
-          Module 03 covered the poll loop's timing settings — <code>max.poll.records</code>,
+          Lesson 03 covered the poll loop's timing settings — <code>max.poll.records</code>,
           <code>max.poll.interval.ms</code> — which govern how much work one call to <code>poll()</code> hands
           your application and how long you have to process it. The settings in this section govern something
           earlier in the pipeline: how the consumer's underlying fetch requests to the broker are shaped, which
@@ -459,7 +459,7 @@ fetch.max.wait.ms = 500
           from a single partition. This interacts with how many partitions one consumer is assigned: a consumer
           owning many partitions with this set high can receive a very large total response in one fetch,
           increasing both consumer-side memory pressure and the time spent deserializing before the next
-          <code>poll()</code> — which, per Module 03's rebalancing discussion, risks tripping
+          <code>poll()</code> — which, per Lesson 03's rebalancing discussion, risks tripping
           <code>max.poll.interval.ms</code> if processing that large a batch takes too long. Raising this value
           trades higher per-fetch throughput for a larger memory footprint and a longer window between polls.
         </Para>
@@ -482,7 +482,7 @@ fetch.max.wait.ms = 500
         </Callout>
         <SubTitle>A worked example: request-count reduction on the consumer side</SubTitle>
         <Para>
-          The same request-count math Module 03 walked through for producer batching applies symmetrically on
+          The same request-count math Lesson 03 walked through for producer batching applies symmetrically on
           the fetch side, and concrete numbers again make the trade-off easier to evaluate than the settings
           alone.
         </Para>
@@ -672,7 +672,7 @@ bandwidth_delay_product = (1,000,000,000 bits/sec / 8) * 0.080 sec
           relevant to Kafka is that it targets a configurable maximum pause time
           (<code>-XX:MaxGCPauseMillis</code>) rather than optimizing purely for throughput at the cost of
           occasional long stop-the-world pauses. Since a long GC pause on a broker can delay replication
-          heartbeats and request handling — the same mechanism covered in Module 03's discussion of a Java
+          heartbeats and request handling — the same mechanism covered in Lesson 03's discussion of a Java
           consumer's heartbeat thread freezing during a GC pause — a collector that keeps individual pauses
           short and predictable matters more for a broker than one that maximizes raw allocation throughput.
         </Para>
@@ -726,7 +726,7 @@ bandwidth_delay_product = (1,000,000,000 bits/sec / 8) * 0.080 sec
         <SectionTag text="// Part 08 — Benchmarking Methodology" />
         <SectionTitle>Measuring Before and After With kafka-producer-perf-test.sh and kafka-consumer-perf-test.sh</SectionTitle>
         <Para>
-          Every trade-off in this module is only worth making if you can measure whether it actually helped your
+          Every trade-off in this lesson is only worth making if you can measure whether it actually helped your
           workload. Kafka ships two command-line benchmarking tools specifically for this — they generate
           synthetic load against a real topic and report throughput and latency numbers, letting you compare a
           setting change against a baseline under controlled, repeatable conditions rather than guessing from
@@ -856,7 +856,7 @@ data.consumed.in.nMsg, nMsg.sec
         <SectionTag text="// Part 09 — Putting It Together" />
         <SectionTitle>Two Complete Tuning Profiles, Side by Side</SectionTitle>
         <Para>
-          Every setting in this module has been presented individually, with its own trade-off. In practice,
+          Every setting in this lesson has been presented individually, with its own trade-off. In practice,
           you rarely tune one setting in isolation — a real pipeline needs a coherent profile where producer,
           broker, and consumer settings all point the same direction on the latency-versus-throughput axis from
           Part 01. Presenting two complete, opposite profiles side by side makes the coherence requirement
@@ -880,13 +880,13 @@ data.consumed.in.nMsg, nMsg.sec
             ['linger.ms', '20-50ms', 'Nobody is waiting on any individual record; maximize batch fill for fewer, larger requests.'],
             ['batch.size', '128 KB - 256 KB', 'Large batches amortize per-request overhead and compress far better as a unit.'],
             ['compression.type', 'zstd', 'Best ratio-per-CPU-cost for a workload where CPU is available and network/disk savings compound at scale.'],
-            ['acks', 'all, or acks=1 if some loss is acceptable for this specific analytical use case', 'Depends on whether this data feeds a system where occasional loss has real cost — decide deliberately per Module 03\'s producer design rule, not by copying Profile A.'],
+            ['acks', 'all, or acks=1 if some loss is acceptable for this specific analytical use case', 'Depends on whether this data feeds a system where occasional loss has real cost — decide deliberately per Lesson 03\'s producer design rule, not by copying Profile A.'],
             ['fetch.min.bytes (downstream consumer)', '64 KB - 1 MB, with a bounded fetch.max.wait.ms', 'Maximize throughput per fetch request; the consumer is a batch job with no per-record latency requirement at all.'],
           ]}
         />
         <Callout title="Pick a profile per pipeline, not per cluster" color={K}>
           A single Kafka cluster commonly hosts both kinds of topics simultaneously — this is expected and
-          correct. The tuning decisions in this module apply at the producer-config and consumer-config level,
+          correct. The tuning decisions in this lesson apply at the producer-config and consumer-config level,
           which are per-application settings, not cluster-wide settings. A fraud-check producer and a clickstream
           warehouse-load producer writing to the same cluster should have entirely different
           <code>linger.ms</code> and <code>compression.type</code> values, because they are answering different
@@ -897,7 +897,7 @@ data.consumed.in.nMsg, nMsg.sec
           Not every pipeline sits cleanly at one extreme. A topic like order-confirmation events is often read
           by two very different kinds of consumer at once: a notification service that wants the event with low
           latency, and an analytics pipeline reading the same topic that cares only about aggregate throughput.
-          Since consumer groups are independent (Module 03), each consumer can be tuned separately even though
+          Since consumer groups are independent (Lesson 03), each consumer can be tuned separately even though
           they read the same topic — the notification-service consumer group keeps
           <code>fetch.min.bytes</code> low, while the analytics consumer group raises it, both reading the same
           underlying data with no coordination required between the two tunings.
@@ -944,7 +944,7 @@ data.consumed.in.nMsg, nMsg.sec
           },
           {
             wrong: '"linger.ms should always be 0 for the lowest possible latency"',
-            right: 'Part 01 and Part 02 both frame this as workload-dependent. A linger.ms of 0 is correct for a latency-sensitive path a user is waiting on, but for throughput-oriented bulk ingestion, a small nonzero linger.ms (10-50ms) usually produces a dramatically better throughput-to-latency trade, per the worked request-count math from Module 03.',
+            right: 'Part 01 and Part 02 both frame this as workload-dependent. A linger.ms of 0 is correct for a latency-sensitive path a user is waiting on, but for throughput-oriented bulk ingestion, a small nonzero linger.ms (10-50ms) usually produces a dramatically better throughput-to-latency trade, per the worked request-count math from Lesson 03.',
           },
           {
             wrong: '"Since Kafka uses sequential I/O, disk type and filesystem choice barely matter"',

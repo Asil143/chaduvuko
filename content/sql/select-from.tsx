@@ -78,7 +78,7 @@ export default function SelectFrom() {
     <LearnLayout
       title="Your First Query — SELECT & FROM"
       description="The two most important words in SQL — what they mean, how the database executes them, and every variation you will use in the real world"
-      section="SQL — Module 05"
+      section="SQL — Lesson 05"
       readTime="10–14 min"
       updatedAt="April 2026"
     >
@@ -153,11 +153,11 @@ FROM customers;`}
             {[
               ['1. SELECT', '2. Executed second', 'Choose which columns to return from the already-identified rows'],
               ['2. FROM', '1. Executed first', 'Identify the table — this always runs before SELECT'],
-              ['3. WHERE', '3. Executed third', 'Filter rows (you will learn this in Module 06)'],
-              ['4. GROUP BY', '4. Executed fourth', 'Group filtered rows (Module 28)'],
-              ['5. HAVING', '5. Executed fifth', 'Filter groups (Module 29)'],
-              ['6. ORDER BY', '6. Executed sixth', 'Sort the result (Module 08)'],
-              ['7. LIMIT', '7. Executed last', 'Cut to n rows (Module 09)'],
+              ['3. WHERE', '3. Executed third', 'Filter rows (you will learn this in Lesson 06)'],
+              ['4. GROUP BY', '4. Executed fourth', 'Group filtered rows (Lesson 28)'],
+              ['5. HAVING', '5. Executed fifth', 'Filter groups (Lesson 29)'],
+              ['6. ORDER BY', '6. Executed sixth', 'Sort the result (Lesson 08)'],
+              ['7. LIMIT', '7. Executed last', 'Cut to n rows (Lesson 09)'],
             ].map(([written, exec, what], i) => (
               <tr key={written} style={{ background: i % 2 === 0 ? 'transparent' : 'var(--surface)' }}>
                 <td style={{ padding: '10px 14px', fontFamily: 'var(--font-mono)', fontSize: 12, color: C, borderBottom: '1px solid var(--border)', whiteSpace: 'nowrap' }}>{written}</td>
@@ -169,7 +169,7 @@ FROM customers;`}
         </table>
       </div>
 
-      <P>The key insight for now: <Hl>FROM runs before SELECT</Hl>. The database first decides which table to read, then decides which columns from that table to return. Every clause you add in future modules fits somewhere in this execution order.</P>
+      <P>The key insight for now: <Hl>FROM runs before SELECT</Hl>. The database first decides which table to read, then decides which columns from that table to return. Every clause you add in future lessons fits somewhere in this execution order.</P>
 
       <HR />
 
@@ -277,7 +277,7 @@ LIMIT 10;`}
         showSchema={false}
       />
 
-      <P>Several things to notice here. First, the arithmetic operators: <Hl>+</Hl> (add), <Hl>-</Hl> (subtract), <Hl>*</Hl> (multiply), <Hl>/</Hl> (divide). Second, the <Hl>AS</Hl> keyword — it gives the computed column a name in the result. Without AS, the database would show the raw expression as the column header. Third, <Hl>ROUND(value, decimal_places)</Hl> — a built-in function that rounds to a specified number of decimal places. You will learn all built-in functions in Modules 41–44.</P>
+      <P>Several things to notice here. First, the arithmetic operators: <Hl>+</Hl> (add), <Hl>-</Hl> (subtract), <Hl>*</Hl> (multiply), <Hl>/</Hl> (divide). Second, the <Hl>AS</Hl> keyword — it gives the computed column a name in the result. Without AS, the database would show the raw expression as the column header. Third, <Hl>ROUND(value, decimal_places)</Hl> — a built-in function that rounds to a specified number of decimal places. You will learn all built-in functions in Lessons 41–44.</P>
 
       <H>Calculating with dates</H>
 
@@ -313,7 +313,7 @@ LIMIT 10;`}
       />
 
       <Callout type="info">
-        String concatenation uses <strong>||</strong> in PostgreSQL, SQLite, and DuckDB (what the playground uses). In MySQL you use CONCAT(first_name, ' ', last_name) instead. Both produce the same result — joining two strings together. This is one of the small dialect differences mentioned in Module 04.
+        String concatenation uses <strong>||</strong> in PostgreSQL, SQLite, and DuckDB (what the playground uses). In MySQL you use CONCAT(first_name, ' ', last_name) instead. Both produce the same result — joining two strings together. This is one of the small dialect differences mentioned in Lesson 04.
       </Callout>
 
       <HR />
@@ -361,7 +361,7 @@ LIMIT 5;`}
 
       <P><Hl>Table and column names depend on the database.</Hl> In PostgreSQL, table and column names are case-insensitive unless you quote them with double quotes. In MySQL, table names are case-sensitive on Linux (because file names are case-sensitive on Linux) but case-insensitive on Windows. The safest practice: always use lowercase for table and column names (as FreshCart does) and write them the same way every time.</P>
 
-      <P><Hl>String values are case-sensitive.</Hl> The value 'Seattle' is not the same as 'seattle' or 'SEATTLE' in a WHERE clause. String comparisons respect exact case — you will see this in Module 06 when learning WHERE.</P>
+      <P><Hl>String values are case-sensitive.</Hl> The value 'Seattle' is not the same as 'seattle' or 'SEATTLE' in a WHERE clause. String comparisons respect exact case — you will see this in Lesson 06 when learning WHERE.</P>
 
       <CodeBlock
         label="All of these are identical — SQL keywords are case-insensitive"
@@ -444,7 +444,7 @@ ORDER BY city, loyalty_tier;`}
       <P>DISTINCT is useful for: finding all unique values in a column (all cities FreshCart serves, all product categories, all payment methods used), checking what values actually exist in a column before filtering on them, and understanding the cardinality of a column — how many distinct values it has.</P>
 
       <Callout type="warning">
-        DISTINCT has a performance cost — the database must compare every row against every other row (or sort all rows) to eliminate duplicates. On large tables, DISTINCT can be significantly slower than a plain SELECT. Only use it when you genuinely need unique values. If you are counting distinct values, use COUNT(DISTINCT column) — covered in Module 27.
+        DISTINCT has a performance cost — the database must compare every row against every other row (or sort all rows) to eliminate duplicates. On large tables, DISTINCT can be significantly slower than a plain SELECT. Only use it when you genuinely need unique values. If you are counting distinct values, use COUNT(DISTINCT column) — covered in Lesson 27.
       </Callout>
 
       <HR />
@@ -579,7 +579,7 @@ ORDER BY order_date DESC;`}
       </div>
 
       <TimeBlock time="10:15 AM" label="You open your SQL client">
-        You connect to the staging database (you never run exploratory queries on production — you learned this in Module 04). You do not know the merchants table structure yet, so first you run: SELECT * FROM merchants LIMIT 5; — this shows you all the columns and a few rows so you know what you are working with.
+        You connect to the staging database (you never run exploratory queries on production — you learned this in Lesson 04). You do not know the merchants table structure yet, so first you run: SELECT * FROM merchants LIMIT 5; — this shows you all the columns and a few rows so you know what you are working with.
       </TimeBlock>
 
       <TimeBlock time="10:18 AM" label="You write the actual query">
@@ -594,7 +594,7 @@ ORDER BY order_date DESC;`}
   city,
   onboarded_date
 FROM merchants
-WHERE status = 'active'  -- (you will learn WHERE in the next module)
+WHERE status = 'active'  -- (you will learn WHERE in the next lesson)
 ORDER BY onboarded_date DESC;`}
       />
 
@@ -667,7 +667,7 @@ ORDER BY onboarded_date DESC;`}
       <Err
         msg="ERROR: missing FROM-clause entry for table 'c' — SELECT c.first_name FROM customers;"
         cause="You are using a table alias (c.first_name) but you never defined the alias. The prefix 'c.' tells the database you want the first_name column from a table aliased as 'c' — but no table in your FROM clause has that alias. This happens when you start writing a JOIN query with aliases and forget to actually add the alias to the FROM clause."
-        fix="Either remove the table prefix (SELECT first_name FROM customers;) or add the alias definition to FROM: SELECT c.first_name FROM customers c; — the alias is defined by placing it after the table name. Aliases become necessary and important in JOIN queries (Module 30 onwards) where the same column name might exist in multiple tables and you need to specify which table's version you want."
+        fix="Either remove the table prefix (SELECT first_name FROM customers;) or add the alias definition to FROM: SELECT c.first_name FROM customers c; — the alias is defined by placing it after the table name. Aliases become necessary and important in JOIN queries (Lesson 30 onwards) where the same column name might exist in multiple tables and you need to specify which table's version you want."
       />
 
       <Err
@@ -691,7 +691,7 @@ ORDER BY onboarded_date DESC;`}
 FROM products
 WHERE in_stock = true
 ORDER BY unit_price ASC;`}
-        explanation="This query combines everything from Module 05: selecting specific columns by name, giving them readable aliases with AS, performing arithmetic inside SELECT (multiplying by 1.08 for sales tax), using ROUND() to control decimal places, filtering with WHERE (you will learn this fully in Module 06), and sorting with ORDER BY. The result is a clean product listing with both the base price and the tax-inclusive price — exactly what a real e-commerce product listing query would look like."
+        explanation="This query combines everything from Lesson 05: selecting specific columns by name, giving them readable aliases with AS, performing arithmetic inside SELECT (multiplying by 1.08 for sales tax), using ROUND() to control decimal places, filtering with WHERE (you will learn this fully in Lesson 06), and sorting with ORDER BY. The result is a clean product listing with both the base price and the tax-inclusive price — exactly what a real e-commerce product listing query would look like."
       />
 
       <HR />
@@ -716,10 +716,10 @@ ORDER BY unit_price ASC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 06</strong>, you add the WHERE clause — the most powerful tool for getting only the rows you actually need. This is where SQL goes from "show me everything" to "show me exactly what I asked for." Every filter you will ever write starts here.
+          In <strong>Lesson 06</strong>, you add the WHERE clause — the most powerful tool for getting only the rows you actually need. This is where SQL goes from "show me everything" to "show me exactly what I asked for." Every filter you will ever write starts here.
         </p>
         <Link href="/learn/sql/where-clause" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 06 → Filtering Rows — WHERE Clause
+          Lesson 06 → Filtering Rows — WHERE Clause
         </Link>
       </div>
 

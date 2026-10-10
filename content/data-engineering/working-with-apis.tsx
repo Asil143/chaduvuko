@@ -177,7 +177,7 @@ export default function WorkingWithAPIsModule() {
     <LearnLayout
       title="Working with APIs — REST, Auth, Pagination, Rate Limits"
       description="How APIs work, every auth pattern, all pagination styles, rate limits, and webhooks vs polling — built as one real payment-ingestion pipeline, not a wall of unrelated snippets."
-      section="Data Engineering — Module 18"
+      section="Data Engineering — Lesson 18"
       readTime="75 min"
       updatedAt="August 2026"
     >
@@ -196,7 +196,7 @@ export default function WorkingWithAPIsModule() {
         </Para>
 
         <Para>
-          This module is built around one real, ongoing example: FreshCart needs
+          This lesson is built around one real, ongoing example: FreshCart needs
           a pipeline that pulls transaction data from its payment gateway into
           the warehouse. Every technique below — auth, pagination, rate limits,
           webhooks — is a piece of that one pipeline, built up incrementally, not
@@ -210,7 +210,7 @@ export default function WorkingWithAPIsModule() {
             fontSize: 14, fontWeight: 800, color: 'var(--text)',
             fontFamily: 'var(--font-display)', marginBottom: 14,
           }}>
-            Seven areas this module covers
+            Seven areas this lesson covers
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
             {[
@@ -286,7 +286,7 @@ X-RateLimit-Reset: 1710720000
         <Para>
           The status line tells you at a glance whether the request succeeded;
           the rate-limit headers (Part 05) and the <code style={inlineCode}>cursor</code>{' '}
-          field (Part 04) are both things this module comes back to build real
+          field (Part 04) are both things this lesson comes back to build real
           logic around — they are not just decorative metadata.
         </Para>
 
@@ -987,7 +987,7 @@ def parse_timestamp(raw):
 
         <Para>
           Every piece so far has been in isolation. Now they combine into the
-          actual FreshCart payment-ingestion pipeline this module has been
+          actual FreshCart payment-ingestion pipeline this lesson has been
           building toward — five properties stacked in order: authenticated,
           rate-limited, resumable, defensive, and idempotent.
         </Para>
@@ -1445,10 +1445,10 @@ The practical cost: an API-key pipeline sends the same string forever, while an 
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 19 covers working with files at scale — partitioning strategies, compression trade-offs, the small file problem, and how columnar formats like Parquet store and retrieve data internally.
+          Lesson 19 covers working with files at scale — partitioning strategies, compression trade-offs, the small file problem, and how columnar formats like Parquet store and retrieve data internally.
         </p>
         <Link href="/learn/data-engineering/files-at-scale" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 19 → Working with Files at Scale
+          Lesson 19 → Working with Files at Scale
         </Link>
       </div>
     </LearnLayout>

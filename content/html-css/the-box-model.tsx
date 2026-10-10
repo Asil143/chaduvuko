@@ -77,7 +77,7 @@ export default function TheBoxModel() {
     <LearnLayout
       title="The Box Model — Margin, Border, Padding, Content"
       description="Every element on the page is a box. Understanding the box model precisely is what makes every later layout concept make sense."
-      section="HTML & CSS — Module 18"
+      section="HTML & CSS — Lesson 18"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -719,11 +719,11 @@ padding: 20px 40px 10px 5px;       /* top, right, bottom, left — CLOCKWISE fro
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 19 covers colors, units, and typography — every unit type you will type in a real
+          Lesson 19 covers colors, units, and typography — every unit type you will type in a real
           stylesheet, every color format, font stacks, and the fundamentals of font-weight and line-height.
         </p>
         <Link href="/learn/html-css/colors-units-typography" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 19 → Colors, Units & Typography
+          Lesson 19 → Colors, Units & Typography
         </Link>
       </div>
     </LearnLayout>

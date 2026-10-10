@@ -61,7 +61,7 @@ export default function WhatIsCybersecurity() {
     <LearnLayout
       title="What is Cybersecurity?"
       description="The threat landscape, the roles, and why this field exists. What attackers actually want and how defenders think."
-      section="Cybersecurity — Module 01"
+      section="Cybersecurity — Lesson 01"
       readTime="25 min"
       updatedAt="May 2026"
     >
@@ -266,7 +266,7 @@ export default function WhatIsCybersecurity() {
       <P><Hl>Authentication</Hl> answers "who are you?" — verifying identity via password, biometric, or certificate. <Hl>Authorisation</Hl> answers "what are you allowed to do?" — determining permissions after identity is established. These are separate systems that are often confused. You can be authenticated (logged in as a real user) but not authorised (not permitted to access a specific resource). Broken authorisation — where authenticated users can access resources they should not — is one of the most common web vulnerabilities.</P>
 
       <H>Confidentiality, Integrity, Availability (CIA)</H>
-      <P>Every security control protects one or more of these three properties. Encryption protects confidentiality. Cryptographic hashes verify integrity. Redundant systems protect availability. Every attack targets one or more of these properties. Module 05 covers the CIA triad in depth — it is the foundational framework for reasoning about any security decision.</P>
+      <P>Every security control protects one or more of these three properties. Encryption protects confidentiality. Cryptographic hashes verify integrity. Redundant systems protect availability. Every attack targets one or more of these properties. Lesson 05 covers the CIA triad in depth — it is the foundational framework for reasoning about any security decision.</P>
 
       <H>Defence in Depth</H>
       <P>No single security control is perfect. Defence in depth means layering multiple controls so that when one fails — and it will — others remain. A phishing email that bypasses the spam filter is stopped by endpoint detection. Malware that evades endpoint detection is stopped by network monitoring. Lateral movement is stopped by network segmentation. The attacker must defeat every layer sequentially.</P>
@@ -414,10 +414,10 @@ export default function WhatIsCybersecurity() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 02</strong>, you go inside the internet — how TCP/IP actually routes a packet, what DNS really does, how HTTP and HTTPS work, and where every layer hides attack surfaces. Security engineers need to know the internet better than the people who built it.
+          In <strong>Lesson 02</strong>, you go inside the internet — how TCP/IP actually routes a packet, what DNS really does, how HTTP and HTTPS work, and where every layer hides attack surfaces. Security engineers need to know the internet better than the people who built it.
         </p>
         <Link href="/learn/cybersecurity/how-the-internet-works" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 02 → How the Internet Works
+          Lesson 02 → How the Internet Works
         </Link>
       </div>
 

@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'What is Generative AI? — Chaduvuko',
@@ -146,7 +145,6 @@ export default function WhatIsGenerativeAIPage() {
       readTime="22–28 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="generative-ai" topic="what-is-generative-ai" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -753,7 +751,7 @@ import torch
         <ConceptBox title="Myth: Generative AI is a completely different kind of technology than traditional ML" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
             Underneath, it is still the same machinery covered throughout this track — gradient
-            descent, backpropagation, loss functions, the dot products from Module 05. What actually
+            descent, backpropagation, loss functions, the dot products from Lesson 05. What actually
             changes is the training objective (learning P(data) instead of P(label given data)) and
             the scale (billions of parameters instead of thousands). A transformer-based LLM and a
             logistic regression model are trained with the same core optimisation loop; generative
@@ -881,7 +879,7 @@ import torch
             latency-critical, single-pass image task (a live filter, a real-time avatar) points toward a
             GAN because diffusion's iterative denoising is too slow for that budget. Anomaly detection or
             a task that needs a smooth, interpolatable latent space points toward a VAE. Layered on top of
-            all of that is the build-vs-buy question from earlier in this module: whether prompting an
+            all of that is the build-vs-buy question from earlier in this lesson: whether prompting an
             existing API, fine-tuning an open model, or — almost never — pretraining from scratch is the
             right level of investment for the constraint you are actually solving for.
           </p>
@@ -899,9 +897,9 @@ import torch
         </h2>
 
         <p style={S.p}>
-          This module introduced all four families at a high level.
+          This lesson introduced all four families at a high level.
           The next four modules go deep on each one in turn.
-          Module 61 builds a GAN from scratch — generator, discriminator,
+          Lesson 61 builds a GAN from scratch — generator, discriminator,
           the adversarial training loop, and why training is so unstable.
           Understanding GANs first builds the intuition that makes
           VAEs, diffusion, and LLMs click into place.
@@ -919,7 +917,7 @@ import torch
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 61 · Generative AI
+              Next — Lesson 61 · Generative AI
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

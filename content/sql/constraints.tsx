@@ -104,7 +104,7 @@ export default function Constraints() {
     <LearnLayout
       title="Constraints"
       description="NOT NULL, UNIQUE, CHECK, PRIMARY KEY, FOREIGN KEY — what each constraint does, when to use it, and how to add or drop them on existing tables with ALTER TABLE"
-      section="SQL — Module 23"
+      section="SQL — Lesson 23"
       readTime="16–22 min"
       updatedAt="April 2026"
     >
@@ -876,10 +876,10 @@ ADD CONSTRAINT uq_promotions_store_code UNIQUE (store_id, promo_code);`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 24</strong>, you learn ALTER TABLE in full depth — adding columns, changing types, renaming columns and tables, and managing schema changes safely in production without downtime.
+          In <strong>Lesson 24</strong>, you learn ALTER TABLE in full depth — adding columns, changing types, renaming columns and tables, and managing schema changes safely in production without downtime.
         </p>
         <Link href="/learn/sql/alter-table" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 24 → ALTER TABLE
+          Lesson 24 → ALTER TABLE
         </Link>
       </div>
 

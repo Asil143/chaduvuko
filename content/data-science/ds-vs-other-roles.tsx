@@ -69,7 +69,7 @@ export default function DsVsOtherRoles() {
     <LearnLayout
       title="Data Science vs Data Engineering vs ML Engineering vs Analytics"
       description="Four job titles that get confused constantly — what each one actually owns day to day, where the boundaries blur in practice, and how to decode a job posting"
-      section="Data Science — Module 03"
+      section="Data Science — Lesson 03"
       readTime="10–14 min"
       updatedAt="July 2026"
     >
@@ -100,7 +100,7 @@ export default function DsVsOtherRoles() {
         </div>
       </div>
 
-      <P>Read left to right, this is roughly the order data flows through a company: engineers move and store it, analysts and scientists make sense of it, and ML engineers turn a scientist's model into something running live in production. The rest of this module walks through each stop on that chain.</P>
+      <P>Read left to right, this is roughly the order data flows through a company: engineers move and store it, analysts and scientists make sense of it, and ML engineers turn a scientist's model into something running live in production. The rest of this lesson walks through each stop on that chain.</P>
 
       <HR />
 
@@ -119,7 +119,7 @@ export default function DsVsOtherRoles() {
         </ul>
       </div>
 
-      <P>The output of good data engineering work is invisible when it works — a warehouse table that just quietly refreshes every night, correctly, forever. This course's sibling <Hl>Data Engineering track</Hl> covers this discipline in full depth; here, treat it as the team whose work you depend on before Stage 2 (Collect) of the workflow from Module 02 can even begin.</P>
+      <P>The output of good data engineering work is invisible when it works — a warehouse table that just quietly refreshes every night, correctly, forever. This course's sibling <Hl>Data Engineering track</Hl> covers this discipline in full depth; here, treat it as the team whose work you depend on before Stage 2 (Collect) of the workflow from Lesson 02 can even begin.</P>
 
       <HR />
 
@@ -145,7 +145,7 @@ export default function DsVsOtherRoles() {
       {/* ── PART 04 ── */}
       <Part n="04" title="Data Scientist — Cleans, Validates, Sometimes Predicts" />
 
-      <P>This is the role this course is built around, covered in full in Module 01. The short version: a Data Scientist takes messy, often raw data, cleans it, applies statistical rigor to determine whether a pattern is meaningful, and — when the question genuinely calls for it — builds a predictive model.</P>
+      <P>This is the role this course is built around, covered in full in Lesson 01. The short version: a Data Scientist takes messy, often raw data, cleans it, applies statistical rigor to determine whether a pattern is meaningful, and — when the question genuinely calls for it — builds a predictive model.</P>
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 20px', margin: '16px 0 24px' }}>
         <div style={{ fontSize: 11, color: C, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 10, fontWeight: 700 }}>A Data Scientist's typical week</div>
@@ -386,7 +386,7 @@ summary`}
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          <strong>Module 04</strong> gets you properly set up — a full tour of the live Python playground powering every module, how Pyodide runs real pandas in your browser, and everything you need to know about the StreamPulse dataset before Section 2 begins.
+          <strong>Lesson 04</strong> gets you properly set up — a full tour of the live Python playground powering every module, how Pyodide runs real pandas in your browser, and everything you need to know about the StreamPulse dataset before Section 2 begins.
         </p>
         <Link href="/learn/data-science" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
           See the full Data Science curriculum →

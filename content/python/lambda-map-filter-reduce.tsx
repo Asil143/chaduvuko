@@ -77,7 +77,7 @@ export default function LambdaMapFilterReduce() {
     <LearnLayout
       title="Lambda Functions and Functional Tools"
       description="Lambda syntax and its real constraint, when it genuinely earns its place, map/filter/reduce in depth, and why comprehensions usually win."
-      section="Python — Module 26"
+      section="Python — Lesson 26"
       readTime="45 min"
       updatedAt="August 2026"
     >
@@ -103,14 +103,14 @@ def square(x):
 
         <Para>
           A lambda can take any number of arguments — including <code>*args</code>,{' '}
-          <code>**kwargs</code>, and default values, exactly like a normal function from Module 25 —
+          <code>**kwargs</code>, and default values, exactly like a normal function from Lesson 25 —
           but its body must be a <strong>single expression</strong>. This is not a stylistic
           limitation; it is enforced by Python&apos;s grammar. A lambda cannot contain statements:
           no <code>if</code>/<code>else</code> as separate lines, no <code>for</code> loops, no{' '}
           <code>while</code> loops, no assignment statements, and no multiple lines of logic.
         </Para>
 
-        <CodeBox label="What a lambda CAN and CANNOT contain">{`# Legal — a conditional EXPRESSION (the ternary from Module 05), not a statement
+        <CodeBox label="What a lambda CAN and CANNOT contain">{`# Legal — a conditional EXPRESSION (the ternary from Lesson 05), not a statement
 classify = lambda age: "adult" if age >= 18 else "minor"
 
 # Illegal — a for loop is a statement, not an expression
@@ -238,7 +238,7 @@ print(adults)   # [22, 34, 19]`}</CodeBox>
         <Para>
           Passing <code>None</code> as the function to <code>filter()</code> is a special, real case
           worth knowing: it filters out every falsy value from the iterable directly, using the same
-          truthiness rules from Module 05.
+          truthiness rules from Lesson 05.
         </Para>
 
         <CodeBox label="filter(None, ...) — dropping every falsy value">{`raw = [0, "hello", "", None, 42, False, "data", []]
@@ -330,7 +330,7 @@ print(merged)   # {'timeout': 60, 'retries': 3, 'debug': True} — later dicts w
 
         <Para>
           Python supports the functional style — <code>map()</code>/<code>filter()</code>/{' '}
-          <code>reduce()</code> — but its own core design leans toward comprehensions (Module 12) for the
+          <code>reduce()</code> — but its own core design leans toward comprehensions (Lesson 12) for the
           exact same jobs <code>map()</code> and <code>filter()</code> do. This is not an accident:
           comprehensions read left to right in the same order the operation actually happens, while
           chained <code>map()</code>/<code>filter()</code> calls read inside-out, which is measurably
@@ -405,7 +405,7 @@ by_salary = sorted(employees, key=lambda e: e["salary"], reverse=True)
           For sorting by more than one field — "sort by department, and within each department, by
           salary descending" — the <code>key</code> function returns a <strong>tuple</strong>. Python
           compares tuples element by element, exactly the way it compares any other tuple (as covered in
-          Module 09), which is precisely what makes multi-key sorting work with a single{' '}
+          Lesson 09), which is precisely what makes multi-key sorting work with a single{' '}
           <code>key</code> function.
         </Para>
 
@@ -616,11 +616,11 @@ final = sorted(step1, key=lambda e: e["dept"])`}</CodeBox>
           },
           {
             q: 'Forgetting that map()/filter() results can only be consumed once',
-            a: 'results = map(str.upper, names); list(results); list(results) — the second list() call returns an empty list. This is the exact same "iterator exhaustion" behaviour covered in depth in the next module (Iterators and Iterables) — map and filter objects are iterators, not reusable collections.',
+            a: 'results = map(str.upper, names); list(results); list(results) — the second list() call returns an empty list. This is the exact same "iterator exhaustion" behaviour covered in depth in the next lesson (Iterators and Iterables) — map and filter objects are iterators, not reusable collections.',
           },
           {
             q: 'Using a lambda inside a loop and accidentally capturing the loop variable by reference',
-            a: 'This is a genuinely famous Python gotcha covered in full in Module 31 (Closures and Scope) — a lambda defined inside a loop, referencing the loop variable, captures the variable itself, not its value at definition time. Every lambda created in the loop ends up seeing the loop variable\'s FINAL value once the loop finishes.',
+            a: 'This is a genuinely famous Python gotcha covered in full in Lesson 31 (Closures and Scope) — a lambda defined inside a loop, referencing the loop variable, captures the variable itself, not its value at definition time. Every lambda created in the loop ends up seeing the loop variable\'s FINAL value once the loop finishes.',
           },
           {
             q: 'Assuming filter(function, iterable) removes items where the function returns True',
@@ -733,11 +733,11 @@ final = sorted(step1, key=lambda e: e["dept"])`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 27 goes underneath the for loop itself — the iterable and iterator protocols, what
+          Lesson 27 goes underneath the for loop itself — the iterable and iterator protocols, what
           Python is actually doing on every pass, and how to build your own iterator class from scratch.
         </p>
         <Link href="/learn/python/iterators-iterables" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 27 → Iterators and Iterables
+          Lesson 27 → Iterators and Iterables
         </Link>
       </div>
     </LearnLayout>

@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Vectors, Matrices and Tensors — Chaduvuko',
@@ -168,7 +167,6 @@ export default function VectorsMatricesTensorsPage() {
       readTime="30–38 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='math-foundations' topic='vectors-matrices-tensors' />
 
       {/* ══ SECTION 1 — WHY THIS MATTERS ══════════════════════════════════════ */}
       <div style={S.sec}>
@@ -1095,7 +1093,7 @@ print(X_train_v2.shape)   # (48000, 5)  <- now the model actually sees it`} />
         </p>
 
         <p style={S.p}>
-          The next module takes this one step further — matrix multiplication
+          The next lesson takes this one step further — matrix multiplication
           and linear transformations. You'll see exactly how data changes shape
           as it flows through a neural network layer, and why the choice of
           matrix dimensions determines what a layer can learn.
@@ -1113,7 +1111,7 @@ print(X_train_v2.shape)   # (48000, 5)  <- now the model actually sees it`} />
               textTransform: 'uppercase' as const, color: '#7F77DD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 04
+              Next — Lesson 04
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

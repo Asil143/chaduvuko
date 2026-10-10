@@ -74,7 +74,7 @@ export default function KafkaConnect() {
     <LearnLayout
       title="Kafka Connect"
       description="What Kafka Connect actually is, source vs sink connectors, standalone vs distributed mode, configuring a real connector through the REST API, offset tracking, Single Message Transforms, converters and Schema Registry, and when to reach for Connect instead of a hand-written producer or consumer."
-      section="Apache Kafka — Module 13"
+      section="Apache Kafka — Lesson 13"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -130,7 +130,7 @@ export default function KafkaConnect() {
           — mature, battle-tested connectors already exist, usually from Confluent, the community, or the
           vendor itself. For a bespoke internal system with business logic that does not map cleanly onto
           "read a record, write a record," you are often better off with a hand-written producer or
-          consumer, which this module covers in the last section.
+          consumer, which this lesson covers in the last section.
         </Para>
       </section>
 
@@ -233,7 +233,7 @@ export default function KafkaConnect() {
           ]}
         />
         <Para>
-          The rest of this module assumes distributed mode, because that is what you will actually operate
+          The rest of this lesson assumes distributed mode, because that is what you will actually operate
           in production, and because the REST API workflow it uses is also the more instructive one to
           learn — you interact with Connect the same way whether you manage two connectors or two hundred.
         </Para>
@@ -447,7 +447,7 @@ connect-offsets topic and resumes with:
           The rule of thumb: if the transformation can be described in one sentence without an "if this
           customer, then..." branch, an SMT is probably the right tool. Real business logic — joining data
           from another topic, computing a derived value that depends on external state, conditional routing
-          based on complex rules — belongs in a stream processing job (Module 14) or a custom application,
+          based on complex rules — belongs in a stream processing job (Lesson 14) or a custom application,
           not in an SMT chain. SMTs that grow too elaborate are a sign the transformation has outgrown Connect.
         </Callout>
       </section>
@@ -523,7 +523,7 @@ magic byte | schema_id=117 | <avro-encoded binary payload>
         <SectionTitle>What Delivery Guarantee Does Connect Actually Give You?</SectionTitle>
         <Para>
           Because a source connector is really a producer and a sink connector is really a consumer, the
-          delivery guarantees from earlier modules apply directly, and it is worth being precise about
+          delivery guarantees from earlier lessons apply directly, and it is worth being precise about
           which guarantee you are actually getting by default.
         </Para>
         <SubTitle>Source connectors — at-least-once by default</SubTitle>
@@ -675,7 +675,7 @@ for connector in list_connectors():
         <SectionTitle>How a Distributed Connect Cluster Actually Rebalances Work</SectionTitle>
         <Para>
           A distributed Connect cluster's workers coordinate the same way a consumer group does, because
-          under the hood they use the same group membership protocol described in Module 03 — one worker
+          under the hood they use the same group membership protocol described in Lesson 03 — one worker
           acts as the group leader, and the set of connectors and tasks is divided among all currently
           active workers. Adding a worker, removing one, or a worker crashing all trigger a rebalance, in
           which tasks are redistributed across whichever workers are currently part of the cluster.
@@ -686,7 +686,7 @@ for connector in list_connectors():
           moment any rebalance began, even tasks that would be reassigned right back to the same worker, and
           the whole cluster paused until every worker had its new assignment. Current Connect versions
           default to incremental cooperative rebalancing — the same underlying idea as the cooperative
-          consumer group protocol covered in Module 03 — where only the specific tasks that actually need to
+          consumer group protocol covered in Lesson 03 — where only the specific tasks that actually need to
           move are stopped and reassigned, and every other task on every unaffected worker keeps running
           uninterrupted through the rebalance.
         </Para>
@@ -793,7 +793,7 @@ DLQ topic pattern (Part 09):
           Part 08 established that source connectors default to at-least-once delivery. Newer versions of
           Connect (Kafka 3.3 and later) support an opt-in exactly-once mode for source connectors,
           <code>exactly.once.source.support</code>, but — unlike Kafka Streams' <code>exactly_once_v2</code>
-          from Module 14, which applies uniformly to any Kafka Streams topology — exactly-once source
+          from Lesson 14, which applies uniformly to any Kafka Streams topology — exactly-once source
           support in Connect must be explicitly implemented by each individual connector plugin. Enabling
           the worker-level setting does nothing on its own for a connector plugin that was never built to
           support it.
@@ -847,7 +847,7 @@ exactly.once.source.support=enabled
           have specifically verified otherwise for both the connector plugin in use and the version of
           Connect it is deployed on, since the exactly-once story for source connectors has changed across
           Kafka versions and is not uniformly available the way it is for Kafka Streams topologies covered
-          in Module 14.
+          in Lesson 14.
         </Para>
         <Para>
           That framing — check the specific plugin and version rather than trusting a framework-wide
@@ -937,7 +937,7 @@ plugin.path=/usr/share/kafka/plugins`}
             'The integration requires real business logic — conditional processing, calling another service mid-pipeline, joining against data that is not simply another Kafka topic or the source database itself.',
             'No connector exists for the system, and building one would take longer than a purpose-built application, particularly for a one-off or low-volume integration.',
             'You need fine-grained control over batching, partitioning strategy, or error handling that goes beyond what a connector\'s configuration surface exposes.',
-            'The integration is really a stream processing job — aggregating, joining, or windowing events — which belongs in Kafka Streams (Module 14), not in a source or sink connector.',
+            'The integration is really a stream processing job — aggregating, joining, or windowing events — which belongs in Kafka Streams (Lesson 14), not in a source or sink connector.',
           ]}
         />
         <CodeBox label="a decision FreshCart actually made">
@@ -986,7 +986,7 @@ hold the order, and notify a Slack channel.
           },
           {
             wrong: '"SMTs can replace a stream processing job if you chain enough of them together"',
-            right: 'Part 06 and Part 09 both draw this line explicitly: SMTs are for mechanical, single-record, config-only edits. Anything involving a join, an aggregation, a window, or a lookup against external state belongs in Kafka Streams, covered in Module 14, not in a growing SMT chain that becomes unreadable and untestable.',
+            right: 'Part 06 and Part 09 both draw this line explicitly: SMTs are for mechanical, single-record, config-only edits. Anything involving a join, an aggregation, a window, or a lookup against external state belongs in Kafka Streams, covered in Lesson 14, not in a growing SMT chain that becomes unreadable and untestable.',
           },
           {
             wrong: '"Kafka Connect guarantees exactly-once delivery out of the box"',
@@ -1067,7 +1067,7 @@ The guarantee this gives you is at-least-once, not exactly-once, by default: if 
 
 I'd reach for a custom producer or consumer when the integration requires real business logic: conditional processing based on multiple signals, calling out to another service mid-pipeline, or anything that needs state beyond what a single record carries. I'd also write custom code if no connector exists for the target system and building a proper one would take longer than a purpose-built, narrower application solves the actual need.
 
-The two aren't mutually exclusive at the platform level — most production Kafka setups run Connect for the boring, high-volume, mechanical integrations, and reserve custom services and stream processing jobs (Kafka Streams, Module 14) for logic that's genuinely specific to the business.`,
+The two aren't mutually exclusive at the platform level — most production Kafka setups run Connect for the boring, high-volume, mechanical integrations, and reserve custom services and stream processing jobs (Kafka Streams, Lesson 14) for logic that's genuinely specific to the business.`,
           },
           {
             q: 'Q4. What is a Single Message Transform, and what is it not appropriate for?',

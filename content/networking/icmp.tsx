@@ -403,7 +403,7 @@ export default function Icmp() {
     <LearnLayout
       title="ICMP — The Internet's Error Reporting System"
       description="A deep-dive into how ICMP carries error messages and diagnostics across IP networks — covering TTL mechanics, path MTU discovery, traceroute internals, ping packet structure, ICMPv6 NDP, and the security implications of filtering ICMP."
-      section="Networking Fundamentals — Module 19"
+      section="Networking Fundamentals — Lesson 19"
       readTime="20–28 min"
       updatedAt="May 2026"
     >

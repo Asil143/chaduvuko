@@ -77,7 +77,7 @@ export default function CssAnimationsKeyframes() {
     <LearnLayout
       title="CSS Animations & Keyframes"
       description="@keyframes and the animation property in full — building genuinely custom motion beyond simple hover transitions."
-      section="HTML & CSS — Module 32"
+      section="HTML & CSS — Lesson 32"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -526,11 +526,11 @@ export default function CssAnimationsKeyframes() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 33 covers CSS transforms in 2D and 3D — translate, rotate, scale, skew, and building real
+          Lesson 33 covers CSS transforms in 2D and 3D — translate, rotate, scale, skew, and building real
           perspective-based depth.
         </p>
         <Link href="/learn/html-css/css-transforms" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 33 → CSS Transforms (2D and 3D)
+          Lesson 33 → CSS Transforms (2D and 3D)
         </Link>
       </div>
     </LearnLayout>

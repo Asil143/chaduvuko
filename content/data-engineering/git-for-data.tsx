@@ -172,7 +172,7 @@ export default function GitForDataModule() {
     <LearnLayout
       title="Git and Version Control for Data Projects"
       description="Branching strategies, large file handling, dbt workflows, CI/CD, and undoing mistakes safely."
-      section="Data Engineering — Module 17"
+      section="Data Engineering — Lesson 17"
       readTime="55 min"
       updatedAt="August 2026"
     >
@@ -194,7 +194,7 @@ export default function GitForDataModule() {
 
         <Para>
           The Git knowledge most tutorials cover — add, commit, push — is the tip
-          of what a data engineer needs. This module covers the patterns that
+          of what a data engineer needs. This lesson covers the patterns that
           actually appear in professional data engineering workflows: branching
           strategies for data projects, what to never commit, handling large data
           files, collaborative dbt workflows, and recovering safely from mistakes
@@ -206,7 +206,7 @@ export default function GitForDataModule() {
             fontSize: 14, fontWeight: 800, color: 'var(--text)',
             fontFamily: 'var(--font-display)', marginBottom: 14,
           }}>
-            Seven skills this module builds
+            Seven skills this lesson builds
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
             {[
@@ -687,7 +687,7 @@ git lfs status             # LFS status of working directory
 │   ├── staging/                  # stg_ models: raw → typed
 │   ├── intermediate/             # int_ models: business logic
 │   ├── marts/                     # fct_/dim_ prefixes follow dimensional modeling
-│   │                              # conventions (covered fully in Module 33)
+│   │                              # conventions (covered fully in Lesson 33)
 │   │   ├── core/dim_customers.sql       # dim_ = dimension/lookup table
 │   │   └── finance/fct_orders.sql       # fct_ = fact/transaction table
 │   └── _schema.yml               # model documentation + tests (committed)
@@ -1131,11 +1131,11 @@ git merge --abort                   # abandon the merge, go back to pre-merge st
           },
           {
             wrong: '"git reset is a generally safe way to undo a commit, same as git revert"',
-            right: 'Part 08 draws a hard line here: reset rewrites history and is only safe on commits nobody else has pulled, while revert adds a new commit and is always safe on a shared branch. This module\'s Real World incident and Error Library both exist specifically to reinforce which one is correct on main.',
+            right: 'Part 08 draws a hard line here: reset rewrites history and is only safe on commits nobody else has pulled, while revert adds a new commit and is always safe on a shared branch. This lesson\'s Real World incident and Error Library both exist specifically to reinforce which one is correct on main.',
           },
           {
             wrong: '"dbt_packages/ and target/ should be committed so CI doesn\'t need to rebuild them"',
-            right: 'Part 06 is explicit that these are generated, not source — like node_modules, they\'re rebuilt from dbt_project.yml and packages.yml by dbt deps. This module\'s Error Library shows exactly what happens when a CI workflow skips that step: dbt deps failing with a missing-package error because nothing installed it first.',
+            right: 'Part 06 is explicit that these are generated, not source — like node_modules, they\'re rebuilt from dbt_project.yml and packages.yml by dbt deps. This lesson\'s Error Library shows exactly what happens when a CI workflow skips that step: dbt deps failing with a missing-package error because nothing installed it first.',
           },
           {
             wrong: '"Renaming a widely-used dbt column is safe as long as you update the SQL correctly"',
@@ -1330,7 +1330,7 @@ Step four: prevent recurrence. Add .env and any other credential-containing file
           },
           {
             q: 'Force-pushing to main to "fix" a rejected push instead of pulling and rebasing first',
-            a: 'This module\'s Error Library is explicit that a rejected push means someone else\'s commits are on the remote that you don\'t have locally yet — git pull --rebase origin main is the fix; force-pushing over it silently discards their work, which is a very different outcome than the one you intended.',
+            a: 'This lesson\'s Error Library is explicit that a rejected push means someone else\'s commits are on the remote that you don\'t have locally yet — git pull --rebase origin main is the fix; force-pushing over it silently discards their work, which is a very different outcome than the one you intended.',
           },
           {
             q: 'Rebasing a feature branch that a teammate has already pulled and is building on top of',
@@ -1435,10 +1435,10 @@ Step four: prevent recurrence. Add .env and any other credential-containing file
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 18 covers REST APIs for data ingestion — authentication, pagination, rate limiting, and how to build robust ingestion classes that handle all three reliably without manual intervention.
+          Lesson 18 covers REST APIs for data ingestion — authentication, pagination, rate limiting, and how to build robust ingestion classes that handle all three reliably without manual intervention.
         </p>
         <Link href="/learn/data-engineering/working-with-apis" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 18 → Working with APIs — REST, Auth, Pagination, Rate Limits
+          Lesson 18 → Working with APIs — REST, Auth, Pagination, Rate Limits
         </Link>
       </div>
     </LearnLayout>

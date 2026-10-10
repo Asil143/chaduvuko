@@ -77,7 +77,7 @@ export default function Dictionaries() {
     <LearnLayout
       title="Dictionaries"
       description="Key-value storage, the most-used data structure in real Python code — every method, iteration patterns, insertion ordering, merging, and defaultdict."
-      section="Python — Module 11"
+      section="Python — Lesson 11"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -88,11 +88,11 @@ export default function Dictionaries() {
         <SectionTitle>Dictionaries — The Data Structure You Will Use the Most</SectionTitle>
 
         <Para>
-          This module opens <strong>Phase 2: Core Data Structures &amp; Logic</strong>. Phase 1 gave
+          This lesson opens <strong>Phase 2: Core Data Structures &amp; Logic</strong>. Phase 1 gave
           you the foundations — variables, types, operators, strings, control flow, loops, functions,
           lists, tuples and sets, and I/O formatting. Everything in Phase 2 builds directly on that:
-          dictionaries rely on the mutability and hashability concepts from Module 02, comprehensions
-          in the next module are a compact rewrite of the loops you learned in Module 06, and nested
+          dictionaries rely on the mutability and hashability concepts from Lesson 02, comprehensions
+          in the next lesson are a compact rewrite of the loops you learned in Lesson 06, and nested
           data structures a few modules from now are just dicts and lists containing more dicts and
           lists. Nothing here is new mechanics — it is the same mechanics, combined into shapes that
           look like real production data.
@@ -156,7 +156,7 @@ print(inventory_counts)
         <Callout type="warning">
           <strong>dict.fromkeys() shares one mutable default across every key.</strong> If the default
           value is mutable (like a list), every key ends up pointing at the <em>same</em> list object —
-          exactly the shared-reference trap from Module 02&apos;s mutability discussion. Mutating one
+          exactly the shared-reference trap from Lesson 02&apos;s mutability discussion. Mutating one
           key&apos;s "list" mutates all of them. Use a dict comprehension instead when the default needs
           to be a fresh mutable object per key: <code>{`{k: [] for k in keys}`}</code>.
         </Callout>
@@ -173,10 +173,10 @@ print(inventory_counts)
         </Para>
 
         <Para>
-          Recall from Module 02 that every object is either mutable or immutable. Mutable objects —
+          Recall from Lesson 02 that every object is either mutable or immutable. Mutable objects —
           lists, dicts, sets — cannot be hashed at all, because their contents (and therefore their
           hash) could change after being used as a key, silently corrupting the hash table. This is
-          the exact same rule you met in Module 09 when learning why sets can only contain immutable
+          the exact same rule you met in Lesson 09 when learning why sets can only contain immutable
           elements: sets and dict keys are built on the same underlying hash-table mechanism.
         </Para>
 
@@ -227,7 +227,7 @@ print(employee.get("salary", 0))
           <strong>Default to <code>.get()</code> for any key whose presence you are not 100% certain
           of.</strong> Reserve <code>[]</code> for cases where a missing key genuinely indicates a bug
           in your program and you <em>want</em> the loud failure. This mirrors the guard-clause
-          philosophy from Module 05 — decide deliberately whether a missing value is an expected case
+          philosophy from Lesson 05 — decide deliberately whether a missing value is an expected case
           to handle gracefully, or a real error that should surface immediately.
         </Callout>
 
@@ -235,7 +235,7 @@ print(employee.get("salary", 0))
 
         <Para>
           To check whether a key exists without retrieving its value, use <code>in</code> — the same
-          membership operator from Module 03&apos;s operators module, applied to a dict&apos;s keys.
+          membership operator from Lesson 03&apos;s operators module, applied to a dict&apos;s keys.
         </Para>
 
         <CodeBox label="in checks keys, not values, by default">{`employee = {"name": "Priya Nair", "role": "Backend Engineer"}
@@ -308,7 +308,7 @@ print(counts)   # {"apples": 2}`}</CodeBox>
           <code>.setdefault(key, default)</code> returns the value for <code>key</code> if it exists;
           if it does not, it inserts <code>key</code> with <code>default</code> and then returns that
           default. It is a genuinely useful shortcut for building up grouped data — you will use it
-          heavily once you reach the grouping patterns in Module 13 — though for the single most common
+          heavily once you reach the grouping patterns in Lesson 13 — though for the single most common
           case (grouping into lists), <code>collections.defaultdict</code> in Part 07 is usually the
           cleaner tool.
         </Para>
@@ -322,7 +322,7 @@ print(len(copy))           # 2 — len() works on dicts too, counting key/value 
         <Callout type="warning">
           <strong>.copy() is shallow.</strong> If a value inside the dict is itself mutable (a nested
           list or dict), the copy shares that nested object with the original — mutating it through
-          either dict affects both. This is exactly the shared-reference issue from Module 02, one
+          either dict affects both. This is exactly the shared-reference issue from Lesson 02, one
           level deeper. For a true independent copy of nested data, use <code>copy.deepcopy()</code>{' '}
           from the standard library&apos;s <code>copy</code> module.
         </Callout>
@@ -421,7 +421,7 @@ print(list(d.keys()))
           One consequence worth internalising: since regular dicts preserve insertion order, they can
           now do double duty as an ordered "seen items" tracker or a simple ordered set-like structure
           in situations where you need uniqueness <em>and</em> order — something a plain <code>set</code>{' '}
-          (from Module 09) cannot give you, since sets make no ordering promises at all.
+          (from Lesson 09) cannot give you, since sets make no ordering promises at all.
         </Para>
       </section>
 
@@ -435,7 +435,7 @@ print(list(d.keys()))
         <Para>
           Dict values can be anything, including other dicts — this is how real hierarchical data
           (a user profile with a nested address, a config file with nested sections) gets represented
-          in Python. Module 13 goes much deeper into working with nested shapes; here is the basic
+          in Python. Lesson 13 goes much deeper into working with nested shapes; here is the basic
           mechanics.
         </Para>
 
@@ -852,12 +852,12 @@ def annotate_drivers(drivers, tickets):
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 12 takes the loops that build lists and dicts one entry at a time and shows you the
+          Lesson 12 takes the loops that build lists and dicts one entry at a time and shows you the
           compact, Pythonic way to write the same logic — comprehensions — including exactly when they
           make code clearer and when they make it worse.
         </p>
         <Link href="/learn/python/comprehensions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 12 → List, Dict and Set Comprehensions
+          Lesson 12 → List, Dict and Set Comprehensions
         </Link>
       </div>
     </LearnLayout>

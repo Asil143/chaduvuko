@@ -79,7 +79,7 @@ export default function MonitoringObservabilityModule() {
     <LearnLayout
       title="Monitoring and Observability for Data Pipelines"
       description="SLAs, alerting tiers, pipeline health dashboards, structured logging, metric collection, DLQ monitoring, and building an on-call culture for data teams."
-      section="Data Engineering — Module 37"
+      section="Data Engineering — Lesson 37"
       readTime="70 min"
       updatedAt="August 2026"
     >
@@ -542,11 +542,11 @@ def emit_to_cloudwatch(pipeline_name: str, rows_rejected: int, run_date: str) ->
           },
           {
             wrong: '"More alerts means better coverage, so err on the side of alerting more"',
-            right: 'This is precisely the alert-fatigue failure this module\'s Error Library and Real World section both document — 47 pages from one root cause, or a false-positive SLA alert firing daily. Part 04\'s tiered model exists to route the RIGHT alerts to the right urgency, not to maximize alert volume.',
+            right: 'This is precisely the alert-fatigue failure this lesson\'s Error Library and Real World section both document — 47 pages from one root cause, or a false-positive SLA alert firing daily. Part 04\'s tiered model exists to route the RIGHT alerts to the right urgency, not to maximize alert volume.',
           },
           {
             wrong: '"A pipeline health dashboard showing all green means the platform is actually healthy"',
-            right: 'This module\'s Error Library has a real case where every pipeline showed "OK" while a Gold table had been stale for 6 hours — the freshness check was reading the wrong timestamp column. A dashboard is only as trustworthy as the queries and columns feeding it; verify what a green checkmark is actually measuring before trusting it.',
+            right: 'This lesson\'s Error Library has a real case where every pipeline showed "OK" while a Gold table had been stale for 6 hours — the freshness check was reading the wrong timestamp column. A dashboard is only as trustworthy as the queries and columns feeding it; verify what a green checkmark is actually measuring before trusting it.',
           },
           {
             wrong: '"SLOs and SLAs are basically interchangeable terms for \'how fast it should be\'"',
@@ -554,7 +554,7 @@ def emit_to_cloudwatch(pipeline_name: str, rows_rejected: int, run_date: str) ->
           },
           {
             wrong: '"DLQ monitoring is done once the alert threshold is configured"',
-            right: 'This module\'s Error Library shows a DLQ that grew by 25,000 records a day for 90 days, reaching 2.3 million, because the threshold only checked DAILY additions, never total pending depth. A one-time threshold configuration is the beginning of DLQ monitoring, not the end of it — Part 06\'s alerting checks the cumulative depth specifically to avoid this.',
+            right: 'This lesson\'s Error Library shows a DLQ that grew by 25,000 records a day for 90 days, reaching 2.3 million, because the threshold only checked DAILY additions, never total pending depth. A one-time threshold configuration is the beginning of DLQ monitoring, not the end of it — Part 06\'s alerting checks the cumulative depth specifically to avoid this.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
@@ -741,7 +741,7 @@ The practical implementation is a PipelineLogger class that wraps Python's loggi
           },
           {
             q: 'Building a DLQ alert that only checks the day\'s new additions',
-            a: 'This module\'s Error Library documents a DLQ that reached 2.3 million records over 90 days because the alert only fired on daily growth exceeding a threshold, never on cumulative depth. Always alert on total pending count, not just the delta since yesterday.',
+            a: 'This lesson\'s Error Library documents a DLQ that reached 2.3 million records over 90 days because the alert only fired on daily growth exceeding a threshold, never on cumulative depth. Always alert on total pending count, not just the delta since yesterday.',
           },
           {
             q: 'Writing runbook steps as vague investigation prompts instead of exact commands',
@@ -824,10 +824,10 @@ The practical implementation is a PipelineLogger class that wraps Python's loggi
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 38 covers data governance — data catalogues, column-level lineage, data classification, and role-based access control — the four pillars every mature data platform must have in place.
+          Lesson 38 covers data governance — data catalogues, column-level lineage, data classification, and role-based access control — the four pillars every mature data platform must have in place.
         </p>
         <Link href="/learn/data-engineering/data-governance" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 38 → Data Governance — Catalogues, Lineage and Access Control
+          Lesson 38 → Data Governance — Catalogues, Lineage and Access Control
         </Link>
       </div>
     </LearnLayout>

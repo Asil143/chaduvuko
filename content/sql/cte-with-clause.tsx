@@ -78,7 +78,7 @@ export default function CteWithClause() {
     <LearnLayout
       title="CTE — WITH Clause"
       description="Named intermediate results that make complex queries readable — single CTEs, chained multi-step CTEs, reuse within one query, DML with CTEs, and performance considerations"
-      section="SQL — Module 55"
+      section="SQL — Lesson 55"
       readTime="14–20 min"
       updatedAt="April 2026"
     >
@@ -906,10 +906,10 @@ ORDER BY target_achievement_pct DESC NULLS LAST;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 56</strong>, you learn Recursive CTEs — using WITH RECURSIVE to query hierarchical and graph data of unknown depth: org charts, category trees, bill-of-materials, and path-finding, without writing a brittle fixed-depth chain of self-joins.
+          In <strong>Lesson 56</strong>, you learn Recursive CTEs — using WITH RECURSIVE to query hierarchical and graph data of unknown depth: org charts, category trees, bill-of-materials, and path-finding, without writing a brittle fixed-depth chain of self-joins.
         </p>
         <Link href="/learn/sql/recursive-cte" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 56 → Recursive CTEs
+          Lesson 56 → Recursive CTEs
         </Link>
       </div>
 

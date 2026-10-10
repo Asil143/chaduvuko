@@ -172,7 +172,7 @@ export default function LakehouseArchitectureModule() {
     <LearnLayout
       title="Lakehouse Architecture"
       description="How the lakehouse converges lake and warehouse, open table format mechanics, ACID on object storage, Unity Catalog, Iceberg in practice, and when to choose it."
-      section="Data Engineering — Module 32"
+      section="Data Engineering — Lesson 32"
       readTime="60 min"
       updatedAt="August 2026"
     >
@@ -584,7 +584,7 @@ TIME TRAVEL RETENTION (Delta Lake):
         <SectionTitle>Apache Iceberg — The Most Portable Open Table Format</SectionTitle>
 
         <Para>
-          Module 29 introduced the three open table formats. This module goes
+          Lesson 29 introduced the three open table formats. This lesson goes
           deeper on Apache Iceberg specifically, because its engine-agnostic design
           is the most relevant for teams building multi-engine platforms in 2026.
           Iceberg is natively supported by Spark, Flink, Trino, Athena, Snowflake,
@@ -923,15 +923,15 @@ when Change Data Feed is actively consumed.`}</Output>
           },
           {
             wrong: '"Adopting the lakehouse means giving up sub-second dashboard performance entirely"',
-            right: 'Part 08\'s decision framework is more precise than that: Snowflake and BigQuery genuinely do outperform Databricks SQL for sub-second interactive queries today, but this module\'s Real World migration shows teams commonly keep a smaller warehouse instance for exactly that workload while moving the bulk of storage and ML/analytics sharing to the lakehouse — it isn\'t all-or-nothing.',
+            right: 'Part 08\'s decision framework is more precise than that: Snowflake and BigQuery genuinely do outperform Databricks SQL for sub-second interactive queries today, but this lesson\'s Real World migration shows teams commonly keep a smaller warehouse instance for exactly that workload while moving the bulk of storage and ML/analytics sharing to the lakehouse — it isn\'t all-or-nothing.',
           },
           {
             wrong: '"Changing a table\'s partitioning strategy always requires a full rewrite, regardless of table format"',
-            right: 'Part 05\'s partition evolution section is specifically about the case where this ISN\'T true — Iceberg lets old and new data coexist under different partition specs with no rewrite, which Delta Lake (as of this module\'s writing) cannot do without a full 50TB-scale rewrite.',
+            right: 'Part 05\'s partition evolution section is specifically about the case where this ISN\'T true — Iceberg lets old and new data coexist under different partition specs with no rewrite, which Delta Lake (as of this lesson\'s writing) cannot do without a full 50TB-scale rewrite.',
           },
           {
             wrong: '"Time travel retention should just be set as long as possible, since storage is cheap"',
-            right: 'Part 04 and this module\'s Error Library both flag the real trade-off: retention window length directly controls VACUUM behavior, and a retention set too SHORT silently makes older versions permanently unrecoverable — while setting it unnecessarily long on a high-write table accumulates real, avoidable storage cost.',
+            right: 'Part 04 and this lesson\'s Error Library both flag the real trade-off: retention window length directly controls VACUUM behavior, and a retention set too SHORT silently makes older versions permanently unrecoverable — while setting it unnecessarily long on a high-write table accumulates real, avoidable storage cost.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
@@ -1144,15 +1144,15 @@ My typical recommendation: if the team is building a new platform and has both M
         {[
           {
             q: 'Appending to a Delta or Iceberg table from two concurrent writers without checking whether events could overlap',
-            a: 'Part 03\'s isolation explanation and this module\'s Error Library both flag the same gap: optimistic concurrency happily allows two concurrent APPENDs to the same partition to both succeed, which duplicates any event present in both batches. MERGE with a real key, not append, is the safe default whenever duplication is possible.',
+            a: 'Part 03\'s isolation explanation and this lesson\'s Error Library both flag the same gap: optimistic concurrency happily allows two concurrent APPENDs to the same partition to both succeed, which duplicates any event present in both batches. MERGE with a real key, not append, is the safe default whenever duplication is possible.',
           },
           {
             q: 'Running VACUUM with a retention window shorter than what your time travel queries actually need',
-            a: 'Part 04 and this module\'s Error Library are explicit that VACUUM permanently deletes data files and log entries outside the retention window — once that happens, the data cannot be recovered from Delta Lake itself. Set retention to match your longest realistic time-travel or audit need before ever running VACUUM in production.',
+            a: 'Part 04 and this lesson\'s Error Library are explicit that VACUUM permanently deletes data files and log entries outside the retention window — once that happens, the data cannot be recovered from Delta Lake itself. Set retention to match your longest realistic time-travel or audit need before ever running VACUUM in production.',
           },
           {
             q: 'Assuming a REVOKE and a GRANT for the same group at different levels combine additively',
-            a: 'This module\'s Error Library shows a Unity Catalog user denied access despite being in a group with schema-level SELECT — because a table-level REVOKE for that group overrides the broader grant. Always check SHOW GRANTS on the specific table rather than assuming schema-level access propagates unconditionally.',
+            a: 'This lesson\'s Error Library shows a Unity Catalog user denied access despite being in a group with schema-level SELECT — because a table-level REVOKE for that group overrides the broader grant. Always check SHOW GRANTS on the specific table rather than assuming schema-level access propagates unconditionally.',
           },
           {
             q: 'Migrating a large table\'s partition strategy in Delta Lake the same way you would in Iceberg',
@@ -1160,7 +1160,7 @@ My typical recommendation: if the team is building a new platform and has both M
           },
           {
             q: 'Expecting a Databricks SQL query to match Snowflake\'s speed on the same data with no additional tuning',
-            a: 'This module\'s Error Library and Part 08\'s decision framework both note that Delta tables need their own optimisation — CLUSTER BY / OPTIMIZE ZORDER BY and periodic file compaction — to compete with Snowflake\'s built-in micro-partition pruning and result cache; a fresh, un-tuned Delta table will not perform the same out of the box.',
+            a: 'This lesson\'s Error Library and Part 08\'s decision framework both note that Delta tables need their own optimisation — CLUSTER BY / OPTIMIZE ZORDER BY and periodic file compaction — to compete with Snowflake\'s built-in micro-partition pruning and result cache; a fresh, un-tuned Delta table will not perform the same out of the box.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
@@ -1253,10 +1253,10 @@ My typical recommendation: if the team is building a new platform and has both M
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 33 covers dimensional modelling — grain declaration, the four fact table types, star schema design, surrogate keys, and the modern wide-table pattern used in lakehouse architectures.
+          Lesson 33 covers dimensional modelling — grain declaration, the four fact table types, star schema design, surrogate keys, and the modern wide-table pattern used in lakehouse architectures.
         </p>
         <Link href="/learn/data-engineering/data-modelling" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 33 → Data Modelling — Dimensional, Star and Snowflake Schema
+          Lesson 33 → Data Modelling — Dimensional, Star and Snowflake Schema
         </Link>
       </div>
     </LearnLayout>

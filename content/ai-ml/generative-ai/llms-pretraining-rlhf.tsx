@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'LLMs — Pretraining, RLHF, and Scaling Laws — Chaduvuko',
@@ -178,7 +177,6 @@ export default function LLMsPretrainingRLHFPage() {
       readTime="45–58 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="generative-ai" topic="llms-pretraining-rlhf" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -191,11 +189,11 @@ export default function LLMsPretrainingRLHFPage() {
         </h2>
 
         <p style={S.p}>
-          Module 48 covered the Transformer architecture — attention, positional
+          Lesson 48 covered the Transformer architecture — attention, positional
           encoding, encoder-decoder. LLMs use only the decoder half
           (or a modified encoder-only variant for BERT).
           GPT, LLaMA, Mistral, and Gemini are all decoder-only Transformers.
-          The key difference from what you built in Module 48:
+          The key difference from what you built in Lesson 48:
           scale. GPT-3 has 175 billion parameters trained on 300 billion tokens
           using thousands of A100 GPUs over months. LLaMA-3-70B has 70 billion
           parameters trained on 15 trillion tokens.
@@ -1233,8 +1231,8 @@ for m, sz, vram, qual, use in quant_methods:
         </h2>
 
         <p style={S.p}>
-          Module 64 covered the architecture and training pipeline of LLMs
-          at a conceptual and code level. Module 65 makes it practical:
+          Lesson 64 covered the architecture and training pipeline of LLMs
+          at a conceptual and code level. Lesson 65 makes it practical:
           full LoRA fine-tuning walkthrough on a real dataset using HuggingFace
           Transformers and PEFT, including when to fine-tune vs use RAG vs
           prompt engineer, and how to evaluate the result.
@@ -1252,7 +1250,7 @@ for m, sz, vram, qual, use in quant_methods:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 65 · Generative AI
+              Next — Lesson 65 · Generative AI
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

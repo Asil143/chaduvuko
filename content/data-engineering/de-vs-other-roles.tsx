@@ -123,7 +123,7 @@ export default function RolesComparisonModule() {
     <LearnLayout
       title="Data Engineer vs Analyst vs Scientist vs ML Engineer"
       description="Clear permanent boundaries between the four most confused roles in tech."
-      section="Data Engineering — Module 05"
+      section="Data Engineering — Lesson 05"
       readTime="45 min"
       updatedAt="August 2026"
     >
@@ -878,7 +878,7 @@ planning                 Serves predictions in real-time
         <SectionTitle>Which Role Should You Target? An Honest Decision Framework</SectionTitle>
 
         <Para>
-          This is the most practically important part of this module for someone at
+          This is the most practically important part of this lesson for someone at
           the beginning of their career. The answer is not "whichever pays the most"
           or "whichever sounds most impressive." The answer is "whichever matches
           how your brain actually works and what kind of problems you genuinely enjoy."
@@ -1253,23 +1253,23 @@ The broader principle: data engineering success is measured by whether downstrea
         {[
           {
             q: 'Treating a metric mismatch between two teams as a pipeline bug before checking whether the definitions actually agree',
-            a: 'This module\'s Error Library shows the "numbers don\'t match my manual calculation" case: the pipeline and the analyst were counting different things (all orders vs delivered orders only), not producing a bug. Trace both calculations to the exact point of divergence before assuming either side is wrong.',
+            a: 'This lesson\'s Error Library shows the "numbers don\'t match my manual calculation" case: the pipeline and the analyst were counting different things (all orders vs delivered orders only), not producing a bug. Trace both calculations to the exact point of divergence before assuming either side is wrong.',
           },
           {
             q: 'Letting ad-hoc "can you rebuild this today?" feature requests bypass any prioritisation process',
-            a: 'This module\'s Error Library shows the cost directly — without a request process, urgent asks interrupt pipeline maintenance and create scope creep. A short specification (what the feature is, how to compute it, which sources) before scheduling the work protects both the requester and the engineer\'s backlog.',
+            a: 'This lesson\'s Error Library shows the cost directly — without a request process, urgent asks interrupt pipeline maintenance and create scope creep. A short specification (what the feature is, how to compute it, which sources) before scheduling the work protects both the requester and the engineer\'s backlog.',
           },
           {
             q: 'Maintaining batch training-feature logic and real-time serving-feature logic as two separately-written implementations',
-            a: 'This module\'s Error Library shows the training-serving skew that results — a model trained on one computation of a feature making predictions on a subtly different computation in production. Part 05\'s ML Engineer section is explicit that feature logic needs one source of truth (a feature store or shared library), not parallel implementations that can silently drift apart.',
+            a: 'This lesson\'s Error Library shows the training-serving skew that results — a model trained on one computation of a feature making predictions on a subtly different computation in production. Part 05\'s ML Engineer section is explicit that feature logic needs one source of truth (a feature store or shared library), not parallel implementations that can silently drift apart.',
           },
           {
             q: 'Assuming two independently-computed business metrics (like "revenue" from two different teams) should naturally agree',
-            a: 'This module\'s Error Library shows a $4.2M vs $3.9M revenue disagreement between the data team and finance — the fix wasn\'t a pipeline patch but a governance conversation to define the metric unambiguously and consolidate to one authoritative table. Two independent calculations of the same-sounding metric are a governance gap waiting to surface, not a coincidence to hope for.',
+            a: 'This lesson\'s Error Library shows a $4.2M vs $3.9M revenue disagreement between the data team and finance — the fix wasn\'t a pipeline patch but a governance conversation to define the metric unambiguously and consolidate to one authoritative table. Two independent calculations of the same-sounding metric are a governance gap waiting to surface, not a coincidence to hope for.',
           },
           {
             q: 'Not setting up role-based data access before a new team member\'s first day',
-            a: 'This module\'s Error Library shows a new data scientist blocked from day one by a permission-denied error on the exact table they needed. Define a data access matrix per role in advance so onboarding is a role assignment, not an individual permissions investigation under time pressure.',
+            a: 'This lesson\'s Error Library shows a new data scientist blocked from day one by a permission-denied error on the exact table they needed. Define a data access matrix per role in advance so onboarding is a role assignment, not an individual permissions investigation under time pressure.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1367,10 +1367,10 @@ The broader principle: data engineering success is measured by whether downstrea
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 06 covers the US data engineering job market — real salary data by city and company type, the companies hiring most aggressively, and how to break in from a non-CS background.
+          Lesson 06 covers the US data engineering job market — real salary data by city and company type, the companies hiring most aggressively, and how to break in from a non-CS background.
         </p>
         <Link href="/learn/data-engineering/de-usa-job-market" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 06 → Data Engineering in the US Job Market (2026)
+          Lesson 06 → Data Engineering in the US Job Market (2026)
         </Link>
       </div>
     </LearnLayout>

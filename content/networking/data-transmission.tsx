@@ -405,7 +405,7 @@ export default function DataTransmission() {
         This sounds simple, but three forces work against you: <Accent>distance</Accent> weakens signals (attenuation), <Accent>noise</Accent> corrupts them, and <Accent>time</Accent> limits how fast you can send them. Understanding these forces — and the techniques engineered to fight them — is the foundation of everything else in networking.
       </Para>
       <StoryBox>
-        You click "Send" on a 4K video file. The bytes leave your SSD, cross a PCIe bus, get handed to your NIC, encoded as electrical pulses on your Ethernet cable, converted to light in a fiber transceiver at your building's patch panel, launched as laser pulses that travel at ~200,000 km/s through 800 km of fiber, and reconstructed as electrons at the destination datacenter — all in about 4 milliseconds of propagation. The file itself takes seconds because the link speed (not the speed of light) is the bottleneck. This module explains every step of that journey in precise detail.
+        You click "Send" on a 4K video file. The bytes leave your SSD, cross a PCIe bus, get handed to your NIC, encoded as electrical pulses on your Ethernet cable, converted to light in a fiber transceiver at your building's patch panel, launched as laser pulses that travel at ~200,000 km/s through 800 km of fiber, and reconstructed as electrons at the destination datacenter — all in about 4 milliseconds of propagation. The file itself takes seconds because the link speed (not the speed of light) is the bottleneck. This lesson explains every step of that journey in precise detail.
       </StoryBox>
 
       <H2>Transmission Media: Where Signals Live</H2>

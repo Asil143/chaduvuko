@@ -107,7 +107,7 @@ export default function NullValues() {
     <LearnLayout
       title="Working with NULL Values"
       description="NULL is not zero, not empty, not false — it is the absence of data. Master three-valued logic, IS NULL, COALESCE, NULLIF, and every NULL trap in SQL"
-      section="SQL — Module 11"
+      section="SQL — Lesson 11"
       readTime="12–16 min"
       updatedAt="April 2026"
     >
@@ -268,7 +268,7 @@ FROM orders;`}
       {/* ── PART 04 ── */}
       <Part n="04" title="NULL in Logical Operations — AND, OR, NOT with NULL" />
 
-      <P>NULL in logical operations produces results that follow three-valued logic. You saw the truth tables for AND, OR, and NOT in Module 07. Here is a focused review of how NULL interacts with each:</P>
+      <P>NULL in logical operations produces results that follow three-valued logic. You saw the truth tables for AND, OR, and NOT in Lesson 07. Here is a focused review of how NULL interacts with each:</P>
 
       <H>AND with NULL</H>
       <NullTable
@@ -542,7 +542,7 @@ FROM customers;
       <Part n="08" title="NULL in ORDER BY, GROUP BY, and DISTINCT" />
 
       <H>NULL in ORDER BY</H>
-      <P>You learned this in Module 08: in PostgreSQL and DuckDB, NULLs sort last in ASC and first in DESC. Use NULLS FIRST or NULLS LAST to control this. NULL values are treated as a special sort value — not greater than or less than any real value, but consistently placed by the database.</P>
+      <P>You learned this in Lesson 08: in PostgreSQL and DuckDB, NULLs sort last in ASC and first in DESC. Use NULLS FIRST or NULLS LAST to control this. NULL values are treated as a special sort value — not greater than or less than any real value, but consistently placed by the database.</P>
 
       <SQLPlayground
         initialQuery={`-- NULLs last in ASC (PostgreSQL/DuckDB default)
@@ -908,10 +908,10 @@ ORDER BY order_date DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 12</strong>, you learn column calculations and arithmetic expressions — doing math directly inside SQL, working with operator precedence, and building computed columns that power real analytics.
+          In <strong>Lesson 12</strong>, you learn column calculations and arithmetic expressions — doing math directly inside SQL, working with operator precedence, and building computed columns that power real analytics.
         </p>
         <Link href="/learn/sql/arithmetic-expressions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 12 → Column Calculations — Arithmetic
+          Lesson 12 → Column Calculations — Arithmetic
         </Link>
       </div>
 

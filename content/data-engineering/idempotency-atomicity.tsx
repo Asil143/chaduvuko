@@ -172,7 +172,7 @@ export default function IdempotencyAtomicityModule() {
     <LearnLayout
       title="Idempotency, Atomicity, and Pipeline Restartability"
       description="The three properties that separate reliable pipelines from fragile ones — precise definitions, implementation at every layer, and automatic failure recovery."
-      section="Data Engineering — Module 26"
+      section="Data Engineering — Lesson 26"
       readTime="70 min"
       updatedAt="August 2026"
     >
@@ -196,7 +196,7 @@ export default function IdempotencyAtomicityModule() {
           always produces the same correct output. Atomicity means each unit of
           work either completes fully or not at all. Restartability means a
           pipeline that fails at any point can resume from exactly where it
-          stopped. This module builds all three around FreshCart&rsquo;s orders pipeline.
+          stopped. This lesson builds all three around FreshCart&rsquo;s orders pipeline.
         </Para>
 
         <HighlightBox>
@@ -795,7 +795,7 @@ test_ten_runs_same_result PASSED
         {[
           {
             wrong: '"ON CONFLICT DO UPDATE automatically makes a write idempotent, no other setup needed"',
-            right: 'ON CONFLICT has nothing to conflict ON without a UNIQUE constraint or primary key on the target column — this module\'s Error Library has the exact failure mode where PostgreSQL silently inserts a duplicate instead of updating, because the constraint was never added. Always verify the constraint exists before trusting the upsert.',
+            right: 'ON CONFLICT has nothing to conflict ON without a UNIQUE constraint or primary key on the target column — this lesson\'s Error Library has the exact failure mode where PostgreSQL silently inserts a duplicate instead of updating, because the constraint was never added. Always verify the constraint exists before trusting the upsert.',
           },
           {
             wrong: '"Wrapping writes in a database transaction is the same as making the pipeline idempotent"',
@@ -803,7 +803,7 @@ test_ten_runs_same_result PASSED
           },
           {
             wrong: '"Saving the checkpoint as soon as a batch is written is safer than waiting"',
-            right: 'It\'s the opposite — Part 04\'s restartability checklist and this module\'s Interview Prep Q3 both show that a checkpoint advanced before the write is durable risks silently skipping data forever if the write then fails. Write first, checkpoint second, every time.',
+            right: 'It\'s the opposite — Part 04\'s restartability checklist and this lesson\'s Interview Prep Q3 both show that a checkpoint advanced before the write is durable risks silently skipping data forever if the write then fails. Write first, checkpoint second, every time.',
           },
           {
             wrong: '"Idempotency only matters for database writes — API calls and file writes are a separate concern"',
@@ -811,7 +811,7 @@ test_ten_runs_same_result PASSED
           },
           {
             wrong: '"If a pipeline has passed code review and works in staging, it\'s idempotent enough"',
-            right: 'Idempotency is specifically the kind of property that looks fine until the exact rerun scenario that breaks it actually happens — this module\'s Real World incident is a pipeline that worked perfectly for months until someone manually re-triggered it for an already-processed date. Part 07\'s explicit test suite is what catches this before production, not code review by itself.',
+            right: 'Idempotency is specifically the kind of property that looks fine until the exact rerun scenario that breaks it actually happens — this lesson\'s Real World incident is a pipeline that worked perfectly for months until someone manually re-triggered it for an already-processed date. Part 07\'s explicit test suite is what catches this before production, not code review by itself.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1003,11 +1003,11 @@ The broader principle: the pipeline should have no externally-visible side effec
         {[
           {
             q: 'Assuming ON CONFLICT works without checking the UNIQUE constraint actually exists',
-            a: 'This is the single most common gap in this module — Part 02, the Real World incident, and the Error Library all circle back to it. ON CONFLICT (order_id) with no matching constraint on order_id doesn\'t error, it just silently behaves like a plain INSERT. Verify the constraint with information_schema.table_constraints before trusting the upsert.',
+            a: 'This is the single most common gap in this lesson — Part 02, the Real World incident, and the Error Library all circle back to it. ON CONFLICT (order_id) with no matching constraint on order_id doesn\'t error, it just silently behaves like a plain INSERT. Verify the constraint with information_schema.table_constraints before trusting the upsert.',
           },
           {
             q: 'Treating "wrapped in a transaction" and "idempotent" as the same guarantee',
-            a: 'Part 03 and this module\'s Misconceptions both address this directly: a transaction gives you atomicity for one run, not safety across reruns. A perfectly atomic plain INSERT still duplicates every row the second time it executes.',
+            a: 'Part 03 and this lesson\'s Misconceptions both address this directly: a transaction gives you atomicity for one run, not safety across reruns. A perfectly atomic plain INSERT still duplicates every row the second time it executes.',
           },
           {
             q: 'Using TRUNCATE + INSERT as two separate statements instead of a staging swap',
@@ -1019,7 +1019,7 @@ The broader principle: the pipeline should have no externally-visible side effec
           },
           {
             q: 'Adding idempotency as a fix after an incident instead of testing for it up front',
-            a: 'Part 07\'s four tests exist specifically so idempotency is verified before the first production deployment, not discovered via a finance team complaint at 7 AM (this module\'s Real World section). Run the double-run and ten-run tests in CI on every pipeline before it ships.',
+            a: 'Part 07\'s four tests exist specifically so idempotency is verified before the first production deployment, not discovered via a finance team complaint at 7 AM (this lesson\'s Real World section). Run the double-run and ten-run tests in CI on every pipeline before it ships.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1115,10 +1115,10 @@ The broader principle: the pipeline should have no externally-visible side effec
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 27 covers error handling and retries — the categories of pipeline failures, exponential backoff patterns, dead letter queues, and how to build alerting that pages the right person at the right time.
+          Lesson 27 covers error handling and retries — the categories of pipeline failures, exponential backoff patterns, dead letter queues, and how to build alerting that pages the right person at the right time.
         </p>
         <Link href="/learn/data-engineering/error-handling-retries" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 27 → Error Handling, Retries and Dead Letter Queues
+          Lesson 27 → Error Handling, Retries and Dead Letter Queues
         </Link>
       </div>
     </LearnLayout>

@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Azure ML — Studio, Pipelines and AutoML — Chaduvuko',
@@ -178,13 +177,12 @@ export default function AzureMLPage() {
       readTime="45–58 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="cloud-ml" topic="azure-ml" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Before any code — what Azure ML actually is</span>
         <h2 style={S.h2}>
-          Everything from Modules 69–74 — pipelines, experiment tracking,
+          Everything from Lessons 69–74 — pipelines, experiment tracking,
           model registry, deployment, monitoring — exists as a managed service
           on Azure. Azure ML is the platform so you do not have to build
           and maintain that infrastructure yourself.
@@ -212,7 +210,7 @@ export default function AzureMLPage() {
 
         <AnalogyBox>
           <p style={{ ...S.p, marginBottom: 8 }}>
-            Building ML infrastructure from scratch (Modules 69–74) is like
+            Building ML infrastructure from scratch (Lessons 69–74) is like
             building your own kitchen from raw materials — you understand every
             component deeply but it takes months before you can cook.
             Azure ML is a fully fitted commercial kitchen — the stove, fridge,
@@ -234,7 +232,7 @@ export default function AzureMLPage() {
         <Callout type="tip">
           Install: <span style={S.code as React.CSSProperties}>pip install azure-ai-ml azure-identity</span>.
           Free tier: Azure gives 1 year free with US$200 credit — enough to run
-          all examples in this module. Create a workspace at
+          all examples in this lesson. Create a workspace at
           ml.azure.com. All code uses the Azure ML Python SDK v2
           (the current version — SDK v1 is deprecated).
         </Callout>
@@ -287,7 +285,7 @@ export default function AzureMLPage() {
                 azure: 'MLflow-compatible model store',
                 color: '#BA7517',
                 what: 'Versioned model storage with lineage. Every registered model links to the run that created it.',
-                contains: 'model.pkl + metadata + metrics + tags. Same concept as MLflow Registry (Module 70).',
+                contains: 'model.pkl + metadata + metrics + tags. Same concept as MLflow Registry (Lesson 70).',
                 cost: 'Storage cost of model artifacts only',
               },
             ].map((item) => (
@@ -542,7 +540,7 @@ print("""
           A command job runs one script. A pipeline chains multiple scripts
           together as a DAG — the output of one step becomes the input of the
           next. This is the AML equivalent of the Prefect flow you built in
-          Module 69. AML Pipelines add managed data passing between steps,
+          Lesson 69. AML Pipelines add managed data passing between steps,
           step-level caching (skip unchanged steps), and a visual DAG in Studio.
           Schedule it with a cron trigger and you have automated daily retraining.
         </p>
@@ -806,7 +804,7 @@ for name, nmae, mae, t in sorted(trials, key=lambda x: x[1]):
 
         <p style={S.p}>
           AML Managed Online Endpoints are the equivalent of the FastAPI +
-          Docker + Kubernetes deployment you built in Module 71 —
+          Docker + Kubernetes deployment you built in Lesson 71 —
           except Azure manages the Kubernetes cluster, load balancer,
           autoscaling, TLS, and health checks for you. You provide the model
           and a scoring script. Azure handles everything else.
@@ -1226,7 +1224,7 @@ az role assignment create --role "AzureML Data Scientist" --assignee alice@fresh
         <p style={S.p}>
           Azure ML, SageMaker, and Vertex AI all solve the same problem —
           managed ML infrastructure — with different APIs and slightly different
-          primitives. Module 77 covers AWS SageMaker: training jobs, processing
+          primitives. Lesson 77 covers AWS SageMaker: training jobs, processing
           jobs, SageMaker Pipelines, the Model Registry, and SageMaker Endpoints.
           The concepts map 1-to-1 with what you just learned. The key differences
           are in IAM permissions, SDK patterns, and how data is referenced.
@@ -1244,7 +1242,7 @@ az role assignment create --role "AzureML Data Scientist" --assignee alice@fresh
               textTransform: 'uppercase' as const, color: '#ff9900',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 77 · Cloud ML Platforms
+              Next — Lesson 77 · Cloud ML Platforms
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
@@ -1254,7 +1252,7 @@ az role assignment create --role "AzureML Data Scientist" --assignee alice@fresh
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
               SageMaker training jobs, processing jobs, Pipelines, Model Registry,
-              and real-time endpoints. The AWS equivalent of everything in this module.
+              and real-time endpoints. The AWS equivalent of everything in this lesson.
             </p>
           </div>
           <Link href="/learn/ai-ml/cloud-ml/aws-sagemaker" style={{
@@ -1270,12 +1268,12 @@ az role assignment create --role "AzureML Data Scientist" --assignee alice@fresh
 
       <KeyTakeaways
         items={[
-          'Azure ML is a managed platform that provides everything from Modules 69–74 as a service: compute cluster (auto-scales to 0), experiment tracking (MLflow-compatible), model registry, pipelines (DAG scheduler), and online endpoints (managed Kubernetes). Your training scripts are unchanged — the SDK wraps them in job definitions.',
+          'Azure ML is a managed platform that provides everything from Lessons 69–74 as a service: compute cluster (auto-scales to 0), experiment tracking (MLflow-compatible), model registry, pipelines (DAG scheduler), and online endpoints (managed Kubernetes). Your training scripts are unchanged — the SDK wraps them in job definitions.',
           'Four core resources: Workspace (top-level container, free), Compute Cluster (AmlCompute, auto-scales to 0 when idle — zero cost between jobs), Environment (versioned Docker image + conda spec, cached after first build), Model Registry (versioned model artifacts with lineage to the training run that produced them).',
           'Command jobs submit a Python script to AML compute with one SDK call. Specify the script, compute, environment, and inputs/outputs. AML provisions the VM, installs the environment, runs the script, captures MLflow logs and metrics, uploads outputs/ to blob storage, and scales down. Your training script needs zero Azure-specific code — just standard argparse and mlflow.',
-          'AML Pipelines chain multiple command jobs as a DAG using the @pipeline decorator. Output of one step becomes input of the next via AML-managed data passing. Steps with unchanged inputs are cached and skipped automatically. Schedule daily retraining with RecurrenceTrigger at 2 AM ET — the AML equivalent of the Airflow DAG from Module 69.',
-          'AutoML tries 20-50 model and hyperparameter combinations automatically. Specify the task (regression/classification), data, target column, primary metric, and time budget. Returns the best model ready to register. Useful for establishing a strong baseline quickly — but understanding your data (Module 25-38) remains essential for interpreting results and knowing when AutoML is finding a spurious pattern.',
-          'Managed Online Endpoints are the Module 71 FastAPI + Docker + Kubernetes stack as a managed service. Deploy with instance_type and instance_count. Built-in autoscaling, TLS, and health checks. Blue-green deployments use traffic splitting: deploy new version as green, shift 10% → 90% → 100% traffic, then delete blue. Zero-downtime updates in three SDK calls.',
+          'AML Pipelines chain multiple command jobs as a DAG using the @pipeline decorator. Output of one step becomes input of the next via AML-managed data passing. Steps with unchanged inputs are cached and skipped automatically. Schedule daily retraining with RecurrenceTrigger at 2 AM ET — the AML equivalent of the Airflow DAG from Lesson 69.',
+          'AutoML tries 20-50 model and hyperparameter combinations automatically. Specify the task (regression/classification), data, target column, primary metric, and time budget. Returns the best model ready to register. Useful for establishing a strong baseline quickly — but understanding your data (Lesson 25-38) remains essential for interpreting results and knowing when AutoML is finding a spurious pattern.',
+          'Managed Online Endpoints are the Lesson 71 FastAPI + Docker + Kubernetes stack as a managed service. Deploy with instance_type and instance_count. Built-in autoscaling, TLS, and health checks. Blue-green deployments use traffic splitting: deploy new version as green, shift 10% → 90% → 100% traffic, then delete blue. Zero-downtime updates in three SDK calls.',
         ]}
       />
     </LearnLayout>

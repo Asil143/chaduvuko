@@ -78,7 +78,7 @@ export default function InBetween() {
     <LearnLayout
       title="IN and BETWEEN Operators"
       description="Clean shorthand for multiple OR conditions and range checks — how IN and BETWEEN work, their equivalents, NULL behaviour, and every production pattern"
-      section="SQL — Module 15"
+      section="SQL — Lesson 15"
       readTime="8–12 min"
       updatedAt="April 2026"
     >
@@ -86,7 +86,7 @@ export default function InBetween() {
       {/* ── PART 01 ── */}
       <Part n="01" title="The Problem They Solve" />
 
-      <P>You have already learned AND and OR from Module 07. They work perfectly — but they get verbose quickly. Consider finding all orders with one of four possible statuses:</P>
+      <P>You have already learned AND and OR from Lesson 07. They work perfectly — but they get verbose quickly. Consider finding all orders with one of four possible statuses:</P>
 
       <CodeBlock
         label="The verbose OR version — works but noisy"
@@ -254,7 +254,7 @@ ORDER BY brand, unit_price;`}
       />
 
       <Callout type="warning">
-        NOT IN has a critical NULL trap — the same one covered in Module 11. If the IN list contains even one NULL value, NOT IN returns zero rows for the entire query. This is because NOT IN expands to col &lt;&gt; val1 AND col &lt;&gt; val2 AND col &lt;&gt; NULL, and col &lt;&gt; NULL evaluates to NULL (not TRUE), making the entire condition NULL for every row. Always verify your IN list has no NULLs, or use NOT EXISTS instead when the list comes from a subquery.
+        NOT IN has a critical NULL trap — the same one covered in Lesson 11. If the IN list contains even one NULL value, NOT IN returns zero rows for the entire query. This is because NOT IN expands to col &lt;&gt; val1 AND col &lt;&gt; val2 AND col &lt;&gt; NULL, and col &lt;&gt; NULL evaluates to NULL (not TRUE), making the entire condition NULL for every row. Always verify your IN list has no NULLs, or use NOT EXISTS instead when the list comes from a subquery.
       </Callout>
 
       <HR />
@@ -262,7 +262,7 @@ ORDER BY brand, unit_price;`}
       {/* ── PART 04 ── */}
       <Part n="04" title="IN with a Subquery — Dynamic Lists" />
 
-      <P>The most powerful use of IN is with a <Hl>subquery</Hl> — instead of a hardcoded list, the list of values is dynamically computed by another SELECT. This is called a subquery or inner query. You will learn subqueries fully in Module 36, but here is the pattern so you can use it now.</P>
+      <P>The most powerful use of IN is with a <Hl>subquery</Hl> — instead of a hardcoded list, the list of values is dynamically computed by another SELECT. This is called a subquery or inner query. You will learn subqueries fully in Lesson 36, but here is the pattern so you can use it now.</P>
 
       <CodeBlock
         label="IN with subquery syntax"
@@ -569,7 +569,7 @@ ORDER BY e.salary DESC;`}
       <H>IN vs multiple OR conditions</H>
       <P>For most databases, IN (value1, value2, ...) and the equivalent OR conditions produce identical execution plans — the query optimiser converts them to the same internal representation. There is no performance difference between them for a hardcoded list. Choose IN for readability when you have more than two or three values.</P>
 
-      <P>For IN with a subquery, performance depends on the subquery's complexity and size. The database executes the subquery first, builds the result set, then uses it for the IN check. On large subquery results, this can be slower than a JOIN — you will learn how to convert IN subqueries to JOINs in Module 31.</P>
+      <P>For IN with a subquery, performance depends on the subquery's complexity and size. The database executes the subquery first, builds the result set, then uses it for the IN check. On large subquery results, this can be slower than a JOIN — you will learn how to convert IN subqueries to JOINs in Lesson 31.</P>
 
       <H>BETWEEN vs &gt;= AND &lt;=</H>
       <P>BETWEEN and the equivalent &gt;= AND &lt;= conditions are identical in execution â€” the optimiser converts BETWEEN to the range comparison internally. Both can use B-tree indexes for range scans equally well. Choose BETWEEN when both endpoints are known and it makes the query more readable. Choose explicit &gt;= AND &lt;= when one endpoint is open (no lower bound, or no upper bound), or when dealing with timestamps where the boundary precision matters.</P>
@@ -578,7 +578,7 @@ ORDER BY e.salary DESC;`}
       <P>IN with a very large hardcoded list (hundreds or thousands of values) can be slow because the database must check each value against the list. For large value sets, a JOIN to a temporary table or a subquery is more efficient. As a rule of thumb: IN with fewer than 100 values is fine; above that, consider an alternative approach.</P>
 
       <ProTip>
-        When you find yourself writing IN with a long list of IDs that came from another query, that is almost always a sign you should be writing a JOIN instead. Instead of WHERE customer_id IN (SELECT customer_id FROM orders WHERE ...), write the JOIN directly: FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE .... The JOIN is typically faster and more readable. You will learn to make this conversion naturally from Module 30 onwards.
+        When you find yourself writing IN with a long list of IDs that came from another query, that is almost always a sign you should be writing a JOIN instead. Instead of WHERE customer_id IN (SELECT customer_id FROM orders WHERE ...), write the JOIN directly: FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE .... The JOIN is typically faster and more readable. You will learn to make this conversion naturally from Lesson 30 onwards.
       </ProTip>
 
       <HR />
@@ -799,7 +799,7 @@ WHERE store_id IN ('ST001', 'ST002', 'ST003', 'ST004')
   AND total_amount BETWEEN 400 AND 1500
   AND order_status NOT IN ('Cancelled', 'Returned')
 ORDER BY total_amount DESC;`}
-        explanation="This query uses all three filter operators from this module together. IN for the store list — cleaner than four OR conditions. BETWEEN for the amount range — inclusive on both ends ($400 and $1,500 are included). NOT IN for the status exclusion — works safely here because the order_status column is NOT NULL (it has a NOT NULL constraint and a CHECK constraint limiting it to specific values), so the NOT IN null trap does not apply. All three are connected with AND — all conditions must be true for a row to appear. This is the standard multi-criteria operational filter pattern used in every business dashboard."
+        explanation="This query uses all three filter operators from this lesson together. IN for the store list — cleaner than four OR conditions. BETWEEN for the amount range — inclusive on both ends ($400 and $1,500 are included). NOT IN for the status exclusion — works safely here because the order_status column is NOT NULL (it has a NOT NULL constraint and a CHECK constraint limiting it to specific values), so the NOT IN null trap does not apply. All three are connected with AND — all conditions must be true for a row to appear. This is the standard multi-criteria operational filter pattern used in every business dashboard."
       />
 
       <HR />
@@ -824,10 +824,10 @@ ORDER BY total_amount DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 16</strong>, you learn CASE WHEN — the SQL equivalent of an if-else statement. It lets you create conditional columns, build custom categories, and handle complex branching logic directly inside a query.
+          In <strong>Lesson 16</strong>, you learn CASE WHEN — the SQL equivalent of an if-else statement. It lets you create conditional columns, build custom categories, and handle complex branching logic directly inside a query.
         </p>
         <Link href="/learn/sql/case-when" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 16 → CASE WHEN — Conditional Logic
+          Lesson 16 → CASE WHEN — Conditional Logic
         </Link>
       </div>
 

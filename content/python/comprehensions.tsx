@@ -77,7 +77,7 @@ export default function Comprehensions() {
     <LearnLayout
       title="List, Dict and Set Comprehensions"
       description="The Pythonic way to build collections — list, dict, and set comprehensions, nested comprehensions, generator expressions, and when a plain loop is better."
-      section="Python — Module 12"
+      section="Python — Lesson 12"
       readTime="45 min"
       updatedAt="August 2026"
     >
@@ -89,13 +89,13 @@ export default function Comprehensions() {
 
         <Para>
           A comprehension is not a new concept — it is a compact syntax for a pattern you already know
-          extremely well from Module 06: build an empty collection, loop over something, and add a
+          extremely well from Lesson 06: build an empty collection, loop over something, and add a
           transformed value to that collection on every iteration. Comprehensions exist because this
           exact pattern is so common that Python gives it its own dedicated syntax, one that reads, once
           you are fluent in it, almost like a sentence: "give me x, for every x in this collection."
         </Para>
 
-        <CodeBox label="The pattern you already know, from Module 06">{`numbers = [1, 2, 3, 4, 5]
+        <CodeBox label="The pattern you already know, from Lesson 06">{`numbers = [1, 2, 3, 4, 5]
 
 squares = []
 for n in numbers:
@@ -112,7 +112,7 @@ print(squares)   # [1, 4, 9, 16, 25]`}</CodeBox>
           Read the comprehension left to right: <code>[</code> starts a new list, <code>n ** 2</code> is
           the expression computed for every element, <code>for n in numbers</code> is exactly the same
           loop header you would write in a full for-loop, and <code>]</code> closes the list. Every
-          comprehension in this module follows this same skeleton — an expression, followed by a{' '}
+          comprehension in this lesson follows this same skeleton — an expression, followed by a{' '}
           <code>for</code> clause, optionally followed by an <code>if</code> clause — just wrapped in
           different brackets depending on what kind of collection you want back.
         </Para>
@@ -122,7 +122,7 @@ print(squares)   # [1, 4, 9, 16, 25]`}</CodeBox>
           read the comprehension as "the append expression, then the for-loop header, in that order."{' '}
           <code>[n ** 2 for n in numbers]</code> is <code>append(n ** 2)</code> followed by{' '}
           <code>for n in numbers</code>, with the wrapping brackets telling you what container you end
-          up with. This translation works for every comprehension you will meet in this module.
+          up with. This translation works for every comprehension you will meet in this lesson.
         </Callout>
       </section>
 
@@ -179,7 +179,7 @@ print(long_a_words)   # ['apple']`}</CodeBox>
         <Para>
           Sometimes you do not want to drop elements that fail a condition — you want to keep every
           element, but compute a <em>different value</em> depending on the condition. That calls for
-          the conditional expression (the ternary from Module 05), placed in the expression position at
+          the conditional expression (the ternary from Lesson 05), placed in the expression position at
           the very start of the comprehension, <em>before</em> the <code>for</code> clause.
         </Para>
 
@@ -239,7 +239,7 @@ print(name_lengths)   # {"Alice": 5, "Bob": 3, "Carla": 5}`}</CodeBox>
           Dict comprehensions are genuinely useful for two things you will do constantly: inverting a
           dict (swapping keys and values), and building a dict from two related lists or from an
           existing dict&apos;s <code>.items()</code>, filtered or transformed along the way — this is
-          exactly the pattern from Module 11&apos;s dict methods, expressed more compactly.
+          exactly the pattern from Lesson 11&apos;s dict methods, expressed more compactly.
         </Para>
 
         <CodeBox label="Inverting a dict, and filtering while building one">{`prices = {"apple": 1.50, "banana": 0.75, "kiwi": 2.20}
@@ -253,7 +253,7 @@ print(expensive)   # {"apple": 1.5, "kiwi": 2.2}`}</CodeBox>
 
         <Callout type="warning">
           Inverting a dict only produces a correct, lossless result if the original values are unique
-          <strong> and hashable</strong> (the hashability rule from Module 11 — a dict&apos;s values
+          <strong> and hashable</strong> (the hashability rule from Lesson 11 — a dict&apos;s values
           become the inverted dict&apos;s keys, so they inherit the same restriction). If two fruits
           shared the same price, inverting would silently lose one of them — whichever key came last in
           iteration order would win.
@@ -271,7 +271,7 @@ print(expensive)   # {"apple": 1.5, "kiwi": 2.2}`}</CodeBox>
           A set comprehension uses curly braces like a dict comprehension, but without the{' '}
           <code>key: value</code> pairing — just a single expression per element, exactly like a list
           comprehension. The result automatically deduplicates, inheriting every set property from
-          Module 09.
+          Lesson 09.
         </Para>
 
         <CodeBox label="Set comprehension — deduplicating while transforming">{`words = ["Apple", "apple", "BANANA", "banana", "Kiwi"]
@@ -384,7 +384,7 @@ for u in users:
 
         <Para>
           Notice the loop version is not "worse Python" — it uses a smaller, perfectly reasonable
-          comprehension for the inner <code>active_orders</code> list, and a guard clause (Module 05)
+          comprehension for the inner <code>active_orders</code> list, and a guard clause (Lesson 05)
           for the filtering, rather than cramming every condition into one nested expression. This is
           the real skill: knowing when a comprehension is the clean, idiomatic choice for a piece of
           logic, and switching to a loop the moment a comprehension would need a second sentence to
@@ -441,9 +441,9 @@ print(total_over_50)   # 420.75
 total_over_50 = sum((t for t in transactions if t > 50))   # identical, just more parentheses`}</CodeBox>
 
         <Para>
-          This module is only a brief introduction — generator expressions are one specific, narrow
+          This lesson is only a brief introduction — generator expressions are one specific, narrow
           application of the much larger idea of <strong>generators</strong>, built with the{' '}
-          <code>yield</code> keyword, which you will cover in full depth in Module 28. For now, the
+          <code>yield</code> keyword, which you will cover in full depth in Lesson 28. For now, the
           practical rule is simple: if you are about to build a list purely to immediately loop over it
           once and discard it (like feeding it straight into <code>sum()</code>, <code>max()</code>, or{' '}
           <code>any()</code>), a generator expression does the same job without the wasted memory
@@ -498,12 +498,12 @@ total_over_50 = sum((t for t in transactions if t > 50))   # identical, just mor
           <SubSubTitle>What the reviewer flags</SubSubTitle>
 
           <Para>
-            Two issues, both traceable directly to earlier parts of this module. First, this crosses
+            Two issues, both traceable directly to earlier parts of this lesson. First, this crosses
             the readability ceiling described in Part 07 — a single line packs a nested comprehension,
             four separate <code>and</code>-chained conditions, and a dict literal, all inside one
             expression the reviewer has to read twice to trust. Second, and more seriously, it is
             functionally slow: for every campaign, it re-scans the <em>entire</em> events list from
-            scratch, exactly the repeated-linear-scan performance trap from Module 11&apos;s Real World
+            scratch, exactly the repeated-linear-scan performance trap from Lesson 11&apos;s Real World
             example — with 500 campaigns and 200,000 events, that is 100 million comparisons for a
             report that should take a fraction of a second.
           </Para>
@@ -524,7 +524,7 @@ def build_report(campaigns, events):
 
           <Para>
             The events are grouped once, up front, using the exact <code>defaultdict</code> pattern
-            from Module 11. The final comprehension is now a single <code>for</code> with a single{' '}
+            from Lesson 11. The final comprehension is now a single <code>for</code> with a single{' '}
             <code>if</code> — well inside the readability heuristic from Part 07 — and does a fast O(1)
             dict lookup per campaign instead of an O(n) scan. Same output, dramatically faster, and
             readable at a glance. The lesson the reviewer leaves in the comment: "a comprehension
@@ -694,7 +694,7 @@ def build_report(campaigns, events):
           {
             error: `KeyError inside a dict comprehension built from .items()`,
             cause: 'Filtering or transforming a dict comprehension based on a key that does not exist on every source dict in the iterable being looped over.',
-            fix: 'Use .get(key, default) inside the comprehension\'s expression instead of [key], exactly as covered in Module 11 — {d.get("id", None): d for d in records} rather than {d["id"]: d for d in records} if "id" is not guaranteed to be present.',
+            fix: 'Use .get(key, default) inside the comprehension\'s expression instead of [key], exactly as covered in Lesson 11 — {d.get("id", None): d for d in records} rather than {d["id"]: d for d in records} if "id" is not guaranteed to be present.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -748,12 +748,12 @@ def build_report(campaigns, events):
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 13 puts dictionaries and comprehensions to work on the shape of data you will actually
+          Lesson 13 puts dictionaries and comprehensions to work on the shape of data you will actually
           meet in the real world — lists of dicts, dicts of lists, and the deeply nested JSON structures
           that come back from every real API.
         </p>
         <Link href="/learn/python/nested-data-structures" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 13 → Nested Data Structures
+          Lesson 13 → Nested Data Structures
         </Link>
       </div>
     </LearnLayout>

@@ -172,7 +172,7 @@ export default function PipelineOrchestrationModule() {
     <LearnLayout
       title="Pipeline Orchestration — Airflow, DAGs, Scheduling, and Dependency Management"
       description="What orchestration actually does, Airflow architecture, DAG design, scheduling, backfills, Sensors, and when to use alternatives."
-      section="Data Engineering — Module 28"
+      section="Data Engineering — Lesson 28"
       readTime="70 min"
       updatedAt="August 2026"
     >
@@ -196,7 +196,7 @@ export default function PipelineOrchestrationModule() {
           The distinction matters because the question &ldquo;why do I need Airflow when
           I have cron?&rdquo; has a precise answer: cron tells you when to run. Airflow
           tells you what to run, in what order, on what conditions, with what
-          resource limits, and what to do when it fails. This module builds up
+          resource limits, and what to do when it fails. This lesson builds up
           FreshCart&rsquo;s actual morning DAG — the pipeline that turns raw orders
           into Gold-layer revenue tables every night — one Airflow concept at a time.
         </Para>
@@ -848,7 +848,7 @@ fix, regardless of which backend enforces which size limit.`}</Output>
           },
           {
             wrong: '"catchup=True is a safe default because Airflow will just handle whatever backlog exists"',
-            right: 'Airflow does handle it — by creating one DagRun per missed interval simultaneously. For a 15-minute DAG paused two weeks, that\'s 1,344 DagRuns competing for scheduler and worker resources at once, exactly the failure mode in this module\'s Error Library. catchup=False plus a deliberate, rate-limited CLI backfill is the production-safe pattern.',
+            right: 'Airflow does handle it — by creating one DagRun per missed interval simultaneously. For a 15-minute DAG paused two weeks, that\'s 1,344 DagRuns competing for scheduler and worker resources at once, exactly the failure mode in this lesson\'s Error Library. catchup=False plus a deliberate, rate-limited CLI backfill is the production-safe pattern.',
           },
           {
             wrong: '"XCom is fine for passing a DataFrame between tasks since Airflow handles serialization"',
@@ -1046,7 +1046,7 @@ Use Sensors when: you need to check an external condition that is not controlled
           },
           {
             q: 'Leaving a Sensor on the default mode="poke" because it "works fine in testing"',
-            a: 'It works fine with one sensor. This module\'s Error Library entry — 100 sensors stuck "running," workers busy, nothing processing — is exactly what happens once several poke sensors exist at once, because each one permanently occupies a worker slot for its entire wait. mode="reschedule" costs nothing and prevents this entirely.',
+            a: 'It works fine with one sensor. This lesson\'s Error Library entry — 100 sensors stuck "running," workers busy, nothing processing — is exactly what happens once several poke sensors exist at once, because each one permanently occupies a worker slot for its entire wait. mode="reschedule" costs nothing and prevents this entirely.',
           },
           {
             q: 'Assuming catchup=False means old data will never be processed',
@@ -1154,10 +1154,10 @@ Use Sensors when: you need to check an external condition that is not controlled
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 29 covers data lake architecture — how to design zones that stay useful for years, the raw and processed zone patterns, and the five anti-patterns that turn a data lake into an unmaintainable swamp.
+          Lesson 29 covers data lake architecture — how to design zones that stay useful for years, the raw and processed zone patterns, and the five anti-patterns that turn a data lake into an unmaintainable swamp.
         </p>
         <Link href="/learn/data-engineering/data-lake-architecture" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 29 → Data Lake Architecture — Design, Zones and Anti-Patterns
+          Lesson 29 → Data Lake Architecture — Design, Zones and Anti-Patterns
         </Link>
       </div>
     </LearnLayout>

@@ -71,7 +71,7 @@ export default function Module14() {
     <LearnLayout
       title="Python for Security Engineers"
       description="Build real security tools in Python — port scanners, packet analysers, log parsers, API fuzzers, and automation scripts used daily in security work."
-      section="Cybersecurity — Module 14"
+      section="Cybersecurity — Lesson 14"
       readTime="46 min"
       updatedAt="May 2026"
     >
@@ -80,10 +80,10 @@ export default function Module14() {
           Python is the lingua franca of security engineering. Nmap, Metasploit's Python bindings, Impacket (the AD attack toolkit), Volatility (memory forensics), SQLMap, Scapy, Burp Suite extensions, SIEM automation scripts — the security tool ecosystem runs on Python. If you're going to work in security, you need to be able to read, modify, and write Python tooling.
         </P>
         <P>
-          This module is hands-on. You'll build a <Hl>port scanner from raw sockets</Hl>, a <Hl>packet analyser with Scapy</Hl>, a <Hl>log parser for threat hunting</Hl>, an <Hl>API security tester</Hl>, and a <Hl>credential checker against the HaveIBeenPwned API</Hl>. You'll understand how popular tools are structured so you can extend them. And you'll learn the Python security library ecosystem — which packages the industry actually uses and when to reach for each one.
+          This lesson is hands-on. You'll build a <Hl>port scanner from raw sockets</Hl>, a <Hl>packet analyser with Scapy</Hl>, a <Hl>log parser for threat hunting</Hl>, an <Hl>API security tester</Hl>, and a <Hl>credential checker against the HaveIBeenPwned API</Hl>. You'll understand how popular tools are structured so you can extend them. And you'll learn the Python security library ecosystem — which packages the industry actually uses and when to reach for each one.
         </P>
         <Callout type="warning">
-          All tools in this module are for authorised use on systems you own or have explicit written permission to test. Running port scanners or packet captures against systems without authorisation violates computer fraud laws in most jurisdictions.
+          All tools in this lesson are for authorised use on systems you own or have explicit written permission to test. Running port scanners or packet captures against systems without authorisation violates computer fraud laws in most jurisdictions.
         </Callout>
       </Part>
 
@@ -991,13 +991,13 @@ if __name__ == "__main__":
 
       <div style={{ background: 'var(--code-bg)', borderRadius: 12, padding: '28px 32px', marginTop: 40 }}>
         <div style={{ fontSize: 13, color: C, fontWeight: 700, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
-          Up Next — Module 15
+          Up Next — Lesson 15
         </div>
         <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--heading)', marginBottom: 12 }}>
           Networking Deep Dive
         </div>
         <p style={{ ...s.p, marginBottom: 20 }}>
-          In Module 15, you go deeper into the protocols that underpin everything. How TCP/IP works at the segment level, how routing decisions are made, how firewalls inspect packets versus stateful session tracking, how NAT works and where it breaks security assumptions, and how modern zero-trust network architectures are structured — and why they make traditional perimeter security obsolete.
+          In Lesson 15, you go deeper into the protocols that underpin everything. How TCP/IP works at the segment level, how routing decisions are made, how firewalls inspect packets versus stateful session tracking, how NAT works and where it breaks security assumptions, and how modern zero-trust network architectures are structured — and why they make traditional perimeter security obsolete.
         </p>
         <Link
           href="/learn/cybersecurity/networking-deep-dive"
@@ -1012,7 +1012,7 @@ if __name__ == "__main__":
             textDecoration: 'none',
           }}
         >
-          Continue to Module 15 →
+          Continue to Lesson 15 →
         </Link>
       </div>
     </LearnLayout>

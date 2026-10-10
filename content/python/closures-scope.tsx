@@ -77,7 +77,7 @@ export default function ClosuresScope() {
     <LearnLayout
       title="Closures and Scope — The LEGB Rule"
       description="How Python resolves variable names, what a closure actually captures, and the scoping bugs that confuse everyone once."
-      section="Python — Module 31"
+      section="Python — Lesson 31"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -146,7 +146,7 @@ print(triple(5))    # 15 — a COMPLETELY separate captured factor=3`}</CodeBox>
 
         <Para>
           This should look immediately familiar — it is exactly the mechanism decorators are built on
-          (the previous module), and it is why <code>double</code> and <code>triple</code> behave
+          (the previous lesson), and it is why <code>double</code> and <code>triple</code> behave
           completely independently despite both being created by the same <code>make_multiplier</code>{' '}
           function: each call to <code>make_multiplier</code> creates a fresh, separate{' '}
           <code>factor</code> variable, and each returned <code>multiply</code> function closes over its
@@ -215,7 +215,7 @@ print([f() for f in functions])
 
         <Para>
           Reading an enclosing variable from a nested function works automatically, as shown throughout
-          this module. <strong>Assigning</strong> to one does not — by default, any assignment inside a
+          this lesson. <strong>Assigning</strong> to one does not — by default, any assignment inside a
           function creates a brand-new local variable, shadowing the enclosing one entirely, rather than
           modifying it.
         </Para>
@@ -548,11 +548,11 @@ callbacks[101]()   # correctly sends command for 101 now`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 32 begins the Advanced Python phase with regular expressions — pattern matching for
+          Lesson 32 begins the Advanced Python phase with regular expressions — pattern matching for
           text, and the syntax that looks intimidating but follows a small set of real rules.
         </p>
         <Link href="/learn/python/regular-expressions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 32 → Regular Expressions with re
+          Lesson 32 → Regular Expressions with re
         </Link>
       </div>
     </LearnLayout>

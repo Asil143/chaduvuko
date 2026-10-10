@@ -172,7 +172,7 @@ export default function IngestionPatternsModule() {
     <LearnLayout
       title="Data Ingestion Patterns — Full Load, Incremental, CDC"
       description="The three patterns that cover every source — when each is correct, how each fails, and how to choose."
-      section="Data Engineering — Module 23"
+      section="Data Engineering — Lesson 23"
       readTime="65 min"
       updatedAt="August 2026"
     >
@@ -191,7 +191,7 @@ export default function IngestionPatternsModule() {
 
         <Para>
           The three patterns exist on a spectrum from simple-but-expensive to
-          complex-but-efficient. This module builds all three around FreshCart&rsquo;s
+          complex-but-efficient. This lesson builds all three around FreshCart&rsquo;s
           actual table inventory — reference data, the orders table, and the
           tables where a missed delete is a real problem.
         </Para>
@@ -745,7 +745,7 @@ TOTAL INFRASTRUCTURE:
           },
           {
             wrong: '"A replication slot is just Debezium\'s internal bookkeeping — nothing to actively monitor"',
-            right: 'This module\'s Error Library and Part 04\'s operational concerns both treat this as a genuine production risk: an unmonitored, stuck slot causes PostgreSQL to retain WAL indefinitely, and on a high-write table that fills the source disk and crashes the PRODUCTION database, not just the CDC pipeline.',
+            right: 'This lesson\'s Error Library and Part 04\'s operational concerns both treat this as a genuine production risk: an unmonitored, stuck slot causes PostgreSQL to retain WAL indefinitely, and on a high-write table that fills the source disk and crashes the PRODUCTION database, not just the CDC pipeline.',
           },
           {
             wrong: '"Once you pick full load, incremental, or CDC for a table, that\'s a permanent architectural decision"',
@@ -924,7 +924,7 @@ The correct monitoring setup: query pg_replication_slots regularly and alert whe
           },
           {
             q: 'Setting up a Debezium connector without a monitoring alert on the replication slot',
-            a: 'Part 04 and this module\'s Error Library both treat this as one of the highest-severity operational gaps in data engineering — an unmonitored slot doesn\'t just slow the CDC pipeline down, it can fill the SOURCE database\'s disk and crash production. Wire the lag alert before the connector goes live, not after an incident.',
+            a: 'Part 04 and this lesson\'s Error Library both treat this as one of the highest-severity operational gaps in data engineering — an unmonitored slot doesn\'t just slow the CDC pipeline down, it can fill the SOURCE database\'s disk and crash production. Wire the lag alert before the connector goes live, not after an incident.',
           },
           {
             q: 'Saving the checkpoint before confirming the destination write succeeded',
@@ -1028,10 +1028,10 @@ The correct monitoring setup: query pg_replication_slots regularly and alert whe
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 24 goes deep on Change Data Capture — log-based, trigger-based, and query-based CDC from the inside, including production gotchas around replication lag, schema changes, and log retention.
+          Lesson 24 goes deep on Change Data Capture — log-based, trigger-based, and query-based CDC from the inside, including production gotchas around replication lag, schema changes, and log retention.
         </p>
         <Link href="/learn/data-engineering/change-data-capture" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 24 → Change Data Capture (CDC) — How It Works Under the Hood
+          Lesson 24 → Change Data Capture (CDC) — How It Works Under the Hood
         </Link>
       </div>
     </LearnLayout>

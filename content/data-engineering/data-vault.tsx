@@ -78,7 +78,7 @@ export default function DataVaultModule() {
     <LearnLayout
       title="Data Vault 2.0"
       description="Hubs, links, and satellites from first principles — hash keys, loading patterns, Business Vault, PIT tables, and when to choose Data Vault over dimensional modelling."
-      section="Data Engineering — Module 35"
+      section="Data Engineering — Lesson 35"
       readTime="60 min"
       updatedAt="August 2026"
     >
@@ -704,7 +704,7 @@ FROM {{ source('staging', 'orders') }}`}</CodeBox>
           },
           {
             wrong: '"A satellite should combine attributes from every source that describes the same entity, for a single clean view"',
-            right: 'Part 02\'s satellite rules say the opposite: one satellite per source system, never mixed. This module\'s Error Library shows exactly why — reconciling conflicting sources belongs in a Business Vault computed satellite (CSAT) with an explicit, documented precedence rule, not silently merged at the raw layer.',
+            right: 'Part 02\'s satellite rules say the opposite: one satellite per source system, never mixed. This lesson\'s Error Library shows exactly why — reconciling conflicting sources belongs in a Business Vault computed satellite (CSAT) with an explicit, documented precedence rule, not silently merged at the raw layer.',
           },
           {
             wrong: '"Since Raw Vault is INSERT-only and fully auditable, you don\'t need PIT tables — just query the satellites directly"',
@@ -874,23 +874,23 @@ The critical mistake is choosing Data Vault because it sounds more enterprise-gr
         {[
           {
             q: 'Computing a hash key inline in every model instead of a single shared normalisation function',
-            a: 'This module\'s Error Library shows the direct consequence: one model hashes MD5(customer_id) while another hashes MD5(UPPER(TRIM(customer_id))), and a source that sends mixed-case or padded values silently splits into two hub rows. Part 03 is explicit that normalisation must be identical everywhere — use one reusable macro, never compute hashes inline.',
+            a: 'This lesson\'s Error Library shows the direct consequence: one model hashes MD5(customer_id) while another hashes MD5(UPPER(TRIM(customer_id))), and a source that sends mixed-case or padded values silently splits into two hub rows. Part 03 is explicit that normalisation must be identical everywhere — use one reusable macro, never compute hashes inline.',
           },
           {
             q: 'Letting a pipeline-generated timestamp leak into a satellite\'s hash_diff calculation',
-            a: 'Part 03\'s hash_diff rule and this module\'s Error Library both flag this: including ingested_at or any load-time timestamp in hash_diff means it changes on every run, so a satellite inserts a new "version" every load even when nothing about the actual business attributes changed.',
+            a: 'Part 03\'s hash_diff rule and this lesson\'s Error Library both flag this: including ingested_at or any load-time timestamp in hash_diff means it changes on every run, so a satellite inserts a new "version" every load even when nothing about the actual business attributes changed.',
           },
           {
             q: 'Loading a link by joining to the hub table to "look up" the hash key instead of computing it from source data',
-            a: 'This module\'s Error Library shows the failure mode directly: an INNER JOIN to hub_customer silently drops link rows for customers not yet in the hub. Part 04 is explicit that links must compute hub hash keys directly from source business keys — the same computation the hub itself uses — which is also what makes parallel loading possible in the first place.',
+            a: 'This lesson\'s Error Library shows the failure mode directly: an INNER JOIN to hub_customer silently drops link rows for customers not yet in the hub. Part 04 is explicit that links must compute hub hash keys directly from source business keys — the same computation the hub itself uses — which is also what makes parallel loading possible in the first place.',
           },
           {
             q: 'Skipping composite indexes on satellite tables because "the joins are just equality joins, they should be fast"',
-            a: 'This module\'s Error Library shows a 10× slowdown from exactly this assumption — an equality join still needs a composite index on (hub_hk, load_dts) or it falls back to a full satellite scan. Add the index (or CLUSTER BY on Snowflake) as part of standing up any new satellite, not after performance complaints.',
+            a: 'This lesson\'s Error Library shows a 10× slowdown from exactly this assumption — an equality join still needs a composite index on (hub_hk, load_dts) or it falls back to a full satellite scan. Add the index (or CLUSTER BY on Snowflake) as part of standing up any new satellite, not after performance complaints.',
           },
           {
             q: 'Letting an Information Mart model join two raw satellites directly when they disagree on an attribute',
-            a: 'This module\'s Error Library and Part 05\'s Business Vault description both point to the same fix: never let a mart join raw satellites directly when sources can conflict. Create a computed satellite (CSAT) with an explicit, documented precedence rule (e.g. COALESCE(loyalty_app.tier, orders_db.tier)) so every downstream mart gets the same, auditable answer.',
+            a: 'This lesson\'s Error Library and Part 05\'s Business Vault description both point to the same fix: never let a mart join raw satellites directly when sources can conflict. Create a computed satellite (CSAT) with an explicit, documented precedence rule (e.g. COALESCE(loyalty_app.tier, orders_db.tier)) so every downstream mart gets the same, auditable answer.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
@@ -969,10 +969,10 @@ The critical mistake is choosing Data Vault because it sounds more enterprise-gr
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 36 covers data quality — the six dimensions (completeness, accuracy, consistency, uniqueness, timeliness, validity), how to test for each in dbt, and what breaks downstream when quality is skipped.
+          Lesson 36 covers data quality — the six dimensions (completeness, accuracy, consistency, uniqueness, timeliness, validity), how to test for each in dbt, and what breaks downstream when quality is skipped.
         </p>
         <Link href="/learn/data-engineering/data-quality" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 36 → Data Quality — Dimensions, Testing and Validation
+          Lesson 36 → Data Quality — Dimensions, Testing and Validation
         </Link>
       </div>
     </LearnLayout>

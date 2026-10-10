@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Advanced RAG — Reranking, Hybrid Search and Evaluation — Chaduvuko',
@@ -178,14 +177,13 @@ export default function AdvancedRAGPage() {
       readTime="36–46 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="generative-ai" topic="advanced-rag" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Before any code — where naive RAG breaks</span>
         <h2 style={S.h2}>
-          Module 52 built a working RAG pipeline.
-          This module explains why it fails in production and how
+          Lesson 52 built a working RAG pipeline.
+          This lesson explains why it fails in production and how
           to fix every failure mode systematically.
         </h2>
 
@@ -229,7 +227,7 @@ export default function AdvancedRAGPage() {
 
         <Callout type="tip">
           Install: <span style={S.code as React.CSSProperties}>pip install sentence-transformers faiss-cpu rank-bm25 ragas</span>.
-          This module uses open-source tools throughout — no paid API required
+          This lesson uses open-source tools throughout — no paid API required
           for the retrieval and evaluation components.
         </Callout>
       </div>
@@ -1126,7 +1124,7 @@ for q in test_questions:
         <ConceptBox title="Myth: RAG eliminates hallucination because the model is just reading from retrieved documents" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
             RAG reduces hallucination by giving the model relevant context to ground its answer in,
-            but it does not force the model to use that context. As this module's error section
+            but it does not force the model to use that context. As this lesson's error section
             covers, an LLM with strong prior knowledge on a topic will readily blend its own
             training-time beliefs with the retrieved context, or ignore the context outright, unless
             the prompt explicitly and strongly instructs it to answer only from what was retrieved.
@@ -1242,7 +1240,7 @@ for q in test_questions:
 
         <p style={S.p}>
           Advanced RAG gives your agent access to a knowledge base.
-          Module 68 — the final module of the Generative AI section —
+          Lesson 68 — the final module of the Generative AI section —
           covers the complete production agent: planning across multiple steps,
           calling real APIs, maintaining memory across turns, handling failures
           gracefully, and the architectural patterns used at companies like
@@ -1262,7 +1260,7 @@ for q in test_questions:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 68 · Generative AI
+              Next — Lesson 68 · Generative AI
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

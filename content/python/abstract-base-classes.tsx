@@ -77,7 +77,7 @@ export default function AbstractBaseClasses() {
     <LearnLayout
       title="Abstract Base Classes and Interfaces"
       description="Enforcing a contract across subclasses with the abc module — how larger Python codebases stay consistent."
-      section="Python — Module 24"
+      section="Python — Lesson 24"
       readTime="30 min"
       updatedAt="August 2026"
     >
@@ -530,7 +530,7 @@ class S3Source(DataSource):
         'A class inheriting from ABC cannot be instantiated until every @abstractmethod (and abstract @property) it declares has a concrete override in the subclass.',
         'The ABC itself can never be instantiated directly, even if all its abstract methods happen to have implementations — abstractness is a property of the class, not of whether the bodies are filled in.',
         'ABCs and duck typing coexist deliberately — duck typing for flexible everyday code, ABCs for enforced contracts across plugin-style or multi-team class families.',
-        'ABCs check WHICH methods exist, not their signatures — for real signature-level checking, pair them with type hints and mypy (covered in a later module).',
+        'ABCs check WHICH methods exist, not their signatures — for real signature-level checking, pair them with type hints and mypy (covered in a later lesson).',
         'typing.Protocol offers a structural-typing alternative that does not require explicit inheritance — worth knowing about even before its full coverage later in this track.',
       ]} />
 
@@ -540,11 +540,11 @@ class S3Source(DataSource):
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 25 begins the Intermediate & Functional Python phase with a deep dive into *args and
+          Lesson 25 begins the Intermediate & Functional Python phase with a deep dive into *args and
           **kwargs — every way Python lets you pass arguments to a function.
         </p>
         <Link href="/learn/python/args-kwargs" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 25 → *args, **kwargs and Function Arguments Deep Dive
+          Lesson 25 → *args, **kwargs and Function Arguments Deep Dive
         </Link>
       </div>
     </LearnLayout>

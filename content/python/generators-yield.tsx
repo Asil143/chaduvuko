@@ -77,7 +77,7 @@ export default function GeneratorsYield() {
     <LearnLayout
       title="Generators and yield"
       description="How yield actually pauses and resumes a function, generator expressions, memory-efficient lazy evaluation, and yield from."
-      section="Python — Module 28"
+      section="Python — Lesson 28"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -88,7 +88,7 @@ export default function GeneratorsYield() {
         <SectionTitle>A Function With yield Does Not Return a Value — It Returns a Generator</SectionTitle>
 
         <Para>
-          Module 27 ended with a promise: everything you built by hand with{' '}
+          Lesson 27 ended with a promise: everything you built by hand with{' '}
           <code>DateRangeIterator</code> — a class implementing <code>__iter__</code> and{' '}
           <code>__next__</code>, tracking its own state between calls — Python can give you almost for
           free, with a single keyword. That keyword is <code>yield</code>.
@@ -98,7 +98,7 @@ export default function GeneratorsYield() {
           A <strong>generator function</strong> is any function whose body contains at least one{' '}
           <code>yield</code> statement. Calling it does <strong>not</strong> run the function body at
           all — it immediately returns a <strong>generator object</strong>, which is a real, genuine
-          iterator, automatically satisfying the entire iterator protocol from Module 27 without you
+          iterator, automatically satisfying the entire iterator protocol from Lesson 27 without you
           writing a single <code>__next__</code> method.
         </Para>
 
@@ -175,7 +175,7 @@ print(next(gen))
         <Para>
           Once the function body reaches its natural end — falls off the bottom, or hits an explicit{' '}
           <code>return</code> with no value — the generator raises <code>StopIteration</code>, exactly
-          like any other exhausted iterator from Module 27. A <code>return</code> statement inside a
+          like any other exhausted iterator from Lesson 27. A <code>return</code> statement inside a
           generator does not send back a normal return value the way it would in a regular function; it
           simply ends the generator.
         </Para>
@@ -189,7 +189,7 @@ print(next(gen))
         <SectionTitle>The Lazy Cousin of the List Comprehension</SectionTitle>
 
         <Para>
-          Module 12 covered list comprehensions in depth: <code>[x**2 for x in range(10)]</code>{' '}
+          Lesson 12 covered list comprehensions in depth: <code>[x**2 for x in range(10)]</code>{' '}
           builds the entire list immediately, in memory, all at once. A <strong>generator
           expression</strong> uses nearly identical syntax — parentheses instead of square brackets —
           but produces values lazily, one at a time, exactly like a generator function does.
@@ -206,7 +206,7 @@ print(next(squares_gen))    # 1
 print(next(squares_gen))    # 4`}</CodeBox>
 
         <Para>
-          Every rule from Module 27 about iterators applies directly: a generator expression is a
+          Every rule from Lesson 27 about iterators applies directly: a generator expression is a
           single-pass iterator, exhausted after one full loop, and cannot be rewound or reused. It also
           supports every comprehension feature you already know — an <code>if</code> filter clause,
           nested loops, and multiple <code>for</code> clauses — the syntax carries over completely.
@@ -336,7 +336,7 @@ for line in read_full_report():
         <SectionTitle>Lazily Reading a Huge CSV File</SectionTitle>
 
         <Para>
-          Modules 15 and 16 covered reading files and working with CSV data. Here is where generators
+          Lessons 15 and 16 covered reading files and working with CSV data. Here is where generators
           make that combination genuinely production-grade: a function that reads a large CSV file and
           yields one parsed row at a time, using the <code>csv</code> module, never holding the whole
           file&apos;s rows in memory at once.
@@ -368,7 +368,7 @@ for order in read_high_value_orders("orders_2026.csv", minimum_total=500):
           <code>yield</code> keyword inside. This is a genuinely important property of generators: the
           calling code does not need to know or care whether it is looping over a list or a generator —
           the <code>for order in ...</code> syntax is identical either way, exactly because generators
-          fully satisfy the iterator protocol from Module 27.
+          fully satisfy the iterator protocol from Lesson 27.
         </Para>
       </section>
 
@@ -491,7 +491,7 @@ def find_anomalies(filepath):
             Peak memory usage dropped from several gigabytes to a few megabytes, and the job&apos;s
             runtime barely changed — the total amount of work was identical, exactly as the Callout in
             Part 04 explains. The only thing that changed was <em>when</em> each row&apos;s memory was
-            allocated and released, which is precisely the trade-off this module is built around.
+            allocated and released, which is precisely the trade-off this lesson is built around.
           </Para>
         </div>
       </section>
@@ -514,7 +514,7 @@ def find_anomalies(filepath):
           },
           {
             wrong: '"A generator, once created, can be looped over as many times as a list can"',
-            right: 'A generator is a single-pass iterator, exactly like the iterators from Module 27 — once exhausted, looping over it again produces nothing, silently, with no error. If you need multiple passes, convert it to a list once with list(my_generator) and reuse the resulting list.',
+            right: 'A generator is a single-pass iterator, exactly like the iterators from Lesson 27 — once exhausted, looping over it again produces nothing, silently, with no error. If you need multiple passes, convert it to a list once with list(my_generator) and reuse the resulting list.',
           },
           {
             wrong: '"yield and return do basically the same thing inside a function"',
@@ -598,7 +598,7 @@ def find_anomalies(filepath):
           },
           {
             q: 'Reusing a generator object after it has already been fully consumed',
-            a: 'Silently produces nothing on the second pass, exactly like any exhausted iterator from Module 27 — no error is raised. If you need to loop over the same data twice, call the generator FUNCTION again to get a fresh generator object, or materialize the results into a list once.',
+            a: 'Silently produces nothing on the second pass, exactly like any exhausted iterator from Lesson 27 — no error is raised. If you need to loop over the same data twice, call the generator FUNCTION again to get a fresh generator object, or materialize the results into a list once.',
           },
           {
             q: 'Expecting print() statements or side effects inside a generator to run immediately when it is defined or called',
@@ -710,12 +710,12 @@ def find_anomalies(filepath):
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 29 builds decorators from first principles — functions that take a function and return
+          Lesson 29 builds decorators from first principles — functions that take a function and return
           a function — starting from the same "functions as objects" idea that made generators and
-          wrapper functions possible in this module and the last.
+          wrapper functions possible in this lesson and the last.
         </p>
         <Link href="/learn/python/decorators" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 29 → Decorators — Writing and Using Them
+          Lesson 29 → Decorators — Writing and Using Them
         </Link>
       </div>
     </LearnLayout>

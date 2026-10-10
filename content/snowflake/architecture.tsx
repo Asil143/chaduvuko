@@ -5,7 +5,7 @@ export default function SnowflakeArchitecture() {
     <LearnLayout
       title="Snowflake Architecture"
       description="Storage, virtual warehouses, cloud services, micro-partitions, warehouse sizing, the three caches, and why Snowflake scales reads and writes independently."
-      section="Snowflake — Module 02"
+      section="Snowflake — Lesson 02"
       readTime="75 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -509,7 +509,7 @@ CREATE SCHEMA SILVER_DEV CLONE SILVER;`}
         <SectionTag text="// Part 13 — Contrast with traditional database architectures" />
         <SectionTitle>Why This Is Different: Shared-Disk and Shared-Nothing, Side by Side</SectionTitle>
         <Para>
-          Everything in this module makes more sense once you can name what Snowflake is not. Most databases
+          Everything in this lesson makes more sense once you can name what Snowflake is not. Most databases
           a beginner has used — a single PostgreSQL or MySQL server, for instance — use a "shared-everything"
           model: one machine holds the data on its own disks and runs every query through its own single
           compute engine (CPU and memory). There is nothing to separate, because storage and compute were

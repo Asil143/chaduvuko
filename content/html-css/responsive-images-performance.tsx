@@ -77,7 +77,7 @@ export default function ResponsiveImagesPerformance() {
     <LearnLayout
       title="Responsive Images & Performance"
       description="srcset, sizes, picture, and the image-loading techniques that keep a real page fast on real connections."
-      section="HTML & CSS — Module 37"
+      section="HTML & CSS — Lesson 37"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -113,13 +113,13 @@ export default function ResponsiveImagesPerformance() {
    Tool: <picture> with multiple <source> elements.`}</CodeBox>
 
         <Para>
-          This module covers both in depth, then layers on the format question (WebP/AVIF vs JPEG/PNG)
+          This lesson covers both in depth, then layers on the format question (WebP/AVIF vs JPEG/PNG)
           and the two Core Web Vitals metrics — CLS and LCP — that images are the single most common
           cause of failing.
         </Para>
 
         <Callout type="info">
-          This module assumes you have already been through Images and Media, where <code>img</code>,{' '}
+          This lesson assumes you have already been through Images and Media, where <code>img</code>,{' '}
           <code>alt</code>, <code>width</code>/<code>height</code>, and a first pass at{' '}
           <code>loading=&quot;lazy&quot;</code> were covered. Everything here builds directly on that
           foundation rather than repeating it.
@@ -511,7 +511,7 @@ decoding="async" | "sync" | "auto"
 
         <Para>
           An unoptimized hero image drags LCP down through a predictable, stacked sequence of delays —
-          each one independently fixable with a technique already covered earlier in this module.
+          each one independently fixable with a technique already covered earlier in this lesson.
         </Para>
 
         <CodeBox label="Where the delay actually comes from, stacked">{`1. Oversized file — a 4000px-wide, unresized original JPEG serving a
@@ -863,12 +863,12 @@ decoding="async" | "sync" | "auto"
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 38 turns to accessibility at the CSS level — visible focus states, WCAG color contrast
+          Lesson 38 turns to accessibility at the CSS level — visible focus states, WCAG color contrast
           ratios, respecting <code>prefers-reduced-motion</code>, and designing hover interactions that
           still work on touch devices with no true hover state.
         </p>
         <Link href="/learn/html-css/css-accessibility-best-practices" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 38 → CSS Accessibility Best Practices
+          Lesson 38 → CSS Accessibility Best Practices
         </Link>
       </div>
     </LearnLayout>

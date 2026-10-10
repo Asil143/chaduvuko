@@ -98,7 +98,7 @@ const MemoryRow = ({ cells }: { cells: { label: string; value: string; address: 
 export default function PointersPage() {
   return (
     <LearnLayout
-      title="Unit 04 — Pointers"
+      title="Pointers"
       description="The concept that confuses 90% of beginners — explained so clearly you will wonder why everyone makes it complicated. Pointers are the backbone of linked lists, trees, and every advanced data structure."
       section="DSA"
       readTime="75 min"
@@ -108,9 +108,7 @@ export default function PointersPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'UNIT 04', green: true },
-          { label: 'Prerequisite: Units 00–03', green: false },
-          { label: '75 min read', green: false },
+          { label: 'Prerequisite: Lessons 1–4', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -125,9 +123,9 @@ export default function PointersPage() {
         layer at a time, until it feels completely obvious.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
-        After this unit, linked lists, trees, graphs, and dynamic memory will all make sense.
+        After this lesson, linked lists, trees, graphs, and dynamic memory will all make sense.
         Every advanced data structure in DSA uses pointers internally.
-        This unit is the key that unlocks the rest.
+        This lesson is the key that unlocks the rest.
       </p>
 
       <Divider />
@@ -139,7 +137,7 @@ export default function PointersPage() {
       <SectionTitle>Every Variable Has a Home Address</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 20 }}>
-        Go back to what we learned in Unit 00. RAM is like a long street of tiny houses.
+        Go back to what we learned in Lesson 1. RAM is like a long street of tiny houses.
         Each house has a unique address. When you create a variable, the computer
         picks an empty house, stores your value there, and gives that house number
         a name — the variable name.
@@ -210,7 +208,7 @@ Address of grade:  0x7fff5fbff5a7
 
       <Callout type="info">
         <strong>The & operator means "give me the address of".</strong> You already used this
-        in Unit 00 with scanf — <code style={{ fontFamily: 'var(--font-mono)' }}>scanf("%d", &age)</code> means
+        in Lesson 1 with scanf — <code style={{ fontFamily: 'var(--font-mono)' }}>scanf("%d", &age)</code> means
         "read a number and store it at the address of age." Now you know exactly why.
       </Callout>
 
@@ -688,16 +686,16 @@ int main() {
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 20 }}>
         Now that you understand pointers, let us connect this to what is coming.
-        Every data structure from Unit 05 onwards uses pointers to link pieces of
+        Every data structure from Lesson 6 onwards uses pointers to link pieces of
         data together. Here is a quick preview:
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
         {[
-          { unit: 'Unit 05', name: 'Linked Lists', how: 'Each node has a pointer to the next node. The last node points to NULL. Without pointers, you cannot build a linked list at all.' },
-          { unit: 'Unit 11', name: 'Trees', how: 'Each node has a left pointer and a right pointer. The tree grows by creating new nodes and linking them with pointers.' },
-          { unit: 'Unit 15', name: 'Graphs', how: 'Each node has a list of pointers to its neighbours. Traversal means following pointers from node to node.' },
-          { unit: 'Unit 16', name: 'Dynamic Programming', how: 'DP tables are arrays — which are pointers to contiguous memory. Memoization uses pointer-based structures internally.' },
+          { unit: 'Lesson 6', name: 'Linked Lists', how: 'Each node has a pointer to the next node. The last node points to NULL. Without pointers, you cannot build a linked list at all.' },
+          { unit: 'Lesson 12', name: 'Trees', how: 'Each node has a left pointer and a right pointer. The tree grows by creating new nodes and linking them with pointers.' },
+          { unit: 'Lesson 16', name: 'Graphs', how: 'Each node has a list of pointers to its neighbours. Traversal means following pointers from node to node.' },
+          { unit: 'Lesson 17', name: 'Dynamic Programming', how: 'DP tables are arrays — which are pointers to contiguous memory. Memoization uses pointer-based structures internally.' },
         ].map((item) => (
           <div key={item.unit} style={{ display: 'flex', gap: 16, alignItems: 'flex-start', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '16px 20px' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700, color: 'var(--green)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.3)', borderRadius: 4, padding: '3px 8px', whiteSpace: 'nowrap', marginTop: 2 }}>{item.unit}</span>
@@ -722,7 +720,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Unit 05</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 6</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now understand the most important and most feared concept in C programming.
@@ -730,7 +728,7 @@ int main() {
         two operators: & to get an address, * to follow one.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Unit 05 we build our first truly dynamic data structure —
+        In Lesson 6 we build our first truly dynamic data structure —
         <strong style={{ color: 'var(--text)' }}> Linked Lists</strong>.
         Everything you just learned about pointers will be used immediately.
         A linked list is nothing more than nodes connected by pointers.
@@ -738,7 +736,7 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → UNIT 05</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 6</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Linked Lists — Nodes Connected by Pointers</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Singly, doubly, circular — insert, delete, reverse, detect loops.</div>
         </div>

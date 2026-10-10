@@ -5,7 +5,7 @@ export default function RolesSecurityBasics() {
     <LearnLayout
       title="Roles and Security Basics"
       description="RBAC, users, roles, grants, ownership, future grants, least privilege, service roles, and the access mistakes that break Snowflake projects."
-      section="Snowflake — Module 04"
+      section="Snowflake — Lesson 04"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[

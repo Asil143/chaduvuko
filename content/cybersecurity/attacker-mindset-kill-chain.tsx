@@ -65,7 +65,7 @@ export default function AttackerMindsetKillChain() {
     <LearnLayout
       title="How Attackers Think — The Kill Chain and MITRE ATT&CK"
       description="The attacker's playbook from reconnaissance to full compromise. The frameworks that make defenders effective by understanding what attackers do next."
-      section="Cybersecurity — Module 07"
+      section="Cybersecurity — Lesson 07"
       readTime="30 min"
       updatedAt="May 2026"
     >
@@ -476,10 +476,10 @@ All steps used only signed Windows binaries — no malware detected by AV`}</Blo
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 08</strong>, you go inside the most successful attack vector in history — social engineering and phishing. How attackers manipulate human psychology, what makes a phishing campaign effective, and why humans remain the hardest security problem to solve.
+          In <strong>Lesson 08</strong>, you go inside the most successful attack vector in history — social engineering and phishing. How attackers manipulate human psychology, what makes a phishing campaign effective, and why humans remain the hardest security problem to solve.
         </p>
         <Link href="/learn/cybersecurity/social-engineering-phishing" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 08 → Social Engineering and Phishing
+          Lesson 08 → Social Engineering and Phishing
         </Link>
       </div>
 

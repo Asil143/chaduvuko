@@ -99,7 +99,7 @@ export default function AcidProperties() {
     <LearnLayout
       title="ACID Properties"
       description="The four rules every reliable database follows — Atomicity, Consistency, Isolation, Durability — and the real-world failures each one prevents"
-      section="SQL — Module 48"
+      section="SQL — Lesson 48"
       readTime="14–18 min"
       updatedAt="April 2026"
     >
@@ -662,10 +662,10 @@ PRAGMA journal_mode;   -- 'wal' means write-ahead logging is active`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 49</strong>, you learn Stored Procedures — reusable named programs stored in the database, with parameters, control flow, and exception handling.
+          In <strong>Lesson 49</strong>, you learn Stored Procedures — reusable named programs stored in the database, with parameters, control flow, and exception handling.
         </p>
         <Link href="/learn/sql/stored-procedures" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 49 → Stored Procedures
+          Lesson 49 → Stored Procedures
         </Link>
       </div>
 

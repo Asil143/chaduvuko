@@ -77,7 +77,7 @@ export default function MetadataSeoFundamentals() {
     <LearnLayout
       title="Metadata & SEO Fundamentals"
       description="meta tags, Open Graph, the viewport meta tag, and favicons — the head content that determines how your page is discovered and shared."
-      section="HTML & CSS — Module 13"
+      section="HTML & CSS — Lesson 13"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -97,7 +97,7 @@ export default function MetadataSeoFundamentals() {
         </Para>
 
         <Para>
-          This module covers the specific head content that most directly controls how your page is{' '}
+          This lesson covers the specific head content that most directly controls how your page is{' '}
           <em>found</em> and <em>shared</em>: character encoding and viewport declarations, the meta
           description search engines quote in results, Open Graph tags that power social link previews,
           favicons, the title tag&apos;s outsized SEO weight, and a first look at canonical links. None of
@@ -269,7 +269,7 @@ export default function MetadataSeoFundamentals() {
 
         <Para>
           Notice these use <code>property</code>, not <code>name</code> — a genuinely easy detail to get
-          wrong, since every other meta tag in this module uses <code>name</code>. Open Graph tags are
+          wrong, since every other meta tag in this lesson uses <code>name</code>. Open Graph tags are
           technically part of a separate metadata protocol (RDFa) that Facebook adopted, and{' '}
           <code>property</code> is the attribute that protocol expects. Using <code>name="og:title"</code>{' '}
           instead of <code>property="og:title"</code> is a mistake that will not raise any visible error
@@ -356,7 +356,7 @@ export default function MetadataSeoFundamentals() {
 
         <Para>
           <code>site.webmanifest</code> is a small JSON file that (among other things used for
-          full Progressive Web App behavior, out of scope for this module) declares additional icon
+          full Progressive Web App behavior, out of scope for this lesson) declares additional icon
           sizes Android uses for home-screen shortcuts and splash screens.
         </Para>
 
@@ -702,11 +702,11 @@ export default function MetadataSeoFundamentals() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 14 covers HTML entities and special characters — why & and &lt; need escaping in text
+          Lesson 14 covers HTML entities and special characters — why & and &lt; need escaping in text
           content, the entities you will actually use day to day, and exactly what breaks when you forget.
         </p>
         <Link href="/learn/html-css/html-entities-special-characters" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 14 → HTML Entities & Special Characters
+          Lesson 14 → HTML Entities & Special Characters
         </Link>
       </div>
     </LearnLayout>

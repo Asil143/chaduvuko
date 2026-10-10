@@ -74,7 +74,7 @@ export default function TestingDebuggingKafka() {
     <LearnLayout
       title="Testing and Debugging Kafka Systems"
       description="Why Kafka-dependent code is hard to test, unit testing producer/consumer logic by mocking the client, integration testing with Testcontainers, testing Kafka Streams topologies with TopologyTestDriver, schema contract testing, and the exact steps to diagnose the most common production symptoms."
-      section="Apache Kafka — Module 23"
+      section="Apache Kafka — Lesson 23"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -99,7 +99,7 @@ export default function TestingDebuggingKafka() {
           bugs Kafka itself does not have, and misses ones it does.
         </Para>
         <Para>
-          This module treats testing as a spectrum rather than a single technique, because no single
+          This lesson treats testing as a spectrum rather than a single technique, because no single
           technique covers everything worth testing. At one end is fast, isolated unit testing of your own
           business logic with the Kafka client mocked out entirely — cheap, instant, and blind to anything
           Kafka-specific. At the other end is a full integration test against a real broker running in
@@ -110,7 +110,7 @@ export default function TestingDebuggingKafka() {
         </Para>
         <HighlightBox>
           <Para>
-            <strong>The rule of thumb this module builds toward:</strong> test your transformation and
+            <strong>The rule of thumb this lesson builds toward:</strong> test your transformation and
             business logic with mocks — fast feedback, run on every commit. Test your actual
             producer/consumer wiring, partitioning, and serialization against a real ephemeral broker via
             Testcontainers — slower, run in CI before merge. Test Kafka Streams topologies with
@@ -829,7 +829,7 @@ print("Seeded the exact production failure case locally.")`}
         </Para>
         <SubTitle>What belongs in CI versus what stays a manual pre-release check</SubTitle>
         <Para>
-          Not everything from this module belongs gated on every PR. Part 10's local-reproduction technique
+          Not everything from this lesson belongs gated on every PR. Part 10's local-reproduction technique
           is explicitly a manual, incident-driven activity — you would not wire a specific captured production
           bug's reproduction script into the standard PR pipeline forever, though promoting a fixed bug's
           reproduction into the permanent Testcontainers suite, as Part 10's closing callout recommends, is

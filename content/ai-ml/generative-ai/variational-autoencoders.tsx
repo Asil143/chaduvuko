@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Variational Autoencoders — Learning Latent Representations — Chaduvuko',
@@ -178,7 +177,6 @@ export default function VAEPage() {
       readTime="26–34 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="generative-ai" topic="variational-autoencoders" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -892,7 +890,7 @@ for use, b, reason in use_cases:
 
         <p style={S.p}>
           The Stable Diffusion fact is worth remembering specifically because it resolves the
-          "VAE vs GAN vs diffusion, pick one" framing this module started with: a huge share of
+          "VAE vs GAN vs diffusion, pick one" framing this lesson started with: a huge share of
           people using diffusion models in production are running a VAE on every single image they
           generate, without necessarily knowing it — it is doing the unglamorous job of making
           diffusion computationally affordable in the first place.
@@ -1051,7 +1049,7 @@ for use, b, reason in use_cases:
           GANs are sharp but unstable. VAEs are stable but blurry.
           Diffusion models get the best of both — they are stable to train,
           produce sharp photorealistic outputs, and avoid mode collapse entirely.
-          Module 63 explains the forward noising process, the reverse denoising
+          Lesson 63 explains the forward noising process, the reverse denoising
           network, and how Stable Diffusion uses a VAE latent space to make
           diffusion fast enough for practical use.
         </p>
@@ -1068,7 +1066,7 @@ for use, b, reason in use_cases:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 63 · Generative AI
+              Next — Lesson 63 · Generative AI
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

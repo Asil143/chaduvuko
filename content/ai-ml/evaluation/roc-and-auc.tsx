@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'ROC Curve and AUC — Threshold-Independent Evaluation — Chaduvuko',
@@ -178,7 +177,6 @@ export default function ROCAndAUCPage() {
       readTime="22–28 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="evaluation" topic="roc-and-auc" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -189,7 +187,7 @@ export default function ROCAndAUCPage() {
         </h2>
 
         <p style={S.p}>
-          Module 34 showed the fundamental problem: precision and recall depend
+          Lesson 34 showed the fundamental problem: precision and recall depend
           on the threshold you choose. Lower the threshold from 0.5 to 0.3 —
           you catch more fraud (higher recall) but generate more false alarms
           (lower precision). Every threshold gives a different precision/recall pair.
@@ -838,7 +836,7 @@ print(f"  weighted: weight by support — use for overall performance summary")`
         <ErrorBlock
           error="AUC = 0.50 on the test set but model trains perfectly — AUC on training is 0.98"
           cause="Classic data leakage or label leakage. The model memorised a feature that directly encodes the label — a timestamp, a transaction ID sequence, a derived feature computed using the label. Or the test set has a completely different distribution from training (temporal split missing). AUC collapses to 0.5 when the model has no valid signal on new data."
-          fix="Remove any feature that could directly or indirectly encode the label. Check feature correlations with y — any feature with correlation above 0.9 is suspicious. Use chronological splits for time-series data. Run the model with randomly shuffled labels — if AUC is still high, a feature is leaking. Audit the preprocessing pipeline for fit-before-split mistakes from Module 20."
+          fix="Remove any feature that could directly or indirectly encode the label. Check feature correlations with y — any feature with correlation above 0.9 is suspicious. Use chronological splits for time-series data. Run the model with randomly shuffled labels — if AUC is still high, a feature is leaking. Audit the preprocessing pipeline for fit-before-split mistakes from Lesson 20."
         />
 
         <ErrorBlock
@@ -868,7 +866,7 @@ print(f"  weighted: weight by support — use for overall performance summary")`
         <h2 style={S.h2}>AUC in a real evaluation report — and picking a threshold from a capacity budget</h2>
 
         <p style={S.p}>
-          AUC shows up in exactly the places this module already mentioned in passing: the model
+          AUC shows up in exactly the places this lesson already mentioned in passing: the model
           card, the slide deck for the launch review, the compliance audit report for a regulated
           model like credit scoring or medical screening. The most common misuse is not a
           mathematical error — it is quoting a single AUC number as if it settles the question of
@@ -1122,7 +1120,7 @@ print("number could move on a different sample of the same population.")`} />
           Cross-validation gives you a distribution of AUC scores across multiple
           non-overlapping test sets — mean and standard deviation — so you can
           report confidence intervals, not just point estimates.
-          Module 37 covers cross-validation, the bias-variance tradeoff,
+          Lesson 37 covers cross-validation, the bias-variance tradeoff,
           and how to use them together to make model comparisons statistically rigorous.
         </p>
 
@@ -1138,7 +1136,7 @@ print("number could move on a different sample of the same population.")`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 37 · Model Evaluation
+              Next — Lesson 37 · Model Evaluation
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

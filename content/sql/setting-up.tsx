@@ -98,8 +98,8 @@ export default function SettingUp() {
   return (
     <LearnLayout
       title="Setting Up Your Environment"
-      description="Install MySQL or PostgreSQL locally, connect with a client, and understand how SQL tools work — or use the browser playground and skip straight to Module 05"
-      section="SQL — Module 04"
+      description="Install MySQL or PostgreSQL locally, connect with a client, and understand how SQL tools work — or use the browser playground and skip straight to Lesson 05"
+      section="SQL — Lesson 04"
       readTime="10–16 min"
       updatedAt="April 2026"
     >
@@ -109,10 +109,10 @@ export default function SettingUp() {
 
       <P>Before going any further — you already have a fully functional SQL environment running in your browser. The playground on every page of this course uses <Hl>SQLite (via sql.js)</Hl> — a real, production-grade database engine that runs entirely in your browser with the complete FreshCart database preloaded. Every query you write here is real SQL. Every concept you learn here works identically in MySQL and PostgreSQL.</P>
 
-      <P>This module is for when you want to go further — when you want a local installation that you can use for your own projects, connect to from your code, or use in job interviews where they ask you to run queries on their database. A local installation is not required to complete any module in this course. If you just want to write SQL, skip to Module 05 right now.</P>
+      <P>This lesson is for when you want to go further — when you want a local installation that you can use for your own projects, connect to from your code, or use in job interviews where they ask you to run queries on their database. A local installation is not required to complete any module in this course. If you just want to write SQL, skip to Lesson 05 right now.</P>
 
       <Callout type="tip">
-        If you are a student or a career switcher just learning SQL for the first time — use the browser playground for now. Come back to this module when you start building a real project or when a company asks you to connect to their database. Do not let setup friction slow your learning.
+        If you are a student or a career switcher just learning SQL for the first time — use the browser playground for now. Come back to this lesson when you start building a real project or when a company asks you to connect to their database. Do not let setup friction slow your learning.
       </Callout>
 
       <SQLPlayground
@@ -187,7 +187,7 @@ FROM customers;`}
         />
       </div>
 
-      <P>The SQL you write in this course works on all three. The tiny syntax differences (like AUTO_INCREMENT vs SERIAL vs INTEGER PRIMARY KEY) are noted where they appear. For the rest of this module, instructions are given for both PostgreSQL and MySQL side by side.</P>
+      <P>The SQL you write in this course works on all three. The tiny syntax differences (like AUTO_INCREMENT vs SERIAL vs INTEGER PRIMARY KEY) are noted where they appear. For the rest of this lesson, instructions are given for both PostgreSQL and MySQL side by side.</P>
 
       <HR />
 
@@ -849,10 +849,10 @@ FROM pragma_table_info('orders');`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          <strong>Module 05</strong> is where the actual SQL writing begins. You will write your first real query — SELECT and FROM — and understand exactly what the database does when it executes it. This is the module where SQL starts to feel like a superpower.
+          <strong>Lesson 05</strong> is where the actual SQL writing begins. You will write your first real query — SELECT and FROM — and understand exactly what the database does when it executes it. This is the module where SQL starts to feel like a superpower.
         </p>
         <Link href="/learn/sql/select-from" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 05 → Your First Query →
+          Lesson 05 → Your First Query →
         </Link>
       </div>
 

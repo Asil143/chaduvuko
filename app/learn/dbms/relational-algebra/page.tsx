@@ -129,7 +129,7 @@ export default function RelationalAlgebra() {
           approximately, but formally. When two SQL queries produce the same result,
           there is always a relational algebra equivalence that explains why.
           Second, you understand why the query optimiser rewrites queries the way it does —
-          every query optimisation in Module 11 was an algebraic equivalence applied
+          every query optimisation in Lesson 11 was an algebraic equivalence applied
           to the query tree. Third, you can express complex queries precisely for
           GATE exams and technical interviews — relational algebra questions are
           a staple of every DBMS examination.
@@ -162,7 +162,7 @@ export default function RelationalAlgebra() {
           </div>
         </div>
 
-        <SubTitle>The Reference Schema — Used Throughout This Module</SubTitle>
+        <SubTitle>The Reference Schema — Used Throughout This Lesson</SubTitle>
 
         <CodeBox label="Reference tables for all examples">
 {`// STUDENTS(student_id, name, city, gpa, dept_id)

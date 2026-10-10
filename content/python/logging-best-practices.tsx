@@ -77,7 +77,7 @@ export default function LoggingBestPractices() {
     <LearnLayout
       title="Logging Best Practices"
       description="Why print() is not logging, the logging module in depth, log levels, handlers and formatters, and what you should never log."
-      section="Python — Module 40"
+      section="Python — Lesson 40"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -115,15 +115,15 @@ export default function LoggingBestPractices() {
           print() output — assuming it was even captured anywhere — you have an undifferentiated wall of
           text with no way to filter to yesterday afternoon, no way to isolate just the errors, and no way
           to tell which messages mattered without reading every line. This is precisely the gap the{' '}
-          <code>logging</code> module exists to close, and precisely why Module 39&apos;s debugging
-          techniques and this module are taught back to back — one is for catching a bug while you can see
+          <code>logging</code> module exists to close, and precisely why Lesson 39&apos;s debugging
+          techniques and this lesson are taught back to back — one is for catching a bug while you can see
           it happen; the other is for understanding what happened after the fact, on a system you were not
           watching live.
         </Para>
 
         <Callout type="info">
           This does not mean print() is banned. It remains genuinely useful for quick, throwaway checks
-          during active development, exactly as covered in the previous module. The distinction is about
+          during active development, exactly as covered in the previous lesson. The distinction is about
           code that ships and runs unattended — anything intended to still be useful a week from now,
           in a file, searchable, with a timestamp and a severity, belongs in the logging module instead.
         </Callout>
@@ -513,7 +513,7 @@ if __name__ == "__main__":
 
           <Para>
             The on-call engineer opens <code>billing_output.txt</code> expecting to find the answer
-            quickly. Instead they find exactly what Part 01 of this module warned about: thousands of
+            quickly. Instead they find exactly what Part 01 of this lesson warned about: thousands of
             identical-looking lines of plain text, no timestamps (so there is no way to isolate "just
             Friday night&apos;s run" — the file is one continuous append across every night the script has
             ever run), and no severity level distinguishing a customer whose card was declined normally
@@ -538,7 +538,7 @@ if __name__ == "__main__":
             with structured, leveled logging (Parts 02–05), specifically so that a future incident like
             this one would be a two-minute log search instead of a two-day manual investigation through an
             undifferentiated text file. This is precisely the gap between print() and real logging that
-            this module opened with — and it is a genuinely common story across companies that treat
+            this lesson opened with — and it is a genuinely common story across companies that treat
             logging as an afterthought until a missed-revenue incident forces the issue.
           </Para>
         </div>
@@ -763,11 +763,11 @@ if __name__ == "__main__":
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 41 turns a working script into a real, installable Python package — project structure,
+          Lesson 41 turns a working script into a real, installable Python package — project structure,
           pyproject.toml, building wheels, and publishing to PyPI.
         </p>
         <Link href="/learn/python/packaging-distribution" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 41 → Packaging and Distributing Python Projects
+          Lesson 41 → Packaging and Distributing Python Projects
         </Link>
       </div>
     </LearnLayout>

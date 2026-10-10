@@ -361,7 +361,7 @@ export default function Udp() {
     <LearnLayout
       title="UDP — The Protocol That Trusts You"
       description="A deep-dive into UDP's minimalist design philosophy — covering its 8-byte header, datagram delivery semantics, why latency-sensitive and broadcast applications need it, UDP amplification attacks, and how QUIC builds reliability on top of UDP in user space."
-      section="Networking Fundamentals — Module 21"
+      section="Networking Fundamentals — Lesson 21"
       readTime="18–24 min"
       updatedAt="May 2026"
     >

@@ -78,7 +78,7 @@ export default function GroupBy() {
     <LearnLayout
       title="GROUP BY"
       description="Split rows into groups and compute aggregates per group — the engine behind every analytics report, dashboard metric, and business intelligence query"
-      section="SQL — Module 28"
+      section="SQL — Lesson 28"
       readTime="14–18 min"
       updatedAt="April 2026"
     >
@@ -86,7 +86,7 @@ export default function GroupBy() {
       {/* ── PART 01 ── */}
       <Part n="01" title="From One Summary to Many — What GROUP BY Does" />
 
-      <P>In Module 27 you learned aggregate functions — they collapse all rows into a single summary number. But most real business questions are not "what is the total revenue?" They are "what is the total revenue <Hl>per store</Hl>?" or "what is the average order value <Hl>per city</Hl>?" or "how many orders were placed <Hl>per month</Hl>?"</P>
+      <P>In Lesson 27 you learned aggregate functions — they collapse all rows into a single summary number. But most real business questions are not "what is the total revenue?" They are "what is the total revenue <Hl>per store</Hl>?" or "what is the average order value <Hl>per city</Hl>?" or "how many orders were placed <Hl>per month</Hl>?"</P>
 
       <P>GROUP BY is the clause that splits rows into groups before aggregating — so instead of one summary number for the whole table, you get one summary number per group. It is the difference between a company-wide total and a per-department breakdown. Between a product's average rating and a category's average rating.</P>
 
@@ -276,7 +276,7 @@ ORDER BY category, in_stock DESC;`}
 
       <H>The key rule — every non-aggregate SELECT column must be in GROUP BY</H>
 
-      <P>Here is why: once GROUP BY runs, every group of source rows collapses into a single output row. A column that is not wrapped in an aggregate function — like store_name below — can hold different values across the rows inside a group, and the database has no rule for picking just one of them to display. So it refuses the query outright. Every SELECT column must either appear in GROUP BY (guaranteeing it is identical for every row in the group) or be wrapped in an aggregate function (which reduces the whole group to one computed value). (The JOIN below previews syntax taught properly in Module 30 — for now, just follow how the rule applies to store_name.)</P>
+      <P>Here is why: once GROUP BY runs, every group of source rows collapses into a single output row. A column that is not wrapped in an aggregate function — like store_name below — can hold different values across the rows inside a group, and the database has no rule for picking just one of them to display. So it refuses the query outright. Every SELECT column must either appear in GROUP BY (guaranteeing it is identical for every row in the group) or be wrapped in an aggregate function (which reduces the whole group to one computed value). (The JOIN below previews syntax taught properly in Lesson 30 — for now, just follow how the rule applies to store_name.)</P>
 
       <CodeBlock
         label="The GROUP BY rule — every non-aggregate must be grouped"
@@ -535,7 +535,7 @@ ORDER BY
       {/* ── PART 08 ── */}
       <Part n="08" title="NULL Values in GROUP BY" />
 
-      <P>Unlike most SQL contexts where NULL ≠ NULL, GROUP BY treats all NULL values as a single group. All rows with NULL in the GROUP BY column(s) are placed together in one NULL group. This is consistent with the DISTINCT behaviour you learned in Module 10.</P>
+      <P>Unlike most SQL contexts where NULL ≠ NULL, GROUP BY treats all NULL values as a single group. All rows with NULL in the GROUP BY column(s) are placed together in one NULL group. This is consistent with the DISTINCT behaviour you learned in Lesson 10.</P>
 
       <SQLPlayground
         initialQuery={`-- Group by sub_category — which includes NULL (products without sub-category)
@@ -785,7 +785,7 @@ ORDER BY p.category, order_count DESC;`}
         showSchema={true}
       />
 
-      <P>SUM(COUNT(DISTINCT o.order_id)) OVER () in the last column is a window function — it totals order counts across every group in the result without collapsing them into a single row, which is what makes a per-row percentage-of-grand-total calculation possible. Window functions are taught properly in Module 52; for now, just recognise the pattern: OVER () with nothing inside the parentheses means "compute across all rows in the result."</P>
+      <P>SUM(COUNT(DISTINCT o.order_id)) OVER () in the last column is a window function — it totals order counts across every group in the result without collapsing them into a single row, which is what makes a per-row percentage-of-grand-total calculation possible. Window functions are taught properly in Lesson 52; for now, just recognise the pattern: OVER () with nothing inside the parentheses means "compute across all rows in the result."</P>
 
       <TimeBlock time="2:40 PM" label="Report delivered">
         The product manager immediately spots that Cash payments are disproportionately high for Staples orders — customers trust FreshCart enough to pay digitally for premium products but default to cash for everyday groceries. This insight drives a new cash-to-digital conversion campaign targeting staple product orders.
@@ -827,7 +827,7 @@ ORDER BY p.category, order_count DESC;`}
       <IQ q="You need to find the top-selling product in each category. How do you approach this with GROUP BY?">
         <p style={{ margin: '0 0 14px' }}>A basic GROUP BY can find the maximum sales value per category: SELECT category, MAX(units_sold) FROM product_sales GROUP BY category. But this only returns the maximum value — not which product achieved it. To find the specific product name alongside the maximum, you need to join the GROUP BY result back to the original data or use a different approach.</p>
         <p style={{ margin: '0 0 14px' }}>Approach 1 — subquery: SELECT p.category, p.product_name, ps.units_sold FROM product_sales ps JOIN products p ON ... WHERE (p.category, ps.units_sold) IN (SELECT p2.category, MAX(ps2.units_sold) FROM product_sales ps2 JOIN products p2 ON ... GROUP BY p2.category). This finds the product where the (category, units_sold) pair matches the maximum units_sold for that category.</p>
-        <p style={{ margin: 0 }}>Approach 2 — window functions (the modern approach): SELECT DISTINCT ON (category) category, product_name, units_sold FROM product_sales ORDER BY category, units_sold DESC. In PostgreSQL, DISTINCT ON returns the first row per category after sorting by units_sold descending — effectively the top product per category. The even cleaner approach using ROW_NUMBER(): SELECT category, product_name, units_sold FROM (SELECT category, product_name, units_sold, ROW_NUMBER() OVER (PARTITION BY category ORDER BY units_sold DESC) AS rn FROM product_sales) ranked WHERE rn = 1. This ranks products within each category and selects only rank 1 — the top seller. Window functions (Module 52) are the professional solution for "top N per group" queries.</p>
+        <p style={{ margin: 0 }}>Approach 2 — window functions (the modern approach): SELECT DISTINCT ON (category) category, product_name, units_sold FROM product_sales ORDER BY category, units_sold DESC. In PostgreSQL, DISTINCT ON returns the first row per category after sorting by units_sold descending — effectively the top product per category. The even cleaner approach using ROW_NUMBER(): SELECT category, product_name, units_sold FROM (SELECT category, product_name, units_sold, ROW_NUMBER() OVER (PARTITION BY category ORDER BY units_sold DESC) AS rn FROM product_sales) ranked WHERE rn = 1. This ranks products within each category and selects only rank 1 — the top seller. Window functions (Lesson 52) are the professional solution for "top N per group" queries.</p>
       </IQ>
 
       <HR />
@@ -916,10 +916,10 @@ ORDER BY total_revenue DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 29</strong>, you learn HAVING — the clause that filters groups after aggregation, completing the WHERE + GROUP BY + HAVING triad that powers every analytical query.
+          In <strong>Lesson 29</strong>, you learn HAVING — the clause that filters groups after aggregation, completing the WHERE + GROUP BY + HAVING triad that powers every analytical query.
         </p>
         <Link href="/learn/sql/having" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 29 → HAVING
+          Lesson 29 → HAVING
         </Link>
       </div>
 

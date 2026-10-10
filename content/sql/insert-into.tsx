@@ -78,7 +78,7 @@ export default function InsertInto() {
     <LearnLayout
       title="INSERT INTO"
       description="Add rows to tables — single inserts, bulk inserts, insert from SELECT, upsert patterns, and every safety practice for writing data correctly"
-      section="SQL — Module 20"
+      section="SQL — Lesson 20"
       readTime="10–14 min"
       updatedAt="April 2026"
     >
@@ -877,10 +877,10 @@ ORDER BY store_id;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 21</strong>, you learn UPDATE — modifying existing rows, updating multiple columns at once, updating from another table, and the most important safety rule in SQL: always run SELECT before UPDATE.
+          In <strong>Lesson 21</strong>, you learn UPDATE — modifying existing rows, updating multiple columns at once, updating from another table, and the most important safety rule in SQL: always run SELECT before UPDATE.
         </p>
         <Link href="/learn/sql/update" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 21 → UPDATE
+          Lesson 21 → UPDATE
         </Link>
       </div>
 

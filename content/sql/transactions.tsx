@@ -118,7 +118,7 @@ export default function Transactions() {
     <LearnLayout
       title="Transactions and ACID"
       description="How databases guarantee correctness — BEGIN, COMMIT, ROLLBACK, savepoints, isolation levels, and the concurrency anomalies that each level prevents"
-      section="SQL — Module 47"
+      section="SQL — Lesson 47"
       readTime="12–16 min"
       updatedAt="April 2026"
     >
@@ -1029,10 +1029,10 @@ WHERE customer_id = 1
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 48</strong>, you learn ACID Properties — the four guarantees every reliable database provides, how each property is enforced at the engine level, and where transactions, isolation levels, and the WAL all fit together.
+          In <strong>Lesson 48</strong>, you learn ACID Properties — the four guarantees every reliable database provides, how each property is enforced at the engine level, and where transactions, isolation levels, and the WAL all fit together.
         </p>
         <Link href="/learn/sql/acid-properties" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 48 → ACID Properties
+          Lesson 48 → ACID Properties
         </Link>
       </div>
 

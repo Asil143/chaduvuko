@@ -359,7 +359,7 @@ export default function FirewallsAndAclsPage() {
     <LearnLayout
       title="Firewalls and ACLs"
       description="From packet filters to next-generation firewalls: how network access control works, how rules are evaluated, and how to design a zone-based security architecture that actually holds."
-      section="Networking Fundamentals — Module 34"
+      section="Networking Fundamentals — Lesson 34"
       readTime="28–38 min"
       updatedAt="May 2026"
     >

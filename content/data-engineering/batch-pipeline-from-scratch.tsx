@@ -119,7 +119,7 @@ export default function BatchPipelineFromScratchModule() {
     <LearnLayout
       title="Building a Batch Pipeline From Scratch"
       description="From requirements to production deployment — schema validation, chunked extraction, transformation, upserts, observability, testing, and scheduling."
-      section="Data Engineering — Module 25"
+      section="Data Engineering — Lesson 25"
       readTime="85 min"
       updatedAt="August 2026"
     >
@@ -130,15 +130,15 @@ export default function BatchPipelineFromScratchModule() {
         <SectionTitle>A Complete Pipeline, Built the Right Way</SectionTitle>
 
         <Para>
-          Previous modules covered the theory — ingestion patterns, design principles,
-          idempotency, observability. This module applies all of it to one concrete
+          Previous lessons covered the theory — ingestion patterns, design principles,
+          idempotency, observability. This lesson applies all of it to one concrete
           task: building a production-grade incremental pipeline for FreshCart&rsquo;s
           orders table, from scratch, one module at a time, explaining every decision
           along the way.
         </Para>
 
         <Para>
-          By the end of this module you will have a complete, deployable pipeline
+          By the end of this lesson you will have a complete, deployable pipeline
           with chunked extraction, schema validation, row-level error handling, upsert
           loading, structured observability, a test suite, and a cron/Airflow schedule.
           Every component is explained — not just shown.
@@ -489,7 +489,7 @@ INFO Extraction complete: 1 batches, 1,842 rows`}</Output>
         <TryThis>
           Change <code>config.overlap_minutes</code> from 5 to 60 in your head and
           predict what happens to <code>rows_extracted</code> on the very next run.
-          The Error Library at the end of this module has an entry for exactly this
+          The Error Library at the end of this lesson has an entry for exactly this
           misconfiguration — check your prediction against it.
         </TryThis>
       </section>
@@ -662,7 +662,7 @@ def validate_batch(raw_rows: list[dict], dlq: DLQWriter) -> list[dict]:
 
         <Output>{`WARNING High rejection rate: 12.3% (34 of 277 rows rejected)
 # 12.3% clears the 5% alert threshold — this is exactly the alert
-# diagnosed in this module's Real World section below`}</Output>
+# diagnosed in this lesson's Real World section below`}</Output>
       </section>
 
       <Divider />
@@ -1323,7 +1323,7 @@ Total duration: 12.9s (SLA: 8 min — not breached)`}</Output>
           },
           {
             wrong: '"A pipeline that has never failed in production is a well-designed pipeline"',
-            right: 'It might just mean it has never been tested by real failure conditions yet. This module\'s Part 03 checkpoint, Part 04 statement timeout, and Part 05 dead letter queue exist specifically because failures are assumed to be inevitable — a pipeline with no failure-handling code that "has never failed" is one bad day away from silently corrupting the destination table with no way to detect it happened.',
+            right: 'It might just mean it has never been tested by real failure conditions yet. This lesson\'s Part 03 checkpoint, Part 04 statement timeout, and Part 05 dead letter queue exist specifically because failures are assumed to be inevitable — a pipeline with no failure-handling code that "has never failed" is one bad day away from silently corrupting the destination table with no way to detect it happened.',
           },
           {
             wrong: '"Adding more Airflow retries makes a flaky pipeline safer"',
@@ -1331,7 +1331,7 @@ Total duration: 12.9s (SLA: 8 min — not breached)`}</Output>
           },
           {
             wrong: '"Once the pipeline passes all its unit tests, it\'s production ready"',
-            right: 'Part 10\'s unit tests prove the pure functions (validate_row, enrich_order) behave correctly in isolation — they say nothing about the source database timing out, the Snowflake warehouse being suspended, or the Airflow scheduler triggering a second concurrent run. Those are exactly the three real first-week issues in this module\'s Real World section, and none of them would have been caught by a unit test.',
+            right: 'Part 10\'s unit tests prove the pure functions (validate_row, enrich_order) behave correctly in isolation — they say nothing about the source database timing out, the Snowflake warehouse being suspended, or the Airflow scheduler triggering a second concurrent run. Those are exactly the three real first-week issues in this lesson\'s Real World section, and none of them would have been caught by a unit test.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1669,10 +1669,10 @@ The overall philosophy: write pure functions wherever possible (transformation, 
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 26 covers idempotency and atomicity — the two properties that separate toy pipelines from production ones — and exactly how to make pipelines safe to restart after any failure at any stage.
+          Lesson 26 covers idempotency and atomicity — the two properties that separate toy pipelines from production ones — and exactly how to make pipelines safe to restart after any failure at any stage.
         </p>
         <Link href="/learn/data-engineering/idempotency-atomicity" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 26 → Idempotency, Atomicity and Pipeline Restartability
+          Lesson 26 → Idempotency, Atomicity and Pipeline Restartability
         </Link>
       </div>
     </LearnLayout>

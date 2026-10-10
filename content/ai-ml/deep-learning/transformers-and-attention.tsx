@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Transformers and Self-Attention — Chaduvuko',
@@ -178,7 +177,6 @@ export default function TransformersAndAttentionPage() {
       readTime="45–58 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="deep-learning" topic="transformers-and-attention" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -191,7 +189,7 @@ export default function TransformersAndAttentionPage() {
         </h2>
 
         <p style={S.p}>
-          Module 47 showed the LSTM's fundamental limitation: sequential processing.
+          Lesson 47 showed the LSTM's fundamental limitation: sequential processing.
           To understand token 512 in a document you must first process tokens
           1 through 511. You cannot parallelise across the sequence.
           Modern GPUs have thousands of cores that sit idle while the LSTM
@@ -238,7 +236,7 @@ export default function TransformersAndAttentionPage() {
         </AnalogyBox>
 
         <Callout type="tip">
-          This module builds self-attention from scratch in NumPy, then
+          This lesson builds self-attention from scratch in NumPy, then
           scales to a full Transformer encoder block in PyTorch.
           Understanding the QKV attention mechanism completely is more
           valuable than memorising the full Transformer architecture —
@@ -1029,7 +1027,7 @@ for epoch in range(1, 21):
         <h2 style={S.h2}>How attention's cost curve turns into an actual infrastructure decision</h2>
 
         <p style={S.p}>
-          Everything this module derives mathematically — attention's quadratic cost in
+          Everything this lesson derives mathematically — attention's quadratic cost in
           sequence length, the memory that a full attention matrix consumes — shows up
           in production not as theory but as a line item in a capacity-planning
           spreadsheet. When a team building a support-ticket classifier or a chat

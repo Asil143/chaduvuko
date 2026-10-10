@@ -304,7 +304,7 @@ export default function HowDbtWorks() {
     <LearnLayout
       title="How dbt Works: Compile, Run, and the DAG"
       description="The real mechanics of dbt run: Jinja compilation, ref()/source() resolution, the dependency graph and topological sort, the difference between compiling and running, what dbt deliberately does not do, and a full worked example tracing a three-model chain."
-      section="dbt — Module 02"
+      section="dbt — Lesson 02"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -318,8 +318,8 @@ export default function HowDbtWorks() {
         <SectionTag text="// Part 01 — What Happens When You Run dbt run" />
         <SectionTitle>What Actually Happens When You Type `dbt run`</SectionTitle>
         <Para>
-          Module 01 described dbt at the conceptual level: a tool that turns SQL models into tables and
-          views. This module opens the hood. Understanding the exact sequence of steps behind{' '}
+          Lesson 01 described dbt at the conceptual level: a tool that turns SQL models into tables and
+          views. This lesson opens the hood. Understanding the exact sequence of steps behind{' '}
           <code>dbt run</code> is what lets you debug a failing run by reasoning about the mechanism instead
           of guessing.
         </Para>
@@ -688,7 +688,7 @@ Done. PASS=2 WARN=0 ERROR=1 SKIP=1 TOTAL=4`}
         <SectionTag text="// Part 05 — What dbt Does Not Do" />
         <SectionTitle>What dbt Deliberately Does Not Do</SectionTitle>
         <Para>
-          Module 01 established that dbt does not extract or load data. This module adds two more boundaries
+          Lesson 01 established that dbt does not extract or load data. This lesson adds two more boundaries
           that matter specifically for understanding how dbt "runs" in a real production environment:
           scheduling and orchestration.
         </Para>
@@ -836,7 +836,7 @@ from {{ ref('stg_events') }}
         <SectionTag text="// Part 07 — Worked Example" />
         <SectionTitle>A Complete Worked Example: Source → Staging → Mart</SectionTitle>
         <Para>
-          Bringing every piece from this module together, here is a full three-model chain traced through
+          Bringing every piece from this lesson together, here is a full three-model chain traced through
           compilation and execution, start to finish, for FreshCart's orders pipeline.
         </Para>
         <SubTitle>Step 1 — the raw source, already landed by ingestion</SubTitle>
@@ -1102,7 +1102,7 @@ group by 1`}
           the staging model's cast wasn't defensive against that case.
         </Para>
         <Callout title="What made this diagnosable in minutes, not hours" color={K}>
-          Every piece of this diagnosis relied on a mechanic covered earlier in this module: the run output
+          Every piece of this diagnosis relied on a mechanic covered earlier in this lesson: the run output
           showing exactly which model failed and which succeeded (Part 01), the SKIP behavior confirming no
           upstream dependency silently failed first (Part 04), and <code>dbt compile</code> revealing the
           literal SQL actually sent to the warehouse (Part 02) rather than requiring the engineer to guess at
@@ -1126,7 +1126,7 @@ group by 1`}
           'The DAG\'s nodes are models, sources, seeds, and snapshots; its edges are ref()/source() calls — and it guarantees a model never runs until everything it depends on has run successfully.',
           'dbt has no built-in scheduler and does not orchestrate other tools — something external (cron, Airflow, CI, or dbt Cloud\'s scheduler) must trigger it, and a separate orchestrator coordinates it alongside ingestion and BI tools.',
           'A model\'s materialization (view, table, incremental, ephemeral) determines exactly what DDL/DML dbt generates and executes for it.',
-          'Tracing a real source → staging → mart chain end to end shows every mechanic in this module working together: source() and ref() resolution, DAG construction, topological sort, and materialization-driven execution.',
+          'Tracing a real source → staging → mart chain end to end shows every mechanic in this lesson working together: source() and ref() resolution, DAG construction, topological sort, and materialization-driven execution.',
         ]}
       />
     </LearnLayout>

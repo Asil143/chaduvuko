@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Pandas DataFrames — Chaduvuko',
@@ -175,7 +174,6 @@ export default function PandasDataFramesPage() {
       readTime="45–58 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='programming' topic='pandas-dataframes' />
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -203,9 +201,9 @@ export default function PandasDataFramesPage() {
         </p>
 
         <p style={S.p}>
-          The running dataset in this module is a simulated DoorDash order table —
+          The running dataset in this lesson is a simulated DoorDash order table —
           10,000 rows with order IDs, restaurant names, distances, delivery times,
-          ratings, and some intentional data quality issues. By the end of this module
+          ratings, and some intentional data quality issues. By the end of this lesson
           you'll have cleaned it, explored it, engineered features from it,
           and prepared it for a model.
         </p>
@@ -213,7 +211,7 @@ export default function PandasDataFramesPage() {
         <HBox color="#888888">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module covers:
+              What this lesson covers:
             </span>
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -1411,7 +1409,7 @@ print(f"\\nSaved ML-ready dataset: {feature_df.shape}")`} />
           On a real ML team, nobody trains a model directly against a SQL table
           or a folder of Parquet files. There is always a pandas layer in between.
           A data scientist pulls a slice of data into a notebook, runs the same
-          five exploration commands from Module 2, then spends the bulk of the
+          five exploration commands from Lesson 2, then spends the bulk of the
           project time in <span style={S.code as React.CSSProperties}>groupby</span>,
           <span style={S.code as React.CSSProperties}> merge</span>, and
           <span style={S.code as React.CSSProperties}> transform</span> calls —
@@ -1437,7 +1435,7 @@ import numpy as np
 
 df = pd.read_parquet('/tmp/orders.parquet')
 
-# Step 1 — always start here (Module 2's five commands)
+# Step 1 — always start here (Lesson 2's five commands)
 print(df.shape)
 print(df.isnull().mean().round(3))
 
@@ -1629,7 +1627,7 @@ y = df['delivery_time'].to_numpy()
             I would start with df.isnull().sum() and the percentage version to see which columns
             are affected and how badly. Then I would check whether the missingness looks random
             or patterned — for example, grouping by another column and comparing missing rates,
-            the same check shown in Section 6 of this module. Only after understanding the
+            the same check shown in Section 6 of this lesson. Only after understanding the
             pattern would I choose a fix: drop for MCAR columns with very low missing rates,
             group-based imputation for MAR columns, and a much more careful, domain-informed
             approach for MNAR columns, since naive imputation there actively introduces bias
@@ -1669,7 +1667,7 @@ y = df['delivery_time'].to_numpy()
         </p>
 
         <p style={S.p}>
-          Module 11 begins the Data Engineering section with data collection —
+          Lesson 11 begins the Data Engineering section with data collection —
           pulling data from REST APIs, SQL databases, file systems, and web scraping.
           In production ML, the data you get from your company's systems is never
           as clean as the datasets in tutorials. The next section closes that gap.
@@ -1687,7 +1685,7 @@ y = df['delivery_time'].to_numpy()
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 11 · Data Engineering
+              Next — Lesson 11 · Data Engineering
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

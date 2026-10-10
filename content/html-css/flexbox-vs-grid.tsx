@@ -77,7 +77,7 @@ export default function FlexboxVsGrid() {
     <LearnLayout
       title="Flexbox vs Grid — When to Use Each"
       description="The decision every layout starts with — one-dimensional vs two-dimensional thinking, and when to combine both in the same page."
-      section="HTML & CSS — Module 27"
+      section="HTML & CSS — Lesson 27"
       readTime="25 min"
       updatedAt="August 2026"
     >
@@ -755,7 +755,7 @@ at the same time?
           {
             error: `A "table-like" list of rows has misaligned columns once real (variable-length) content is used, despite looking fine with placeholder/lorem-ipsum data`,
             cause: 'Each row is its own independent Flexbox container, negotiating space-between or similar spacing on its own — with real data of varying lengths, that negotiation produces a different result per row, since nothing ties one row\'s column boundaries to another\'s.',
-            fix: 'Restructure as a single Grid with shared grid-template-columns across all rows (commonly using display: contents on each row wrapper), exactly as shown in the Real World example in this module.',
+            fix: 'Restructure as a single Grid with shared grid-template-columns across all rows (commonly using display: contents on each row wrapper), exactly as shown in the Real World example in this lesson.',
           },
           {
             error: `A Grid item with grid-column: span 2 unexpectedly wraps to the next row instead of sitting flush with its neighbor`,
@@ -818,7 +818,7 @@ at the same time?
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          With both layout systems and the decision framework between them in hand, the next module
+          With both layout systems and the decision framework between them in hand, the next lesson
           covers how a layout actually adapts to different screen sizes — media query syntax, breakpoint
           strategy, and testing responsively for real.
         </p>

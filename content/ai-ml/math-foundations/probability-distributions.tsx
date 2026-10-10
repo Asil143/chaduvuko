@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Probability Distributions and Bayes Theorem — Chaduvuko',
@@ -169,7 +168,6 @@ export default function ProbabilityDistributionsPage() {
       readTime="36–45 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='math-foundations' topic='probability-distributions' />
 
       {/* ══ SECTION 1 — WHY PROBABILITY ════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -205,7 +203,7 @@ export default function ProbabilityDistributionsPage() {
         <HBox color="#7F77DD">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module covers:
+              What this lesson covers:
             </span>
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -230,7 +228,7 @@ export default function ProbabilityDistributionsPage() {
         </HBox>
 
         <Callout type="tip">
-          This module has more concepts than the previous ones but each one
+          This lesson has more concepts than the previous ones but each one
           is short. Read it in order — each concept is the foundation of the next.
           The payoff comes at the end when everything connects to the loss
           functions you will use every day in ML.
@@ -1320,7 +1318,7 @@ for name, pred in [("pred_A", pred_A), ("pred_B", pred_B)]:
         <h2 style={S.h2}>Choosing a distribution is a design decision, not a stats-homework step</h2>
 
         <p style={S.p}>
-          This module's ideas show up under a few very specific job titles:
+          This lesson's ideas show up under a few very specific job titles:
           data scientists running experimentation platforms who need to decide
           whether an A/B test result is real or noise, ML engineers picking a
           loss function for a new model, and applied scientists building
@@ -1597,7 +1595,7 @@ print(f"Expected lift: {lift.mean()*100:.2f}%  "
               textTransform: 'uppercase' as const, color: '#7F77DD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 07
+              Next — Lesson 07
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -78,7 +78,7 @@ export default function FullOuterJoin() {
     <LearnLayout
       title="FULL OUTER JOIN"
       description="Keep all rows from both tables — reconciliation reports, symmetric difference queries, gap analysis across two data sources, and every pattern where neither side can be dropped"
-      section="SQL — Module 33"
+      section="SQL — Lesson 33"
       readTime="10–14 min"
       updatedAt="April 2026"
     >
@@ -756,10 +756,10 @@ ORDER BY revenue_change DESC NULLS LAST;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 34</strong>, you learn SELF JOIN — joining a table to itself, the technique for hierarchical queries, adjacency list traversal, and comparing rows within the same table.
+          In <strong>Lesson 34</strong>, you learn SELF JOIN — joining a table to itself, the technique for hierarchical queries, adjacency list traversal, and comparing rows within the same table.
         </p>
         <Link href="/learn/sql/self-join" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 34 → SELF JOIN
+          Lesson 34 → SELF JOIN
         </Link>
       </div>
 

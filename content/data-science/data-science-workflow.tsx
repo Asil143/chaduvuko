@@ -69,7 +69,7 @@ export default function DataScienceWorkflow() {
     <LearnLayout
       title="The Data Science Workflow"
       description="From a vague business question to a shipped decision — the six stages every real project moves through, walked end to end on the StreamPulse dataset"
-      section="Data Science — Module 02"
+      section="Data Science — Lesson 02"
       readTime="12–16 min"
       updatedAt="July 2026"
     >
@@ -77,7 +77,7 @@ export default function DataScienceWorkflow() {
       {/* ── PART 01 ── */}
       <Part n="01" title={'"Analyze the Data" Is Not a Plan'} />
 
-      <P>Module 01 introduced the six-stage data science lifecycle in one paragraph each. This module goes through every stage in full depth, because the single biggest reason data science projects stall or produce numbers nobody trusts is skipping one of these stages — almost always without realizing it.</P>
+      <P>Lesson 01 introduced the six-stage data science lifecycle in one paragraph each. This lesson goes through every stage in full depth, because the single biggest reason data science projects stall or produce numbers nobody trusts is skipping one of these stages — almost always without realizing it.</P>
 
       <P>Here is the full sequence again, as a reference you will come back to:</P>
 
@@ -230,7 +230,7 @@ export default function DataScienceWorkflow() {
       <P>A cancellation rate calculated from 3 subscribers is not evidence of anything, even if the percentage looks dramatic. This is the exact reason Section 9 (Statistics) exists — hypothesis testing formalizes exactly how much sample size you need before a difference is trustworthy, instead of eyeballing it.</P>
 
       <H>Ask whether the result would survive a stricter test</H>
-      <P>If a groupby shows Premium subscribers cancel more than Basic, the immediate next question is: is that a real behavioral difference, or does it just reflect that Premium happened to sign up more recently (less time to prove they stay)? Module 42 (Hypothesis Testing) and Module 44 (A/B Testing) give you the formal tools; for now, the habit to build is asking this question at all, every time.</P>
+      <P>If a groupby shows Premium subscribers cancel more than Basic, the immediate next question is: is that a real behavioral difference, or does it just reflect that Premium happened to sign up more recently (less time to prove they stay)? Lesson 42 (Hypothesis Testing) and Lesson 44 (A/B Testing) give you the formal tools; for now, the habit to build is asking this question at all, every time.</P>
 
       <Callout type="warning">
         The most expensive data science mistake is not a bug in the code — it is presenting a pattern from a small or biased sample as if it were a validated fact. Always ask "how many rows is this actually based on?" before repeating a number to a stakeholder.
@@ -334,7 +334,7 @@ export default function DataScienceWorkflow() {
 
       <IQ q="Give an example of when a simple groupby is the right answer, and when you would build a model instead.">
         <p style={{ margin: '0 0 14px' }}>A groupby and chart is the right tool when the question is descriptive — "what happened, broken down by category?" For example, "what is the average watch time per device type?" is fully answered by grouping watch_history by device and taking the mean. No model adds value here because nothing is being predicted about an individual, unseen case.</p>
-        <p style={{ margin: '0 0 14px' }}>A model is the right tool when the question is genuinely predictive about individual future cases — "will this specific subscriber cancel next month?" cannot be answered by a groupby, because it requires estimating a probability for one new individual based on patterns learned across many past individuals. That requires a trained classification model, covered starting in Module 47.</p>
+        <p style={{ margin: '0 0 14px' }}>A model is the right tool when the question is genuinely predictive about individual future cases — "will this specific subscriber cancel next month?" cannot be answered by a groupby, because it requires estimating a probability for one new individual based on patterns learned across many past individuals. That requires a trained classification model, covered starting in Lesson 47.</p>
         <p style={{ margin: 0 }}>A common junior mistake is reaching for a model when a groupby would answer the question just as well and be far easier to explain and maintain — model complexity should be justified by the question's actual need for individual-level prediction, not used as a default.</p>
       </IQ>
 
@@ -387,7 +387,7 @@ export default function DataScienceWorkflow() {
         hint="Merge users and watch_history on user_id, filter to just the two referral sources you care about (or don't filter and group by all of them), then groupby('referral_source') and take the mean of minutes_watched."
         answer={`merged = users.merge(watch_history, on='user_id')
 merged.groupby('referral_source')['minutes_watched'].mean().round(1).sort_values(ascending=False)`}
-        explanation="This mirrors the full Stage 3–4 pattern from this module: merge two related tables into one analysis-ready DataFrame, then groupby the dimension you care about and aggregate the metric in question. Before reporting a difference between Social Media and Organic Search specifically, Stage 5 (validate) would require checking how many rows back each group — with StreamPulse's small teaching dataset, that check usually reveals the sample is too small to draw a confident conclusion, which is itself the correct, honest finding."
+        explanation="This mirrors the full Stage 3–4 pattern from this lesson: merge two related tables into one analysis-ready DataFrame, then groupby the dimension you care about and aggregate the metric in question. Before reporting a difference between Social Media and Organic Search specifically, Stage 5 (validate) would require checking how many rows back each group — with StreamPulse's small teaching dataset, that check usually reveals the sample is too small to draw a confident conclusion, which is itself the correct, honest finding."
       />
 
       <HR />
@@ -414,10 +414,10 @@ merged.groupby('referral_source')['minutes_watched'].mean().round(1).sort_values
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          <strong>Module 03</strong> draws a sharp, practical line between Data Scientist, Data Analyst, ML Engineer, and Data Engineer — what each role actually owns day to day, where the boundaries blur in practice, and how to talk about your own work in interviews without the titles getting confused.
+          <strong>Lesson 03</strong> draws a sharp, practical line between Data Scientist, Data Analyst, ML Engineer, and Data Engineer — what each role actually owns day to day, where the boundaries blur in practice, and how to talk about your own work in interviews without the titles getting confused.
         </p>
         <Link href="/learn/data-science/ds-vs-other-roles" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 03 → Data Scientist vs Other Roles
+          Lesson 03 → Data Scientist vs Other Roles
         </Link>
       </div>
 

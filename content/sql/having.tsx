@@ -78,7 +78,7 @@ export default function Having() {
     <LearnLayout
       title="HAVING"
       description="Filter groups after aggregation — the clause that completes WHERE + GROUP BY + HAVING, with real business examples of every pattern you will use in production analytics"
-      section="SQL — Module 29"
+      section="SQL — Lesson 29"
       readTime="10–14 min"
       updatedAt="April 2026"
     >
@@ -866,10 +866,10 @@ ORDER BY last_order_date ASC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 30</strong>, you learn JOINs — the most powerful concept in relational SQL. How to combine data from multiple tables, the difference between INNER, LEFT, RIGHT, and FULL OUTER JOINs, and why joins are the foundation of every non-trivial query.
+          In <strong>Lesson 30</strong>, you learn JOINs — the most powerful concept in relational SQL. How to combine data from multiple tables, the difference between INNER, LEFT, RIGHT, and FULL OUTER JOINs, and why joins are the foundation of every non-trivial query.
         </p>
         <Link href="/learn/sql/joins-intro" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 30 → Introduction to JOINs
+          Lesson 30 → Introduction to JOINs
         </Link>
       </div>
 

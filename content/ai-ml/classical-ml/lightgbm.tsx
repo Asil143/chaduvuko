@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'LightGBM — Fast Gradient Boosting at Scale — Chaduvuko',
@@ -178,7 +177,6 @@ export default function LightGBMPage() {
       readTime="30–40 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="classical-ml" topic="lightgbm" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -205,7 +203,7 @@ export default function LightGBMPage() {
         </p>
 
         <p style={S.p}>
-          This module explains the three innovations clearly,
+          This lesson explains the three innovations clearly,
           shows you the LightGBM API (nearly identical to XGBoost),
           and gives you the practical parameter guide for production use.
         </p>
@@ -228,7 +226,7 @@ export default function LightGBMPage() {
         <Callout type="tip">
           LightGBM requires <span style={S.code as React.CSSProperties}>pip install lightgbm</span>.
           It implements the sklearn estimator interface — every Pipeline,
-          cross_val_score, and GridSearchCV from earlier modules works unchanged.
+          cross_val_score, and GridSearchCV from earlier lessons works unchanged.
           The main difference from XGBoost is parameter names and one
           critical default: leaf-wise growth, which needs
           <span style={S.code as React.CSSProperties}> num_leaves</span> to be tuned
@@ -1193,7 +1191,7 @@ print("\nProduction bundle saved.")`} />
         </p>
 
         <p style={S.p}>
-          Module 32 begins unsupervised learning — K-Means Clustering.
+          Lesson 32 begins unsupervised learning — K-Means Clustering.
           Instead of predicting a label, you find hidden groups in data.
           Amazon uses it to segment 300 million customers.
           DoorDash uses it to cluster delivery zones.
@@ -1213,7 +1211,7 @@ print("\nProduction bundle saved.")`} />
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 32 · Classical ML
+              Next — Lesson 32 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

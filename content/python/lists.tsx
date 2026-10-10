@@ -77,7 +77,7 @@ export default function Lists() {
     <LearnLayout
       title="Lists — Creation, Indexing, Methods"
       description="The workhorse data structure of Python — creating and slicing lists, every common method, mutability in depth, the shallow-copy trap, and nested lists."
-      section="Python — Module 08"
+      section="Python — Lesson 08"
       readTime="55 min"
       updatedAt="August 2026"
     >
@@ -90,7 +90,7 @@ export default function Lists() {
         <Para>
           A list is Python&apos;s general-purpose ordered collection — it can hold any number of items,
           in any type, including a mix of types in the same list, and it remembers the order items were
-          added in. You have already seen lists used casually in earlier modules; this module is where
+          added in. You have already seen lists used casually in earlier lessons; this lesson is where
           you learn every operation you will actually use on them, in depth.
         </Para>
 
@@ -404,7 +404,7 @@ print(deep)        # [[1, 2, 99], [3, 4]]     — only the deep copy changed`}</
           there is nothing nested to share. Reach for <code>copy.deepcopy()</code> specifically when a
           list contains other mutable objects (lists, dicts) that also need to be genuinely independent
           after copying. You will meet this exact problem again, in a slightly different shape, once you
-          reach the Nested Data Structures module (Module 13).
+          reach the Nested Data Structures module (Lesson 13).
         </Callout>
       </section>
 
@@ -437,7 +437,7 @@ print(list_a is list_c)           # True  — AND the same object, since list_c 
           <code>==</code> but never <code>is</code>. The practical rule is unchanged from the Variables
           module: use <code>==</code> for essentially all comparisons; reserve <code>is</code> for
           checking against <code>None</code> or for deliberately confirming two names refer to one
-          shared object — exactly the check used throughout this module to explain the copying
+          shared object — exactly the check used throughout this lesson to explain the copying
           behaviour above.
         </Para>
       </section>
@@ -518,7 +518,7 @@ def build_driver_route(driver, todays_stops):
 
           <Para>
             One added method call — <code>.copy()</code> — fixes the entire incident. The lesson the
-            team takes away, and the one worth internalising from this module generally: any time a
+            team takes away, and the one worth internalising from this lesson generally: any time a
             "starting point" list is going to be built on by multiple independent callers, ask explicitly
             whether each caller needs its own copy, because Python will never make one for you silently.
           </Para>
@@ -744,11 +744,11 @@ def build_driver_route(driver, todays_stops):
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 09 covers tuples and sets — immutable sequences, unpacking, hashability, and the set
+          Lesson 09 covers tuples and sets — immutable sequences, unpacking, hashability, and the set
           operations that make membership checks dramatically faster than scanning a list.
         </p>
         <Link href="/learn/python/tuples-sets" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 09 → Tuples and Sets
+          Lesson 09 → Tuples and Sets
         </Link>
       </div>
     </LearnLayout>

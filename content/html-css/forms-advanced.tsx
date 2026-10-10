@@ -77,7 +77,7 @@ export default function FormsAdvanced() {
     <LearnLayout
       title="HTML Forms — Advanced"
       description="select, textarea, fieldset/legend, radio and checkbox groups, and the form-submission details that trip up beginners."
-      section="HTML & CSS — Module 09"
+      section="HTML & CSS — Lesson 09"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -88,8 +88,8 @@ export default function FormsAdvanced() {
         <SectionTitle>The select Element — Dropdowns Done Properly</SectionTitle>
 
         <Para>
-          The previous module covered the common input types — text, email, checkbox, radio, and the
-          rest. This module picks up where that one left off, with the form controls that need a little
+          The previous lesson covered the common input types — text, email, checkbox, radio, and the
+          rest. This lesson picks up where that one left off, with the form controls that need a little
           more structure: dropdowns, multi-line text, grouped fields, and the actual mechanics of what
           happens the instant a user clicks Submit. A <code>{'<select>'}</code> element renders a
           dropdown menu built from one or more <code>{'<option>'}</code> children. Every option needs a{' '}
@@ -629,7 +629,7 @@ export default function FormsAdvanced() {
         </Para>
 
         <Callout type="info">
-          This module deliberately stops at the concept, not the full implementation — reading form
+          This lesson deliberately stops at the concept, not the full implementation — reading form
           values in JavaScript, sending them with <code>fetch()</code>, and handling the server&apos;s
           response are genuinely a separate, larger topic that belongs to JavaScript fundamentals rather
           than this HTML track. What matters here is understanding precisely what default behavior is
@@ -689,14 +689,14 @@ export default function FormsAdvanced() {
           <SubSubTitle>What the engineer finds</SubSubTitle>
 
           <Para>
-            Two separate bugs, each traceable directly to earlier parts of this module. First, the
+            Two separate bugs, each traceable directly to earlier parts of this lesson. First, the
             backend&apos;s order-processing code checks{' '}
             <code>{`if request.form.get('gift_wrap') == 'true'`}</code> — but per Part 05, an{' '}
             <em>unchecked</em> checkbox is never submitted at all, so that comparison is actually never
             the source of a false positive from an unchecked box. The real cause turns out to be a
             client-side JavaScript bug elsewhere that was re-checking the box after a price-estimate
             AJAX call — unrelated to the HTML itself, but only found by first ruling out the HTML/backend
-            contract, exactly the reasoning this module trains. Second, and this one is a pure markup
+            contract, exactly the reasoning this lesson trains. Second, and this one is a pure markup
             bug: the first radio input has <code>name="shiping_speed"</code> — missing the second
             "p" — while the other two correctly say <code>shipping_speed</code>. Exactly the typo
             warned about in Part 04: "Standard" is its own one-member group, so it can be checked{' '}
@@ -792,7 +792,7 @@ export default function FormsAdvanced() {
           },
           {
             q: 'What does event.preventDefault() actually stop, in the context of a form submit handler?',
-            a: 'It stops the browser\'s built-in default action for that event — for a submit event, that default action is exactly the GET/POST navigation and full page reload described earlier in this module. It does not stop any other JavaScript from running; a handler can call preventDefault() and then, separately, send the data with fetch() or another AJAX mechanism to achieve the same end result without a page reload.',
+            a: 'It stops the browser\'s built-in default action for that event — for a submit event, that default action is exactly the GET/POST navigation and full page reload described earlier in this lesson. It does not stop any other JavaScript from running; a handler can call preventDefault() and then, separately, send the data with fetch() or another AJAX mechanism to achieve the same end result without a page reload.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -943,12 +943,12 @@ export default function FormsAdvanced() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 10 steps back from forms specifically to the accessibility principles that every form,
+          Lesson 10 steps back from forms specifically to the accessibility principles that every form,
           and every page, depends on — why semantic HTML matters beyond convenience, basic ARIA, and how
           to write alt text that actually helps a real screen reader user.
         </p>
         <Link href="/learn/html-css/semantic-html-accessibility-basics" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 10 → Semantic HTML & Accessibility Basics
+          Lesson 10 → Semantic HTML & Accessibility Basics
         </Link>
       </div>
     </LearnLayout>

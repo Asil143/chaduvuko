@@ -104,7 +104,7 @@ const GridCell = ({ value, color, bg, size = 40 }: { value: string; color?: stri
 export default function BacktrackingPage() {
   return (
     <LearnLayout
-      title="Unit 18 — Backtracking"
+      title="Backtracking"
       description="Try a path. Hit a dead end. Undo. Try another. Backtracking is how computers solve puzzles — N-Queens, Sudoku, mazes, and subset problems. Brute force made smart by pruning impossible paths early."
       section="DSA"
       readTime="90 min"
@@ -114,9 +114,7 @@ export default function BacktrackingPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'UNIT 18', green: true },
-          { label: 'Prerequisite: Unit 08 — Recursion', green: false },
-          { label: '90 min read', green: false },
+          { label: 'Prerequisite: Lesson 9 — Recursion', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -942,7 +940,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Unit 19</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 20</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now understand backtracking completely — the choose-explore-unchoose pattern,
@@ -951,7 +949,7 @@ int main() {
         constraint solver you have ever used works under the hood.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Unit 19 — the final unit — we cover
+        In Lesson 20 — the final unit — we cover
         <strong style={{ color: 'var(--text)' }}> Advanced Topics</strong>: Segment Trees,
         Fenwick Trees (BIT), Tries, Union-Find (DSU), Sliding Window, Two Pointers,
         and Bit Manipulation. These are the techniques that separate good engineers
@@ -960,7 +958,7 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → UNIT 19</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 20</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Advanced Topics — The Final Level</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Segment Tree, Trie, DSU, Sliding Window, Two Pointers, Bit Manipulation — all in C.</div>
         </div>

@@ -74,7 +74,7 @@ export default function CicdForDbt() {
     <LearnLayout
       title="CI/CD for dbt Projects"
       description="Why dbt projects need continuous integration just like application code, the Slim CI pattern with state:modified+ and --defer, a real GitHub Actions workflow, dbt Cloud's built-in CI jobs versus self-hosting, and a full PR-to-production deployment flow."
-      section="dbt — Module 18"
+      section="dbt — Lesson 18"
       readTime="65 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -126,7 +126,7 @@ export default function CicdForDbt() {
           unique, accepted values, a custom business rule. CI is the automation that decides <em>when</em>
           those tests run, <em>what</em> gets built before they run, and <em>whether</em> a human is allowed
           to merge if they fail. A project can have excellent tests and still ship broken code constantly if
-          nothing forces those tests to run before merge — that gap is exactly what this module closes.
+          nothing forces those tests to run before merge — that gap is exactly what this lesson closes.
         </Callout>
       </section>
 
@@ -638,7 +638,7 @@ Typical flow:
           None of this three-tier structure should ever require a model's SQL to branch on which environment
           it is running in. <code>target.name</code> (available in Jinja) lets a model or macro behave
           differently per environment when genuinely necessary — most commonly to sample a smaller subset of
-          data outside of production, exactly the local/CI distinction Part 07 of this module's system-design
+          data outside of production, exactly the local/CI distinction Part 07 of this lesson's system-design
           companion module discusses — but reaching for it routinely is usually a sign a materialization or
           variable-based config would be the better tool.
         </Para>
@@ -665,7 +665,7 @@ WHERE random() < 0.05
         <SectionTag text="// Part 11 — credentials and CI security" />
         <SectionTitle>Handling Warehouse Credentials and Secrets Safely in a CI Pipeline</SectionTitle>
         <Para>
-          Every CI run in this module's examples needs live warehouse credentials to actually connect and
+          Every CI run in this lesson's examples needs live warehouse credentials to actually connect and
           build models — which means a dbt CI pipeline is also a place real production-adjacent secrets flow
           through automation triggered by, in the case of a public or externally-contributed repository, code
           a stranger wrote. Getting this wrong is not a hypothetical risk; it is one of the more common ways a
@@ -674,7 +674,7 @@ WHERE random() < 0.05
         <SubTitle>A dedicated CI role, never a personal or admin credential</SubTitle>
         <Para>
           The CI pipeline should authenticate as its own dedicated warehouse role — commonly named something
-          like <code>ci_role</code>, as used in this module's Part 07 example — with privileges scoped to
+          like <code>ci_role</code>, as used in this lesson's Part 07 example — with privileges scoped to
           exactly what CI needs: creating and dropping PR-specific schemas, reading from source tables, and
           nothing more. It should never authenticate as an individual engineer's personal credentials, and it
           should never use a broadly-privileged administrative role, because a compromised or misconfigured CI
@@ -690,7 +690,7 @@ WHERE random() < 0.05
         />
         <SubTitle>Secrets belong in the CI platform's secret store, never in a workflow file</SubTitle>
         <Para>
-          Every credential referenced in this module's GitHub Actions example — the Snowflake account, user,
+          Every credential referenced in this lesson's GitHub Actions example — the Snowflake account, user,
           and password — is pulled from <code>secrets.*</code>, GitHub Actions' encrypted secret store, never
           hardcoded into the YAML file itself. A workflow file lives in the same git history as everything
           else in the repository, including any fork of it; a credential committed directly into that file is
@@ -815,7 +815,7 @@ git push origin main
         <SectionTag text="// Part 13 — CI cost and scaling considerations" />
         <SectionTitle>What Happens to This Pipeline as the Project and Team Both Grow</SectionTitle>
         <Para>
-          Everything in this module works well for a project of a few hundred models and a team merging a
+          Everything in this lesson works well for a project of a few hundred models and a team merging a
           handful of PRs a day. It is worth understanding, concretely, what starts to strain as both numbers
           grow significantly, because a system-design interviewer asking about dbt CI/CD often follows up with
           exactly this kind of scaling question.
@@ -1003,7 +1003,7 @@ dbt parse
           },
           {
             m: '"A production deploy failure and a PR-time CI failure should be handled the same way -- just fix it and rerun."',
-            r: 'They are not the same severity. A PR-time CI failure blocks an unmerged change from ever reaching production -- low stakes, fix at your own pace. A production deploy failure means the change already merged, and if a test failed after a successful rebuild, wrong data may already be live and queryable by real users right now, which usually calls for an immediate revert rather than a leisurely fix-forward, per this module\'s Part 12.',
+            r: 'They are not the same severity. A PR-time CI failure blocks an unmerged change from ever reaching production -- low stakes, fix at your own pace. A production deploy failure means the change already merged, and if a test failed after a successful rebuild, wrong data may already be live and queryable by real users right now, which usually calls for an immediate revert rather than a leisurely fix-forward, per this lesson\'s Part 12.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '22px 26px', marginBottom: 18 }}>
@@ -1039,7 +1039,7 @@ dbt parse
             Webflow's data platform team built their CI pipeline around treating <code>manifest.json</code>{' '}
             from every successful production deploy as a versioned artifact in its own right, not an
             incidental build output — uploaded to cloud storage immediately after every production run,
-            exactly as this module's Part 08 describes. This let them decouple their CI tooling from any one
+            exactly as this lesson's Part 08 describes. This let them decouple their CI tooling from any one
             CI vendor: because the state-comparison mechanism only depends on having the right manifest file
             available, they were able to migrate their pipeline between CI providers without changing any of
             the underlying Slim CI logic, only the YAML that fetches the file.
@@ -1097,11 +1097,11 @@ dbt parse
           },
           {
             q: 'Q5. What is the difference between dbt Cloud\'s built-in CI job and a self-hosted CI pipeline, and when would you choose one over the other?',
-            a: 'dbt Cloud\'s CI job type implements the entire Slim CI pattern -- manifest tracking, state comparison, ephemeral schema creation, PR status reporting -- as a managed feature with essentially no pipeline code to write, at the cost of requiring a dbt Cloud plan that includes it and being somewhat tied to dbt Cloud\'s own job model. A self-hosted pipeline (GitHub Actions, GitLab CI, and so on, as in this module\'s Part 07) requires building the manifest storage, triggering, and reporting steps yourself, but is fully portable, avoids a dbt-specific cost, and is easier to extend with organization-specific steps. Teams already committed to dbt Cloud usually take the built-in job for the reduced maintenance; teams with an existing CI platform and custom pipeline needs often prefer owning it directly.',
+            a: 'dbt Cloud\'s CI job type implements the entire Slim CI pattern -- manifest tracking, state comparison, ephemeral schema creation, PR status reporting -- as a managed feature with essentially no pipeline code to write, at the cost of requiring a dbt Cloud plan that includes it and being somewhat tied to dbt Cloud\'s own job model. A self-hosted pipeline (GitHub Actions, GitLab CI, and so on, as in this lesson\'s Part 07) requires building the manifest storage, triggering, and reporting steps yourself, but is fully portable, avoids a dbt-specific cost, and is easier to extend with organization-specific steps. Teams already committed to dbt Cloud usually take the built-in job for the reduced maintenance; teams with an existing CI platform and custom pipeline needs often prefer owning it directly.',
           },
           {
             q: 'Q6. A production dbt build fails after successfully rebuilding a table, but before a test on it runs -- is this the same severity as a test actually failing?',
-            a: 'No, and the distinction matters. If the build itself failed partway through, some tables are simply stale, not wrong -- rerunning the build once the underlying issue is fixed produces a correct end state, since dbt models are idempotent. If instead the build succeeds and a test on the resulting data fails, wrong data is already live and queryable in production right now, which is the more urgent situation and usually warrants an immediate revert of the change rather than a fix-forward, exactly as this module\'s Part 12 distinguishes.',
+            a: 'No, and the distinction matters. If the build itself failed partway through, some tables are simply stale, not wrong -- rerunning the build once the underlying issue is fixed produces a correct end state, since dbt models are idempotent. If instead the build succeeds and a test on the resulting data fails, wrong data is already live and queryable in production right now, which is the more urgent situation and usually warrants an immediate revert of the change rather than a fix-forward, exactly as this lesson\'s Part 12 distinguishes.',
           },
           {
             q: 'Q7. Why might state:modified+ under-select the affected models for a change to a widely-used macro?',
@@ -1163,12 +1163,12 @@ dbt parse
           {
             e: 'Two open PRs touching overlapping models silently interfere with each other\'s CI runs',
             w: 'This happens when the CI schema naming is not actually unique per PR -- for example, a fixed schema name shared across all CI runs rather than one derived from the PR number -- so two concurrent CI builds race to create and drop the same schema.',
-            f: 'Derive the CI target schema name from something guaranteed unique per PR, such as the PR number or the branch name, exactly as shown in this module\'s GitHub Actions example, so concurrent PRs never share a schema.',
+            f: 'Derive the CI target schema name from something guaranteed unique per PR, such as the PR number or the branch name, exactly as shown in this lesson\'s GitHub Actions example, so concurrent PRs never share a schema.',
           },
           {
             e: 'A production deploy succeeds and every test passes, but a stakeholder reports a wrong number hours later',
             w: 'This is not a CI failure at all -- it is a test-coverage gap. CI can only catch what a written test actually checks; a business rule nobody encoded as a singular test can pass silently while producing a plausible-looking but incorrect number.',
-            f: 'Fix the underlying model AND add the specific missing test in the same PR, per this module\'s Part 12 guidance on the three distinct production-failure shapes -- treat the incident as evidence of exactly which assertion was missing, not just a one-off bug to patch.',
+            f: 'Fix the underlying model AND add the specific missing test in the same PR, per this lesson\'s Part 12 guidance on the three distinct production-failure shapes -- treat the incident as evidence of exactly which assertion was missing, not just a one-off bug to patch.',
           },
         ].map((item, i) => (
           <div key={i} style={{ marginBottom: 22 }}>

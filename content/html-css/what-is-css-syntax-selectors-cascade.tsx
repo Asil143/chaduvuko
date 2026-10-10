@@ -77,7 +77,7 @@ export default function WhatIsCss() {
     <LearnLayout
       title="What is CSS? Syntax, Selectors & the Cascade"
       description="How CSS actually applies styles — selectors, the cascade, inheritance, and the mental model everything else in CSS builds on."
-      section="HTML & CSS — Module 17"
+      section="HTML & CSS — Lesson 17"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -226,7 +226,7 @@ h1 {
         <SectionTitle>Selecting Elements — The Basic Vocabulary</SectionTitle>
 
         <Para>
-          Selectors determine which elements a rule targets. This module covers the fundamentals needed to
+          Selectors determine which elements a rule targets. This lesson covers the fundamentals needed to
           read and write everyday CSS; the full combinator and pseudo-class/pseudo-element vocabulary, plus
           the complete specificity calculation, gets a dedicated deep dive later in this phase.
         </Para>
@@ -369,7 +369,7 @@ p { color: black; }
           This is the single most common source of "why isn&apos;t my CSS applying?" confusion for anyone
           new to the language — a rule that looks like it should apply, sitting later in the file, gets
           silently beaten by an earlier rule with a more specific selector. Once specificity is understood
-          precisely (next module in this phase), that confusion mostly disappears.
+          precisely (next lesson in this phase), that confusion mostly disappears.
         </Para>
       </section>
 
@@ -787,7 +787,7 @@ p {
         'CSS can be attached three ways — external stylesheet, internal <style> block, or inline style attribute — with external winning for nearly every real production project.',
         'The cascade resolves conflicts using three forces, weakest to strongest: source order, specificity, and importance (!important).',
         'Source order only breaks ties between selectors of EQUAL specificity — a more specific selector written earlier still beats a less specific one written later.',
-        'Specificity is roughly: inline styles > ID selectors > class/attribute/pseudo-class selectors > element/pseudo-element selectors. The full numeric calculation is covered in the next module.',
+        'Specificity is roughly: inline styles > ID selectors > class/attribute/pseudo-class selectors > element/pseudo-element selectors. The full numeric calculation is covered in the next lesson.',
         '!important overrides the entire specificity system and should be used sparingly — it is usually a symptom of an unresolved specificity conflict, not a real fix.',
         'Inheritance is separate from the cascade: a specific set of mostly text-related properties (color, font-family, line-height) pass down to children automatically; box-model properties (margin, padding, border) do not.',
         'Class selectors are the standard, reusable building block of real-world CSS — reserve IDs for JavaScript hooks and anchor targets, not general styling.',
@@ -799,11 +799,11 @@ p {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 18 covers the box model in full — content, padding, border, and margin, box-sizing, and the
+          Lesson 18 covers the box model in full — content, padding, border, and margin, box-sizing, and the
           margin-collapsing behaviour that catches nearly every engineer off guard at least once.
         </p>
         <Link href="/learn/html-css/the-box-model" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 18 → The Box Model — Margin, Border, Padding, Content
+          Lesson 18 → The Box Model — Margin, Border, Padding, Content
         </Link>
       </div>
     </LearnLayout>

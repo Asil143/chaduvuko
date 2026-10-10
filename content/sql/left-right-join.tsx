@@ -78,7 +78,7 @@ export default function LeftRightJoin() {
     <LearnLayout
       title="LEFT and RIGHT JOIN"
       description="Keep unmatched rows — every LEFT JOIN pattern from basic optional enrichment to anti-join gap analysis, plus when RIGHT JOIN makes sense and the ON vs WHERE trap"
-      section="SQL — Module 32"
+      section="SQL — Lesson 32"
       readTime="14–20 min"
       updatedAt="April 2026"
     >
@@ -741,7 +741,7 @@ ORDER BY c.customer_id;`}
 
       <H>Method 2 — NOT EXISTS</H>
 
-      <P>The subquery below references the outer query's c.customer_id, which makes it a <Hl>correlated</Hl> subquery — covered properly in Module 37; for now, just read it as "check per customer."</P>
+      <P>The subquery below references the outer query's c.customer_id, which makes it a <Hl>correlated</Hl> subquery — covered properly in Lesson 37; for now, just read it as "check per customer."</P>
 
       <SQLPlayground
         initialQuery={`-- Method 2: NOT EXISTS
@@ -1031,10 +1031,10 @@ ORDER BY employee_count DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 33</strong>, you learn FULL OUTER JOIN — combining both LEFT and RIGHT behaviour to keep all rows from both tables, with real use cases for reconciliation, gap analysis, and symmetric difference queries.
+          In <strong>Lesson 33</strong>, you learn FULL OUTER JOIN — combining both LEFT and RIGHT behaviour to keep all rows from both tables, with real use cases for reconciliation, gap analysis, and symmetric difference queries.
         </p>
         <Link href="/learn/sql/full-outer-join" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 33 → FULL OUTER JOIN
+          Lesson 33 → FULL OUTER JOIN
         </Link>
       </div>
 

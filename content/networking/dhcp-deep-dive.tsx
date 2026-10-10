@@ -278,7 +278,7 @@ export default function DhcpDeepDivePage() {
     <LearnLayout
       title="DHCP — Dynamic Host Configuration Protocol"
       description="From the broadcast storm of DORA to the precision of DHCP snooping and stateless DHCPv6: how the protocol that configures every device on your network actually works."
-      section="Networking Fundamentals — Module 30"
+      section="Networking Fundamentals — Lesson 30"
       readTime="28–38 min"
       updatedAt="May 2026"
     >

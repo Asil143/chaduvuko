@@ -49,7 +49,7 @@ export default function SqlForDataAnalysis() {
     <LearnLayout
       title="SQL for Data Analysis"
       description="Real analytical patterns — revenue trends, customer segmentation, cohort analysis, and RFM scoring — applied to the FreshCart dataset"
-      section="SQL — Module 60"
+      section="SQL — Lesson 60"
       readTime="28–36 min"
       updatedAt="April 2026"
     >
@@ -57,9 +57,9 @@ export default function SqlForDataAnalysis() {
       {/* ── PART 01 ── */}
       <Part n="01" title="What Data Analysis Looks Like in SQL" />
 
-      <P>Data analysis in SQL is not about learning new syntax — it is about applying the syntax you already know to answer real business questions. The patterns in this module are used daily by analysts at DoorDash, Instacart, Chime, and every data-driven company: revenue breakdowns, customer cohorts, retention curves, and RFM segmentation.</P>
+      <P>Data analysis in SQL is not about learning new syntax — it is about applying the syntax you already know to answer real business questions. The patterns in this lesson are used daily by analysts at DoorDash, Instacart, Chime, and every data-driven company: revenue breakdowns, customer cohorts, retention curves, and RFM segmentation.</P>
 
-      <P>We will use the <Hl>FreshCart dataset</Hl> — the same one in every playground in this course — so every query you run here is real and produces real results. By the end of this module you will have a toolkit of analytical query patterns you can adapt to any business dataset.</P>
+      <P>We will use the <Hl>FreshCart dataset</Hl> — the same one in every playground in this course — so every query you run here is real and produces real results. By the end of this lesson you will have a toolkit of analytical query patterns you can adapt to any business dataset.</P>
 
       <SQLPlayground
         initialQuery={`-- FreshCart business overview — what we are working with
@@ -641,10 +641,10 @@ ORDER BY avg_revenue_per_customer DESC NULLS LAST;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 61</strong>, you tackle the Top 50 SQL interview questions — every question that appears in data analyst and data engineer interviews, with complete answers and the traps interviewers set.
+          In <strong>Lesson 61</strong>, you tackle the Top 50 SQL interview questions — every question that appears in data analyst and data engineer interviews, with complete answers and the traps interviewers set.
         </p>
         <Link href="/learn/sql/interview-questions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 61 → Top 50 SQL Interview Questions
+          Lesson 61 → Top 50 SQL Interview Questions
         </Link>
       </div>
 

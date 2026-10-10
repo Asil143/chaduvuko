@@ -74,7 +74,7 @@ export default function ConsumerGroupsOffsets() {
     <LearnLayout
       title="Consumer Groups and Offsets"
       description="What a consumer group really is, how rebalancing and partition assignment work, where offsets actually live, commit strategies, auto.offset.reset, consumer lag, and static group membership — the operational core of running Kafka consumers in production."
-      section="Apache Kafka — Module 05"
+      section="Apache Kafka — Lesson 05"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -587,12 +587,12 @@ ALL subscribed topics as one combined pool, avoiding this per-topic repetition:
         <Para>
           It is also worth being precise about <code>subscribe()</code> versus <code>assign()</code>. Calling
           <code>subscribe()</code> with a topic name or pattern hands partition assignment over to the group
-          coordinator entirely — this is the consumer-group model described throughout this module, with
+          coordinator entirely — this is the consumer-group model described throughout this lesson, with
           rebalancing, heartbeats, and generation ids all in play. Calling <code>assign()</code> instead lets
           an application manually pin itself to specific partitions, bypassing the group protocol altogether.
           Manual assignment has real uses — a Kafka Streams-style application doing custom partition-to-
           instance mapping, or a tool that genuinely needs to read one specific partition regardless of group
-          membership — but it forfeits every benefit covered in this module: no automatic rebalancing on
+          membership — but it forfeits every benefit covered in this lesson: no automatic rebalancing on
           scale-out, no automatic failover if that instance dies, and no group-tracked offset management unless
           you build it yourself.
         </Para>
@@ -649,7 +649,7 @@ alert: kafka_consumer_group_active_members < expected_replica_count
         <SectionTag text="// Part 11 — Consumer groups and transactional reads" />
         <SectionTitle>isolation.level Decides Whether a Consumer Sees In-Flight Transactions</SectionTitle>
         <Para>
-          Everything in this module assumes a consumer reads whatever is physically appended to a partition's
+          Everything in this lesson assumes a consumer reads whatever is physically appended to a partition's
           log. That assumption gets one important qualifier when the producer side is using Kafka
           transactions — the read-process-write pattern where a producer writes to an output topic and
           commits a consumer offset atomically, as one unit. A transactional producer's writes land in the
@@ -705,7 +705,7 @@ isolation.level=read_committed:
         <SectionTag text="// Part 12 — Designing a consumer for the failure cases, not just the happy path" />
         <SectionTitle>Putting It Together — A Consumer Loop That Survives Real Production Conditions</SectionTitle>
         <Para>
-          Every individual mechanism in this module — commits, rebalances, lag, static membership, isolation
+          Every individual mechanism in this lesson — commits, rebalances, lag, static membership, isolation
           level — is straightforward on its own. What makes consumer design genuinely hard in practice is that
           production conditions combine several of them at once: a rebalance happens mid-batch, a downstream
           write times out right before a commit, a deploy restarts half the group while the other half is

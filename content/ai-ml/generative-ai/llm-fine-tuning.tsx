@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'LLM Fine-Tuning in Practice — Chaduvuko',
@@ -178,7 +177,6 @@ export default function LLMFineTuningPage() {
       readTime="50–65 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="generative-ai" topic="llm-fine-tuning" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -229,7 +227,7 @@ export default function LLMFineTuningPage() {
         </AnalogyBox>
 
         <Callout type="tip">
-          All code in this module uses HuggingFace Transformers, PEFT, and TRL —
+          All code in this lesson uses HuggingFace Transformers, PEFT, and TRL —
           the standard open-source stack used by ML teams everywhere.
           Install: <span style={S.code as React.CSSProperties}>pip install transformers peft trl accelerate bitsandbytes datasets</span>.
           A free Google Colab T4 GPU (16GB) is enough to fine-tune a 7B model with QLoRA.
@@ -441,7 +439,7 @@ print(f"\nLength: {len(formatted)} characters")`} />
         <h2 style={S.h2}>QLoRA fine-tuning — 4-bit quantisation + LoRA on a 7B model</h2>
 
         <p style={S.p}>
-          QLoRA (Module 51) combines 4-bit quantisation of the frozen base model
+          QLoRA (Lesson 51) combines 4-bit quantisation of the frozen base model
           with LoRA adapters that train in fp16. This makes fine-tuning a 7B model
           possible on a single 16GB GPU — a Google Colab T4 or a local RTX 4090.
           The TRL library (from HuggingFace) wraps SFTTrainer — a Trainer
@@ -991,7 +989,7 @@ Production monitoring checklist:
             not eliminate it. A high LoRA rank, too many training epochs on a small dataset, or a
             learning rate that is too aggressive can still push the adapted model to lose general
             capabilities it had before fine-tuning, especially on tasks unrelated to the fine-tuning
-            data. The overfitting error covered earlier in this module — training loss collapsing
+            data. The overfitting error covered earlier in this lesson — training loss collapsing
             while validation loss rises — is a direct symptom of this same failure mode. Always
             evaluate a fine-tuned model on general capability benchmarks, not just the target task,
             to catch this regardless of which fine-tuning method was used.
@@ -1014,7 +1012,7 @@ Production monitoring checklist:
 
         <ConceptBox title="Myth: You need thousands of examples before fine-tuning is worth attempting" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            As this module's data preparation section covers, 500 high-quality, diverse examples
+            As this lesson's data preparation section covers, 500 high-quality, diverse examples
             routinely outperform 5,000 mediocre ones — the quality and diversity of examples
             matters far more than raw count. LoRA in particular, with its small number of trainable
             parameters, can show meaningful task-specific improvement from a few hundred carefully
@@ -1120,7 +1118,7 @@ Production monitoring checklist:
           The next frontier is multimodal models — models that jointly understand
           images and text. CLIP encodes images and text in a shared embedding space.
           LLaVA connects a vision encoder to an LLM decoder, enabling visual
-          question answering. Module 66 covers how these architectures work
+          question answering. Lesson 66 covers how these architectures work
           and how to use them for tasks that require understanding both
           what is written and what is shown.
         </p>
@@ -1137,7 +1135,7 @@ Production monitoring checklist:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 66 · Generative AI
+              Next — Lesson 66 · Generative AI
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

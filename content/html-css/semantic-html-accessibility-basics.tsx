@@ -77,7 +77,7 @@ export default function SemanticHtmlAccessibilityBasics() {
     <LearnLayout
       title="Semantic HTML & Accessibility Basics"
       description="Why semantics matter beyond styling — ARIA basics, accessible forms, and how screen readers and search engines actually read your page."
-      section="HTML & CSS — Module 10"
+      section="HTML & CSS — Lesson 10"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -94,7 +94,7 @@ export default function SemanticHtmlAccessibilityBasics() {
           semantic tags that describe what a piece of content <em>is</em>, not just how it should look.
           It is tempting to think of the difference between these and a generic{' '}
           <code>{'<div>'}</code> as purely stylistic — after all, a <code>{'<nav>'}</code> and a{' '}
-          <code>{'<div class="nav">'}</code> can be made to look pixel-identical with CSS. This module
+          <code>{'<div class="nav">'}</code> can be made to look pixel-identical with CSS. This lesson
           is about the part of the story that has nothing to do with appearance at all: semantic tags
           are read directly by software other than a rendering engine — screen readers, browser
           extensions, search engine crawlers, and browser built-in features like Reader Mode — and each
@@ -124,7 +124,7 @@ export default function SemanticHtmlAccessibilityBasics() {
         </Para>
 
         <Callout type="info">
-          A useful mental model for the rest of this module: CSS controls how a page{' '}
+          A useful mental model for the rest of this lesson: CSS controls how a page{' '}
           <em>looks</em>. Semantic HTML controls what a page <em>is</em>, structurally, independent of
           any stylesheet. A page with all CSS removed should still make structural sense when read
           top to bottom — that is precisely the experience a screen reader user, and a search engine
@@ -347,7 +347,7 @@ export default function SemanticHtmlAccessibilityBasics() {
 
         <Para>
           You met the <code>alt</code> attribute in the Images and Media module as a required attribute
-          on every <code>{'<img>'}</code>. This module goes further: not every non-empty string is
+          on every <code>{'<img>'}</code>. This lesson goes further: not every non-empty string is
           good alt text, and the difference between good and bad alt text is entirely about whether it
           conveys the same <em>information or purpose</em> the image conveys to a sighted user — not
           about literally describing every visual detail.
@@ -434,12 +434,12 @@ export default function SemanticHtmlAccessibilityBasics() {
         </Para>
 
         <Para>
-          The <code>{'<fieldset>'}</code>/<code>{'<legend>'}</code> pattern from the previous module is
+          The <code>{'<fieldset>'}</code>/<code>{'<legend>'}</code> pattern from the previous lesson is
           itself an accessibility feature, not just visual grouping — recall from Part 02 of that module
           that a screen reader announces the legend before every control nested inside, giving a user
           navigating a long form the same "which section am I in" context a sighted user gets for free
           from the visual box around the group. And the <code>aria-describedby</code> pattern from Part 04
-          of this module is precisely how you should connect a field to helper text or a validation
+          of this lesson is precisely how you should connect a field to helper text or a validation
           error message — an error message that only appears in red text next to a field, with no{' '}
           <code>aria-describedby</code> connecting it, is entirely invisible to a screen reader user who
           has no way to know it exists.
@@ -472,7 +472,7 @@ export default function SemanticHtmlAccessibilityBasics() {
           assistive technology, right now, regardless of how a page ranks in search results.
         </Para>
 
-        <CodeBox label="Div soup — every failure from this module, compounded in one snippet">{`<div class="header">
+        <CodeBox label="Div soup — every failure from this lesson, compounded in one snippet">{`<div class="header">
   <div class="logo">Acme Co</div>
   <div class="nav">
     <div class="nav-item" onclick="location.href='/'">Home</div>
@@ -650,7 +650,7 @@ export default function SemanticHtmlAccessibilityBasics() {
           },
           {
             wrong: '"Accessibility fixes generally require changing how a page looks"',
-            right: 'Nearly every fix in this module — swapping a div for a nav, a button, or an h1, connecting a label with for/id, adding aria-label to an icon button — changes the underlying markup while leaving the rendered, styled appearance completely untouched, exactly as shown in the Real World example above.',
+            right: 'Nearly every fix in this lesson — swapping a div for a nav, a button, or an h1, connecting a label with for/id, adding aria-label to an icon button — changes the underlying markup while leaving the rendered, styled appearance completely untouched, exactly as shown in the Real World example above.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -851,12 +851,12 @@ export default function SemanticHtmlAccessibilityBasics() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 11 opens Phase 2 of the HTML track with a survey of HTML5&apos;s browser-facing APIs —
+          Lesson 11 opens Phase 2 of the HTML track with a survey of HTML5&apos;s browser-facing APIs —
           custom data-* attributes and the JavaScript dataset property that reads them, the
           contenteditable attribute, and the native drag-and-drop API.
         </p>
         <Link href="/learn/html-css/html5-apis-overview" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 11 → HTML5 APIs Overview
+          Lesson 11 → HTML5 APIs Overview
         </Link>
       </div>
     </LearnLayout>

@@ -264,7 +264,7 @@ export default function SSHPage() {
     <LearnLayout
       title="SSH — Secure Shell"
       description="From the terminal of desperation to the cryptographic bedrock of modern infrastructure: how SSH works, why it replaced everything else, and how to use it without shooting yourself in the foot."
-      section="Networking Fundamentals — Module 28"
+      section="Networking Fundamentals — Lesson 28"
       readTime="30–42 min"
       updatedAt="May 2026"
     >
@@ -283,7 +283,7 @@ export default function SSHPage() {
         SSH is used for more than remote shells. Every time you run <Code>git push</Code> to GitHub over SSH, every time your CI/CD pipeline deploys code via <Code>rsync</Code> or <Code>scp</Code>, every time a Kubernetes operator syncs a secret — SSH is working underneath.
       </WowBox>
       <Para>
-        This module covers the SSH protocol from the TCP handshake through the cryptographic key exchange, all authentication methods, channel multiplexing, port forwarding, the agent, certificates, and the security hardening practices that separate a properly locked-down server from a breach waiting to happen.
+        This lesson covers the SSH protocol from the TCP handshake through the cryptographic key exchange, all authentication methods, channel multiplexing, port forwarding, the agent, certificates, and the security hardening practices that separate a properly locked-down server from a breach waiting to happen.
       </Para>
 
       <Divider />

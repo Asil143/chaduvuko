@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Naive Bayes — Probabilistic Text Classification — Chaduvuko',
@@ -177,7 +176,6 @@ export default function NaiveBayesPage() {
       readTime="22–28 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="classical-ml" topic="naive-bayes" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -245,7 +243,7 @@ export default function NaiveBayesPage() {
         <h2 style={S.h2}>Bayes theorem — update your belief when you see evidence</h2>
 
         <p style={S.p}>
-          Bayes theorem (from Module 08) says: the probability of a hypothesis
+          Bayes theorem (from Lesson 08) says: the probability of a hypothesis
           given evidence equals the probability of the evidence given the hypothesis,
           times the prior probability of the hypothesis, divided by the probability
           of the evidence. Written in plain English:
@@ -1192,7 +1190,7 @@ print("Model saved — ready for production deployment")`} />
         </p>
 
         <p style={S.p}>
-          Module 28 — Random Forest — combines hundreds of decision trees
+          Lesson 28 — Random Forest — combines hundreds of decision trees
           through a technique called bagging. Each tree is trained on a
           random subset of data with a random subset of features.
           Their predictions are averaged. The result consistently beats
@@ -1212,7 +1210,7 @@ print("Model saved — ready for production deployment")`} />
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 28 · Classical ML
+              Next — Lesson 28 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -77,7 +77,7 @@ export default function Strings() {
     <LearnLayout
       title="Strings — Creation, Indexing, Slicing, Methods"
       description="Indexing, slicing, the string methods that matter, Unicode, and f-strings done right."
-      section="Python — Module 04"
+      section="Python — Lesson 04"
       readTime="65 min"
       updatedAt="August 2026"
     >
@@ -110,7 +110,7 @@ She specialises in backend systems."""`}</CodeBox>
           actually returns a brand new string object, leaving the original untouched. This is a
           deliberate design choice that makes strings safe to share across a program without fear of
           one part of the code silently corrupting a value another part depends on — the same
-          immutability concept introduced for numbers back in Module 02.
+          immutability concept introduced for numbers back in Lesson 02.
         </Callout>
 
         <CodeBox label="Immutability in action">{`name = "maria"
@@ -187,7 +187,7 @@ word[100]     # IndexError: string index out of range`}</CodeBox>
 
         <Para>
           <code>len()</code> returns the number of characters in a string — the count of Unicode code
-          points, specifically, a distinction that becomes relevant in Part 06 of this module. It is
+          points, specifically, a distinction that becomes relevant in Part 06 of this lesson. It is
           the tool you will use constantly alongside indexing and slicing to work with the end of a
           string relative to its actual length.
         </Para>
@@ -505,7 +505,7 @@ with open("customers.csv", encoding="utf-8") as f:
             This exact bug — code that works flawlessly in development and fails in production because
             of an unstated encoding assumption — is common enough that it has a name among experienced
             engineers: "works on my machine." Real-world names, addresses, and product descriptions
-            contain non-ASCII characters constantly. This is exactly why Part 07 of this module treated
+            contain non-ASCII characters constantly. This is exactly why Part 07 of this lesson treated
             Unicode and encoding as a first-class topic rather than a footnote — it is one of the most
             common real production bugs in text-processing code, and it is entirely preventable by
             always specifying an encoding explicitly.
@@ -727,11 +727,11 @@ with open("customers.csv", encoding="utf-8") as f:
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 05 covers control flow — how Python evaluates truthiness, every form of conditional
+          Lesson 05 covers control flow — how Python evaluates truthiness, every form of conditional
           logic, and the readability patterns senior engineers actually use.
         </p>
         <Link href="/learn/python/control-flow" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 05 → Control Flow
+          Lesson 05 → Control Flow
         </Link>
       </div>
     </LearnLayout>

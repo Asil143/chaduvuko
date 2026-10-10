@@ -74,7 +74,7 @@ export default function ProjectSetup() {
     <LearnLayout
       title="Setting Up a dbt Project"
       description="dbt Core vs dbt Cloud, the required project files, the standard folder structure, installing the right adapter, the essential CLI commands, and a full walkthrough of dbt init through your first successful dbt run."
-      section="dbt — Module 03"
+      section="dbt — Lesson 03"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -147,8 +147,8 @@ export default function ProjectSetup() {
           ]}
         />
 
-        <Callout title="This module teaches dbt Core" color={K}>
-          Every command and file in this module works identically whether
+        <Callout title="This lesson teaches dbt Core" color={K}>
+          Every command and file in this lesson works identically whether
           you eventually run it via dbt Core on your laptop, in a GitHub
           Actions job, or inside dbt Cloud's IDE — dbt Cloud runs the exact
           same <code>dbt_project.yml</code>, the exact same models, and the
@@ -747,7 +747,7 @@ Done. PASS=2 WARN=0 ERROR=0 SKIP=0 TOTAL=2`}
           <code>FRESHCART_DEV.dbt_asil</code>. If this succeeds, your
           environment is fully wired up and you are ready to delete the
           example models and start writing real ones — which is exactly
-          where Module 04 picks up.
+          where Lesson 04 picks up.
         </Para>
 
         <Callout title="If dbt run fails here, it's almost always Part 04" color={K}>
@@ -913,7 +913,7 @@ jobs:
           step when either standing up a brand-new project or picking up
           an existing one you didn't build. Here is the order that catches
           the most common setup problems fastest, each step building on
-          exactly what earlier Parts of this module covered.
+          exactly what earlier Parts of this lesson covered.
         </Para>
 
         <CodeBox label="a practical pre-flight sequence for any dbt project">

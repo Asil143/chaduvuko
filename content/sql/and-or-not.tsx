@@ -107,7 +107,7 @@ export default function AndOrNot() {
     <LearnLayout
       title="Multiple Conditions — AND, OR, NOT"
       description="Combine WHERE filters to answer complex business questions — precedence rules, truth tables, and every pattern you will use in production"
-      section="SQL — Module 07"
+      section="SQL — Lesson 07"
       readTime="10–14 min"
       updatedAt="April 2026"
     >
@@ -115,7 +115,7 @@ export default function AndOrNot() {
       {/* ── PART 01 ── */}
       <Part n="01" title="Why One Condition Is Never Enough" />
 
-      <P>In Module 06 you learned to filter rows with a single WHERE condition. Real business questions almost never have a single condition. They sound like this:</P>
+      <P>In Lesson 06 you learned to filter rows with a single WHERE condition. Real business questions almost never have a single condition. They sound like this:</P>
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', margin: '20px 0 28px' }}>
         <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', marginBottom: 16, textTransform: 'uppercase', letterSpacing: '.08em' }}>Real questions from real teams</div>
@@ -272,7 +272,7 @@ ORDER BY category, unit_price;`}
       />
 
       <Callout type="tip">
-        When you find yourself writing multiple OR conditions on the same column — WHERE city = 'Seattle' OR city = 'Austin' OR city = 'New York' — there is a cleaner way: the IN operator. WHERE city IN ('Seattle', 'Austin', 'New York'). You will learn IN in Module 15. For now, OR works perfectly and understanding it deeply makes IN intuitive when you get there.
+        When you find yourself writing multiple OR conditions on the same column — WHERE city = 'Seattle' OR city = 'Austin' OR city = 'New York' — there is a cleaner way: the IN operator. WHERE city IN ('Seattle', 'Austin', 'New York'). You will learn IN in Lesson 15. For now, OR works perfectly and understanding it deeply makes IN intuitive when you get there.
       </Callout>
 
       <HR />
@@ -293,7 +293,7 @@ ORDER BY category, unit_price;`}
         ]}
       />
 
-      <P>Important: NOT NULL is still NULL — the absence of a value reversed is still unknown. This is why NOT IN behaves surprisingly when the list contains NULL values — you will see this in Module 15.</P>
+      <P>Important: NOT NULL is still NULL — the absence of a value reversed is still unknown. This is why NOT IN behaves surprisingly when the list contains NULL values — you will see this in Lesson 15.</P>
 
       <H>NOT in practice — FreshCart examples</H>
 
@@ -712,7 +712,7 @@ ORDER BY c.city;`}
       <IQ q="How does NOT work and what are its limitations with NULL?">
         <p style={{ margin: '0 0 14px' }}>NOT reverses the logical result of a condition. A condition that evaluates to TRUE becomes FALSE, and a condition that evaluates to FALSE becomes TRUE. NOT NULL, however, is still NULL — the unknown reversed is still unknown. This is the fundamental limitation of NOT with nullable columns.</p>
         <p style={{ margin: '0 0 14px' }}>The practical consequence: WHERE NOT city = 'Seattle' returns rows where city is any value other than 'Seattle' but does NOT return rows where city IS NULL. Rows with a null city silently disappear from the results. If you want to include null values in a NOT condition, you must explicitly add them: WHERE (city &lt;&gt; 'Seattle' OR city IS NULL).</p>
-        <p style={{ margin: 0 }}>NOT is most commonly used in two forms: NOT LIKE (does not match a pattern), NOT IN (value not in a list), and NOT EXISTS (no matching rows in a subquery). The NOT IN form has a particularly dangerous NULL interaction — if the IN list contains even one NULL value, NOT IN returns zero rows for the entire query, which is almost never what was intended. This is why NOT EXISTS is often preferred over NOT IN for correlated subqueries. You will learn this in Module 38.</p>
+        <p style={{ margin: 0 }}>NOT is most commonly used in two forms: NOT LIKE (does not match a pattern), NOT IN (value not in a list), and NOT EXISTS (no matching rows in a subquery). The NOT IN form has a particularly dangerous NULL interaction — if the IN list contains even one NULL value, NOT IN returns zero rows for the entire query, which is almost never what was intended. This is why NOT EXISTS is often preferred over NOT IN for correlated subqueries. You will learn this in Lesson 38.</p>
       </IQ>
 
       <IQ q="Given the query: WHERE status = 'Delivered' OR status = 'Returned' AND amount > 1000 — what does it actually return?">
@@ -753,7 +753,7 @@ ORDER BY c.city;`}
       <Err
         msg="Query is correct but very slow — WHERE LOWER(city) = 'seattle' OR LOWER(city) = 'austin'"
         cause="Applying a function to the column side of OR conditions (LOWER(city)) prevents the database from using an index on the city column. The index stores raw city values ('Seattle', 'Austin') — not their lowercase equivalents. When LOWER() is applied, the database cannot use the index and must scan every row, applying LOWER() to each one. On a table with millions of rows, this causes a full table scan that is orders of magnitude slower than an index lookup."
-        fix="Two approaches. First, standardise data at insertion time — store all city values in consistent case ('Seattle' not 'seattle') and use case-sensitive comparison: WHERE city = 'Seattle' OR city = 'Austin'. This allows index usage. Second, if consistent casing cannot be guaranteed, create a functional index on LOWER(city): CREATE INDEX idx_customers_city_lower ON customers (LOWER(city)); — then WHERE LOWER(city) = 'seattle' OR LOWER(city) = 'austin' can use this index. For performance-critical queries, always check whether index usage is possible with EXPLAIN ANALYZE (covered in Module 57)."
+        fix="Two approaches. First, standardise data at insertion time — store all city values in consistent case ('Seattle' not 'seattle') and use case-sensitive comparison: WHERE city = 'Seattle' OR city = 'Austin'. This allows index usage. Second, if consistent casing cannot be guaranteed, create a functional index on LOWER(city): CREATE INDEX idx_customers_city_lower ON customers (LOWER(city)); — then WHERE LOWER(city) = 'seattle' OR LOWER(city) = 'austin' can use this index. For performance-critical queries, always check whether index usage is possible with EXPLAIN ANALYZE (covered in Lesson 57)."
       />
 
       <Err
@@ -809,10 +809,10 @@ ORDER BY total_amount DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 08</strong>, you control the order your results come back in using ORDER BY — ascending, descending, multiple columns, and how sorting interacts with NULL values.
+          In <strong>Lesson 08</strong>, you control the order your results come back in using ORDER BY — ascending, descending, multiple columns, and how sorting interacts with NULL values.
         </p>
         <Link href="/learn/sql/order-by" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 08 → Sorting Results — ORDER BY
+          Lesson 08 → Sorting Results — ORDER BY
         </Link>
       </div>
 

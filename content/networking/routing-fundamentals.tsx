@@ -331,7 +331,7 @@ export default function RoutingFundamentalsModule() {
     <LearnLayout
       title="Routing Fundamentals"
       description="How packets find their way across networks — from static routes to dynamic routing protocols. Understand routing tables, Administrative Distance, Longest Prefix Match, and ECMP: the mechanisms that move data across the internet."
-      section="Networking Fundamentals — Module 16"
+      section="Networking Fundamentals — Lesson 16"
       readTime="25–35 min"
       updatedAt="May 2026"
     >

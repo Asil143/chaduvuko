@@ -87,7 +87,7 @@ const ComplexityBadge = ({ value, color }: { value: string; color: string }) => 
 export default function ArraysPage() {
   return (
     <LearnLayout
-      title="Unit 02 — Arrays"
+      title="Arrays"
       description="The first and most fundamental data structure. Boxes lined up in memory — simple to understand, powerful in practice, used absolutely everywhere."
       section="DSA"
       readTime="90 min"
@@ -97,9 +97,7 @@ export default function ArraysPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'UNIT 02', green: true },
-          { label: 'Prerequisite: Unit 00 + Unit 01', green: false },
-          { label: '90 min read', green: false },
+          { label: 'Prerequisite: Lesson 1 + Lesson 2', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -113,7 +111,7 @@ export default function ArraysPage() {
         If you understand arrays deeply, the rest of DSA becomes much easier to learn.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
-        In this unit we build arrays from scratch in C, understand exactly how they
+        In this lesson we build arrays from scratch in C, understand exactly how they
         live in your computer's memory, and implement every core operation with full
         code and complexity analysis.
       </p>
@@ -609,7 +607,7 @@ int main() {
       </div>
 
       <Callout type="info">
-        We will cover <strong>Binary Search</strong> in Unit 10 — a far faster way to search
+        We will cover <strong>Binary Search</strong> in Lesson 11 — a far faster way to search
         that works in O(log n). But it only works on sorted arrays. For now, linear search
         is the correct tool for unsorted data.
       </Callout>
@@ -812,7 +810,7 @@ int main() {
           <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 0 }}>
             For each element, check if the same value appears again later in the array.
             This uses a nested loop — O(n²) — which is the straightforward approach.
-            There are faster methods using hashing (Unit 14) but this version
+            There are faster methods using hashing (Lesson 15) but this version
             requires no extra knowledge.
           </p>
         </div>
@@ -934,7 +932,7 @@ int main() {
 
       <Callout type="tip">
         <strong>This is exactly why Linked Lists exist</strong> — they solve the fixed-size
-        and slow-insertion problems of arrays. We cover them in Unit 05. Every weakness
+        and slow-insertion problems of arrays. We cover them in Lesson 6. Every weakness
         of arrays becomes a motivation for the next data structure.
       </Callout>
 
@@ -974,7 +972,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Unit 03</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 4</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now understand arrays completely — from how they sit in RAM to every core
@@ -982,7 +980,7 @@ int main() {
         irrelevant. Arrays are inside almost every program ever written.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Unit 03 we cover <strong style={{ color: 'var(--text)' }}>Strings</strong> —
+        In Lesson 4 we cover <strong style={{ color: 'var(--text)' }}>Strings</strong> —
         which are, at their core, just arrays of characters. You already know
         how they work in memory. Now we learn how to search, reverse, compare,
         and manipulate text in C.
@@ -990,7 +988,7 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → UNIT 03</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 4</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Strings — Text is Just an Array</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Reverse, palindrome, anagram, pattern matching — in C.</div>
         </div>
@@ -1006,7 +1004,7 @@ int main() {
         'Insertion and deletion at a position require shifting elements — worst case O(n)',
         'Linear search checks every element one by one — O(n) worst case',
         '2D arrays are tables: accessed as matrix[row][column], traversal is O(rows × cols)',
-        'Arrays are fast to access but slow to insert/delete. This weakness motivates linked lists in Unit 05',
+        'Arrays are fast to access but slow to insert/delete. This weakness motivates linked lists in Lesson 6',
       ]} />
 
     </LearnLayout>

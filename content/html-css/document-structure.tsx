@@ -77,7 +77,7 @@ export default function DocumentStructure() {
     <LearnLayout
       title="Document Structure — DOCTYPE, html, head, body"
       description="Every HTML document follows the same skeleton. What each part actually does, and the mistakes that silently break rendering."
-      section="HTML & CSS — Module 02"
+      section="HTML & CSS — Lesson 02"
       readTime="30 min"
       updatedAt="August 2026"
     >
@@ -112,14 +112,14 @@ export default function DocumentStructure() {
           <code>lang</code> attribute (Part 03), the <code>&lt;head&gt;</code> holding metadata the browser
           needs but does not display directly (Part 04), the character encoding declaration inside it
           (Part 05), and the <code>&lt;body&gt;</code> holding everything a visitor actually sees (Part
-          03). The rest of this module goes through each of these individually, in the order they matter
+          03). The rest of this lesson goes through each of these individually, in the order they matter
           most for understanding what actually breaks when one is missing or misplaced.
         </Para>
 
         <Callout type="info">
           None of these five pieces are optional in a document you actually intend to ship. Browsers are
           extremely forgiving and will still render a page missing several of them — which is precisely
-          why the mistakes in this module are dangerous: they do not throw visible errors, they just
+          why the mistakes in this lesson are dangerous: they do not throw visible errors, they just
           quietly degrade the page in ways that are easy to miss during casual testing.
         </Callout>
       </section>
@@ -289,7 +289,7 @@ export default function DocumentStructure() {
           A common mistake: forgetting <code>&lt;title&gt;</code> entirely. The page still renders fine —
           nothing visibly breaks in the content area — but the browser tab shows a blank or generic label,
           search results show an unhelpful auto-generated title, and anyone sharing the link gets a broken
-          preview. This is exactly the kind of "silently degrades, never errors" mistake this module keeps
+          preview. This is exactly the kind of "silently degrades, never errors" mistake this lesson keeps
           returning to.
         </Callout>
       </section>
@@ -679,12 +679,12 @@ export default function DocumentStructure() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 03 moves into everything that goes inside &lt;body&gt; — the heading hierarchy, paragraphs
+          Lesson 03 moves into everything that goes inside &lt;body&gt; — the heading hierarchy, paragraphs
           versus generic containers, and the semantic landmark elements that turn a page from "div soup"
           into a real, meaningful document.
         </p>
         <Link href="/learn/html-css/text-semantic-structure" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 03 → Text Elements & Semantic Structure
+          Lesson 03 → Text Elements & Semantic Structure
         </Link>
       </div>
     </LearnLayout>

@@ -74,7 +74,7 @@ export default function ModelsBasics() {
     <LearnLayout
       title="Models: SELECT Statements as the Building Block"
       description="What a dbt model actually is, how filenames become object names, why the default materialization is a view, the config() Jinja block, staging/intermediate/marts organization, and a full worked staging model example."
-      section="dbt — Module 04"
+      section="dbt — Lesson 04"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -143,7 +143,7 @@ from raw.orders`}
           in whatever order you remembered was correct. A dbt model removes
           all three of those manual steps — the naming, the DDL, and the
           run order — and replaces them with configuration and file
-          location, which is what the rest of this module covers.
+          location, which is what the rest of this lesson covers.
         </Para>
       </section>
 
@@ -309,7 +309,7 @@ from raw.orders`}
         <SectionTitle>The config() Block — Per-Model Settings, Inline With the SQL</SectionTitle>
 
         <Para>
-          Module 03 showed how <code>dbt_project.yml</code> sets default
+          Lesson 03 showed how <code>dbt_project.yml</code> sets default
           materializations per directory. But sometimes one specific model
           needs to override that default — a single heavy mart model that
           should be a table even though its sibling models default to
@@ -350,7 +350,7 @@ left join {{ ref('stg_customers') }} c
           <code>unique_key</code> for incremental models,
           <code>schema</code> to override where a specific model lands,
           <code>enabled</code> to disable a model without deleting the file
-          — that later modules in this track cover as they become relevant.
+          — that later lessons in this track cover as they become relevant.
         </Para>
 
         <Table
@@ -387,8 +387,8 @@ left join {{ ref('stg_customers') }} c
           sense of which models are raw cleanup versus final, dashboard-
           ready output. The convention nearly every dbt project converges
           on, in some form, is three layers: <code>staging</code>,
-          <code>intermediate</code>, and <code>marts</code>. This module
-          introduces the idea at a beginner level; a later module in this
+          <code>intermediate</code>, and <code>marts</code>. This lesson
+          introduces the idea at a beginner level; a later lesson in this
           track, on project structure, goes much deeper into naming
           conventions, cross-layer rules, and when to add more layers than
           just these three.
@@ -610,7 +610,7 @@ select * from renamed`}
 
         <Para>
           Two things in that file are worth flagging even though they
-          aren't this module's main focus. First, the
+          aren't this lesson's main focus. First, the
           <code>{'{{ config(materialized=\'view\') }}'}</code> line is
           actually redundant here — Part 03 established that view is
           already the default, so this line is included only to make the
@@ -626,7 +626,7 @@ select * from renamed`}
           You need just enough of <code>source()</code> to read this
           example: it's a Jinja function that resolves to a raw table dbt
           knows about, declared elsewhere in a YAML file, rather than a
-          transformation dbt built itself. Module 05 — Sources, ref(), and
+          transformation dbt built itself. Lesson 05 — Sources, ref(), and
           the Dependency Graph — is where <code>source()</code>,
           <code>ref()</code>, and how dbt builds its dependency graph from
           both of them get the full, proper treatment. Everything you need
@@ -692,7 +692,7 @@ Done. PASS=1 WARN=0 ERROR=0 SKIP=0 TOTAL=1`}
         <SectionTitle>dbt compile — Seeing Exactly What Your Model Turns Into</SectionTitle>
 
         <Para>
-          Everything in this module so far has described what a model file
+          Everything in this lesson so far has described what a model file
           looks like before dbt touches it — the Jinja, the
           <code>ref()</code> and <code>source()</code> calls, the
           <code>config()</code> block. It's worth seeing the other side:
@@ -756,7 +756,7 @@ select * from renamed`}
           <code>FRESHCART_DEV.raw.orders</code>, using whichever database
           the active profile target points at. This is exactly why the
           same model file can be run against <code>dev</code> or
-          <code>prod</code> (Module 03, Part 08) and correctly resolve to
+          <code>prod</code> (Lesson 03, Part 08) and correctly resolve to
           each environment's own database without a single line of the
           model changing.
         </Para>
@@ -882,7 +882,7 @@ where order_status != 'cancelled'`}
         <SectionTitle>Before You Commit a New Model, Check These Five Things</SectionTitle>
 
         <Para>
-          Everything in this module compresses into a short, practical
+          Everything in this lesson compresses into a short, practical
           checklist worth running through on every new model before
           opening a pull request, especially while the conventions are
           still new. None of these take more than a minute to verify, and
@@ -930,7 +930,7 @@ where order_status != 'cancelled'`}
           materialization are predictable at a glance — which matters more
           as a project grows past the size where any one person can hold
           the whole thing in their head. This is the practical foundation
-          the next module builds on directly: understanding exactly how
+          the next lesson builds on directly: understanding exactly how
           <code>ref()</code> and <code>source()</code> wire these
           well-organized models together into a dependency graph.
         </Callout>
@@ -1054,7 +1054,7 @@ Concretely, per Part 05's convention, I'd clean each raw source individually in 
             q: 'Q5. What is the {{ config(...) }} block, and give two examples of settings you\'d put there beyond materialization.',
             a: `Per Part 04, config() is a Jinja block at the top of a model file that sets per-model configuration, evaluated at compile time before any SQL reaches the warehouse — it's the most specific, highest-precedence place to configure a single model, overriding whatever default the model's directory sets in dbt_project.yml.
 
-Beyond materialized, common examples include tags — a list of labels used to selectively run subsets of a project later, like dbt run --select tag:finance — and schema, which overrides where a specific model's object gets created relative to the profile's default schema. Later modules add more advanced examples specific to incremental models, like unique_key, once that materialization is covered in depth.`,
+Beyond materialized, common examples include tags — a list of labels used to selectively run subsets of a project later, like dbt run --select tag:finance — and schema, which overrides where a specific model's object gets created relative to the profile's default schema. Later lessons add more advanced examples specific to incremental models, like unique_key, once that materialization is covered in depth.`,
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
@@ -1129,7 +1129,7 @@ Beyond materialized, common examples include tags — a list of labels used to s
           {
             error: `A model fails with "Compilation Error - 'source' is undefined" when it should exist`,
             cause: 'The source() call in the model references a source name or table name that was never declared in a sources: YAML file, or there\'s a typo in one of the two arguments — the source project name or the specific table name.',
-            fix: 'Check the sources: YAML block for the exact source name and table name being referenced. Module 05 covers declaring and using source() in full; for now, confirm the two string arguments to source() exactly match what\'s declared in the YAML.',
+            fix: 'Check the sources: YAML block for the exact source name and table name being referenced. Lesson 05 covers declaring and using source() in full; for now, confirm the two string arguments to source() exactly match what\'s declared in the YAML.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
@@ -1154,7 +1154,7 @@ Beyond materialized, common examples include tags — a list of labels used to s
           'The filename, minus the .sql extension, is the object name dbt creates by default — there is no separate naming step, and renaming a model file creates a new object rather than renaming the old one.',
           'An unconfigured model materializes as a view by default, not a table — a genuinely important default, since leaving an expensive, frequently-queried mart model unconfigured means every downstream query recomputes it from scratch.',
           'The {{ config(...) }} Jinja block at the top of a model sets per-model configuration and always overrides directory-level defaults set in dbt_project.yml.',
-          'The staging / intermediate / marts convention organizes models by role — staging cleans one raw source at a time, intermediate combines staging models, marts produce the final business-facing shape — and a later module goes deeper on the exact rules.',
+          'The staging / intermediate / marts convention organizes models by role — staging cleans one raw source at a time, intermediate combines staging models, marts produce the final business-facing shape — and a later lesson goes deeper on the exact rules.',
           'A good model does one clear transformation step; splitting a large, do-everything query into small, named, single-purpose models improves testability, reusability, and debuggability, even though dbt places no technical limit on model complexity.',
         ]}
       />

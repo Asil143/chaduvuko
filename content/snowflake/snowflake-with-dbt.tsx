@@ -5,7 +5,7 @@ export default function SnowflakeWithDbt() {
     <LearnLayout
       title="Snowflake with dbt"
       description="dbt project structure, sources, models and materializations, tests, snapshots, incremental strategies with Snowflake MERGE, environments, and CI/CD for dbt on Snowflake."
-      section="Snowflake — Module 17"
+      section="Snowflake — Lesson 17"
       readTime="70 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -540,7 +540,7 @@ FROM {{ source('raw', 'customers') }}
           GOLD-configured schema, are the Gold layer: business-ready facts, dimensions, and marts with tests
           and documented owners.
         </Para>
-        <CodeBox label="The mapping, made explicit">{`Medallion concept (elt-medallion module)     dbt implementation (this module)
+        <CodeBox label="The mapping, made explicit">{`Medallion concept (elt-medallion module)     dbt implementation (this lesson)
 -------------------------------------------  -------------------------------------------
 RAW schema, loaded outside the warehouse      source() declarations in sources.yml
 SILVER: typed, deduped, standardized          models/staging/*.sql -> view/table materialization

@@ -70,7 +70,7 @@ export default function DataModellingModule() {
     <LearnLayout
       title="Data Modelling — Dimensional Modelling, Star Schema, Facts and Dimensions"
       description="Dimensional modelling from first principles — grain, fact types, dimension design, surrogate keys, conformed dimensions, and the modern wide-table pattern."
-      section="Data Engineering — Module 33"
+      section="Data Engineering — Lesson 33"
       readTime="65 min"
       updatedAt="August 2026"
     >
@@ -91,7 +91,7 @@ export default function DataModellingModule() {
         </Para>
 
         <Para>
-          This module covers dimensional modelling — the dominant approach for
+          This lesson covers dimensional modelling — the dominant approach for
           analytical data modelling since Ralph Kimball formalised it in the 1990s
           and still the most relevant framework for data engineers in 2026. It
           also covers the modern wide-table pattern that has emerged as a practical
@@ -680,7 +680,7 @@ LEFT JOIN {{ ref('dim_payment_method') }} p ON o.payment_method = p.payment_meth
         {[
           {
             wrong: '"The grain is a documentation detail — you can add columns first and formalize it later"',
-            right: 'Part 02 is explicit that grain has to come first precisely because every later column choice depends on it — adding product_id to an order-grain table silently multiplies rows per order, and this module\'s Error Library shows exactly what that does: SUM(order_amount) balloons to roughly 59× its correct value without any error being raised.',
+            right: 'Part 02 is explicit that grain has to come first precisely because every later column choice depends on it — adding product_id to an order-grain table silently multiplies rows per order, and this lesson\'s Error Library shows exactly what that does: SUM(order_amount) balloons to roughly 59× its correct value without any error being raised.',
           },
           {
             wrong: '"Snowflaking a dimension (normalizing dim_store into dim_store → dim_city → dim_region) is the more correct, professional design"',
@@ -688,7 +688,7 @@ LEFT JOIN {{ ref('dim_payment_method') }} p ON o.payment_method = p.payment_meth
           },
           {
             wrong: '"Joining a fact table to a dimension on the natural key (customer_id) is basically equivalent to joining on the surrogate key (customer_sk)"',
-            right: 'Part 04\'s Reason 1 and this module\'s Error Library both show this is where point-in-time accuracy dies — the natural-key join matches every historical SCD2 version simultaneously, causing exactly the same COUNT(order_id) fan-out bug this module\'s Error Library opens with — a roughly 59× inflation there, not a mere tripling.',
+            right: 'Part 04\'s Reason 1 and this lesson\'s Error Library both show this is where point-in-time accuracy dies — the natural-key join matches every historical SCD2 version simultaneously, causing exactly the same COUNT(order_id) fan-out bug this lesson\'s Error Library opens with — a roughly 59× inflation there, not a mere tripling.',
           },
           {
             wrong: '"Storing a pre-computed ratio like cancellation_rate in the fact table is fine as long as it\'s accurate when written"',
@@ -864,11 +864,11 @@ The pragmatic 2026 approach is a hybrid: build the canonical model as a star sch
         {[
           {
             q: 'Adding a column to a fact table without checking whether it\'s actually true at the declared grain',
-            a: 'Part 02\'s grain examples show exactly how this happens — product_id looks harmless to add to an order-grain table, but it silently forces multiple rows per order, and this module\'s Error Library documents the direct consequence: a revenue dashboard showing 59x the correct value with no error anywhere in the pipeline.',
+            a: 'Part 02\'s grain examples show exactly how this happens — product_id looks harmless to add to an order-grain table, but it silently forces multiple rows per order, and this lesson\'s Error Library documents the direct consequence: a revenue dashboard showing 59x the correct value with no error anywhere in the pipeline.',
           },
           {
             q: 'Joining a fact table to an SCD Type 2 dimension on the natural key instead of the surrogate key',
-            a: 'Part 04\'s Reason 1 is the whole explanation, and this module\'s Error Library shows the two ways it manifests — a fan-out that inflates COUNT(*), or an is_current=TRUE filter that makes every historical order silently show the customer\'s CURRENT city instead of the one true at order time.',
+            a: 'Part 04\'s Reason 1 is the whole explanation, and this lesson\'s Error Library shows the two ways it manifests — a fan-out that inflates COUNT(*), or an is_current=TRUE filter that makes every historical order silently show the customer\'s CURRENT city instead of the one true at order time.',
           },
           {
             q: 'Building a separate dim_city or dim_product_category table to "properly normalize" a dimension',
@@ -876,11 +876,11 @@ The pragmatic 2026 approach is a hybrid: build the canonical model as a star sch
           },
           {
             q: 'Storing a computed metric like average_order_value or conversion_rate directly in a fact or aggregate table',
-            a: 'Part 03\'s non-additive facts rule and this module\'s Real World section both point to the same failure mode: a stored ratio is only correct at the moment it was computed, and any later change to what should count in the denominator makes it silently wrong. Store the components, compute the ratio at query time.',
+            a: 'Part 03\'s non-additive facts rule and this lesson\'s Real World section both point to the same failure mode: a stored ratio is only correct at the moment it was computed, and any later change to what should count in the denominator makes it silently wrong. Store the components, compute the ratio at query time.',
           },
           {
             q: 'Letting two teams write independent SQL that both claim to compute the same named metric',
-            a: 'This module\'s entire Real World section is built around exactly this — Finance and Operations both had "correct" SQL for "March revenue" that returned numbers $340K apart, because nothing forced them to share a single definition. A canonical dbt metrics model, queried by every team, is the actual fix — not a data quality investigation.',
+            a: 'This lesson\'s entire Real World section is built around exactly this — Finance and Operations both had "correct" SQL for "March revenue" that returned numbers $340K apart, because nothing forced them to share a single definition. A canonical dbt metrics model, queried by every team, is the actual fix — not a data quality investigation.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
@@ -959,10 +959,10 @@ The pragmatic 2026 approach is a hybrid: build the canonical model as a star sch
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 34 covers Slowly Changing Dimensions — what happens when a customer moves city or changes job title, and the three SCD types that handle historical tracking correctly, partially, or not at all.
+          Lesson 34 covers Slowly Changing Dimensions — what happens when a customer moves city or changes job title, and the three SCD types that handle historical tracking correctly, partially, or not at all.
         </p>
         <Link href="/learn/data-engineering/slowly-changing-dimensions" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 34 → Slowly Changing Dimensions — SCD Types 1, 2 and 3
+          Lesson 34 → Slowly Changing Dimensions — SCD Types 1, 2 and 3
         </Link>
       </div>
     </LearnLayout>

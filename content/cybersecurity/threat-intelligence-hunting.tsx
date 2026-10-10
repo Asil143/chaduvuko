@@ -52,7 +52,7 @@ export default function Module34() {
     <LearnLayout
       title="Threat Intelligence and Threat Hunting"
       description="Move from reactive defence to proactive hunting. Learn threat intelligence consumption, STIX/TAXII, MITRE ATT&CK-based hunt hypotheses, detection engineering, and how to find attackers hiding in your environment before they announce themselves."
-      section="Cybersecurity — Module 34"
+      section="Cybersecurity — Lesson 34"
       readTime="40 min"
       updatedAt="May 2026"
     >
@@ -848,8 +848,8 @@ SOURCE: attack.mitre.org/groups/G0016, CISA AA21-116A`}
       ]} />
 
       <Callout type="info">
-        <strong>Up Next — Module 35: DevSecOps</strong><br />
-        Module 35 brings security into the software development pipeline end-to-end. You will learn how to embed security gates at every SDLC phase, build secure CI/CD pipelines with SAST/DAST/SCA, implement infrastructure-as-code security scanning, manage secrets in pipelines, and foster a security culture where developers own security outcomes.
+        <strong>Up Next — Lesson 35: DevSecOps</strong><br />
+        Lesson 35 brings security into the software development pipeline end-to-end. You will learn how to embed security gates at every SDLC phase, build secure CI/CD pipelines with SAST/DAST/SCA, implement infrastructure-as-code security scanning, manage secrets in pipelines, and foster a security culture where developers own security outcomes.
       </Callout>
 
     </LearnLayout>

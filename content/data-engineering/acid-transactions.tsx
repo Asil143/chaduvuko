@@ -176,7 +176,7 @@ export default function ACIDTransactionsModule() {
     <LearnLayout
       title="ACID Properties and Transactions"
       description="Why ACID exists, what each property means, and what happens when it breaks."
-      section="Data Engineering — Module 13"
+      section="Data Engineering — Lesson 13"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -282,7 +282,7 @@ export default function ACIDTransactionsModule() {
 
         <Para>
           Atomicity is implemented using the Write-Ahead Log (WAL) we covered in
-          Module 09. Every operation in a transaction is written to the WAL before
+          Lesson 09. Every operation in a transaction is written to the WAL before
           the data pages are modified. When a transaction commits, a commit record
           is written to the WAL and flushed to disk. If a crash occurs before the
           commit record is written, the database replays the WAL on restart, sees
@@ -845,7 +845,7 @@ with psycopg2.connect(conn_string) as conn:
           holding locks on all resources for the duration of the entire operation.
           Long transactions: block other queries waiting for locks, consume enormous
           amounts of WAL space, prevent VACUUM from reclaiming dead row versions (as
-          covered in Module 09), and take a long time to roll back if they fail.
+          covered in Lesson 09), and take a long time to roll back if they fail.
         </Para>
 
         <SubSubTitle>One transaction for a million rows — what it costs</SubSubTitle>
@@ -1367,15 +1367,15 @@ This is exactly what dbt tests are for. A unique test on order_id catches the du
           },
           {
             q: 'Opening a database transaction before making an external API call inside it',
-            a: 'This module\'s Error Library shows the direct consequence — idle_in_transaction_session_timeout killing a connection that sat open for 2 hours because the pipeline was waiting on an API response mid-transaction. Fetch external data before opening the transaction; keep only the actual database write inside BEGIN/COMMIT.',
+            a: 'This lesson\'s Error Library shows the direct consequence — idle_in_transaction_session_timeout killing a connection that sat open for 2 hours because the pipeline was waiting on an API response mid-transaction. Fetch external data before opening the transaction; keep only the actual database write inside BEGIN/COMMIT.',
           },
           {
             q: 'Relying on ON CONFLICT DO UPDATE to prevent duplicates without an actual UNIQUE constraint on the conflict column',
-            a: 'This module\'s Error Library and Part 09\'s Real World scenario both trace a real financial discrepancy back to exactly this gap — ON CONFLICT has nothing to detect a conflict against without a UNIQUE constraint on settlement_id, so duplicate inserts succeeded silently. The constraint isn\'t optional; the upsert clause depends on it existing.',
+            a: 'This lesson\'s Error Library and Part 09\'s Real World scenario both trace a real financial discrepancy back to exactly this gap — ON CONFLICT has nothing to detect a conflict against without a UNIQUE constraint on settlement_id, so duplicate inserts succeeded silently. The constraint isn\'t optional; the upsert clause depends on it existing.',
           },
           {
             q: 'Using TRUNCATE + INSERT to reload a table without wrapping both steps in one transaction',
-            a: 'This module\'s Error Library shows a table left empty after a pipeline truncated it and then failed before the INSERT completed. Part 02\'s atomicity principle applies directly here: TRUNCATE and the subsequent INSERT must be one atomic unit, or use an upsert pattern against the live table instead of truncate-and-reload.',
+            a: 'This lesson\'s Error Library shows a table left empty after a pipeline truncated it and then failed before the INSERT completed. Part 02\'s atomicity principle applies directly here: TRUNCATE and the subsequent INSERT must be one atomic unit, or use an upsert pattern against the live table instead of truncate-and-reload.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1471,10 +1471,10 @@ This is exactly what dbt tests are for. A unique test on order_id catches the du
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 14 covers Python for data pipelines — file I/O at scale, REST APIs, exponential backoff, generators, and the patterns that separate scripts that break from pipelines that survive production.
+          Lesson 14 covers Python for data pipelines — file I/O at scale, REST APIs, exponential backoff, generators, and the patterns that separate scripts that break from pipelines that survive production.
         </p>
         <Link href="/learn/data-engineering/python-for-de" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 14 → Python for Data Engineering
+          Lesson 14 → Python for Data Engineering
         </Link>
       </div>
     </LearnLayout>

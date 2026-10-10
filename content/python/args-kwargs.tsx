@@ -77,13 +77,13 @@ export default function ArgsKwargs() {
     <LearnLayout
       title="*args, **kwargs and Function Arguments Deep Dive"
       description="Every way Python lets you pass arguments to a function, and how to design flexible, unambiguous function signatures."
-      section="Python — Module 25"
+      section="Python — Lesson 25"
       readTime="45 min"
       updatedAt="August 2026"
     >
 
       <Para>
-        This module opens <strong>Phase 4 — Intermediate &amp; Functional Python</strong>. Phases 1
+        This lesson opens <strong>Phase 4 — Intermediate &amp; Functional Python</strong>. Phases 1
         through 3 built your foundation: syntax, data structures, and Object-Oriented Python, including
         writing classes, encapsulation, and the <code>@property</code> decorator. Phase 4 builds directly
         on top of that — it is where Python stops looking like "a scripting language with functions" and
@@ -99,7 +99,7 @@ export default function ArgsKwargs() {
         <SectionTitle>Positional and Keyword Arguments, Revisited</SectionTitle>
 
         <Para>
-          Back in Module 07 (Functions), you learned that a function call can pass arguments two ways:{' '}
+          Back in Lesson 07 (Functions), you learned that a function call can pass arguments two ways:{' '}
           <strong>positionally</strong>, matched to parameters left to right by their position, or{' '}
           <strong>by keyword</strong>, matched explicitly by parameter name regardless of order. This
           module assumes that is solid ground and builds the rest of Python&apos;s argument-passing model
@@ -115,14 +115,14 @@ describe_pet(age=3, name="Biscuit", species="dog")       # keyword — order no 
 describe_pet("Biscuit", age=3, species="dog")            # mixed — positional first, then keyword`}</CodeBox>
 
         <Para>
-          One rule carries forward from Module 07 and matters a great deal for everything in this
+          One rule carries forward from Lesson 07 and matters a great deal for everything in this
           module: once you use a keyword argument in a call, every argument after it must also be
           passed by keyword. You cannot follow a keyword argument with another positional one — Python
           would have no reliable way to know which remaining parameter it belongs to.
         </Para>
 
         <Para>
-          What this module actually covers is the layer above that: what happens when you do not know,
+          What this lesson actually covers is the layer above that: what happens when you do not know,
           at the time you write the function, exactly how many arguments will be passed, or exactly
           what their names will be. That is the entire reason <code>*args</code> and{' '}
           <code>**kwargs</code> exist.
@@ -155,7 +155,7 @@ total()                   # 0      — args is an empty tuple, which is perfectl
 
         <Para>
           Because <code>args</code> is a genuine tuple, everything you already know about tuples from
-          Module 09 applies directly — you can index into it, slice it, iterate over it with a{' '}
+          Lesson 09 applies directly — you can index into it, slice it, iterate over it with a{' '}
           <code>for</code> loop, or unpack it. It is not some special new type invented for this
           feature; it is the same immutable sequence type you already understand.
         </Para>
@@ -205,7 +205,7 @@ build_profile()
 # {} — an empty dict, perfectly legal, same as an empty *args tuple`}</CodeBox>
 
         <Para>
-          Because <code>kwargs</code> is a genuine dict, every dict method from Module 11 works on it
+          Because <code>kwargs</code> is a genuine dict, every dict method from Lesson 11 works on it
           directly — <code>.items()</code>, <code>.get()</code>, <code>.keys()</code>, membership
           checks with <code>in</code>, all of it. This is precisely why <code>**kwargs</code> is the
           standard way to accept an open-ended set of optional, named configuration values without
@@ -392,7 +392,7 @@ user = User(**row)   # far cleaner than User(row["name"], row["email"], row["rol
         <SectionTitle>The Required Order, and a Real Worked Example</SectionTitle>
 
         <Para>
-          A single function signature can legally combine every form covered in this module —
+          A single function signature can legally combine every form covered in this lesson —
           positional-only parameters, regular parameters, <code>*args</code>, keyword-only parameters,
           and <code>**kwargs</code> — but Python enforces a strict order, and getting it wrong is a{' '}
           <code>SyntaxError</code> caught before your program ever runs.
@@ -429,7 +429,7 @@ full_signature(1, 2, 3, 4, kw_only=5, extra=6)
           together is a <strong>wrapper function</strong> — one that adds some behaviour (logging,
           timing, retrying, authentication) around a call to another function, without needing to know
           anything about that function&apos;s specific arguments. This exact pattern is also the
-          foundation the Decorators module (Module 29) will build on directly.
+          foundation the Decorators module (Lesson 29) will build on directly.
         </Para>
 
         <CodeBox label="A wrapper that forwards ANY arguments to ANY function it wraps">{`import time
@@ -536,7 +536,7 @@ call_with_logging(fetch_user, 42, include_orders=True)
             genuinely earns its place for open-ended, evolving data, but it quietly gives up the
             "unexpected keyword argument" safety net that a normal function signature provides for free.
             Knowing that trade-off exists — and deciding when it is and is not acceptable — is the actual
-            skill this module is teaching, not just the syntax.
+            skill this lesson is teaching, not just the syntax.
           </Para>
         </div>
       </section>
@@ -760,12 +760,12 @@ call_with_logging(fetch_user, 42, include_orders=True)
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 26 covers lambda functions and Python&apos;s functional toolkit — map, filter, and
+          Lesson 26 covers lambda functions and Python&apos;s functional toolkit — map, filter, and
           functools.reduce — plus an honest, non-dogmatic take on when a one-line lambda is the right
           call and when a named function genuinely reads better.
         </p>
         <Link href="/learn/python/lambda-map-filter-reduce" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 26 → Lambda Functions and Functional Tools
+          Lesson 26 → Lambda Functions and Functional Tools
         </Link>
       </div>
     </LearnLayout>

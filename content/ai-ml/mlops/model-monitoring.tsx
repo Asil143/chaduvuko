@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Model Monitoring — Drift Detection and Retraining — Chaduvuko',
@@ -178,7 +177,6 @@ export default function ModelMonitoringPage() {
       readTime="36–46 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="mlops" topic="model-monitoring" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -235,7 +233,7 @@ export default function ModelMonitoringPage() {
           Install: <span style={S.code as React.CSSProperties}>pip install evidently scipy numpy pandas scikit-learn</span>.
           Evidently is the most widely used open-source ML monitoring library
           in the industry — generates drift reports from reference and current data.
-          All statistical tests in this module are also implemented from scratch
+          All statistical tests in this lesson are also implemented from scratch
           so you understand what the library is doing.
         </Callout>
       </div>
@@ -757,7 +755,7 @@ for metric in ['mae', 'rmse', 'mape', 'within_5min', 'bias']:
           Manual retraining — a data scientist noticing a metric, running a notebook,
           and deploying — does not scale to dozens of models.
           Automated retraining monitors metrics and triggers the training pipeline
-          (Module 69) when thresholds are breached.
+          (Lesson 69) when thresholds are breached.
           The trigger calls the Airflow DAG or Prefect flow with a flag
           indicating emergency retraining. The pipeline runs, evaluates the new model,
           and either promotes it automatically (if above a quality threshold)
@@ -992,7 +990,7 @@ for scenario in test_scenarios:
           Infrastructure metrics (request latency, error rate, pod CPU and memory)
           flow into Prometheus or Datadog and get graphed in Grafana, exactly like
           any other backend service. Statistical drift metrics — the PSI and KS
-          test results from earlier in this module — are usually computed on a
+          test results from earlier in this lesson — are usually computed on a
           schedule (an Airflow DAG running nightly or every few hours) rather than
           per-request, then written to the same metrics store so they show up
           alongside infra metrics on one dashboard. Business KPIs — fraud dollars
@@ -1263,7 +1261,7 @@ for scenario in test_scenarios:
           Monitoring tells you when to retrain. But when you retrain,
           you need to know exactly what data produced each model —
           so you can reproduce results, audit decisions, and debug regressions.
-          Module 73 covers retraining pipelines with champion-challenger evaluation,
+          Lesson 73 covers retraining pipelines with champion-challenger evaluation,
           safe model promotion, and the rollback patterns that protect production
           when a new model unexpectedly underperforms after deployment.
         </p>
@@ -1280,7 +1278,7 @@ for scenario in test_scenarios:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 73 · MLOps
+              Next — Lesson 73 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -123,7 +123,7 @@ export default function DEUsaJobMarketModule() {
     <LearnLayout
       title="Data Engineering in the US Job Market (2026)"
       description="Salaries, companies, skills, JD decoding, and breaking in from a non-CS background."
-      section="Data Engineering — Module 06"
+      section="Data Engineering — Lesson 06"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -184,7 +184,7 @@ export default function DEUsaJobMarketModule() {
         </HighlightBox>
 
         <Callout type="info">
-          <strong>Data source:</strong> Salary figures in this module are sourced from
+          <strong>Data source:</strong> Salary figures in this lesson are sourced from
           Levels.fyi, Glassdoor, LinkedIn Salary Insights, and BLS Occupational
           Employment data, cross-referenced with data engineering community surveys.
           All figures reflect March 2026 data. Figures are base salary unless
@@ -751,11 +751,11 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
           },
           {
             wrong: '"Listing as many tools as possible on your resume maximizes your chances"',
-            right: 'Part 04\'s Callout and this module\'s first TryThis both make the opposite case: interviewers probe for depth within the first two follow-up questions, and a thin list of tools you can discuss deeply beats a long list that collapses under questioning.',
+            right: 'Part 04\'s Callout and this lesson\'s first TryThis both make the opposite case: interviewers probe for depth within the first two follow-up questions, and a thin list of tools you can discuss deeply beats a long list that collapses under questioning.',
           },
           {
             wrong: '"If you\'re getting rejected or hearing silence, it means you\'re not qualified"',
-            right: 'Part 09\'s real career story reports roughly 100+ applications and single-digit interview conversion as the realistic range for a disciplined non-CS candidate — not evidence of being unqualified. This module\'s Common Mistakes and Error Library sections both cover the structural reasons (resume tailoring, ATS filtering) that explain most of this gap.',
+            right: 'Part 09\'s real career story reports roughly 100+ applications and single-digit interview conversion as the realistic range for a disciplined non-CS candidate — not evidence of being unqualified. This lesson\'s Common Mistakes and Error Library sections both cover the structural reasons (resume tailoring, ATS filtering) that explain most of this gap.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
@@ -988,10 +988,10 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 07 covers the three data categories every data engineer works with daily — structured, semi-structured, and unstructured — and what each one demands from your pipeline design.
+          Lesson 07 covers the three data categories every data engineer works with daily — structured, semi-structured, and unstructured — and what each one demands from your pipeline design.
         </p>
         <Link href="/learn/data-engineering/data-types-structured" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 07 → Structured, Semi-Structured and Unstructured Data
+          Lesson 07 → Structured, Semi-Structured and Unstructured Data
         </Link>
       </div>
     </LearnLayout>

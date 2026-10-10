@@ -78,7 +78,7 @@ export default function CreateTable() {
     <LearnLayout
       title="CREATE TABLE"
       description="Define tables from scratch — column types, constraints, primary keys, foreign keys, default values, and schema design decisions that last for years"
-      section="SQL — Module 19"
+      section="SQL — Lesson 19"
       readTime="14–18 min"
       updatedAt="April 2026"
     >
@@ -90,7 +90,7 @@ export default function CreateTable() {
 
       <P>CREATE TABLE is not just syntax to memorise. The decisions you make in a CREATE TABLE statement — which columns to include, which types to use, which constraints to enforce, which relationships to define — shape the entire application built on top of it. A well-designed table is a joy to query and maintain. A poorly designed one causes bugs, data quality issues, and migrations that lock production databases for hours.</P>
 
-      <P>This module teaches you to write CREATE TABLE statements that are correct, complete, and built to last.</P>
+      <P>This lesson teaches you to write CREATE TABLE statements that are correct, complete, and built to last.</P>
 
       <HR />
 
@@ -991,10 +991,10 @@ CREATE TABLE prescriptions (
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 20</strong>, you learn INSERT INTO — adding rows to tables, inserting multiple rows at once, inserting from SELECT queries, and handling conflicts with upsert patterns.
+          In <strong>Lesson 20</strong>, you learn INSERT INTO — adding rows to tables, inserting multiple rows at once, inserting from SELECT queries, and handling conflicts with upsert patterns.
         </p>
         <Link href="/learn/sql/insert-into" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 20 → INSERT INTO
+          Lesson 20 → INSERT INTO
         </Link>
       </div>
 

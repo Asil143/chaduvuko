@@ -74,7 +74,7 @@ export default function EventDrivenArchitecture() {
     <LearnLayout
       title="Event-Driven Architecture"
       description="What event-driven architecture actually means as a system design style, EDA vs request-response trade-offs, notification vs state-transfer events, the outbox pattern, choreography vs orchestration, schema as an API contract, and a worked order-fulfillment example."
-      section="Apache Kafka — Module 20"
+      section="Apache Kafka — Lesson 20"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -89,7 +89,7 @@ export default function EventDrivenArchitecture() {
         <SectionTitle>Event-Driven Architecture Is a Communication Style, Not a Kafka Feature</SectionTitle>
         <Para>
           Every module so far has treated Kafka as infrastructure — brokers, partitions, producers, consumers,
-          replication. This module steps back and asks a different question: what does it actually mean to
+          replication. This lesson steps back and asks a different question: what does it actually mean to
           design a <em>system</em> around Kafka, rather than just point a few services at a cluster? The
           answer is event-driven architecture (EDA) — a system design style where services communicate by
           publishing facts about things that happened, and other services independently react to those facts,
@@ -120,14 +120,14 @@ export default function EventDrivenArchitecture() {
           subscriber topic is exactly the primitive EDA needs: publishers don't need to know who's listening,
           new subscribers can join at any time and even replay history, and the broker itself absorbs the
           timing mismatch between a fast publisher and a slow (or temporarily offline) subscriber — the
-          temporal, spatial, and rate decoupling covered in earlier modules is precisely what makes EDA
+          temporal, spatial, and rate decoupling covered in earlier lessons is precisely what makes EDA
           practical at scale rather than just a nice diagram.
         </Para>
         <Callout title="EDA is a design decision, made per interaction, not a system-wide switch" color={K}>
           Very few real systems are "fully event-driven" or "fully request-response." A checkout flow might
           use synchronous request-response for the parts a user is actively waiting on (validating a
           discount code) and event-driven communication for everything that happens after the user clicks
-          "place order" (inventory, payment, shipping, notifications). This module is about recognizing when
+          "place order" (inventory, payment, shipping, notifications). This lesson is about recognizing when
           each style fits, not about treating EDA as universally superior.
         </Callout>
       </section>
@@ -146,7 +146,7 @@ export default function EventDrivenArchitecture() {
         <SubTitle>What EDA buys you</SubTitle>
         <BulletList
           items={[
-            'Decoupling — the order service does not need to know the notification service, the fraud-detection service, or the analytics pipeline exist. New consumers can be added with zero changes to the producer, exactly as covered for pub-sub topics in earlier modules.',
+            'Decoupling — the order service does not need to know the notification service, the fraud-detection service, or the analytics pipeline exist. New consumers can be added with zero changes to the producer, exactly as covered for pub-sub topics in earlier lessons.',
             'Independent scaling — each consuming service scales based on its own load characteristics, not tied to the producer\'s request volume or any other consumer\'s processing speed.',
             'Resilience to a downstream service being down — if the notification service is deployed, crashed, or being restarted, order placement still succeeds. The event sits durably in the topic and the notification service catches up whenever it comes back, instead of the order API itself failing or timing out because a downstream dependency was unavailable.',
           ]}
@@ -337,7 +337,7 @@ COMMIT;
           background job that polls the outbox table on a timer and publishes new rows — works, but adds
           latency and constant polling load. The far more common production approach is to point Change Data
           Capture (CDC) at the outbox table specifically: a CDC connector like Debezium tails the database's
-          own transaction log (the same mechanism covered in the next module) and streams new outbox rows to
+          own transaction log (the same mechanism covered in the next lesson) and streams new outbox rows to
           Kafka as they are committed, with very low latency and no polling overhead. This ties the outbox
           pattern directly into CDC — the outbox table becomes a clean, purpose-built source table for exactly
           the events a service intends to publish, rather than CDC-ing the entire orders table and exposing
@@ -348,13 +348,13 @@ COMMIT;
           rows={[
             ['Naive dual write (DB then Kafka, or Kafka then DB)', 'None — a crash between the two writes causes permanent inconsistency', 'Lowest, when it works', 'Looks simple, but silently loses correctness under real failure conditions'],
             ['Outbox table + polling publisher', 'Full — one local database transaction covers both writes', 'Seconds, bounded by the poll interval', 'Simple to build, but constant polling load and added latency'],
-            ['Outbox table + CDC (e.g. Debezium)', 'Full — same local transaction guarantee', 'Sub-second — driven by transaction log tailing, not polling', 'Requires running a CDC connector, but is the standard production pattern — covered in depth next module'],
+            ['Outbox table + CDC (e.g. Debezium)', 'Full — same local transaction guarantee', 'Sub-second — driven by transaction log tailing, not polling', 'Requires running a CDC connector, but is the standard production pattern — covered in depth next lesson'],
           ]}
         />
-        <Callout title="This is exactly why the next module exists" color={K}>
+        <Callout title="This is exactly why the next lesson exists" color={K}>
           The outbox pattern is the design decision; CDC is the mechanism that usually implements its "publish
           to Kafka" half in production. If this pattern feels incomplete without knowing how a tool actually
-          tails a database's transaction log reliably, that's the right instinct — the next module, Change Data
+          tails a database's transaction log reliably, that's the right instinct — the next lesson, Change Data
           Capture with Debezium, is precisely that mechanism.
         </Callout>
       </section>
@@ -739,7 +739,7 @@ shipping-service:  subscribes to payment.charged
         <SectionTag text="// Part 10 — Idempotent Consumers Across the Chain" />
         <SectionTitle>Every Consumer in an Event Chain Needs to Assume It Will See an Event More Than Once</SectionTitle>
         <Para>
-          Earlier modules established that Kafka's default delivery guarantee is at-least-once — a consumer
+          Earlier lessons established that Kafka's default delivery guarantee is at-least-once — a consumer
           can, under real failure conditions (a crash between processing and committing an offset, a
           rebalance mid-batch), see the same event more than once. In a simple single-consumer pipeline this
           is a known, manageable property. In a multi-step event-driven chain like the order-fulfillment
@@ -814,11 +814,11 @@ shipping-service:  subscribes to payment.charged
         <Para>
           These two terms get used almost interchangeably in casual conversation, and conflating them leads
           to real design confusion. They are related but distinct ideas, and it's worth being precise about
-          the difference before moving into the next module, which relies on a clear notion of what an event
+          the difference before moving into the next lesson, which relies on a clear notion of what an event
           represents.
         </Para>
         <Para>
-          Event-driven architecture, as this module has covered it, is about how services <em>communicate</em>
+          Event-driven architecture, as this lesson has covered it, is about how services <em>communicate</em>
           — publishing and reacting to events instead of calling each other directly. It says nothing about
           how any individual service stores its own internal state. A perfectly ordinary service using EDA to
           communicate can still store its current state as a normal mutable row in a relational database,
@@ -838,7 +838,7 @@ shipping-service:  subscribes to payment.charged
             ['What it governs', 'How services communicate with each other', 'How one service persists its own internal state'],
             ['Can exist without the other?', 'Yes — a service can publish and react to events while storing its own state as ordinary mutable rows', 'Yes — a service can use event sourcing internally while still exposing a normal synchronous request-response API externally'],
             ['Typical storage shape', 'Whatever each service chooses — relational tables, key-value stores, anything', 'An append-only event log as the source of truth; current state is derived, not stored directly'],
-            ['Relationship to this module\'s Kafka topics', 'Kafka topics are the communication medium between services', 'A Kafka compacted or standard topic can serve as the event store itself, if a service chooses event sourcing internally'],
+            ['Relationship to this lesson\'s Kafka topics', 'Kafka topics are the communication medium between services', 'A Kafka compacted or standard topic can serve as the event store itself, if a service chooses event sourcing internally'],
           ]}
         />
         <Para>
@@ -879,7 +879,7 @@ shipping-service:  subscribes to payment.charged
           headers={['Governance practice', 'Problem it prevents']}
           rows={[
             ['A named owning team per topic, documented and discoverable', 'A schema change ships without anyone realizing which team\'s approval it should have gone through, or without knowing who to ask when a consumer has a question'],
-            ['A registered (even informally) list of known consumers per topic', 'A breaking change catches a downstream team by surprise because the publishing team genuinely didn\'t know they were consuming it — the Chewy scenario from this module\'s story section'],
+            ['A registered (even informally) list of known consumers per topic', 'A breaking change catches a downstream team by surprise because the publishing team genuinely didn\'t know they were consuming it — the Chewy scenario from this lesson\'s story section'],
             ['A deprecation window for any breaking change, communicated ahead of time', 'Consumers are forced into a same-day, unplanned migration instead of a scheduled one, even when the schema registry technically blocked the fully incompatible version'],
             ['A lightweight review step for new topics that look likely to become widely shared', 'A topic that starts as one team\'s internal implementation detail becomes a de facto public contract without anyone having designed it as one from the start'],
           ]}

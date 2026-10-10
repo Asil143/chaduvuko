@@ -102,7 +102,7 @@ export default function JoinsIntro() {
     <LearnLayout
       title="Introduction to JOINs"
       description="Combine data from multiple tables — what JOINs are, why relational databases need them, the four JOIN types, ON vs USING, table aliases, and every foundational pattern you will build on"
-      section="SQL — Module 30"
+      section="SQL — Lesson 30"
       readTime="12–16 min"
       updatedAt="April 2026"
     >
@@ -112,7 +112,7 @@ export default function JoinsIntro() {
 
       <P>Every query you have written so far touches one table at a time. But the FreshCart database has six tables — customers, orders, order_items, products, stores, and employees — and the most valuable information lives across the boundaries between them. An order row knows its customer_id but not the customer's name. An order_items row knows the product_id but not the product's name. A store row knows the city but not the orders placed there.</P>
 
-      <P>This is not a design flaw — it is the relational model working exactly as intended. Normalisation (Module 26) taught you to store each fact once in the right table. JOINs are how you <Hl>reassemble</Hl> those facts at query time — combining columns from multiple tables based on matching values, producing a result that looks like it came from one wide table but was stored efficiently in several narrow ones.</P>
+      <P>This is not a design flaw — it is the relational model working exactly as intended. Normalisation (Lesson 26) taught you to store each fact once in the right table. JOINs are how you <Hl>reassemble</Hl> those facts at query time — combining columns from multiple tables based on matching values, producing a result that looks like it came from one wide table but was stored efficiently in several narrow ones.</P>
 
       <P>Without JOINs you cannot answer any cross-table question:</P>
 
@@ -692,7 +692,7 @@ SELECT * FROM table1, table2;  -- comma-separated = CROSS JOIN
 
       <P>Some schemas use composite keys — two or more columns that together uniquely identify a row, or together form a foreign key back to another table. Joining on a composite key means every column in the composite must match, ANDed together in a single ON clause: ON t1.col_a = t2.col_a AND t1.col_b = t2.col_b. Matching on only one of the columns would pair rows that share that one value but disagree on the other — a silent, wrong result.</P>
 
-      <P>FreshCart's own schema does not need this: every table here uses a single-column surrogate key (order_id, product_id, customer_id, item_id), so every JOIN you have written so far — including the multi-table chains earlier in this module — matches on exactly one column per JOIN. Here is what a genuine composite-key ON clause looks like, illustrated with a hypothetical table:</P>
+      <P>FreshCart's own schema does not need this: every table here uses a single-column surrogate key (order_id, product_id, customer_id, item_id), so every JOIN you have written so far — including the multi-table chains earlier in this lesson — matches on exactly one column per JOIN. Here is what a genuine composite-key ON clause looks like, illustrated with a hypothetical table:</P>
 
       <CodeBlock
         label="A genuine composite-key JOIN — illustrative, not FreshCart's real schema"
@@ -931,10 +931,10 @@ ORDER BY delivered_order_count DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 31</strong>, you learn INNER JOIN in depth — every pattern, every pitfall, multi-table chains, joining on expressions, and the full suite of INNER JOIN use cases you will encounter in production analytics.
+          In <strong>Lesson 31</strong>, you learn INNER JOIN in depth — every pattern, every pitfall, multi-table chains, joining on expressions, and the full suite of INNER JOIN use cases you will encounter in production analytics.
         </p>
         <Link href="/learn/sql/inner-join" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 31 → INNER JOIN
+          Lesson 31 → INNER JOIN
         </Link>
       </div>
 

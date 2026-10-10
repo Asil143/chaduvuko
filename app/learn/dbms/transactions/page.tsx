@@ -487,7 +487,7 @@ COMMIT;
               On recovery after a crash, the DBMS reads the WAL, identifies which transactions
               were committed and which were not, redoes committed transactions whose data
               pages may not have been flushed, and rolls back transactions that were not
-              committed. WAL is covered in full depth in Module 16 (Crash Recovery).
+              committed. WAL is covered in full depth in Lesson 16 (Crash Recovery).
             </Para>
 
             <Callout type="info">
@@ -700,7 +700,7 @@ COMMIT;
               Different isolation levels prevent different subsets of these four problems.
               Understanding exactly what each problem is — and what isolation level prevents it —
               is essential for both system design and interviews. These problems are covered
-              in complete depth in Module 10 (Concurrency Control). Here we introduce them
+              in complete depth in Lesson 10 (Concurrency Control). Here we introduce them
               in the context of isolation.
             </Para>
 
@@ -868,7 +868,7 @@ COMMIT;`}
               the WAL on disk contains a complete record of every change in that transaction.
               On restart, the recovery system reads the WAL, identifies the committed transaction,
               and re-applies its changes to the data pages. The committed data is recovered
-              completely. This is covered in complete depth in Module 16.
+              completely. This is covered in complete depth in Lesson 16.
             </Para>
 
             <CodeBox label="Durability in practice — WAL flush and recovery">
@@ -922,7 +922,7 @@ SHOW synchronous_commit;`}
               High availability (always reachable) and durability (no data loss on commit)
               are related but separate concerns. High availability requires replication —
               keeping copies of data on multiple servers so that if one fails, another
-              takes over. Replication is covered in Module 17 (Distributed Databases).
+              takes over. Replication is covered in Lesson 17 (Distributed Databases).
             </Para>
           </div>
         </div>
@@ -1078,7 +1078,7 @@ COMMIT;
 
         <Para>
           ACID is the consistency model of traditional relational databases. When databases
-          are distributed across multiple servers (as covered in Module 17), maintaining
+          are distributed across multiple servers (as covered in Lesson 17), maintaining
           full ACID guarantees becomes extremely expensive — it requires coordination
           between servers which adds latency and reduces throughput. Many internet-scale
           systems opt for a weaker consistency model called

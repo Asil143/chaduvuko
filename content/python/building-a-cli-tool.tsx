@@ -77,7 +77,7 @@ export default function BuildingACliTool() {
     <LearnLayout
       title="Building a CLI Tool"
       description="A complete, real command-line tool built from scratch using argparse — start to finish, project-style."
-      section="Python — Module 44"
+      section="Python — Lesson 44"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -88,10 +88,10 @@ export default function BuildingACliTool() {
         <SectionTitle>wordstat — a Small, Real Text-Analysis CLI</SectionTitle>
 
         <Para>
-          This module builds one complete tool end to end, rather than covering isolated snippets — a
+          This lesson builds one complete tool end to end, rather than covering isolated snippets — a
           command-line utility called <code>wordstat</code> that reads a text file and reports word
           counts, the most frequent words, and basic statistics. It deliberately pulls together file I/O,
-          the <code>collections</code> module, and — the actual focus of this module —{' '}
+          the <code>collections</code> module, and — the actual focus of this lesson —{' '}
           <code>argparse</code>, the standard library's tool for building a real command-line interface.
         </Para>
 
@@ -379,7 +379,7 @@ wordstat report notes.txt --top 5    # no more "python wordstat.py" needed`}</Co
             A team's deployment process starts as a shared page of copy-pasted shell commands, each
             engineer running a slightly different variation, with several production incidents traced
             back to a step run out of order or a flag forgotten entirely. They consolidate the whole
-            process into a single internal CLI tool, built exactly the way this module builds{' '}
+            process into a single internal CLI tool, built exactly the way this lesson builds{' '}
             <code>wordstat</code>.
           </Para>
 
@@ -611,11 +611,11 @@ deploytool rollback --env prod --to v1.4.2`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 45 covers Python best practices — PEP 8, naming conventions, and the conventions that
+          Lesson 45 covers Python best practices — PEP 8, naming conventions, and the conventions that
           separate readable, maintainable code from code that merely works.
         </p>
         <Link href="/learn/python/python-best-practices" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 45 → Python Best Practices — PEP 8, Clean Code
+          Lesson 45 → Python Best Practices — PEP 8, Clean Code
         </Link>
       </div>
     </LearnLayout>

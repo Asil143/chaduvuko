@@ -82,7 +82,7 @@ export default function WhatIsADatabase() {
     <LearnLayout
       title="What is a Database?"
       description="The definition, the internals, the US companies using them, and why SQL is the most valuable skill you can learn in tech"
-      section="SQL — Module 01"
+      section="SQL — Lesson 01"
       readTime="8–12 min"
       updatedAt="April 2026"
     >
@@ -110,7 +110,7 @@ export default function WhatIsADatabase() {
 
       <P>The database also never lets a write leave the data in a state that breaks its own rules — this is called <Hl>consistency</Hl>. Say FreshCart's orders table requires payment_method to be one of 'Credit Card', 'Debit Card', 'Apple Pay', or 'Cash', and requires customer_id to reference a real row in the customers table. If a checkout bug tries to insert an order with payment_method = 'Zelle' or customer_id = 9999 — a customer who does not exist — the database rejects the entire insert before a single byte is written. Atomicity guarantees the write happens completely or not at all; consistency guarantees that whichever way it lands, the data never violates the rules you defined for it.</P>
 
-      <P>Together these four guarantees are called <Hl>ACID</Hl> — Atomicity, Consistency, Isolation, Durability. You will learn them deeply in Module 47. For now, know this: every reliable software system you have ever used runs on a database because of these four guarantees. Nothing else provides them.</P>
+      <P>Together these four guarantees are called <Hl>ACID</Hl> — Atomicity, Consistency, Isolation, Durability. You will learn them deeply in Lesson 47. For now, know this: every reliable software system you have ever used runs on a database because of these four guarantees. Nothing else provides them.</P>
 
       <HR />
 
@@ -125,7 +125,7 @@ export default function WhatIsADatabase() {
 
       <H>Indexes — the reason SQL is fast at all</H>
       <P>Without an index, finding a customer by email in a table with 10 million rows requires the database to scan every single page from start to finish. On a table of that size, that takes seconds. With an index on the email column, the database maintains a separate sorted data structure called a <Hl>B-tree</Hl> that lets it jump directly to the right page in microseconds — the same way a book's index lets you jump to the right page instead of reading every word.</P>
-      <P>The difference between a query with and without an index on a 10-million-row table is not 10% faster — it is often 1000× faster. You will build indexes in Module 46 and learn exactly when to add them and when they hurt rather than help.</P>
+      <P>The difference between a query with and without an index on a 10-million-row table is not 10% faster — it is often 1000× faster. You will build indexes in Lesson 46 and learn exactly when to add them and when they hurt rather than help.</P>
 
       <H>The buffer pool — why RAM size matters</H>
       <P>Reading from disk is roughly 100,000 times slower than reading from RAM. So the database keeps recently accessed pages in a memory area called the <Hl>buffer pool</Hl>. When you run the same query twice in quick succession, the second run is often dramatically faster because the pages are already in memory — no disk read needed. This is why a database server with more RAM handles more queries without slowing down. It fits more of its "hot" data in the buffer pool.</P>
@@ -291,8 +291,8 @@ export default function WhatIsADatabase() {
       {/* ── PART 06 ── */}
       <Part n="06" title="The FreshCart Database — Your SQL Dataset for All 62 Modules" />
 
-      <P>Every single module in this course — from Module 01 to Module 62 — uses the same database: <Hl>FreshCart</Hl>. A fictional US grocery chain. 10 stores across New York, Chicago, Los Angeles, Seattle, Austin, and Portland. Real-world brands — King Arthur, Tillamook, Vital Farms, Starbucks, Head &amp; Shoulders. Realistic prices, realistic data.</P>
-      <P>You will know this database so well by Module 62 that you could rebuild it from memory. That depth of familiarity with one dataset is intentional — every query you write will feel meaningful, not academic.</P>
+      <P>Every single module in this course — from Lesson 01 to Lesson 62 — uses the same database: <Hl>FreshCart</Hl>. A fictional US grocery chain. 10 stores across New York, Chicago, Los Angeles, Seattle, Austin, and Portland. Real-world brands — King Arthur, Tillamook, Vital Farms, Starbucks, Head &amp; Shoulders. Realistic prices, realistic data.</P>
+      <P>You will know this database so well by Lesson 62 that you could rebuild it from memory. That depth of familiarity with one dataset is intentional — every query you write will feel meaningful, not academic.</P>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 12, margin: '24px 0 32px' }}>
         {[
@@ -322,7 +322,7 @@ export default function WhatIsADatabase() {
       <Part n="07" title="The Live SQL Playground — Run Queries Right Now" />
 
       <P>Every module in this course has a live SQL playground. The FreshCart database is loaded and ready the moment the page opens — no install, no account, no cloud. It runs entirely in your browser using DuckDB-WASM.</P>
-      <P>Do not worry about understanding the syntax below yet. That starts in Module 05. For now, click <Hl>Run</Hl> and see real FreshCart data appear.</P>
+      <P>Do not worry about understanding the syntax below yet. That starts in Lesson 05. For now, click <Hl>Run</Hl> and see real FreshCart data appear.</P>
 
       <SQLPlayground
         initialQuery={`-- Every customer and their loyalty tier
@@ -338,7 +338,7 @@ LIMIT 10;`}
 
       <SQLPlayground
         initialQuery={`-- Total revenue and order count per city
--- (You will understand every word of this by Module 28)
+-- (You will understand every word of this by Lesson 28)
 SELECT c.city,
        COUNT(o.order_id)      AS total_orders,
        SUM(o.total_amount)    AS revenue
@@ -351,7 +351,7 @@ ORDER BY revenue DESC;`}
         showSchema={false}
       />
 
-      <P>That second query joins two tables, filters by status, groups by city, and sorts by revenue. You will write queries like this yourself by Module 31. For now just notice: one SQL query answered a business question that would have taken 10 minutes of VLOOKUP in Excel.</P>
+      <P>That second query joins two tables, filters by status, groups by city, and sorts by revenue. You will write queries like this yourself by Lesson 31. For now just notice: one SQL query answered a business question that would have taken 10 minutes of VLOOKUP in Excel.</P>
 
       <HR />
 
@@ -473,7 +473,7 @@ ORDER BY revenue DESC;`}
 5. stores — the orders row links here to record which FreshCart location processed the order
 
 The employees table is not directly involved in recording the transaction, though a store's employees are associated with that store.`}
-        explanation="This is the relational model in action. One real-world event — a customer buying 3 products — is split across 5 coordinated tables. Each table stores exactly one type of thing. The tables are linked through foreign keys. When you query this data with SQL, you will JOIN these tables back together to answer questions like 'What did each customer buy, and from which store?' Understanding this structure is the foundation of every JOIN query you will write from Module 30 onwards."
+        explanation="This is the relational model in action. One real-world event — a customer buying 3 products — is split across 5 coordinated tables. Each table stores exactly one type of thing. The tables are linked through foreign keys. When you query this data with SQL, you will JOIN these tables back together to answer questions like 'What did each customer buy, and from which store?' Understanding this structure is the foundation of every JOIN query you will write from Lesson 30 onwards."
       />
 
       <HR />
@@ -500,10 +500,10 @@ The employees table is not directly involved in recording the transaction, thoug
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 02</strong>, you go inside the database — how primary keys and foreign keys are defined in code, what constraints are and how they enforce data quality automatically, and why the decisions you make about table structure before writing a single query determine how well everything downstream works.
+          In <strong>Lesson 02</strong>, you go inside the database — how primary keys and foreign keys are defined in code, what constraints are and how they enforce data quality automatically, and why the decisions you make about table structure before writing a single query determine how well everything downstream works.
         </p>
         <Link href="/learn/sql/how-databases-work" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 02 → How Databases Work
+          Lesson 02 → How Databases Work
         </Link>
       </div>
 

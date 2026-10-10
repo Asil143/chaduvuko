@@ -61,7 +61,7 @@ export default function CiaTriadSecurityModels() {
     <LearnLayout
       title="The CIA Triad and Security Models"
       description="Confidentiality, Integrity, Availability — the three properties every security decision trades off. How attacks target each and how controls defend it."
-      section="Cybersecurity — Module 05"
+      section="Cybersecurity — Lesson 05"
       readTime="26 min"
       updatedAt="May 2026"
     >
@@ -504,10 +504,10 @@ export default function CiaTriadSecurityModels() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 06</strong>, you get the full picture of the US cybersecurity job market — every role mapped with real salary data, which certifications are worth pursuing at which stage, and the companies hiring the most security engineers right now.
+          In <strong>Lesson 06</strong>, you get the full picture of the US cybersecurity job market — every role mapped with real salary data, which certifications are worth pursuing at which stage, and the companies hiring the most security engineers right now.
         </p>
         <Link href="/learn/cybersecurity/cybersecurity-careers-us" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 06 → Cybersecurity Career Paths and the US Job Market
+          Lesson 06 → Cybersecurity Career Paths and the US Job Market
         </Link>
       </div>
 

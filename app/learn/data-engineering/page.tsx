@@ -19,7 +19,7 @@ interface Module {
   color: string
 }
 
-// Derived from the shared DE_CURRICULUM (also used by DESectionNav on lesson pages)
+// Derived from the shared DE_CURRICULUM
 // so the module list only has one source of truth.
 const phaseColors: Record<number, string> = Object.fromEntries(
   DE_CURRICULUM.map(s => [s.id, s.color])
@@ -54,7 +54,7 @@ export default function DataEngineeringTrack() {
   return (
     <LearnLayout
       title="Data Engineering"
-      description="From zero to production-grade DE — 47 modules, no prerequisites"
+      description="From zero to production-grade DE — 47 lessons, no prerequisites"
       section="Data Engineering"
       readTime="Self-paced"
       updatedAt="March 2026"
@@ -100,7 +100,7 @@ export default function DataEngineeringTrack() {
         marginBottom: 36,
       }}>
         {[
-          { value: `${modules.length}`, label: 'Modules'        },
+          { value: `${modules.length}`, label: 'Lessons'        },
           { value: '6',                 label: 'Phases'          },
           { value: `${totalTopics}+`,   label: 'Topics covered'  },
           { value: `${totalHours}h`,    label: 'Total content'   },
@@ -155,7 +155,7 @@ export default function DataEngineeringTrack() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              47 Modules. Zero to Advanced.
+              47 Lessons. Zero to Advanced.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
               Follow in order. Each module builds on the last. Every concept is
@@ -381,7 +381,7 @@ export default function DataEngineeringTrack() {
           fontSize: 14, color: 'var(--muted)', lineHeight: 1.7,
           maxWidth: 480, margin: '0 auto 24px',
         }}>
-          Start with Module 01 the moment it goes live. Each module is self-contained
+          Start with Lesson 01 the moment it goes live. Each module is self-contained
           enough to read on its own — but follow the order. Every concept earns the next one.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>

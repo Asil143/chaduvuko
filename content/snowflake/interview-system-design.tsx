@@ -6,7 +6,7 @@ export default function InterviewSystemDesign() {
     <LearnLayout
       title="Snowflake Interview and System Design"
       description="The capstone module for the Snowflake track: full worked system-design interview questions synthesizing architecture, performance tuning, cost optimization, security, and streams/tasks, plus a complete vocabulary cheat sheet, common interview traps, and rapid-fire conceptual Q&A."
-      section="Snowflake — Module 20"
+      section="Snowflake — Lesson 20"
       readTime="90 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -20,7 +20,7 @@ export default function InterviewSystemDesign() {
         <SectionTitle>You've Completed All 19 Prior Modules. Here's How It Comes Together.</SectionTitle>
         <HighlightBox>
           <Para>
-            <strong>This module does not introduce new Snowflake mechanics.</strong> It is a synthesis — the
+            <strong>This lesson does not introduce new Snowflake mechanics.</strong> It is a synthesis — the
             place where warehouse sizing, micro-partition pruning, clustering, RBAC, masking policies, streams
             and tasks, and cost governance all show up together in the same conversation, the way they
             actually do in a real interview or a real architecture review, instead of one topic at a time
@@ -32,7 +32,7 @@ export default function InterviewSystemDesign() {
             and expects you to arrive at a right-sized multi-cluster warehouse, a clustering key on
             transaction date, a masking policy on card numbers, and a resource monitor on the ingestion
             warehouse — as the natural consequence of reasoning through requirements out loud, not as
-            memorized facts recited on cue. That is the skill this module builds.
+            memorized facts recited on cue. That is the skill this lesson builds.
           </Para>
           <Para>
             Work through the eight worked examples below the way you would in a real interview: read the
@@ -59,7 +59,7 @@ export default function InterviewSystemDesign() {
           rows={[
             ['1. Requirements gathering', 'Ask about data volume, freshness needs, number and type of users, compliance obligations, and budget before proposing an architecture.', 'A design built on assumed requirements is a design for the wrong problem. Interviewers are testing whether you ask, not whether you guess correctly.'],
             ['2. Data flow sketch', 'Draw sources, ingestion method, Raw/Silver/Gold layering, and consumers before naming a single Snowflake feature.', 'The shape of the pipeline should drive feature choices, not the other way around.'],
-            ['3. Feature mapping', 'Attach specific Snowflake objects — warehouses, streams, tasks, dynamic tables, masking policies — to specific stages of that sketch, and justify each one.', 'This is where breadth across all 19 prior modules actually shows. A senior answer names the object and the reason together.'],
+            ['3. Feature mapping', 'Attach specific Snowflake objects — warehouses, streams, tasks, dynamic tables, masking policies — to specific stages of that sketch, and justify each one.', 'This is where breadth across all 19 prior lessons actually shows. A senior answer names the object and the reason together.'],
             ['4. Trade-offs stated out loud', 'Name what the design gives up — staleness window, cost ceiling, operational burden — before the interviewer has to ask.', 'An answer with no acknowledged weakness reads as inexperienced or evasive. Naming trade-offs unprompted is a strong signal.'],
             ['5. Failure and recovery', 'Describe what breaks first under load or bad input, and how you would detect and recover from it.', 'Production systems fail. Interviewers want to know you have thought past the happy path.'],
           ]}
@@ -94,10 +94,10 @@ export default function InterviewSystemDesign() {
         <SubTitle>Architecture</SubTitle>
         <Para>
           POS terminals write transaction events to cloud storage every few seconds. Snowpipe auto-ingests
-          those files into a RAW.POS_TRANSACTIONS table continuously — this is the module 10 pattern, chosen
+          those files into a RAW.POS_TRANSACTIONS table continuously — this is the lesson 10 pattern, chosen
           over batch COPY INTO precisely because the 5-minute freshness requirement rules out an hourly batch
-          job. A stream on RAW.POS_TRANSACTIONS (module 11) feeds a task that runs every 2 minutes, merging
-          into SILVER.TRANSACTIONS with dedup logic and basic validation. A dynamic table (module 12) with a
+          job. A stream on RAW.POS_TRANSACTIONS (lesson 11) feeds a task that runs every 2 minutes, merging
+          into SILVER.TRANSACTIONS with dedup logic and basic validation. A dynamic table (lesson 12) with a
           1-minute target lag builds GOLD.STORE_SALES_ROLLUP directly from Silver — dynamic tables fit here
           because the transformation is a straightforward aggregation with no branching task-graph logic, so
           letting Snowflake manage the refresh is simpler than hand-rolling another task.
@@ -119,13 +119,13 @@ Dynamic table (target lag 1 min) -> GOLD.STORE_SALES_ROLLUP
         </CodeBox>
         <SubTitle>Compute and security decisions</SubTitle>
         <Table
-          headers={['Decision', 'Choice', 'Why (cross-referencing earlier modules)']}
+          headers={['Decision', 'Choice', 'Why (cross-referencing earlier lessons)']}
           rows={[
-            ['Ingestion warehouse', 'Dedicated XS warehouse, separate from BI.', 'Module 02 (warehouses): workload isolation so a holiday sales spike in ingestion never starves store dashboards.'],
-            ['Store manager access', 'Row access policy on store_id, masking policy on card_number.', 'Module 15 (security/governance): least-privilege by row, not by giving each store its own database.'],
+            ['Ingestion warehouse', 'Dedicated XS warehouse, separate from BI.', 'Lesson 02 (warehouses): workload isolation so a holiday sales spike in ingestion never starves store dashboards.'],
+            ['Store manager access', 'Row access policy on store_id, masking policy on card_number.', 'Lesson 15 (security/governance): least-privilege by row, not by giving each store its own database.'],
             ['Fraud model access', 'Separate role with unmasked card data, granted narrowly.', 'Masking policies support conditional unmasking by role — the fraud team is the deliberate exception, not the default.'],
-            ['Cost control', 'Resource monitor per department warehouse, with a hard suspend at 100% of the monthly quota.', 'Module 14 (cost optimization): the "fixed monthly ceiling" requirement maps directly onto resource monitors, not manual tracking.'],
-            ['Clustering', 'Cluster GOLD.STORE_SALES_ROLLUP and SILVER.TRANSACTIONS on transaction_date.', 'Module 13 (performance tuning): dashboards filter by date range constantly; clustering keeps pruning effective as the table grows past the point natural ingestion order stops helping.'],
+            ['Cost control', 'Resource monitor per department warehouse, with a hard suspend at 100% of the monthly quota.', 'Lesson 14 (cost optimization): the "fixed monthly ceiling" requirement maps directly onto resource monitors, not manual tracking.'],
+            ['Clustering', 'Cluster GOLD.STORE_SALES_ROLLUP and SILVER.TRANSACTIONS on transaction_date.', 'Lesson 13 (performance tuning): dashboards filter by date range constantly; clustering keeps pruning effective as the table grows past the point natural ingestion order stops helping.'],
           ]}
         />
         <SubTitle>Trade-offs and failure modes stated out loud</SubTitle>
@@ -164,9 +164,9 @@ Dynamic table (target lag 1 min) -> GOLD.STORE_SALES_ROLLUP
         <Para>
           Given a large BI surface area and low downtime tolerance, the answer is a phased parallel-run
           migration, not a single cutover weekend. Historical data is bulk-loaded via COPY INTO from exported
-          files (module 05), landing in a Raw layer that mirrors the legacy schema as closely as possible to
+          files (lesson 05), landing in a Raw layer that mirrors the legacy schema as closely as possible to
           minimize transformation risk during the migration itself — reshaping into a proper medallion
-          architecture (module 07) happens as a second phase, after correctness is proven, not during it. For
+          architecture (lesson 07) happens as a second phase, after correctness is proven, not during it. For
           the transition window, both systems run in parallel: legacy nightly batch keeps running, and a
           Snowflake pipeline processes the same source extracts on the same cadence.
         </Para>
@@ -193,7 +193,7 @@ Phase 4 — Decommission
           The reconciliation job is not optional — it is the entire reason the parallel run exists. It
           compares row counts, key aggregates (sum of revenue, count of orders), and a sample of individual
           rows between legacy output and Snowflake output every night, and any discrepancy blocks that
-          domain's cutover. Using zero-copy clones (module 09) of the Snowflake target tables before each
+          domain's cutover. Using zero-copy clones (lesson 09) of the Snowflake target tables before each
           reconciliation run means the comparison can be re-run against a stable snapshot without interfering
           with the pipeline still writing new data underneath it.
         </Para>
@@ -235,8 +235,8 @@ Phase 4 — Decommission
         />
         <SubTitle>Architecture: one warehouse per department, one role hierarchy, one shared data layer</SubTitle>
         <Para>
-          Data itself stays shared and centrally governed — a single medallion architecture (module 07) with
-          RBAC (module 04) controlling who sees what, rather than five siloed databases that would duplicate
+          Data itself stays shared and centrally governed — a single medallion architecture (lesson 07) with
+          RBAC (lesson 04) controlling who sees what, rather than five siloed databases that would duplicate
           storage and diverge over time. Compute is where isolation actually matters for the stated goal, so
           each department gets its own warehouse, sized independently, with its own resource monitor.
         </Para>
@@ -277,7 +277,7 @@ ALTER WAREHOUSE WH_MARKETING_ANALYST
         />
         <Para>
           Cost attribution falls out of this naturally: every query runs on a warehouse named after its
-          department, so QUERY_HISTORY and WAREHOUSE_METERING_HISTORY (module 14) can be grouped by
+          department, so QUERY_HISTORY and WAREHOUSE_METERING_HISTORY (lesson 14) can be grouped by
           warehouse_name with no extra tagging effort. A team asking for query tags on top of this is
           reasonable for finer-grained attribution within a department, but the department-level split is
           the load-bearing decision.
@@ -303,12 +303,12 @@ ALTER WAREHOUSE WH_MARKETING_ANALYST
         <SubTitle>Structured triage, in order</SubTitle>
         <BulletList
           items={[
-            'Step 1 — confirm it is actually the query, not queueing. Check whether the warehouse was already busy with other work, since a queued query looks slow but is not actually slow (module 13).',
+            'Step 1 — confirm it is actually the query, not queueing. Check whether the warehouse was already busy with other work, since a queued query looks slow but is not actually slow (lesson 13).',
             'Step 2 — pull Query Profile for last night\'s run and compare it against a known-good run from a week ago, looking specifically at bytes scanned and partitions scanned vs. total partitions.',
             'Step 3 — check data volume. Did the source table grow abnormally? A 10x row-count jump from a bad upstream load fully explains a 10x runtime jump with nothing else wrong.',
             'Step 4 — check for pruning loss. If partitions scanned jumped toward partitions total, a filter that used to prune well may now scan almost everything — often because someone changed a WHERE clause to wrap the filtered column in a function.',
             'Step 5 — check for a spilling warehouse. If Query Profile shows bytes spilled to local or remote storage, the working set stopped fitting in memory for the current warehouse size.',
-            'Step 6 — check for a clustering key gone stale. A table that depends on a clustering key (module 13) can degrade gradually as new data lands out of clustering order and re-clustering falls behind.',
+            'Step 6 — check for a clustering key gone stale. A table that depends on a clustering key (lesson 13) can degrade gradually as new data lands out of clustering order and re-clustering falls behind.',
             'Step 7 — check for a concurrency conflict. A concurrent write holding a lock, or a burst of unrelated queries queuing on the same warehouse, can make an individual query\'s wall-clock time balloon even though its actual compute time is normal.',
           ]}
         />
@@ -370,7 +370,7 @@ WHERE query_id = '<last_night_query_id>';`}
           CRM, web analytics, and support data land in Raw via their respective ingestion methods (batch COPY
           INTO for CRM exports, Snowpipe for web events, an API-based load for the support system), get
           conformed into a single SILVER.CUSTOMER_360 keyed on a stable customer_id, and then GOLD marts serve
-          each consumer. Every column containing PII gets a masking policy (module 15) applied at the column
+          each consumer. Every column containing PII gets a masking policy (lesson 15) applied at the column
           level in Silver and Gold, so masking is inherited automatically by every downstream view rather than
           reapplied ad hoc per report.
         </Para>
@@ -392,7 +392,7 @@ CREATE OR REPLACE ROW ACCESS POLICY PARTNER_OPT_IN_ONLY AS (customer_id STRING) 
         </CodeBox>
         <SubTitle>Sharing with the partner — reader account, not a data copy</SubTitle>
         <Para>
-          The partner gets access through Snowflake secure data sharing (module 16) into a reader account
+          The partner gets access through Snowflake secure data sharing (lesson 16) into a reader account
           scoped to a purpose-built GOLD.PARTNER_MARKETING_SEGMENTS view, filtered by the opt-in row access
           policy above and containing no raw PII columns at all — aggregated segment membership only. This is
           deliberately not a data export or a copied extract: the partner always sees current, live,
@@ -406,7 +406,7 @@ CREATE OR REPLACE ROW ACCESS POLICY PARTNER_OPT_IN_ONLY AS (customer_id STRING) 
           rows={[
             ['Right-to-erasure request.', 'A stored procedure that deletes/anonymizes the customer_id across all Raw, Silver, and Gold tables in one transaction-scoped call, logged to a compliance audit table.'],
             ['Data-subject access request.', 'A parameterized view returning every row across the customer 360 model for a single customer_id, runnable only by the compliance role.'],
-            ['Proof of who accessed PII.', 'Query ACCESS_HISTORY (module 15) filtered to columns with masking policies attached, joined to query text and user, retained per the compliance retention window.'],
+            ['Proof of who accessed PII.', 'Query ACCESS_HISTORY (lesson 15) filtered to columns with masking policies attached, joined to query text and user, retained per the compliance retention window.'],
             ['Erasure must reach Time Travel / Fail-safe too.', 'This is the trap most candidates miss — see the interview-traps section. Time Travel and Fail-safe retain historical versions of a row for their retention windows regardless of a delete, so a true erasure SLA has to account for that retention period, not just the live table state.'],
           ]}
         />
@@ -442,7 +442,7 @@ CREATE OR REPLACE ROW ACCESS POLICY PARTNER_OPT_IN_ONLY AS (customer_id STRING) 
           At 3,000 tenants, a separate database or schema per tenant becomes an operational nightmare — 3,000
           objects to migrate on every schema change. The better pattern is one shared, clustered Gold table
           keyed on tenant_id, with a row access policy enforcing isolation, combined with clustering on
-          tenant_id plus a secondary time dimension (module 13) so that per-tenant dashboard queries prune
+          tenant_id plus a secondary time dimension (lesson 13) so that per-tenant dashboard queries prune
           down to almost exactly their own data regardless of total table size.
         </Para>
         <CodeBox label="Tenant isolation and clustering">{`CREATE OR REPLACE ROW ACCESS POLICY TENANT_ISOLATION AS (tenant_id STRING) RETURNS BOOLEAN ->
@@ -455,7 +455,7 @@ ALTER TABLE GOLD.USAGE_EVENTS
   CLUSTER BY (tenant_id, event_date);`}
         </CodeBox>
         <Para>
-          For the embedded-dashboard query pattern specifically, a multi-cluster warehouse (module 13) with
+          For the embedded-dashboard query pattern specifically, a multi-cluster warehouse (lesson 13) with
           auto-scaling handles the "one large tenant shouldn't starve a small one" requirement better than
           warehouse sizing alone — concurrent dashboard loads from many tenants spread across additional
           clusters automatically rather than queuing behind each other on a single cluster.
@@ -683,7 +683,7 @@ ALTER WAREHOUSE WH_<NAME>_ANALYST SET TAG COST_CENTER.TEAM = '<NAME>';`}
         <SectionTag text="// Vocabulary cheat sheet" />
         <SectionTitle>Snowflake Vocabulary Cheat Sheet — Every Major Term From the Track</SectionTitle>
         <Para>
-          A dense reference covering terminology from all 19 prior modules. Use it to cram the night before an
+          A dense reference covering terminology from all 19 prior lessons. Use it to cram the night before an
           interview, or to check yourself: if you cannot state a one-line precise definition for every row
           below without looking, that is the term to go back and review.
         </Para>
@@ -917,7 +917,7 @@ ALTER WAREHOUSE WH_<NAME>_ANALYST SET TAG COST_CENTER.TEAM = '<NAME>';`}
           'Time Travel, Fail-safe, and cross-region replication protect against three different failure classes and are not substitutes for one another.',
           'RBAC controls object-level access; masking policies control column-level values; row access policies control row-level visibility — three distinct governance tools, not one.',
           'Streams and tasks, dynamic tables, Snowpipe, clustering, and cost governance are the building blocks referenced constantly in these worked answers — knowing when each one is the right tool matters more than knowing all of them exist.',
-          'This module closes the Snowflake track: 19 modules of individual mechanics and one capstone module of synthesis, the same way real interviews and real architecture reviews actually test the material.',
+          'This lesson closes the Snowflake track: 19 modules of individual mechanics and one capstone module of synthesis, the same way real interviews and real architecture reviews actually test the material.',
         ]}
       />
 

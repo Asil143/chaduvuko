@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout  } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Eigenvalues and Eigenvectors — Chaduvuko',
@@ -214,7 +213,6 @@ export default function EigenvaluesEigenvectorsPage() {
       readTime="26–34 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="math-foundations" topic="eigenvalues-eigenvectors" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH FIRST ═══════════════════════════════════ */}
       <div style={S.sec}>
@@ -259,7 +257,7 @@ export default function EigenvaluesEigenvectorsPage() {
             PCA (Principal Component Analysis) uses exactly this idea.
             It finds the directions in your data where the shadow is longest —
             where the data varies the most — and uses those as the new axes.
-            Module 33 covers PCA in full. This module gives you the mathematical
+            Lesson 33 covers PCA in full. This lesson gives you the mathematical
             foundation to understand how it works.
           </p>
         </AnalogyBox>
@@ -280,7 +278,7 @@ export default function EigenvaluesEigenvectorsPage() {
         <h2 style={S.h2}>A matrix is a transformation — it stretches, rotates, and reflects vectors</h2>
 
         <p style={S.p}>
-          From Module 04 you know that matrix multiplication transforms vectors.
+          From Lesson 04 you know that matrix multiplication transforms vectors.
           When you multiply a matrix by a vector, the result is a new vector —
           usually pointing in a different direction and having a different length.
           The matrix is performing a geometric operation on the vector.
@@ -1289,7 +1287,7 @@ check_recurrent_stability(W_orthogonal)
 
         <p style={S.p}>
           Eigenvalues help you find the important directions in a dataset before training.
-          The next module — Derivatives, Gradients and the Chain Rule — explains how
+          The next lesson — Derivatives, Gradients and the Chain Rule — explains how
           ML models actually improve during training. Specifically: how do you adjust
           millions of model parameters to make predictions better?
           The answer is gradient descent — the engine behind every neural network,
@@ -1308,7 +1306,7 @@ check_recurrent_stability(W_orthogonal)
               textTransform: 'uppercase' as const, color: '#7F77DD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 07 · Math Foundations
+              Next — Lesson 07 · Math Foundations
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

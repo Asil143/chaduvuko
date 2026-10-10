@@ -74,7 +74,7 @@ export default function LocalSetupCli() {
     <LearnLayout
       title="Local Setup and Kafka CLI"
       description="Run a real single-broker Kafka cluster on your laptop with Docker Compose and KRaft mode, then learn the actual command-line tools engineers use every day: creating topics, producing and consuming test messages, and inspecting consumer group lag."
-      section="Apache Kafka — Module 04"
+      section="Apache Kafka — Lesson 04"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -90,7 +90,7 @@ export default function LocalSetupCli() {
           Every concept in the previous two modules — partitions, leaders, producers, consumers, offsets —
           is easy to nod along to and easy to misunderstand without actually watching it happen. Reading
           about consumer lag is not the same as producing 50 messages, killing your consumer halfway
-          through, restarting it, and watching it resume from exactly where it left off. This module gets a
+          through, restarting it, and watching it resume from exactly where it left off. This lesson gets a
           real, working Kafka broker running on your own machine in a few minutes, and then teaches the
           command-line tools you will use constantly, both while learning and in real production debugging.
         </Para>
@@ -99,7 +99,7 @@ export default function LocalSetupCli() {
           coordination service, and the Kafka broker itself, which depended on it. That is no longer true.
           Kafka 3.x and later fully support <strong>KRaft mode</strong>, where the broker manages its own
           cluster metadata internally using the Raft consensus protocol, with no separate service to install,
-          configure, or keep alive. This module uses KRaft mode exclusively — you should never need to set
+          configure, or keep alive. This lesson uses KRaft mode exclusively — you should never need to set
           up ZooKeeper to learn or run Kafka today.
         </Para>
         <HighlightBox>
@@ -113,13 +113,13 @@ export default function LocalSetupCli() {
         <Table
           headers={['Approach', 'Setup effort', 'When it makes sense']}
           rows={[
-            ['Docker Compose, single broker, KRaft (this module)', 'One file, one command, running in seconds.', 'Learning, local development, reproducing bugs, quick experiments — the default choice for almost everyone.'],
+            ['Docker Compose, single broker, KRaft (this lesson)', 'One file, one command, running in seconds.', 'Learning, local development, reproducing bugs, quick experiments — the default choice for almost everyone.'],
             ['Raw Kafka binaries installed directly on the host', 'Download, unpack, manage a JVM version, manage the process lifecycle yourself.', 'Rare today; mainly when you need to inspect or modify Kafka\'s own startup scripts directly.'],
             ['A managed cloud Kafka service (Confluent Cloud, MSK, etc.)', 'Account setup, no local process at all.', 'Testing against production-like managed infrastructure specifically, not for day-to-day local learning.'],
           ]}
         />
         <Para>
-          This module focuses entirely on the first approach, because it is the fastest path to a real,
+          This lesson focuses entirely on the first approach, because it is the fastest path to a real,
           fully-functional broker with zero cloud dependency, zero cost, and a completely disposable
           environment you can tear down and recreate in seconds whenever you want a clean slate.
         </Para>
@@ -275,10 +275,10 @@ kafka  | [KafkaServer id=1] started (kafka.server.KafkaServer)`}
           the first time it is needed, and its presence means the broker successfully handled a metadata
           request end to end.
         </Para>
-        <Callout title="Every command in this module follows this shape" color={K}>
+        <Callout title="Every command in this lesson follows this shape" color={K}>
           Real Kafka CLI tools always take <code>--bootstrap-server host:port</code> (older tool versions
           used <code>--zookeeper</code> for some commands — that flag is legacy and should not be used on a
-          current KRaft-mode cluster). To save repetition, the rest of this module shows commands without
+          current KRaft-mode cluster). To save repetition, the rest of this lesson shows commands without
           the <code>docker compose exec kafka</code> prefix — assume every command below runs against the
           broker the same way this one did.
         </Callout>
@@ -310,7 +310,7 @@ kafka  | [KafkaServer id=1] started (kafka.server.KafkaServer)`}
           That is completely fine for local learning, where you have only one broker anyway and losing data
           on container restart is not a real concern. In production, a replication factor of 1 means a
           single disk failure loses that partition's data permanently — production topics use a replication
-          factor of at least 3, exactly as covered in the broker durability material in Module 03. Never
+          factor of at least 3, exactly as covered in the broker durability material in Lesson 03. Never
           carry <code>--replication-factor 1</code> from a local example into a production command.
         </Callout>
         <SubTitle>Listing topics</SubTitle>
@@ -425,7 +425,7 @@ Adding partitions succeeded!`}
         <Para>
           Those three lines are now three separate records in the <code>orders</code> topic, distributed
           across its partitions (with no key specified, the producer spreads records across partitions using
-          a round-robin-like strategy, as covered in Module 02's partitioning material).
+          a round-robin-like strategy, as covered in Lesson 02's partitioning material).
         </Para>
         <SubTitle>kafka-console-consumer.sh</SubTitle>
         <Para>
@@ -449,7 +449,7 @@ order-1002 placed`}
           Notice the order above does not match the order the messages were produced in. This is expected,
           not a bug — the three records landed on different partitions (no key was given), and the console
           consumer reads across all of a topic's partitions concurrently. Kafka only guarantees ordering
-          within a single partition, exactly as covered in Module 03's discussion of ordering guarantees. If
+          within a single partition, exactly as covered in Lesson 03's discussion of ordering guarantees. If
           you need to see strict production order for a test, create a single-partition topic or produce
           with an explicit key so related records land on the same partition.
         </Callout>
@@ -583,7 +583,7 @@ orders-cli-test  orders  2          0`}
             ['--to-earliest', 'Rewinds to the oldest offset still retained — full replay of everything currently in the topic.'],
             ['--to-latest', 'Jumps to the current end of the log — skips everything currently unread, starts fresh from now.'],
             ['--to-offset <n>', 'Jumps to a specific, exact offset — useful for skipping past one known poison message.'],
-            ['--to-datetime <ISO8601>', 'Jumps to whatever offset corresponds to that timestamp, using the time index covered conceptually in Module 03.'],
+            ['--to-datetime <ISO8601>', 'Jumps to whatever offset corresponds to that timestamp, using the time index covered conceptually in Lesson 03.'],
             ['--shift-by <n>', 'Moves the current offset forward or backward by a relative amount, e.g. --shift-by -100 to rewind 100 records.'],
           ]}
         />
@@ -641,7 +641,7 @@ billing-service  orders  1          150010          150300          290   billin
 billing-service  orders  2          149500          162100          12600 billing-service-1-d4e5f6`}
         </CodeBox>
         <Para>
-          This is exactly the shape of output referenced in Module 03's discussion of per-partition lag
+          This is exactly the shape of output referenced in Lesson 03's discussion of per-partition lag
           hiding behind a healthy-looking average — partition 2 here has over 12,000 records of lag while
           partition 1 is nearly caught up. Always check the per-partition breakdown, not just a summed
           total, when diagnosing a slow consumer group.
@@ -714,7 +714,7 @@ billing-service  orders  2          149500          162100          12600 billin
           headers={['Common config', 'What it controls', 'Useful local-dev value']}
           rows={[
             ['retention.ms', 'How long records are retained before becoming eligible for deletion.', 'A short value like 600000 (10 min) keeps disk usage low during iterative testing.'],
-            ['cleanup.policy', 'delete (age out old segments) or compact (keep latest value per key) or both.', 'compact, when testing changelog-style topics locally, per the compaction material in Module 02.'],
+            ['cleanup.policy', 'delete (age out old segments) or compact (keep latest value per key) or both.', 'compact, when testing changelog-style topics locally, per the compaction material in Lesson 02.'],
             ['min.insync.replicas', 'Minimum in-sync replicas required for an acks=all write to succeed.', '1 on a single-broker local cluster — anything higher makes the topic permanently unwritable with only one broker.'],
             ['max.message.bytes', 'Largest single record the topic will accept.', 'Raise temporarily if testing with unusually large local payloads; keep at cluster default otherwise.'],
           ]}
@@ -783,7 +783,7 @@ InvalidReplicationFactorException: Replication factor: 3 larger than available b
           multi-broker behavior (leader election, ISR shrinking, replication) locally, you need to extend
           the compose file to run 3 broker services instead of 1, each with a unique <code>KAFKA_NODE_ID</code>
           and listed in a shared <code>KAFKA_CONTROLLER_QUORUM_VOTERS</code>. A single broker is sufficient
-          for everything in this module and the next several, but topic-design and replication modules later
+          for everything in this lesson and the next several, but topic-design and replication modules later
           in this track will walk through a multi-broker compose file.
         </Para>
         <SubTitle>Commands hanging with no output at all</SubTitle>
@@ -823,7 +823,7 @@ kafka   apache/kafka:3.8.0    Up 2 minutes (healthy)`}
 KAFKA_HEAP_OPTS: "-Xmx512m -Xms512m"`}
         </CodeBox>
         <Para>
-          512MB of heap is comfortably enough for the volume of test data covered in this module — a few
+          512MB of heap is comfortably enough for the volume of test data covered in this lesson — a few
           topics, a handful of partitions, and a modest number of test records — while leaving headroom for
           whatever else is running on the same machine.
         </Para>
@@ -896,7 +896,7 @@ KAFKA_HEAP_OPTS: "-Xmx512m -Xms512m"`}
             <code>kafka-topics.sh --describe</code> to confirm partition count, replication factor, and that
             the in-sync replica set actually matches the full replica set — not just that replicas exist,
             per Part 04 — plus <code>kafka-consumer-groups.sh --describe</code> to confirm a consuming
-            application's real offset position, which is exactly the toolkit this module builds.
+            application's real offset position, which is exactly the toolkit this lesson builds.
           </Para>
         </HighlightBox>
       </section>
@@ -933,9 +933,9 @@ This matters for debugging specifically because it lets you reproduce real offse
           },
           {
             q: 'Q4. A consumer group\'s overall lag looks fine on a dashboard, but a specific downstream process is clearly falling behind. How would you investigate from the CLI?',
-            a: `I would not trust an aggregated lag number and go straight to kafka-consumer-groups.sh --describe --group <name>, per Part 07, which reports lag per partition rather than as one summed total. An average can look healthy while one specific partition is badly behind — exactly the pattern in the Instacart example in this module, where twelve partitions summed to a modest-looking average while one partition alone carried the vast majority of the lag.
+            a: `I would not trust an aggregated lag number and go straight to kafka-consumer-groups.sh --describe --group <name>, per Part 07, which reports lag per partition rather than as one summed total. An average can look healthy while one specific partition is badly behind — exactly the pattern in the Instacart example in this lesson, where twelve partitions summed to a modest-looking average while one partition alone carried the vast majority of the lag.
 
-Once I've identified the specific lagging partition, I'd check whether it consistently receives disproportionate volume — a hot key concentrating too much traffic there — since Module 03 covers that a partition is only ever owned by one consumer in a group at a time, so adding more consumers to the group does nothing to help one already-saturated partition.
+Once I've identified the specific lagging partition, I'd check whether it consistently receives disproportionate volume — a hot key concentrating too much traffic there — since Lesson 03 covers that a partition is only ever owned by one consumer in a group at a time, so adding more consumers to the group does nothing to help one already-saturated partition.
 
 The fix from there is either a better partitioning key that spreads that hot entity's traffic more evenly, or increasing partition count for that topic specifically, not simply scaling out the consumer group.`,
           },
@@ -945,7 +945,7 @@ The fix from there is either a better partitioning key that spreads that hot ent
 
 The fix locally is either to lower the replication factor to 1 for that throwaway topic, which is fine because there's nothing at stake, or to extend the local compose setup to run 3 broker services if you specifically want to exercise multi-broker replication behavior.
 
-Importantly, this is purely a local capacity constraint, not a signal that replication factor 3 is somehow wrong or unnecessary — the exact opposite is true in production, where replication factor 1 is the actual danger, per Part 04's callout and the durability material in Module 03. The error is the cluster doing its job correctly; the response is to fix the local topology, never to carry a lowered replication factor into a real deployment.`,
+Importantly, this is purely a local capacity constraint, not a signal that replication factor 3 is somehow wrong or unnecessary — the exact opposite is true in production, where replication factor 1 is the actual danger, per Part 04's callout and the durability material in Lesson 03. The error is the cluster doing its job correctly; the response is to fix the local topology, never to carry a lowered replication factor into a real deployment.`,
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
@@ -963,7 +963,7 @@ Importantly, this is purely a local capacity constraint, not a signal that repli
         {[
           {
             q: 'Trying to install and run ZooKeeper for a brand-new local setup',
-            a: 'Part 01 and Part 02 cover why this is unnecessary work for any current Kafka version — KRaft mode needs no external coordination service, and the single-container compose file in this module handles everything ZooKeeper used to be responsible for.',
+            a: 'Part 01 and Part 02 cover why this is unnecessary work for any current Kafka version — KRaft mode needs no external coordination service, and the single-container compose file in this lesson handles everything ZooKeeper used to be responsible for.',
           },
           {
             q: 'Copying --replication-factor 1 from a local tutorial straight into a production topic-creation script',

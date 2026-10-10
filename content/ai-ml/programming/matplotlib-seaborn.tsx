@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Data Visualisation — Matplotlib and Seaborn — Chaduvuko',
@@ -175,7 +174,6 @@ export default function MatplotlibSeabornPage() {
       readTime="35–45 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='programming' topic='matplotlib-seaborn' />
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -203,7 +201,7 @@ export default function MatplotlibSeabornPage() {
         </p>
 
         <p style={S.p}>
-          This module teaches exactly the plots you will use every week as an
+          This lesson teaches exactly the plots you will use every week as an
           ML engineer — not every matplotlib function, but the ones that actually
           appear in real project workflows, with the configuration options
           that make them readable and shareable.
@@ -212,7 +210,7 @@ export default function MatplotlibSeabornPage() {
         <HBox color="#888888">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module covers:
+              What this lesson covers:
             </span>
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -242,7 +240,7 @@ export default function MatplotlibSeabornPage() {
         </HBox>
 
         <Callout type="tip">
-          Run all the code in this module in a Jupyter notebook — the plots render
+          Run all the code in this lesson in a Jupyter notebook — the plots render
           inline. Use <span style={S.code as React.CSSProperties}>%matplotlib inline</span> at
           the top of the notebook. For scripts, call{' '}
           <span style={S.code as React.CSSProperties}>plt.show()</span> at the end
@@ -446,11 +444,11 @@ sns.set_theme(
       {/* ══ SECTION 3 — GENERATE DATASET ═══════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Setup</span>
-        <h2 style={S.h2}>The DoorDash dataset used throughout this module</h2>
+        <h2 style={S.h2}>The DoorDash dataset used throughout this lesson</h2>
 
         <p style={S.p}>
-          All plots in this module use the same simulated DoorDash orders dataset
-          from Module 10. Run this setup block once before the rest of the module.
+          All plots in this lesson use the same simulated DoorDash orders dataset
+          from Lesson 10. Run this setup block once before the rest of the module.
         </p>
 
         <CodeBlock code={`import numpy as np
@@ -1510,7 +1508,7 @@ plt.savefig('/tmp/stakeholder_chart.png', dpi=150, bbox_inches='tight')
 
         <ConceptBox title="Myth: Plotting is presentation work — something you do at the end, for a slide" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            As Section 1 of this module argues directly, most of the plotting an ML engineer does
+            As Section 1 of this lesson argues directly, most of the plotting an ML engineer does
             never reaches a slide at all. It happens during EDA, before a model is even chosen,
             and again immediately after training as a diagnostic step. If the only plots in a
             project are the ones prepared for a final deck, the diagnostic step that catches
@@ -1525,7 +1523,7 @@ plt.savefig('/tmp/stakeholder_chart.png', dpi=150, bbox_inches='tight')
             a matplotlib Axes object. The moment you need pixel-level control — repositioning a
             legend, annotating a specific point, composing several plots into one custom layout,
             controlling exactly how a figure is saved — you are calling matplotlib methods
-            directly on the object seaborn gave you, as this module does constantly (ax.set_title,
+            directly on the object seaborn gave you, as this lesson does constantly (ax.set_title,
             ax.axvline, ax.legend after a seaborn call). Seaborn changes where you start for
             statistical plots; it does not remove the need for matplotlib underneath.
           </p>
@@ -1617,7 +1615,7 @@ plt.savefig('/tmp/stakeholder_chart.png', dpi=150, bbox_inches='tight')
             Matplotlib draws every point individually, so a scatter plot of a million rows both
             takes a long time to render and produces an unreadable solid blob once points start
             overlapping — the pattern in the data actually becomes harder to see, not easier, as
-            more data is added. Sampling a representative few thousand points, as this module does
+            more data is added. Sampling a representative few thousand points, as this lesson does
             throughout, keeps the plot both fast and legible. For cases where I genuinely need
             every point's density represented, I would use hexbin or a 2D histogram instead, which
             aggregate points into bins and encode density with colour rather than rendering each
@@ -1655,12 +1653,12 @@ plt.savefig('/tmp/stakeholder_chart.png', dpi=150, bbox_inches='tight')
         </p>
 
         <p style={S.p}>
-          Module 12 begins the Data Engineering section.
+          Lesson 12 begins the Data Engineering section.
           Before a model can learn, data has to be collected from somewhere —
           REST APIs, SQL databases, data warehouses, web scraping.
           In most companies the data you need for ML is not a pre-packaged dataset
           but a query away, an API call away, or a scraping job away.
-          Module 12 shows you how to build those pipelines reliably.
+          Lesson 12 shows you how to build those pipelines reliably.
         </p>
 
         <div style={{
@@ -1675,7 +1673,7 @@ plt.savefig('/tmp/stakeholder_chart.png', dpi=150, bbox_inches='tight')
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 12 · Data Engineering
+              Next — Lesson 12 · Data Engineering
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

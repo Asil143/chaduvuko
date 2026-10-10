@@ -74,7 +74,7 @@ export default function KeysOrderingPartitioning() {
     <LearnLayout
       title="Keys, Ordering, and Partitioning Strategy"
       description="What a record key actually does, why Kafka's ordering guarantee is strictly per-partition, how to choose a partition key that avoids hot partitions, custom partitioners, and why changing partition count later breaks key-based ordering."
-      section="Apache Kafka — Module 07"
+      section="Apache Kafka — Lesson 07"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -91,7 +91,7 @@ export default function KeysOrderingPartitioning() {
           something you attach to a record the way you'd attach a tag, useful for humans reading logs later.
           That is not what the key is for. The key's real job is to decide which partition the record lands
           on. That single fact — key chooses partition — is the mechanism behind almost everything else in
-          this module: per-key ordering, hot partitions, custom partitioners, and the partition-count trap.
+          this lesson: per-key ordering, hot partitions, custom partitioners, and the partition-count trap.
         </Para>
         <Para>
           When a producer sends a record with a non-null key, the default partitioner hashes the key and maps
@@ -265,7 +265,7 @@ send(key="user_9271", value="order C")   # → partition 2, offset 41
         <SubTitle>Retries can silently reorder writes within the same partition</SubTitle>
         <Para>
           There's one more layer to the "what the log physically contains" point that's worth spelling out,
-          because it directly connects this module to the producer configuration decisions covered elsewhere
+          because it directly connects this lesson to the producer configuration decisions covered elsewhere
           in this track. By default, a producer can have several requests in flight to the same broker at
           once (<code>max.in.flight.requests.per.connection</code>, default 5). If an earlier batch fails to
           get acknowledged and is retried while a later batch has already been sent, the later batch can be
@@ -840,7 +840,7 @@ composite_key("acme_corp", "user_503")   # → "acme_corp#2"  (same bucket as us
           code at all — they arrive via Kafka Connect source connectors, most commonly CDC (change data
           capture) connectors like Debezium reading a database's write-ahead log. It's worth being explicit
           about how keying decisions get made in that path, because it's a different mechanism from the
-          <code>producer.send(key=..., value=...)</code> calls used throughout this module, even though the
+          <code>producer.send(key=..., value=...)</code> calls used throughout this lesson, even though the
           underlying partitioning formula from Part 01 still applies once a key exists.
         </Para>
         <Para>
@@ -902,7 +902,7 @@ composite_key("acme_corp", "user_503")   # → "acme_corp#2"  (same bucket as us
         <SectionTag text="// Part 14 — Verifying key/partition assignment locally" />
         <SectionTitle>Proving the Routing Mechanism Rather Than Trusting It Blindly</SectionTitle>
         <Para>
-          Everything in this module describes a deterministic mechanism, which means it's directly testable —
+          Everything in this lesson describes a deterministic mechanism, which means it's directly testable —
           you don't have to take it on faith that two records with the same key land on the same partition,
           or that a null key spreads load. Before relying on a partitioning strategy in production, it's worth
           actually observing the assignment on a local or test cluster, the same way you'd verify retention
@@ -1026,7 +1026,7 @@ kafka-console-consumer --topic test.partitioning --bootstrap-server localhost:90
             that no cross-trip ordering exists or is needed. It also flags the hot-partition risk for a
             power-driver or promotional surge scenario, and states that partition count would be sized with
             headroom at launch rather than adjusted reactively. Every one of those points traces back to a
-            Part in this module.
+            Part in this lesson.
           </Para>
         </HighlightBox>
       </section>

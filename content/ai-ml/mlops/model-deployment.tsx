@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Model Deployment — FastAPI, Docker, Kubernetes — Chaduvuko',
@@ -178,7 +177,6 @@ export default function ModelDeploymentPage() {
       readTime="50–65 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="mlops" topic="model-deployment" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -207,7 +205,7 @@ export default function ModelDeploymentPage() {
           (3,333 per second) you need roughly 70 parallel processes.
           Kubernetes manages those 70 containers automatically — scaling up
           during peak hours and down at 3 AM to save compute cost.
-          This is the deployment stack this module teaches.
+          This is the deployment stack this lesson teaches.
         </p>
 
         <AnalogyBox>
@@ -232,7 +230,7 @@ export default function ModelDeploymentPage() {
           Install: <span style={S.code as React.CSSProperties}>pip install fastapi uvicorn pydantic scikit-learn</span>.
           Docker Desktop: docker.com/products/docker-desktop.
           kubectl + minikube for local Kubernetes: minikube.sigs.k8s.io.
-          This module shows the full stack — follow along with the code
+          This lesson shows the full stack — follow along with the code
           even if you only run FastAPI locally.
         </Callout>
       </div>
@@ -1341,7 +1339,7 @@ for metric, target, desc in slos:
           Models degrade silently as the world changes around them.
           The fraud patterns Stripe trained on in January look different
           by June. The delivery time patterns from pre-monsoon do not hold
-          during monsoon season. Module 72 covers drift detection and monitoring —
+          during monsoon season. Lesson 72 covers drift detection and monitoring —
           how to know your model is degrading before users notice,
           and how to trigger automatic retraining when it does.
         </p>
@@ -1358,7 +1356,7 @@ for metric, target, desc in slos:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 72 · MLOps
+              Next — Lesson 72 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

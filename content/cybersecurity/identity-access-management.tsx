@@ -59,7 +59,7 @@ export default function Module29() {
     <LearnLayout
       title="Identity and Access Management — MFA, RBAC, and Privileged Access"
       description="Authentication factors and their attack resistance, RBAC versus ABAC design, SSO federation, MFA implementation, Privileged Access Management, Just-in-Time access, and identity governance for enterprise environments."
-      section="Cybersecurity — Module 29"
+      section="Cybersecurity — Lesson 29"
       readTime="32 min"
       updatedAt="May 2026"
     >
@@ -71,7 +71,7 @@ export default function Module29() {
           Identity and Access Management (IAM) is the set of processes, policies, and technologies that control who can do what in an organisation's systems. Getting IAM right — proper authentication, least-privilege authorisation, privileged access controls, and identity lifecycle management — eliminates the most common attack vectors at their root.
         </P>
         <Callout type="info">
-          IAM engineering is one of the fastest-growing specialisations in the US security market. Okta, Microsoft Entra, and CyberArk professionals command significant premiums, and the skills in this module apply directly to those roles.
+          IAM engineering is one of the fastest-growing specialisations in the US security market. Okta, Microsoft Entra, and CyberArk professionals command significant premiums, and the skills in this lesson apply directly to those roles.
         </Callout>
       </Part>
 
@@ -491,7 +491,7 @@ aws accessanalyzer list-findings --analyzer-arn <arn>
       <Callout type="info">
         Identity controls determine who can authenticate. In{' '}
         <Link href="/learn/cybersecurity/firewalls-ids-ips">
-          Module 30: Firewalls, IDS, and IPS
+          Lesson 30: Firewalls, IDS, and IPS
         </Link>
         , you learn the network control layer: how modern next-generation firewalls work, intrusion detection and prevention systems, WAF architecture, and how to design firewall rules that are both secure and operationally sustainable.
       </Callout>

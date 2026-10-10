@@ -65,7 +65,7 @@ export default function CryptographyFundamentals() {
     <LearnLayout
       title="Cryptography From Scratch"
       description="Symmetric, asymmetric, hashing, digital signatures — practical understanding of what protects and what breaks. No math degree required."
-      section="Cybersecurity — Module 04"
+      section="Cybersecurity — Lesson 04"
       readTime="32 min"
       updatedAt="May 2026"
     >
@@ -628,10 +628,10 @@ The vulnerability pattern:
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 05</strong>, you learn the framework that underlies every security decision ever made — the CIA triad. Confidentiality, Integrity, Availability: how they conflict, how every attack targets one of them, and how every security control is a trade-off between them.
+          In <strong>Lesson 05</strong>, you learn the framework that underlies every security decision ever made — the CIA triad. Confidentiality, Integrity, Availability: how they conflict, how every attack targets one of them, and how every security control is a trade-off between them.
         </p>
         <Link href="/learn/cybersecurity/cia-triad-security-models" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 05 → The CIA Triad and Security Models
+          Lesson 05 → The CIA Triad and Security Models
         </Link>
       </div>
 

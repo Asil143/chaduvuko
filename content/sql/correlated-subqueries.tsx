@@ -78,7 +78,7 @@ export default function CorrelatedSubqueries() {
     <LearnLayout
       title="Correlated Subqueries"
       description="Row-level computations that reference the outer query — every pattern, the execution model, performance implications, and when to rewrite with JOINs or window functions"
-      section="SQL — Module 37"
+      section="SQL — Lesson 37"
       readTime="14–20 min"
       updatedAt="April 2026"
     >
@@ -577,7 +577,7 @@ ORDER BY p.category, p.unit_price DESC;`}
         showSchema={false}
       />
 
-      <P>AVG(unit_price) OVER (PARTITION BY category) below is a <Hl>window function</Hl> — window functions are taught properly in Module 52; for now, just read OVER (PARTITION BY category) as "compute this aggregate per category, without collapsing the rows the way GROUP BY does."</P>
+      <P>AVG(unit_price) OVER (PARTITION BY category) below is a <Hl>window function</Hl> — window functions are taught properly in Lesson 52; for now, just read OVER (PARTITION BY category) as "compute this aggregate per category, without collapsing the rows the way GROUP BY does."</P>
 
       <SQLPlayground
         initialQuery={`-- FASTEST at scale: window function (single pass, no join)
@@ -1013,10 +1013,10 @@ ORDER BY p.category, cheaper_in_category DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 38</strong>, you learn EXISTS and NOT EXISTS in full depth — every pattern, performance analysis, and the complete comparison against IN, NOT IN, and LEFT JOIN IS NULL for every anti-join scenario.
+          In <strong>Lesson 38</strong>, you learn EXISTS and NOT EXISTS in full depth — every pattern, performance analysis, and the complete comparison against IN, NOT IN, and LEFT JOIN IS NULL for every anti-join scenario.
         </p>
         <Link href="/learn/sql/exists-not-exists" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 38 → EXISTS and NOT EXISTS
+          Lesson 38 → EXISTS and NOT EXISTS
         </Link>
       </div>
 

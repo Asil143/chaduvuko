@@ -97,9 +97,9 @@ export default function ConcurrencyControl() {
         </Para>
 
         <Para>
-          In Module 09 we introduced the four concurrency anomalies — dirty reads,
+          In Lesson 09 we introduced the four concurrency anomalies — dirty reads,
           non-repeatable reads, phantom reads, and lost updates — and noted that
-          isolation levels prevent them. In this module we examine the precise
+          isolation levels prevent them. In this lesson we examine the precise
           mechanisms by which that prevention is implemented. Knowing that
           SERIALIZABLE isolation prevents phantom reads is useful. Understanding
           <em> how</em> it prevents them — what the database actually does when
@@ -243,7 +243,7 @@ export default function ConcurrencyControl() {
           The <strong style={{ color: 'var(--accent)' }}>precedence graph</strong> (also called
           the serialisation graph or conflict graph) is the algorithmic tool for testing
           whether a schedule is conflict-serializable. It is the most important algorithm
-          in this module and appears in virtually every GATE exam on this topic.
+          in this lesson and appears in virtually every GATE exam on this topic.
         </Para>
 
         <Para>
@@ -1241,7 +1241,7 @@ ORDER BY pid, relation;`}
 
         <Para>
           Every major e-commerce company faces this problem during sales events.
-          Understanding it completely requires every concept from this module.
+          Understanding it completely requires every concept from this lesson.
         </Para>
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>

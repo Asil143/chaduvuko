@@ -5,7 +5,7 @@ export default function EltMedallion() {
     <LearnLayout
       title="ELT and Medallion Architecture in Snowflake"
       description="Raw, Silver, Gold, ELT, dbt-style modeling, tests, lineage, ownership, marts, and production transformation patterns in Snowflake."
-      section="Snowflake — Module 07"
+      section="Snowflake — Lesson 07"
       readTime="80 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -490,7 +490,7 @@ FROM RETAIL.GOLD.DAILY_REVENUE;`}
           ]}
         />
         <Callout title="Module connection">
-          The next module, MERGE and idempotency, goes deep on incremental design. For medallion architecture,
+          The next lesson, MERGE and idempotency, goes deep on incremental design. For medallion architecture,
           remember the principle: Raw should allow replay, Silver should be reliable, and Gold should be
           rebuildable or repairable.
         </Callout>

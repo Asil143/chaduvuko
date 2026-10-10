@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Image Fundamentals — Pixels, Channels and Tensors — Chaduvuko',
@@ -178,7 +177,6 @@ export default function ImageFundamentalsPage() {
       readTime="26–34 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="computer-vision" topic="image-fundamentals" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -786,7 +784,7 @@ print(f"\nDenormalised for display: {sample_display.shape}  dtype={sample_displa
         <h2 style={S.h2}>The bug report you actually get: training and serving disagree on what a pixel means</h2>
 
         <p style={S.p}>
-          Every concept in this module — channel order, colour space,
+          Every concept in this lesson — channel order, colour space,
           normalisation statistics — sounds like a one-time setup detail
           you get right in a Jupyter notebook and never think about again.
           In production it is not one pipeline, it is two: the training
@@ -911,7 +909,7 @@ def preprocessing_parity_check(path: str, tolerance: float = 1e-3) -> bool:
             Shape is only one of three things a model expects to match: shape, dtype, and value
             distribution. A (3, 224, 224) float32 tensor with values in [0, 1] has the correct
             shape but the wrong distribution for any ImageNet-pretrained model, which expects
-            roughly zero mean and unit variance per channel. As this module's errors section shows,
+            roughly zero mean and unit variance per channel. As this lesson's errors section shows,
             skipping normalisation produces a model that predicts the same class for every input —
             not a crash, which would be easy to catch, but silent, confident, wrong output. Resize
             gets the geometry right; normalisation gets the statistics right, and a pretrained
@@ -937,7 +935,7 @@ def preprocessing_parity_check(path: str, tolerance: float = 1e-3) -> bool:
           <p style={{ ...S.ps, marginBottom: 0 }}>
             A pretrained model's first layer only checks tensor shape — it has no way to verify
             that your resize strategy, normalisation statistics, or train/validation transform
-            split match what the model was actually trained on. This module's errors section
+            split match what the model was actually trained on. This lesson's errors section
             covers a real case: applying RandomResizedCrop to a validation set instead of a
             deterministic Resize plus CenterCrop still produces a correctly-shaped tensor, but
             validation accuracy becomes inconsistent between runs because the input distribution
@@ -957,7 +955,7 @@ def preprocessing_parity_check(path: str, tolerance: float = 1e-3) -> bool:
             same image into a 1D vector of 150,528 numbers and a convolutional filter has nothing
             meaningful to slide across — position information collapses, and two pixels that were
             adjacent in the image can end up far apart in the vector. The array shape covered in
-            this module is not bookkeeping; it is the substrate that gives a CNN's translation
+            this lesson is not bookkeeping; it is the substrate that gives a CNN's translation
             invariance its meaning.
           </p>
         </ConceptBox>
@@ -1064,7 +1062,7 @@ def preprocessing_parity_check(path: str, tolerance: float = 1e-3) -> bool:
           of labelled images but collecting and labelling them is expensive.
           Data augmentation synthetically multiplies your dataset
           by applying random transformations that preserve the label.
-          Module 56 covers every augmentation technique used in production
+          Lesson 56 covers every augmentation technique used in production
           and explains exactly what each one teaches the model.
         </p>
 
@@ -1080,7 +1078,7 @@ def preprocessing_parity_check(path: str, tolerance: float = 1e-3) -> bool:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 56 · Computer Vision
+              Next — Lesson 56 · Computer Vision
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout }from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Semantic Segmentation — Pixel-Level Classification — Chaduvuko',
@@ -178,7 +177,6 @@ export default function SemanticSegmentationPage() {
       readTime="30–40 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="computer-vision" topic="semantic-segmentation" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -854,7 +852,7 @@ print(f"  'aux' key shape:  {tuple(out['aux'].shape)}  ← auxiliary loss head")
         <h2 style={S.h2}>Where segmentation ships in production — and the mask cleanup step every deployment needs</h2>
 
         <p style={S.p}>
-          The three practical examples from the start of this module —
+          The three practical examples from the start of this lesson —
           medical imaging, satellite and aerial imagery, and autonomous
           driving — sit at very different points on the speed-versus-accuracy
           spectrum, and that difference drives almost every architecture
@@ -1131,7 +1129,7 @@ print("standard, near-universal steps between model output and production use.")
         <p style={S.p}>
           You have built segmentation from scratch and used pretrained models.
           Both required labelled masks — expensive to collect.
-          Module 59 covers transfer learning for vision:
+          Lesson 59 covers transfer learning for vision:
           how to use a ResNet or EfficientNet backbone pretrained on ImageNet
           as a feature extractor for your own task, freezing early layers
           and fine-tuning later layers. The same technique powers every
@@ -1151,7 +1149,7 @@ print("standard, near-universal steps between model output and production use.")
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 59 · Computer Vision
+              Next — Lesson 59 · Computer Vision
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

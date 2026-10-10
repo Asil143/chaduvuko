@@ -52,7 +52,7 @@ export default function Module39() {
     <LearnLayout
       title="Building a Home Lab for Cybersecurity Practice"
       description="Build a realistic cybersecurity lab on your own hardware or for free in the cloud. Set up virtualisation, a vulnerable Active Directory environment, SIEM, IDS, and a safe isolated network to practice every technique in this course legally."
-      section="Cybersecurity — Module 39"
+      section="Cybersecurity — Lesson 39"
       readTime="38 min"
       updatedAt="May 2026"
     >
@@ -203,7 +203,7 @@ Proxmox snapshot (CLI):
 
       <Part title="Building an Active Directory Lab">
         <P>
-          Active Directory is the authentication and authorisation backbone of most enterprise environments. The majority of major breaches involve AD compromise. Building an AD lab lets you practise every attack covered in Modules 26 and beyond — Kerberoasting, Pass-the-Hash, DCSync, BloodHound — safely.
+          Active Directory is the authentication and authorisation backbone of most enterprise environments. The majority of major breaches involve AD compromise. Building an AD lab lets you practise every attack covered in Lessons 26 and beyond — Kerberoasting, Pass-the-Hash, DCSync, BloodHound — safely.
         </P>
 
         <H>Required VMs</H>
@@ -779,7 +779,7 @@ Key Learnings:
       ]} />
 
       <Callout type="info">
-        <strong>Up Next — Module 40: Interview Preparation and Landing Your First Security Job</strong><br />
+        <strong>Up Next — Lesson 40: Interview Preparation and Landing Your First Security Job</strong><br />
         The final module brings everything together. You will learn how to position yourself for security roles, answer the most common technical and behavioural interview questions, negotiate your first offer, and build the professional network that accelerates your career. This is where 39 modules of knowledge becomes a job.
       </Callout>
 

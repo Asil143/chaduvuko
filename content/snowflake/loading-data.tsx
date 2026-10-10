@@ -5,7 +5,7 @@ export default function LoadingData() {
     <LearnLayout
       title="Loading Data with Stages and COPY INTO"
       description="Internal vs external stages, stage types, file formats, PUT, COPY INTO in depth, validation, rejected rows, load history and idempotency, and a full worked S3 load."
-      section="Snowflake — Module 05"
+      section="Snowflake — Lesson 05"
       readTime="90 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -158,7 +158,7 @@ CREATE OR REPLACE FILE FORMAT RAW.PARQUET_STANDARD
   TYPE = PARQUET;
 
 -- Both are covered in full depth in the semi-structured data module.
--- This module focuses on CSV, since it's the most common first load.`}
+-- This lesson focuses on CSV, since it's the most common first load.`}
         </CodeBox>
       </section>
 
@@ -570,13 +570,13 @@ LIST @RAW.ORDERS_STAGE/exports/orders_2026_09/;`}
         <Table
           headers={['Direction', 'Syntax shape', 'Typical use']}
           rows={[
-            ['Loading (this module\'s focus)', 'COPY INTO <table> FROM <stage>', 'Bring external files into a Snowflake table.'],
+            ['Loading (this lesson\'s focus)', 'COPY INTO <table> FROM <stage>', 'Bring external files into a Snowflake table.'],
             ['Unloading', 'COPY INTO <stage location> FROM <table or query>', 'Export table/query results out to files for downstream systems or archiving.'],
           ]}
         />
         <Callout title="Unloading isn't just the reverse of loading">
           Unload file sizing, compression, and header options matter for whoever consumes the exported files
-          downstream — coordinate the file format with that consumer rather than defaulting blindly. This module
+          downstream — coordinate the file format with that consumer rather than defaulting blindly. This lesson
           focuses on loading; treat unloading as a preview of a capability you'll use once data needs to leave
           Snowflake again.
         </Callout>

@@ -123,7 +123,7 @@ export default function HowDataMovesModule() {
     <LearnLayout
       title="How Data Moves Through a Company"
       description="The complete end-to-end journey — from data creation to business decisions."
-      section="Data Engineering — Module 03"
+      section="Data Engineering — Lesson 03"
       readTime="55 min"
       updatedAt="August 2026"
     >
@@ -963,11 +963,11 @@ Most companies need streaming for: fraud detection, live inventory,
         {[
           {
             wrong: '"The landing zone and the Bronze layer are basically redundant — just pick one"',
-            right: 'Part 04 and this module\'s Interview Prep Q2 both draw the distinction precisely: the landing zone accepts heterogeneous raw formats with zero structure requirements, while Bronze standardises format and adds date partitioning. That standardisation is specifically what lets a query engine skip irrelevant partitions — the difference between a 2-minute query and a 3-second one.',
+            right: 'Part 04 and this lesson\'s Interview Prep Q2 both draw the distinction precisely: the landing zone accepts heterogeneous raw formats with zero structure requirements, while Bronze standardises format and adds date partitioning. That standardisation is specifically what lets a query engine skip irrelevant partitions — the difference between a 2-minute query and a 3-second one.',
           },
           {
             wrong: '"Streaming is strictly better than batch, since it\'s more real-time"',
-            right: 'Part 08\'s decision rule and Callout are explicit that streaming costs 3-5× the engineering effort of an equivalent batch pipeline, and most business questions don\'t need sub-hour freshness. Batch is the default in this module\'s framing, not a fallback — streaming is justified only by a specific decision that needs that freshness.',
+            right: 'Part 08\'s decision rule and Callout are explicit that streaming costs 3-5× the engineering effort of an equivalent batch pipeline, and most business questions don\'t need sub-hour freshness. Batch is the default in this lesson\'s framing, not a fallback — streaming is justified only by a specific decision that needs that freshness.',
           },
           {
             wrong: '"Gold tables are just Bronze data with some aggregation on top"',
@@ -1159,23 +1159,23 @@ This systematic approach means I never spend more than 15–20 minutes finding t
         {[
           {
             q: 'Scheduling a downstream pipeline by a fixed time gap instead of an explicit dependency on the upstream job finishing',
-            a: 'This module\'s Error Library shows the exact failure — a Bronze processing job starts before ingestion finishes writing files, and gets a FileNotFoundError. Configure the orchestrator so the downstream task depends on the upstream task\'s success (in Airflow, trigger_rule="all_success"), never on a time gap that assumes the upstream job always finishes within it.',
+            a: 'This lesson\'s Error Library shows the exact failure — a Bronze processing job starts before ingestion finishes writing files, and gets a FileNotFoundError. Configure the orchestrator so the downstream task depends on the upstream task\'s success (in Airflow, trigger_rule="all_success"), never on a time gap that assumes the upstream job always finishes within it.',
           },
           {
             q: 'Using an INNER JOIN in a Silver transformation where rows without a match should still be kept',
-            a: 'This module\'s Error Library shows a Silver row-count validation catching exactly this — a join to a dimension table with an unmatched key silently drops the row entirely. Part 05\'s Silver rules describe joining with reference data as enrichment, not filtering; use LEFT JOIN when a missing match shouldn\'t remove the row.',
+            a: 'This lesson\'s Error Library shows a Silver row-count validation catching exactly this — a join to a dimension table with an unmatched key silently drops the row entirely. Part 05\'s Silver rules describe joining with reference data as enrichment, not filtering; use LEFT JOIN when a missing match shouldn\'t remove the row.',
           },
           {
             q: 'Joining to a table that can have multiple rows per key without deduplicating or aggregating it first',
-            a: 'This module\'s Error Library shows Gold table rows appearing 2.3× on average from exactly this — joining orders to a promotions table where one order can have several promotions causes fan-out. Collapse the right-side table to one row per key (STRING_AGG, MAX, or ROW_NUMBER) before joining, not after.',
+            a: 'This lesson\'s Error Library shows Gold table rows appearing 2.3× on average from exactly this — joining orders to a promotions table where one order can have several promotions causes fan-out. Collapse the right-side table to one row per key (STRING_AGG, MAX, or ROW_NUMBER) before joining, not after.',
           },
           {
             q: 'Assuming a pipeline\'s runtime stays constant as data volume grows, with no schedule buffer',
-            a: 'This module\'s Error Library shows an SLA breach from exactly this assumption — a pipeline that used to finish comfortably before 6 AM starts finishing at 8:47 AM once volume grew. Profile which step scales worst, and schedule pipelines with a buffer rather than assuming yesterday\'s runtime holds forever.',
+            a: 'This lesson\'s Error Library shows an SLA breach from exactly this assumption — a pipeline that used to finish comfortably before 6 AM starts finishing at 8:47 AM once volume grew. Profile which step scales worst, and schedule pipelines with a buffer rather than assuming yesterday\'s runtime holds forever.',
           },
           {
             q: 'Letting two runs of the same scheduled pipeline execute concurrently against the same partition',
-            a: 'This module\'s Error Library shows a locked-partition error from precisely this: a pipeline that now takes longer than its schedule interval is still running when the next trigger fires. Configure the orchestrator for a single concurrent run per pipeline with a "latest only" or "skip if running" policy rather than letting overlapping runs collide.',
+            a: 'This lesson\'s Error Library shows a locked-partition error from precisely this: a pipeline that now takes longer than its schedule interval is still running when the next trigger fires. Configure the orchestrator for a single concurrent run per pipeline with a "latest only" or "skip if running" policy rather than letting overlapping runs collide.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1273,10 +1273,10 @@ This systematic approach means I never spend more than 15–20 minutes finding t
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 04 maps the entire DE tool ecosystem — ingestion, storage, processing, orchestration, and serving — so every tool you encounter has a context before you study any one of them.
+          Lesson 04 maps the entire DE tool ecosystem — ingestion, storage, processing, orchestration, and serving — so every tool you encounter has a context before you study any one of them.
         </p>
         <Link href="/learn/data-engineering/de-ecosystem" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 04 → The Data Engineering Ecosystem
+          Lesson 04 → The Data Engineering Ecosystem
         </Link>
       </div>
     </LearnLayout>

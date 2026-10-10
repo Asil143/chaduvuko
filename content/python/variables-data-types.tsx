@@ -77,7 +77,7 @@ export default function VariablesDataTypes() {
     <LearnLayout
       title="Variables, Data Types & Type Conversion"
       description="Every value in Python is an object. Variables, the core data types, dynamic typing, and how to convert safely between them."
-      section="Python — Module 02"
+      section="Python — Lesson 02"
       readTime="60 min"
       updatedAt="August 2026"
     >
@@ -115,7 +115,7 @@ print(backup)          # [90, 85, 77, 100] — backup changed too!`}</CodeBox>
           <strong>Why backup changed:</strong> <code>backup = scores</code> did not copy the list — it
           made <code>backup</code> point at the exact same object in memory as <code>scores</code>.
           Both names refer to one list, so a change through either name is visible through both. This
-          becomes critical once you learn about mutable vs immutable types later in this module, and
+          becomes critical once you learn about mutable vs immutable types later in this lesson, and
           again when you learn proper copying techniques in the Lists module.
         </Callout>
 
@@ -498,7 +498,7 @@ int(float("42.5"))   # 42`}</CodeBox>
           </Para>
 
           <Para>
-            This is precisely why this module spent real time on floating-point imprecision instead of
+            This is precisely why this lesson spent real time on floating-point imprecision instead of
             treating it as a footnote. It is one of the most common real production bugs that traces
             directly back to a fundamental data type decision made on day one of a project.
           </Para>
@@ -657,11 +657,11 @@ int(float("42.5"))   # 42`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 03 covers every operator Python has — arithmetic, comparison, and logical — and the
+          Lesson 03 covers every operator Python has — arithmetic, comparison, and logical — and the
           precedence rules that cause real, hard-to-spot bugs when ignored.
         </p>
         <Link href="/learn/python/operators" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 03 → Operators
+          Lesson 03 → Operators
         </Link>
       </div>
     </LearnLayout>

@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Backpropagation — How Neural Networks Learn — Chaduvuko',
@@ -178,7 +177,6 @@ export default function BackpropagationPage() {
       readTime="36–46 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="deep-learning" topic="backpropagation" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -190,7 +188,7 @@ export default function BackpropagationPage() {
         </h2>
 
         <p style={S.p}>
-          Module 41 showed the forward pass — data flows left to right through
+          Lesson 41 showed the forward pass — data flows left to right through
           the network, layer by layer, until a prediction emerges.
           The prediction is compared to the true label. The difference is the loss.
           Now what? The network has thousands of weights. Which ones made the
@@ -235,11 +233,11 @@ export default function BackpropagationPage() {
         </AnalogyBox>
 
         <Callout type="tip">
-          Read Module 07 (Derivatives and Gradients) before this one.
+          Read Lesson 07 (Derivatives and Gradients) before this one.
           Backpropagation is the chain rule applied repeatedly.
           If you are comfortable with ∂f/∂x notation and the chain rule
           ∂f/∂x = (∂f/∂g)(∂g/∂x), the entire algorithm will make sense.
-          If not, Module 07 first — 20 minutes there saves 2 hours of confusion here.
+          If not, Lesson 07 first — 20 minutes there saves 2 hours of confusion here.
         </Callout>
       </div>
 
@@ -905,7 +903,7 @@ print("  But for standard training: always call zero_grad() before backward()")`
 
         <p style={S.p}>
           Every production model calls loss.backward() once and lets autograd handle the
-          chain rule end to end. That does not make this module optional — it means the
+          chain rule end to end. That does not make this lesson optional — it means the
           moments where backprop understanding actually matters are concentrated into a
           few specific, recurring situations instead of spread across every line of code.
         </p>
@@ -1049,10 +1047,10 @@ print("autograd would faithfully, and unhelpfully, report exactly that.")`} />
           <p style={{ ...S.ps, marginBottom: 0 }}>
             Autograd computes every gradient for you — you will rarely, if ever, write dW = A_prev.T
             @ dZ by hand in production code. But "rarely write it" is not "never need to understand
-            it": every one of the errors in this module (dead ReLUs, NaN losses, gradient
+            it": every one of the errors in this lesson (dead ReLUs, NaN losses, gradient
             explosions) is invisible to autograd itself — it faithfully computes whatever gradient
             the math produces, including a completely broken one. Debugging those requires knowing
-            what backprop is actually doing under the hood, which is exactly why this module exists
+            what backprop is actually doing under the hood, which is exactly why this lesson exists
             even though nobody hand-codes it day to day.
           </p>
         </ConceptBox>
@@ -1151,7 +1149,7 @@ print("autograd would faithfully, and unhelpfully, report exactly that.")`} />
           ability to learn depends critically on two other choices:
           the activation function (what non-linearity to apply at each neuron)
           and the loss function (what the network is trying to minimise).
-          Module 43 covers every major activation and loss function —
+          Lesson 43 covers every major activation and loss function —
           what each one does, when to use it, and the numerical stability
           pitfalls that trip up every practitioner at least once.
         </p>
@@ -1168,7 +1166,7 @@ print("autograd would faithfully, and unhelpfully, report exactly that.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 43 · Deep Learning
+              Next — Lesson 43 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

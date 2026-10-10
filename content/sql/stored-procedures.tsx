@@ -91,7 +91,7 @@ export default function StoredProcedures() {
     <LearnLayout
       title="Stored Procedures"
       description="Reusable named programs stored inside the database — parameters, variables, control flow, exception handling, and when database-side logic beats application-layer logic"
-      section="SQL — Module 49"
+      section="SQL — Lesson 49"
       readTime="14–20 min"
       updatedAt="April 2026"
     >
@@ -821,7 +821,7 @@ GRANT EXECUTE ON PROCEDURE sp_upgrade_loyalty_tier(INTEGER) TO app_role;
 REVOKE EXECUTE ON PROCEDURE sp_upgrade_loyalty_tier(INTEGER) FROM PUBLIC;`}
       />
 
-      <P>SQLite has no stored procedures or user-defined routines at the SQL level at all — there is nothing for a playground to introspect, and <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--bg2)', padding: '2px 6px', borderRadius: 4, fontSize: '0.9em' }}>information_schema.routines</code> does not exist in SQLite. The query below is a static PostgreSQL example rather than a live, runnable one — this applies to every "live" demonstration of CREATE PROCEDURE / CALL in this module: the browser playground can only simulate what a procedure would compute with plain SELECTs, never actually create or call one.</P>
+      <P>SQLite has no stored procedures or user-defined routines at the SQL level at all — there is nothing for a playground to introspect, and <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--bg2)', padding: '2px 6px', borderRadius: 4, fontSize: '0.9em' }}>information_schema.routines</code> does not exist in SQLite. The query below is a static PostgreSQL example rather than a live, runnable one — this applies to every "live" demonstration of CREATE PROCEDURE / CALL in this lesson: the browser playground can only simulate what a procedure would compute with plain SELECTs, never actually create or call one.</P>
 
       <CodeBlock
         label="Illustrative PostgreSQL only — SQLite has no stored procedures to list"
@@ -1125,7 +1125,7 @@ BEGIN
       store_revenue,
       avg_order_value,
       category                                AS best_category,
-      -- This uses a window function (OVER (...)) — covered fully in Module 52
+      -- This uses a window function (OVER (...)) — covered fully in Lesson 52
       RANK() OVER (
         PARTITION BY store_id
         ORDER BY category_revenue DESC
@@ -1234,10 +1234,10 @@ $$;
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 50</strong>, you learn User-Defined Functions — scalar functions, table-valued functions, SQL functions vs PL/pgSQL functions, IMMUTABLE vs STABLE vs VOLATILE, and building a reusable function library.
+          In <strong>Lesson 50</strong>, you learn User-Defined Functions — scalar functions, table-valued functions, SQL functions vs PL/pgSQL functions, IMMUTABLE vs STABLE vs VOLATILE, and building a reusable function library.
         </p>
         <Link href="/learn/sql/user-defined-functions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 50 → User-Defined Functions
+          Lesson 50 → User-Defined Functions
         </Link>
       </div>
 

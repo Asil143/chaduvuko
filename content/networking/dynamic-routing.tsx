@@ -526,7 +526,7 @@ export default function DynamicRouting() {
     <LearnLayout
       title="Dynamic Routing Protocols"
       description="A deep-dive into how routers automatically discover, share, and optimize paths through networks — covering OSPF's link-state database, BGP's policy engine, EIGRP's DUAL algorithm, and IS-IS's TLV architecture at production scale."
-      section="Networking Fundamentals — Module 17"
+      section="Networking Fundamentals — Lesson 17"
       readTime="30–40 min"
       updatedAt="May 2026"
     >

@@ -74,7 +74,7 @@ export default function IncrementalModels() {
     <LearnLayout
       title="Incremental Models in Depth"
       description="Why incremental models exist, how is_incremental() actually works, the append / delete+insert / merge strategies, unique_key, full-refresh recovery, and the classic bug where incremental and full-refresh runs silently diverge."
-      section="dbt — Module 07"
+      section="dbt — Lesson 07"
       readTime="65 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -587,7 +587,7 @@ when not matched then insert (
           A common real mistake is answering the first question wrong by assumption rather than by checking
           the actual source system. "Orders never change once placed" sounds true until a refund, a status
           correction, or a support-tooling backfill script proves otherwise months later — exactly the
-          pattern in this module's Real World section. When in doubt, default to <code>merge</code> with a
+          pattern in this lesson's Real World section. When in doubt, default to <code>merge</code> with a
           <code>unique_key</code> set; the cost of an unnecessary key check on genuinely immutable data is
           small, while the cost of silently accumulating duplicate rows under <code>append</code> on data
           that turned out to be mutable is a real, compounding data quality bug.
@@ -958,7 +958,7 @@ where source_side.source_row_count != fact_side.fact_row_count`}
           A nonzero <code>row_count_diff</code> for a recent window is an early warning sign worth
           investigating well before it grows large enough for a stakeholder to notice in a dashboard. This
           kind of audit query can itself be wired up as a dbt singular test — exactly the pattern covered in
-          the next module in this track — turning an ad hoc sanity check into an automatically enforced
+          the next lesson in this track — turning an ad hoc sanity check into an automatically enforced
           assertion that runs on every <code>dbt build</code>.
         </Para>
       </section>

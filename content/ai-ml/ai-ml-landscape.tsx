@@ -288,7 +288,7 @@ export default function AIMLLandscapePage() {
           textTransform: 'uppercase', color: 'var(--accent)',
           fontFamily: 'var(--font-mono)',
         }}>
-          AI &amp; ML Track · Module 02
+          AI &amp; ML Track · Lesson 02
         </span>
       </div>
 
@@ -339,7 +339,7 @@ export default function AIMLLandscapePage() {
 
         <p style={S.p}>
           The tools in ML are organised by what stage of the workflow they serve.
-          The same workflow from the previous module — collect data, prepare it,
+          The same workflow from the previous lesson — collect data, prepare it,
           train a model, evaluate, deploy, monitor — maps directly to the tools
           below. Every tool has exactly one job.
         </p>
@@ -825,7 +825,7 @@ export default function AIMLLandscapePage() {
             GenAI tooling like LangChain barely existed before 2023. Every role on this page
             lists tools that are themselves only a few years old. The skill that actually stays
             constant across a career is not any specific tool — it is the underlying workflow
-            from Module 01 and the judgement to evaluate whether a new tool is worth adopting.
+            from Lesson 01 and the judgement to evaluate whether a new tool is worth adopting.
           </p>
         </ConceptBox>
       </div>
@@ -920,7 +920,7 @@ export default function AIMLLandscapePage() {
         <HBox>
           <p style={{ ...S.ps, marginBottom: 0 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>Starting now: </span>
-            the next module begins with the math — specifically vectors and matrices.
+            the next lesson begins with the math — specifically vectors and matrices.
             Don't skip it. Every algorithm in this track uses matrix operations.
             Understanding them visually before seeing the code is what makes the
             rest of the track click into place instead of feeling like memorisation.

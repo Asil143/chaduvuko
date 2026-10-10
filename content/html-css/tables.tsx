@@ -77,7 +77,7 @@ export default function Tables() {
     <LearnLayout
       title="Tables — Structure and Correct Usage"
       description="table, thead/tbody/tfoot, th, td, colspan/rowspan — and exactly why tables should never be used for page layout."
-      section="HTML & CSS — Module 07"
+      section="HTML & CSS — Lesson 07"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -370,7 +370,7 @@ export default function Tables() {
           should be aiming for whenever you are marking up genuine tabular data in production code.
         </Para>
 
-        <CodeBox label="A full table using every element from this module">{`<table>
+        <CodeBox label="A full table using every element from this lesson">{`<table>
   <caption>Employee Directory — Engineering Team</caption>
   <thead>
     <tr>
@@ -539,7 +539,7 @@ export default function Tables() {
           <SubSubTitle>What the audit report says</SubSubTitle>
 
           <Para>
-            The report lists three separate findings, all traceable to specific parts of this module.
+            The report lists three separate findings, all traceable to specific parts of this lesson.
             First: no <code>{`<th>`}</code> elements anywhere — every cell, including the row and column
             labels, is a plain <code>{`<td>`}</code>, so nothing marks "Checking," "Savings," or the
             month labels as headers at all. Second: no <code>scope</code> attributes, meaning even if{' '}
@@ -797,12 +797,12 @@ export default function Tables() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 08 moves into HTML forms — the form element, every common input type with real
+          Lesson 08 moves into HTML forms — the form element, every common input type with real
           behavioral differences, labels done correctly, and the built-in browser validation you get for
           free before a single line of JavaScript.
         </p>
         <Link href="/learn/html-css/forms-inputs-validation" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 08 → HTML Forms — Inputs &amp; Validation Basics
+          Lesson 08 → HTML Forms — Inputs &amp; Validation Basics
         </Link>
       </div>
     </LearnLayout>

@@ -172,7 +172,7 @@ export default function ETLvsELTModule() {
     <LearnLayout
       title="ETL vs ELT — History, Difference, When to Use Each"
       description="Why ETL dominated for 30 years, why ELT replaced it, and when each still belongs in a modern stack."
-      section="Data Engineering — Module 22"
+      section="Data Engineering — Lesson 22"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -824,7 +824,7 @@ DECISION RULE: ELT or ETL for each source?
           },
           {
             wrong: '"Since ELT preserves raw data, you don\'t need to test data quality as carefully"',
-            right: 'Part 07\'s anti-patterns and this module\'s Error Library both show the opposite: untested staging models let bad data flow silently into Gold, where it gets used in reports before anyone notices. Raw preservation only helps you fix the problem after the fact — it does nothing to stop bad data from reaching business users first.',
+            right: 'Part 07\'s anti-patterns and this lesson\'s Error Library both show the opposite: untested staging models let bad data flow silently into Gold, where it gets used in reports before anyone notices. Raw preservation only helps you fix the problem after the fact — it does nothing to stop bad data from reaching business users first.',
           },
           {
             wrong: '"The EL layer should do as much cleanup as possible to make dbt\'s job easier"',
@@ -1045,7 +1045,7 @@ ELT with good dbt tests is more reliable than ETL with the same quality checks, 
         {[
           {
             q: 'Letting a dbt staging model silently drop rows via a WHERE clause or INNER JOIN with no test to catch it',
-            a: 'This module\'s Error Library shows exactly this: raw.orders at 48,234 rows and stg_orders at 31,847 rows with no error raised. Part 07\'s "no tests on raw or staging" anti-pattern is the root cause — add a row-count comparison test between raw and staging so a silent drop fails the dbt build instead of quietly reaching Gold.',
+            a: 'This lesson\'s Error Library shows exactly this: raw.orders at 48,234 rows and stg_orders at 31,847 rows with no error raised. Part 07\'s "no tests on raw or staging" anti-pattern is the root cause — add a row-count comparison test between raw and staging so a silent drop fails the dbt build instead of quietly reaching Gold.',
           },
           {
             q: 'Calling a table "raw" when the EL loader already cleaned or filtered it',
@@ -1057,11 +1057,11 @@ ELT with good dbt tests is more reliable than ETL with the same quality checks, 
           },
           {
             q: 'Running dbt on a schedule with no dependency check on whether the EL load actually succeeded',
-            a: 'This module\'s Error Library shows dbt failing with "relation raw.orders does not exist" after an EL failure went unnoticed. Add dbt source freshness checks or an explicit task dependency (Airflow: dbt task depends on the EL task) so a failed load blocks the dbt run instead of silently transforming stale or missing data.',
+            a: 'This lesson\'s Error Library shows dbt failing with "relation raw.orders does not exist" after an EL failure went unnoticed. Add dbt source freshness checks or an explicit task dependency (Airflow: dbt task depends on the EL task) so a failed load blocks the dbt run instead of silently transforming stale or missing data.',
           },
           {
             q: 'Treating a migration from ETL to ELT as automatically fixing existing data-quality problems',
-            a: 'This module\'s Error Library is explicit that migrating architecture does not add tests by itself — an untested metric that was wrong for 6 months under ETL stays wrong under ELT unless tests are added as part of the migration, not just raw-data preservation. Part 07\'s "no tests on raw or staging" anti-pattern applies just as much to a freshly-migrated ELT pipeline as to an old ETL one.',
+            a: 'This lesson\'s Error Library is explicit that migrating architecture does not add tests by itself — an untested metric that was wrong for 6 months under ETL stays wrong under ELT unless tests are added as part of the migration, not just raw-data preservation. Part 07\'s "no tests on raw or staging" anti-pattern applies just as much to a freshly-migrated ELT pipeline as to an old ETL one.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1157,10 +1157,10 @@ ELT with good dbt tests is more reliable than ETL with the same quality checks, 
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 23 covers the three ingestion patterns — full load, incremental load, and CDC — including the watermark patterns that make incremental loads reliable and the common ways each one silently fails.
+          Lesson 23 covers the three ingestion patterns — full load, incremental load, and CDC — including the watermark patterns that make incremental loads reliable and the common ways each one silently fails.
         </p>
         <Link href="/learn/data-engineering/ingestion-patterns" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 23 → Data Ingestion Patterns — Full Load, Incremental, CDC
+          Lesson 23 → Data Ingestion Patterns — Full Load, Incremental, CDC
         </Link>
       </div>
     </LearnLayout>

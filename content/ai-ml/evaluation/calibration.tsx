@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Calibration — Are Your Probabilities Trustworthy? — Chaduvuko',
@@ -178,7 +177,6 @@ export default function CalibrationPage() {
       readTime="18–24 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="evaluation" topic="calibration" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -190,7 +188,7 @@ export default function CalibrationPage() {
         </h2>
 
         <p style={S.p}>
-          Module 34 taught you that ROC-AUC measures ranking quality — does the model
+          Lesson 34 taught you that ROC-AUC measures ranking quality — does the model
           score fraud higher than legitimate transactions? A model with AUC = 0.95
           is excellent at ranking. But ranking quality says nothing about whether
           the actual probability values are meaningful.
@@ -551,7 +549,7 @@ for name, model in models.items():
               algo: 'Naive Bayes',
               color: '#BA7517',
               pattern: 'Severely overconfident — probabilities near 0 and 1',
-              why: 'The naive independence assumption causes probability products to push toward 0 and 1 very aggressively. Module 27 covers this. With 20 correlated features, multiplying 20 individual likelihoods produces extreme products even for ambiguous cases.',
+              why: 'The naive independence assumption causes probability products to push toward 0 and 1 very aggressively. Lesson 27 covers this. With 20 correlated features, multiplying 20 individual likelihoods produces extreme products even for ambiguous cases.',
               shape: 'Most predictions near 0 or 1 — almost nothing in the middle range',
             },
             {
@@ -1153,8 +1151,8 @@ print("  5. Monitor ECE weekly — recalibrate monthly or on drift alert")`} />
         </p>
 
         <p style={S.p}>
-          Module 36 — Feature Importance and Explainability — covers
-          permutation importance, SHAP values (already introduced in Module 30
+          Lesson 36 — Feature Importance and Explainability — covers
+          permutation importance, SHAP values (already introduced in Lesson 30
           for XGBoost), SHAP across all model types including tree ensembles,
           linear models, and black-box models. And the business of explaining
           an individual prediction to a customer who was rejected for credit.
@@ -1172,7 +1170,7 @@ print("  5. Monitor ECE weekly — recalibrate monthly or on drift alert")`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 36 · Model Evaluation
+              Next — Lesson 36 · Model Evaluation
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

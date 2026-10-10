@@ -75,7 +75,7 @@ export default function KafkaInterviewSystemDesign() {
     <LearnLayout
       title="Kafka Interview and System Design Guide"
       description="The capstone module for the Apache Kafka track: full worked system-design interview questions synthesizing partitioning, delivery semantics, schema design, consumer groups, and monitoring, plus a complete vocabulary cheat sheet, common interview traps, and rapid-fire conceptual Q&A."
-      section="Apache Kafka — Module 24"
+      section="Apache Kafka — Lesson 24"
       readTime="70 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -90,7 +90,7 @@ export default function KafkaInterviewSystemDesign() {
         <SectionTitle>You Have Learned All 23 Modules. Here Is How It Comes Together.</SectionTitle>
         <HighlightBox>
           <Para>
-            <strong>This module is different from the previous 23.</strong> It does not introduce new Kafka
+            <strong>This lesson is different from the previous 23.</strong> It does not introduce new Kafka
             mechanics. It is a synthesis — a place where partitioning strategy, delivery semantics, schema
             design, consumer group topology, and monitoring all show up together, the way they actually do
             in a real system-design interview or a real production architecture review, instead of one
@@ -101,8 +101,8 @@ export default function KafkaInterviewSystemDesign() {
             "design a real-time analytics pipeline for a ride-sharing app's driver locations," and expects
             you to arrive at <code>acks=all</code> — and a partitioning key, and a retention policy, and a
             consumer group topology — as the natural consequence of reasoning through requirements, not as a
-            memorized fact recited on cue. That is the skill this module builds: taking everything from
-            Modules 01 through 23 and using it to reason through a system from a cold start, out loud, the
+            memorized fact recited on cue. That is the skill this lesson builds: taking everything from
+            Lessons 01 through 23 and using it to reason through a system from a cold start, out loud, the
             way an interviewer actually wants to see it happen.
           </Para>
           <Para>
@@ -121,7 +121,7 @@ export default function KafkaInterviewSystemDesign() {
         <SectionTag text="// Interview Methodology" />
         <SectionTitle>A Reusable Structure for Any Kafka System-Design Prompt</SectionTitle>
         <Para>
-          Every worked example in this module, from Part 01 through Part 09, follows the same five-step
+          Every worked example in this lesson, from Part 01 through Part 09, follows the same five-step
           structure deliberately, because that structure is itself the thing interviewers are evaluating —
           more than any single correct answer. Internalizing this shape means a genuinely unfamiliar prompt on
           interview day is still approachable, because the process for attacking it is the same one practiced
@@ -131,9 +131,9 @@ export default function KafkaInterviewSystemDesign() {
           headers={['Step', 'What to actually do', 'Why interviewers weight this step heavily']}
           rows={[
             ['1. Requirements gathering', 'Ask about scale, latency needs, acceptable staleness or loss, and ordering requirements before proposing anything.', 'A design built on assumed requirements that turn out wrong is a design for the wrong problem — interviewers are testing whether you ask, not whether you guess correctly.'],
-            ['2. Capacity estimation', 'State assumed numbers explicitly, then apply the formulas from this module\'s capacity-planning reference to get partition count, storage, and throughput figures.', 'A design with no numbers behind it cannot be sanity-checked by anyone, including you — stating rough math is what makes a design falsifiable and therefore credible.'],
+            ['2. Capacity estimation', 'State assumed numbers explicitly, then apply the formulas from this lesson\'s capacity-planning reference to get partition count, storage, and throughput figures.', 'A design with no numbers behind it cannot be sanity-checked by anyone, including you — stating rough math is what makes a design falsifiable and therefore credible.'],
             ['3. Topic and partition design', 'Decide topic boundaries, partition keys, and partition counts, and justify the partition key choice specifically in terms of ordering and skew.', 'The partition key decision is the single choice with the most downstream consequences in almost any Kafka design — interviewers listen closely for how it is justified.'],
-            ['4. Delivery semantics and durability trade-offs', 'Choose acks, replication factor, and idempotence settings as a deliberate consequence of what the data actually is, not a default.', 'This is where "acks=all is always right" gets tested directly — see this module\'s interview-traps section.'],
+            ['4. Delivery semantics and durability trade-offs', 'Choose acks, replication factor, and idempotence settings as a deliberate consequence of what the data actually is, not a default.', 'This is where "acks=all is always right" gets tested directly — see this lesson\'s interview-traps section.'],
             ['5. Trade-offs stated out loud', 'Name what the design gives up, not just what it achieves — a staleness window, an idle-consumer ceiling, an operational cost.', 'A design presented with no acknowledged weaknesses reads as either inexperienced or evasive; naming trade-offs unprompted is a strong, deliberately practiced signal.'],
           ]}
         />
@@ -142,7 +142,7 @@ export default function KafkaInterviewSystemDesign() {
           Interviewers consistently report that the single most common mistake in a system-design interview,
           Kafka-specific or otherwise, is a candidate leaping straight to an architecture diagram before
           establishing what problem that architecture is actually meant to solve. Every worked example in
-          this module opens with requirements gathering for exactly this reason, not as a formality.
+          this lesson opens with requirements gathering for exactly this reason, not as a formality.
         </Para>
         <Callout title="Practice narrating, not just solving" color={K}>
           A correct design reasoned through silently and then announced as a finished answer loses most of
@@ -191,7 +191,7 @@ Partition count: one partition can sustain roughly 10-20 MB/sec of writes comfor
 typical hardware. To handle 100 MB/sec with headroom for peak spikes and future growth:
 100 MB/sec / 15 MB/sec per partition ≈ 7, round up generously to 24 partitions
 (partition count should also comfortably exceed the largest expected consumer group size,
-covered in Part 09 of this module's vocabulary and in the earlier consumer-groups module)`}
+covered in Part 09 of this lesson's vocabulary and in the earlier consumer-groups module)`}
         </CodeBox>
         <SubTitle>Topic and partition design</SubTitle>
         <Para>
@@ -502,7 +502,7 @@ Phase 4 (cleanup, weeks later, once confidence is high):
         </Para>
         <SubTitle>Why this is fundamentally different from Parts 01-04 — a blocking, latency-critical path</SubTitle>
         <Para>
-          Every previous example in this module was async — Kafka absorbed the work and something downstream
+          Every previous example in this lesson was async — Kafka absorbed the work and something downstream
           eventually caught up. A fraud check that blocks the transaction cannot use Kafka the same way,
           because the caller is waiting on a synchronous answer within 200ms, and Kafka's own end-to-end
           latency (produce, replicate, consume, process) can already eat a meaningful fraction of that budget
@@ -768,7 +768,7 @@ Consumer groups:
           system" — that an existing, maintained sink connector already implements reliably, including its
           own offset management and retry behavior. Hand-writing a custom consumer for either would mean
           re-implementing connector functionality that already exists and is already battle-tested at scale,
-          exactly the trap named in this module's interview-traps section.
+          exactly the trap named in this lesson's interview-traps section.
         </Para>
       </section>
 
@@ -911,7 +911,7 @@ enriched.to("playback.events.enriched");`}
         <SectionTag text="// Reference" />
         <SectionTitle>Capacity-Planning Formulas You Can Reuse in Any System-Design Interview</SectionTitle>
         <Para>
-          Every worked example in this module used the same handful of back-of-envelope calculations. Having
+          Every worked example in this lesson used the same handful of back-of-envelope calculations. Having
           these ready to apply immediately, rather than deriving them from scratch under interview pressure,
           is worth the memorization — an interviewer consistently rates a candidate who states a number and
           shows the arithmetic higher than one who hand-waves past sizing entirely.
@@ -946,10 +946,10 @@ enriched.to("playback.events.enriched");`}
           stating assumptions out loud before calculating is worth more than a quietly-correct final answer.
         </Para>
         <Table
-          headers={['Quantity', 'Typical range to assume if not given', 'Where it showed up in this module']}
+          headers={['Quantity', 'Typical range to assume if not given', 'Where it showed up in this lesson']}
           rows={[
             ['Sustainable throughput per partition', '10-20 MB/sec on typical hardware', 'Part 01\'s driver-location partition-count estimate'],
-            ['Replication factor for production data', '3, with min.insync.replicas=2', 'Every worked design in this module'],
+            ['Replication factor for production data', '3, with min.insync.replicas=2', 'Every worked design in this lesson'],
             ['Retention for a firehose/raw topic', '24 hours to 7 days, unless compliance dictates otherwise', 'Part 01\'s raw location-ping topic'],
             ['Retention for a compacted current-state topic', 'Effectively indefinite — compaction, not time, bounds its size', 'Part 01 and Part 04\'s compacted current-state topics'],
           ]}
@@ -1036,7 +1036,7 @@ enriched.to("playback.events.enriched");`}
           },
           {
             q: 'Q7. Why is idempotent producer configuration alone not sufficient for exactly-once processing?',
-            a: 'Idempotent producers deduplicate retries only within a single producer session, tracked by a Producer ID that is discarded when the producer restarts. A crashed and restarted producer resending the same logical event under a new session is invisible to that mechanism — genuine exactly-once semantics for a read-process-write loop additionally needs transactions and a read_committed consumer, as covered in Module 24\'s Part 02 payment example.',
+            a: 'Idempotent producers deduplicate retries only within a single producer session, tracked by a Producer ID that is discarded when the producer restarts. A crashed and restarted producer resending the same logical event under a new session is invisible to that mechanism — genuine exactly-once semantics for a read-process-write loop additionally needs transactions and a read_committed consumer, as covered in Lesson 24\'s Part 02 payment example.',
           },
           {
             q: 'Q8. When would you reach for Kafka Connect instead of writing a custom producer or consumer?',
@@ -1093,7 +1093,7 @@ enriched.to("playback.events.enriched");`}
             semantics, schemas, Kafka Streams, Connect, security, operations, managed cloud platforms,
             testing, and now full system-design synthesis — that is the complete arc of what a working Kafka
             engineer actually needs, end to end. Revisit any module as a reference whenever a real project
-            calls for it; the vocabulary table and worked examples in this module are built specifically to
+            calls for it; the vocabulary table and worked examples in this lesson are built specifically to
             be reused before your next interview, not read once and forgotten.
           </p>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>

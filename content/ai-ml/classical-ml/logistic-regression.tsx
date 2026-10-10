@@ -319,7 +319,7 @@ export default function LogisticRegressionPage() {
         </p>
 
         <p style={S.p}>
-          This module builds logistic regression from scratch — sigmoid function,
+          This lesson builds logistic regression from scratch — sigmoid function,
           cross-entropy loss, gradient descent — so every piece is visible.
           Then shows you the sklearn implementation, all regularisation options,
           the multi-class extension, and every evaluation metric that matters
@@ -329,7 +329,7 @@ export default function LogisticRegressionPage() {
         <HBox color="#378ADD">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module covers:
+              What this lesson covers:
             </span>
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -359,7 +359,7 @@ export default function LogisticRegressionPage() {
         </HBox>
 
         <Callout type="tip">
-          The problem throughout this module: predict whether a DoorDash delivery
+          The problem throughout this lesson: predict whether a DoorDash delivery
           will be late (delivery_time &gt; 45 minutes). This is a binary
           classification problem — the kind logistic regression was designed for.
           Every concept is demonstrated on this real business question.
@@ -1674,7 +1674,7 @@ print(f"\nNew order prediction: {pred} (P(late)={p_late:.3f})")`} />
         </p>
 
         <p style={S.p}>
-          Module 21 covers Decision Trees — the algorithm that grows a flowchart
+          Lesson 21 covers Decision Trees — the algorithm that grows a flowchart
           from your data. Trees are the conceptual foundation of Random Forests
           and Gradient Boosting (XGBoost, LightGBM) — the algorithms that win
           most tabular ML competitions and power most production ML systems
@@ -1693,7 +1693,7 @@ print(f"\nNew order prediction: {pred} (P(late)={p_late:.3f})")`} />
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 21 · Classical ML
+              Next — Lesson 21 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

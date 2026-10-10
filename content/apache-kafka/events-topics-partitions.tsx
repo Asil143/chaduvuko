@@ -103,7 +103,7 @@ export default function EventsTopicsPartitions() {
     <LearnLayout
       title="Events, Topics, and Partitions"
       description="The complete foundation of Kafka's data model: what events are, how topics organize them, how partitions scale them, how records map to partitions, and why ordering is more subtle than beginners expect."
-      section="Apache Kafka — Module 02"
+      section="Apache Kafka — Lesson 02"
       readTime="65 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -118,7 +118,7 @@ export default function EventsTopicsPartitions() {
         <SectionTitle>Kafka Is Built from Events, Topics, Partitions, and Offsets</SectionTitle>
 
         <Para>
-          Module 01 explained why Kafka exists. This module explains, in real depth, what Kafka is made
+          Lesson 01 explained why Kafka exists. This lesson explains, in real depth, what Kafka is made
           of. Every Kafka system, from a tiny local demo to a multi-region enterprise platform, depends on
           the same data model: events are written to topics, topics are split into partitions, and records
           inside each partition receive offsets. If you understand this model deeply, Kafka becomes
@@ -171,7 +171,7 @@ partition 2:
         </CodeBox>
 
         <Para>
-          Everything else in this module — what exactly an event contains, why topics get split this way,
+          Everything else in this lesson — what exactly an event contains, why topics get split this way,
           how a record ends up in one partition versus another, and what retention actually means at the
           partition level — is really just unpacking the consequences of this one picture.
         </Para>
@@ -194,7 +194,7 @@ partition 2:
         <SectionTitle>An Event Is an Immutable Fact With a Key, a Value, a Timestamp, and Headers</SectionTitle>
 
         <Para>
-          Module 01 introduced the event loosely as &quot;a fact that already happened.&quot; Here is the
+          Lesson 01 introduced the event loosely as &quot;a fact that already happened.&quot; Here is the
           precise, physical shape of a Kafka record, because every downstream design decision — how you
           choose a key, how consumers deduplicate, how ordering works — depends on understanding exactly
           what fields a record carries.
@@ -269,7 +269,7 @@ headers:   {
           agnostic to all three — it stores and transmits opaque bytes and never inspects the value's
           contents. The producer and every consumer of a topic must independently agree on which format is
           in use and how to interpret it; Kafka provides no enforcement of this by itself; that is what a
-          schema registry, covered in a later module, is for.
+          schema registry, covered in a later lesson, is for.
         </Para>
 
         <Para>
@@ -297,7 +297,7 @@ headers:   {
           decide independently what it means for them. <code>ChargeCustomerNow</code> is a command — it
           only makes sense to one consumer, the billing service, and coupling a Kafka topic to one
           consumer's specific action defeats the entire purpose of publishing a broadly reusable stream of
-          facts. This is the same idea Module 01 introduced at a high level; here it becomes a concrete
+          facts. This is the same idea Lesson 01 introduced at a high level; here it becomes a concrete
           filter you can apply to every event you design.
         </Para>
 
@@ -730,7 +730,7 @@ hash("order-1024") % 8 = 5   -> NEW events for order-1024 now go to partition 5
           Data in a Kafka topic is not kept forever by default. Every partition's log has a retention
           policy that determines when old records become eligible for deletion — typically time-based (for
           example, delete anything older than 7 days) or size-based (cap the partition at a maximum size on
-          disk, whichever fills up first). A later module in this track, on retention and compaction, goes
+          disk, whichever fills up first). A later lesson in this track, on retention and compaction, goes
           into the full internals — how deletion actually happens at the segment-file level and what log
           compaction does differently. Here, you need a correct working model, not the complete mechanics.
         </Para>
@@ -886,7 +886,7 @@ Why:
           which is exactly what gives you per-entity ordering, and exactly why partition count can only
           safely increase, never decrease, without disrupting that guarantee for existing keys. Partitions
           are simultaneously the unit of parallelism and the boundary of ordering — that trade-off is the
-          single most important idea in this module.
+          single most important idea in this lesson.
         </Para>
 
         <Table
@@ -913,8 +913,8 @@ Why:
         />
 
         <Para>
-          Carry one idea forward into Module 03: everything in this module described the shape of the data
-          — events, topics, partitions, offsets, keys. Module 03 describes the mechanics of how producers
+          Carry one idea forward into Lesson 03: everything in this lesson described the shape of the data
+          — events, topics, partitions, offsets, keys. Lesson 03 describes the mechanics of how producers
           and consumers actually talk to brokers over the network to read and write that data — metadata
           discovery, leader election, acknowledgement settings, and consumer group rebalancing. The data
           model you now understand is the foundation that machinery operates on.
@@ -994,7 +994,7 @@ Why:
             <strong>In a system design interview:</strong> you\'re asked to design the event topic backing
             a food-delivery app\'s order tracking screen, and specifically asked &quot;how many partitions,
             and what key?&quot; A weak answer picks an arbitrary number like 6 with no key. The strong
-            answer, straight from Part 04, Part 05, and Part 09 of this module, reasons out loud: key by
+            answer, straight from Part 04, Part 05, and Part 09 of this lesson, reasons out loud: key by
             <code>order_id</code> so each order\'s full lifecycle (placed, confirmed, picked up, delivered)
             stays strictly ordered in one partition; size the partition count for expected peak consumer
             parallelism with headroom, because growing later disrupts existing key-to-partition mappings;
@@ -1170,7 +1170,7 @@ If a consumer's lag — the gap between the latest offset and its committed offs
           'Kafka guarantees ordering within a single partition — never across a topic\'s partitions as a whole. This is the single most important rule in the whole module.',
           'Records are routed to partitions by hashing the key (partition = hash(key) % partition_count) when a key is present, or by round-robin distribution when the key is null. Same key, same partition — as long as partition count stays fixed.',
           'Partition count can be increased but not safely decreased, because changing it changes the hash-modulo result for every existing key — plan partition count generously up front rather than resizing later.',
-          'Retention deletes old records by time or size, independent of consumer read progress. A consumer that falls behind further than the retention window permanently loses access to the oldest lagged records — this working model is enough for now; full compaction internals come in a later module.',
+          'Retention deletes old records by time or size, independent of consumer read progress. A consumer that falls behind further than the retention window permanently loses access to the oldest lagged records — this working model is enough for now; full compaction internals come in a later lesson.',
         ]}
       />
     </LearnLayout>

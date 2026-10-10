@@ -77,7 +77,7 @@ export default function IntroToSass() {
     <LearnLayout
       title="Intro to Sass — Variables, Nesting, Mixins"
       description="The CSS preprocessor that came before CSS variables — nesting, mixins, and why many real codebases still use it today."
-      section="HTML & CSS — Module 36"
+      section="HTML & CSS — Lesson 36"
       readTime="35 min"
       updatedAt="August 2026"
     >
@@ -565,7 +565,7 @@ $directions: (t: top, r: right, b: bottom, l: left);
           performance techniques every real production page needs.
         </p>
         <Link href="/learn/html-css/responsive-images-performance" style={{ background: '#ff4757', color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 37 → Responsive Images &amp; Performance
+          Lesson 37 → Responsive Images &amp; Performance
         </Link>
       </div>
     </LearnLayout>

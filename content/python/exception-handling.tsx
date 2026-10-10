@@ -77,7 +77,7 @@ export default function ExceptionHandling() {
     <LearnLayout
       title="Exception Handling"
       description="try/except/else/finally in full, catching specific exceptions, the exception hierarchy, raising and chaining exceptions, and writing your own exception classes."
-      section="Python — Module 17"
+      section="Python — Lesson 17"
       readTime="50 min"
       updatedAt="August 2026"
     >
@@ -834,12 +834,12 @@ finally:
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 18 covers how real Python projects are actually structured — the import system in full,
+          Lesson 18 covers how real Python projects are actually structured — the import system in full,
           how packages work, the if __name__ == &quot;__main__&quot; idiom, and building a proper
           requirements.txt.
         </p>
         <Link href="/learn/python/modules-packages-venv" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 18 → Modules, Packages &amp; Virtual Environments
+          Lesson 18 → Modules, Packages &amp; Virtual Environments
         </Link>
       </div>
     </LearnLayout>

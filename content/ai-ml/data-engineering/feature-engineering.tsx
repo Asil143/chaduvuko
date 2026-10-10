@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Feature Engineering — Chaduvuko',
@@ -175,7 +174,6 @@ export default function FeatureEngineeringPage() {
       readTime="45–55 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='data-engineering' topic='feature-engineering' />
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -208,14 +206,14 @@ export default function FeatureEngineeringPage() {
           is consistently the highest-leverage activity. The top solution
           in most Kaggle competitions uses a standard model on engineered features —
           not a novel architecture on raw data.
-          This module teaches every major technique with working code
+          This lesson teaches every major technique with working code
           on the DoorDash dataset.
         </p>
 
         <HBox color="#1D9E75">
           <p style={{ ...S.p, marginBottom: 8 }}>
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
-              What this module covers:
+              What this lesson covers:
             </span>
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -248,11 +246,11 @@ export default function FeatureEngineeringPage() {
         <Callout type="tip">
           Feature engineering must always be done inside a
           <span style={S.code as React.CSSProperties}> Pipeline</span> that is fit
-          only on training data. Every technique in this module that uses statistics
+          only on training data. Every technique in this lesson that uses statistics
           from the data (mean, std, target mean, frequency) must compute those
           statistics from training data only, then apply them to validation and test.
           Leakage — computing on the full dataset — is the most common silent
-          failure mode in ML. This module shows you how to prevent it.
+          failure mode in ML. This lesson shows you how to prevent it.
         </Callout>
       </div>
 
@@ -277,7 +275,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 10_000
 
-# Generate clean DoorDash dataset (Module 16 output)
+# Generate clean DoorDash dataset (Lesson 16 output)
 restaurants = ['Pizza Hut','Biryani Blues',"McDonald's","Haldiram's",
                'Dominos','KFC','Subway','Burger King']
 cities      = ['Seattle','New York','Denver','Austin','Boston','Chicago']
@@ -1639,7 +1637,7 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
         <ErrorBlock
           error="Target encoding produces better training score but worse test score than one-hot"
           cause="Naive target encoding — computing mean target per category on the full training set and using it as a feature — leaks information. Each training row's own target is included in its encoded value, creating a circular feature that the model overuses."
-          fix="Use cross-fold target encoding (shown in this module). For each training row, compute the category mean using only the other folds — never including the row's own target. Apply smoothing to handle rare categories. The sklearn-contrib category_encoders library has a TargetEncoder with built-in cross-fold encoding."
+          fix="Use cross-fold target encoding (shown in this lesson). For each training row, compute the category mean using only the other folds — never including the row's own target. Apply smoothing to handle rare categories. The sklearn-contrib category_encoders library has a TargetEncoder with built-in cross-fold encoding."
         />
 
         <ErrorBlock
@@ -1663,7 +1661,7 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
         <h2 style={S.h2}>How feature engineering actually happens on a team — feature stores, reuse, and ownership</h2>
 
         <p style={S.p}>
-          The SimpleFeatureStore built earlier in this module is a toy, but the problem it solves is
+          The SimpleFeatureStore built earlier in this lesson is a toy, but the problem it solves is
           entirely real. Once a company has more than one model — an ETA model, a fraud model, a
           restaurant ranking model — several of them end up wanting the exact same underlying
           signal: "how does this restaurant typically perform." Without a shared feature store, three
@@ -1676,7 +1674,7 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
 
         <p style={S.p}>
           Production feature stores — Feast, Tecton, Hopsworks, or a company's internal equivalent —
-          solve a harder version of the problem this module's SimpleFeatureStore only gestures at:
+          solve a harder version of the problem this lesson's SimpleFeatureStore only gestures at:
           keeping an offline store (used for training, computed in batch over historical data) and an
           online store (used for real-time serving, needing sub-10-millisecond lookups) consistent
           with each other. A feature computed one way during training and a slightly different way
@@ -1685,7 +1683,7 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
           shared, versioned feature definition is designed to prevent.
         </p>
 
-        <VisualBox label="What a real feature store adds beyond this module's SimpleFeatureStore">
+        <VisualBox label="What a real feature store adds beyond this lesson's SimpleFeatureStore">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[
               { concern: 'Offline / online consistency', color: '#378ADD', desc: 'The exact same feature definition must produce the same value whether computed in a nightly batch job (training) or a live lookup at request time (serving) — this is the hardest engineering problem a feature store solves.' },
@@ -1709,7 +1707,7 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
 
         <ConceptBox title="Feature ownership in practice">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            On a mature ML team, a feature group like restaurant_features from this module's example
+            On a mature ML team, a feature group like restaurant_features from this lesson's example
             has a named owner responsible for its correctness, its freshness SLA, and reviewing
             changes to its definition — the same way a shared library has a maintainer. A model team
             that wants a new feature typically requests it from that owner or contributes the
@@ -1756,7 +1754,7 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
 
         <ConceptBox title="Myth: Feature engineering is a purely statistical exercise, separate from domain knowledge" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
-            The single highest-leverage feature in this module's DoorDash example — distance times
+            The single highest-leverage feature in this lesson's DoorDash example — distance times
             traffic times prep time as a combined "slow delivery" indicator — did not come from a
             statistical test. It came from understanding, as a person who has ordered food delivery,
             that these three factors compound rather than add. The statistical techniques in this
@@ -1775,14 +1773,14 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
             leak information from after the historical moment they represent, and tracking freshness
             and ownership across dozens of feature groups shared by multiple teams. A plain database
             table with extra columns solves none of these — it is the same problem the
-            SimpleFeatureStore in this module intentionally simplifies away for teaching purposes.
+            SimpleFeatureStore in this lesson intentionally simplifies away for teaching purposes.
           </p>
         </ConceptBox>
 
         <ConceptBox title="Myth: If a new feature improves cross-validation score, it is safe to ship" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
             A cross-validation improvement is necessary but not sufficient — the leakage section of
-            this module exists precisely because a feature can look like a genuine improvement in CV
+            this lesson exists precisely because a feature can look like a genuine improvement in CV
             while actually encoding information that will not exist at prediction time in production.
             A feature derived from a groupby aggregate that was computed on the full dataset instead
             of training folds only, or a feature that is a proxy for the target because of how it was
@@ -1848,7 +1846,7 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
             I would start by identifying which features are genuinely shared — like per-restaurant or
             per-city aggregate statistics — versus features specific to a single model, and only put
             the shared ones into the store. Each feature group would have a named owner, a documented
-            definition, and a freshness SLA, following exactly the registry pattern in this module's
+            definition, and a freshness SLA, following exactly the registry pattern in this lesson's
             SimpleFeatureStore. The harder engineering problem I would prioritise early is offline and
             online consistency — making sure the batch computation used for training and the real-time
             lookup used for serving are guaranteed to produce the same value for the same feature,
@@ -1889,7 +1887,7 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
         </p>
 
         <p style={S.p}>
-          Module 18 begins the Classical Machine Learning section with
+          Lesson 18 begins the Classical Machine Learning section with
           linear regression — the oldest, most interpretable, and still one of
           the most useful algorithms in production ML.
           Understanding linear regression deeply — not just calling{' '}
@@ -1910,7 +1908,7 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 18 · Classical ML
+              Next — Lesson 18 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

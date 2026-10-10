@@ -94,7 +94,7 @@ const ProblemHeader = ({ num, title, complexity, color = '#facc15' }: { num: str
 export default function StringsPage() {
   return (
     <LearnLayout
-      title="Unit 03 — Strings"
+      title="Strings"
       description="Text is just an array of characters. Learn how computers store words, how to manipulate them in C, and solve the classic string problems that appear in every interview."
       section="DSA"
       readTime="60 min"
@@ -104,9 +104,7 @@ export default function StringsPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'UNIT 03', green: true },
-          { label: 'Prerequisite: Unit 02 — Arrays', green: false },
-          { label: '60 min read', green: false },
+          { label: 'Prerequisite: Lesson 3 — Arrays', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -120,7 +118,7 @@ export default function StringsPage() {
         sitting in memory, one after another, with a special signal at the end that says "stop here."
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
-        Because you already understand arrays from Unit 02, strings will feel natural.
+        Because you already understand arrays from Lesson 3, strings will feel natural.
         We just need to learn a few new rules — especially that special signal at the end —
         and then practise the classic problems that show up in almost every coding interview.
       </p>
@@ -387,7 +385,7 @@ int main() {
       <ProblemHeader num="Problem 01" title="Reverse a String" complexity="O(n)" />
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '14px 20px', marginBottom: 0 }}>
         <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
-          Same two-pointer technique as reversing an array from Unit 02. One pointer at the
+          Same two-pointer technique as reversing an array from Lesson 3. One pointer at the
           start, one at the end — swap and move inward until they meet.
         </p>
       </div>
@@ -715,7 +713,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Unit 04</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 5</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now understand strings fully — how they sit in memory, how to manipulate them,
@@ -723,7 +721,7 @@ int main() {
         which appears constantly in string, array, and hashing problems.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Unit 04 we tackle <strong style={{ color: 'var(--text)' }}>Pointers</strong> — the concept
+        In Lesson 5 we tackle <strong style={{ color: 'var(--text)' }}>Pointers</strong> — the concept
         that confuses most beginners but is the backbone of everything advanced in C.
         You have already seen pointers briefly with the <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--green)' }}>&</code> in
         scanf and with array names being addresses. Now we make it all explicit and clear.
@@ -731,7 +729,7 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → UNIT 04</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 5</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Pointers — The Concept That Changes Everything</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Memory addresses, & and *, pointer arithmetic — explained simply.</div>
         </div>

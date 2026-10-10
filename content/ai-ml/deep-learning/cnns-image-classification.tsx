@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'CNNs — Shopify Product Image Classification — Chaduvuko',
@@ -178,7 +177,6 @@ export default function CNNsImageClassificationPage() {
       readTime="45–58 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="deep-learning" topic="cnns-image-classification" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -228,7 +226,7 @@ export default function CNNsImageClassificationPage() {
         </AnalogyBox>
 
         <Callout type="tip">
-          This module builds a CNN from scratch in PyTorch, trains it on a
+          This lesson builds a CNN from scratch in PyTorch, trains it on a
           simulated Shopify-style product classification task, then shows
           transfer learning — using a pretrained ResNet50 and fine-tuning
           only the final layer. Transfer learning is how all production
@@ -855,7 +853,7 @@ for group in optimizer_diff.param_groups:
         <h2 style={S.h2}>Shipping a CNN to a phone is a different engineering problem than shipping one to a GPU server</h2>
 
         <p style={S.p}>
-          Every backbone comparison earlier in this module ranked architectures by
+          Every backbone comparison earlier in this lesson ranked architectures by
           accuracy. In production that ranking gets a second axis: does the model
           actually fit the device it needs to run on. A model that scores highest on a
           validation set is worthless if it is 98MB and takes 340 milliseconds per frame
@@ -1120,7 +1118,7 @@ print(f"mobilenet_v3_small — int8-quantised (Linear layers): "
           is a sequence of daily values, a user session is a sequence of actions.
           Sequences have temporal structure: what came earlier affects what
           comes later. CNNs treat every position independently and cannot
-          model this dependency. Module 47 covers RNNs and LSTMs —
+          model this dependency. Lesson 47 covers RNNs and LSTMs —
           architectures designed specifically to process sequences
           by maintaining a hidden state that carries information
           forward across time steps.
@@ -1138,7 +1136,7 @@ print(f"mobilenet_v3_small — int8-quantised (Linear layers): "
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 47 · Deep Learning
+              Next — Lesson 47 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -1069,7 +1069,7 @@ ANALYZE orders (total_amount);
 
         <Para>
           This is the full realistic workflow of diagnosing and fixing a slow query in production.
-          Every step uses concepts from this module.
+          Every step uses concepts from this lesson.
         </Para>
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>

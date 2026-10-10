@@ -5,7 +5,7 @@ export default function PerformanceTuning() {
     <LearnLayout
       title="Performance Tuning"
       description="Micro-partition pruning, clustering keys, search optimization, reading a query profile, cache behavior, and warehouse sizing for real query performance work."
-      section="Snowflake — Module 13"
+      section="Snowflake — Lesson 13"
       readTime="70 min"
       updatedAt="September 2026"
       breadcrumbs={[

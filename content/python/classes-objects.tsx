@@ -77,7 +77,7 @@ export default function ClassesObjects() {
     <LearnLayout
       title="Classes and Objects — The Basics"
       description="What a class actually is, what an object actually is, how self really works under the hood, and when object-oriented Python genuinely earns its complexity."
-      section="Python — Module 19"
+      section="Python — Lesson 19"
       readTime="40 min"
       updatedAt="August 2026"
     >
@@ -89,12 +89,12 @@ export default function ClassesObjects() {
 
         <Para>
           Everything in this track up to this point — variables, control flow, strings, lists, dicts,
-          and especially functions in Module 07 — was building toward this phase. Object-oriented
+          and especially functions in Lesson 07 — was building toward this phase. Object-oriented
           programming is not a separate topic bolted onto Python; it is the natural next step once you
           have functions that operate on data and you start noticing the same clusters of data and
           functions traveling together everywhere in your code. A shopping cart. A user account. A bank
           transaction. Each of those is really a bundle of related data (what it <em>has</em>) plus
-          related behavior (what it can <em>do</em>). Phase 3, starting with this module, is about
+          related behavior (what it can <em>do</em>). Phase 3, starting with this lesson, is about
           learning Python&apos;s tool for expressing that bundle explicitly: the <code>class</code>.
         </Para>
 
@@ -103,7 +103,7 @@ export default function ClassesObjects() {
           that way. Every string is an instance of the built-in <code>str</code> class. Every list is
           an instance of <code>list</code>. When you call <code>"hello".upper()</code>, you are calling
           a method defined on the <code>str</code> class, and <code>"hello"</code> is the object that
-          method runs against. This module pulls back the curtain on that mechanism and shows you how
+          method runs against. This lesson pulls back the curtain on that mechanism and shows you how
           to build your own classes, from scratch, that work the exact same way.
         </Para>
 
@@ -179,7 +179,7 @@ print(isinstance(rex, Dog))   # True`}</CodeBox>
         </Para>
 
         <CodeBox label="The pieces of a class">{`class Dog:                          # PascalCase class name
-    species = "Canis familiaris"    # a class attribute (Part 02 of the next module covers this properly)
+    species = "Canis familiaris"    # a class attribute (Part 02 of the next lesson covers this properly)
 
     def __init__(self, name, breed):   # the constructor — runs automatically when you create an object
         self.name = name                # an instance attribute
@@ -302,7 +302,7 @@ Dog.bark(rex)        # "Rex says Woof!" — IDENTICAL call, calling the function
           raise a <code>TypeError</code> the moment you call it as <code>rex.bark()</code>, because
           Python is still trying to pass <code>rex</code> in as an argument, but the function signature
           has no parameter to receive it. The exact error message is covered in the Error Library at
-          the end of this module.
+          the end of this lesson.
         </Callout>
       </section>
 
@@ -343,7 +343,7 @@ print(bella.tricks)     # [] — completely unaffected by what happened to rex`}
         <Para>
           You can also read and write instance attributes directly from outside the class, using dot
           notation on the object — <code>rex.name</code>, <code>rex.tricks</code>. Nothing in plain
-          Python prevents this by default (that is exactly the subject of encapsulation, Module 22,
+          Python prevents this by default (that is exactly the subject of encapsulation, Lesson 22,
           later in this phase). For now, treat instance attributes as an object&apos;s own private
           notebook of facts about itself.
         </Para>
@@ -430,7 +430,7 @@ print(bob_account)      # BankAccount(owner='Bob', balance=50)`}</CodeBox>
         <Para>
           If you just need to group a few related values together with no behavior attached — no
           methods, no validation, no invariants to protect — a plain <code>dict</code> or a{' '}
-          <code>collections.namedtuple</code> (or, once you reach later modules, a{' '}
+          <code>collections.namedtuple</code> (or, once you reach later lessons, a{' '}
           <code>dataclass</code>) is simpler, requires less boilerplate, and is exactly as readable.
         </Para>
 
@@ -677,7 +677,7 @@ def end_trip(trip):
           },
           {
             q: 'Confusing Dog (the class) with rex (an instance of it) when reading errors',
-            a: 'Error messages and code both refer to classes and instances by very similar-looking names. Getting comfortable reading type(rex) and isinstance(rex, Dog) early makes debugging far less confusing once inheritance is introduced in Module 21.',
+            a: 'Error messages and code both refer to classes and instances by very similar-looking names. Getting comfortable reading type(rex) and isinstance(rex, Dog) early makes debugging far less confusing once inheritance is introduced in Lesson 21.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -718,12 +718,12 @@ def end_trip(trip):
           {
             error: `TypeError: __init__() missing 1 required positional argument: 'breed'`,
             cause: 'The class was called with fewer arguments than __init__ requires — for example, Dog("Rex") when __init__(self, name, breed) requires both name and breed.',
-            fix: 'Pass every required argument, or give the missing parameter a default value in __init__ (covered in depth in Module 20) if it should be optional.',
+            fix: 'Pass every required argument, or give the missing parameter a default value in __init__ (covered in depth in Lesson 20) if it should be optional.',
           },
           {
             error: `TypeError: 'Dog' object is not callable`,
             cause: 'An instance is being called with parentheses as if it were a function or the class itself — for example, rex() instead of rex.bark(). This usually means a method call is missing its name.',
-            fix: 'Call a specific method on the instance (rex.bark()), not the instance itself, unless the class deliberately defines __call__ — an advanced dunder method outside the scope of this module.',
+            fix: 'Call a specific method on the instance (rex.bark()), not the instance itself, unless the class deliberately defines __call__ — an advanced dunder method outside the scope of this lesson.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -777,12 +777,12 @@ def end_trip(trip):
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 20 goes deeper on __init__, and covers the single most infamous gotcha in
+          Lesson 20 goes deeper on __init__, and covers the single most infamous gotcha in
           object-oriented Python: what happens when a class attribute is a mutable object, shared
           silently across every instance until you know to watch for it.
         </p>
         <Link href="/learn/python/constructors-attributes" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 20 → Constructors, Instance vs Class Attributes
+          Lesson 20 → Constructors, Instance vs Class Attributes
         </Link>
       </div>
     </LearnLayout>

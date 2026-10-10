@@ -96,7 +96,7 @@ export default function Indexes() {
     <LearnLayout
       title="Indexes"
       description="How databases find rows without scanning every row — B-tree, hash, composite, partial, and functional indexes; when to create them; and diagnosing slow queries with EXPLAIN ANALYZE"
-      section="SQL — Module 46"
+      section="SQL — Lesson 46"
       readTime="14–20 min"
       updatedAt="April 2026"
     >
@@ -953,10 +953,10 @@ ORDER BY tbl_name, name;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 47</strong>, you learn Transactions and ACID properties — how databases guarantee consistency, how COMMIT and ROLLBACK work, isolation levels, and how to avoid lost updates and phantom reads.
+          In <strong>Lesson 47</strong>, you learn Transactions and ACID properties — how databases guarantee consistency, how COMMIT and ROLLBACK work, isolation levels, and how to avoid lost updates and phantom reads.
         </p>
         <Link href="/learn/sql/transactions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 47 → Transactions and ACID
+          Lesson 47 → Transactions and ACID
         </Link>
       </div>
 

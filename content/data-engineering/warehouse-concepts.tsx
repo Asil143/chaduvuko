@@ -172,7 +172,7 @@ export default function WarehouseConceptsModule() {
     <LearnLayout
       title="Data Warehouse Concepts"
       description="Columnar storage, query execution, result caching, virtual warehouses, cluster keys, and why Snowflake queries are fast."
-      section="Data Engineering — Module 31"
+      section="Data Engineering — Lesson 31"
       readTime="60 min"
       updatedAt="August 2026"
     >
@@ -191,7 +191,7 @@ export default function WarehouseConceptsModule() {
         </Para>
 
         <Para>
-          This module covers the concepts that explain warehouse behaviour:
+          This lesson covers the concepts that explain warehouse behaviour:
           why columnar storage makes analytical queries fast, how a virtual
           warehouse scales, what micro-partition pruning and result caching actually
           do, why distribution keys matter in Redshift, and how to read a query
@@ -205,7 +205,7 @@ export default function WarehouseConceptsModule() {
             fontSize: 14, fontWeight: 800, color: 'var(--text)',
             fontFamily: 'var(--font-display)', marginBottom: 14,
           }}>
-            Eight concepts this module covers
+            Eight concepts this lesson covers
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
             {[
@@ -940,7 +940,7 @@ Sort on large data set without index → ORDER BY without index → add index or
           },
           {
             wrong: '"The result cache means dashboard data is always current"',
-            right: 'Part 04 is specific about the opposite risk: the result cache serves a cached result for up to 24 hours as long as the underlying tables haven\'t changed and the SQL text matches exactly. A dashboard refresh scheduled before the pipeline finishes can silently serve yesterday\'s numbers — this exact scenario appears in this module\'s Error Library.',
+            right: 'Part 04 is specific about the opposite risk: the result cache serves a cached result for up to 24 hours as long as the underlying tables haven\'t changed and the SQL text matches exactly. A dashboard refresh scheduled before the pipeline finishes can silently serve yesterday\'s numbers — this exact scenario appears in this lesson\'s Error Library.',
           },
           {
             wrong: '"CLUSTER BY works like an index — add it to any column you filter on"',
@@ -948,7 +948,7 @@ Sort on large data set without index → ORDER BY without index → add index or
           },
           {
             wrong: '"Snowflake, BigQuery, and Redshift are interchangeable — it\'s all just SQL"',
-            right: 'Part 06\'s comparison table shows the compute and storage models are fundamentally different — Redshift\'s DISTKEY has no equivalent in Snowflake\'s micro-partition model, and treating the platforms as identical is exactly how teams end up with unmatched Redshift distribution keys and the expensive DS_DIST_BOTH joins covered in Part 06 and this module\'s Error Library.',
+            right: 'Part 06\'s comparison table shows the compute and storage models are fundamentally different — Redshift\'s DISTKEY has no equivalent in Snowflake\'s micro-partition model, and treating the platforms as identical is exactly how teams end up with unmatched Redshift distribution keys and the expensive DS_DIST_BOTH joins covered in Part 06 and this lesson\'s Error Library.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
@@ -1160,7 +1160,7 @@ Fifth, check if the result cache was invalidated more frequently. If the pipelin
         {[
           {
             q: 'Wrapping the filter column in a function — WHERE YEAR(order_date) = 2026 — and being surprised pruning stopped working',
-            a: 'Part 03\'s pruning section and this module\'s Error Library both cover this exact anti-pattern: Snowflake\'s micro-partition metadata stores min/max on the raw column, not on the result of a function applied to it, so any function wrapping the filter column forces a full scan. Rewrite the filter as a direct range comparison on the column itself.',
+            a: 'Part 03\'s pruning section and this lesson\'s Error Library both cover this exact anti-pattern: Snowflake\'s micro-partition metadata stores min/max on the raw column, not on the result of a function applied to it, so any function wrapping the filter column forces a full scan. Rewrite the filter as a direct range comparison on the column itself.',
           },
           {
             q: 'Sizing a warehouse up whenever a query is slow, without checking why it\'s slow first',
@@ -1168,7 +1168,7 @@ Fifth, check if the result cache was invalidated more frequently. If the pipelin
           },
           {
             q: 'Loading a large historical backfill in random or unsorted order, then being surprised query performance collapses afterward',
-            a: 'Part 03\'s cluster key section and this module\'s Error Library both describe this scenario: an out-of-order backfill interleaves old and new data across micro-partitions, destroying the natural date ordering that pruning depended on. Load historical data in chronological order, or recluster immediately after a large out-of-order load.',
+            a: 'Part 03\'s cluster key section and this lesson\'s Error Library both describe this scenario: an out-of-order backfill interleaves old and new data across micro-partitions, destroying the natural date ordering that pruning depended on. Load historical data in chronological order, or recluster immediately after a large out-of-order load.',
           },
           {
             q: 'Assuming a frequently-joined dimension table\'s distribution key doesn\'t matter because the table is "small"',
@@ -1176,7 +1176,7 @@ Fifth, check if the result cache was invalidated more frequently. If the pipelin
           },
           {
             q: 'Never running VACUUM or ANALYZE after a large Redshift load, then blaming the query for a bad join plan',
-            a: 'Part 06 states plainly that Redshift does not auto-update table statistics — a large load without a follow-up ANALYZE leaves the query planner working from stale row counts, which produces exactly the kind of poor join-order and join-type decisions this module\'s Error Library shows for Redshift.',
+            a: 'Part 06 states plainly that Redshift does not auto-update table statistics — a large load without a follow-up ANALYZE leaves the query planner working from stale row counts, which produces exactly the kind of poor join-order and join-type decisions this lesson\'s Error Library shows for Redshift.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1272,10 +1272,10 @@ Fifth, check if the result cache was invalidated more frequently. If the pipelin
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 32 covers Lakehouse Architecture — why it emerged, how table formats like Delta Lake and Iceberg bring ACID guarantees to object storage, and how it combines the best of warehouses and data lakes.
+          Lesson 32 covers Lakehouse Architecture — why it emerged, how table formats like Delta Lake and Iceberg bring ACID guarantees to object storage, and how it combines the best of warehouses and data lakes.
         </p>
         <Link href="/learn/data-engineering/lakehouse-architecture" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 32 → Lakehouse Architecture — Why It Exists and How It Works
+          Lesson 32 → Lakehouse Architecture — Why It Exists and How It Works
         </Link>
       </div>
     </LearnLayout>

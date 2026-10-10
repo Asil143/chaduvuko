@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Fine-Tuning with PEFT — LoRA and Adapters — Chaduvuko',
@@ -178,7 +177,6 @@ export default function PeftLoraAdaptersPage() {
       readTime="36–46 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="nlp" topic="peft-lora-adapters" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -190,7 +188,7 @@ export default function PeftLoraAdaptersPage() {
         </h2>
 
         <p style={S.p}>
-          Module 50 showed full fine-tuning — update all 110M parameters
+          Lesson 50 showed full fine-tuning — update all 110M parameters
           of BERT for 3 epochs. That costs 4GB of GPU memory and 30 minutes.
           Acceptable for BERT. Completely impractical for LLaMA-3 (8B),
           Mistral (7B), or Falcon (40B). Full fine-tuning a 7B model
@@ -901,7 +899,7 @@ sql_model = PeftModel.from_pretrained(base, './lora-sql-adapter')
 
         <p style={S.p}>
           This is a materially different problem from the training-side LoRA workflow covered
-          earlier in this module. Training produces one adapter. Production serving has to keep
+          earlier in this lesson. Training produces one adapter. Production serving has to keep
           hundreds or thousands of trained adapters on hand and route each incoming request to
           the right one, without paying the cost of a full model reload per customer and without
           one customer's traffic starving another's latency.
@@ -1206,7 +1204,7 @@ print("""
           Retrieval-Augmented Generation (RAG) solves this by combining
           a retriever (find relevant documents from a vector database)
           with a generator (produce an answer grounded in those documents).
-          Module 52 builds a complete RAG pipeline for a Stripe knowledge base.
+          Lesson 52 builds a complete RAG pipeline for a Stripe knowledge base.
         </p>
 
         <div style={{
@@ -1221,7 +1219,7 @@ print("""
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 52 · NLP
+              Next — Lesson 52 · NLP
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

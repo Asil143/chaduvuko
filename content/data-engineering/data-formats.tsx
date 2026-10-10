@@ -179,7 +179,7 @@ export default function DataFormatsModule() {
     <LearnLayout
       title="Data Formats — CSV, JSON, Parquet, Avro, ORC"
       description="How each format works internally, when to use it, and what breaks when you pick the wrong one."
-      section="Data Engineering — Module 08"
+      section="Data Engineering — Lesson 08"
       readTime="60 min"
       updatedAt="August 2026"
     >
@@ -447,7 +447,7 @@ Quoting rule (RFC 4180):
           JSON is the lingua franca of the internet. Every REST API speaks JSON.
           Every modern web application exchanges JSON. Every NoSQL database stores
           JSON. As a data engineer, you will read, parse, validate, flatten, and
-          transform more JSON than any other format. Module 07 covered JSON structure
+          transform more JSON than any other format. Lesson 07 covered JSON structure
           in depth — here we focus on JSON as a storage and transfer format.
         </Para>
 
@@ -1086,7 +1086,7 @@ Format choice is a cost decision as much as a performance decision.`}</CodeBox>
           },
           {
             wrong: '"Parquet\'s schema evolution means old and new files get automatically reconciled into one clean schema"',
-            right: 'This module\'s Error Library ("47 columns but dbt model expects 52") and Part 04\'s schema evolution note both show the real behavior: old files simply return NULL for columns that didn\'t exist when they were written. Nothing is backfilled automatically — the dbt model has to handle the NULLs explicitly with COALESCE.',
+            right: 'This lesson\'s Error Library ("47 columns but dbt model expects 52") and Part 04\'s schema evolution note both show the real behavior: old files simply return NULL for columns that didn\'t exist when they were written. Nothing is backfilled automatically — the dbt model has to handle the NULLs explicitly with COALESCE.',
           },
           {
             wrong: '"ORC is obsolete now that Parquet has won"',
@@ -1264,23 +1264,23 @@ I would present this to the analyst as a two-week migration project with measura
         {[
           {
             q: 'Pointing a query engine at a Parquet directory without checking it actually contains matching files',
-            a: 'This module\'s Error Library shows the "Unable to infer schema" exception that results — the path is wrong, the upstream pipeline wrote nothing, or files with conflicting schemas are mixed together. A quick `aws s3 ls --recursive | grep .parquet` before debugging further saves time chasing the wrong cause.',
+            a: 'This lesson\'s Error Library shows the "Unable to infer schema" exception that results — the path is wrong, the upstream pipeline wrote nothing, or files with conflicting schemas are mixed together. A quick `aws s3 ls --recursive | grep .parquet` before debugging further saves time chasing the wrong cause.',
           },
           {
             q: 'Removing or renaming an Avro field without a default value and expecting the Schema Registry to allow it',
-            a: 'This module\'s Error Library shows exactly this rejection — the Schema Registry is enforcing the backward-compatibility rules from Part 05, not malfunctioning. Evolve schemas additively: add a default to a field before removing it, or add a new field alongside an old one rather than renaming in place.',
+            a: 'This lesson\'s Error Library shows exactly this rejection — the Schema Registry is enforcing the backward-compatibility rules from Part 05, not malfunctioning. Evolve schemas additively: add a default to a field before removing it, or add a new field alongside an old one rather than renaming in place.',
           },
           {
             q: 'Storing Parquet files without date partitioning and expecting a WHERE clause to prune automatically',
-            a: 'This module\'s Error Library shows a $20.48 Athena query that scanned 4.2 TB for a 7-day filter — with no date-partitioned paths, there\'s nothing for the engine to prune against no matter how selective the WHERE clause looks. Predicate pushdown on row-group statistics (Part 04) and partition pruning are separate mechanisms; you need both.',
+            a: 'This lesson\'s Error Library shows a $20.48 Athena query that scanned 4.2 TB for a 7-day filter — with no date-partitioned paths, there\'s nothing for the engine to prune against no matter how selective the WHERE clause looks. Predicate pushdown on row-group statistics (Part 04) and partition pruning are separate mechanisms; you need both.',
           },
           {
             q: 'Writing large Parquet or ORC files directly to their final path instead of write-then-atomic-rename',
-            a: 'This module\'s Error Library shows a "Malformed ORC file footer" error from a write that was interrupted mid-file — since both formats store their index in a footer written last, a partial write has no usable footer at all. Write to a temporary key and move it to the final path only once the write completes.',
+            a: 'This lesson\'s Error Library shows a "Malformed ORC file footer" error from a write that was interrupted mid-file — since both formats store their index in a footer written last, a partial write has no usable footer at all. Write to a temporary key and move it to the final path only once the write completes.',
           },
           {
             q: 'Treating NULLs in old Parquet files after a schema change as a bug rather than expected behavior',
-            a: 'This module\'s Error Library shows a dbt model expecting 52 columns getting NULLs for 5 of them from older files with only 47 — Part 04 is explicit that this is Parquet schema evolution working correctly, not corruption. Handle it with COALESCE and sensible defaults in the transformation, or backfill old files through the new pipeline logic if uniform NULLs are unacceptable.',
+            a: 'This lesson\'s Error Library shows a dbt model expecting 52 columns getting NULLs for 5 of them from older files with only 47 — Part 04 is explicit that this is Parquet schema evolution working correctly, not corruption. Handle it with COALESCE and sensible defaults in the transformation, or backfill old files through the new pipeline logic if uniform NULLs are unacceptable.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1376,10 +1376,10 @@ I would present this to the analyst as a two-week migration project with measura
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 09 goes inside a database engine — storage on disk, B-tree indexes, the buffer pool, and the Write-Ahead Log that makes durability possible across crashes and restarts.
+          Lesson 09 goes inside a database engine — storage on disk, B-tree indexes, the buffer pool, and the Write-Ahead Log that makes durability possible across crashes and restarts.
         </p>
         <Link href="/learn/data-engineering/databases-internals" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 09 → Databases — What They Are and How They Work Internally
+          Lesson 09 → Databases — What They Are and How They Work Internally
         </Link>
       </div>
     </LearnLayout>

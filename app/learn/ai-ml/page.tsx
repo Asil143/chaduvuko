@@ -725,7 +725,7 @@ export default function AIMLTrack() {
   return (
     <LearnLayout
       title="AI & Machine Learning"
-      description="From zero to production-grade AI/ML — 80 modules, no prerequisites"
+      description="From zero to production-grade AI/ML — 80 lessons, no prerequisites"
       section="AI & ML"
       readTime="Self-paced"
       updatedAt="March 2026"
@@ -771,7 +771,7 @@ export default function AIMLTrack() {
         marginBottom: 36,
       }}>
         {[
-          { value: '80',    label: 'Modules'         },
+          { value: '80',    label: 'Lessons'         },
           { value: '12',    label: 'Sections'         },
           { value: '200+',  label: 'Topics covered'   },
           { value: '~60h',  label: 'Total content'    },
@@ -813,10 +813,10 @@ export default function AIMLTrack() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
           {[
-            { icon: '🏭', title: 'Real company use cases',    desc: 'Every algorithm module is built around a real problem — DoorDash delivery time, Stripe fraud, Airbnb pricing, Shopify image classification. Not toy datasets.',  color: 'var(--green)' },
+            { icon: '🏭', title: 'Real company use cases',    desc: 'Every algorithm lesson is built around a real problem — DoorDash delivery time, Stripe fraud, Airbnb pricing, Shopify image classification. Not toy datasets.',  color: 'var(--green)' },
             { icon: '🔩', title: 'From-scratch first',        desc: 'You build neural networks from NumPy before touching PyTorch. Understand the mechanics before the framework hides them.',                                              color: '#7F77DD'      },
             { icon: '🩺', title: 'Error Library',             desc: 'Every project includes the exact errors you will hit, why they happen, and the precise fix. 80% of real ML engineering is debugging.',                               color: '#D85A30'      },
-            { icon: '🎯', title: '50 complete interview Qs',  desc: 'Module 80 covers 50 ML interview questions at senior engineer depth — classical ML, deep learning, system design, and behavioral rounds.',                          color: '#4285f4'      },
+            { icon: '🎯', title: '50 complete interview Qs',  desc: 'Lesson 80 covers 50 ML interview questions at senior engineer depth — classical ML, deep learning, system design, and behavioral rounds.',                          color: '#4285f4'      },
           ].map(f => (
             <div key={f.title} style={{
               background: 'var(--surface)',
@@ -849,7 +849,7 @@ export default function AIMLTrack() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              80 Modules. Zero to Advanced.
+              80 Lessons. Zero to Advanced.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
               Follow in order. Each module builds on the last. Every concept is
@@ -1077,13 +1077,13 @@ export default function AIMLTrack() {
           color: 'var(--text)', fontFamily: 'var(--font-display)',
           letterSpacing: '-1px', marginBottom: 12,
         }}>
-          80 modules. Start anywhere, finish stronger.
+          80 lessons. Start anywhere, finish stronger.
         </h3>
         <p style={{
           fontSize: 14, color: 'var(--muted)', lineHeight: 1.7,
           maxWidth: 480, margin: '0 auto 24px',
         }}>
-          All 80 modules are live. Start with Module 01 and follow the order —
+          All 80 lessons are live. Start with Lesson 01 and follow the order —
           each module is self-contained enough to read on its own, but every concept earns the next one.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -1092,7 +1092,7 @@ export default function AIMLTrack() {
             color: '#000', fontWeight: 700, fontSize: 13,
             borderRadius: 8, padding: '10px 24px', textDecoration: 'none',
           }}>
-            Start Module 01 →
+            Start Lesson 01 →
           </Link>
           <Link href="/learn/projects" style={{
             display: 'inline-block', background: 'var(--surface)',

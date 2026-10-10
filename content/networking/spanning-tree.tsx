@@ -327,7 +327,7 @@ export default function SpanningTreeModule() {
     <LearnLayout
       title="Spanning Tree Protocol"
       description="STP is the protocol that keeps Ethernet networks alive by breaking loops in redundant topologies. From 802.1D's 50-second convergence to RSTP's sub-second failover — a deep dive into network resilience."
-      section="Networking Fundamentals — Module 11"
+      section="Networking Fundamentals — Lesson 11"
       readTime="22–30 min"
       updatedAt="May 2026"
     >

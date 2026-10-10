@@ -77,7 +77,7 @@ export default function CssTransitions() {
     <LearnLayout
       title="CSS Transitions"
       description="Smooth, performant state changes — transition-property, timing functions, and the properties that animate cheaply vs expensively."
-      section="HTML & CSS — Module 31"
+      section="HTML & CSS — Lesson 31"
       readTime="30 min"
       updatedAt="August 2026"
     >
@@ -123,7 +123,7 @@ export default function CssTransitions() {
         <Callout type="info">
           A transition fires whenever the computed value of the watched property changes — through a{' '}
           <code>:hover</code>, <code>:focus</code>, or <code>:active</code> pseudo-class, a class toggled
-          by JavaScript, a media query boundary being crossed, or even a custom property (Module 30)
+          by JavaScript, a media query boundary being crossed, or even a custom property (Lesson 30)
           being updated at runtime. It is not exclusively a hover effect, even though hover is the most
           common example used to teach it.
         </Callout>
@@ -609,7 +609,7 @@ function dismissToast() {
           },
           {
             wrong: '"A transition and a CSS animation (@keyframes) are basically interchangeable — pick whichever"',
-            right: 'A transition only ever describes the path between exactly two states — a start and an end — triggered by a property change. It has no concept of multiple intermediate steps, looping, or running without an external trigger. Genuinely multi-step or self-running motion needs @keyframes, covered in the next module.',
+            right: 'A transition only ever describes the path between exactly two states — a start and an end — triggered by a property change. It has no concept of multiple intermediate steps, looping, or running without an external trigger. Genuinely multi-step or self-running motion needs @keyframes, covered in the next lesson.',
           },
           {
             wrong: '"transitionend fires exactly once per element, right when its animation visually finishes"',
@@ -805,7 +805,7 @@ function dismissToast() {
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Transitions only ever describe a path between two states. The next module covers @keyframes and
+          Transitions only ever describe a path between two states. The next lesson covers @keyframes and
           the animation property — genuine multi-step, self-running, and looping motion, for effects a
           transition simply cannot express.
         </p>

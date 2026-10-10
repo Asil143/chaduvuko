@@ -74,7 +74,7 @@ export default function RetentionCompaction() {
     <LearnLayout
       title="Retention and Log Compaction"
       description="What retention.ms and retention.bytes actually delete, how segment-granular deletion works physically, the difference between delete and compact cleanup policies, tombstones, and picking the right policy for event streams versus entity changelogs."
-      section="Apache Kafka — Module 08"
+      section="Apache Kafka — Lesson 08"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -601,7 +601,7 @@ NEW FACT  → cleanup.policy=delete   (set retention.ms/.bytes to your real need
         <SectionTag text="// Part 10 — Retention and compaction in the consumer replay path" />
         <SectionTitle>What a Fresh Consumer Actually Sees When It Replays From the Beginning</SectionTitle>
         <Para>
-          A useful way to consolidate everything in this module is to trace through what a brand-new consumer
+          A useful way to consolidate everything in this lesson is to trace through what a brand-new consumer
           sees when it starts reading a topic from the very beginning (offset 0, or the earliest surviving
           offset), for each cleanup policy. This is exactly the scenario that matters for rebuilding a cache,
           bootstrapping a new service, or recovering a Kafka Streams state store after a failure.
@@ -881,7 +881,7 @@ kafka-console-producer --topic test.compact-behavior --bootstrap-server localhos
         <SectionTag text="// Part 15 — Broker-level vs topic-level configuration" />
         <SectionTitle>Defaults Live on the Broker, Overrides Live on the Topic</SectionTitle>
         <Para>
-          One last practical detail worth being precise about: every setting covered in this module —
+          One last practical detail worth being precise about: every setting covered in this lesson —
           <code>retention.ms</code>, <code>retention.bytes</code>, <code>cleanup.policy</code>,
           <code>delete.retention.ms</code>, <code>min.cleanable.dirty.ratio</code> — exists at two levels.
           The broker has a cluster-wide default (configured as <code>log.retention.ms</code>,
@@ -1003,7 +1003,7 @@ kafka-configs --describe --entity-type topics --entity-name freshcart.product-pr
             how many times a row was updated. It explicitly covers what happens on row deletion (a tombstone,
             not just silence) and states plainly that this pattern would be wrong for something like an
             orders-placed event stream, where every event matters independently and nothing should be
-            compacted away. Distinguishing those two cases is exactly the point of this module.
+            compacted away. Distinguishing those two cases is exactly the point of this lesson.
           </Para>
         </HighlightBox>
       </section>

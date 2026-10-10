@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Matrix Multiplication and Linear Transformations — Chaduvuko',
@@ -230,7 +229,6 @@ export default function MatrixMultiplicationPage() {
       readTime="26–34 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section='math-foundations' topic='matrix-multiplication' />
 
       {/* ══ SECTION 1 — WHY ════════════════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -1460,7 +1458,7 @@ print(f"Parameter increase: {proposed_params / current_params:.1f}x")
         </p>
 
         <p style={S.p}>
-          The next module covers derivatives and gradients —
+          The next lesson covers derivatives and gradients —
           the mechanism that tells gradient descent <em>which direction</em>
           to move the weights. Once you have matmul and gradients,
           backpropagation (how neural networks train) becomes completely obvious.
@@ -1479,7 +1477,7 @@ print(f"Parameter increase: {proposed_params / current_params:.1f}x")
               textTransform: 'uppercase' as const, color: '#7F77DD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 05
+              Next — Lesson 05
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

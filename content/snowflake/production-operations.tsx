@@ -5,7 +5,7 @@ export default function ProductionOperations() {
     <LearnLayout
       title="Production Operations and Monitoring"
       description="ACCOUNT_USAGE views, INFORMATION_SCHEMA latency tradeoffs, native alerting, operational dashboards, incident response, runbooks, and freshness/latency SLOs for a Snowflake platform."
-      section="Snowflake — Module 18"
+      section="Snowflake — Lesson 18"
       readTime="65 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -18,7 +18,7 @@ export default function ProductionOperations() {
         <SectionTag text="// Part 01 — The plain-English idea" />
         <SectionTitle>Operations Is What Happens After the Pipeline "Works"</SectionTitle>
         <Para>
-          Every earlier module in this track was about building something: loading data, transforming it,
+          Every earlier lesson in this track was about building something: loading data, transforming it,
           securing it, tuning it. Production operations is about a different question: how do you know, at
           3 AM on a Tuesday, whether all of that is still working? A pipeline that ran correctly once is not
           the same thing as a pipeline that is reliable. Reliability requires visibility into what happened,

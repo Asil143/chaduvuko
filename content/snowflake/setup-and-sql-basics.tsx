@@ -5,7 +5,7 @@ export default function SetupAndSqlBasics() {
     <LearnLayout
       title="Setup and SQL Basics"
       description="The Snowflake object hierarchy, warehouses vs databases, creating warehouses/databases/schemas/tables, core DML, session context, and first-day gotchas."
-      section="Snowflake — Module 03"
+      section="Snowflake — Lesson 03"
       readTime="85 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -158,7 +158,7 @@ CREATE WAREHOUSE IF NOT EXISTS WH_LEARN_XS
   AUTO_RESUME = TRUE;`}
         </CodeBox>
         <Callout title="This is not the whole roles story">
-          This module only covers enough about roles to run <code>CREATE WAREHOUSE</code>,
+          This lesson only covers enough about roles to run <code>CREATE WAREHOUSE</code>,
           <code>CREATE DATABASE</code>, and basic DML. Grants, custom roles, the role hierarchy, and
           least-privilege design are covered in full in the dedicated roles and security basics module later in
           this track. Don't try to learn access control from this page.
@@ -238,7 +238,7 @@ SELECT CURRENT_ROLE(), CURRENT_WAREHOUSE(), CURRENT_DATABASE(), CURRENT_SCHEMA()
           ]}
         />
         <Callout title="Don't over-invest in VARIANT yet">
-          You will see <code>VARIANT</code> columns in later modules when loading JSON. For this module, just
+          You will see <code>VARIANT</code> columns in later lessons when loading JSON. For this lesson, just
           recognize the type exists and holds semi-structured data — the deep dive on querying it comes with the
           semi-structured data module.
         </Callout>
@@ -513,7 +513,7 @@ WHERE table_schema = 'RAW';`}
           ]}
         />
         <Para>
-          As a beginner, Snowsight is the fastest way to run everything in this module. You'll reach for SnowSQL
+          As a beginner, Snowsight is the fastest way to run everything in this lesson. You'll reach for SnowSQL
           specifically once you need to <code>PUT</code> local files onto an internal stage — covered in the next
           module on loading data.
         </Para>
@@ -591,7 +591,7 @@ SELECT * FROM "raw"."my_special_table";`}
         <SectionTag text="// Part 16 — Hands-on lab" />
         <SectionTitle>Hands-On Lab: Stand Up a Full Environment From Scratch</SectionTitle>
         <Para>
-          This lab walks through everything in this module in order: role, warehouse, database, schemas,
+          This lab walks through everything in this lesson in order: role, warehouse, database, schemas,
           a table, DML, and a check of session context.
         </Para>
         <CodeBox label="Lab: full setup">{`USE ROLE SYSADMIN;

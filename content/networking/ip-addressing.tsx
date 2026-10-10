@@ -274,7 +274,7 @@ const SPECIAL_RANGES = [
   { range: '169.254.0.0/16', name: 'Link-local / APIPA', rfc: 'RFC 3927', use: 'Auto-assigned when DHCP fails (Windows/macOS). Not routed beyond local subnet. Seeing 169.254.x.x = DHCP failure diagnostic.' },
   { range: '172.16.0.0/12', name: 'Private — Class B range', rfc: 'RFC 1918', use: '172.16.0.0–172.31.255.255. ~1 million addresses. Common in enterprise private networks. Docker uses 172.17.0.0/16 by default.' },
   { range: '192.168.0.0/16', name: 'Private — Class C range', rfc: 'RFC 1918', use: '65,536 addresses. Home routers default to 192.168.1.x or 192.168.0.x. Most recognized private range globally.' },
-  { range: '192.0.2.0/24', name: 'Documentation (TEST-NET-1)', rfc: 'RFC 5737', use: 'Reserved for documentation and examples — like this module. Never appears on real networks. Also 198.51.100.0/24 and 203.0.113.0/24.' },
+  { range: '192.0.2.0/24', name: 'Documentation (TEST-NET-1)', rfc: 'RFC 5737', use: 'Reserved for documentation and examples — like this lesson. Never appears on real networks. Also 198.51.100.0/24 and 203.0.113.0/24.' },
   { range: '198.18.0.0/15', name: 'Benchmarking', rfc: 'RFC 2544', use: 'Network device performance testing. Never routed on public internet. Used to generate test traffic without affecting real addresses.' },
   { range: '224.0.0.0/4', name: 'Multicast (Class D)', rfc: 'RFC 1112', use: '224.0.0.x = link-local (routing protocols). 232.x.x.x = source-specific multicast. 239.x.x.x = organization scope.' },
   { range: '240.0.0.0/4', name: 'Reserved (Class E)', rfc: 'RFC 1112', use: 'Experimental. Never assigned. Some proposals to reclaim for use, but compatibility issues prevent deployment.' },
@@ -557,7 +557,7 @@ Cisco ACL entry (permit host range 10.10.10.0–10.10.10.255):
       <H2>Documentation Addresses (RFC 5737)</H2>
 
       <Para>
-        Three /24 blocks are reserved for documentation and examples in textbooks, RFCs, training materials, and tutorials: <Code>192.0.2.0/24</Code> (TEST-NET-1), <Code>198.51.100.0/24</Code> (TEST-NET-2), and <Code>203.0.113.0/24</Code> (TEST-NET-3). These addresses should appear only in documentation — never in production configurations. This module uses them for examples.
+        Three /24 blocks are reserved for documentation and examples in textbooks, RFCs, training materials, and tutorials: <Code>192.0.2.0/24</Code> (TEST-NET-1), <Code>198.51.100.0/24</Code> (TEST-NET-2), and <Code>203.0.113.0/24</Code> (TEST-NET-3). These addresses should appear only in documentation — never in production configurations. This lesson uses them for examples.
       </Para>
 
       <Divider />

@@ -74,7 +74,7 @@ export default function ProducerDesign() {
     <LearnLayout
       title="Producer Design"
       description="How to build a production-grade Kafka producer: the full config walkthrough, sync vs async sends, error handling in delivery callbacks, a worked order-events producer, graceful shutdown, monitoring, and a production-readiness checklist."
-      section="Apache Kafka — Module 11"
+      section="Apache Kafka — Lesson 11"
       readTime="60 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -87,7 +87,7 @@ export default function ProducerDesign() {
         <SectionTag text="// Part 01 — From concept to client" />
         <SectionTitle>You Already Know What a Producer Does. Now Build One That Doesn't Lose Data.</SectionTitle>
         <Para>
-          Module 03 covered what a producer is at the mechanical level: it serializes records, discovers
+          Lesson 03 covered what a producer is at the mechanical level: it serializes records, discovers
           partition leaders, batches by partition, and waits for whatever acknowledgement <code>acks</code>
           demands. That mental model is necessary but not sufficient. Knowing that <code>acks=all</code>
           exists is different from knowing which fifteen configuration properties you actually need to set,
@@ -95,7 +95,7 @@ export default function ProducerDesign() {
           order event or silently duplicating a payment.
         </Para>
         <Para>
-          This module is deliberately applied. Every example below is code you could paste into a real
+          This lesson is deliberately applied. Every example below is code you could paste into a real
           service, not pseudocode standing in for a concept. We use Python with the
           <code>confluent-kafka</code> client throughout — its API maps closely to the underlying librdkafka
           C client that most production Kafka clients are built on, so the property names and semantics you
@@ -131,7 +131,7 @@ export default function ProducerDesign() {
         </Para>
         <SubTitle>acks — what counts as a successful write</SubTitle>
         <Para>
-          Covered conceptually in Module 03, but worth restating as a config decision you write down
+          Covered conceptually in Lesson 03, but worth restating as a config decision you write down
           explicitly rather than inherit from a default. <code>acks=0</code> means fire-and-forget — the
           producer does not even wait for a response. <code>acks=1</code> (a common client default) means the
           partition leader acknowledges after writing to its own local log, before followers have replicated
@@ -175,7 +175,7 @@ export default function ProducerDesign() {
         </Para>
         <SubTitle>linger.ms, batch.size, compression.type — batching, revisited as config</SubTitle>
         <Para>
-          Module 03 explained the mechanics. As config decisions: <code>linger.ms=0</code> is the safest
+          Lesson 03 explained the mechanics. As config decisions: <code>linger.ms=0</code> is the safest
           default for latency-sensitive request paths (a checkout API waiting on a synchronous confirmation),
           while <code>linger.ms</code> in the 5-20ms range is a near-free throughput win for background
           ingestion where nobody is blocked on an individual record. <code>batch.size</code> (default 16KB in
@@ -449,7 +449,7 @@ def _json_default(obj):
         </CodeBox>
         <Para>
           Choosing the partition key deserves the same deliberateness as the config decisions in Part 02.
-          Module 04's keying guidance still applies directly here: key by <code>order_id</code> or
+          Lesson 04's keying guidance still applies directly here: key by <code>order_id</code> or
           <code>customer_id</code> when per-entity ordering matters to a downstream consumer, and be
           conscious that a highly skewed key distribution — one enormous customer, one dominant tenant —
           creates a hot partition no amount of consumer scaling can fix, because a partition is only ever
@@ -691,7 +691,7 @@ class OrderEventProducer:
           on a network round trip, it never lets a serialization failure disappear silently, it distinguishes
           "this message can never succeed" from "the broker is having a bad moment" in its error handling, and
           it refuses to let the process exit while messages are still sitting unflushed in memory. Each of
-          these is a specific, named failure mode from earlier parts of this module, addressed deliberately
+          these is a specific, named failure mode from earlier parts of this lesson, addressed deliberately
           rather than accidentally.
         </Para>
       </section>

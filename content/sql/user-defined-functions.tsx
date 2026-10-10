@@ -96,7 +96,7 @@ export default function UserDefinedFunctions() {
     <LearnLayout
       title="User-Defined Functions"
       description="Build reusable scalar, table-valued, and SQL functions — IMMUTABLE vs STABLE vs VOLATILE, overloading, security definer, and assembling a production function library"
-      section="SQL — Module 50"
+      section="SQL — Lesson 50"
       readTime="12–18 min"
       updatedAt="April 2026"
     >
@@ -392,7 +392,7 @@ BEGIN
       ROUND(AVG(o.total_amount), 2)       AS avg_val,
       p.category,
       ROUND(SUM(oi.line_total), 2)        AS cat_rev,
-      -- This uses a window function (OVER (...)) — covered fully in Module 52
+      -- This uses a window function (OVER (...)) — covered fully in Lesson 52
       RANK() OVER (
         PARTITION BY o.order_date
         ORDER BY SUM(oi.line_total) DESC
@@ -438,7 +438,7 @@ WITH daily AS (
     ROUND(AVG(o.total_amount), 2)         AS avg_order,
     p.category,
     ROUND(SUM(oi.line_total), 2)          AS cat_rev,
-    -- This uses a window function (OVER (...)) — covered fully in Module 52
+    -- This uses a window function (OVER (...)) — covered fully in Lesson 52
     RANK() OVER (
       PARTITION BY o.order_date
       ORDER BY SUM(oi.line_total) DESC
@@ -927,7 +927,7 @@ SELECT
   -- fn_format_usd (TO_CHAR has no SQLite equivalent — printf() swaps in):
   '$' || printf('%,.2f', p.unit_price)                                      AS display_price,
   -- fn_safe_pct (% of category). This uses a window function
-  -- (OVER (...)) — covered fully in Module 52:
+  -- (OVER (...)) — covered fully in Lesson 52:
   ROUND(p.unit_price / NULLIF(
     SUM(p.unit_price) OVER (PARTITION BY p.category)
   , 0) * 100, 1)                                                             AS pct_of_category_total
@@ -1210,10 +1210,10 @@ LIMIT 10;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 51</strong>, you learn Triggers — automatic database responses to INSERT, UPDATE, and DELETE events, with row-level and statement-level triggers, BEFORE vs AFTER timing, and audit log patterns.
+          In <strong>Lesson 51</strong>, you learn Triggers — automatic database responses to INSERT, UPDATE, and DELETE events, with row-level and statement-level triggers, BEFORE vs AFTER timing, and audit log patterns.
         </p>
         <Link href="/learn/sql/triggers" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 51 → Triggers
+          Lesson 51 → Triggers
         </Link>
       </div>
 

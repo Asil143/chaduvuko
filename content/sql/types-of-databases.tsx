@@ -101,7 +101,7 @@ export default function TypesOfDatabases() {
     <LearnLayout
       title="Types of Databases"
       description="Relational, Document, Key-Value, Column-Family, Graph, Time-Series — what each one is built for and how US companies use them"
-      section="SQL — Module 03"
+      section="SQL — Lesson 03"
       readTime="8–12 min"
       updatedAt="April 2026"
     >
@@ -117,14 +117,14 @@ export default function TypesOfDatabases() {
         <P>Relational databases guarantee consistency and correctness. But guaranteeing consistency in a distributed system — where data is spread across hundreds of servers across multiple data centres — requires coordination between those servers. That coordination takes time. At extreme scale, the time spent coordinating becomes the bottleneck. Some systems need speed so badly that they are willing to trade a degree of consistency for it. That trade-off is what every NoSQL database is fundamentally about.</P>
       </div>
 
-      <P>This module maps every major type of database — what it is built for, where it breaks down, and which US companies actually use it. By the end, you will be able to answer the question "which database should we use?" for any system you are ever asked to design.</P>
+      <P>This lesson maps every major type of database — what it is built for, where it breaks down, and which US companies actually use it. By the end, you will be able to answer the question "which database should we use?" for any system you are ever asked to design.</P>
 
       <HR />
 
       {/* ── PART 02 ── */}
       <Part n="02" title="The CAP Theorem — The Foundation of Every Database Trade-Off" />
 
-      <P>To understand why different databases make different choices, you need to understand the CAP theorem. It is one of the most important concepts in all of distributed systems, and it directly explains every design decision you will see in this module.</P>
+      <P>To understand why different databases make different choices, you need to understand the CAP theorem. It is one of the most important concepts in all of distributed systems, and it directly explains every design decision you will see in this lesson.</P>
 
       <P>The CAP theorem states that a distributed data system can guarantee at most two of the following three properties simultaneously:</P>
 
@@ -146,14 +146,14 @@ export default function TypesOfDatabases() {
 
       <P><Hl>CP systems</Hl> (Consistent + Partition Tolerant) choose to return an error or wait rather than return potentially stale data. PostgreSQL and MySQL are CP — during a partition, they will refuse to serve requests rather than risk returning incorrect data. <Hl>AP systems</Hl> (Available + Partition Tolerant) always respond, but the response might be slightly stale. Cassandra and CouchDB are AP — they always return a result, but it might not reflect the very latest write from a node that is currently unreachable.</P>
 
-      <P>Neither choice is wrong. It depends entirely on what your application cannot tolerate. A banking app cannot tolerate incorrect balance information — CP. A social media feed can tolerate showing a post from 2 seconds ago — AP. Every database type in this module makes one of these two choices.</P>
+      <P>Neither choice is wrong. It depends entirely on what your application cannot tolerate. A banking app cannot tolerate incorrect balance information — CP. A social media feed can tolerate showing a post from 2 seconds ago — AP. Every database type in this lesson makes one of these two choices.</P>
 
       <HR />
 
       {/* ── PART 03 ── */}
       <Part n="03" title="Relational Databases (RDBMS) — The Default Choice" />
 
-      <P>You already know relational databases from Modules 01 and 02. They store data in tables with rows and columns, enforce relationships through foreign keys, guarantee ACID properties, and are queried with SQL. They are the right choice for the vast majority of business applications — and they have been for 50 years.</P>
+      <P>You already know relational databases from Lessons 01 and 02. They store data in tables with rows and columns, enforce relationships through foreign keys, guarantee ACID properties, and are queried with SQL. They are the right choice for the vast majority of business applications — and they have been for 50 years.</P>
 
       <H>When relational databases are the right choice</H>
       <P>Use a relational database when your data is <Hl>structured and well-defined</Hl> — you know in advance what columns exist and what types they hold. When relationships between entities matter and must be enforced — customers have orders, orders have items. When you need <Hl>complex queries</Hl> — multi-table joins, aggregations, subqueries, window functions. When ACID guarantees are non-negotiable — financial transactions, inventory management, booking systems.</P>
@@ -601,14 +601,14 @@ LIMIT 8;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 04</strong>, you set up your local SQL environment — install MySQL or PostgreSQL, connect with a client, and run your first query on a real database server. If you prefer to keep using the browser playground for now, you can skip ahead to <strong>Module 05</strong> where the SQL writing begins.
+          In <strong>Lesson 04</strong>, you set up your local SQL environment — install MySQL or PostgreSQL, connect with a client, and run your first query on a real database server. If you prefer to keep using the browser playground for now, you can skip ahead to <strong>Lesson 05</strong> where the SQL writing begins.
         </p>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <Link href="/learn/sql/setting-up" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-            Module 04 → Setting Up
+            Lesson 04 → Setting Up
           </Link>
           <Link href="/learn/sql/select-from" style={{ background: 'none', color: 'var(--text)', border: '1px solid var(--border)', padding: '11px 20px', borderRadius: 7, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-            Skip to Module 05 → Your First Query
+            Skip to Lesson 05 → Your First Query
           </Link>
         </div>
       </div>

@@ -144,7 +144,7 @@ export default function WhatIsApacheKafka() {
     <LearnLayout
       title="What is Apache Kafka?"
       description="A complete beginner-to-advanced explanation of Apache Kafka: events, logs, brokers, topics, partitions, replay, durability, and why Kafka changed modern data systems."
-      section="Apache Kafka — Module 01"
+      section="Apache Kafka — Lesson 01"
       readTime="65 min"
       updatedAt="September 2026"
       breadcrumbs={[
@@ -195,7 +195,7 @@ export default function WhatIsApacheKafka() {
           changes this relationship entirely. A service records what happened and moves on. Other
           services react when they are ready. This separates the act of <em>producing</em> a fact from
           the act of <em>consuming</em> it, and that separation is the single idea underneath almost
-          everything else in this module.
+          everything else in this lesson.
         </Para>
 
         <HighlightBox>
@@ -224,7 +224,7 @@ export default function WhatIsApacheKafka() {
           by another process is, functionally, a message. A Kafka <strong>event</strong> is a specific,
           disciplined kind of message: an immutable record of something that already happened, carrying
           enough information that a reader who was not involved in producing it can still make sense of
-          it later — possibly much later. Module 02 goes much deeper into the exact shape of an event
+          it later — possibly much later. Lesson 02 goes much deeper into the exact shape of an event
           (key, value, timestamp, headers). For now, hold the general idea: an event is a fact, not a
           request, and not a command.
         </Para>
@@ -374,7 +374,7 @@ offset 4  -> OrderCancelled(order_id=101)
           compaction, replication — exists to answer one of two questions about this log: how do we split
           it up so it can grow arbitrarily large and be read/written in parallel (that is topics and
           partitions), and how do we keep it durable and available when machines fail (that is
-          replication). Module 02 spends its entire length on the first question. This module gives you
+          replication). Lesson 02 spends its entire length on the first question. This lesson gives you
           enough of the picture to keep moving.
         </Para>
 
@@ -410,7 +410,7 @@ offset 4  -> OrderCancelled(order_id=101)
           become eligible for deletion, regardless of whether every consumer has read them yet. This is a
           deliberate trade-off, not a limitation to work around: retention should be set based on how much
           replayable history your consumers genuinely need, and how far behind a consumer is realistically
-          allowed to fall before it must fully catch up or restart from scratch. Module 02 covers exactly
+          allowed to fall before it must fully catch up or restart from scratch. Lesson 02 covers exactly
           how this works at the partition level; for now, understand that &quot;durable&quot; and
           &quot;permanent&quot; are not the same claim.
         </Para>
@@ -464,7 +464,7 @@ offset 4  -> OrderCancelled(order_id=101)
             ['Read semantics', 'Destructive — message removed once delivered/acked.', 'Non-destructive — message stays; every subscriber can read it.'],
             ['Fan-out to many independent readers', 'Requires separate queues per consumer, or fan-out exchange config.', 'Native — any number of consumer groups read the same topic independently.'],
             ['Replay / re-read history', 'Not possible — the message is gone after delivery.', 'Yes — reset a consumer group\'s offset and re-read any retained history.'],
-            ['Ordering', 'FIFO per queue; broker-dependent guarantees under retries.', 'Strict order within a partition (Module 02 covers this in depth).'],
+            ['Ordering', 'FIFO per queue; broker-dependent guarantees under retries.', 'Strict order within a partition (Lesson 02 covers this in depth).'],
             ['Typical use', 'Distributing discrete units of work across a worker pool.', 'Broadcasting a fact so many independent systems can each react.'],
             ['Retention after delivery', 'None by design — delivered messages are gone.', 'Configurable — minutes to forever, independent of whether anyone has read it.'],
           ]}
@@ -527,7 +527,7 @@ fraud-group joins 6 months later -> resets to offset 0, reads full history, no r
           feature store — each shaped for its own query needs. Kafka carries the facts; databases store
           the queryable current state built from those facts. This pattern even has a name — event sourcing,
           when a system's database of record is itself rebuilt by replaying a Kafka topic from the
-          beginning — though that is a deeper topic than this module needs to cover.
+          beginning — though that is a deeper topic than this lesson needs to cover.
         </Para>
 
         <Table
@@ -548,7 +548,7 @@ fraud-group joins 6 months later -> resets to offset 0, reads full history, no r
           to change at all. This turns a database's private internal history into a shared, replayable
           Kafka stream that other systems can consume — a very common bridge between the &quot;current
           state&quot; world of databases and the &quot;what happened&quot; world of Kafka. It is not a
-          topic this module goes deep on, but recognizing the term will help the rest of this track's later
+          topic this lesson goes deep on, but recognizing the term will help the rest of this track's later
           data-pipeline material make sense faster.
         </Para>
       </section>
@@ -562,8 +562,8 @@ fraud-group joins 6 months later -> resets to offset 0, reads full history, no r
 
         <Para>
           The rest of the Kafka track goes deep on each of these individually — events and partitions get
-          their own full module (Module 02), producers/consumers/brokers get their own full module
-          (Module 03). Here, you need a correct, working definition of each word — not the full depth,
+          their own full module (Lesson 02), producers/consumers/brokers get their own full module
+          (Lesson 03). Here, you need a correct, working definition of each word — not the full depth,
           just enough that the vocabulary stops being a wall of jargon.
         </Para>
 
@@ -650,7 +650,7 @@ support-dashboard-group    committed offset: 88112 (also caught up, different pa
           are debugging: if something is wrong with which events exist or what they contain, look at the
           producer. If something is wrong with reading progress, look at the consumer. If something is
           wrong with data being available, durable, or fast, look at the broker/partition/replication
-          layer. This module's sibling module, Module 03, is organized around exactly that same split.
+          layer. This lesson's sibling module, Lesson 03, is organized around exactly that same split.
         </Para>
 
         <Table
@@ -901,9 +901,9 @@ support-dashboard-group    committed offset: 88112 (also caught up, different pa
             Kafka. Kafka stores those facts in topics split into partitions, replicated across brokers so
             no single machine failure loses data. Consumers read at their own pace and track offsets.
             Consumer groups let readers scale horizontally. Retention controls how long history remains.
-            Keys influence partition placement and ordering. This module gave you a correct, if not
-            exhaustive, picture of every one of those pieces — Module 02 goes deep on events, topics, and
-            partitions, and Module 03 goes deep on how producers, consumers, and brokers actually talk to
+            Keys influence partition placement and ordering. This lesson gave you a correct, if not
+            exhaustive, picture of every one of those pieces — Lesson 02 goes deep on events, topics, and
+            partitions, and Lesson 03 goes deep on how producers, consumers, and brokers actually talk to
             each other over the network.
           </Para>
         </HighlightBox>
@@ -940,10 +940,10 @@ support-dashboard-group    committed offset: 88112 (also caught up, different pa
         </Para>
 
         <Para>
-          Carry three things forward into Module 02: an event is a fact, not an instruction; ordering and
+          Carry three things forward into Lesson 02: an event is a fact, not an instruction; ordering and
           parallelism live in tension with each other, mediated by partitions; and Kafka is a deliberate
           choice with real operational cost, not a default reach for anything that touches more than one
-          service. Module 02 takes the event, topic, and partition vocabulary introduced here and gives
+          service. Lesson 02 takes the event, topic, and partition vocabulary introduced here and gives
           each one the full depth this introductory module intentionally left for later.
         </Para>
       </section>
@@ -962,7 +962,7 @@ support-dashboard-group    committed offset: 88112 (also caught up, different pa
           },
           {
             wrong: '"Kafka guarantees events are processed in the order they happened, across the whole topic"',
-            right: 'Part 06 and Part 10 are explicit that ordering is only guaranteed within a single partition, not across a topic\'s partitions as a whole. Module 02 goes deep on exactly why partitions exist and what that ordering boundary means in practice.',
+            right: 'Part 06 and Part 10 are explicit that ordering is only guaranteed within a single partition, not across a topic\'s partitions as a whole. Lesson 02 goes deep on exactly why partitions exist and what that ordering boundary means in practice.',
           },
           {
             wrong: '"You should default to Kafka whenever you need real-time or event-driven behavior"',
@@ -1001,7 +1001,7 @@ support-dashboard-group    committed offset: 88112 (also caught up, different pa
             produces the events. Your first instinct, from a REST-API background, is to ask &quot;how does
             the playback service know to call all five of those teams?&quot; The answer is that it
             doesn&apos;t — it writes one event to one Kafka topic, and every team reads independently. That
-            is Part 02 and Part 07 of this module, not an abstraction — it is literally how the system in
+            is Part 02 and Part 07 of this lesson, not an abstraction — it is literally how the system in
             front of you is built.
           </Para>
         </HighlightBox>
@@ -1025,7 +1025,7 @@ support-dashboard-group    committed offset: 88112 (also caught up, different pa
             backend — specifically, how the driver-location service should notify the rider\'s app, the
             ETA-calculation service, the surge-pricing service, and the trip-history archive, every time a
             driver\'s location updates. A weak answer reaches for four separate HTTP calls from the
-            location service. The strong answer, straight out of Part 02 and Part 06 of this module,
+            location service. The strong answer, straight out of Part 02 and Part 06 of this lesson,
             recognizes that a single fact — DriverLocationUpdated — needs independent fan-out to four
             unrelated, evolving consumers, at very high frequency, and names Kafka specifically because of
             that shape: one producer, many independent consumer groups, no coupling between them.
@@ -1100,7 +1100,7 @@ I'd push back on defaulting to Kafka just because it's an industry-standard name
           },
           {
             q: 'Assuming Kafka guarantees strict ordering across an entire topic',
-            a: 'Part 06 and Part 10 are explicit that ordering is guaranteed within a partition, not across the whole topic. This is one of the single most common production surprises for engineers new to Kafka — Module 02 is dedicated to explaining exactly why this boundary exists and how to design around it.',
+            a: 'Part 06 and Part 10 are explicit that ordering is guaranteed within a partition, not across the whole topic. This is one of the single most common production surprises for engineers new to Kafka — Lesson 02 is dedicated to explaining exactly why this boundary exists and how to design around it.',
           },
           {
             q: 'Reaching for Kafka by default, without checking whether the problem actually needs replay or fan-out',
@@ -1116,7 +1116,7 @@ I'd push back on defaulting to Kafka just because it's an industry-standard name
           },
           {
             q: 'Assuming Kafka automatically prevents duplicate processing or exactly-once delivery out of the box',
-            a: 'Part 09\'s comparison table is direct about this: Kafka does not automatically guarantee every external database write happens exactly once end to end. That requires deliberate producer and consumer design — idempotent producers, careful offset-commit timing, and sometimes transactions — which Module 03 and the data-engineering broker-internals module cover in depth. Treating "we use Kafka" as sufficient exactly-once guarantee on its own is a common and costly assumption.',
+            a: 'Part 09\'s comparison table is direct about this: Kafka does not automatically guarantee every external database write happens exactly once end to end. That requires deliberate producer and consumer design — idempotent producers, careful offset-commit timing, and sometimes transactions — which Lesson 03 and the data-engineering broker-internals module cover in depth. Treating "we use Kafka" as sufficient exactly-once guarantee on its own is a common and costly assumption.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1150,7 +1150,7 @@ I'd push back on defaulting to Kafka just because it's an industry-standard name
           {
             error: `"Our dashboard shows events from partition 3 arriving out of order relative to partition 1" flagged as a Kafka bug in a bug tracker`,
             cause: 'This is expected behavior, not a bug. Per Part 06 and Part 10, Kafka only guarantees ordering within a single partition. Events across different partitions have no ordering guarantee relative to each other, even if they were produced moments apart.',
-            fix: 'This is a design question, not a defect: if true ordering across those entities matters, they need to share a partition (typically by using the same event key), which Module 02 covers in depth. If ordering across partitions genuinely doesn\'t matter for the use case, the "bug" report should be closed as expected behavior with an explanation.',
+            fix: 'This is a design question, not a defect: if true ordering across those entities matters, they need to share a partition (typically by using the same event key), which Lesson 02 covers in depth. If ordering across partitions genuinely doesn\'t matter for the use case, the "bug" report should be closed as expected behavior with an explanation.',
           },
           {
             error: `A new hire asks "can we just query the orders topic for all orders over $500?" during a sprint planning meeting, expecting Kafka to behave like a SQL table`,
@@ -1197,7 +1197,7 @@ I'd push back on defaulting to Kafka just because it's an industry-standard name
           'Kafka is built on the log: an append-only, ordered, non-destructive data structure. This one design choice is what makes replay, independent fan-out, and durability possible.',
           'A traditional queue (RabbitMQ, SQS) is destructive on read and best for distributing discrete work items. A Kafka topic is non-destructive and best for broadcasting facts to many independent, evolving consumers.',
           'Kafka answers "what happened, in what order" — a database answers "what is true right now." Real systems typically use both together, not one instead of the other.',
-          'The core vocabulary — event, topic, partition, producer, consumer, broker, offset, replication — is introduced here at a working level; Module 02 goes deep on events/topics/partitions, and Module 03 goes deep on how producers, consumers, and brokers interact.',
+          'The core vocabulary — event, topic, partition, producer, consumer, broker, offset, replication — is introduced here at a working level; Lesson 02 goes deep on events/topics/partitions, and Lesson 03 goes deep on how producers, consumers, and brokers interact.',
         ]}
       />
     </LearnLayout>

@@ -4,7 +4,6 @@ import { Fragment } from 'react'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'ML Interview Prep — 50 Complete Answers',
@@ -196,18 +195,17 @@ export default function MLInterviewPrepPage() {
       readTime="120–180 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="cloud-ml" topic="ml-interview-prep" />
 
       {/* ══ INTRO ══════════════════════════════════════════════════════════════ */}
       <div style={S.sec}>
-        <span style={S.tag}>How to use this module</span>
+        <span style={S.tag}>How to use this lesson</span>
         <h2 style={S.h2}>
           50 questions. Two answers for each — one for non-technical interviewers,
           one for technical ones. Practise both. The real interview always
           has both in the room.
         </h2>
         <p style={S.p}>
-          Every answer in this module follows the same structure. The green
+          Every answer in this lesson follows the same structure. The green
           "Plain English" box is what you say when a product manager, engineering
           manager, or non-ML interviewer asks the question — no jargon,
           pure intuition. The blue "Technical depth" box is what you say
@@ -1078,7 +1076,7 @@ optimiser = torch.optim.Adam([
               </div>
             ))}
           </div>
-          <p style={{ ...S.ps, marginBottom: 0 }}>Advanced RAG improvements: re-ranking retrieved chunks with a cross-encoder (Module 67), HyDE (generate a hypothetical answer, embed that instead of the query), parent-child chunking (index small chunks, return larger parent for context), query decomposition (split complex questions into sub-questions).</p>
+          <p style={{ ...S.ps, marginBottom: 0 }}>Advanced RAG improvements: re-ranking retrieved chunks with a cross-encoder (Lesson 67), HyDE (generate a hypothetical answer, embed that instead of the query), parent-child chunking (index small chunks, return larger parent for context), query decomposition (split complex questions into sub-questions).</p>
         </>}
         example="Stripe's merchant support bot answers 50,000 questions per day about integration docs, error codes, and settlement policies. Their documentation updates weekly. Fine-tuning would require weekly retraining at significant cost. RAG indexes all Stripe docs in a vector store — when documentation changes, they re-index (1 hour) instead of retraining (1 week). Accuracy on policy questions improved from 71% (fine-tuned static model) to 89% (RAG with current docs)."
       />
@@ -1348,7 +1346,7 @@ print(pd.DataFrame(skew_report).T.sort_values('ks_statistic', ascending=False))`
               </div>
             ))}
           </div>
-          <p style={{ ...S.ps, marginBottom: 0 }}>The three-pipeline architecture (Module 69): feature pipeline → training pipeline → inference pipeline must all use the same feature definitions (via feature store) or training-serving skew is inevitable. The common failure: teams build pipelines where each stage has its own feature computation code — subtle differences accumulate and cause silent degradation.</p>
+          <p style={{ ...S.ps, marginBottom: 0 }}>The three-pipeline architecture (Lesson 69): feature pipeline → training pipeline → inference pipeline must all use the same feature definitions (via feature store) or training-serving skew is inevitable. The common failure: teams build pipelines where each stage has its own feature computation code — subtle differences accumulate and cause silent degradation.</p>
         </>}
         example="DoorDash's delivery time model runs three pipelines: the feature pipeline runs every 30 minutes on Kafka streams (updating restaurant queue length, driver location), the training pipeline runs every Sunday at 2 AM on the full week's data, and the monitoring pipeline runs every morning comparing the week's feature distributions to the training baseline. When the monsoon monitoring triggered a drift alert in June, the weekly retraining automatically captured the new distribution and model MAE recovered within one week."
       />
@@ -1723,11 +1721,11 @@ print(f"Practical:   {'Meaningful improvement' if lift_pct > 1.0 else 'Too small
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>The complete AI/ML track is done</span>
         <h2 style={S.h2}>
-          80 modules. 10 sections. Every concept from linear regression to
+          80 lessons. 10 sections. Every concept from linear regression to
           production agents, from NumPy to Vertex AI. You are ready.
         </h2>
         <p style={S.p}>
-          This module completes the Chaduvuko AI/ML track. Every concept in these
+          This lesson completes the Chaduvuko AI/ML track. Every concept in these
           50 questions links back to a module where it was taught from scratch with
           code, analogies, and real company examples. If any answer here felt
           unfamiliar, the module number that covers it in depth is linked in the

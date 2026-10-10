@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Model Interpretability — SHAP and LIME — Chaduvuko',
@@ -178,7 +177,6 @@ export default function ModelInterpretabilityPage() {
       readTime="30–40 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="evaluation" topic="model-interpretability" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -207,7 +205,7 @@ export default function ModelInterpretabilityPage() {
         </p>
 
         <p style={S.p}>
-          This module covers two complementary techniques.
+          This lesson covers two complementary techniques.
           <strong style={{ color: '#1D9E75' }}> SHAP</strong> (SHapley Additive exPlanations)
           computes the exact contribution of each feature to each prediction
           using game theory — it is mathematically rigorous and model-agnostic.
@@ -1031,7 +1029,7 @@ for i, applicant in enumerate(new_applications):
             space. High employment_yrs might reduce default risk for applicants with strong credit
             scores but barely matter for applicants with weak ones. Generalising from one applicant's
             SHAP breakdown to "this is how the model treats employment_yrs" is exactly the mistake
-            this module's global-vs-local distinction exists to prevent — global patterns require
+            this lesson's global-vs-local distinction exists to prevent — global patterns require
             aggregating many local explanations (mean |SHAP| across the dataset), not extrapolating
             from a single one.
           </p>
@@ -1040,7 +1038,7 @@ for i, applicant in enumerate(new_applications):
         <ConceptBox title="Myth: Interpretable models and accurate models are fundamentally in tension" color="#ff4757">
           <p style={{ ...S.ps, marginBottom: 0 }}>
             For many structured, tabular problems — exactly the loan-default and credit-scoring
-            examples used throughout this module — well-regularised logistic regression, shallow
+            examples used throughout this lesson — well-regularised logistic regression, shallow
             trees, or generalised additive models often perform within a percentage point or two of
             a tuned gradient boosting model. The accuracy gap that people attribute to "black box
             models are just better" is frequently attributable to something else entirely: better
@@ -1070,7 +1068,7 @@ for i, applicant in enumerate(new_applications):
           <p style={{ ...S.ps, marginBottom: 0 }}>
             The right explanation depends entirely on who is asking. A regulator enforcing ECOA
             needs specific, individually adverse reason codes tied to this applicant's rejection —
-            exactly the top-3-risk-factors output this module's production pipeline generates. A
+            exactly the top-3-risk-factors output this lesson's production pipeline generates. A
             data scientist debugging a systematic error needs global SHAP importance and
             interaction analysis to find patterns across thousands of predictions. A rejected
             applicant needs one or two plain-English sentences, not a table of SHAP values in
@@ -1186,7 +1184,7 @@ for i, applicant in enumerate(new_applications):
           the model learns its own representations.
           Instead of gradient boosting on tabular data, you train
           multi-layer networks on images, sequences, and text.
-          Module 40 builds a neural network from scratch —
+          Lesson 40 builds a neural network from scratch —
           forward pass, backpropagation, and gradient descent —
           before introducing PyTorch.
         </p>

@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'DVC — Data Version Control — Chaduvuko',
@@ -178,7 +177,6 @@ export default function DVCPage() {
       readTime="30–40 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="mlops" topic="dvc-data-version-control" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -233,7 +231,7 @@ export default function DVCPage() {
           For GCS: <span style={S.code as React.CSSProperties}>pip install dvc-gs</span>.
           For Azure: <span style={S.code as React.CSSProperties}>pip install dvc-azure</span>.
           DVC integrates with Git — all DVC commands are run inside a Git repository.
-          For this module every command is shown with comments explaining what it does.
+          For this lesson every command is shown with comments explaining what it does.
         </Callout>
       </div>
 
@@ -623,7 +621,7 @@ print("\nStage 2: train (simulated with direct call)")
           creating a new Git commit — DVC saves the experiment as a stash.
           After running several experiments, compare them in a table,
           pick the best one, and promote it to a full Git commit.
-          This integrates with MLflow and W&B (Module 70) for richer
+          This integrates with MLflow and W&B (Lesson 70) for richer
           visualisations while keeping the experiment lineage in Git.
         </p>
 
@@ -1128,7 +1126,7 @@ cat dvc.lock         # shows exact hash of raw.csv used to build train.parquet
         </h2>
 
         <p style={S.p}>
-          Module 75 is the final module of the MLOps section and one of the
+          Lesson 75 is the final module of the MLOps section and one of the
           most practically valuable in the entire track — ML System Design.
           Given a real-world ML problem (build DoorDash's delivery time prediction
           system from scratch, or Stripe's fraud detection system), how do you
@@ -1150,7 +1148,7 @@ cat dvc.lock         # shows exact hash of raw.csv used to build train.parquet
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 75 · MLOps
+              Next — Lesson 75 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
