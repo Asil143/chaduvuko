@@ -1,4 +1,84 @@
 {
+ "/learn/dsa/advanced": {
+  "kind": "text",
+  "text": "best 3-day total = 18, starting at day 1"
+ },
+ "/learn/dsa/arrays": {
+  "kind": "text",
+  "text": "a[2] = 30\n10 20 25 30 40 50"
+ },
+ "/learn/dsa/backtracking": {
+  "kind": "text",
+  "text": "N = 4: 2 solutions\nN = 5: 10 solutions\nN = 6: 4 solutions"
+ },
+ "/learn/dsa/binary-search-tree": {
+  "kind": "text",
+  "text": "20 30 40 50 60 70 80 \ncontains 60? 1  contains 65? 0"
+ },
+ "/learn/dsa/complexity": {
+  "kind": "text",
+  "text": "n=  10  O(n)=  10  O(n^2)=    100\nn= 100  O(n)= 100  O(n^2)=  10000\nn=1000  O(n)=1000  O(n^2)=1000000"
+ },
+ "/learn/dsa/dynamic-programming": {
+  "kind": "text",
+  "text": "naive: fib(25) = 75025 using 242785 calls\ntable: fib(25) = 75025, fib(50) = 12586269025 using 49 additions"
+ },
+ "/learn/dsa/graphs": {
+  "kind": "text",
+  "text": "vertex 0: distance 0\nvertex 1: distance 1\nvertex 2: distance 1\nvertex 3: distance 2\nvertex 4: distance 3\nvertex 5: distance 4"
+ },
+ "/learn/dsa/greedy": {
+  "kind": "text",
+  "text": "take [1, 2)\ntake [3, 4)\ntake [5, 7)\ntake [8, 9)\n4 activities"
+ },
+ "/learn/dsa/hashing": {
+  "kind": "text",
+  "text": "apple -> bucket 1\nmilk  -> bucket 0\nbread -> bucket 3\neggs  -> bucket 4\nrice  -> bucket 4"
+ },
+ "/learn/dsa/heaps": {
+  "kind": "text",
+  "text": "42 40 23 15 8 4"
+ },
+ "/learn/dsa/introduction": {
+  "kind": "text",
+  "text": "orders = 42, total = 129.50\norders uses 4 bytes, total uses 8 bytes"
+ },
+ "/learn/dsa/linked-lists": {
+  "kind": "text",
+  "text": "3 -> 2 -> 1 -> NULL"
+ },
+ "/learn/dsa/pointers": {
+  "kind": "text",
+  "text": "age = 31\nx = 2, y = 1"
+ },
+ "/learn/dsa/queues": {
+  "kind": "text",
+  "text": "1 2 3 4"
+ },
+ "/learn/dsa/recursion": {
+  "kind": "text",
+  "text": "5! = 120\nmoves for 3 disks = 7"
+ },
+ "/learn/dsa/searching": {
+  "kind": "text",
+  "text": "step 1: check a[4] = 42\nstep 2: check a[6] = 61\nfound at index 6"
+ },
+ "/learn/dsa/sorting": {
+  "kind": "text",
+  "text": "pass 1: 2 5 4 6 1 3 \npass 2: 2 4 5 6 1 3 \npass 3: 2 4 5 6 1 3 \npass 4: 1 2 4 5 6 3 \npass 5: 1 2 3 4 5 6"
+ },
+ "/learn/dsa/stacks": {
+  "kind": "text",
+  "text": "1 0 0"
+ },
+ "/learn/dsa/strings": {
+  "kind": "text",
+  "text": "length = 5\nsame? yes\nreversed = kcats"
+ },
+ "/learn/dsa/trees": {
+  "kind": "text",
+  "text": "preorder:  1 2 4 5 3 \ninorder:   4 2 5 1 3 \npostorder: 4 5 2 3 1"
+ },
  "/learn/python/abstract-base-classes": {
   "kind": "text",
   "text": "1,a\n2,b\nTypeError: Can't instantiate abstract class BrokenExporter with abstract method export"
