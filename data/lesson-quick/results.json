@@ -1,5 +1,170 @@
 {
+ "/learn/python/abstract-base-classes": {
+  "kind": "text",
+  "text": "1,a\n2,b\nTypeError: Can't instantiate abstract class BrokenExporter with abstract method export"
+ },
+ "/learn/python/args-kwargs": {
+  "kind": "text",
+  "text": "totals (3, 5, 8) {'unit': 'USD'}\n3, 5, 8\n12 ft²"
+ },
+ "/learn/python/async-python": {
+  "kind": "text",
+  "text": "['a done', 'b done', 'c done']\nabout 0.2s, not 0.6s: True"
+ },
+ "/learn/python/building-a-cli-tool": {
+  "kind": "text",
+  "text": "Namespace(amount=120.0, rate=0.9, places=2)\n108.0"
+ },
+ "/learn/python/class-static-methods-properties": {
+  "kind": "text",
+  "text": "100.0 False"
+ },
+ "/learn/python/classes-objects": {
+  "kind": "text",
+  "text": "Ava 20 | Ben 50"
+ },
+ "/learn/python/closures-scope": {
+  "kind": "text",
+  "text": "1 2 3\n[2, 2, 2] [0, 1, 2]"
+ },
+ "/learn/python/comprehensions": {
+  "kind": "text",
+  "text": "[4, 16, 36]\n['odd', 'even', 'odd']\n{1: 1, 2: 4, 3: 9}\n{3, 6}"
+ },
+ "/learn/python/constructors-attributes": {
+  "kind": "text",
+  "text": "0.1 0.08 ['a']"
+ },
+ "/learn/python/context-managers": {
+  "kind": "text",
+  "text": "open db\nusing DB\nclose db\nopen cache\nclose cache\ncaught boom"
+ },
+ "/learn/python/control-flow": {
+  "kind": "text",
+  "text": "A B C\nFalse True"
+ },
+ "/learn/python/csv-json": {
+  "kind": "text",
+  "text": "Lee, Ava | Austin\n['a', 'b'] None\n{\"id\": 7, \"tags\": [\"a\", \"b\"], \"paid\": null}"
+ },
+ "/learn/python/dates-times": {
+  "kind": "text",
+  "text": "Mon Mar 18, 11:30 AM\n74.0 hours\n2024-03-15T10:00:00-07:00"
+ },
+ "/learn/python/debugging-techniques": {
+  "kind": "text",
+  "text": "where: line 4, in total()\ncode:  return order[\"qty\"] * order[\"price\"]\nwhat:  KeyError: 'price'"
+ },
+ "/learn/python/decorators": {
+  "kind": "text",
+  "text": "calling add(2, 3)\nadd returned 5\nadd"
+ },
+ "/learn/python/dictionaries": {
+  "kind": "text",
+  "text": "0\napple 1.2\nmilk 3.5\nbread 2.75\n{'to': 2, 'be': 2, 'or': 1, 'not': 1}"
+ },
+ "/learn/python/encapsulation-dunder-methods": {
+  "kind": "text",
+  "text": "[Money(0.99), Money(2.50), Money(2.50)]\n2 True"
+ },
+ "/learn/python/exception-handling": {
+  "kind": "text",
+  "text": "parsed 42\nchecked 42\nnot a number: '4x'\nchecked 4x"
+ },
+ "/learn/python/functions": {
+  "kind": "text",
+  "text": "108.0 110.0\n['a', 'b'] ['a', 'b']"
+ },
+ "/learn/python/generators-yield": {
+  "kind": "text",
+  "text": "generator\nstarting\n3 2\n[1]\n0 1 4"
+ },
+ "/learn/python/inheritance-polymorphism": {
+  "kind": "text",
+  "text": "square 9 True\ncircle 3.14 True"
+ },
+ "/learn/python/io-formatting": {
+  "kind": "text",
+  "text": "<class 'str'> 30\n2024-03-15\nLoading... done"
+ },
+ "/learn/python/iterators-iterables": {
+  "kind": "text",
+  "text": "a b\nStopIteration: the loop ends here\n[3, 2, 1]"
+ },
+ "/learn/python/lambda-map-filter-reduce": {
+  "kind": "text",
+  "text": "[('Ben', 25), ('Ava', 31), ('Cy', 40)]\n[10, 30]\n[10, 30]\n24"
+ },
+ "/learn/python/lists": {
+  "kind": "text",
+  "text": "[3, 1, 2, [4, 5]]\n[1, 2, 3, 4, 5] [3, 1, 2, 4, 5]\n99"
+ },
+ "/learn/python/logging-best-practices": {
+  "kind": "text",
+  "text": "INFO orders: order 1042 created\nWARNING orders: stock low for milk"
+ },
+ "/learn/python/loops": {
+  "kind": "text",
+  "text": "round 0\nround 1\nround 2\n1 Austin 91\n2 Denver 78"
+ },
+ "/learn/python/multithreading-multiprocessing": {
+  "kind": "text",
+  "text": "[0, 1, 4, 9, 16]\nabout 0.2s, not 1.0s: True"
+ },
+ "/learn/python/nested-data-structures": {
+  "kind": "text",
+  "text": "unknown\n[3, 2, 1]\n{'Austin': 55, 'Denver': 25}"
+ },
+ "/learn/python/operators": {
+  "kind": "text",
+  "text": "3.5 3 -4 1\n1024\nguest"
+ },
+ "/learn/python/performance-profiling": {
+  "kind": "text",
+  "text": "set lookup is faster: True"
+ },
+ "/learn/python/python-best-practices": {
+  "kind": "text",
+  "text": "6.49\nReturn the shipping cost in USD for a weight in pounds."
+ },
+ "/learn/python/python-interview-prep": {
+  "kind": "text",
+  "text": "(0, 1)\n(1, 2)\nTrue False"
+ },
+ "/learn/python/reading-writing-files": {
+  "kind": "text",
+  "text": "1 first line\n2 second line"
+ },
+ "/learn/python/regular-expressions": {
+  "kind": "text",
+  "text": "['2024', '03', '15', '1042', '812']\n1042 812\n98101 True\n9810 False\n98101x False"
+ },
+ "/learn/python/string-manipulation-deep-dive": {
+  "kind": "text",
+  "text": "['Seattle', 'Portland', 'Austin']\n0007   120\n0042     9"
+ },
+ "/learn/python/strings": {
+  "kind": "text",
+  "text": "S e eat elttaeS\nSEATTLE SeaTTle\nTotal: $1,234.50"
+ },
+ "/learn/python/tuples-sets": {
+  "kind": "text",
+  "text": "3 4 1 [2, 3, 4]\n['python'] ['docker', 'git', 'python', 'sql'] ['git', 'sql']"
+ },
+ "/learn/python/type-hints-mypy": {
+  "kind": "text",
+  "text": "ava None\nNone\n{'user_id': <class 'int'>, 'return': typing.Optional[str]}"
+ },
+ "/learn/python/variables-data-types": {
+  "kind": "text",
+  "text": "<class 'str'> 43\n0.30000000000000004\n0.3"
+ },
+ "/learn/python/what-is-python-setup": {
+  "kind": "text",
+  "text": "Hello, world!\nRunning Python 3"
+ },
  "/learn/sql/acid-properties": {
+  "kind": "table",
   "columns": [
    "orders_with_unknown_customer"
   ],
@@ -10,6 +175,7 @@
   ]
  },
  "/learn/sql/aggregate-functions": {
+  "kind": "table",
   "columns": [
    "orders",
    "revenue",
@@ -26,6 +192,7 @@
   ]
  },
  "/learn/sql/aliases": {
+  "kind": "table",
   "columns": [
    "product",
    "profit"
@@ -54,6 +221,7 @@
   ]
  },
  "/learn/sql/alter-table": {
+  "kind": "table",
   "columns": [
    "order_id",
    "order_status",
@@ -78,6 +246,7 @@
   ]
  },
  "/learn/sql/analytics-lag-lead": {
+  "kind": "table",
   "columns": [
    "customer_id",
    "order_id",
@@ -112,6 +281,7 @@
   ]
  },
  "/learn/sql/and-or-not": {
+  "kind": "table",
   "columns": [
    "first_name",
    "last_name",
@@ -134,6 +304,7 @@
   ]
  },
  "/learn/sql/arithmetic-expressions": {
+  "kind": "table",
   "columns": [
    "product_name",
    "margin",
@@ -168,6 +339,7 @@
   ]
  },
  "/learn/sql/case-when": {
+  "kind": "table",
   "columns": [
    "order_id",
    "total_amount",
@@ -202,6 +374,7 @@
   ]
  },
  "/learn/sql/cast-convert": {
+  "kind": "table",
   "columns": [
    "from_text",
    "truncated",
@@ -216,6 +389,7 @@
   ]
  },
  "/learn/sql/complex-where": {
+  "kind": "table",
   "columns": [
    "first_name",
    "city",
@@ -240,6 +414,7 @@
   ]
  },
  "/learn/sql/constraints": {
+  "kind": "table",
   "columns": [
    "name",
    "type",
@@ -269,6 +444,7 @@
   ]
  },
  "/learn/sql/correlated-subqueries": {
+  "kind": "table",
   "columns": [
    "product_name",
    "category",
@@ -303,6 +479,7 @@
   ]
  },
  "/learn/sql/create-table": {
+  "kind": "table",
   "columns": [
    "code",
    "discount",
@@ -317,6 +494,7 @@
   ]
  },
  "/learn/sql/cross-join": {
+  "kind": "table",
   "columns": [
    "method",
    "status"
@@ -349,6 +527,7 @@
   ]
  },
  "/learn/sql/cte-with-clause": {
+  "kind": "table",
   "columns": [
    "first_name",
    "total"
@@ -377,6 +556,7 @@
   ]
  },
  "/learn/sql/data-types": {
+  "kind": "table",
   "columns": [
    "name",
    "type"
@@ -417,6 +597,7 @@
   ]
  },
  "/learn/sql/date-time-functions": {
+  "kind": "table",
   "columns": [
    "month",
    "orders"
@@ -437,6 +618,7 @@
   ]
  },
  "/learn/sql/delete": {
+  "kind": "table",
   "columns": [
    "items_left"
   ],
@@ -447,6 +629,7 @@
   ]
  },
  "/learn/sql/derived-tables": {
+  "kind": "table",
   "columns": [
    "store_name",
    "orders",
@@ -481,6 +664,7 @@
   ]
  },
  "/learn/sql/distinct": {
+  "kind": "table",
   "columns": [
    "city"
   ],
@@ -509,6 +693,7 @@
   ]
  },
  "/learn/sql/drop-truncate": {
+  "kind": "table",
   "columns": [
    "table_name",
    "row_count"
@@ -525,6 +710,7 @@
   ]
  },
  "/learn/sql/exists-not-exists": {
+  "kind": "table",
   "columns": [
    "product_id",
    "product_name",
@@ -544,6 +730,7 @@
   ]
  },
  "/learn/sql/explain-analyze": {
+  "kind": "table",
   "columns": [
    "id",
    "parent",
@@ -566,6 +753,7 @@
   ]
  },
  "/learn/sql/full-outer-join": {
+  "kind": "table",
   "columns": [
    "january",
    "march"
@@ -598,6 +786,7 @@
   ]
  },
  "/learn/sql/group-by": {
+  "kind": "table",
   "columns": [
    "payment_method",
    "orders",
@@ -627,6 +816,7 @@
   ]
  },
  "/learn/sql/having": {
+  "kind": "table",
   "columns": [
    "city",
    "customers"
@@ -651,6 +841,7 @@
   ]
  },
  "/learn/sql/how-databases-work": {
+  "kind": "table",
   "columns": [
    "product_name",
    "unit_price",
@@ -691,6 +882,7 @@
   ]
  },
  "/learn/sql/in-between": {
+  "kind": "table",
   "columns": [
    "product_name",
    "unit_price"
@@ -731,6 +923,7 @@
   ]
  },
  "/learn/sql/index-strategies": {
+  "kind": "table",
   "columns": [
    "id",
    "parent",
@@ -747,6 +940,7 @@
   ]
  },
  "/learn/sql/indexes": {
+  "kind": "table",
   "columns": [
    "id",
    "parent",
@@ -763,6 +957,7 @@
   ]
  },
  "/learn/sql/inner-join": {
+  "kind": "table",
   "columns": [
    "order_id",
    "product_name",
@@ -791,6 +986,7 @@
   ]
  },
  "/learn/sql/insert-into": {
+  "kind": "table",
   "columns": [
    "customer_id",
    "first_name",
@@ -807,6 +1003,7 @@
   ]
  },
  "/learn/sql/interview-questions": {
+  "kind": "table",
   "columns": [
    "second_highest"
   ],
@@ -817,6 +1014,7 @@
   ]
  },
  "/learn/sql/joins-intro": {
+  "kind": "table",
   "columns": [
    "order_id",
    "total_amount",
@@ -851,6 +1049,7 @@
   ]
  },
  "/learn/sql/left-right-join": {
+  "kind": "table",
   "columns": [
    "product_name",
    "times_ordered"
@@ -875,6 +1074,7 @@
   ]
  },
  "/learn/sql/like-wildcards": {
+  "kind": "table",
   "columns": [
    "product_name",
    "brand",
@@ -889,6 +1089,7 @@
   ]
  },
  "/learn/sql/limit-fetch": {
+  "kind": "table",
   "columns": [
    "order_id",
    "total_amount"
@@ -909,6 +1110,7 @@
   ]
  },
  "/learn/sql/math-functions": {
+  "kind": "table",
   "columns": [
    "unit_price",
    "rounded",
@@ -943,6 +1145,7 @@
   ]
  },
  "/learn/sql/normalization": {
+  "kind": "table",
   "columns": [
    "order_id",
    "product_name",
@@ -977,6 +1180,7 @@
   ]
  },
  "/learn/sql/null-values": {
+  "kind": "table",
   "columns": [
    "order_id",
    "order_status",
@@ -1011,6 +1215,7 @@
   ]
  },
  "/learn/sql/order-by": {
+  "kind": "table",
   "columns": [
    "product_name",
    "unit_price"
@@ -1039,6 +1244,7 @@
   ]
  },
  "/learn/sql/query-best-practices": {
+  "kind": "table",
   "columns": [
    "order_id",
    "order_date",
@@ -1073,6 +1279,7 @@
   ]
  },
  "/learn/sql/ranking-functions": {
+  "kind": "table",
   "columns": [
    "first_name",
    "salary",
@@ -1126,6 +1333,7 @@
   ]
  },
  "/learn/sql/recursive-cte": {
+  "kind": "table",
   "columns": [
    "employee_id",
    "first_name",
@@ -1155,6 +1363,7 @@
   ]
  },
  "/learn/sql/select-from": {
+  "kind": "table",
   "columns": [
    "first_name",
    "city"
@@ -1183,6 +1392,7 @@
   ]
  },
  "/learn/sql/self-join": {
+  "kind": "table",
   "columns": [
    "employee",
    "role",
@@ -1217,6 +1427,7 @@
   ]
  },
  "/learn/sql/setting-up": {
+  "kind": "table",
   "columns": [
    "customers_loaded"
   ],
@@ -1227,6 +1438,7 @@
   ]
  },
  "/learn/sql/sql-for-data-analysis": {
+  "kind": "table",
   "columns": [
    "category",
    "revenue",
@@ -1261,6 +1473,7 @@
   ]
  },
  "/learn/sql/sql-projects": {
+  "kind": "table",
   "columns": [
    "delivered_orders",
    "customers",
@@ -1277,6 +1490,7 @@
   ]
  },
  "/learn/sql/stored-procedures": {
+  "kind": "table",
   "columns": [
    "first_name",
    "loyalty_tier",
@@ -1311,6 +1525,7 @@
   ]
  },
  "/learn/sql/string-functions": {
+  "kind": "table",
   "columns": [
    "full_name",
    "initial",
@@ -1340,6 +1555,7 @@
   ]
  },
  "/learn/sql/subqueries": {
+  "kind": "table",
   "columns": [
    "order_id",
    "total_amount"
@@ -1368,6 +1584,7 @@
   ]
  },
  "/learn/sql/transactions": {
+  "kind": "table",
   "columns": [
    "items_still_there"
   ],
@@ -1378,6 +1595,7 @@
   ]
  },
  "/learn/sql/triggers": {
+  "kind": "table",
   "columns": [
    "order_id",
    "old_status",
@@ -1392,6 +1610,7 @@
   ]
  },
  "/learn/sql/types-of-databases": {
+  "kind": "table",
   "columns": [
    "city",
    "orders"
@@ -1420,6 +1639,7 @@
   ]
  },
  "/learn/sql/union-intersect-except": {
+  "kind": "table",
   "columns": [
    "city"
   ],
@@ -1448,6 +1668,7 @@
   ]
  },
  "/learn/sql/update": {
+  "kind": "table",
   "columns": [
    "customer_id",
    "first_name",
@@ -1462,6 +1683,7 @@
   ]
  },
  "/learn/sql/user-defined-functions": {
+  "kind": "table",
   "columns": [
    "product_name",
    "margin_pct"
@@ -1486,6 +1708,7 @@
   ]
  },
  "/learn/sql/views": {
+  "kind": "table",
   "columns": [
    "delivered",
    "revenue"
@@ -1498,6 +1721,7 @@
   ]
  },
  "/learn/sql/what-is-a-database": {
+  "kind": "table",
   "columns": [
    "first_name",
    "last_name",
@@ -1538,6 +1762,7 @@
   ]
  },
  "/learn/sql/where-clause": {
+  "kind": "table",
   "columns": [
    "first_name",
    "last_name",
@@ -1572,6 +1797,7 @@
   ]
  },
  "/learn/sql/window-functions-intro": {
+  "kind": "table",
   "columns": [
    "order_id",
    "store_id",

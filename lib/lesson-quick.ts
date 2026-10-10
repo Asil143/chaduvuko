@@ -1,8 +1,8 @@
 /**
  * The "Quick answer" at the top of a lesson and the one-question quick check at its end.
  * Entries live in data/lesson-quick/<track>.ts, keyed by lesson URL; a lesson without an
- * entry shows neither. scripts/validate-quick.ts checks every entry, and runs each SQL example
- * on FreshCart so the result shown on the page is the one the query really returns.
+ * entry shows neither. scripts/quick-results.ts checks every entry and runs each SQL, Python and
+ * C example, so the result shown on the page is the one the code really produces.
  */
 
 export interface QuickCheck {
@@ -13,7 +13,10 @@ export interface QuickCheck {
   explanation: string
 }
 
-export type QuickLang = 'sql' | 'python' | 'c' | 'html' | 'css' | 'bash' | 'yaml' | 'json' | 'javascript' | 'text'
+export type QuickLang = 'sql' | 'python' | 'c' | 'html' | 'css' | 'bash' | 'yaml' | 'toml' | 'json' | 'javascript' | 'text'
+
+/** Languages whose examples are run to produce the result shown under them. */
+export const RUNNABLE: QuickLang[] = ['sql', 'python', 'c']
 
 export interface QuickExample {
   /** One line naming what the example shows. */
@@ -21,10 +24,10 @@ export interface QuickExample {
   lang: QuickLang
   code: string
   /**
-   * What running the code prints, for languages the playground cannot run. Only set when it
-   * was produced by running the code. SQL results are computed instead (data/lesson-quick/sql-results.json).
+   * Show the code without running it, for examples that need a network, a server, or a terminal.
+   * Runnable examples otherwise get their real result from data/lesson-quick/results.json.
    */
-  output?: string
+  static?: boolean
 }
 
 export interface LessonQuick {
@@ -36,10 +39,10 @@ export interface LessonQuick {
   check: QuickCheck
 }
 
-export interface QuickResult {
-  columns: string[]
-  rows: string[][]
-}
+/** What running an example produced: a table for SQL, printed text for Python and C. */
+export type QuickResult =
+  | { kind: 'table'; columns: string[]; rows: string[][] }
+  | { kind: 'text'; text: string }
 
 /** What a lesson page receives: the entry plus the computed SQL result, when there is one. */
 export interface LessonQuickView extends Omit<LessonQuick, 'check'> {

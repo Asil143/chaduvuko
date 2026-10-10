@@ -9,7 +9,7 @@ const SQLPlayground = dynamic(() => import('@/components/sql/SQLPlayground'), { 
 
 const eyebrow = 'font-mono text-[11px] font-semibold uppercase tracking-[0.12em]'
 
-function ResultTable({ result }: { result: QuickResult }) {
+function ResultTable({ result }: { result: Extract<QuickResult, { kind: 'table' }> }) {
   return (
     <div className="mt-3">
       <p className={eyebrow} style={{ color: 'var(--muted)' }}>
@@ -69,7 +69,7 @@ export function QuickAnswer({ quick }: { quick: LessonQuickView }) {
           <div className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
             <div className="flex items-center gap-3 min-h-10 pl-3.5 pr-1.5" style={{ background: 'var(--bg2)', borderBottom: '1px solid var(--border)' }}>
               <span className="flex-1 min-w-0 text-[13px] truncate" style={{ color: 'var(--text2)' }}>{example.label}</span>
-              {example.lang === 'sql' && !running && (
+              {example.lang === 'sql' && !example.static && !running && (
                 <button
                   type="button"
                   onClick={() => setRunning(true)}
@@ -91,11 +91,11 @@ export function QuickAnswer({ quick }: { quick: LessonQuickView }) {
               <SQLPlayground initialQuery={example.code} height={Math.min(260, 24 * example.code.split('\n').length + 24)} showSchema={false} />
             </div>
           )}
-          {!running && result && <ResultTable result={result} />}
-          {!running && example.output && (
+          {!running && result?.kind === 'table' && <ResultTable result={result} />}
+          {result?.kind === 'text' && (
             <div className="mt-3">
               <p className={eyebrow} style={{ color: 'var(--muted)' }}>Output</p>
-              <pre className="mt-1.5 m-0 px-4 py-3 rounded-lg text-[13px] leading-6 font-mono overflow-x-auto" style={{ background: 'var(--bg2)', color: 'var(--text)', border: '1px solid var(--border)' }}>{example.output}</pre>
+              <pre className="mt-1.5 m-0 px-4 py-3 rounded-lg text-[13px] leading-6 font-mono overflow-x-auto" style={{ background: 'var(--bg2)', color: 'var(--text)', border: '1px solid var(--border)' }}>{result.text}</pre>
             </div>
           )}
         </div>

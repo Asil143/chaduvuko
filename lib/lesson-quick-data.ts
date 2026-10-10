@@ -1,9 +1,10 @@
 import { LESSON_QUICK } from '@/data/lesson-quick'
-import SQL_RESULTS from '@/data/lesson-quick/sql-results.json'
+import RESULTS from '@/data/lesson-quick/results.json'
 import { QUIZZES } from '@/data/quizzes'
 import type { LessonQuickView, QuickCheck, QuickResult } from '@/lib/lesson-quick'
 
-const results: Record<string, QuickResult> = SQL_RESULTS
+// Generated and checked by scripts/quick-results.ts.
+const results = RESULTS as unknown as Record<string, QuickResult>
 
 /**
  * Rotates the options so the correct answer sits at a position picked by a hash of the lesson URL.
