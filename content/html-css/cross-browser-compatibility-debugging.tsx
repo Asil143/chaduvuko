@@ -79,7 +79,6 @@ export default function CrossBrowserCompatibilityDebugging() {
       description="Vendor prefixes, feature detection, DevTools workflows, and debugging the CSS bug that only shows up in one browser."
       section="HTML & CSS — Lesson 39"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

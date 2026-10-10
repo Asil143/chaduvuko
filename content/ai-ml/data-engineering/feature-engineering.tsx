@@ -172,7 +172,6 @@ export default function FeatureEngineeringPage() {
       description="Transform raw columns into powerful model inputs. Log transforms, interaction features, target encoding, cyclical encodings, embeddings, and the techniques that consistently beat model tuning."
       section="Data Engineering"
       readTime="45–55 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}

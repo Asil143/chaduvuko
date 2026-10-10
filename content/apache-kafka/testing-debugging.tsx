@@ -76,7 +76,6 @@ export default function TestingDebuggingKafka() {
       description="Why Kafka-dependent code is hard to test, unit testing producer/consumer logic by mocking the client, integration testing with Testcontainers, testing Kafka Streams topologies with TopologyTestDriver, schema contract testing, and the exact steps to diagnose the most common production symptoms."
       section="Apache Kafka — Lesson 23"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

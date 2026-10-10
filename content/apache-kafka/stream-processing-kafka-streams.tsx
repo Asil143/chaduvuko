@@ -76,7 +76,6 @@ export default function StreamProcessingKafkaStreams() {
       description="What stream processing actually means, Kafka Streams as a client library instead of a separate cluster, KStream vs KTable, stateless vs stateful operations, windowing and event-time, KStream-KTable and KStream-KStream joins, exactly-once processing, and a worked real-time fraud-detection example."
       section="Apache Kafka — Lesson 14"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

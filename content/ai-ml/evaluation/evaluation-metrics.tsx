@@ -175,7 +175,6 @@ export default function EvaluationMetricsPage() {
       description="Precision, recall, F1, ROC-AUC, PR-AUC, confusion matrices, and the business cost framing that turns metrics into decisions."
       section="Model Evaluation"
       readTime="26–34 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

@@ -80,7 +80,6 @@ export default function ExistsNotExists() {
       description="The cleanest existence check in SQL — how EXISTS works, when it beats IN and LEFT JOIN IS NULL, every anti-join pattern, NULL safety, and performance at scale"
       section="SQL — Lesson 38"
       readTime="12–16 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

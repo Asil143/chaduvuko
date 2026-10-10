@@ -192,7 +192,6 @@ export default function LinuxShellModule() {
       description="The commands and scripts every DE uses daily — files, processes, cron, log analysis, and bash — taught through one running investigation, not a command dump."
       section="Data Engineering — Lesson 16"
       readTime="70 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Linux ───────────────────────────────────────── */}

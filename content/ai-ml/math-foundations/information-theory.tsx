@@ -166,7 +166,6 @@ export default function InformationTheoryPage() {
       description="The information-theoretic foundations of ML. Why surprise is measurable, what entropy really means, and how every neural network loss function connects to information theory."
       section="Math Foundations"
       readTime="26–34 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — THE HOOK ═══════════════════════════════════════════════ */}

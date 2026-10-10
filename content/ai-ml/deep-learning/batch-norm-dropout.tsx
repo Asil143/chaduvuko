@@ -175,7 +175,6 @@ export default function TrainingDeepNetworksPage() {
       description="The four techniques that separate a network that trains from one that trains well. Used in every production deep learning system."
       section="Deep Learning"
       readTime="22–28 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

@@ -105,7 +105,6 @@ export default function EventsTopicsPartitions() {
       description="The complete foundation of Kafka's data model: what events are, how topics organize them, how partitions scale them, how records map to partitions, and why ordering is more subtle than beginners expect."
       section="Apache Kafka — Lesson 02"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

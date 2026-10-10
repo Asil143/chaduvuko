@@ -264,7 +264,6 @@ export default function NtpPage() {
       description="From atomic clocks to the microseconds that make TLS certificates valid, Kerberos work, and distributed systems stay sane: how NTP synchronizes time across the internet."
       section="Networking Fundamentals — Lesson 32"
       readTime="25–35 min"
-      updatedAt="May 2026"
     >
       {/* ── Chapter 1 ─────────────────────────────────────────── */}
       <Chapter n={1} title="Why Time Matters More Than You Think" />

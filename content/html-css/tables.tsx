@@ -79,7 +79,6 @@ export default function Tables() {
       description="table, thead/tbody/tfoot, th, td, colspan/rowspan — and exactly why tables should never be used for page layout."
       section="HTML & CSS — Lesson 07"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

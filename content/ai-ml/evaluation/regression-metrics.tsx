@@ -175,7 +175,6 @@ export default function RegressionMetricsPage() {
       description="When your output is a number not a class. MAE, RMSE, MAPE, R², and which metric to choose based on how you want to treat large errors."
       section="Model Evaluation"
       readTime="22–28 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

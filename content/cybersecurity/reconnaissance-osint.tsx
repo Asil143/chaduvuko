@@ -61,7 +61,6 @@ export default function Module22() {
       description="Passive and active reconnaissance techniques used by professional penetration testers: DNS enumeration, certificate transparency, Shodan, Google dorks, theHarvester, Maltego, and building a complete target profile."
       section="Cybersecurity — Lesson 22"
       readTime="31 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

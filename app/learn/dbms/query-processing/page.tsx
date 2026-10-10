@@ -77,7 +77,6 @@ export default function QueryProcessing() {
       description="What actually happens between typing a SQL query and seeing results — parsing, algebra transformation, cost estimation, join algorithms, and how the database chooses the fastest execution plan."
       section="DBMS"
       readTime="85–100 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

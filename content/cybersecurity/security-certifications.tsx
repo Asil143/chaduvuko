@@ -54,7 +54,6 @@ export default function Module37() {
       description="Navigate the certification landscape strategically. Learn which certs matter for which roles, the most efficient study paths, exam strategies, and how to build a portfolio that gets you hired in the US cybersecurity job market."
       section="Cybersecurity — Lesson 37"
       readTime="35 min"
-      updatedAt="May 2026"
     >
 
       <Part title="Certifications vs Experience — Setting Expectations">

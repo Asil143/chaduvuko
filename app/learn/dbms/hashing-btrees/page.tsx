@@ -77,7 +77,6 @@ export default function HashingBTrees() {
       description="The two data structures that power every fast database lookup — how hashing handles exact searches in O(1), and how B+ trees handle everything else in O(log n), with every insert, delete, split, and merge traced step by step."
       section="DBMS"
       readTime="85–100 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

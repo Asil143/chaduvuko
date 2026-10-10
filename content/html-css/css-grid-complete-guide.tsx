@@ -79,7 +79,6 @@ export default function CssGridCompleteGuide() {
       description="Two-dimensional layout done right — grid-template-columns/rows, grid areas, and the mental model that makes Grid click."
       section="HTML & CSS — Lesson 25"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

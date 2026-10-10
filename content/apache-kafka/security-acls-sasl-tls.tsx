@@ -76,7 +76,6 @@ export default function KafkaSecurityACLsSASLTLS() {
       description="Why an unsecured Kafka cluster is a real risk, and how to close it: encryption in transit with TLS, authenticating clients with SASL/PLAIN, SCRAM, GSSAPI and mTLS, authorizing access with ACLs, and locking a topic down to specific service accounts."
       section="Apache Kafka — Lesson 15"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

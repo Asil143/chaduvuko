@@ -77,7 +77,6 @@ export default function DatabaseSecurity() {
       description="The complete picture of how databases protect data — who gets in, what they can see, how attackers try to break in, how to stop them, and how to prove nothing went wrong."
       section="DBMS"
       readTime="80–95 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

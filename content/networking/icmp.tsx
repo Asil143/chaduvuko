@@ -405,7 +405,6 @@ export default function Icmp() {
       description="A deep-dive into how ICMP carries error messages and diagnostics across IP networks — covering TTL mechanics, path MTU discovery, traceroute internals, ping packet structure, ICMPv6 NDP, and the security implications of filtering ICMP."
       section="Networking Fundamentals — Lesson 19"
       readTime="20–28 min"
-      updatedAt="May 2026"
     >
       {/* Chapter 01 */}
       <Chapter n={1} />

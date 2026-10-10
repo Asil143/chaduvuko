@@ -63,7 +63,6 @@ export default function CybersecurityCareersUS() {
       description="Every security role mapped with real salary data, which certifications matter at which stage, and the companies hiring the most security engineers."
       section="Cybersecurity — Lesson 06"
       readTime="27 min"
-      updatedAt="May 2026"
     >
 
       {/* ── PART 01 ── */}

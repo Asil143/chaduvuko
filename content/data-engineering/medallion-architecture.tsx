@@ -174,7 +174,6 @@ export default function MedallionArchitectureModule() {
       description="What belongs in each layer, the exact transformations at each boundary, dbt and Spark integration, SCD handling, and governing a three-tier lakehouse."
       section="Data Engineering — Lesson 30"
       readTime="65 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What the Medallion Architecture Is ──────────────── */}

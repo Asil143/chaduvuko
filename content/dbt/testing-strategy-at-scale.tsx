@@ -76,7 +76,6 @@ export default function TestingStrategyAtScale() {
       description="Why 'add tests everywhere' fails at scale, tiering tests by DAG position and severity, store_failures for real debugging, freshness SLAs as team agreements, and building a data-quality culture instead of a pile of assertions nobody owns."
       section="dbt — Lesson 19"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

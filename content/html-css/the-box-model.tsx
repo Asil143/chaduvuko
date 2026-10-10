@@ -79,7 +79,6 @@ export default function TheBoxModel() {
       description="Every element on the page is a box. Understanding the box model precisely is what makes every later layout concept make sense."
       section="HTML & CSS — Lesson 18"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

@@ -79,7 +79,6 @@ export default function DebuggingTechniques() {
       description="Reading a traceback the right way, the real limits of print debugging, pdb, VS Code's debugger, and a full worked debugging session."
       section="Python — Lesson 39"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       <Para>

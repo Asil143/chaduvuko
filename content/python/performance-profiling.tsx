@@ -79,7 +79,6 @@ export default function PerformanceProfiling() {
       description="Finding real bottlenecks before optimising anything — profiling tools and the optimisations that actually matter."
       section="Python — Lesson 42"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

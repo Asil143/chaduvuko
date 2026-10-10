@@ -200,7 +200,6 @@ export default function SystemDesignDEModule() {
       description="A complete framework for designing any data system from scratch — capacity estimation, storage selection, pipeline architecture, trade-off analysis, and five complete worked designs."
       section="Data Engineering — Lesson 46"
       readTime="80 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What the Interviewer Is Actually Testing ───────── */}

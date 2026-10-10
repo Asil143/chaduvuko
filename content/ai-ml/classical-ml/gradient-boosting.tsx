@@ -175,7 +175,6 @@ export default function GradientBoostingPage() {
       description="Sequential weak learners, residuals, learning rate, and why gradient boosting wins almost every tabular ML competition — built from plain English first."
       section="Classical ML"
       readTime="30–40 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

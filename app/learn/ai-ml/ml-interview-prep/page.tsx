@@ -193,7 +193,6 @@ export default function MLInterviewPrepPage() {
       description="The 50 most-asked ML engineering questions across DoorDash, Stripe, Amazon, Brex, and Meta — with complete, ready-to-deliver answers for every level."
       section="Cloud ML Platforms"
       readTime="120–180 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ INTRO ══════════════════════════════════════════════════════════════ */}

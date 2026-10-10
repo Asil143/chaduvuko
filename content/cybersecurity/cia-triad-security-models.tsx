@@ -63,7 +63,6 @@ export default function CiaTriadSecurityModels() {
       description="Confidentiality, Integrity, Availability — the three properties every security decision trades off. How attacks target each and how controls defend it."
       section="Cybersecurity — Lesson 05"
       readTime="26 min"
-      updatedAt="May 2026"
     >
 
       {/* ── PART 01 ── */}

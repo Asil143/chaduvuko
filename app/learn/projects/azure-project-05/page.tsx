@@ -134,7 +134,6 @@ export default function Project05Page() {
       description="Stop overwriting files silently. Build a pipeline that checks if a file exists before copying, date-stamps the output, cleans the landing zone automatically, and logs what was missing — a complete production file management workflow."
       section="Projects"
       readTime="90–120 min"
-      updatedAt="March 2026"
     >
 
       <LearningResourceJsonLd name="ADF File Management: Get Metadata, If Condition and Delete Activity" description="Build a production-grade ADF pipeline with file existence checks, date stamps, auto-cleanup, and error logging." url="https://chaduvuko.com/learn/projects/azure-project-05" datePublished="2026-03-01" keywords={['adf get metadata activity', 'adf if condition', 'adf delete activity', 'azure file management pipeline']} timeRequired="PT90M" />

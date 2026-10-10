@@ -175,7 +175,6 @@ export default function ImageFundamentalsPage() {
       description="How computers see images. Pixel values, colour channels, image tensors, normalisation, and the preprocessing pipeline every vision model expects."
       section="Computer Vision"
       readTime="26–34 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

@@ -134,7 +134,6 @@ export default function SQLComplete() {
       description="From your very first SELECT to recursive CTEs and window functions — every SQL concept explained from first principles with production-realistic examples from real US tech companies."
       section="DBMS"
       readTime="120–150 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

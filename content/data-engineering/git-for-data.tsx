@@ -174,7 +174,6 @@ export default function GitForDataModule() {
       description="Branching strategies, large file handling, dbt workflows, CI/CD, and undoing mistakes safely."
       section="Data Engineering — Lesson 17"
       readTime="55 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Git for Data Engineers ─────────────────────── */}

@@ -164,7 +164,6 @@ export default function ComplexityPage() {
       description="How to measure how fast your code runs and how much memory it uses — the skill that separates good code from great code."
       section="DSA"
       readTime="60 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

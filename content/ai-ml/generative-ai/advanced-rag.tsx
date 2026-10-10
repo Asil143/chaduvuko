@@ -175,7 +175,6 @@ export default function AdvancedRAGPage() {
       description="Reranking retrieved chunks, hybrid dense-sparse search, RAG evaluation metrics, and the patterns that separate production RAG from toy RAG."
       section="Generative AI"
       readTime="36–46 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

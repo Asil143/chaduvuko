@@ -103,7 +103,6 @@ export default function SlowlyChangingDimensionsModule() {
       description="Every SCD type in depth — when each is the right choice, full SQL implementations, dbt snapshot patterns, and the operational pitfalls."
       section="Data Engineering — Lesson 34"
       readTime="60 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Core Problem ────────────────────────────────── */}

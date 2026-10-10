@@ -128,7 +128,6 @@ export default function SearchingPage() {
       description="Linear search checks every element. Binary search cuts the problem in half each step. Learn when to use each, how binary search works exactly, and all its powerful variations."
       section="DSA"
       readTime="45 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

@@ -103,7 +103,6 @@ export default function TreesPage() {
       description="Hierarchical data structures that look like upside-down trees. The foundation of file systems, HTML pages, databases, and compilers. Built from scratch in C with all four traversals."
       section="DSA"
       readTime="90 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

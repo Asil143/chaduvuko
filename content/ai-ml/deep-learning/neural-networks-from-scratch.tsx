@@ -203,7 +203,6 @@ export default function NeuralNetworksFromScratchPage() {
       description="Forward pass, backpropagation, and gradient descent built in NumPy before touching PyTorch. The foundation every deep learning framework is built on."
       section="Deep Learning"
       readTime="40–52 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

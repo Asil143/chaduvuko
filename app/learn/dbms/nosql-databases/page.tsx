@@ -77,7 +77,6 @@ export default function NoSQLDatabases() {
       description="Why relational databases are not always the right tool, what NoSQL means in practice, and how each NoSQL family solves a specific class of problem that SQL databases handle poorly."
       section="DBMS"
       readTime="85–100 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

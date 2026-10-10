@@ -76,7 +76,6 @@ export default function CdcDebezium() {
       description="What Change Data Capture actually is, why polling for changes is fragile, how Debezium reads a database's own transaction log instead of querying tables, the Debezium event envelope, initial snapshots, the outbox pattern, schema evolution, and the operational pitfalls of running CDC in production."
       section="Apache Kafka — Lesson 21"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

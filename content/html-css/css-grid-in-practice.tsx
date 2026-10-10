@@ -79,7 +79,6 @@ export default function CssGridInPractice() {
       description="Real page layouts built with Grid — holy grail layouts, image galleries, and dashboards that would be painful with Flexbox alone."
       section="HTML & CSS — Lesson 26"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

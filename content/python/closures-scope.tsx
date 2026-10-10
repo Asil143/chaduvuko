@@ -79,7 +79,6 @@ export default function ClosuresScope() {
       description="How Python resolves variable names, what a closure actually captures, and the scoping bugs that confuse everyone once."
       section="Python — Lesson 31"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

@@ -175,7 +175,6 @@ export default function ROCAndAUCPage() {
       description="What the ROC curve actually measures, why AUC equals a probability, and how to use operating points to choose a threshold for production."
       section="Model Evaluation"
       readTime="22–28 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

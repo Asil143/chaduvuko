@@ -266,7 +266,6 @@ export default function SSHPage() {
       description="From the terminal of desperation to the cryptographic bedrock of modern infrastructure: how SSH works, why it replaced everything else, and how to use it without shooting yourself in the foot."
       section="Networking Fundamentals — Lesson 28"
       readTime="30–42 min"
-      updatedAt="May 2026"
     >
       {/* ── Chapter 1 ─────────────────────────────────────────── */}
       <Chapter n={1} title="The Night Tatu Ylönen Wrote SSH" />

@@ -121,7 +121,6 @@ export default function LinearRegressionPage() {
       description="The simplest ML algorithm — and the most important one to truly understand. Build a DoorDash delivery time predictor from scratch."
       section="Classical ML"
       readTime="30–35 min"
-      updatedAt="March 2026"
     >
 
       {/* ── SECTION 1: The problem ─────────────────────────────────────────── */}

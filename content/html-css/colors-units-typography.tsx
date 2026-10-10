@@ -79,7 +79,6 @@ export default function ColorsUnitsTypography() {
       description="px vs em vs rem vs %, every color format, font-family stacks, and web fonts — the values you will type in every single stylesheet."
       section="HTML & CSS — Lesson 19"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

@@ -97,7 +97,6 @@ export default function WhatIsMLPage() {
       description="Not the Wikipedia definition. The actual idea — what it means, how it works, and why it changed everything."
       section="Classical ML"
       readTime="18–22 min"
-      updatedAt="March 2026"
     >
 
       {/* ── SECTION 1: The problem ─────────────────────────────────────────── */}

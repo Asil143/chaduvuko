@@ -79,7 +79,6 @@ export default function ExceptionHandling() {
       description="try/except/else/finally in full, catching specific exceptions, the exception hierarchy, raising and chaining exceptions, and writing your own exception classes."
       section="Python — Lesson 17"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

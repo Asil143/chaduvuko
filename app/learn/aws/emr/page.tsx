@@ -134,7 +134,6 @@ export default function EMRPage() {
       description="Amazon EMR (Elastic MapReduce) is AWS managed big data platform. It runs Apache Spark, Hadoop, Hive, and Presto on EC2 clusters. EMR is the lower-cost alternative to Databricks for teams that want Spark without the premium."
       section="Section 03 · AWS Track"
       readTime="13 min read"
-      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'AWS Track', href: '/learn/aws/introduction' },
         { label: 'Amazon EMR', href: '/learn/aws/emr' },

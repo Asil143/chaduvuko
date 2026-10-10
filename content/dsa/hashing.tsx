@@ -107,7 +107,6 @@ export default function HashingPage() {
       description="The technique behind O(1) lookup. Hash tables power database indexes, caches, password storage, and almost every fast system you have ever used. Built from scratch in C."
       section="DSA"
       readTime="75 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

@@ -76,7 +76,6 @@ export default function Seeds() {
       description="What a dbt seed actually is, the CSV-in-warehouse-out model, what seeds are genuinely good for versus what they are not, column type overrides with seed-column-types, dbt seed versus dbt seed --full-refresh, and a full worked country-region lookup example."
       section="dbt — Lesson 12"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

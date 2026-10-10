@@ -121,7 +121,6 @@ export default function StacksPage() {
       description="Last In, First Out. The data structure behind undo/redo, function calls, browser history, and expression evaluation. Built using arrays and linked lists."
       section="DSA"
       readTime="60 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

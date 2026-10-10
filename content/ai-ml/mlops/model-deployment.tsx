@@ -175,7 +175,6 @@ export default function ModelDeploymentPage() {
       description="Wrap your model in a FastAPI endpoint, containerise with Docker, scale with Kubernetes. Full working deployment of the DoorDash delivery time model."
       section="MLOps and Production"
       readTime="50–65 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

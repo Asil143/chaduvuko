@@ -174,7 +174,6 @@ export default function TrainValTestSplitPage() {
       description="Why three splits not two. Holdout sets, stratified splits, data leakage across splits, and the time-series exception where random splits break everything."
       section="Data Engineering for ML"
       readTime="26–34 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

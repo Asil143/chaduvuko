@@ -96,7 +96,6 @@ export default function Project06Page() {
       description="Call a live weather API from ADF, receive JSON responses for three cities, save them to ADLS, and automate the pipeline to run every morning at 6 AM — no files, no uploads, pure API-driven ingestion."
       section="Projects"
       readTime="75–90 min"
-      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'Projects', href: '/learn/projects/azure-batch-pipeline' },
         { label: 'Project 06 — Pull Data From a REST API', href: '/learn/projects/azure-project-06' },

@@ -175,7 +175,6 @@ export default function DiffusionModelsPage() {
       description="Forward noise, reverse denoising, DDPM, latent diffusion — how Stable Diffusion generates photorealistic images from text prompts."
       section="Generative AI"
       readTime="40–52 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

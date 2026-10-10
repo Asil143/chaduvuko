@@ -76,7 +76,6 @@ export default function ProducersConsumersBrokers() {
       description="How Kafka clients and servers actually work together: metadata discovery, broker leadership, producer batching and acks, the consumer poll loop, pull-based backpressure, and cluster coordination."
       section="Apache Kafka — Lesson 03"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

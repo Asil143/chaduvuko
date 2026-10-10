@@ -79,7 +79,6 @@ export default function ImagesMedia() {
       description="img, alt text, figure/figcaption, audio, video, and the source element — plus lazy loading and why alt text is never optional."
       section="HTML & CSS — Lesson 05"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

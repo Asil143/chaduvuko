@@ -76,7 +76,6 @@ export default function Materializations() {
       description="What a materialization actually is, how view/table/ephemeral/incremental compile to different warehouse DDL, how to set materializations per model or per directory, and a decision framework for picking the right one."
       section="dbt — Lesson 06"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

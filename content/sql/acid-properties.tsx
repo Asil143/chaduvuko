@@ -101,7 +101,6 @@ export default function AcidProperties() {
       description="The four rules every reliable database follows — Atomicity, Consistency, Isolation, Durability — and the real-world failures each one prevents"
       section="SQL — Lesson 48"
       readTime="14–18 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

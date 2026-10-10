@@ -7,7 +7,6 @@ export default function Snowpipe() {
       description="Snowpipe architecture, stages, file formats, pipes, auto-ingest, cloud notifications, error handling, monitoring, replay, file sizing, cost, and production loading patterns."
       section="Snowflake — Lesson 10"
       readTime="70 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

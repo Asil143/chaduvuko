@@ -166,7 +166,6 @@ export default function DerivativesGradientsPage() {
       description="The mathematical engine behind every learning algorithm. How neural networks figure out which direction to improve — explained from scratch before any formula."
       section="Math Foundations"
       readTime="30–40 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — THE PROBLEM ════════════════════════════════════════════ */}

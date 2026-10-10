@@ -77,7 +77,6 @@ export default function ConcurrencyControl() {
       description="How databases let thousands of transactions run simultaneously without corrupting each other — locks, two-phase locking, deadlocks, timestamp ordering, and MVCC explained from the ground up."
       section="DBMS"
       readTime="90–110 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

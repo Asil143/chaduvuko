@@ -81,7 +81,6 @@ export default function DataGovernanceModule() {
       description="What governance actually means in practice — lineage, cataloging, access control, GDPR, PII handling, and the data mesh organizational pattern."
       section="Data Engineering — Lesson 38"
       readTime="65 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What Governance Actually Is ─────────────────────── */}

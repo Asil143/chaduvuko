@@ -80,7 +80,6 @@ export default function InBetween() {
       description="Clean shorthand for multiple OR conditions and range checks — how IN and BETWEEN work, their equivalents, NULL behaviour, and every production pattern"
       section="SQL — Lesson 15"
       readTime="8–12 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

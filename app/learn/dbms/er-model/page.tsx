@@ -80,7 +80,6 @@ export default function ERModel() {
       description="The architectural blueprint of database design — how to model any real-world system as entities, attributes, and relationships before writing a single line of SQL."
       section="DBMS"
       readTime="80–95 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

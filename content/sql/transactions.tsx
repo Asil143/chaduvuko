@@ -120,7 +120,6 @@ export default function Transactions() {
       description="How databases guarantee correctness — BEGIN, COMMIT, ROLLBACK, savepoints, isolation levels, and the concurrency anomalies that each level prevents"
       section="SQL — Lesson 47"
       readTime="12–16 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

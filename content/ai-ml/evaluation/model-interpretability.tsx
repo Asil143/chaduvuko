@@ -175,7 +175,6 @@ export default function ModelInterpretabilityPage() {
       description="Explain any individual prediction. Global feature importance, local SHAP explanations, LIME for black-box models, and presenting model decisions to regulators."
       section="Model Evaluation"
       readTime="30–40 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

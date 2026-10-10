@@ -79,7 +79,6 @@ export default function Lists() {
       description="Ordered, unordered, and description lists — nesting them correctly, and the semantic reasons to choose one over the other."
       section="HTML & CSS — Lesson 06"
       readTime="25 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

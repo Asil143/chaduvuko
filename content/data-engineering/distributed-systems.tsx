@@ -174,7 +174,6 @@ export default function DistributedSystemsModule() {
       description="CAP theorem applied to real data systems, consistency models, replication strategies, partitioning and sharding, distributed joins, fault tolerance and delivery semantics, consensus protocols, and the Saga pattern — explained for data engineers, not distributed systems PhDs."
       section="Data Engineering — Lesson 42"
       readTime="65 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why This Matters ───────────────────────────────── */}

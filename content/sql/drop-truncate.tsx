@@ -80,7 +80,6 @@ export default function DropTruncate() {
       description="Remove entire tables or all their data — the difference between DROP and TRUNCATE, cascade behaviour, safe patterns for dev vs production, and why these commands demand maximum respect"
       section="SQL — Lesson 25"
       readTime="8–12 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

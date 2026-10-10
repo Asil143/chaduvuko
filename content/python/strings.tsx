@@ -79,7 +79,6 @@ export default function Strings() {
       description="Indexing, slicing, the string methods that matter, Unicode, and f-strings done right."
       section="Python — Lesson 04"
       readTime="65 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

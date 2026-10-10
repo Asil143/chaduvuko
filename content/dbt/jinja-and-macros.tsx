@@ -76,7 +76,6 @@ export default function JinjaAndMacros() {
       description="What Jinja is and why dbt uses it, control flow inside a model with if and for, writing reusable macros, a worked cents_to_dollars macro and the generate_schema_name override, whitespace control, debugging with dbt compile, and the anti-pattern of over-templated SQL."
       section="dbt — Lesson 10"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

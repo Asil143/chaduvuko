@@ -76,7 +76,6 @@ export default function CicdForDbt() {
       description="Why dbt projects need continuous integration just like application code, the Slim CI pattern with state:modified+ and --defer, a real GitHub Actions workflow, dbt Cloud's built-in CI jobs versus self-hosting, and a full PR-to-production deployment flow."
       section="dbt — Lesson 18"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

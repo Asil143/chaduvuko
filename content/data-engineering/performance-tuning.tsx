@@ -64,7 +64,6 @@ export default function PerformanceTuningModule() {
       description="Spark execution model, partitioning, shuffles, broadcast joins, predicate pushdown, SQL query planning, incremental strategies, and diagnosing slow pipelines."
       section="Data Engineering — Lesson 43"
       readTime="70 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Performance Mindset ────────────────────────── */}

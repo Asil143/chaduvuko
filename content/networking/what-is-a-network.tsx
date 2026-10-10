@@ -793,7 +793,6 @@ export default function WhatIsANetworkModule() {
       description="A beginner-to-PhD journey through computer networks — from why they exist, to how a single click on your phone becomes electrons crossing five continents and back in 300 milliseconds."
       section="Networking Fundamentals"
       readTime="45 min"
-      updatedAt="May 2026"
     >
 
       {/* ── CHAPTER 1: The Hook ─────────────────────────────────────────── */}

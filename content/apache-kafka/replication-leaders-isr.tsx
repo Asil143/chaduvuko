@@ -76,7 +76,6 @@ export default function ReplicationLeadersISR() {
       description="Why Kafka replicates partitions, how leader/follower replication and the in-sync replica set actually work, what happens when a leader fails, and how acks, min.insync.replicas, and unclean leader election combine to define your real durability guarantee."
       section="Apache Kafka — Lesson 06"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

@@ -67,7 +67,6 @@ export default function WebAttacksOwasp() {
       description="SQL injection, XSS, SSRF, IDOR — every OWASP vulnerability explained with real attack examples and the exact code patterns that cause them."
       section="Cybersecurity — Lesson 09"
       readTime="35 min"
-      updatedAt="May 2026"
     >
 
       {/* ── PART 01 ── */}

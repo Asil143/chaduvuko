@@ -174,7 +174,6 @@ export default function StreamingDataModule() {
       description="Event-driven architecture, producers, consumers, offsets, partitions, consumer groups, delivery semantics, time, and ordering — the complete conceptual foundation before you touch Kafka or Flink."
       section="Data Engineering — Lesson 40"
       readTime="55 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Real Distinction ───────────────────────────── */}

@@ -212,7 +212,6 @@ export default function SklearnInterfacePage() {
       description="The API every sklearn algorithm shares. fit, transform, predict, Pipeline, ColumnTransformer — understand the interface once and every algorithm becomes obvious."
       section="Programming Ecosystem"
       readTime="30–40 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

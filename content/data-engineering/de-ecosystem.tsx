@@ -125,7 +125,6 @@ export default function DEEcosystemModule() {
       description="Every tool category, what it solves, and how they all connect."
       section="Data Engineering — Lesson 04"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why So Many Tools ──────────────────────────────── */}

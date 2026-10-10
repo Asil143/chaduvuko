@@ -12,7 +12,6 @@ export default function RedshiftPage() {
       description="Redshift is AWS's cloud data warehouse. It is where large-scale analytical queries live — the kind that scan billions of rows, aggregate across years of data, and need to return results in seconds rather than hours."
       section="AWS Track"
       readTime="13 min"
-      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'AWS', href: '/learn/aws/introduction' },
         { label: 'Amazon Redshift', href: '/learn/aws/redshift' },

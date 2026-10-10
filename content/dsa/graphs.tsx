@@ -114,7 +114,6 @@ export default function GraphsPage() {
       description="Nodes connected by edges in any direction. Maps, social networks, flight routes, dependency graphs — every complex relationship is a graph. BFS, DFS, Dijkstra's, topological sort — all from scratch."
       section="DSA"
       readTime="120 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

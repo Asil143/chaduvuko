@@ -135,7 +135,6 @@ export default function SortingPage() {
       description="Six ways to arrange data in order — from the simplest to the fastest. Every algorithm explained with step-by-step visuals, full C code, and complexity analysis."
       section="DSA"
       readTime="120 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

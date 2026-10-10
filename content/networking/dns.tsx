@@ -191,7 +191,6 @@ export default function DnsPage() {
       description="The Domain Name System: the world's largest distributed database, resolving 3.5 trillion queries per day — and the infrastructure that can redirect or bring down the entire internet when misconfigured."
       section="Networking Fundamentals — Lesson 25"
       readTime="28–38 min"
-      updatedAt="May 2026"
     >
 
       <Chapter n={1} />

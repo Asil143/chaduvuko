@@ -79,7 +79,6 @@ export default function DatesTimes() {
       description="The datetime module in depth — creating and formatting dates, naive vs timezone-aware datetimes, zoneinfo, and a real scheduling example."
       section="Python — Lesson 33"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

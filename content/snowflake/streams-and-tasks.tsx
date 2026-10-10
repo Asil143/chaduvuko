@@ -7,7 +7,6 @@ export default function StreamsAndTasks() {
       description="Change tracking, scheduled SQL, task graphs, incremental ELT, stream consumption, staleness, serverless tasks, monitoring, and production recovery patterns."
       section="Snowflake — Lesson 11"
       readTime="80 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

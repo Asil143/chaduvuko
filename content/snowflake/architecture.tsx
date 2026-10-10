@@ -7,7 +7,6 @@ export default function SnowflakeArchitecture() {
       description="Storage, virtual warehouses, cloud services, micro-partitions, warehouse sizing, the three caches, and why Snowflake scales reads and writes independently."
       section="Snowflake — Lesson 02"
       readTime="75 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

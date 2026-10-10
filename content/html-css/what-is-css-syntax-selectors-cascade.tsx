@@ -79,7 +79,6 @@ export default function WhatIsCss() {
       description="How CSS actually applies styles — selectors, the cascade, inheritance, and the mental model everything else in CSS builds on."
       section="HTML & CSS — Lesson 17"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

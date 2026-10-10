@@ -77,7 +77,6 @@ export default function ViewsProceduresTriggers() {
       description="The database's programmable layer — virtual tables that simplify complex queries, stored logic that runs inside the database engine, and event-driven code that fires automatically when data changes."
       section="DBMS"
       readTime="80–95 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

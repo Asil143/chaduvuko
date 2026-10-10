@@ -154,7 +154,6 @@ export default function DSAIntroductionPage() {
       description="What DSA is, why it matters, how computers store data, and your first C program."
       section="DSA"
       readTime="45 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Unit badges ── */}

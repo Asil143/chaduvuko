@@ -8,7 +8,6 @@ export default function InterviewSystemDesign() {
       description="The capstone module for the Snowflake track: full worked system-design interview questions synthesizing architecture, performance tuning, cost optimization, security, and streams/tasks, plus a complete vocabulary cheat sheet, common interview traps, and rapid-fire conceptual Q&A."
       section="Snowflake — Lesson 20"
       readTime="90 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

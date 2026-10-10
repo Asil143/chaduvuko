@@ -79,7 +79,6 @@ export default function CsvJson() {
       description="The csv and json modules in depth — DictReader/DictWriter, quoting and delimiter edge cases, JSON type mapping, nested data, and a full worked pipeline."
       section="Python — Lesson 16"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

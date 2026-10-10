@@ -81,7 +81,6 @@ export default function Module12() {
       description="How attackers steal and abuse credentials without ever cracking passwords — Pass-the-Hash, Kerberoasting, credential stuffing, and token theft."
       section="Cybersecurity — Lesson 12"
       readTime="43 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

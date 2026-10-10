@@ -79,7 +79,6 @@ export default function ArgsKwargs() {
       description="Every way Python lets you pass arguments to a function, and how to design flexible, unambiguous function signatures."
       section="Python — Lesson 25"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       <Para>

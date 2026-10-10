@@ -54,7 +54,6 @@ export default function Module36() {
       description="Navigate the compliance landscape without losing your mind. Learn what each major framework requires, how they overlap, how to build a unified control library, and how to prepare for and survive an audit."
       section="Cybersecurity — Lesson 36"
       readTime="36 min"
-      updatedAt="May 2026"
     >
 
       <Part title="Compliance vs Security — Understanding the Difference">

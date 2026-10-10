@@ -54,7 +54,6 @@ export default function Module34() {
       description="Move from reactive defence to proactive hunting. Learn threat intelligence consumption, STIX/TAXII, MITRE ATT&CK-based hunt hypotheses, detection engineering, and how to find attackers hiding in your environment before they announce themselves."
       section="Cybersecurity — Lesson 34"
       readTime="40 min"
-      updatedAt="May 2026"
     >
 
       <Part title="Threat Intelligence Fundamentals">

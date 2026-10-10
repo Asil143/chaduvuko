@@ -175,7 +175,6 @@ export default function CrossValidationPage() {
       description="From point estimates to confidence intervals. K-fold, stratified, and repeated CV — and when the bias-variance tradeoff determines which model to choose."
       section="Model Evaluation"
       readTime="26–34 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

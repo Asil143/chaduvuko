@@ -79,7 +79,6 @@ export default function WorkingWithAPIsPython() {
       description="The requests library, REST calls, authentication, and the error-handling patterns real production code needs when talking to the outside world."
       section="Python — Lesson 37"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

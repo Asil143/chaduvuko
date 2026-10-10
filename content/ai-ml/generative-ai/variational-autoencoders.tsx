@@ -175,7 +175,6 @@ export default function VAEPage() {
       description="The reparameterisation trick, KL divergence loss, and why VAEs enable controllable generation through structured latent spaces."
       section="Generative AI"
       readTime="26–34 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

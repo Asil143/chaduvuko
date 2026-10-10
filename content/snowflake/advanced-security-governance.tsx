@@ -7,7 +7,6 @@ export default function AdvancedSecurityGovernance() {
       description="Masking policies, row access policies, object tagging, classification, access history, and how they build on RBAC to protect sensitive data at query time."
       section="Snowflake — Lesson 15"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

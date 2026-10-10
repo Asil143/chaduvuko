@@ -61,7 +61,6 @@ export default function Module18() {
       description="The shared responsibility model, cloud IAM from first principles, the most dangerous cloud misconfigurations, SSRF to metadata theft, and cloud-native detection tools."
       section="Cybersecurity — Lesson 18"
       readTime="43 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

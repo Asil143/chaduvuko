@@ -125,7 +125,6 @@ export default function DataTypesStructuredModule() {
       description="The three categories every data engineer works with — what each demands from your pipeline."
       section="Data Engineering — Lesson 07"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why the Categories Matter ──────────────────────── */}

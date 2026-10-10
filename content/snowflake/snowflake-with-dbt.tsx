@@ -7,7 +7,6 @@ export default function SnowflakeWithDbt() {
       description="dbt project structure, sources, models and materializations, tests, snapshots, incremental strategies with Snowflake MERGE, environments, and CI/CD for dbt on Snowflake."
       section="Snowflake — Lesson 17"
       readTime="70 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

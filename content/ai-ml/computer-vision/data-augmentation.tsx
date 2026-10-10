@@ -175,7 +175,6 @@ export default function DataAugmentationPage() {
       description="Flips, crops, colour jitter, mixup, cutout — and how each one affects what the model learns. Multiply your dataset without collecting a single new image."
       section="Computer Vision"
       readTime="22–28 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

@@ -80,7 +80,6 @@ export default function OrderBy() {
       description="Control exactly how your results come back — ascending, descending, multiple columns, NULL handling, and sorting by expressions"
       section="SQL — Lesson 08"
       readTime="8–12 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

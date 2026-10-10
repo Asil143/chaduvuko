@@ -76,7 +76,6 @@ export default function VariablesAndEnvironments() {
       description="The dev/staging/prod pattern, the target context variable, vars in dbt_project.yml versus --vars on the CLI, var() defaults, env_var() for secrets, the real difference between vars and env_var, and custom per-environment schema naming."
       section="dbt — Lesson 14"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

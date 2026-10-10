@@ -175,7 +175,6 @@ export default function BertEncoderFamilyPage() {
       description="Masked language modelling, next sentence prediction, fine-tuning on downstream tasks. The model that changed NLP — still powering classification and NER."
       section="Natural Language Processing"
       readTime="36–46 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

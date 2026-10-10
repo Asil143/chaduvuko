@@ -63,7 +63,6 @@ export default function WhatIsCybersecurity() {
       description="The threat landscape, the roles, and why this field exists. What attackers actually want and how defenders think."
       section="Cybersecurity — Lesson 01"
       readTime="25 min"
-      updatedAt="May 2026"
     >
 
       {/* ── PART 01 ── */}

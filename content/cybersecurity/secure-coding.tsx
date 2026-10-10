@@ -61,7 +61,6 @@ export default function Module20() {
       description="Input validation, output encoding, parameterised queries, secrets management, dependency hygiene, SAST/DAST in CI/CD, and threat modelling — the complete developer security toolkit."
       section="Cybersecurity — Lesson 20"
       readTime="34 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

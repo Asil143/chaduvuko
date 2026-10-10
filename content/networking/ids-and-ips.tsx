@@ -380,7 +380,6 @@ export default function IdsAndIpsPage() {
       description="From signature matching to machine learning anomaly detection: how intrusion detection and prevention systems work, why they alert on everything and nothing, and how to make them useful."
       section="Networking Fundamentals — Lesson 35"
       readTime="28–38 min"
-      updatedAt="May 2026"
     >
       {/* ── Chapter 1 ─────────────────────────────────────────── */}
       <Chapter n={1} title="The Alert That Saved a Network — and the One That Was Ignored" />

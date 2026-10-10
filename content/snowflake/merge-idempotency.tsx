@@ -7,7 +7,6 @@ export default function MergeIdempotency() {
       description="MERGE syntax, staging tables, deduplication, watermarks, reruns, load audit tables, late-arriving data, deletes, and idempotent Snowflake pipeline design."
       section="Snowflake — Lesson 08"
       readTime="75 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

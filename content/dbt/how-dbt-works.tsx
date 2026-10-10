@@ -306,7 +306,6 @@ export default function HowDbtWorks() {
       description="The real mechanics of dbt run: Jinja compilation, ref()/source() resolution, the dependency graph and topological sort, the difference between compiling and running, what dbt deliberately does not do, and a full worked example tracing a three-model chain."
       section="dbt — Lesson 02"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

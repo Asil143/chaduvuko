@@ -76,7 +76,6 @@ export default function EventDrivenArchitecture() {
       description="What event-driven architecture actually means as a system design style, EDA vs request-response trade-offs, notification vs state-transfer events, the outbox pattern, choreography vs orchestration, schema as an API contract, and a worked order-fulfillment example."
       section="Apache Kafka — Lesson 20"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

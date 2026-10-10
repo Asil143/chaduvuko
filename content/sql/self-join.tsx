@@ -80,7 +80,6 @@ export default function SelfJoin() {
       description="Join a table to itself — manager-employee hierarchies, comparing rows within the same table, finding duplicates, and every pattern where two rows of the same table need to be compared"
       section="SQL — Lesson 34"
       readTime="12–16 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

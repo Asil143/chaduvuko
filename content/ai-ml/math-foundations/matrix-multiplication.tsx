@@ -227,7 +227,6 @@ export default function MatrixMultiplicationPage() {
       description="The single operation that powers every neural network. Understand this deeply and every layer in every model makes intuitive sense."
       section="Math Foundations"
       readTime="26–34 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — WHY ════════════════════════════════════════════════════ */}

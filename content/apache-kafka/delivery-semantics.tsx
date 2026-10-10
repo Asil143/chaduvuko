@@ -76,7 +76,6 @@ export default function DeliverySemantics() {
       description="What at-most-once, at-least-once, and exactly-once actually guarantee in Kafka, how the idempotent producer and transactions work mechanically, and how to choose the right semantics for a real workload instead of copying a default."
       section="Apache Kafka — Lesson 09"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

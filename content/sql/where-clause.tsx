@@ -80,7 +80,6 @@ export default function WhereClause() {
       description="Get only the rows you actually need — every comparison operator, every data type, and how the database evaluates filters internally"
       section="SQL — Lesson 06"
       readTime="12–16 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

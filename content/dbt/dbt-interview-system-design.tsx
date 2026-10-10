@@ -77,7 +77,6 @@ export default function DbtInterviewSystemDesign() {
       description="The capstone module for the dbt track: full worked system-design interview questions synthesizing project structure, testing, incremental models, CI/CD, and migration strategy, plus a complete vocabulary cheat sheet, common interview traps, and rapid-fire conceptual Q&A."
       section="dbt — Lesson 20"
       readTime="90 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

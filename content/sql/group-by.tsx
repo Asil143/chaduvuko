@@ -80,7 +80,6 @@ export default function GroupBy() {
       description="Split rows into groups and compute aggregates per group — the engine behind every analytics report, dashboard metric, and business intelligence query"
       section="SQL — Lesson 28"
       readTime="14–18 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

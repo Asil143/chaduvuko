@@ -188,7 +188,6 @@ export default function RandomForestPage() {
       description="Bagging, random feature subsets, out-of-bag evaluation, and the feature importance that actually works. Why Random Forest beats a single tree on every real dataset."
       section="Classical ML"
       readTime="22–28 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}

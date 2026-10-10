@@ -79,7 +79,6 @@ export default function VariablesDataTypes() {
       description="Every value in Python is an object. Variables, the core data types, dynamic typing, and how to convert safely between them."
       section="Python — Lesson 02"
       readTime="60 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

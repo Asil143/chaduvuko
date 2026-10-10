@@ -79,7 +79,6 @@ export default function RegularExpressions() {
       description="What regex is actually for, when it's overkill, the re module built up systematically, and a real log-parsing example."
       section="Python — Lesson 32"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

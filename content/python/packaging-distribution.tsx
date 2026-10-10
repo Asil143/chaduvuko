@@ -79,7 +79,6 @@ export default function PackagingDistribution() {
       description="Project structure, pyproject.toml as the modern standard, building wheels and sdists, semantic versioning, and publishing a real package to PyPI."
       section="Python — Lesson 41"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

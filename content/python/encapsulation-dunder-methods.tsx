@@ -79,7 +79,6 @@ export default function EncapsulationDunderMethods() {
       description="Python's convention-based privacy, and the dunder methods that make your objects behave like built-in types."
       section="Python — Lesson 22"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

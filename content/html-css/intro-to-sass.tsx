@@ -79,7 +79,6 @@ export default function IntroToSass() {
       description="The CSS preprocessor that came before CSS variables — nesting, mixins, and why many real codebases still use it today."
       section="HTML & CSS — Lesson 36"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

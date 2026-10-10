@@ -96,7 +96,6 @@ export default function PythonInterviewPrep() {
       description="The Python questions that come up in real technical interviews, answered at senior-engineer depth."
       section="Python — Lesson 46 (Capstone)"
       readTime="60 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Intro ── */}

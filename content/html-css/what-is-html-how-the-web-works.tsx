@@ -79,7 +79,6 @@ export default function WhatIsHtml() {
       description="Browsers, servers, the DOM, and the HTTP request/response cycle — the foundation every web page sits on."
       section="HTML & CSS — Lesson 01"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

@@ -174,7 +174,6 @@ export default function MessageBrokersQueuesModule() {
       description="How messages flow from producer to consumer. Queues vs topics, durability, replication, compaction, backpressure, dead letter queues, ordering guarantees, and exactly-once semantics — the internal mechanics without tool noise."
       section="Data Engineering — Lesson 41"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What a Message Broker Actually Is ──────────────── */}

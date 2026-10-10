@@ -80,7 +80,6 @@ export default function RelationalModel() {
       description="The mathematical bedrock of every relational database — from Codd's formal definitions to every key type, every integrity constraint, and every design decision that flows from them."
       section="DBMS"
       readTime="85–100 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

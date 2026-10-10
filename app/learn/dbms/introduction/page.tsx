@@ -72,7 +72,6 @@ export default function DBMSIntroduction() {
       description="From raw data to organized information systems — what databases are, why they exist, how they evolved, and why every application in the world depends on one."
       section="DBMS"
       readTime="60–75 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

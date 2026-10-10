@@ -175,7 +175,6 @@ export default function XGBoostPage() {
       description="Train, tune, and interpret XGBoost on a real dataset. Regularisation parameters, early stopping, SHAP values, and production deployment — all in one module."
       section="Classical ML"
       readTime="36–45 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

@@ -109,7 +109,6 @@ export default function UnionIntersectExcept() {
       description="Combine result sets vertically — stack rows from multiple queries, find common rows, subtract one set from another, and every rule about column matching, deduplication, and ordering"
       section="SQL — Lesson 39"
       readTime="12–16 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

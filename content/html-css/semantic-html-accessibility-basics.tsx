@@ -79,7 +79,6 @@ export default function SemanticHtmlAccessibilityBasics() {
       description="Why semantics matter beyond styling — ARIA basics, accessible forms, and how screen readers and search engines actually read your page."
       section="HTML & CSS — Lesson 10"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

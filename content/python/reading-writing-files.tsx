@@ -79,7 +79,6 @@ export default function ReadingWritingFiles() {
       description="open(), file modes, the with statement, reading strategies for files of any size, encoding, and pathlib — the modern, portable way to work with paths."
       section="Python — Lesson 15"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

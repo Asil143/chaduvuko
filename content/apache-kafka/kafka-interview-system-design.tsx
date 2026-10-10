@@ -77,7 +77,6 @@ export default function KafkaInterviewSystemDesign() {
       description="The capstone module for the Apache Kafka track: full worked system-design interview questions synthesizing partitioning, delivery semantics, schema design, consumer groups, and monitoring, plus a complete vocabulary cheat sheet, common interview traps, and rapid-fire conceptual Q&A."
       section="Apache Kafka — Lesson 24"
       readTime="70 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

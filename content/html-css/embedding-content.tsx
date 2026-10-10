@@ -79,7 +79,6 @@ export default function EmbeddingContent() {
       description="Embedding external content safely — iframe, embed, object, and the security considerations every embed introduces."
       section="HTML & CSS — Lesson 12"
       readTime="30 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

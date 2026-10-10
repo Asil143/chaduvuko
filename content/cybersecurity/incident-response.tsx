@@ -54,7 +54,6 @@ export default function Module33() {
       description="Master the full incident response lifecycle: preparation, detection, containment, eradication, recovery, and lessons learned. Build playbooks, work a ransomware scenario, and learn digital forensics fundamentals."
       section="Cybersecurity — Lesson 33"
       readTime="40 min"
-      updatedAt="May 2026"
     >
 
       <Part title="Incident Response Fundamentals">

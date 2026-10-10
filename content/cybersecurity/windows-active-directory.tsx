@@ -61,7 +61,6 @@ export default function Module17() {
       description="How Active Directory works, what the most dangerous AD misconfigurations are, how Group Policy enforces security, and how to defend Windows enterprise environments."
       section="Cybersecurity — Lesson 17"
       readTime="45 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

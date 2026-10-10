@@ -175,7 +175,6 @@ export default function DVCPage() {
       description="Version datasets like code. DVC pipelines, remote storage, experiment tracking, and the full DVC + Git workflow for reproducible ML projects."
       section="MLOps and Production"
       readTime="30–40 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

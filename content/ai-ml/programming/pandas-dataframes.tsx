@@ -172,7 +172,6 @@ export default function PandasDataFramesPage() {
       description="Load, clean, transform and explore real datasets. Every Pandas operation ML projects actually use — with DoorDash and Stripe examples throughout."
       section="Programming Ecosystem"
       readTime="45–58 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}

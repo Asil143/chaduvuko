@@ -102,7 +102,6 @@ export default function PointersPage() {
       description="The concept that confuses 90% of beginners — explained so clearly you will wonder why everyone makes it complicated. Pointers are the backbone of linked lists, trees, and every advanced data structure."
       section="DSA"
       readTime="75 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

@@ -79,7 +79,6 @@ export default function FormsInputsValidation() {
       description="form, every common input type, labels, placeholder, and the built-in validation attributes browsers already give you for free."
       section="HTML & CSS — Lesson 08"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

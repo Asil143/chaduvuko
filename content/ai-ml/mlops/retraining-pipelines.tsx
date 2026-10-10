@@ -175,7 +175,6 @@ export default function RetrainingPipelinesPage() {
       description="Champion-challenger evaluation, safe model promotion, and rollback patterns that protect production when a new model underperforms after deployment."
       section="MLOps and Production"
       readTime="30–40 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

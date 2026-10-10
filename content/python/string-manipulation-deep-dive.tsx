@@ -79,7 +79,6 @@ export default function StringManipulationDeepDive() {
       description="Parsing messy real-world text, cleaning and normalising data, alignment and padding, textwrap, string.Template vs f-strings, and a full log-line parsing example."
       section="Python — Lesson 14"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

@@ -79,7 +79,6 @@ export default function BuildingACliTool() {
       description="A complete, real command-line tool built from scratch using argparse — start to finish, project-style."
       section="Python — Lesson 44"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

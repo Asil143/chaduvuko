@@ -76,7 +76,6 @@ export default function PackagesModule() {
       description="What a dbt package actually is, packages.yml syntax, dbt deps, why version pinning matters, and the dbt_utils macros worth knowing cold — surrogate_key, date_spine, pivot, and unique_combination_of_columns."
       section="dbt — Lesson 11"
       readTime="55 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

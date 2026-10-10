@@ -84,7 +84,6 @@ export default function WhatIsADatabase() {
       description="The definition, the internals, the US companies using them, and why SQL is the most valuable skill you can learn in tech"
       section="SQL — Lesson 01"
       readTime="8–12 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

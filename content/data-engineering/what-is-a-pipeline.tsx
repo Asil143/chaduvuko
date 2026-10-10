@@ -174,7 +174,6 @@ export default function WhatIsAPipelineModule() {
       description="The anatomy of every pipeline, the design principles that make them reliable, and the patterns that separate good from fragile."
       section="Data Engineering — Lesson 20"
       readTime="65 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Precise Definition ─────────────────────────── */}

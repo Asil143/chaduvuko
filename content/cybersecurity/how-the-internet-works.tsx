@@ -71,7 +71,6 @@ export default function HowTheInternetWorks() {
       description="TCP/IP, DNS, HTTP, TLS — every layer's attack surfaces explained from first principles. What happens in the network when you type a URL."
       section="Cybersecurity — Lesson 02"
       readTime="28 min"
-      updatedAt="May 2026"
     >
 
       {/* ── PART 01 ── */}

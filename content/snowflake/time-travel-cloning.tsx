@@ -7,7 +7,6 @@ export default function TimeTravelCloning() {
       description="Recover dropped or changed data, query historical table state, clone databases and schemas, understand retention, Fail-safe, clone storage, governance, and incident recovery."
       section="Snowflake — Lesson 09"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

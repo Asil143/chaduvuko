@@ -79,7 +79,6 @@ export default function InheritancePolymorphism() {
       description="Single inheritance, super(), method overriding, real polymorphism, the method resolution order, isinstance vs type ==, and composition over inheritance."
       section="Python — Lesson 21"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

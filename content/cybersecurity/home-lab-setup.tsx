@@ -54,7 +54,6 @@ export default function Module39() {
       description="Build a realistic cybersecurity lab on your own hardware or for free in the cloud. Set up virtualisation, a vulnerable Active Directory environment, SIEM, IDS, and a safe isolated network to practice every technique in this course legally."
       section="Cybersecurity — Lesson 39"
       readTime="38 min"
-      updatedAt="May 2026"
     >
 
       <Part title="Why You Need a Home Lab">

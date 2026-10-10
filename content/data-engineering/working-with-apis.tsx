@@ -179,7 +179,6 @@ export default function WorkingWithAPIsModule() {
       description="How APIs work, every auth pattern, all pagination styles, rate limits, and webhooks vs polling — built as one real payment-ingestion pipeline, not a wall of unrelated snippets."
       section="Data Engineering — Lesson 18"
       readTime="75 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why APIs Matter ────────────────────────────────── */}

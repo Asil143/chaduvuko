@@ -98,7 +98,6 @@ export default function Triggers() {
       description="Automatic database responses to data changes — BEFORE and AFTER triggers, row-level vs statement-level, the NEW and OLD records, audit logging, cascading updates, and when triggers hurt more than they help"
       section="SQL — Lesson 51"
       readTime="14–18 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

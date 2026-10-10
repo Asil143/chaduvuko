@@ -188,7 +188,6 @@ export default function DecisionTreesPage() {
       description="The algorithm that thinks in if-then questions. Gini impurity, information gain, pruning, and why decision trees are the foundation of every ensemble method."
       section="Classical ML"
       readTime="26–34 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}

@@ -76,7 +76,6 @@ export default function HooksAndOperations() {
       description="What a dbt hook actually is, the four hook types and their exact config syntax, the classic post-hook grant pattern for keeping BI tools from silently losing access after every table rebuild, run-operation for standalone maintenance macros, and how hooks differ from on-demand macro invocation."
       section="dbt — Lesson 15"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

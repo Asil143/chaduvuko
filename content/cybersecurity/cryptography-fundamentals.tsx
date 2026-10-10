@@ -67,7 +67,6 @@ export default function CryptographyFundamentals() {
       description="Symmetric, asymmetric, hashing, digital signatures — practical understanding of what protects and what breaks. No math degree required."
       section="Cybersecurity — Lesson 04"
       readTime="32 min"
-      updatedAt="May 2026"
     >
 
       {/* ── PART 01 ── */}

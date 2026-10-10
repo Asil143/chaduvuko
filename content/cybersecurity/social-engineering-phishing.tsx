@@ -63,7 +63,6 @@ export default function SocialEngineeringPhishing() {
       description="The most successful attack vector in history — how social engineering works, why humans are the hardest patch, and how organisations defend against it."
       section="Cybersecurity — Lesson 08"
       readTime="28 min"
-      updatedAt="May 2026"
     >
 
       {/* ── PART 01 ── */}

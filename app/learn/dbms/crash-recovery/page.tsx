@@ -77,7 +77,6 @@ export default function CrashRecovery() {
       description="How a database restores itself to a consistent state after a failure — the theory of what can go wrong, the write-ahead log that makes recovery possible, and the ARIES algorithm that every major database uses."
       section="DBMS"
       readTime="85–100 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

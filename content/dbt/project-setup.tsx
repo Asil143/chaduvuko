@@ -76,7 +76,6 @@ export default function ProjectSetup() {
       description="dbt Core vs dbt Cloud, the required project files, the standard folder structure, installing the right adapter, the essential CLI commands, and a full walkthrough of dbt init through your first successful dbt run."
       section="dbt — Lesson 03"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

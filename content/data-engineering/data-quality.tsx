@@ -81,7 +81,6 @@ export default function DataQualityModule() {
       description="The six dimensions of quality, dbt tests at every layer, anomaly detection, data contracts, and building quality into pipelines rather than checking at the end."
       section="Data Engineering — Lesson 36"
       readTime="75 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Data Quality Fails ─────────────────────────── */}

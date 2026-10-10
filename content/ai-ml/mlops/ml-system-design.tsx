@@ -143,7 +143,6 @@ export default function MLSystemDesignPage() {
       description="Design any ML system from scratch. The framework, tradeoffs, capacity estimation, and how to present it in a senior ML engineering interview."
       section="MLOps and Production"
       readTime="55–70 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — THE FRAMEWORK ══════════════════════════════════════════ */}

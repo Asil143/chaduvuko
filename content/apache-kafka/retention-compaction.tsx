@@ -76,7 +76,6 @@ export default function RetentionCompaction() {
       description="What retention.ms and retention.bytes actually delete, how segment-granular deletion works physically, the difference between delete and compact cleanup policies, tombstones, and picking the right policy for event streams versus entity changelogs."
       section="Apache Kafka — Lesson 08"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

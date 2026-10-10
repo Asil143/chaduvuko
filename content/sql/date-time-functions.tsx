@@ -88,7 +88,6 @@ export default function DateTimeFunctions() {
       description="Extract parts, calculate differences, truncate to periods, format for display, handle timezones — every temporal operation for time-series analytics and reporting"
       section="SQL — Lesson 42"
       readTime="14–18 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

@@ -80,7 +80,6 @@ export default function CreateTable() {
       description="Define tables from scratch — column types, constraints, primary keys, foreign keys, default values, and schema design decisions that last for years"
       section="SQL — Lesson 19"
       readTime="14–18 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

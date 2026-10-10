@@ -61,7 +61,6 @@ export default function Module16() {
       description="A systematic approach to hardening Linux servers: minimal install, user privilege management, SSH, kernel parameters, SELinux/AppArmor, audit logging, and CIS compliance."
       section="Cybersecurity — Lesson 16"
       readTime="44 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

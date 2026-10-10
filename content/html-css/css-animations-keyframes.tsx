@@ -79,7 +79,6 @@ export default function CssAnimationsKeyframes() {
       description="@keyframes and the animation property in full — building genuinely custom motion beyond simple hover transitions."
       section="HTML & CSS — Lesson 32"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

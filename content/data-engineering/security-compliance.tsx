@@ -191,7 +191,6 @@ export default function SecurityCompliancePage() {
       description="GDPR and the CCPA — what they mean for your pipelines and how to build systems that are compliant by design."
       section="Data Engineering — Lesson 39"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Last Verified ──────────────────────────────────────────────── */}

@@ -61,7 +61,6 @@ export default function Module21() {
       description="The five-phase pentest methodology, rules of engagement, scoping, legal authorisation, report writing, and the ethical framework that separates professional testing from criminal hacking."
       section="Cybersecurity — Lesson 21"
       readTime="32 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

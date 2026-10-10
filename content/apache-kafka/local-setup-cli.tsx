@@ -76,7 +76,6 @@ export default function LocalSetupCli() {
       description="Run a real single-broker Kafka cluster on your laptop with Docker Compose and KRaft mode, then learn the actual command-line tools engineers use every day: creating topics, producing and consuming test messages, and inspecting consumer group lag."
       section="Apache Kafka — Lesson 04"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

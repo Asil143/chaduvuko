@@ -174,7 +174,6 @@ export default function DataLakeArchitectureModule() {
       description="What a data lake is, why it was invented, zone-based organisation, compute-storage separation, and the rise of the lakehouse."
       section="Data Engineering — Lesson 29"
       readTime="55 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What a Data Lake Actually Is ────────────────────── */}

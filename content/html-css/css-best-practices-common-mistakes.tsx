@@ -79,7 +79,6 @@ export default function CssBestPracticesCommonMistakes() {
       description="The conventions that separate maintainable CSS from a stylesheet nobody wants to touch — and the mistakes every beginner makes at least once."
       section="HTML & CSS — Lesson 41"
       readTime="30 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

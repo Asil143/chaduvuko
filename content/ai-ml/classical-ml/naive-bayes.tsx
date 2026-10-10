@@ -174,7 +174,6 @@ export default function NaiveBayesPage() {
       description="Bayes theorem applied to classification. Why the naive independence assumption works surprisingly well for spam filters and document classification."
       section="Classical ML"
       readTime="22–28 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

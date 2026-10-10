@@ -79,7 +79,6 @@ export default function ClassesObjects() {
       description="What a class actually is, what an object actually is, how self really works under the hood, and when object-oriented Python genuinely earns its complexity."
       section="Python — Lesson 19"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

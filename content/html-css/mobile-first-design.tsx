@@ -79,7 +79,6 @@ export default function MobileFirstDesign() {
       description="Why designing for the smallest screen first produces better layouts, and how to structure your CSS to make it painless."
       section="HTML & CSS — Lesson 29"
       readTime="30 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

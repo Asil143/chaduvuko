@@ -67,7 +67,6 @@ export default function AttackerMindsetKillChain() {
       description="The attacker's playbook from reconnaissance to full compromise. The frameworks that make defenders effective by understanding what attackers do next."
       section="Cybersecurity — Lesson 07"
       readTime="30 min"
-      updatedAt="May 2026"
     >
 
       {/* ── PART 01 ── */}

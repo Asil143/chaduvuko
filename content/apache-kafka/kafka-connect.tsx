@@ -76,7 +76,6 @@ export default function KafkaConnect() {
       description="What Kafka Connect actually is, source vs sink connectors, standalone vs distributed mode, configuring a real connector through the REST API, offset tracking, Single Message Transforms, converters and Schema Registry, and when to reach for Connect instead of a hand-written producer or consumer."
       section="Apache Kafka — Lesson 13"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

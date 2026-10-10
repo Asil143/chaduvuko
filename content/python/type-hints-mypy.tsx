@@ -79,7 +79,6 @@ export default function TypeHintsMypy() {
       description="Adding types to Python without losing what makes it Python — annotations, generics, and catching bugs before runtime."
       section="Python — Lesson 36"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

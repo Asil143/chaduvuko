@@ -175,7 +175,6 @@ export default function TransferLearningPage() {
       description="Feature extraction vs fine-tuning, layer freezing, and choosing the right backbone. Get ImageNet-level features without ImageNet-level compute."
       section="Computer Vision"
       readTime="30–40 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

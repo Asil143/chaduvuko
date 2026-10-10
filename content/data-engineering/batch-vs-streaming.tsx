@@ -174,7 +174,6 @@ export default function BatchVsStreamingModule() {
       description="When each processing model is right, the trade-offs nobody talks about, and how modern systems blend all three."
       section="Data Engineering — Lesson 21"
       readTime="55 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Core Question ──────────────────────────────── */}

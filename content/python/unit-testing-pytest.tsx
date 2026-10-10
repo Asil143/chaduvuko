@@ -79,7 +79,6 @@ export default function UnitTestingPytest() {
       description="Writing tests that actually catch bugs — fixtures, assertions, mocking, and testing as a habit, not an afterthought."
       section="Python — Lesson 38"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

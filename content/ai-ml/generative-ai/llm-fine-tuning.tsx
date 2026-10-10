@@ -175,7 +175,6 @@ export default function LLMFineTuningPage() {
       description="When to fine-tune vs RAG vs prompt. Full LoRA fine-tuning walkthrough on a real dataset using HuggingFace Transformers and PEFT."
       section="Generative AI"
       readTime="50–65 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

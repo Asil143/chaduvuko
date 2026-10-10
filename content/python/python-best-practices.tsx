@@ -79,7 +79,6 @@ export default function PythonBestPractices() {
       description="The conventions that separate readable, maintainable Python from code that works but nobody wants to touch."
       section="Python — Lesson 45"
       readTime="30 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

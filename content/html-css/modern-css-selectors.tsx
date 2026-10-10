@@ -79,7 +79,6 @@ export default function ModernCssSelectors() {
       description="The newest selectors that changed how CSS is written — the parent selector finally arrives, plus container queries for truly component-based responsive design."
       section="HTML & CSS — Lesson 34"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

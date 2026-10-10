@@ -174,7 +174,6 @@ export default function IdempotencyAtomicityModule() {
       description="The three properties that separate reliable pipelines from fragile ones — precise definitions, implementation at every layer, and automatic failure recovery."
       section="Data Engineering — Lesson 26"
       readTime="70 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why These Three Properties ─────────────────────── */}

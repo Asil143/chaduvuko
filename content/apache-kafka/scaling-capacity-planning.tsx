@@ -76,7 +76,6 @@ export default function ScalingCapacityPlanning() {
       description="How to size a Kafka cluster before it exists and grow it correctly afterward: disk math from throughput and retention, partition count sizing, broker sizing, horizontal scaling and throttled reassignment, quotas for multi-tenancy, and a full worked capacity-planning example."
       section="Apache Kafka — Lesson 18"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

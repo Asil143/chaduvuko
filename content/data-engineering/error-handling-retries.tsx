@@ -174,7 +174,6 @@ export default function ErrorHandlingRetriesModule() {
       description="Classifying errors, exponential backoff with jitter, circuit breakers, DLQ design, and building pipelines that recover automatically."
       section="Data Engineering — Lesson 27"
       readTime="70 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Error Handling Gap ─────────────────────────── */}

@@ -178,7 +178,6 @@ export default function ACIDTransactionsModule() {
       description="Why ACID exists, what each property means, and what happens when it breaks."
       section="Data Engineering — Lesson 13"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Problem ACID Solves ────────────────────────── */}

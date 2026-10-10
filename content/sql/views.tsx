@@ -98,7 +98,6 @@ export default function Views() {
       description="Store a query as a named database object — create, replace, and drop views, build layered reporting abstractions, control access with views, and understand when materialized views beat regular ones"
       section="SQL — Lesson 45"
       readTime="12–16 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

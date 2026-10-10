@@ -146,7 +146,6 @@ export default function WhatIsApacheKafka() {
       description="A complete beginner-to-advanced explanation of Apache Kafka: events, logs, brokers, topics, partitions, replay, durability, and why Kafka changed modern data systems."
       section="Apache Kafka — Lesson 01"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

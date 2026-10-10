@@ -76,7 +76,6 @@ export default function Documentation() {
       description="Model and column descriptions in schema.yml, reusable doc blocks with the doc() function, generating and serving the dbt docs site, the auto-generated DAG lineage graph, meta fields and tags, and documentation as a team habit instead of an afterthought."
       section="dbt — Lesson 09"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

@@ -109,7 +109,6 @@ export default function NullValues() {
       description="NULL is not zero, not empty, not false — it is the absence of data. Master three-valued logic, IS NULL, COALESCE, NULLIF, and every NULL trap in SQL"
       section="SQL — Lesson 11"
       readTime="12–16 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

@@ -178,7 +178,6 @@ export default function SchemasTablesKeysModule() {
       description="The foundation of every database — what each concept is and why it matters."
       section="Data Engineering — Lesson 12"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why This Matters ───────────────────────────────── */}

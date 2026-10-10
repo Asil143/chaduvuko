@@ -178,7 +178,6 @@ export default function WarehouseLakeLakehouseModule() {
       description="Three answers to where we store data — the honest trade-offs and how to choose."
       section="Data Engineering — Lesson 11"
       readTime="55 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Same Problem, Three Solutions ───────────────── */}

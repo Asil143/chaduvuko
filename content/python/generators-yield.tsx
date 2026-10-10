@@ -79,7 +79,6 @@ export default function GeneratorsYield() {
       description="How yield actually pauses and resumes a function, generator expressions, memory-efficient lazy evaluation, and yield from."
       section="Python — Lesson 28"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

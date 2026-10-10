@@ -143,7 +143,6 @@ export default function WhatIsGenerativeAIPage() {
       description="GANs, VAEs, diffusion, and LLMs — what makes each one generative, and when each one is the right architecture. The shift from recognising to creating."
       section="Generative AI"
       readTime="22–28 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

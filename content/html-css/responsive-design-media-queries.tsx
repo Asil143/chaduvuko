@@ -79,7 +79,6 @@ export default function ResponsiveDesignMediaQueries() {
       description="Building layouts that adapt to any screen — media query syntax, common breakpoints, and testing responsively for real."
       section="HTML & CSS — Lesson 28"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

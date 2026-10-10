@@ -79,7 +79,6 @@ export default function FlexboxInPractice() {
       description="Building real, common UI patterns with Flexbox — a responsive navbar, an equal-height card grid, the centering reflex, a sticky footer layout, and the gap property."
       section="HTML & CSS — Lesson 24"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

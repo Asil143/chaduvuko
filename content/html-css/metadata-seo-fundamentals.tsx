@@ -79,7 +79,6 @@ export default function MetadataSeoFundamentals() {
       description="meta tags, Open Graph, the viewport meta tag, and favicons — the head content that determines how your page is discovered and shared."
       section="HTML & CSS — Lesson 13"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

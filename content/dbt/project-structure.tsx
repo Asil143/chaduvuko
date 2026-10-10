@@ -76,7 +76,6 @@ export default function ProjectStructure() {
       description="Staging, intermediate, and marts in real depth — one staging model per source, business logic isolated in intermediate, domain-organized marts, naming conventions, and how a project stays maintainable past 200 models."
       section="dbt — Lesson 16"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

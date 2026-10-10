@@ -79,7 +79,6 @@ export default function BackgroundsBorders() {
       description="background-color/image/position/size/repeat and the background shorthand, linear-gradient() and radial-gradient() syntax, border-radius including elliptical corners, and box-shadow — inset, multiple stacked shadows, and blur/spread."
       section="HTML & CSS — Lesson 22"
       readTime="30 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

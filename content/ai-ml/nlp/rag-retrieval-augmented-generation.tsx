@@ -175,7 +175,6 @@ export default function RAGPage() {
       description="Vector databases, semantic search, chunking strategies, and the full RAG pipeline from document to answer. Build a Stripe knowledge base Q&A system."
       section="Natural Language Processing"
       readTime="40–52 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

@@ -93,7 +93,6 @@ export default function InterviewQuestions() {
       description="60 questions across every DBMS topic — with complete answers written the way senior engineers actually think about them. Organised by topic, labelled by difficulty."
       section="DBMS"
       readTime="120–150 min"
-      updatedAt="March 2026"
     >
 
       {/* INTRO */}

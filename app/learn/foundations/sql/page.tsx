@@ -12,7 +12,6 @@ export default function SQLPage() {
       description="Not SQL for beginners — SQL for people who need to build pipelines, debug data quality issues, and answer hard questions from analysts. The parts that actually come up in interviews and on the job."
       section="Foundations"
       readTime="25 min"
-      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'Foundations', href: '/learn/roadmap' },
         { label: 'SQL for Data Engineers', href: '/learn/foundations/sql' },

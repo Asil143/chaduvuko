@@ -61,7 +61,6 @@ export default function Module27() {
       description="How Capture The Flag competitions work, the five challenge categories (web, crypto, pwn, reverse engineering, forensics), essential tools for each, and the systematic approach to solving challenges when you are completely stuck."
       section="Cybersecurity — Lesson 27"
       readTime="30 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

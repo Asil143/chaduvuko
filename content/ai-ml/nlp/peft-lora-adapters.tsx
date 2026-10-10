@@ -175,7 +175,6 @@ export default function PeftLoraAdaptersPage() {
       description="Tune less than 1% of a model's parameters and get 95% of the performance. LoRA, adapters, and prefix tuning — when and how to use each."
       section="Natural Language Processing"
       readTime="36–46 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

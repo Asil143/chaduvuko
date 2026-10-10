@@ -77,7 +77,6 @@ export default function DistributedDatabases() {
       description="Why single-server databases stop being enough, what tradeoffs you face when data spans multiple machines, and the theorems that make those tradeoffs unavoidable."
       section="DBMS"
       readTime="90–110 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

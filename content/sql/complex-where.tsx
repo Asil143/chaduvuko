@@ -80,7 +80,6 @@ export default function ComplexWhere() {
       description="Mastering brackets, operator precedence, AND vs OR logic, multi-layer filters, and building WHERE clauses that express any business rule precisely"
       section="SQL — Lesson 17"
       readTime="10–14 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

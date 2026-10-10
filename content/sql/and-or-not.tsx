@@ -109,7 +109,6 @@ export default function AndOrNot() {
       description="Combine WHERE filters to answer complex business questions — precedence rules, truth tables, and every pattern you will use in production"
       section="SQL — Lesson 07"
       readTime="10–14 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

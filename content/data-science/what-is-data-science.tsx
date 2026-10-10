@@ -71,7 +71,6 @@ export default function WhatIsDataScience() {
       description="The definition that actually explains it, the DS lifecycle, and why Netflix, Spotify, Swiggy, and every subscription business on earth runs on this discipline"
       section="Data Science — Lesson 01"
       readTime="10–14 min"
-      updatedAt="July 2026"
     >
 
       {/* ── PART 01 ── */}

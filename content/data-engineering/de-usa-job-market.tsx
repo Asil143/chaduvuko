@@ -125,7 +125,6 @@ export default function DEUsaJobMarketModule() {
       description="Salaries, companies, skills, JD decoding, and breaking in from a non-CS background."
       section="Data Engineering — Lesson 06"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — State of the Market ────────────────────────────── */}

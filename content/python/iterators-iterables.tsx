@@ -79,7 +79,6 @@ export default function IteratorsIterables() {
       description="What Python actually does when you write a for loop, the iterable vs iterator protocols, and how to build your own iterator class."
       section="Python — Lesson 27"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

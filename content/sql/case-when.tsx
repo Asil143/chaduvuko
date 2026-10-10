@@ -80,7 +80,6 @@ export default function CaseWhen() {
       description="SQL's if-else statement — build custom categories, conditional columns, pivot tables, and handle complex branching logic directly inside any query"
       section="SQL — Lesson 16"
       readTime="12–16 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

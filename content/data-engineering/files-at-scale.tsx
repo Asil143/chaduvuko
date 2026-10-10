@@ -174,7 +174,6 @@ export default function FilesAtScaleModule() {
       description="File organisation, compression, partitioning, the small file problem, and format conversion pipelines."
       section="Data Engineering — Lesson 19"
       readTime="65 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Files at Scale Is Its Own Topic ────────────── */}

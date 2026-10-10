@@ -172,7 +172,6 @@ export default function NumpyArraysPage() {
       description="The backbone of all numerical ML in Python. Master arrays, indexing, vectorised operations, and broadcasting — the skills that make ML code fast."
       section="Programming Ecosystem"
       readTime="40–52 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}

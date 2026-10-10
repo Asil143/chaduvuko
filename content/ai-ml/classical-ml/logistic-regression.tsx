@@ -202,7 +202,6 @@ export default function LogisticRegressionPage() {
       description="The foundation of all classification. Sigmoid, decision boundaries, cross-entropy, regularisation, and multi-class extension — built from scratch then in sklearn on real data."
       section="Classical ML"
       readTime="25–30 min"
-      updatedAt="March 2026"
     >
       {/* ── Section progress header ───────────────────────────────────────── */}
       <div style={{ marginBottom: 40 }}>

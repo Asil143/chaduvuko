@@ -175,7 +175,6 @@ export default function MultimodalModelsPage() {
       description="Models that see and understand images and text together. CLIP for zero-shot image classification, LLaVA for visual question answering."
       section="Generative AI"
       readTime="36–46 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

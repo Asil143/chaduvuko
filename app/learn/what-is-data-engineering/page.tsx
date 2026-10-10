@@ -12,7 +12,6 @@ export default function WhatIsDataEngineeringPage() {
       description="Before you touch a single Azure service or write a line of PySpark, you need to understand what you are actually building and why companies pay so much to hire people who can build it."
       section="Foundations"
       readTime="10 min"
-      updatedAt="March 2026"
       showSalary={false}
       breadcrumbs={[
         { label: 'Learn', href: '/learn/roadmap' },

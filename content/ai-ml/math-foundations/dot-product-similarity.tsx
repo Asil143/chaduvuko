@@ -208,7 +208,6 @@ export default function DotProductSimilarityPage() {
       description="The operation behind every recommendation engine, embedding search, and attention mechanism — built from plain English first, then intuition, then math, then code."
       section="Math Foundations"
       readTime="22–28 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — START WITH PLAIN ENGLISH ══════════════════════════════ */}

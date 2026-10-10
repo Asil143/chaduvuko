@@ -76,7 +76,6 @@ export default function PerformanceTuningDbt() {
       description="Finding slow models, materialization trade-offs revisited for performance, incremental strategy tuning, warehouse-specific config passthrough like cluster_by, reducing full-refresh cost, splitting workloads across warehouse sizes, and thread parallelism — with a real before-and-after case study."
       section="dbt — Lesson 17"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

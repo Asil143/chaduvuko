@@ -105,7 +105,6 @@ export default function HeapsPage() {
       description="A special complete binary tree where the parent is always larger or smaller than its children. Always balanced, always O(log n), powers priority queues and heap sort."
       section="DSA"
       readTime="75 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

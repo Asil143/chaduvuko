@@ -181,7 +181,6 @@ export default function DataFormatsModule() {
       description="How each format works internally, when to use it, and what breaks when you pick the wrong one."
       section="Data Engineering — Lesson 08"
       readTime="60 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Formats Matter ─────────────────────────────── */}

@@ -98,7 +98,6 @@ export default function UserDefinedFunctions() {
       description="Build reusable scalar, table-valued, and SQL functions — IMMUTABLE vs STABLE vs VOLATILE, overloading, security definer, and assembling a production function library"
       section="SQL — Lesson 50"
       readTime="12–18 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

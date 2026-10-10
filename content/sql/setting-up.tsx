@@ -101,7 +101,6 @@ export default function SettingUp() {
       description="Install MySQL or PostgreSQL locally, connect with a client, and understand how SQL tools work — or use the browser playground and skip straight to Lesson 05"
       section="SQL — Lesson 04"
       readTime="10–16 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

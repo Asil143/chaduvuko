@@ -76,7 +76,6 @@ export default function TestingBasics() {
       description="Generic tests versus singular tests, the four built-in generic tests and their exact YAML syntax, how a generic test actually works as a parameterized SQL query, writing custom generic and singular tests, and where in the DAG to place each kind of test."
       section="dbt — Lesson 08"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

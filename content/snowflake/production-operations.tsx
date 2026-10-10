@@ -7,7 +7,6 @@ export default function ProductionOperations() {
       description="ACCOUNT_USAGE views, INFORMATION_SCHEMA latency tradeoffs, native alerting, operational dashboards, incident response, runbooks, and freshness/latency SLOs for a Snowflake platform."
       section="Snowflake — Lesson 18"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

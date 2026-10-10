@@ -77,7 +77,6 @@ export default function Transactions() {
       description="The mechanism that keeps your bank balance correct when the server crashes mid-transfer — what transactions are, why they exist, and how ACID properties guarantee correctness even when everything goes wrong."
       section="DBMS"
       readTime="80–95 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

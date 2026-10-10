@@ -174,7 +174,6 @@ export default function IngestionPatternsModule() {
       description="The three patterns that cover every source — when each is correct, how each fails, and how to choose."
       section="Data Engineering — Lesson 23"
       readTime="65 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ───────────────────────────────────────────────────── */}

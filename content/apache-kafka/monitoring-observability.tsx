@@ -76,7 +76,6 @@ export default function MonitoringObservability() {
       description="Why Kafka needs monitoring beyond generic host metrics: the critical broker, producer, and consumer metrics, how they are exposed via JMX and scraped by Prometheus, setting alert thresholds that catch real problems, and diagnosing a real consumer lag incident step by step."
       section="Apache Kafka — Lesson 16"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

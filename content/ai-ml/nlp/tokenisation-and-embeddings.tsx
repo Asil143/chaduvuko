@@ -175,7 +175,6 @@ export default function TokenisationAndEmbeddingsPage() {
       description="BPE, WordPiece, SentencePiece — how text becomes numbers. Word2Vec, GloVe, and contextual embeddings from BERT. The foundation of every NLP system."
       section="Natural Language Processing"
       readTime="30–40 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

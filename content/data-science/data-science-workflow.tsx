@@ -71,7 +71,6 @@ export default function DataScienceWorkflow() {
       description="From a vague business question to a shipped decision — the six stages every real project moves through, walked end to end on the StreamPulse dataset"
       section="Data Science — Lesson 02"
       readTime="12–16 min"
-      updatedAt="July 2026"
     >
 
       {/* ── PART 01 ── */}

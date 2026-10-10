@@ -71,7 +71,6 @@ export default function DataModels() {
       description="The complete evolution of how humanity has organised data — from paper ledgers to distributed graph databases — and why every architectural decision in database engineering traces back to the choice of data model."
       section="DBMS"
       readTime="70–85 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

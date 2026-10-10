@@ -172,7 +172,6 @@ export default function PythonForMLPage() {
       description="Not Python 101. Python the way ML engineers actually write it — vectorised, readable, and production-ready from day one."
       section="Programming Ecosystem"
       readTime="55–70 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}

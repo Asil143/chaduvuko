@@ -7,7 +7,6 @@ export default function SetupAndSqlBasics() {
       description="The Snowflake object hierarchy, warehouses vs databases, creating warehouses/databases/schemas/tables, core DML, session context, and first-day gotchas."
       section="Snowflake — Lesson 03"
       readTime="85 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

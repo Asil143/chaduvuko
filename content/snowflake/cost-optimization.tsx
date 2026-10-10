@@ -7,7 +7,6 @@ export default function CostOptimization() {
       description="Credit-based billing, auto-suspend/auto-resume, warehouse sizing trade-offs, multi-cluster scaling, resource monitors, account usage views, anti-patterns, and chargeback."
       section="Snowflake — Lesson 14"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

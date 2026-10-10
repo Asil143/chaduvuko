@@ -275,7 +275,6 @@ export default function SnmpAndSyslogPage() {
       description="From community strings to SNMPv3 authPriv, from syslog UDP to structured logging pipelines: how networks tell you when something goes wrong — and how to actually listen."
       section="Networking Fundamentals — Lesson 31"
       readTime="28–38 min"
-      updatedAt="May 2026"
     >
       {/* ── Chapter 1 ─────────────────────────────────────────── */}
       <Chapter n={1} title="The Night the Router Went Silent" />

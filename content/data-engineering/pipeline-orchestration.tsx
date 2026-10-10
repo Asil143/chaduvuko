@@ -174,7 +174,6 @@ export default function PipelineOrchestrationModule() {
       description="What orchestration actually does, Airflow architecture, DAG design, scheduling, backfills, Sensors, and when to use alternatives."
       section="Data Engineering — Lesson 28"
       readTime="70 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What Orchestration Actually Is ─────────────────── */}

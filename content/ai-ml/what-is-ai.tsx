@@ -97,7 +97,6 @@ export default function WhatIsAIPage() {
       description="The clearest explanation of the AI family — zero jargon, real examples, interactive visual."
       section="AI & ML — Introduction"
       readTime="20–25 min"
-      updatedAt="March 2026"
     >
 
       {/* ── SECTION 1: Before we start ─────────────────────────────────────── */}

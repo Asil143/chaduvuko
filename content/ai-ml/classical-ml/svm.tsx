@@ -175,7 +175,6 @@ export default function SVMPage() {
       description="The algorithm that finds the widest possible boundary between classes. Margins, support vectors, the kernel trick, and when SVMs still beat neural networks."
       section="Classical ML"
       readTime="26–34 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

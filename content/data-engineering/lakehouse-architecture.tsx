@@ -174,7 +174,6 @@ export default function LakehouseArchitectureModule() {
       description="How the lakehouse converges lake and warehouse, open table format mechanics, ACID on object storage, Unity Catalog, Iceberg in practice, and when to choose it."
       section="Data Engineering — Lesson 32"
       readTime="60 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Problem the Lakehouse Solves ────────────────── */}

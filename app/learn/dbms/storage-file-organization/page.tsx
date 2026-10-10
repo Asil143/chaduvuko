@@ -77,7 +77,6 @@ export default function StorageFileOrganization() {
       description="The physical foundation everything else rests on — how databases talk to disks, how data is laid out in pages, how files are organised for fast access, and how the buffer pool keeps the most useful data in RAM."
       section="DBMS"
       readTime="75–90 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

@@ -76,7 +76,6 @@ export default function IncrementalModels() {
       description="Why incremental models exist, how is_incremental() actually works, the append / delete+insert / merge strategies, unique_key, full-refresh recovery, and the classic bug where incremental and full-refresh runs silently diverge."
       section="dbt — Lesson 07"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

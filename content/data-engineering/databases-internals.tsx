@@ -178,7 +178,6 @@ export default function DatabasesInternalsModule() {
       description="Storage engines, B-trees, indexes, buffer pools, WAL — the inside story."
       section="Data Engineering — Lesson 09"
       readTime="65 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Internals Matter ───────────────────────────── */}

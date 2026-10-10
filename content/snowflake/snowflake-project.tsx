@@ -7,7 +7,6 @@ export default function SnowflakeProject() {
       description="A full capstone build: raw ingestion, semi-structured JSON, idempotent Bronze/Silver/Gold pipelines, streams and tasks, masking and row access policies, time travel recovery, clustering, resource monitors, and monitoring — one orders analytics platform synthesizing the whole track."
       section="Snowflake — Lesson 19"
       readTime="120 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

@@ -120,7 +120,6 @@ export default function DynamicProgrammingPage() {
       description="Remember what you already computed so you never compute it twice. The technique that turns exponential problems into polynomial ones. From naive recursion to memoization to tabulation — built from scratch."
       section="DSA"
       readTime="150 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

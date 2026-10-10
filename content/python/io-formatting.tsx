@@ -79,7 +79,6 @@ export default function IOFormatting() {
       description="input() mechanics, reading multiple values from one line, and print() in real depth — sep, end, file, and flush — plus stdout vs stderr and print-based debugging."
       section="Python — Lesson 10"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

@@ -178,7 +178,6 @@ export default function SQLvsNoSQLModule() {
       description="What each one trades off, four NoSQL families from first principles, and how to choose."
       section="Data Engineering — Lesson 10"
       readTime="55 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Misconception ──────────────────────────────── */}

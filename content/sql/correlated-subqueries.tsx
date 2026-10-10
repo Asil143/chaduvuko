@@ -80,7 +80,6 @@ export default function CorrelatedSubqueries() {
       description="Row-level computations that reference the outer query — every pattern, the execution model, performance implications, and when to rewrite with JOINs or window functions"
       section="SQL — Lesson 37"
       readTime="14–20 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

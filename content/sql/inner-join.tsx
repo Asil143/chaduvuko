@@ -80,7 +80,6 @@ export default function InnerJoin() {
       description="Master the most-used JOIN — two-table joins, three and four-table chains, joining on expressions, aggregate queries with joins, and every production pattern you will write daily"
       section="SQL — Lesson 31"
       readTime="14–18 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

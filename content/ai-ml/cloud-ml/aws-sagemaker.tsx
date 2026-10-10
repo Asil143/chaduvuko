@@ -173,7 +173,6 @@ export default function AWSSageMakerPage() {
       description="SageMaker training jobs, SageMaker Pipelines, Feature Store, Clarify for bias detection, and JumpStart model hub. Production ML on AWS from scratch."
       section="Cloud ML Platforms"
       readTime="40–52 min"
-      updatedAt="April 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

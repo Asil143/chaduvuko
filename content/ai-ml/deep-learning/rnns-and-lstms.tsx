@@ -175,7 +175,6 @@ export default function RNNsAndLSTMsPage() {
       description="Hidden states, vanishing gradients across time, and how LSTMs use gates to selectively remember and forget. Built from scratch before PyTorch."
       section="Deep Learning"
       readTime="36–46 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

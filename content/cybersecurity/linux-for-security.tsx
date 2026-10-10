@@ -71,7 +71,6 @@ export default function LinuxForSecurity() {
       description="File permissions, processes, users, logs, and the commands every security professional uses daily. The OS that runs the internet."
       section="Cybersecurity — Lesson 03"
       readTime="30 min"
-      updatedAt="May 2026"
     >
 
       {/* ── PART 01 ── */}

@@ -80,7 +80,6 @@ export default function LimitFetch() {
       description="Control exactly how many rows come back, implement pagination, and understand the performance implications of LIMIT on large tables"
       section="SQL — Lesson 09"
       readTime="8–12 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

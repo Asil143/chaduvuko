@@ -121,7 +121,6 @@ export default function CDCModule() {
       description="WAL internals, Debezium architecture, Schema Registry, the Outbox Pattern, event ordering, and operating CDC in production."
       section="Data Engineering — Lesson 24"
       readTime="70 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What CDC Actually Is ───────────────────────────── */}

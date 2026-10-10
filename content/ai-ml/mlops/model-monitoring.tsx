@@ -175,7 +175,6 @@ export default function ModelMonitoringPage() {
       description="How to know your model is degrading before users complain. Data drift, concept drift, Evidently AI, and automated retraining triggers."
       section="MLOps and Production"
       readTime="36–46 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

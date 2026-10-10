@@ -165,7 +165,6 @@ export default function VectorsMatricesTensorsPage() {
       description="The language every ML algorithm speaks. From a single number to multi-dimensional arrays — visual intuition first, formula second."
       section="Math Foundations"
       readTime="30–38 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — WHY THIS MATTERS ══════════════════════════════════════ */}

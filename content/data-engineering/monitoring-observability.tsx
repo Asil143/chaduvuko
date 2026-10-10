@@ -81,7 +81,6 @@ export default function MonitoringObservabilityModule() {
       description="SLAs, alerting tiers, pipeline health dashboards, structured logging, metric collection, DLQ monitoring, and building an on-call culture for data teams."
       section="Data Engineering — Lesson 37"
       readTime="70 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Monitoring vs Observability ─────────────────────── */}

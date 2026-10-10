@@ -79,7 +79,6 @@ export default function ContextManagers() {
       description="What with is actually doing, and building your own context managers for resource management."
       section="Python — Lesson 30"
       readTime="30 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

@@ -329,7 +329,6 @@ export default function NetworkAttacksPage() {
       description="From ARP spoofing to BGP hijacking, from SYN floods to SSL stripping: how attacks exploit protocol design, and what defenders can do about it."
       section="Networking Fundamentals — Lesson 33"
       readTime="30–42 min"
-      updatedAt="May 2026"
     >
       {/* ── Chapter 1 ─────────────────────────────────────────── */}
       <Chapter n={1} title="The Attacker's Advantage: Protocols Built on Trust" />

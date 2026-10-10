@@ -125,7 +125,6 @@ export default function RolesComparisonModule() {
       description="Clear permanent boundaries between the four most confused roles in tech."
       section="Data Engineering — Lesson 05"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why the Confusion Exists ───────────────────────── */}

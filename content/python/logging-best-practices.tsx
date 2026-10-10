@@ -79,7 +79,6 @@ export default function LoggingBestPractices() {
       description="Why print() is not logging, the logging module in depth, log levels, handlers and formatters, and what you should never log."
       section="Python — Lesson 40"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

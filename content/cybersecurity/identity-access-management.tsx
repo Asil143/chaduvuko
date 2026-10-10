@@ -61,7 +61,6 @@ export default function Module29() {
       description="Authentication factors and their attack resistance, RBAC versus ABAC design, SSO federation, MFA implementation, Privileged Access Management, Just-in-Time access, and identity governance for enterprise environments."
       section="Cybersecurity — Lesson 29"
       readTime="32 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

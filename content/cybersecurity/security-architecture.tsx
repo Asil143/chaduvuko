@@ -61,7 +61,6 @@ export default function Module28() {
       description="How to design systems that are resilient under attack: defence in depth, Zero Trust principles, network segmentation, security control selection, threat modelling integration, and architectural patterns for cloud-native environments."
       section="Cybersecurity — Lesson 28"
       readTime="33 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

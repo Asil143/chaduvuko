@@ -71,7 +71,6 @@ export default function DsVsOtherRoles() {
       description="Four job titles that get confused constantly — what each one actually owns day to day, where the boundaries blur in practice, and how to decode a job posting"
       section="Data Science — Lesson 03"
       readTime="10–14 min"
-      updatedAt="July 2026"
     >
 
       {/* ── PART 01 ── */}

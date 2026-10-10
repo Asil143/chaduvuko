@@ -61,7 +61,6 @@ export default function Module23() {
       description="Systematic port scanning with nmap, service fingerprinting, vulnerability scanning with Nessus and Nuclei, web directory enumeration, SMB/LDAP enumeration, and building the vulnerability hypothesis list."
       section="Cybersecurity — Lesson 23"
       readTime="33 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

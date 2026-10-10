@@ -83,7 +83,6 @@ export default function WhatIsPythonSetup() {
       description="Why Python is the most in-demand language in the US job market, how it actually runs, and getting a real environment set up."
       section="Python — Lesson 01"
       readTime="55 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

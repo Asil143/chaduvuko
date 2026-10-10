@@ -79,7 +79,6 @@ export default function ClassStaticMethodsProperties() {
       description="@classmethod, @staticmethod, and @property — what each is actually for, with real examples of when to reach for each."
       section="Python — Lesson 23"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

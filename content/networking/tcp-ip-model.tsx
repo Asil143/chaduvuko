@@ -430,7 +430,6 @@ export default function TCPIPModel() {
       description="The four-layer model that actually runs the internet — from the protocol that created it, to the IP header fields, TCP state machine, and how every packet travels from your keyboard to a server on the other side of the world."
       section="Networking Fundamentals — Lesson 4"
       readTime="35–50 min"
-      updatedAt="May 2026"
     >
 
       {/* ── Chapter 1 ── */}

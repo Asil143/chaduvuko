@@ -101,7 +101,6 @@ export default function GreedyPage() {
       description="Always pick the locally best option at each step. Sometimes that is enough to reach the global optimum — and it is much faster than DP. Activity selection, fractional knapsack, Huffman coding, and when greedy fails."
       section="DSA"
       readTime="75 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

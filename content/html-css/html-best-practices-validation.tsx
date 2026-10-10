@@ -79,7 +79,6 @@ export default function HtmlBestPracticesValidation() {
       description="The W3C validator, void elements, self-closing tag myths, and the conventions that separate clean markup from markup that merely renders."
       section="HTML & CSS — Lesson 15"
       readTime="30 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

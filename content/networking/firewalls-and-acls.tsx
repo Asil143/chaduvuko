@@ -361,7 +361,6 @@ export default function FirewallsAndAclsPage() {
       description="From packet filters to next-generation firewalls: how network access control works, how rules are evaluated, and how to design a zone-based security architecture that actually holds."
       section="Networking Fundamentals — Lesson 34"
       readTime="28–38 min"
-      updatedAt="May 2026"
     >
       {/* ── Chapter 1 ─────────────────────────────────────────── */}
       <Chapter n={1} title="The First Firewall: A Packet Filter in a Crisis" />

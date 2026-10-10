@@ -126,7 +126,6 @@ export default function Normalization() {
       description="The complete science of designing databases that don't betray you — eliminating every class of anomaly, through every normal form, with complete worked examples and real-world context."
       section="DBMS"
       readTime="95–115 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

@@ -80,7 +80,6 @@ export default function AlterTable() {
       description="Modify table structure safely — add, rename, and drop columns, change data types, manage constraints, and run schema changes in production without downtime"
       section="SQL — Lesson 24"
       readTime="10–14 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

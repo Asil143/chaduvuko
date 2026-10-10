@@ -175,7 +175,6 @@ export default function LightGBMPage() {
       description="Leaf-wise tree growth, histogram-based splitting, and why LightGBM trains 10x faster than XGBoost on large datasets."
       section="Classical ML"
       readTime="30–40 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

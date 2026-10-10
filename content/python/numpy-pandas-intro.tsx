@@ -79,7 +79,6 @@ export default function NumpyPandasIntro() {
       description="The bridge from core Python into data work — arrays, DataFrames, and why these libraries exist at all."
       section="Python — Lesson 43"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

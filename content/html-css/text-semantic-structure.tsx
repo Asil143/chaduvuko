@@ -79,7 +79,6 @@ export default function TextSemanticStructure() {
       description="Headings, paragraphs, and the semantic tags — header, nav, main, section, article, aside, footer — that give a page real meaning."
       section="HTML & CSS — Lesson 03"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

@@ -81,7 +81,6 @@ export default function CrossJoin() {
       description="Generate every combination — Cartesian products, reference grids, calendar scaffolding, test data, and the scenarios where every-row-with-every-row is exactly what you need"
       section="SQL — Lesson 35"
       readTime="8–12 min"
-      updatedAt="April 2026"
     >
       <WhyMatters track="sql">
         Instacart's operations team runs JOIN queries every morning to match delivery partner IDs to order IDs. This is that query.

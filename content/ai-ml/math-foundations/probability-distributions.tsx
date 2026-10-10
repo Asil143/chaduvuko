@@ -166,7 +166,6 @@ export default function ProbabilityDistributionsPage() {
       description="How ML models reason under uncertainty. Distributions, Bayes theorem, MLE, and why every loss function is secretly a probability model."
       section="Math Foundations"
       readTime="36–45 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — WHY PROBABILITY ════════════════════════════════════════ */}

@@ -118,7 +118,6 @@ export default function LinkedListsPage() {
       description="A chain of nodes where each one points to the next. More flexible than arrays, a favourite in interviews, and the foundation of stacks, queues, and trees."
       section="DSA"
       readTime="90 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

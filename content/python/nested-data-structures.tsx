@@ -79,7 +79,6 @@ export default function NestedDataStructures() {
       description="Lists of dicts, dicts of lists, and the real-world JSON-shaped data you will actually work with — safe access, flattening, sorting, and aggregation."
       section="Python — Lesson 13"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

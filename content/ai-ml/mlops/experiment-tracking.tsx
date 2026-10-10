@@ -175,7 +175,6 @@ export default function ExperimentTrackingPage() {
       description="Log every run, compare experiments, version models, register artifacts. Never lose a good experiment again."
       section="MLOps and Production"
       readTime="30–40 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

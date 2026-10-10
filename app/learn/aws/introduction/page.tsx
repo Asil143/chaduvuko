@@ -36,7 +36,6 @@ export default function AWSIntroductionPage() {
       description="AWS is the largest cloud platform by market share. If you already know Azure, the concepts transfer directly — you are learning new service names, not new ideas. This section maps everything you know to AWS equivalents."
       section="Section 02 · AWS Track"
       readTime="12 min read"
-      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'AWS Track', href: '/learn/aws/introduction' },
         { label: 'AWS Introduction', href: '/learn/aws/introduction' },

@@ -51,7 +51,6 @@ export default function SqlForDataAnalysis() {
       description="Real analytical patterns — revenue trends, customer segmentation, cohort analysis, and RFM scoring — applied to the FreshCart dataset"
       section="SQL — Lesson 60"
       readTime="28–36 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

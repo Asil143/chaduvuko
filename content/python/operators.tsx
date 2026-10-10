@@ -79,7 +79,6 @@ export default function Operators() {
       description="Every operator Python has, what it does under the hood, and the precedence rules that cause real bugs."
       section="Python — Lesson 03"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

@@ -7,7 +7,6 @@ export default function RolesSecurityBasics() {
       description="RBAC, users, roles, grants, ownership, future grants, least privilege, service roles, and the access mistakes that break Snowflake projects."
       section="Snowflake — Lesson 04"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

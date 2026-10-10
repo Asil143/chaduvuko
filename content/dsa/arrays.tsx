@@ -91,7 +91,6 @@ export default function ArraysPage() {
       description="The first and most fundamental data structure. Boxes lined up in memory — simple to understand, powerful in practice, used absolutely everywhere."
       section="DSA"
       readTime="90 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

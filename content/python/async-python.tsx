@@ -79,7 +79,6 @@ export default function AsyncPython() {
       description="What async solves, coroutines and the event loop explained properly, asyncio.gather, a concurrent-API-calls worked example, and honest guidance on complexity."
       section="Python — Lesson 35"
       readTime="55 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

@@ -202,7 +202,6 @@ export default function QuicHttp3Page() {
       description="How Google's experiment to fix the web became an IETF standard — and why running a transport protocol over UDP required reinventing congestion control, TLS integration, multiplexing, and connection migration."
       section="Networking Fundamentals — Lesson 24"
       readTime="25–35 min"
-      updatedAt="May 2026"
     >
 
       <Chapter n={1} />

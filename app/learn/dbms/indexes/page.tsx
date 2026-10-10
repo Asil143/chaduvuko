@@ -77,7 +77,6 @@ export default function Indexes() {
       description="Why queries slow down at scale, how indexes fix them, and the data structures powering every fast database lookup — explained from scratch."
       section="DBMS"
       readTime="75–90 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

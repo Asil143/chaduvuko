@@ -79,7 +79,6 @@ export default function Lists() {
       description="The workhorse data structure of Python — creating and slicing lists, every common method, mutability in depth, the shallow-copy trap, and nested lists."
       section="Python — Lesson 08"
       readTime="55 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

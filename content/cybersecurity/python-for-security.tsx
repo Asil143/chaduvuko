@@ -73,7 +73,6 @@ export default function Module14() {
       description="Build real security tools in Python — port scanners, packet analysers, log parsers, API fuzzers, and automation scripts used daily in security work."
       section="Cybersecurity — Lesson 14"
       readTime="46 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

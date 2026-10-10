@@ -79,7 +79,6 @@ export default function Loops() {
       description="Every form of iteration in Python — for loops, range(), while loops, break/continue, the loop else clause, nested loops, enumerate(), and zip()."
       section="Python — Lesson 06"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

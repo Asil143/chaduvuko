@@ -96,7 +96,6 @@ export default function HtmlCssInterviewPrep() {
       description="The HTML and CSS questions that come up in real front-end interviews, answered at senior-engineer depth."
       section="HTML & CSS — Lesson 42 (Capstone)"
       readTime="55 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Intro ── */}

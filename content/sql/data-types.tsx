@@ -110,7 +110,6 @@ export default function DataTypes() {
       description="What types exist, which to choose for each use case, how types affect storage and performance, and how type mismatches cause silent bugs in calculations and comparisons"
       section="SQL — Lesson 18"
       readTime="12–16 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

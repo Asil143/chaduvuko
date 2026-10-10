@@ -79,7 +79,6 @@ export default function BuildingACompleteStaticPage() {
       description="A full project pulling structure, semantics, media, and forms together into one real, complete HTML page — start to finish."
       section="HTML & CSS — Lesson 16 (Capstone)"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Intro ── */}

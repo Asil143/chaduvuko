@@ -280,7 +280,6 @@ export default function DhcpDeepDivePage() {
       description="From the broadcast storm of DORA to the precision of DHCP snooping and stateless DHCPv6: how the protocol that configures every device on your network actually works."
       section="Networking Fundamentals — Lesson 30"
       readTime="28–38 min"
-      updatedAt="May 2026"
     >
       {/* ── Chapter 1 ─────────────────────────────────────────── */}
       <Chapter n={1} title="Before DHCP: The Pain of Static Addresses" />

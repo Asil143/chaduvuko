@@ -129,7 +129,6 @@ export default function WhatIsDataEngineeringModule() {
       description="The role, the lifecycle, what DEs actually do, and how to break in."
       section="Data Engineering — Lesson 02"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Definition ─────────────────────────────────── */}

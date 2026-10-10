@@ -95,7 +95,6 @@ export default function CastConvert() {
       description="Converting between data types — CAST, :: shorthand, implicit vs explicit casting, TRY_CAST for safe conversion, and every coercion rule that prevents silent errors in production queries"
       section="SQL — Lesson 44"
       readTime="10–14 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

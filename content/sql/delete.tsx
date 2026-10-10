@@ -80,7 +80,6 @@ export default function Delete() {
       description="Remove rows from tables safely — DELETE vs TRUNCATE, soft delete patterns, cascade deletes, referential integrity, and why SELECT before DELETE is non-negotiable"
       section="SQL — Lesson 22"
       readTime="10–14 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

@@ -103,7 +103,6 @@ export default function TypesOfDatabases() {
       description="Relational, Document, Key-Value, Column-Family, Graph, Time-Series — what each one is built for and how US companies use them"
       section="SQL — Lesson 03"
       readTime="8–12 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

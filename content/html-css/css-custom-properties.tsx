@@ -79,7 +79,6 @@ export default function CssCustomProperties() {
       description="Native CSS variables — scoping, fallbacks, and using them to build a real, maintainable design system without a preprocessor."
       section="HTML & CSS — Lesson 30"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

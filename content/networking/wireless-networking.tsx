@@ -296,7 +296,6 @@ export default function WirelessNetworkingModule() {
       description="From 802.11b's 11 Mbps to Wi-Fi 7's 46 Gbps — the physics, protocols, and design principles behind wireless networks. Understand why Wi-Fi behaves differently from wired Ethernet and how to design high-density wireless deployments."
       section="Networking Fundamentals — Lesson 12"
       readTime="25–35 min"
-      updatedAt="May 2026"
     >
       {/* ── Chapter 1 ── */}
       <Chapter n={1} title="Radio Waves and the Wireless Channel" />

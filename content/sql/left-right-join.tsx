@@ -80,7 +80,6 @@ export default function LeftRightJoin() {
       description="Keep unmatched rows — every LEFT JOIN pattern from basic optional enrichment to anti-join gap analysis, plus when RIGHT JOIN makes sense and the ON vs WHERE trap"
       section="SQL — Lesson 32"
       readTime="14–20 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

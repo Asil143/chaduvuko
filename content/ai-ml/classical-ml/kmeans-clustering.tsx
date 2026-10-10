@@ -175,7 +175,6 @@ export default function KMeansClusteringPage() {
       description="Finding hidden groups in data without labels. Inertia, elbow method, silhouette scores, and when clustering is and is not the right approach."
       section="Classical ML"
       readTime="22–28 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

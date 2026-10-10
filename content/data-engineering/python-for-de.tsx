@@ -152,7 +152,6 @@ export default function PythonForDEModule() {
       description="File I/O at scale, error handling, structured logging, generators, config management, and writing testable pipeline code — built around one running pipeline."
       section="Data Engineering — Lesson 14"
       readTime="80 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — This Is Not Python 101 ─────────────────────────── */}

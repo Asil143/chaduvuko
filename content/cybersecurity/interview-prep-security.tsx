@@ -47,7 +47,6 @@ export default function Module40() {
       description="40 modules of knowledge meets the hiring process. Master technical and behavioural security interviews, position yourself effectively, negotiate your offer, and build the professional network that accelerates your entire career."
       section="Cybersecurity — Lesson 40"
       readTime="40 min"
-      updatedAt="May 2026"
     >
 
       <Part title="The Security Job Market">

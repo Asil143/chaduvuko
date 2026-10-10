@@ -54,7 +54,6 @@ export default function Module35() {
       description="Embed security into every phase of the SDLC without slowing delivery. Build SAST/DAST/SCA gates, secure CI/CD pipelines, scan infrastructure-as-code, manage secrets, and build a security culture where developers own security outcomes."
       section="Cybersecurity — Lesson 35"
       readTime="38 min"
-      updatedAt="May 2026"
     >
 
       <Part title="What Is DevSecOps?">

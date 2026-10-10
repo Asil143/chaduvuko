@@ -76,7 +76,6 @@ export default function ADFPage() {
       description="ADF is the orchestration backbone of every Azure data pipeline. It moves data from 90+ sources, triggers Databricks notebooks, handles failures, and automates everything on a schedule — all without writing infrastructure code."
       section="Section 02 · Azure Track"
       readTime="16 min read"
-      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'Azure Track', href: '/learn/azure/introduction' },
         { label: 'Azure Data Factory', href: '/learn/azure/adf' },

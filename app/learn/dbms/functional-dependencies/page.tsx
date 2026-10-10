@@ -100,7 +100,6 @@ export default function FunctionalDependencies() {
       description="The mathematical language of normalization — how attributes determine each other, how to derive all possible dependencies from a given set, and how to design schemas that enforce exactly the constraints the data requires."
       section="DBMS"
       readTime="90–110 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

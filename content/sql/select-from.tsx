@@ -80,7 +80,6 @@ export default function SelectFrom() {
       description="The two most important words in SQL — what they mean, how the database executes them, and every variation you will use in the real world"
       section="SQL — Lesson 05"
       readTime="10–14 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

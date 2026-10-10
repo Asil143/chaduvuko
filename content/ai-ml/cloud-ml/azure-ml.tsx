@@ -175,7 +175,6 @@ export default function AzureMLPage() {
       description="Azure Machine Learning Studio, compute clusters, AML Pipelines, AutoML, model registry, and online endpoints. Production ML on Azure from scratch."
       section="Cloud ML Platforms"
       readTime="45–58 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

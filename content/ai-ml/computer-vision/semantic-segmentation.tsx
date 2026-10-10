@@ -175,7 +175,6 @@ export default function SemanticSegmentationPage() {
       description="U-Net architecture, skip connections, and how segmentation powers medical imaging and autonomous vehicles. Label every pixel in one forward pass."
       section="Computer Vision"
       readTime="30–40 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

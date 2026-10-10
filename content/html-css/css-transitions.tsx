@@ -79,7 +79,6 @@ export default function CssTransitions() {
       description="Smooth, performant state changes — transition-property, timing functions, and the properties that animate cheaply vs expensively."
       section="HTML & CSS — Lesson 31"
       readTime="30 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

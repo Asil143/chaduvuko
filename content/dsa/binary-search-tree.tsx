@@ -110,7 +110,6 @@ export default function BSTPage() {
       description="A binary tree with one powerful rule: every left child is smaller, every right child is larger. This rule makes search, insert, and delete all run in O(log n) on a balanced tree."
       section="DSA"
       readTime="75 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

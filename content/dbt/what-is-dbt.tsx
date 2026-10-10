@@ -298,7 +298,6 @@ export default function WhatIsDbt() {
       description="What dbt actually is, the ETL-to-ELT shift that created the need for it, its exact scope boundary against ingestion tools, why it exists, and how it compares to hand-rolled SQL, GUI ETL tools, and Dataform."
       section="dbt — Lesson 01"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

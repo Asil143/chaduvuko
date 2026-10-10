@@ -175,7 +175,6 @@ export default function LLMAgentsPage() {
       description="Function calling, memory, multi-agent coordination, and the architecture behind every production AI agent."
       section="Natural Language Processing"
       readTime="36–46 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

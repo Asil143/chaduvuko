@@ -144,7 +144,6 @@ export default function QueuesPage() {
       description="First In, First Out. The data structure behind CPU scheduling, WhatsApp message delivery, printer spooling, and breadth-first search. Built two ways with full C code."
       section="DSA"
       readTime="60 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

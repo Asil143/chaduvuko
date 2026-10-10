@@ -80,7 +80,6 @@ export default function HowDatabasesWork() {
       description="Tables, rows, columns, data types, primary keys, foreign keys, constraints — the complete building blocks"
       section="SQL — Lesson 02"
       readTime="10–14 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

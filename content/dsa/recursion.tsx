@@ -107,7 +107,6 @@ export default function RecursionPage() {
       description="A function that calls itself. The concept that trips up most beginners — explained step by step, traced visually, and built up from the simplest example to the legendary Tower of Hanoi."
       section="DSA"
       readTime="90 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

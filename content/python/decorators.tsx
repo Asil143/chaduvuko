@@ -79,7 +79,6 @@ export default function Decorators() {
       description="Functions that wrap functions. How decorators actually work, and writing your own from scratch."
       section="Python — Lesson 29"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

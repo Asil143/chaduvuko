@@ -76,7 +76,6 @@ export default function ManagedKafkaCloud() {
       description="Why teams choose managed Kafka over self-hosting, how Confluent Cloud, Amazon MSK, Redpanda, and WarpStream actually differ, Kubernetes-based self-management with Strimzi as a middle ground, real cost-model trade-offs, migration considerations, and a decision framework for choosing based on team size, cloud provider, compliance, and throughput."
       section="Apache Kafka — Lesson 22"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

@@ -121,7 +121,6 @@ export default function BatchPipelineFromScratchModule() {
       description="From requirements to production deployment — schema validation, chunked extraction, transformation, upserts, observability, testing, and scheduling."
       section="Data Engineering — Lesson 25"
       readTime="85 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What We Are Building ───────────────────────────── */}

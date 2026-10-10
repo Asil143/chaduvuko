@@ -363,7 +363,6 @@ export default function Udp() {
       description="A deep-dive into UDP's minimalist design philosophy — covering its 8-byte header, datagram delivery semantics, why latency-sensitive and broadcast applications need it, UDP amplification attacks, and how QUIC builds reliability on top of UDP in user space."
       section="Networking Fundamentals — Lesson 21"
       readTime="18–24 min"
-      updatedAt="May 2026"
     >
       {/* Chapter 01 */}
       <Chapter n={1} />

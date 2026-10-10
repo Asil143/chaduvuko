@@ -174,7 +174,6 @@ export default function WarehouseConceptsModule() {
       description="Columnar storage, query execution, result caching, virtual warehouses, cluster keys, and why Snowflake queries are fast."
       section="Data Engineering — Lesson 31"
       readTime="60 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Internal Concepts Matter ────────────────────── */}

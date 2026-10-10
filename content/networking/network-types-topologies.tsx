@@ -587,7 +587,6 @@ export default function NetworkTypesTopologies() {
       description="LAN to WAN to SAN — and Bus to Star to Mesh. The two dimensions that define every network ever built, and why the layout you choose on day one determines what breaks on year five."
       section="Networking Fundamentals"
       readTime="35 min"
-      updatedAt="May 2026"
     >
 
       {/* ── CHAPTER 1: The Hook ─────────────────────────────────────────── */}

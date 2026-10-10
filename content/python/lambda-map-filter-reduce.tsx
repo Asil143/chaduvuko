@@ -79,7 +79,6 @@ export default function LambdaMapFilterReduce() {
       description="Lambda syntax and its real constraint, when it genuinely earns its place, map/filter/reduce in depth, and why comprehensions usually win."
       section="Python — Lesson 26"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

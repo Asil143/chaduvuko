@@ -80,7 +80,6 @@ export default function Distinct() {
       description="Return only unique values, understand how DISTINCT works across single and multiple columns, its performance cost, and when to use GROUP BY instead"
       section="SQL — Lesson 10"
       readTime="7–10 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

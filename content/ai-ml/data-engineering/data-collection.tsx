@@ -172,7 +172,6 @@ export default function DataCollectionPage() {
       description="Where ML data actually comes from and how to pull it reliably. REST APIs with pagination, SQL queries at scale, Parquet pipelines, and scraping — all with production-grade error handling."
       section="Data Engineering"
       readTime="50–62 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}

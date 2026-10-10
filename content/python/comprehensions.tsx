@@ -79,7 +79,6 @@ export default function Comprehensions() {
       description="The Pythonic way to build collections — list, dict, and set comprehensions, nested comprehensions, generator expressions, and when a plain loop is better."
       section="Python — Lesson 12"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

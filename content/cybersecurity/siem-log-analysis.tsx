@@ -61,7 +61,6 @@ export default function Module31() {
       description="Log sources, centralised collection architecture, SIEM query languages (Splunk SPL, Elastic KQL, Sentinel KQL), detection rule writing, alert triage methodology, and the essential Windows Event IDs that every SOC analyst must know."
       section="Cybersecurity — Lesson 31"
       readTime="34 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

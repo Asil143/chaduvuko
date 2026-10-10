@@ -129,7 +129,6 @@ export default function WhatIsDataModule() {
       description="The foundation of everything — bits, bytes, files, and why data needs engineers."
       section="Data Engineering — Lesson 01"
       readTime="55 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What Actually Is Data ─────────────────────────── */}

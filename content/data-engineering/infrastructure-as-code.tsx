@@ -81,7 +81,6 @@ export default function InfrastructureAsCodeModule() {
       description="Terraform fundamentals, provisioning Snowflake warehouses, S3 buckets, Airflow environments, IAM roles, and managing data infrastructure with state, modules, and CI/CD."
       section="Data Engineering — Lesson 45"
       readTime="70 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Data Engineers Need IaC ─────────────────────── */}

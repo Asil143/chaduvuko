@@ -175,7 +175,6 @@ export default function BackpropagationPage() {
       description="The chain rule applied to a network of layers. Gradients flow backward, weights update, the network gets better. Understood once, never forgotten."
       section="Deep Learning"
       readTime="36–46 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

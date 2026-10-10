@@ -175,7 +175,6 @@ export default function CNNsImageClassificationPage() {
       description="Filters, feature maps, pooling, and how CNNs learn to recognise objects at any position in an image. Built from scratch then scaled with transfer learning."
       section="Deep Learning"
       readTime="45–58 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

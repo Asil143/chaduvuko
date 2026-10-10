@@ -79,7 +79,6 @@ export default function ControlFlow() {
       description="How Python evaluates truthiness, every form of conditional logic, structural pattern matching, and real readability patterns."
       section="Python — Lesson 05"
       readTime="55 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

@@ -79,7 +79,6 @@ export default function FlexboxVsGrid() {
       description="The decision every layout starts with — one-dimensional vs two-dimensional thinking, and when to combine both in the same page."
       section="HTML & CSS — Lesson 27"
       readTime="25 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

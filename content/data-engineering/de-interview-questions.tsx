@@ -133,7 +133,6 @@ export default function DEInterviewQuestionsModule() {
       description="60 complete data engineering interview answers across Python, SQL, pipelines, Spark, Kafka, data modelling, warehousing, cloud, distributed systems, system design, and behavioural — written at senior engineer depth."
       section="Data Engineering — Lesson 47"
       readTime="90 min"
-      updatedAt="August 2026"
     >
 
       {/* ── How to use this lesson ───────────────────────────────────── */}

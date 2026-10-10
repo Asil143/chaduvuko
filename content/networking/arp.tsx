@@ -357,7 +357,6 @@ export default function ArpPage() {
       description="The glue between Layer 2 and Layer 3 — how every packet finds the MAC address it needs, and why this simple protocol is a persistent security vulnerability."
       section="Networking Fundamentals — Lesson 09"
       readTime="18–24 min"
-      updatedAt="May 2026"
     >
       {/* ── Chapter 01 ── */}
       <Chapter n={1} title="The Missing Link Between IP and Ethernet" />

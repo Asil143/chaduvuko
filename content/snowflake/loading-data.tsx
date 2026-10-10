@@ -7,7 +7,6 @@ export default function LoadingData() {
       description="Internal vs external stages, stage types, file formats, PUT, COPY INTO in depth, validation, rejected rows, load history and idempotency, and a full worked S3 load."
       section="Snowflake — Lesson 05"
       readTime="90 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

@@ -76,7 +76,6 @@ export default function ConsumerDesign() {
       description="How to build a production-grade Kafka consumer: the full config walkthrough, manual commit-after-processing, idempotent processing, poison-message handling, graceful shutdown, rebalance listeners, and a production-readiness checklist."
       section="Apache Kafka — Lesson 12"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

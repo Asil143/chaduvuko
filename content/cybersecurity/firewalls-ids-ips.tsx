@@ -61,7 +61,6 @@ export default function Module30() {
       description="Stateful vs next-generation firewalls, intrusion detection and prevention systems, WAF architecture, firewall rule design, detection signatures, and tuning detection to catch real attacks without drowning in false positives."
       section="Cybersecurity — Lesson 30"
       readTime="31 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

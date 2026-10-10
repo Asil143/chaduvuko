@@ -106,7 +106,6 @@ export default function Constraints() {
       description="NOT NULL, UNIQUE, CHECK, PRIMARY KEY, FOREIGN KEY — what each constraint does, when to use it, and how to add or drop them on existing tables with ALTER TABLE"
       section="SQL — Lesson 23"
       readTime="16–22 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

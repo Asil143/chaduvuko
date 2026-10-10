@@ -79,7 +79,6 @@ export default function Html5ApisOverview() {
       description="data-* attributes, contenteditable, and the drag-and-drop API — the browser features beyond plain markup."
       section="HTML & CSS — Lesson 11"
       readTime="30 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

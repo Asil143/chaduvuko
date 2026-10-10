@@ -72,7 +72,6 @@ export default function DataModellingModule() {
       description="Dimensional modelling from first principles — grain, fact types, dimension design, surrogate keys, conformed dimensions, and the modern wide-table pattern."
       section="Data Engineering — Lesson 33"
       readTime="65 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ───────────────────────────────────────────────────── */}

@@ -175,7 +175,6 @@ export default function CalibrationPage() {
       description="Reliability diagrams, Brier score, and Platt scaling vs isotonic regression — when your model says 80% fraud probability, does it actually mean 80%?"
       section="Model Evaluation"
       readTime="18–24 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

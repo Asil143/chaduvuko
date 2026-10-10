@@ -79,7 +79,6 @@ export default function MultithreadingMultiprocessing() {
       description="Concurrency vs parallelism, the GIL explained honestly, threading for I/O-bound work, multiprocessing for CPU-bound work, and a clear decision framework."
       section="Python — Lesson 34"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

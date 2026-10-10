@@ -61,7 +61,6 @@ export default function Module15() {
       description="How packets move, how firewalls make decisions, how VPNs work under the hood, and why zero-trust architecture makes the traditional perimeter obsolete."
       section="Cybersecurity — Lesson 15"
       readTime="41 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

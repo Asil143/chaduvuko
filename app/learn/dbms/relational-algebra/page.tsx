@@ -105,7 +105,6 @@ export default function RelationalAlgebra() {
       description="The procedural query language that SQL compiles into — every operator defined precisely, composed into queries, and applied to every GATE and interview problem type you will encounter."
       section="DBMS"
       readTime="80–95 min"
-      updatedAt="March 2026"
     >
 
       {/* ========================================

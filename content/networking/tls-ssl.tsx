@@ -547,7 +547,6 @@ export default function TlsSslPage() {
       description="How the internet encrypts a trillion connections per day — from the math of Diffie-Hellman to the politics of certificate authorities."
       section="Networking Fundamentals — Lesson 23"
       readTime="28–38 min"
-      updatedAt="May 2026"
     >
 
       {/* ── Chapter 1 ──────────────────────────────────────────── */}

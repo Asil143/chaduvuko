@@ -80,7 +80,6 @@ export default function Aliases() {
       description="Give columns and tables readable names, understand where aliases can and cannot be used, and write queries that communicate clearly to every reader"
       section="SQL — Lesson 13"
       readTime="7–10 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

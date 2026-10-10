@@ -79,7 +79,6 @@ export default function ResponsiveImagesPerformance() {
       description="srcset, sizes, picture, and the image-loading techniques that keep a real page fast on real connections."
       section="HTML & CSS — Lesson 37"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

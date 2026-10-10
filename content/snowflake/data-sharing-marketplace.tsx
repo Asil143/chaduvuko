@@ -7,7 +7,6 @@ export default function DataSharingMarketplace() {
       description="Secure Data Sharing, shares, reader accounts, the Snowflake Marketplace, data clean rooms, governance over shared objects, and a worked provider/consumer walkthrough."
       section="Snowflake — Lesson 16"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

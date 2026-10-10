@@ -79,7 +79,6 @@ export default function CssTransforms() {
       description="translate, rotate, scale, skew, and 3D transforms with perspective — how modern interfaces move without touching layout."
       section="HTML & CSS — Lesson 33"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

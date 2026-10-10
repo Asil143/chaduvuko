@@ -172,7 +172,6 @@ export default function EncodingCategoricalFeaturesPage() {
       description="One-hot encoding, ordinal encoding, target encoding — what each one does to your data, which algorithms need which, and when each is the right choice."
       section="Data Engineering for ML"
       readTime="36–45 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}

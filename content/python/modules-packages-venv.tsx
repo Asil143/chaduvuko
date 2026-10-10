@@ -79,7 +79,6 @@ export default function ModulesPackagesVenv() {
       description="import, pip, requirements.txt, and virtual environments — how real Python projects are actually structured."
       section="Python — Lesson 18"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

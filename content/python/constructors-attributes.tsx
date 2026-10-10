@@ -79,7 +79,6 @@ export default function ConstructorsAttributes() {
       description="Constructor validation and defaults, the critical difference between instance and class attributes, the mutable-default-class-attribute trap, attribute lookup order, and __dict__."
       section="Python — Lesson 20"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

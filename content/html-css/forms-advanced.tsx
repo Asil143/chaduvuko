@@ -79,7 +79,6 @@ export default function FormsAdvanced() {
       description="select, textarea, fieldset/legend, radio and checkbox groups, and the form-submission details that trip up beginners."
       section="HTML & CSS — Lesson 09"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

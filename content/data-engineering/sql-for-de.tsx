@@ -121,7 +121,6 @@ export default function SQLForDEModule() {
       description="Window functions, CTEs, deduplication, NULL handling, and the queries every interview tests."
       section="Data Engineering — Lesson 15"
       readTime="80 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — This Is Not Basic SQL ──────────────────────────── */}

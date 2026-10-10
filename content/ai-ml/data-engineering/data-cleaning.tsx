@@ -172,7 +172,6 @@ export default function DataCleaningPage() {
       description="Turn raw, messy data into reliable ML training sets. Schema validation, duplicate detection, type coercion, outlier handling, and automated rules that catch problems before they reach your model."
       section="Data Engineering"
       readTime="45–58 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}

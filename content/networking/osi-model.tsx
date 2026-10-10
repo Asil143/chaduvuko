@@ -509,7 +509,6 @@ export default function OSIModel() {
       description="The universal framework every network engineer uses to understand, design, and troubleshoot networks — from copper cables to application APIs."
       section="Networking Fundamentals — Lesson 3"
       readTime="22–30 min"
-      updatedAt="May 2026"
     >
 
       {/* ── Chapter 1 ── */}

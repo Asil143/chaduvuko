@@ -175,7 +175,6 @@ export default function ObjectDetectionPage() {
       description="Anchor boxes, IoU, non-maximum suppression, and why YOLO became the production standard for real-time detection. Built from concepts to code."
       section="Computer Vision"
       readTime="36–46 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

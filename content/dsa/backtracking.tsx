@@ -108,7 +108,6 @@ export default function BacktrackingPage() {
       description="Try a path. Hit a dead end. Undo. Try another. Backtracking is how computers solve puzzles — N-Queens, Sudoku, mazes, and subset problems. Brute force made smart by pruning impossible paths early."
       section="DSA"
       readTime="90 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

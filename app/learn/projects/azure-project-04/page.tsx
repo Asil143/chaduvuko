@@ -132,7 +132,6 @@ export default function Project04Page() {
       description="Stop uploading files manually. Build a pipeline that goes directly to a public internet URL, downloads the CSV, and saves it to ADLS — automatically, every morning. No analyst involvement required."
       section="Projects"
       readTime="60–75 min"
-      updatedAt="March 2026"
     >
 
       <LearningResourceJsonLd name="ADF HTTP Ingestion: Download from Public URL to ADLS Gen2" description="Use ADF HTTP Linked Service to pull data from a public HTTPS endpoint into Azure Data Lake." url="https://chaduvuko.com/learn/projects/azure-project-04" datePublished="2026-03-01" keywords={['azure data factory http ingestion', 'adf download from url', 'adf http linked service']} timeRequired="PT60M" />

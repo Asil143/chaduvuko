@@ -76,7 +76,6 @@ export default function SourcesAndRef() {
       description="What a dbt source actually is, why you declare raw tables instead of hardcoding them, source freshness checks, how ref() mechanically resolves models across environments, and how dbt statically builds its DAG from ref()/source() calls."
       section="dbt — Lesson 05"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

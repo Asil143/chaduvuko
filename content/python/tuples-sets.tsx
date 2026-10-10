@@ -79,7 +79,6 @@ export default function TuplesSets() {
       description="Immutable sequences and unordered unique collections — tuple packing/unpacking, named tuples, every set operation, and when sets beat lists for membership testing."
       section="Python — Lesson 09"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

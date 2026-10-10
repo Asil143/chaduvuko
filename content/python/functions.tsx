@@ -79,7 +79,6 @@ export default function Functions() {
       description="def syntax, parameters vs arguments, default argument values and the mutable-default trap, *args/**kwargs, return values, docstrings, and the basics of scope."
       section="Python — Lesson 07"
       readTime="55 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

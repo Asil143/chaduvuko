@@ -61,7 +61,6 @@ export default function Module19() {
       description="REST and GraphQL API vulnerabilities, JWT attacks, OAuth misconfigurations, Docker container escape, Kubernetes RBAC, and supply chain security."
       section="Cybersecurity — Lesson 19"
       readTime="44 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

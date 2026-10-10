@@ -79,7 +79,6 @@ export default function CssArchitectureNaming() {
       description="BEM and other naming systems, organizing large stylesheets, and the patterns that keep CSS maintainable as a project grows."
       section="HTML & CSS — Lesson 35"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

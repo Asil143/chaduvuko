@@ -76,7 +76,6 @@ export default function ModelsBasics() {
       description="What a dbt model actually is, how filenames become object names, why the default materialization is a view, the config() Jinja block, staging/intermediate/marts organization, and a full worked staging model example."
       section="dbt — Lesson 04"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'dbt', href: '/learn/dbt' },

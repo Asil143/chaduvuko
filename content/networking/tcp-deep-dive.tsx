@@ -487,7 +487,6 @@ export default function TcpDeepDive() {
       description="A complete exploration of TCP — from the 3-way handshake and sequence number mechanics to congestion control algorithms, flow control, TIME_WAIT, TCP options, performance tuning, and the subtle failure modes that make TCP connections mysteriously hang."
       section="Networking Fundamentals — Lesson 20"
       readTime="28–38 min"
-      updatedAt="May 2026"
     >
       {/* Chapter 01 */}
       <Chapter n={1} title="The Contract That Makes the Internet Work" />

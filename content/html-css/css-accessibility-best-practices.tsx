@@ -79,7 +79,6 @@ export default function CssAccessibilityBestPractices() {
       description="Focus states, color contrast, prefers-reduced-motion, and the CSS-level decisions that make or break real accessibility."
       section="HTML & CSS — Lesson 38"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

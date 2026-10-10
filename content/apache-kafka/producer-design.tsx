@@ -76,7 +76,6 @@ export default function ProducerDesign() {
       description="How to build a production-grade Kafka producer: the full config walkthrough, sync vs async sends, error handling in delivery callbacks, a worked order-events producer, graceful shutdown, monitoring, and a production-readiness checklist."
       section="Apache Kafka — Lesson 11"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

@@ -81,7 +81,6 @@ export default function Module10() {
       description="How attackers intercept, spoof, and abuse protocol-level weaknesses at the network layer — and how defenders detect and stop them."
       section="Cybersecurity — Lesson 10"
       readTime="42 min"
-      updatedAt="May 2026"
     >
       <Part>
         <P>

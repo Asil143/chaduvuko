@@ -76,7 +76,6 @@ export default function SchemasSerialization() {
       description="Why raw, unvalidated JSON breaks production Kafka pipelines at scale, how Avro and Protobuf compare to JSON, what a Schema Registry actually does, and the backward/forward compatibility rules that let producers and consumers evolve independently without breaking each other."
       section="Apache Kafka — Lesson 10"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

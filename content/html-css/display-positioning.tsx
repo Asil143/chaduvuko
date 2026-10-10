@@ -79,7 +79,6 @@ export default function DisplayPositioning() {
       description="display: block/inline/inline-block in real rendered behavior, position: static/relative/absolute/fixed/sticky and how each containing block is determined, and what genuinely creates a stacking context."
       section="HTML & CSS — Lesson 21"
       readTime="45 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

@@ -125,7 +125,6 @@ export default function HowDataMovesModule() {
       description="The complete end-to-end journey — from data creation to business decisions."
       section="Data Engineering — Lesson 03"
       readTime="55 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Journey of a Single Data Point ─────────────── */}

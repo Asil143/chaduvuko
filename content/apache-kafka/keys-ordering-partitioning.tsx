@@ -76,7 +76,6 @@ export default function KeysOrderingPartitioning() {
       description="What a record key actually does, why Kafka's ordering guarantee is strictly per-partition, how to choose a partition key that avoids hot partitions, custom partitioners, and why changing partition count later breaks key-based ordering."
       section="Apache Kafka — Lesson 07"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

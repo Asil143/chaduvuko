@@ -79,7 +79,6 @@ export default function BuildingAResponsiveWebsite() {
       description="The capstone project — a full, real, responsive website built end-to-end using everything from this entire track."
       section="HTML & CSS — Lesson 40 (Capstone Project)"
       readTime="60 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Intro ── */}

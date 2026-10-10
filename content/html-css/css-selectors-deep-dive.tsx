@@ -79,7 +79,6 @@ export default function CssSelectorsDeepDive() {
       description="Combinators, pseudo-classes, pseudo-elements, and specificity — the rules that decide which style actually wins."
       section="HTML & CSS — Lesson 20"
       readTime="40 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

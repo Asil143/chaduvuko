@@ -79,7 +79,6 @@ export default function LinksNavigation() {
       description="The anchor tag in full — relative vs absolute paths, targets, anchor links within a page, and building real navigation."
       section="HTML & CSS — Lesson 04"
       readTime="35 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

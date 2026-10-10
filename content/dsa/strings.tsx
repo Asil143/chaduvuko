@@ -98,7 +98,6 @@ export default function StringsPage() {
       description="Text is just an array of characters. Learn how computers store words, how to manipulate them in C, and solve the classic string problems that appear in every interview."
       section="DSA"
       readTime="60 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

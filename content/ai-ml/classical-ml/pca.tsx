@@ -175,7 +175,6 @@ export default function PCAPage() {
       description="Turn 100 features into 10 without losing most of the information. Explained variance, scree plots, reconstruction error, and when PCA helps and when it hurts."
       section="Classical ML"
       readTime="26–34 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

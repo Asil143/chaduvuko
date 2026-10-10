@@ -175,7 +175,6 @@ export default function MLOpsOnCloudPage() {
       description="GitHub Actions triggering retraining, model quality gates in CI, automated deployment to staging and production across Azure ML, SageMaker, and Vertex AI."
       section="Cloud ML Platforms"
       readTime="45–58 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

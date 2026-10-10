@@ -7,7 +7,6 @@ export default function WhatIsSnowflake() {
       description="Snowflake explained from scratch: warehouse vs database, OLAP vs OLTP, storage vs compute, why companies adopt it, its history, and how it compares to BigQuery, Redshift, and Databricks."
       section="Snowflake — Lesson 01"
       readTime="65 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

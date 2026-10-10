@@ -76,7 +76,6 @@ export default function ConsumerGroupsOffsets() {
       description="What a consumer group really is, how rebalancing and partition assignment work, where offsets actually live, commit strategies, auto.offset.reset, consumer lag, and static group membership — the operational core of running Kafka consumers in production."
       section="Apache Kafka — Lesson 05"
       readTime="60 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },

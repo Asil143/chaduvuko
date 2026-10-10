@@ -211,7 +211,6 @@ export default function EigenvaluesEigenvectorsPage() {
       description="The mathematical foundation of PCA, spectral clustering, and PageRank — built from plain English first, then intuition, then math, then code."
       section="Math Foundations"
       readTime="26–34 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH FIRST ═══════════════════════════════════ */}

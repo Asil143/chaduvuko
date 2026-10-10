@@ -93,7 +93,6 @@ export default function StringFunctions() {
       description="Every text manipulation tool — concatenation, case, length, trimming, substrings, replacement, padding, splitting, and pattern matching for real data cleaning"
       section="SQL — Lesson 41"
       readTime="14–18 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

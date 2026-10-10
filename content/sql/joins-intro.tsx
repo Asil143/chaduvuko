@@ -104,7 +104,6 @@ export default function JoinsIntro() {
       description="Combine data from multiple tables — what JOINs are, why relational databases need them, the four JOIN types, ON vs USING, table aliases, and every foundational pattern you will build on"
       section="SQL — Lesson 30"
       readTime="12–16 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

@@ -104,7 +104,6 @@ export default function AdvancedPage() {
       description="The final level. Segment Trees, Fenwick Trees, Tries, Union-Find, Sliding Window, Two Pointers, and Bit Manipulation — the techniques that separate good engineers from great ones in product company interviews."
       section="DSA"
       readTime="180 min"
-      updatedAt="March 2026"
     >
 
       {/* ── Badges ── */}

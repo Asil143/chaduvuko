@@ -101,7 +101,6 @@ export default function WindowFunctionsIntro() {
       description="Compute aggregates across related rows without collapsing them — ROW_NUMBER, RANK, DENSE_RANK, NTILE, LAG, LEAD, running totals, moving averages, and the PARTITION BY / ORDER BY frame"
       section="SQL — Lesson 52"
       readTime="16–22 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

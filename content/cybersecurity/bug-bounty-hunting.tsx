@@ -54,7 +54,6 @@ export default function Module38() {
       description="Earn money finding real vulnerabilities. Learn how to choose programmes, build a recon workflow, escalate findings into high-severity reports, and develop a reputation on HackerOne and Bugcrowd."
       section="Cybersecurity — Lesson 38"
       readTime="36 min"
-      updatedAt="May 2026"
     >
 
       <Part title="What Is Bug Bounty Hunting?">

@@ -81,7 +81,6 @@ export default function CICDPipelinesModule() {
       description="Testing dbt models in CI, environment promotion, blue-green deployments, Airflow deployment patterns, slim CI, and building a safe deployment pipeline for data transformations."
       section="Data Engineering — Lesson 44"
       readTime="70 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Data Pipelines Need CI/CD ───────────────────── */}

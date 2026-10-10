@@ -7,7 +7,6 @@ export default function SemiStructuredData() {
       description="Load and query JSON in Snowflake with VARIANT, OBJECT, ARRAY, path notation, casting, LATERAL FLATTEN, schema drift handling, and production modeling patterns."
       section="Snowflake — Lesson 06"
       readTime="70 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

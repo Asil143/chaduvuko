@@ -80,7 +80,6 @@ export default function LikeWildcards() {
       description="Find rows that match a pattern rather than an exact value — the % and _ wildcards, ILIKE, SIMILAR TO, performance implications, and every real-world use case"
       section="SQL — Lesson 14"
       readTime="10–14 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

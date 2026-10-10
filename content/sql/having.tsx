@@ -80,7 +80,6 @@ export default function Having() {
       description="Filter groups after aggregation — the clause that completes WHERE + GROUP BY + HAVING, with real business examples of every pattern you will use in production analytics"
       section="SQL — Lesson 29"
       readTime="10–14 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

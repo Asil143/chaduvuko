@@ -79,7 +79,6 @@ export default function Dictionaries() {
       description="Key-value storage, the most-used data structure in real Python code — every method, iteration patterns, insertion ordering, merging, and defaultdict."
       section="Python — Lesson 11"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

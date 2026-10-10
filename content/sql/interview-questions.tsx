@@ -56,7 +56,6 @@ export default function InterviewQuestions() {
       description="Every question that appears in data analyst and data engineer interviews — with complete answers, example queries, and the traps interviewers set"
       section="SQL — Lesson 61"
       readTime="55–70 min"
-      updatedAt="April 2026"
     >
 
       <Part n="01" title="Basics and Core Concepts (Q1–Q10)" />

@@ -80,7 +80,6 @@ export default function DataVaultModule() {
       description="Hubs, links, and satellites from first principles — hash keys, loading patterns, Business Vault, PIT tables, and when to choose Data Vault over dimensional modelling."
       section="Data Engineering — Lesson 35"
       readTime="60 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ───────────────────────────────────────────────────── */}

@@ -175,7 +175,6 @@ export default function ActivationFunctionsPage() {
       description="ReLU, GELU, Swish, sigmoid, softmax — and cross-entropy, MSE, Huber, focal loss. When to use each and why numerical stability matters more than you think."
       section="Deep Learning"
       readTime="26–34 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

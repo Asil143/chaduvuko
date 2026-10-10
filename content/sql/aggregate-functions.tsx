@@ -106,7 +106,6 @@ export default function AggregateFunctions() {
       description="COUNT, SUM, AVG, MIN, MAX — turn raw rows into business metrics, understand NULL behaviour, combine with DISTINCT, and build the analytics queries that power every dashboard"
       section="SQL — Lesson 27"
       readTime="12–16 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

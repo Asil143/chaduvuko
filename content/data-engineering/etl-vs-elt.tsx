@@ -174,7 +174,6 @@ export default function ETLvsELTModule() {
       description="Why ETL dominated for 30 years, why ELT replaced it, and when each still belongs in a modern stack."
       section="Data Engineering — Lesson 22"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why This Distinction Matters ───────────────────── */}

@@ -172,7 +172,6 @@ export default function MatplotlibSeabornPage() {
       description="Every plot an ML engineer actually uses. Distributions, correlations, model evaluation, feature importance, and learning curves — with clean production-ready code."
       section="Programming Ecosystem"
       readTime="35–45 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}

@@ -79,7 +79,6 @@ export default function AbstractBaseClasses() {
       description="Enforcing a contract across subclasses with the abc module — how larger Python codebases stay consistent."
       section="Python — Lesson 24"
       readTime="30 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

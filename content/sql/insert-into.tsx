@@ -80,7 +80,6 @@ export default function InsertInto() {
       description="Add rows to tables — single inserts, bulk inserts, insert from SELECT, upsert patterns, and every safety practice for writing data correctly"
       section="SQL — Lesson 20"
       readTime="10–14 min"
-      updatedAt="April 2026"
     >
 
       {/* ── PART 01 ── */}

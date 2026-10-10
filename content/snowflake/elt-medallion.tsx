@@ -7,7 +7,6 @@ export default function EltMedallion() {
       description="Raw, Silver, Gold, ELT, dbt-style modeling, tests, lineage, ownership, marts, and production transformation patterns in Snowflake."
       section="Snowflake — Lesson 07"
       readTime="80 min"
-      updatedAt="September 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
         { label: 'Snowflake', href: '/learn/snowflake' },

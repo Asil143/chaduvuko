@@ -175,7 +175,6 @@ export default function TransformersAndAttentionPage() {
       description="Queries, keys, values, and why attention is all you need. Build a self-attention layer from scratch, then see how GPT and BERT use it."
       section="Deep Learning"
       readTime="45–58 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

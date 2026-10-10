@@ -79,7 +79,6 @@ export default function HtmlEntitiesSpecialCharacters() {
       description="Why some characters need to be escaped, the entities you will actually use, and the bugs that happen when you forget."
       section="HTML & CSS — Lesson 14"
       readTime="20 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

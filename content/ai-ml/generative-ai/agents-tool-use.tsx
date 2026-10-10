@@ -154,7 +154,6 @@ export default function AgentsToolUsePage() {
       description="LLMs that plan, use tools, and execute multi-step tasks autonomously. ReAct, tool calling, memory, and the architecture patterns behind production AI agents."
       section="Generative AI"
       readTime="36–46 min"
-      updatedAt="March 2026"
     >
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}

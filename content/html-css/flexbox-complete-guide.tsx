@@ -79,7 +79,6 @@ export default function FlexboxCompleteGuide() {
       description="flex-direction and the main-axis vs cross-axis mental model, justify-content, align-items, align-content, flex-wrap, and flex-grow/flex-shrink/flex-basis worked through with real numeric examples."
       section="HTML & CSS — Lesson 23"
       readTime="50 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}

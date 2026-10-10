@@ -79,7 +79,6 @@ export default function DocumentStructure() {
       description="Every HTML document follows the same skeleton. What each part actually does, and the mistakes that silently break rendering."
       section="HTML & CSS — Lesson 02"
       readTime="30 min"
-      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ── */}
