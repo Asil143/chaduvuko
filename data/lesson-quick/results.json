@@ -506,6 +506,263 @@
   "kind": "text",
   "text": "got 2, next cursor = c1\ngot 2, next cursor = c2\ngot 1, next cursor = None\ntotal 5"
  },
+ "/learn/dbms/concurrency-control": {
+  "kind": "text",
+  "text": "edges: [('T1', 'T2'), ('T2', 'T1')]\nconflict-serializable: False"
+ },
+ "/learn/dbms/crash-recovery": {
+  "kind": "text",
+  "text": "after recovery: {'A': 50} | rolled back: ['T2', 'T3']"
+ },
+ "/learn/dbms/data-models": {
+  "kind": "table",
+  "columns": [
+   "product_name",
+   "orders_containing"
+  ],
+  "rows": [
+   [
+    "All-Purpose Flour",
+    "13"
+   ],
+   [
+    "Ground Coffee",
+    "9"
+   ],
+   [
+    "Anti-Dandruff Shampoo",
+    "9"
+   ],
+   [
+    "Whole Milk",
+    "8"
+   ]
+  ]
+ },
+ "/learn/dbms/database-security": {
+  "kind": "text",
+  "text": "concatenated: [('ava',), ('ben',)]\nparameterised: []"
+ },
+ "/learn/dbms/distributed-databases": {
+  "kind": "table",
+  "columns": [
+   "shard",
+   "customers"
+  ],
+  "rows": [
+   [
+    "shard_1",
+    "7"
+   ],
+   [
+    "shard_2",
+    "7"
+   ],
+   [
+    "shard_3",
+    "6"
+   ]
+  ]
+ },
+ "/learn/dbms/functional-dependencies": {
+  "kind": "text",
+  "text": "A+  = ['A', 'B', 'C']\nAD+ = ['A', 'B', 'C', 'D', 'E'] → AD is a key of R(A,B,C,D,E)"
+ },
+ "/learn/dbms/hashing-btrees": {
+  "kind": "text",
+  "text": "bucket 0: [15, 40]\nbucket 1: [31, 26]\nbucket 2: [22, 17]\nbucket 3: [8]\nbucket 4: [9]"
+ },
+ "/learn/dbms/indexes": {
+  "kind": "table",
+  "columns": [
+   "id",
+   "parent",
+   "notused",
+   "detail"
+  ],
+  "rows": [
+   [
+    "2",
+    "0",
+    "53",
+    "SEARCH orders USING COVERING INDEX idx_orders_status (order_status=?)"
+   ]
+  ]
+ },
+ "/learn/dbms/interview-questions": {
+  "kind": "table",
+  "columns": [
+   "unit_price"
+  ],
+  "rows": [
+   [
+    "8.99"
+   ]
+  ]
+ },
+ "/learn/dbms/introduction": {
+  "kind": "table",
+  "columns": [
+   "loyalty_tier",
+   "customers"
+  ],
+  "rows": [
+   [
+    "Gold",
+    "6"
+   ],
+   [
+    "Silver",
+    "5"
+   ],
+   [
+    "Bronze",
+    "5"
+   ],
+   [
+    "Platinum",
+    "4"
+   ]
+  ]
+ },
+ "/learn/dbms/nosql-databases": {
+  "kind": "text",
+  "text": "[('ava', 55), ('cy', 50), ('ben', 45)]"
+ },
+ "/learn/dbms/query-processing": {
+  "kind": "table",
+  "columns": [
+   "id",
+   "parent",
+   "notused",
+   "detail"
+  ],
+  "rows": [
+   [
+    "3",
+    "0",
+    "216",
+    "SCAN o"
+   ],
+   [
+    "5",
+    "0",
+    "45",
+    "SEARCH c USING INTEGER PRIMARY KEY (rowid=?)"
+   ]
+  ]
+ },
+ "/learn/dbms/relational-algebra": {
+  "kind": "table",
+  "columns": [
+   "first_name"
+  ],
+  "rows": [
+   [
+    "Emma"
+   ],
+   [
+    "Ava"
+   ],
+   [
+    "Lucas"
+   ],
+   [
+    "Mason"
+   ],
+   [
+    "Evelyn"
+   ]
+  ]
+ },
+ "/learn/dbms/relational-model": {
+  "kind": "table",
+  "columns": [
+   "orphan_orders"
+  ],
+  "rows": [
+   [
+    "0"
+   ]
+  ]
+ },
+ "/learn/dbms/sql-complete": {
+  "kind": "table",
+  "columns": [
+   "store_id",
+   "delivered"
+  ],
+  "rows": [
+   [
+    "ST001",
+    "6"
+   ],
+   [
+    "ST008",
+    "5"
+   ],
+   [
+    "ST009",
+    "4"
+   ]
+  ]
+ },
+ "/learn/dbms/storage-file-organization": {
+  "kind": "text",
+  "text": "51 rows per page, 980,393 pages for a full scan"
+ },
+ "/learn/dbms/transactions": {
+  "kind": "table",
+  "columns": [
+   "product_id",
+   "unit_price"
+  ],
+  "rows": [
+   [
+    "1",
+    "5.99"
+   ],
+   [
+    "2",
+    "8.99"
+   ]
+  ]
+ },
+ "/learn/dbms/views-procedures-triggers": {
+  "kind": "table",
+  "columns": [
+   "customer_id",
+   "first_name",
+   "loyalty_tier"
+  ],
+  "rows": [
+   [
+    "1",
+    "Emma",
+    "Gold"
+   ],
+   [
+    "5",
+    "Ava",
+    "Gold"
+   ],
+   [
+    "14",
+    "Lucas",
+    "Bronze"
+   ],
+   [
+    "16",
+    "Mason",
+    "Platinum"
+   ],
+   [
+    "18",
+    "Evelyn",
+    "Silver"
+   ]
+  ]
+ },
  "/learn/dbt/models-basics": {
   "kind": "table",
   "columns": [
@@ -871,6 +1128,76 @@
  "/learn/python/what-is-python-setup": {
   "kind": "text",
   "text": "Hello, world!\nRunning Python 3"
+ },
+ "/learn/snowflake/elt-medallion": {
+  "kind": "table",
+  "columns": [
+   "order_id",
+   "customer_id",
+   "order_date",
+   "total_amount"
+  ],
+  "rows": [
+   [
+    "1001",
+    "1",
+    "2024-01-05",
+    "59.69"
+   ],
+   [
+    "1002",
+    "2",
+    "2024-01-08",
+    "27.97"
+   ],
+   [
+    "1003",
+    "3",
+    "2024-01-10",
+    "17.95"
+   ],
+   [
+    "1004",
+    "4",
+    "2024-01-12",
+    "44.05"
+   ]
+  ]
+ },
+ "/learn/snowflake/what-is-snowflake": {
+  "kind": "table",
+  "columns": [
+   "city",
+   "orders",
+   "revenue"
+  ],
+  "rows": [
+   [
+    "New York",
+    "8",
+    "461.83"
+   ],
+   [
+    "Seattle",
+    "6",
+    "252.92"
+   ],
+   [
+    "Portland",
+    "4",
+    "198.37"
+   ],
+   [
+    "Chicago",
+    "5",
+    "149.64"
+   ],
+   [
+    "Austin",
+    "3",
+    "119.87"
+   ]
+  ]
  },
  "/learn/sql/acid-properties": {
   "kind": "table",

@@ -1140,7 +1140,7 @@ WHERE order_id = 1001;`,
       'Durability comes from the write-ahead log, flushed to disk before COMMIT returns.',
     ],
     example: {
-      label: 'A foreign key keeps the data consistent',
+      label: 'Consistency check: no order points to a missing customer',
       lang: 'sql',
       code: `SELECT COUNT(*) AS orders_with_unknown_customer
 FROM orders AS o

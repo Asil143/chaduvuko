@@ -6,6 +6,8 @@ import { DSA_QUICK } from './dsa'
 import { DE_QUICK } from './data-engineering'
 import { KAFKA_QUICK } from './apache-kafka'
 import { DBT_QUICK } from './dbt'
+import { SNOWFLAKE_QUICK } from './snowflake'
+import { DBMS_QUICK } from './dbms'
 
 /** Every lesson's quick answer and check, keyed by lesson URL. Server-only; see lib/lesson-quick-data.ts. */
 export const LESSON_QUICK: Record<string, LessonQuick> = {
@@ -16,4 +18,6 @@ export const LESSON_QUICK: Record<string, LessonQuick> = {
   ...DE_QUICK,
   ...KAFKA_QUICK,
   ...DBT_QUICK,
+  ...SNOWFLAKE_QUICK,
+  ...DBMS_QUICK,
 }
