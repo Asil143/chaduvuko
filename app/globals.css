@@ -285,3 +285,19 @@ body:has([data-lesson-page]) .search-trigger kbd { display: none !important; }
 .site-header:has([data-menu-panel]) { z-index: 60; }
 /* Header panels are modal, so the chat bubble must not float over them. */
 body:has([data-menu-panel]) .chad-float { display: none; }
+
+/* Printing (the roadmap "Save as PDF" button prints the page). Site chrome and interactive
+   parts are dropped; .print-only blocks, hidden on screen, carry the printable version. */
+.print-only { display: none; }
+@media print {
+  .site-header, footer, .chad-float, .no-print { display: none !important; }
+  .print-only { display: block; }
+  html, body { background: #fff !important; color: #000 !important; }
+  main { padding-top: 0 !important; }
+  .roadmap-print-list { margin: 16px 0 0; padding-left: 20px; font-size: 11pt; line-height: 1.45; }
+  .roadmap-print-list > li { margin: 0 0 12px; break-inside: avoid; }
+  .roadmap-print-list p { margin: 0 0 3px; }
+  .roadmap-print-title { font-weight: 700; }
+  .roadmap-print-meta { font-weight: 400; color: #555; }
+  .roadmap-print-list ul { margin: 2px 0 0; padding-left: 16px; color: #333; font-size: 10pt; }
+}

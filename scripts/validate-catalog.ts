@@ -3,6 +3,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { LESSONS, LIVE_LESSONS, NON_LESSON_PREFIXES, NON_LESSON_ROUTES, TRACKS } from '@/lib/catalog'
+import { ROLE_ROADMAPS } from '@/data/roadmaps/role-registry'
+import { TOPIC_LESSONS } from '@/data/roadmaps/topic-lessons'
 
 const errors: string[] = []
 const fail = (message: string) => errors.push(message)
@@ -77,7 +79,25 @@ function checkAgainstBuild(nextDir: string) {
   return built
 }
 
+// Roadmap topic drawers link only to live lessons, and every key names a real roadmap node.
+function checkTopicLessons() {
+  const live = new Set(LIVE_LESSONS.map(lesson => lesson.href))
+  const nodeIds = new Set<string>()
+  const roadmapNodes = new Set<string>()
+  for (const roadmap of Object.values(ROLE_ROADMAPS)) {
+    for (const node of roadmap.nodes) {
+      nodeIds.add(node.id)
+      roadmapNodes.add(`${roadmap.slug}:${node.id}`)
+    }
+  }
+  for (const [key, hrefs] of Object.entries(TOPIC_LESSONS)) {
+    if (key.includes(':') ? !roadmapNodes.has(key) : !nodeIds.has(key)) fail(`topic-lessons: "${key}" is not a roadmap node`)
+    for (const href of hrefs) if (!live.has(href)) fail(`topic-lessons: "${key}" links to ${href}, which is not a live lesson`)
+  }
+}
+
 checkCatalog()
+checkTopicLessons()
 const staticOnly = process.argv.includes('--static-only')
 const nextDir = path.join(process.cwd(), '.next')
 let builtCount = 0

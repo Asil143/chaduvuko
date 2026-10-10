@@ -24,6 +24,23 @@ import { platformEngineerCurriculum } from '@/data/roadmaps/curriculum/platform-
 import { pythonDeveloperCurriculum } from '@/data/roadmaps/curriculum/python-developer'
 import { softwareArchitectCurriculum } from '@/data/roadmaps/curriculum/software-architect'
 import { CurriculumGuide } from '@/components/roadmap/CurriculumGuide'
+import type { TopicLesson } from '@/components/roadmap/TopicDrawer'
+import { lessonsForTopic } from '@/data/roadmaps/topic-lessons'
+import { getLiveLesson, getTrack } from '@/lib/catalog'
+import type { Roadmap } from '@/data/roadmaps/types'
+
+/** The Chaduvuko lessons for each topic on this roadmap, with titles, for the topic drawer. */
+function topicLessons(roadmap: Roadmap): Record<string, TopicLesson[]> {
+  return Object.fromEntries(
+    roadmap.nodes.map(node => [
+      node.id,
+      lessonsForTopic(roadmap.slug, node.id).flatMap(href => {
+        const lesson = getLiveLesson(href)
+        return lesson ? [{ href, title: lesson.title, track: getTrack(lesson.track)?.title ?? '' }] : []
+      }),
+    ]),
+  )
+}
 
 
 const CURRICULUM: Record<string, string> = {
@@ -75,7 +92,7 @@ export default function RoadmapPage({ params }: Props) {
       <div style={{ maxWidth: 820, margin: '0 auto' }}>
 
         {/* Breadcrumb */}
-        <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 24 }}>
+        <div className="no-print" style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 24 }}>
           <a href="/learn/roadmap" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Roadmaps</a>
           <span style={{ margin: '0 8px' }}>›</span>
           <span style={{ color: 'var(--text)' }}>{roadmap.title}</span>
@@ -102,18 +119,19 @@ export default function RoadmapPage({ params }: Props) {
               {roadmap.estimatedTime}
             </span>
             <span style={{ fontSize: 12, color: 'var(--muted)' }}>
-              <b style={{ color: 'var(--text)', fontWeight: 700, marginRight: 6 }}>Nodes</b>
+              <b style={{ color: 'var(--text)', fontWeight: 700, marginRight: 6 }}>Topics</b>
               {roadmap.nodes.length}
             </span>
           </div>
         </div>
 
         {/* Skill tree */}
-        <SkillTree roadmap={roadmap} />
+        <SkillTree roadmap={roadmap} topicLessons={topicLessons(roadmap)} />
 
         {/* Complete curriculum guide */}
         {CURRICULUM[params.slug] && (
           <div
+            className="no-print"
             style={{
               marginTop: 40,
               background: 'var(--surface)',
@@ -130,7 +148,7 @@ export default function RoadmapPage({ params }: Props) {
         )}
 
         {/* Footer note */}
-        <div style={{ marginTop: 28, fontSize: 12, color: 'rgba(255,255,255,.15)', textAlign: 'center', lineHeight: 1.7 }}>
+        <div className="no-print" style={{ marginTop: 28, fontSize: 12, color: 'var(--muted)', textAlign: 'center', lineHeight: 1.7 }}>
           Progress saves automatically in your browser. No account needed.
         </div>
 
