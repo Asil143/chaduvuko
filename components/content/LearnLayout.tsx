@@ -97,6 +97,14 @@ const RESUME_BULLETS: Record<string, string[]> = {
   ],
 }
 
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+/** "2026-09-12" → "Sep 12, 2026". Parsed by hand so server and client render the same text. */
+function formatDate(iso: string) {
+  const [year, month, day] = iso.split('-').map(Number)
+  return `${MONTHS[month - 1]} ${day}, ${year}`
+}
+
 const difficultyColors = {
   Beginner:     { bg: 'rgba(0,194,255,0.1)',   color: '#00c2ff', border: 'rgba(0,194,255,0.2)' },
   Intermediate: { bg: 'rgba(245,197,66,0.1)',  color: '#f5c542', border: 'rgba(245,197,66,0.2)' },
@@ -256,7 +264,15 @@ export function LearnLayout({ children, title, description, section, readTime, u
               style={{ color: 'var(--muted)', fontFamily: 'Lora, serif', fontStyle: 'italic', overflowWrap: 'break-word' }}>{description}</p>
             <div className="flex items-center gap-4 mt-4 text-xs font-mono" style={{ color: 'var(--muted)' }}>
               {readTime  && <span className="flex items-center gap-1"><Clock size={11} /> {readTime}</span>}
-              {updatedAt && <span className="flex items-center gap-1"><Calendar size={11} /> {updatedAt}</span>}
+              {lessonNav ? (
+                lessonNav.context.updatedAt && (
+                  <span className="flex items-center gap-1">
+                    <Calendar size={11} /> Updated <time dateTime={lessonNav.context.updatedAt}>{formatDate(lessonNav.context.updatedAt)}</time>
+                  </span>
+                )
+              ) : (
+                updatedAt && <span className="flex items-center gap-1"><Calendar size={11} /> {updatedAt}</span>
+              )}
               <PageViews slug={pathname} />
             </div>
           </div>

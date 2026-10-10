@@ -60,6 +60,8 @@ export interface LessonContext {
   /** 1-based position among the track's live lessons. */
   position: number
   total: number
+  /** ISO date the lesson's content last changed (data/lesson-updated.json), or null. */
+  updatedAt: string | null
   lessons: TrackLessonEntry[]
 }
 

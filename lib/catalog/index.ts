@@ -1,6 +1,7 @@
 import { TRACKS } from './tracks'
 import { staticLessons } from './static-lessons'
 import { curriculumLessons } from './curriculum-lessons'
+import lessonDates from '@/data/lesson-updated.json'
 import type { Lesson, NonLessonKind, Track } from './types'
 import type { LessonNavLink, LessonNavLinks, TrackSummaries } from '@/lib/lesson-nav'
 import type { LessonEntry } from '@/lib/up-next'
@@ -8,7 +9,13 @@ import type { LessonEntry } from '@/lib/up-next'
 export type { Lesson, LessonStatus, NonLessonKind, Track, TrackArea } from './types'
 export { TRACKS }
 
-export const LESSONS: Lesson[] = [...staticLessons, ...curriculumLessons]
+// Last-changed dates from git; regenerate with: npx tsx scripts/lesson-dates.ts
+const LESSON_DATES: Record<string, string> = lessonDates
+
+export const LESSONS: Lesson[] = [...staticLessons, ...curriculumLessons].map(lesson => ({
+  ...lesson,
+  updatedAt: lesson.updatedAt ?? LESSON_DATES[lesson.href],
+}))
 
 /** The only lessons that may appear in counts, search, sitemap, navigation, and progress. */
 export const LIVE_LESSONS: Lesson[] = LESSONS.filter(lesson => lesson.status === 'live')
@@ -129,6 +136,7 @@ export function getLessonNavLinks(href: string): LessonNavLinks | null {
       module: nav.lesson.section ?? null,
       position: lessons.findIndex(lesson => lesson.href === href) + 1,
       total: lessons.length,
+      updatedAt: nav.lesson.updatedAt ?? null,
       lessons: lessons.map(lesson => [lesson.href, lesson.title, lesson.section ?? '']),
     },
   }

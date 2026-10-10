@@ -1,0 +1,28 @@
+# Commits that touched many lessons without changing what they teach (wording, metadata,
+# navigation wiring, file moves). scripts/lesson-dates.ts skips them when dating a lesson.
+85fb7a34d5f8e553c672f0b17f3009d5664259d8 # Show a lesson's place once and call every lesson a lesson
+f31b64895011aaa0544c14b57f89e5c582a78346 # Brand page titles through the root template
+00c6c55b301db35a33594fe4b3c174a1fd481a8b # Provide lesson prev/next from the server, not the client bundle
+5a062e038f3a295f510ba87a512bc1b1c5eb8071 # Drive lesson prev/next navigation from the catalog
+f0ee61505ae198666c890729d201a43846f1c52d # Fix critical/security/functional bugs found in full site audit
+1733425ac5211c4beda59397cde60ec06e72cffb # sync readTime in all AI-ML content files to match curriculum ranges
+d0b801924405afd4ce5021ebbf0935f3c79a02f0 # sync readTime in all 62 SQL content files to match curriculum ranges
+fbc1a8465026316465830f605933278ee66c7e5e # refactor: DE + AI/ML tracks → dynamic routes, content to content/ folder
+59aa69ec4a96a23b5a10882e3593b101c1e892aa # Fix SQL Playground layout on phones and tablets
+063657458661139ee311b6833394051099b4a0b9 # Define font tokens so code renders in JetBrains Mono
+342a1de62907e8c9cc1896d3bc469f38b7f41d88 # Remove unused curriculum xp fields
+8db25bb73a0c7a95e26df1952f6d449f0a351b46 # Show real catalog counts and drop duplicate track cards
+885939ec85a4ccc856f5b26bce62d4189f245844 # Keep the YOLO history heading out of the scrolling rows
+027d52d1a0d00ab49e924c5eca0f06987f9d0e15 # Fix the remaining lesson layouts that overflowed phones
+231a48ba0930ec39977b7417dd2b28bb0e432633 # Drive homepage and /learn track cards from the catalog
+73f7c5fa2885e4fbc6aeb2b79a7b227876376732 # Add blog posts and role roadmaps to the sitemap
+7465302768d443a2dfcd88d6df10302a6023098d # Split networking and DSA lessons into per-lesson chunks
+03b6704593c02754b3f1ae8acdbb8d4cb661c674 # Add canonical learning catalog and drift validation
+a67417088f581acf00786fd682758484d933b95c # Hide unpublished networking routes and noindex topology preview
+cc645e6f736d6ff4e0eb740fbccee5872426aca0 # Harden the remaining 6 inline <style>{...}</style> blocks preventively
+befe814c9df32ba0737d47fb5fa9ae011f88cc40 # Fix TOC Myths/Prep chips not rendering for AI/ML's Misconceptions and Interview Prep sections
+4d750bebaf5dbed3be6a821e897fe3d22a4648b7 # Extend reading-rail chips to Data Engineering
+bafda5fde6e89ee0bd40c04a4026780acaccec31 # Add reading-rail redesign to the "On this page" sidebar
+c7bb37edde254ac176105a7440ad1d53f6da0989 # Add per-lesson section navigator to Data Engineering track
+eb082c047f9fc9ea69af150d3f0cb27acd72493a # Merge /learn and /learn/tutorials into one page
+5fa226dc69cc2dfc2aeea93c3eaa6f46a7b8b4f4 # Drop hand-typed updatedAt months from lesson pages

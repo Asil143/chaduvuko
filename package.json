@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "tsx scripts/validate-catalog.ts && tsx scripts/validate-seo.ts",
+    "postbuild": "tsx scripts/validate-catalog.ts && tsx scripts/validate-seo.ts && tsx scripts/lesson-dates.ts --check",
     "validate:catalog": "tsx scripts/validate-catalog.ts",
     "start": "next start",
     "lint": "next lint",
