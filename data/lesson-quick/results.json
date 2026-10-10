@@ -1,4 +1,475 @@
 {
+ "/learn/data-engineering/acid-transactions": {
+  "kind": "table",
+  "columns": [
+   "product_name",
+   "unit_price"
+  ],
+  "rows": [
+   [
+    "All-Purpose Flour",
+    "5.99"
+   ],
+   [
+    "Jasmine Rice",
+    "8.99"
+   ],
+   [
+    "Red Lentils",
+    "3.49"
+   ]
+  ]
+ },
+ "/learn/data-engineering/batch-pipeline-from-scratch": {
+  "kind": "text",
+  "text": "{'watermark': '2024-03-15'}"
+ },
+ "/learn/data-engineering/data-formats": {
+  "kind": "text",
+  "text": "row file:    ['1001', 'Austin', 59.69, '1002', 'Denver', 27.97, '1003', 'Austin', 17.95]\ncolumn file: {'order_id': ['1001', '1002', '1003'], 'city': ['Austin', 'Denver', 'Austin'], 'total': [59.69, 27.97, 17.95]}\nSUM(total) reads only: [59.69, 27.97, 17.95]"
+ },
+ "/learn/data-engineering/data-governance": {
+  "kind": "table",
+  "columns": [
+   "customer_id",
+   "first_name",
+   "email",
+   "city"
+  ],
+  "rows": [
+   [
+    "1",
+    "E***",
+    "***@gmail.com",
+    "Seattle"
+   ],
+   [
+    "2",
+    "L***",
+    "***@outlook.com",
+    "Chicago"
+   ],
+   [
+    "3",
+    "O***",
+    "***@yahoo.com",
+    "Los Angeles"
+   ]
+  ]
+ },
+ "/learn/data-engineering/data-modelling": {
+  "kind": "table",
+  "columns": [
+   "category",
+   "city",
+   "sales"
+  ],
+  "rows": [
+   [
+    "Dairy",
+    "New York",
+    "144.74"
+   ],
+   [
+    "Staples",
+    "New York",
+    "124.84"
+   ],
+   [
+    "Staples",
+    "Seattle",
+    "91.89"
+   ],
+   [
+    "Beverages",
+    "Seattle",
+    "79.93"
+   ],
+   [
+    "Beverages",
+    "New York",
+    "71.94"
+   ]
+  ]
+ },
+ "/learn/data-engineering/data-quality": {
+  "kind": "table",
+  "columns": [
+   "check_name",
+   "failures"
+  ],
+  "rows": [
+   [
+    "null customer",
+    "0"
+   ],
+   [
+    "duplicate order_id",
+    "0"
+   ],
+   [
+    "negative total",
+    "0"
+   ],
+   [
+    "unknown status",
+    "0"
+   ]
+  ]
+ },
+ "/learn/data-engineering/data-types-structured": {
+  "kind": "text",
+  "text": "1042 Austin A1 2\n1042 Austin B4 1"
+ },
+ "/learn/data-engineering/data-vault": {
+  "kind": "text",
+  "text": "hub_customer: 9d5b3647a1be3490c275642d1f76a016\nsame key, messy input: True\nlink_order_customer: 9d46957e7cccf0a3ce2a06448415ec25"
+ },
+ "/learn/data-engineering/databases-internals": {
+  "kind": "table",
+  "columns": [
+   "id",
+   "parent",
+   "notused",
+   "detail"
+  ],
+  "rows": [
+   [
+    "2",
+    "0",
+    "33",
+    "SEARCH customers USING INTEGER PRIMARY KEY (rowid=?)"
+   ]
+  ]
+ },
+ "/learn/data-engineering/de-interview-questions": {
+  "kind": "table",
+  "columns": [
+   "customer_id",
+   "orders"
+  ],
+  "rows": [
+   [
+    "1",
+    "2"
+   ],
+   [
+    "2",
+    "2"
+   ],
+   [
+    "4",
+    "2"
+   ],
+   [
+    "5",
+    "2"
+   ],
+   [
+    "6",
+    "2"
+   ]
+  ]
+ },
+ "/learn/data-engineering/distributed-systems": {
+  "kind": "text",
+  "text": "{0: ['cust-1', 'cust-2', 'cust-4', 'cust-5'], 1: ['cust-3', 'cust-6']}"
+ },
+ "/learn/data-engineering/error-handling-retries": {
+  "kind": "text",
+  "text": "attempt 1: wait up to 1s\nattempt 2: wait up to 2s\nattempt 3: wait up to 4s\nattempt 4: wait up to 8s\nattempt 5: wait up to 16s\nattempt 6: wait up to 30s\nattempt 7: wait up to 30s"
+ },
+ "/learn/data-engineering/etl-vs-elt": {
+  "kind": "table",
+  "columns": [
+   "order_id",
+   "payment_method",
+   "total_usd"
+  ],
+  "rows": [
+   [
+    "1001",
+    "CREDIT CARD",
+    "59.69"
+   ],
+   [
+    "1002",
+    "DEBIT CARD",
+    "27.97"
+   ],
+   [
+    "1003",
+    "CREDIT CARD",
+    "17.95"
+   ],
+   [
+    "1004",
+    "CASH",
+    "44.05"
+   ]
+  ]
+ },
+ "/learn/data-engineering/how-data-moves": {
+  "kind": "table",
+  "columns": [
+   "order_date",
+   "delivered_orders",
+   "revenue"
+  ],
+  "rows": [
+   [
+    "2024-01-05",
+    "1",
+    "59.69"
+   ],
+   [
+    "2024-01-08",
+    "1",
+    "27.97"
+   ],
+   [
+    "2024-01-12",
+    "1",
+    "44.05"
+   ],
+   [
+    "2024-01-15",
+    "1",
+    "60.17"
+   ],
+   [
+    "2024-01-20",
+    "1",
+    "73.62"
+   ]
+  ]
+ },
+ "/learn/data-engineering/idempotency-atomicity": {
+  "kind": "table",
+  "columns": [
+   "day",
+   "revenue"
+  ],
+  "rows": [
+   [
+    "2024-03-01",
+    "48.05"
+   ]
+  ]
+ },
+ "/learn/data-engineering/ingestion-patterns": {
+  "kind": "text",
+  "text": "loaded ids [2, 3] | new watermark 2024-03-09"
+ },
+ "/learn/data-engineering/medallion-architecture": {
+  "kind": "table",
+  "columns": [
+   "store_name",
+   "delivered_orders",
+   "revenue"
+  ],
+  "rows": [
+   [
+    "FreshCart Manhattan",
+    "6",
+    "383.01"
+   ],
+   [
+    "FreshCart Capitol Hill",
+    "5",
+    "237.65"
+   ],
+   [
+    "FreshCart Pearl District",
+    "4",
+    "198.37"
+   ],
+   [
+    "FreshCart Scottsdale",
+    "2",
+    "100.09"
+   ]
+  ]
+ },
+ "/learn/data-engineering/message-brokers-queues": {
+  "kind": "text",
+  "text": "queue: {'w1': ['job-1', 'job-3'], 'w2': ['job-2']} | left: []\ntopic: billing sees ['evt-1', 'evt-2'] | analytics sees ['evt-1', 'evt-2']"
+ },
+ "/learn/data-engineering/monitoring-observability": {
+  "kind": "text",
+  "text": "z-score -37.9: ALERT, volume anomaly"
+ },
+ "/learn/data-engineering/python-for-de": {
+  "kind": "text",
+  "text": "batch 1: 3 rows, total 60\nbatch 2: 3 rows, total 150\nbatch 3: 1 rows, total 70"
+ },
+ "/learn/data-engineering/schemas-tables-keys": {
+  "kind": "table",
+  "columns": [
+   "order_id",
+   "customer_id",
+   "first_name"
+  ],
+  "rows": [
+   [
+    "1001",
+    "1",
+    "Emma"
+   ],
+   [
+    "1002",
+    "2",
+    "Liam"
+   ],
+   [
+    "1003",
+    "3",
+    "Olivia"
+   ],
+   [
+    "1004",
+    "4",
+    "Noah"
+   ]
+  ]
+ },
+ "/learn/data-engineering/security-compliance": {
+  "kind": "table",
+  "columns": [
+   "remaining"
+  ],
+  "rows": [
+   [
+    "0"
+   ]
+  ]
+ },
+ "/learn/data-engineering/slowly-changing-dimensions": {
+  "kind": "table",
+  "columns": [
+   "customer_id",
+   "city",
+   "valid_from",
+   "valid_to",
+   "is_current"
+  ],
+  "rows": [
+   [
+    "7",
+    "Austin",
+    "2023-01-01",
+    "2024-03-01",
+    "0"
+   ],
+   [
+    "7",
+    "Denver",
+    "2024-03-01",
+    "NULL",
+    "1"
+   ]
+  ]
+ },
+ "/learn/data-engineering/sql-for-de": {
+  "kind": "table",
+  "columns": [
+   "customer_id",
+   "order_id",
+   "order_date"
+  ],
+  "rows": [
+   [
+    "1",
+    "1016",
+    "2024-02-14"
+   ],
+   [
+    "2",
+    "1026",
+    "2024-03-13"
+   ],
+   [
+    "3",
+    "1003",
+    "2024-01-10"
+   ],
+   [
+    "4",
+    "1028",
+    "2024-03-19"
+   ],
+   [
+    "5",
+    "1018",
+    "2024-02-19"
+   ]
+  ]
+ },
+ "/learn/data-engineering/streaming-data": {
+  "kind": "text",
+  "text": "billing   ['order_created:1001', 'order_paid:1001', 'order_created:1002']\nanalytics ['order_created:1001']\noffsets   {'billing': 3, 'analytics': 1}"
+ },
+ "/learn/data-engineering/system-design-de": {
+  "kind": "text",
+  "text": "25 GB/day raw, 9.1 TB/year\npeak about 1,736 events/second"
+ },
+ "/learn/data-engineering/warehouse-concepts": {
+  "kind": "table",
+  "columns": [
+   "payment_method",
+   "revenue"
+  ],
+  "rows": [
+   [
+    "Credit Card",
+    "734.39"
+   ],
+   [
+    "Debit Card",
+    "303.19"
+   ],
+   [
+    "Apple Pay",
+    "221.35"
+   ],
+   [
+    "Cash",
+    "100.09"
+   ]
+  ]
+ },
+ "/learn/data-engineering/what-is-a-pipeline": {
+  "kind": "table",
+  "columns": [
+   "order_id",
+   "order_date",
+   "order_status"
+  ],
+  "rows": [
+   [
+    "1029",
+    "2024-03-22",
+    "Delivered"
+   ],
+   [
+    "1030",
+    "2024-03-25",
+    "Processing"
+   ]
+  ]
+ },
+ "/learn/data-engineering/what-is-data": {
+  "kind": "text",
+  "text": "[72, 105] ['01001000', '01101001']\nint32 max: 2147483647\nFalse"
+ },
+ "/learn/data-engineering/what-is-data-engineering": {
+  "kind": "text",
+  "text": "{'2024-03-01': 3.5, '2024-03-02': 3.5} | dropped 1 bad row"
+ },
+ "/learn/data-engineering/working-with-apis": {
+  "kind": "text",
+  "text": "got 2, next cursor = c1\ngot 2, next cursor = c2\ngot 1, next cursor = None\ntotal 5"
+ },
  "/learn/dsa/advanced": {
   "kind": "text",
   "text": "best 3-day total = 18, starting at day 1"
