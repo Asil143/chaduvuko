@@ -6,8 +6,10 @@
  *
  *   npx tsx scripts/quick-results.ts [--check]
  *
- * Python and C are skipped (with a note) when python3 or cc is not installed, as on some hosted
- * builders; SQL needs only sql.js and always runs.
+ * Output can differ between language versions (error messages change), so the python3 and cc
+ * versions used are recorded in data/lesson-quick/toolchain.json. Python and C examples are only
+ * re-run where the same versions are installed; elsewhere, as on a hosted builder, the committed
+ * results are kept. SQL needs only sql.js and always runs.
  */
 import { execFileSync, spawnSync } from 'child_process'
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs'
@@ -19,11 +21,16 @@ import type { LessonQuick, QuickResult } from '@/lib/lesson-quick'
 import { runFreshCart } from './lib/freshcart'
 
 const OUT = 'data/lesson-quick/results.json'
+const TOOLCHAIN = 'data/lesson-quick/toolchain.json'
 const MAX_ROWS = 8
 const MAX_COLUMNS = 6
 const MAX_OUTPUT_LINES = 12
 
-const has = (command: string) => spawnSync(command, ['--version'], { stdio: 'ignore' }).status === 0
+/** First line of `command --version`, or null when the command is not installed. */
+function version(command: string): string | null {
+  const run = spawnSync(command, ['--version'], { encoding: 'utf8' })
+  return run.status === 0 ? `${run.stdout}${run.stderr}`.trim().split('\n')[0] : null
+}
 
 function checkEntry(href: string, quick: LessonQuick, problems: string[]) {
   const fail = (message: string) => problems.push(`${href}: ${message}`)
@@ -54,7 +61,14 @@ function runProgram(lang: 'python' | 'c', code: string): string {
 }
 
 async function main() {
-  const canRun = { python: has('python3'), c: has('cc') }
+  const check = process.argv.includes('--check')
+  const installed = { python: version('python3'), c: version('cc') }
+  const recorded: Partial<Record<'python' | 'c', string>> = existsSync(TOOLCHAIN) ? JSON.parse(readFileSync(TOOLCHAIN, 'utf8')) : {}
+  // When writing, run with whatever is installed and record it. When checking, only re-run with the recorded versions.
+  const canRun = {
+    python: Boolean(installed.python) && (!check || installed.python === recorded.python),
+    c: Boolean(installed.c) && (!check || installed.c === recorded.c),
+  }
   const previous: Record<string, QuickResult> = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : {}
   const results: Record<string, QuickResult> = {}
   const problems: string[] = []
@@ -90,14 +104,14 @@ async function main() {
     }
   }
 
-  if (skipped.length) console.log(`quick results: ${skipped.length} Python/C example(s) not run here (no python3 or cc)`)
+  if (skipped.length) console.log(`quick results: ${skipped.length} Python/C example(s) not re-run here (toolchain differs from ${TOOLCHAIN}); committed results kept`)
   if (problems.length) {
     console.error(`quick results: ${problems.length} problem(s):\n${problems.map(p => `  - ${p}`).join('\n')}`)
     process.exit(1)
   }
   const json = JSON.stringify(results, null, 1) + '\n'
   const count = Object.keys(results).length
-  if (process.argv.includes('--check')) {
+  if (check) {
     if (readFileSync(OUT, 'utf8') !== json) {
       console.error(`quick results: ${OUT} is out of date. Run: npx tsx scripts/quick-results.ts`)
       process.exit(1)
@@ -105,6 +119,7 @@ async function main() {
     console.log(`quick results OK (${Object.keys(LESSON_QUICK).length} lessons, ${count} examples run)`)
   } else {
     writeFileSync(OUT, json)
+    writeFileSync(TOOLCHAIN, JSON.stringify({ python: installed.python, c: installed.c }, null, 2) + '\n')
     console.log(`quick results: ${count} example results written to ${OUT}`)
   }
 }
