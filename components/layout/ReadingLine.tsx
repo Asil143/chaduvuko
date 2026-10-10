@@ -24,7 +24,7 @@ export function ReadingLine() {
   }, [])
 
   return (
-    <div aria-hidden="true" className="h-0.5 w-full" style={{ background: 'var(--border)' }}>
+    <div aria-hidden="true" className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: 'var(--border)' }}>
       <div className="h-full origin-left" style={{ transform: `scaleX(${progress})`, background: 'var(--text2)' }} />
     </div>
   )

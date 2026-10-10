@@ -8,6 +8,8 @@ export interface TrackSummary {
   lessons: number
   /** True when most of the track is still unpublished. Short finished tracks stay unmarked. */
   early: boolean
+  /** One line under the name in the header. Omitted outside the header. */
+  blurb?: string
 }
 
 /** Live counts shown on the homepage and /learn, computed on the server. */
@@ -49,7 +51,7 @@ export interface LessonNavLink {
 /** A lesson in the track picker: [href, title, module]. */
 export type TrackLessonEntry = [href: string, title: string, module: string]
 
-/** Where the open lesson sits in its track; drives the lesson row under the site bar. */
+/** Where the open lesson sits in its track; drives the lesson controls in the site header. */
 export interface LessonContext {
   trackTitle: string
   trackHref: string

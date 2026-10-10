@@ -7,6 +7,10 @@ import { ThemeChoice, ThemeMenu } from '@/components/ui/ThemePicker'
 import { SiteSearch, type SearchResume } from '@/components/ui/SiteSearch'
 import { TRACKS_HREF, TracksListMobile, TracksMenuDesktop } from '@/components/layout/TracksMenu'
 import { PRACTICE_ITEMS, PracticeListMobile, PracticeMenuDesktop } from '@/components/layout/PracticeMenu'
+import { RoadmapsListMobile, RoadmapsMenuDesktop } from '@/components/layout/RoadmapsMenu'
+import { LessonHeaderControls } from '@/components/layout/LessonRow'
+import { ReadingLine } from '@/components/layout/ReadingLine'
+import { useLessonChrome } from '@/lib/lesson-chrome'
 import { useLearnerProgress, type LearnerProgress } from '@/components/layout/useLearnerProgress'
 import { useMenuDisclosure } from '@/components/layout/useMenuDisclosure'
 import { useIsLessonPage } from '@/lib/lesson-page'
@@ -39,6 +43,7 @@ export function Navbar({ header }: { header: HeaderData }) {
   // The lesson index is needed for the Continue slot (hidden on lessons) and for
   // per-track completion counts once a track list is opened.
   const learner = useLearnerProgress(!isLessonPage || tracksOpened || mobileOpen)
+  const lesson = useLessonChrome()
   const projectCount = header.tracks.projects?.lessons ?? 0
   const searchTracks = useMemo(
     () => Object.values(header.tracks)
@@ -70,34 +75,40 @@ export function Navbar({ header }: { header: HeaderData }) {
       <Link
         href="/"
         aria-label="Chaduvuko home"
-        className="flex items-center flex-shrink-0 lg:mr-4"
+        className="brand flex items-center flex-shrink-0 lg:mr-4"
         style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1, textDecoration: 'none' }}
       >
         <span style={{ color: 'var(--text)' }}>Chadu</span>
         <span style={{ color: 'var(--brand-green)' }}>vuko</span>
       </Link>
 
-      <nav aria-label="Main" className="hidden lg:block">
-        <ul className="flex items-center gap-0.5">
-          <li>
-            <TracksMenuDesktop
-              header={header}
-              completedByTrack={learner.completedByTrack}
-              active={activeHref === TRACKS_HREF}
-              onOpenChange={open => { if (open) setTracksOpened(true) }}
-            />
-          </li>
-          <li><DesktopLink item={ROADMAPS} active={activeHref === ROADMAPS.href} /></li>
-          <li><PracticeMenuDesktop activeHref={activeHref} projectCount={projectCount} /></li>
-          <li><DesktopLink item={INTERVIEW} active={activeHref === INTERVIEW.href} /></li>
-        </ul>
-      </nav>
+      {lesson ? (
+        <LessonHeaderControls nav={lesson} />
+      ) : (
+        <nav aria-label="Main" className="desktop-nav hidden lg:block">
+          <ul className="flex items-center gap-0.5">
+            <li>
+              <TracksMenuDesktop
+                header={header}
+                completedByTrack={learner.completedByTrack}
+                active={activeHref === TRACKS_HREF}
+                onOpenChange={open => { if (open) setTracksOpened(true) }}
+              />
+            </li>
+            <li><RoadmapsMenuDesktop header={header} active={activeHref === ROADMAPS.href} /></li>
+            <li><PracticeMenuDesktop activeHref={activeHref} projectCount={projectCount} /></li>
+            <li><DesktopLink item={INTERVIEW} active={activeHref === INTERVIEW.href} /></li>
+          </ul>
+        </nav>
+      )}
 
       <div className="ml-auto flex items-center gap-1 sm:gap-2 flex-shrink-0">
         <SiteSearch resume={resume} tracks={searchTracks} />
-        <div className="hidden lg:block">
-          <ThemeMenu />
-        </div>
+        {!lesson && (
+          <div className="header-theme hidden lg:block">
+            <ThemeMenu />
+          </div>
+        )}
         <ResumeSlot learner={learner} tracks={header.tracks} />
         <MobileMenu
           header={header}
@@ -108,6 +119,7 @@ export function Navbar({ header }: { header: HeaderData }) {
           onOpenChange={setMobileOpen}
         />
       </div>
+      {lesson && <ReadingLine />}
     </header>
   )
 }
@@ -122,6 +134,7 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
   onOpenChange: (open: boolean) => void
 }) {
   const { open, setOpen, close, containerRef, buttonRef } = useMenuDisclosure()
+  const isLessonPage = useIsLessonPage()
   const navigate = () => setOpen(false)
 
   useEffect(() => {
@@ -133,7 +146,7 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
   }, [open, onOpenChange])
 
   return (
-    <div ref={containerRef} className="lg:hidden">
+    <div ref={containerRef} className="header-menu lg:hidden">
       <button
         ref={buttonRef}
         type="button"
@@ -173,6 +186,19 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
           </div>
 
           <nav aria-label="Menu" className="flex-1 overflow-y-auto overscroll-contain px-3 py-3">
+            {isLessonPage && (
+              <button
+                type="button"
+                className="flex items-center w-full min-h-[50px] px-3 mb-1 text-base font-semibold rounded-lg"
+                style={{ color: 'var(--text)' }}
+                onClick={() => {
+                  setOpen(false)
+                  requestAnimationFrame(() => document.querySelector<HTMLButtonElement>('.search-trigger')?.click())
+                }}
+              >
+                Search
+              </button>
+            )}
             {resume && (
               <Link
                 href={resume.href}
@@ -195,7 +221,7 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
               active={activeHref === TRACKS_HREF}
               onNavigate={navigate}
             />
-            <MobileLink item={ROADMAPS} active={activeHref === ROADMAPS.href} onNavigate={navigate} />
+            <RoadmapsListMobile header={header} active={activeHref === ROADMAPS.href} onNavigate={navigate} />
             <PracticeListMobile activeHref={activeHref} projectCount={projectCount} onNavigate={navigate} />
             <MobileLink item={INTERVIEW} active={activeHref === INTERVIEW.href} onNavigate={navigate} />
             <div className="mt-2 pt-2" style={{ borderTop: '1px solid var(--border)' }}>

@@ -12,7 +12,7 @@
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
     --font-display: var(--font-sans);
 
-    /* Height of the fixed site header; 0 while lesson mode hides it. */
+    /* Height of the fixed site header. */
     --header-offset: 64px;
 
     color-scheme: light;
@@ -251,28 +251,31 @@
   50% { opacity: 0.2; }
 }
 
-/* Lesson pages (components/layout/LessonRow.tsx, LessonHeaderMode.tsx).
-   The lesson row sits under the site bar; while reading, the bar slides away and the row moves
-   up by the bar's height. Sticky offsets and anchor jumps use both heights. Next is the action
-   on a lesson, so the Continue/Start slot is removed (pure CSS, so it holds before hydration). */
-:root { --lesson-row-h: 0px; }
-html:has([data-lesson-page]) { --lesson-row-h: 54px; }
-html:has([data-lesson-page]) { scroll-padding-top: calc(var(--header-offset) + var(--lesson-row-h) + 16px); }
+/* Lesson pages use the one site header. Catalog links move into the menu; the open
+   lesson, its position, and Next sit in the bar. Continue/Start is hidden because Next
+   is the action. These rules apply before hydration, while the lesson controls mount. */
+html:has([data-lesson-page]) { scroll-padding-top: calc(var(--header-offset) + 16px); }
 body:has([data-lesson-page]) .resume-slot { display: none; }
-html[data-header-hidden="true"] { --header-offset: 0px; }
-.site-header { transition: transform 0.2s ease; }
-html[data-header-hidden="true"] .site-header { transform: translateY(-100%); }
-.lesson-row { top: var(--header-offset); transition: top 0.2s ease; }
+body:has([data-lesson-page]) .desktop-nav { display: none !important; }
+body:has([data-lesson-page]) .header-theme { display: none !important; }
+body:has([data-lesson-page]) .header-menu { display: block !important; }
+body:has([data-lesson-page]) .search-trigger {
+  width: 2.75rem !important;
+  min-width: 2.75rem !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  justify-content: center !important;
+}
+body:has([data-lesson-page]) .search-trigger span,
+body:has([data-lesson-page]) .search-trigger kbd { display: none !important; }
+@media (max-width: 389px) {
+  body:has([data-lesson-page]) .search-trigger { display: none !important; }
+  body:has([data-lesson-page]) .brand { font-size: 16px !important; margin-right: 0 !important; }
+}
 .lesson-sidebar {
-  top: calc(var(--header-offset) + var(--lesson-row-h));
-  max-height: calc(100vh - var(--header-offset) - var(--lesson-row-h));
-  transition: top 0.2s ease, max-height 0.2s ease;
+  top: var(--header-offset);
+  max-height: calc(100vh - var(--header-offset));
 }
-@media (prefers-reduced-motion: reduce) {
-  .site-header, .lesson-row, .lesson-sidebar { transition: none; }
-}
-
-/* A panel opened from the lesson row (the phone lesson sheet) must cover the site bar. */
-.lesson-row:has([data-menu-panel]) { z-index: 60; }
-/* Header and lesson-row panels are modal, so the chat bubble must not float over them. */
+.site-header:has([data-menu-panel]) { z-index: 60; }
+/* Header panels are modal, so the chat bubble must not float over them. */
 body:has([data-menu-panel]) .chad-float { display: none; }

@@ -1,22 +1,21 @@
 'use client'
 import { CommentSection }  from '@/components/ui/CommentSection'
 import { ReadingProgress } from '@/components/ui/ReadingProgress'
-import { LessonHeaderMode } from '@/components/layout/LessonHeaderMode'
 import { LessonPageMarker } from '@/components/layout/LessonPageMarker'
-import { LessonRow } from '@/components/layout/LessonRow'
 import { ShareButtons }    from '@/components/ui/ShareButtons'
 import { PageViews }       from '@/components/ui/PageViews'
 import { RelatedArticles } from '@/components/ui/RelatedArticles'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ChevronRight, ChevronLeft, Clock, Calendar, BookOpen, Copy, Check, CheckCircle2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { TableOfContents } from '@/components/ui/TableOfContents'
 import { QuizSection } from '@/components/ui/QuizSection'
 import { LinkedInGenerator } from '@/components/ui/LinkedInGenerator'
 import { SalaryWidget } from '@/components/ui/SalaryWidget'
 import { getPageMeta, NEXT_PAGES, getNextPages } from '@/data/navigation'
 import { useLessonNav } from '@/components/content/LessonNavContext'
+import { setLessonChrome } from '@/lib/lesson-chrome'
 import { recordLessonVisit, recordQuizPass, setLessonComplete, useProgress } from '@/lib/progress'
 import SQLSectionNav from '@/components/sql/SQLSectionNav'
 import DESectionNav from '@/components/data-engineering/DESectionNav'
@@ -213,24 +212,25 @@ export function LearnLayout({ children, title, description, section, readTime, u
     if (isLesson) recordLessonVisit(pathname)
   }, [isLesson, pathname])
 
+  // The header is outside this page, so publish the open lesson before paint.
+  useLayoutEffect(() => (lessonNav ? setLessonChrome(lessonNav) : undefined), [lessonNav])
+
   return (
     <>
       {lessonNav ? (
         <>
           <LessonPageMarker />
-          <LessonRow nav={lessonNav} />
-          <LessonHeaderMode />
         </>
       ) : (
         <ReadingProgress />
       )}
-      <div className={`${isLesson ? 'pt-[118px]' : 'pt-16'} min-h-screen`} style={{ background: 'var(--bg)' }}>
+      <div className="pt-16 min-h-screen" style={{ background: 'var(--bg)' }}>
 
         {/* Page header */}
         <div className="border-b" style={{ borderColor: 'var(--border)', background: 'var(--bg2)' }}>
           <div className="w-[96%] max-w-[2200px] mx-auto px-4 md:px-6 py-8">
             {breadcrumbs && (
-              // On lessons the lesson row carries the trail from lg up.
+              // On lessons the header carries the track and module from lg up.
               <nav className={`flex items-center gap-1.5 text-xs font-mono mb-4 ${isLesson ? 'lg:hidden' : ''}`} style={{ color: 'var(--muted)' }}>
                 <Link href="/" style={{ color: 'var(--accent)' }}>Home</Link>
                 {breadcrumbs.map(bc => (

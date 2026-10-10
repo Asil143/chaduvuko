@@ -182,7 +182,7 @@ export function SiteSearch({ resume, tracks }: { resume: SearchResume | null; tr
         aria-label="Search lessons, tracks, roadmaps, practice and interview prep"
         aria-haspopup="dialog"
         aria-expanded={open}
-        className="flex items-center justify-center lg:justify-start gap-2 h-11 w-11 lg:h-10 lg:w-auto lg:px-3 xl:w-[260px] xl:min-w-[220px] rounded-[10px] text-sm flex-shrink-0"
+        className="search-trigger flex items-center justify-center lg:justify-start gap-2 h-11 w-11 lg:h-10 lg:w-auto lg:px-3 xl:w-[260px] xl:min-w-[220px] rounded-[10px] text-sm flex-shrink-0"
         style={{ background: 'var(--bg2)', border: '1px solid var(--border)', color: 'var(--muted)' }}
       >
         <Search size={15} aria-hidden="true" />

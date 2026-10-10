@@ -6,7 +6,6 @@ import { Check, ChevronDown, X } from 'lucide-react'
 import { useProgress } from '@/lib/progress'
 import type { LessonNavLink, LessonNavLinks } from '@/lib/lesson-nav'
 import { useMenuDisclosure } from '@/components/layout/useMenuDisclosure'
-import { ReadingLine } from '@/components/layout/ReadingLine'
 
 /** At the ends of a track, Previous/Next point to the track overview. */
 function prevText(link: LessonNavLink) {
@@ -25,80 +24,65 @@ function nextName(link: LessonNavLink) {
 const CHIP = 'flex items-center h-11 lg:h-10 rounded-[10px] text-[13px] whitespace-nowrap flex-shrink-0'
 
 /**
- * The row under the site bar on lesson pages: track and module, position, the track's lesson
- * picker, and Previous/Next. Neighbour titles show at 1200px and wider; below that the row keeps
- * only the controls and the lesson title lives in the page heading.
+ * Lesson controls inside the site header: track, position, the lesson title when it fits,
+ * and Previous/Next. Below 1200px the title lives only in the page heading.
  */
-export function LessonRow({ nav }: { nav: LessonNavLinks }) {
+export function LessonHeaderControls({ nav }: { nav: LessonNavLinks }) {
   const { prev, next, context } = nav
-  const shortTrack = context.trackTitle
 
   return (
-    <nav
-      aria-label="Lesson"
-      className="lesson-row fixed left-0 right-0 z-40 flex flex-col"
-      style={{ background: 'var(--bg2)', borderBottom: '1px solid var(--border)' }}
-    >
-      <div className="h-[52px] flex items-center gap-2 lg:gap-3 pl-3.5 pr-2 lg:px-6">
-        <span className="flex items-center gap-1.5 min-w-0 text-[13px] whitespace-nowrap" style={{ color: 'var(--muted)' }}>
-          <Link href={context.trackHref} className="flex items-center h-11 font-semibold flex-shrink-0" style={{ color: 'var(--accent)' }}>
-            {shortTrack}
-          </Link>
-          {context.module && (
-            <span className="hidden lg:inline truncate">
-              <span aria-hidden="true">› </span>{context.module}
-            </span>
+    <nav aria-label="Lesson" className="lesson-row flex flex-1 items-center gap-1 sm:gap-2 min-w-0">
+      <Link
+        href={context.trackHref}
+        className="hidden sm:flex items-center h-11 max-w-[9rem] xl:max-w-[16rem] truncate text-[13px] font-semibold flex-shrink-0"
+        style={{ color: 'var(--accent)' }}
+      >
+        {context.trackTitle}
+      </Link>
+      {context.module && (
+        <span className="hidden lg:inline min-w-0 truncate text-[13px]" style={{ color: 'var(--muted)' }}>
+          <span aria-hidden="true">› </span>{context.module}
+        </span>
+      )}
+      <span className="hidden min-[1200px]:block flex-1 min-w-0 truncate text-sm font-semibold" style={{ color: 'var(--text)' }}>
+        {/* Orientation only. The page h1 is the heading. */}
+        <LessonTitle lessons={context.lessons} />
+      </span>
+      <LessonPicker nav={nav} />
+      {prev && (
+        <Link
+          href={prev.href}
+          aria-label={prevName(prev)}
+          title={prev.title}
+          className={`${CHIP} hidden sm:flex justify-center w-11 lg:w-auto lg:px-3`}
+          style={{ border: '1px solid var(--border2)', color: 'var(--text)' }}
+        >
+          <span aria-hidden="true">←</span>
+          <span className="hidden lg:inline min-[1200px]:hidden">&nbsp;Previous</span>
+          <span className="hidden min-[1200px]:inline max-w-[18ch] truncate">&nbsp;{prevText(prev)}</span>
+        </Link>
+      )}
+      {next && (
+        <Link
+          href={next.href}
+          aria-label={nextName(next)}
+          title={next.title}
+          className={`${CHIP} px-3 font-bold`}
+          style={{ background: 'var(--green)', color: '#04140a' }}
+        >
+          {next.label === 'Next' ? (
+            <>
+              <span className="min-[1200px]:hidden">Next&nbsp;→</span>
+              <span className="hidden min-[1200px]:inline max-w-[24ch] truncate">Next · {nextText(next)}&nbsp;→</span>
+            </>
+          ) : (
+            <>
+              <span className="lg:hidden">Done&nbsp;→</span>
+              <span className="hidden lg:inline">Track complete&nbsp;→</span>
+            </>
           )}
-        </span>
-
-        <span className="hidden min-[1200px]:block w-px h-5 flex-shrink-0" style={{ background: 'var(--border2)' }} />
-        <span className="hidden min-[1200px]:block flex-1 min-w-0 truncate text-sm font-semibold" style={{ color: 'var(--text)' }}>
-          {/* Current title, for orientation; the h1 is the heading. */}
-          <LessonTitle lessons={context.lessons} />
-        </span>
-
-        <span className="hidden lg:inline ml-auto min-[1200px]:ml-0 font-mono text-xs whitespace-nowrap" style={{ color: 'var(--muted)' }}>
-          Lesson {context.position} of {context.total}
-        </span>
-
-        <LessonPicker nav={nav} />
-
-        {prev && (
-          <Link
-            href={prev.href}
-            aria-label={prevName(prev)}
-            title={prev.title}
-            className={`${CHIP} justify-center w-11 lg:w-auto lg:px-3`}
-            style={{ border: '1px solid var(--border2)', color: 'var(--text)' }}
-          >
-            <span aria-hidden="true">←</span>
-            <span className="hidden lg:inline min-[1200px]:hidden">&nbsp;Previous</span>
-            <span className="hidden min-[1200px]:inline max-w-[22ch] truncate">&nbsp;{prevText(prev)}</span>
-          </Link>
-        )}
-        {next && (
-          <Link
-            href={next.href}
-            aria-label={nextName(next)}
-            title={next.title}
-            className={`${CHIP} px-3.5 font-bold`}
-            style={{ background: 'var(--green)', color: '#04140a' }}
-          >
-            {next.label === 'Next' ? (
-              <>
-                <span className="min-[1200px]:hidden">Next&nbsp;→</span>
-                <span className="hidden min-[1200px]:inline max-w-[30ch] truncate">Next · {nextText(next)}&nbsp;→</span>
-              </>
-            ) : (
-              <>
-                <span className="lg:hidden">Done&nbsp;→</span>
-                <span className="hidden lg:inline">Track complete&nbsp;→</span>
-              </>
-            )}
-          </Link>
-        )}
-      </div>
-      <ReadingLine />
+        </Link>
+      )}
     </nav>
   )
 }
@@ -146,7 +130,7 @@ function LessonPicker({ nav }: { nav: LessonNavLinks }) {
   const label = `${context.trackTitle} lessons`
 
   return (
-    <div ref={containerRef} className="lg:relative mr-auto lg:mr-0">
+    <div ref={containerRef} className="relative flex-shrink-0">
       <button
         ref={buttonRef}
         type="button"
@@ -158,7 +142,7 @@ function LessonPicker({ nav }: { nav: LessonNavLinks }) {
         style={{ border: '1px solid var(--border2)', color: 'var(--text)', background: open ? 'var(--bg3)' : 'transparent' }}
       >
         <span className="lg:hidden font-mono text-xs" style={{ color: 'var(--text2)' }}>{context.position} of {context.total}</span>
-        <span className="hidden lg:inline">{label}</span>
+        <span className="hidden lg:inline whitespace-nowrap">Lesson {context.position} of {context.total}</span>
         <ChevronDown size={12} aria-hidden="true" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
       </button>
 

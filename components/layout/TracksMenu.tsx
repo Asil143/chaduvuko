@@ -48,12 +48,17 @@ function TrackRow({ slug, track, completed, pathname, onNavigate, tall = false }
         href={track.href}
         aria-current={pathname === track.href ? 'page' : undefined}
         onClick={onNavigate}
-        className={`flex items-center justify-between gap-3 px-2 -mx-2 rounded-md text-sm hover:bg-[var(--bg3)] ${tall ? 'min-h-11' : 'py-1.5'}`}
+        className={`flex items-start justify-between gap-3 px-2 -mx-2 rounded-md text-sm hover:bg-[var(--bg3)] ${tall ? 'py-2' : 'py-1.5'}`}
         style={{ color: 'var(--text)', fontWeight: current ? 600 : 400 }}
       >
         <span className="min-w-0">
-          {track.title}
-          {slug === START_HERE && <span className="text-xs font-normal" style={{ color: 'var(--muted)' }}> · start here</span>}
+          <span className="block">
+            {track.title}
+            {slug === START_HERE && <span className="text-xs font-normal" style={{ color: 'var(--muted)' }}> · start here</span>}
+          </span>
+          {track.blurb && (
+            <span className="block text-xs font-normal mt-0.5" style={{ color: 'var(--muted)' }}>{track.blurb}</span>
+          )}
         </span>
         <span className="flex items-center gap-1.5 flex-shrink-0 text-xs">
           {completed > 0 ? (
@@ -140,8 +145,8 @@ export function TracksMenuDesktop({ header, completedByTrack, active, onOpenChan
           className="fixed left-0 right-0 top-16 z-40 max-h-[calc(100vh-4rem)] overflow-y-auto"
           style={{ background: 'var(--bg2)', borderBottom: '1px solid var(--border2)', boxShadow: 'var(--shadow-lg)' }}
         >
-          <div className="relative max-w-[1400px] mx-auto px-8 pt-6 pb-5 flex gap-8">
-            <div className="flex-1 grid grid-cols-3 gap-10">
+          <div className="relative max-w-[1400px] mx-auto px-8 pt-6 pb-5 pr-16">
+            <div className="grid grid-cols-3 gap-10">
               {COLUMNS.map((areas, i) => (
                 <div key={i} className="flex flex-col gap-6">
                   {areas.map(area => (
@@ -149,24 +154,6 @@ export function TracksMenuDesktop({ header, completedByTrack, active, onOpenChan
                   ))}
                 </div>
               ))}
-            </div>
-            <div className="hidden xl:flex flex-col w-[270px] pl-6 pr-10" style={{ borderLeft: '1px solid var(--border)' }}>
-              <div id={`${panelId}-roadmaps`} className="pb-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--accent)' }}>
-                Featured roadmaps
-              </div>
-              <ul aria-labelledby={`${panelId}-roadmaps`}>
-                {header.featuredRoadmaps.map(roadmap => (
-                  <li key={roadmap.href}>
-                    <Link href={roadmap.href} onClick={navigate} className="block py-1.5 rounded-md hover:underline">
-                      <span className="block text-sm font-semibold" style={{ color: 'var(--text)' }}>{roadmap.title}</span>
-                      <span className="block text-xs" style={{ color: 'var(--muted)' }}>{roadmap.blurb}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <Link href="/learn/roadmap" onClick={navigate} className="pt-2.5 text-sm font-semibold" style={{ color: 'var(--accent)' }}>
-                All {header.roadmapCount} roadmaps →
-              </Link>
             </div>
             <button
               type="button"
