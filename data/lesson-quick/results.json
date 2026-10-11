@@ -93,7 +93,7 @@
  },
  "/learn/cybersecurity/python-for-security": {
   "kind": "text",
-  "text": "127.0.0.1:57922 open\n127.0.0.1:1 closed"
+  "text": "127.0.0.1:8080 open\n127.0.0.1:9 closed"
  },
  "/learn/cybersecurity/reconnaissance-osint": {
   "kind": "text",

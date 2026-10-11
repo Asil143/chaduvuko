@@ -356,11 +356,10 @@ for v in sorted(vulns, key=priority, reverse=True):
       code: `import socket
 
 listener = socket.socket()
-listener.bind(("127.0.0.1", 0))
+listener.bind(("127.0.0.1", 8080))     # a port we open ourselves, to probe
 listener.listen()
-open_port = listener.getsockname()[1]
 
-for port in (open_port, 1):
+for port in (8080, 9):
     with socket.socket() as s:
         s.settimeout(0.5)
         state = "open" if s.connect_ex(("127.0.0.1", port)) == 0 else "closed"
