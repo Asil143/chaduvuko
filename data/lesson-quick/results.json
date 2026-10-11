@@ -1,4 +1,228 @@
 {
+ "/learn/ai-ml/classical-ml/decision-trees": {
+  "kind": "text",
+  "text": "pure (10 yes, 0 no): 0.0\nmixed (5 yes, 5 no): 0.5\nskewed (9 yes, 1 no): 0.18"
+ },
+ "/learn/ai-ml/classical-ml/gradient-boosting": {
+  "kind": "text",
+  "text": "round 0: predictions [15.0, 20.0, 25.0]\nround 1: predictions [12.5, 20.0, 27.5]\nround 2: predictions [11.2, 20.0, 28.8]"
+ },
+ "/learn/ai-ml/classical-ml/kmeans-clustering": {
+  "kind": "text",
+  "text": "clusters: {0: [1, 2, 3], 1: [10, 11, 12]}\nupdated centroids: [2.0, 11.0]"
+ },
+ "/learn/ai-ml/classical-ml/knn": {
+  "kind": "text",
+  "text": "nearest labels: ['A', 'A', 'B'] -> predict A"
+ },
+ "/learn/ai-ml/classical-ml/linear-regression": {
+  "kind": "text",
+  "text": "predicted delivery time: 36 minutes"
+ },
+ "/learn/ai-ml/classical-ml/logistic-regression": {
+  "kind": "text",
+  "text": "z=-3.0  P=0.047  class=no\nz=-0.5  P=0.378  class=no\nz=+0.0  P=0.500  class=yes\nz=+1.5  P=0.818  class=yes\nz=+4.0  P=0.982  class=yes"
+ },
+ "/learn/ai-ml/classical-ml/naive-bayes": {
+  "kind": "text",
+  "text": "unnormalised spam score: 0.032"
+ },
+ "/learn/ai-ml/classical-ml/pca": {
+  "kind": "text",
+  "text": "1 component(s): 62% of variance kept\n2 component(s): 85% of variance kept\n3 component(s): 93% of variance kept\n-> keep 3 components to retain 90%"
+ },
+ "/learn/ai-ml/classical-ml/random-forest": {
+  "kind": "text",
+  "text": "single tree error: 14.1\nforest (50 trees) error: 0.4"
+ },
+ "/learn/ai-ml/classical-ml/svm": {
+  "kind": "text",
+  "text": "boundary at 5.0, margin width 5.0\nsupport vectors: 2.5 7.5"
+ },
+ "/learn/ai-ml/classical-ml/what-is-ml": {
+  "kind": "text",
+  "text": "epoch 0: w = 2.800, loss = 0.187\nepoch 1: w = 2.987, loss = 0.001\nepoch 2: w = 2.999, loss = 0.000\nepoch 3: w = 3.000, loss = 0.000\nepoch 4: w = 3.000, loss = 0.000"
+ },
+ "/learn/ai-ml/computer-vision/image-fundamentals": {
+  "kind": "text",
+  "text": "raw 200 -> scaled 0.784 -> normalised 1.307"
+ },
+ "/learn/ai-ml/computer-vision/object-detection": {
+  "kind": "text",
+  "text": "IoU: 0.143"
+ },
+ "/learn/ai-ml/data-engineering/data-cleaning": {
+  "kind": "text",
+  "text": "rows: 8\nmissing: 1\nout of range: 2\nclean values: [34, 28, 45, 31, 29]"
+ },
+ "/learn/ai-ml/data-engineering/data-collection": {
+  "kind": "text",
+  "text": "attempt 1: wait up to 1s before retrying\nattempt 2: wait up to 2s before retrying\nattempt 3: wait up to 4s before retrying\nattempt 4: wait up to 8s before retrying\nattempt 5: wait up to 16s before retrying\nattempt 6: wait up to 30s before retrying"
+ },
+ "/learn/ai-ml/data-engineering/encoding-categorical-features": {
+  "kind": "text",
+  "text": "card {'apple_pay': 0, 'card': 1, 'cash': 0}\ncash {'apple_pay': 0, 'card': 0, 'cash': 1}\ncard {'apple_pay': 0, 'card': 1, 'cash': 0}\napple_pay {'apple_pay': 1, 'card': 0, 'cash': 0}"
+ },
+ "/learn/ai-ml/data-engineering/feature-engineering": {
+  "kind": "text",
+  "text": "month  1: sin=+0.00, cos=+1.00\nmonth  6: sin=+0.50, cos=-0.87\nmonth 12: sin=-0.50, cos=+0.87"
+ },
+ "/learn/ai-ml/data-engineering/feature-scaling": {
+  "kind": "text",
+  "text": "mean 7.0 std 2.92\nstandardised: [-0.69, 0.34, -1.2, 1.71, -0.17]"
+ },
+ "/learn/ai-ml/data-engineering/train-val-test-split": {
+  "kind": "text",
+  "text": "train: [1, 2, 3, 4, 5, 6]\nval:   [7, 8]\ntest:  [9, 10] — all later than train, never shuffled"
+ },
+ "/learn/ai-ml/deep-learning/activation-functions": {
+  "kind": "text",
+  "text": "probabilities: [0.659, 0.242, 0.099] sum = 1.0"
+ },
+ "/learn/ai-ml/deep-learning/backpropagation": {
+  "kind": "text",
+  "text": "loss: 49.0 | dloss/dx: 28.0"
+ },
+ "/learn/ai-ml/deep-learning/batch-norm-dropout": {
+  "kind": "text",
+  "text": "after dropout: [1.33, 0.0, 4.0, 5.33]"
+ },
+ "/learn/ai-ml/deep-learning/cnns-image-classification": {
+  "kind": "text",
+  "text": "224 input, 3x3 kernel, pad 1, stride 1 -> 224\n224 input, 3x3 kernel, pad 0, stride 2 -> 111"
+ },
+ "/learn/ai-ml/deep-learning/neural-networks-from-scratch": {
+  "kind": "text",
+  "text": "z = -0.1 -> activation = 0.0"
+ },
+ "/learn/ai-ml/deep-learning/optimisers": {
+  "kind": "text",
+  "text": "plain SGD position:    -0.180\nwith momentum position: -0.704"
+ },
+ "/learn/ai-ml/deep-learning/rnns-and-lstms": {
+  "kind": "text",
+  "text": "gradient after  5 steps: 1.68e-01\ngradient after 20 steps: 7.98e-04\ngradient after 50 steps: 1.80e-08"
+ },
+ "/learn/ai-ml/deep-learning/transformers-and-attention": {
+  "kind": "text",
+  "text": "attention weights: [0.786, 0.039, 0.175]"
+ },
+ "/learn/ai-ml/evaluation/calibration": {
+  "kind": "text",
+  "text": "predicted 80%, actual 80% -> well calibrated"
+ },
+ "/learn/ai-ml/evaluation/cross-validation": {
+  "kind": "text",
+  "text": "mean 0.800 ± 0.024\none split alone could have reported any single value above"
+ },
+ "/learn/ai-ml/evaluation/evaluation-metrics": {
+  "kind": "text",
+  "text": "precision 0.75  recall 0.60  F1 0.67"
+ },
+ "/learn/ai-ml/evaluation/hyperparameter-tuning": {
+  "kind": "text",
+  "text": "grid search trials: 24\nrandom search trials: whatever budget you set, e.g. 10"
+ },
+ "/learn/ai-ml/evaluation/model-interpretability": {
+  "kind": "text",
+  "text": "distance  importance = 0.18\nhour      importance = 0.02\nitems     importance = 0.04"
+ },
+ "/learn/ai-ml/evaluation/regression-metrics": {
+  "kind": "text",
+  "text": "MAE 7.2  RMSE 10.4  (RMSE is larger: one big 20-min miss dominates)"
+ },
+ "/learn/ai-ml/evaluation/roc-and-auc": {
+  "kind": "text",
+  "text": "AUC = 0.89"
+ },
+ "/learn/ai-ml/generative-ai/advanced-rag": {
+  "kind": "text",
+  "text": "['A', 'C', 'B', 'D']"
+ },
+ "/learn/ai-ml/generative-ai/agents-tool-use": {
+  "kind": "text",
+  "text": "ran search\nstopped: loop detected\nran read\nstopped: loop detected"
+ },
+ "/learn/ai-ml/generative-ai/diffusion-models": {
+  "kind": "text",
+  "text": "step    0: 100.00% signal, 0.00% noise\nstep  250: 85.36% signal, 14.64% noise\nstep  500: 50.00% signal, 50.00% noise\nstep 1000: 0.00% signal, 100.00% noise"
+ },
+ "/learn/ai-ml/generative-ai/gans-generator-discriminator": {
+  "kind": "text",
+  "text": "discriminator loss -0.85, generator loss -0.20"
+ },
+ "/learn/ai-ml/generative-ai/llms-pretraining-rlhf": {
+  "kind": "text",
+  "text": "refreshes  P = 87.56%\nfailed     P = 11.85%\nbanana     P = 0.59%"
+ },
+ "/learn/ai-ml/generative-ai/multimodal-models": {
+  "kind": "text",
+  "text": "predicted label: a cat"
+ },
+ "/learn/ai-ml/generative-ai/variational-autoencoders": {
+  "kind": "text",
+  "text": "sampled latent z = 2.471"
+ },
+ "/learn/ai-ml/math-foundations/derivatives-and-gradients": {
+  "kind": "text",
+  "text": "step 0: x = 2.0000, loss = 4.0000\nstep 1: x = 0.8000, loss = 0.6400\nstep 2: x = 0.3200, loss = 0.1024\nstep 3: x = 0.1280, loss = 0.0164\nstep 4: x = 0.0512, loss = 0.0026\nstep 5: x = 0.0205, loss = 0.0004"
+ },
+ "/learn/ai-ml/math-foundations/dot-product-similarity": {
+  "kind": "text",
+  "text": "dot(u, v): 28\ncosine(u, v): 1.0\ncosine(u, w): -0.074"
+ },
+ "/learn/ai-ml/math-foundations/eigenvalues-eigenvectors": {
+  "kind": "text",
+  "text": "v=[1, 0]  A v=[2, 0]  eigenvector=True, eigenvalue=2.0\nv=[0, 1]  A v=[0, 3]  eigenvector=True, eigenvalue=3.0\nv=[1, 1]  A v=[2, 3]  eigenvector=False"
+ },
+ "/learn/ai-ml/math-foundations/information-theory": {
+  "kind": "text",
+  "text": "fair coin   : 1.0 bits\nbiased coin : 0.469 bits\ncertain     : -0.0 bits"
+ },
+ "/learn/ai-ml/math-foundations/matrix-multiplication": {
+  "kind": "text",
+  "text": "[58, 64]\n[139, 154]"
+ },
+ "/learn/ai-ml/math-foundations/probability-distributions": {
+  "kind": "text",
+  "text": "P(disease | positive) = 15.4%"
+ },
+ "/learn/ai-ml/math-foundations/vectors-matrices-tensors": {
+  "kind": "text",
+  "text": "vector length: 3\nmatrix shape: 2 x 3\ntensor shape: 2 x 2 x 2"
+ },
+ "/learn/ai-ml/mlops/model-monitoring": {
+  "kind": "text",
+  "text": "PSI = 0.228 -> significant drift"
+ },
+ "/learn/ai-ml/mlops/retraining-pipelines": {
+  "kind": "text",
+  "text": "challenger MAE 7.4 R2 0.83\npromote to shadow: True"
+ },
+ "/learn/ai-ml/nlp/llm-agents-and-tool-use": {
+  "kind": "text",
+  "text": "tool result fed back to the model: 27C sunny"
+ },
+ "/learn/ai-ml/nlp/peft-lora-adapters": {
+  "kind": "text",
+  "text": "full fine-tune: 16,777,216 params\nLoRA:           65,536 params (0.39%)"
+ },
+ "/learn/ai-ml/nlp/rag-retrieval-augmented-generation": {
+  "kind": "text",
+  "text": "retrieved chunk: refunds"
+ },
+ "/learn/ai-ml/nlp/tokenisation-and-embeddings": {
+  "kind": "text",
+  "text": "most frequent adjacent pair: ('l', 'o') -> 3 times\nBPE would merge it into a single new token"
+ },
+ "/learn/ai-ml/programming/python-for-ml": {
+  "kind": "text",
+  "text": "buggy: [1, 2] [1, 2]\nfixed: [1] [2]"
+ },
+ "/learn/ai-ml/what-is-ai": {
+  "kind": "text",
+  "text": "learned spam words: ['cash', 'free', 'money', 'now', 'win']\nis_spam('free lunch'): True"
+ },
  "/learn/apache-kafka/consumer-groups-offsets": {
   "kind": "text",
   "text": "2 consumers -> busy 2, idle 0\n3 consumers -> busy 3, idle 0\n8 consumers -> busy 6, idle 2"

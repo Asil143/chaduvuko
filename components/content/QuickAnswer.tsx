@@ -52,7 +52,7 @@ export function QuickAnswer({ quick }: { quick: LessonQuickView }) {
   const { example, result } = quick
 
   return (
-    <section aria-labelledby="quick-answer" className="mb-10 rounded-2xl px-5 py-5 sm:px-6" style={{ background: 'var(--surface)', border: '1px solid var(--border2)' }}>
+    <section aria-labelledby="quick-answer" className="quick-answer mb-10 rounded-2xl px-5 py-5 sm:px-6" style={{ background: 'var(--surface)', border: '1px solid var(--border2)' }}>
       <h2 id="quick-answer" className={eyebrow} style={{ color: 'var(--accent)' }}>Quick answer</h2>
       <p className="mt-2.5 text-[16px] leading-relaxed" style={{ color: 'var(--text)' }}>{quick.answer}</p>
       <ul className="mt-3 flex flex-col gap-1.5">

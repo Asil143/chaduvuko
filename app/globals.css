@@ -192,10 +192,16 @@
      Keep them within the column on narrow screens: wide content scrolls in place,
      long words and URLs break only when they cannot fit. */
   .prose-chaduvuko pre,
-  .prose-chaduvuko [style*="white-space:pre"]:not([style*="white-space:pre-"]) {
+  .prose-chaduvuko [style*="white-space:pre"]:not([style*="white-space:pre-"]),
+  /* The Quick answer box renders outside .prose-chaduvuko, so it needs the same rule. */
+  .quick-answer pre,
+  .quick-answer table {
     max-width: 100%;
     overflow-x: auto;
   }
+  /* Long unbreakable tokens in the answer text (paths, URLs) break instead of overflowing.
+     Code lives in <pre> with white-space:pre, which this does not affect. */
+  .quick-answer { overflow-wrap: anywhere; }
   @media (max-width: 767px) {
     /* `anywhere` (unlike `break-word`) also shrinks the min-content width of grid and
        flex items, so fixed `1fr` lesson layouts can narrow instead of overflowing. */

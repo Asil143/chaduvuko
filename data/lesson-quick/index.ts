@@ -11,6 +11,7 @@ import { DBMS_QUICK } from './dbms'
 import { NETWORKING_QUICK } from './networking'
 import { CYBER_QUICK } from './cybersecurity'
 import { CLOUD_QUICK } from './cloud-tracks'
+import { AIML_QUICK } from './ai-ml'
 
 /** Every lesson's quick answer and check, keyed by lesson URL. Server-only; see lib/lesson-quick-data.ts. */
 export const LESSON_QUICK: Record<string, LessonQuick> = {
@@ -26,4 +27,5 @@ export const LESSON_QUICK: Record<string, LessonQuick> = {
   ...NETWORKING_QUICK,
   ...CYBER_QUICK,
   ...CLOUD_QUICK,
+  ...AIML_QUICK,
 }
