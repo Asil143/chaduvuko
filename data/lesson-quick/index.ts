@@ -10,6 +10,7 @@ import { SNOWFLAKE_QUICK } from './snowflake'
 import { DBMS_QUICK } from './dbms'
 import { NETWORKING_QUICK } from './networking'
 import { CYBER_QUICK } from './cybersecurity'
+import { CLOUD_QUICK } from './cloud-tracks'
 
 /** Every lesson's quick answer and check, keyed by lesson URL. Server-only; see lib/lesson-quick-data.ts. */
 export const LESSON_QUICK: Record<string, LessonQuick> = {
@@ -24,4 +25,5 @@ export const LESSON_QUICK: Record<string, LessonQuick> = {
   ...DBMS_QUICK,
   ...NETWORKING_QUICK,
   ...CYBER_QUICK,
+  ...CLOUD_QUICK,
 }
