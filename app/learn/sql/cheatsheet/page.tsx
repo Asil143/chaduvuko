@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ProjectIdeas } from '@/components/content/CheatSheetView';
+import { SQL_PROJECTS } from '@/data/cheatsheets/sql-projects';
 
 export const metadata: Metadata = {
   title: 'SQL Cheat Sheet — All Syntax on One Page',
@@ -165,6 +167,8 @@ export default function SQLCheatSheet() {
             </Section>
           </div>
         </div>
+
+        <ProjectIdeas projects={SQL_PROJECTS} />
 
         {/* Footer */}
         <div style={{

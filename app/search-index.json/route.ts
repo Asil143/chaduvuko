@@ -3,6 +3,7 @@ import { LIVE_LESSONS, TRACKS, getCatalogStats, getLiveLesson, getTrack } from '
 import { ROLE_ROADMAPS } from '@/data/roadmaps/role-registry'
 import { BLOG_ARTICLES } from '@/data/blog-articles'
 import type { SearchEntry, SearchIndex } from '@/lib/search'
+import { CHEAT_SHEET_FOR_PATH } from '@/lib/cheatsheet-links'
 
 export const dynamic = 'force-static'
 
@@ -11,7 +12,6 @@ const SITE_PAGES: SearchEntry[] = [
   { href: '/learn/roadmap',         title: 'Career roadmaps',     context: 'Role-by-role learning paths', kind: 'roadmap' },
   { href: '/learn/interview',       title: 'Interview prep',      context: 'Questions and answers',       kind: 'interview' },
   { href: '/learn/industry',        title: 'Industry guide',      context: 'Companies and roles',         kind: 'page' },
-  { href: '/learn/sql/cheatsheet',  title: 'SQL cheatsheet',      context: 'Practice',                    kind: 'practice' },
   { href: '/learn/sql/playground',  title: 'SQL playground',      context: 'Practice',                    kind: 'practice' },
   { href: '/learn/sql/joins',       title: 'Visual JOIN diagrams', context: 'Practice',                   kind: 'practice' },
   { href: '/playground',            title: 'Code playground',     context: 'Practice',                    kind: 'practice' },
@@ -55,11 +55,18 @@ export function GET() {
     kind: 'article',
   }))
 
+  const cheatSheets: SearchEntry[] = Object.values(CHEAT_SHEET_FOR_PATH).map(link => ({
+    href: link.href,
+    title: link.label.replace(' and project ideas', ''),
+    context: 'Reference',
+    kind: 'practice',
+  }))
+
   const stats = getCatalogStats()
   const index: SearchIndex = {
     lessonCount: stats.lessons - stats.projects,
     trackCount: stats.liveTracks,
-    entries: [...tracks, ...lessons, ...roadmaps, ...articles, ...SITE_PAGES],
+    entries: [...tracks, ...lessons, ...roadmaps, ...articles, ...cheatSheets, ...SITE_PAGES],
   }
   return NextResponse.json(index)
 }

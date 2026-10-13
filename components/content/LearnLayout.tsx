@@ -18,6 +18,7 @@ import { useLessonNav, useLessonQuick } from '@/components/content/LessonNavCont
 import { QuickAnswer } from '@/components/content/QuickAnswer'
 import { QuickCheck } from '@/components/content/QuickCheck'
 import { setLessonChrome } from '@/lib/lesson-chrome'
+import { CHEAT_SHEET_FOR_PATH } from '@/lib/cheatsheet-links'
 import { SuggestFix } from '@/components/content/SuggestFix'
 import { recordLessonVisit, recordQuizPass, setLessonComplete, useProgress } from '@/lib/progress'
 import { AIML_SECTIONS } from '@/data/aiml-curriculum'
@@ -266,6 +267,14 @@ export function LearnLayout({ children, title, description, section, readTime, u
               style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', color: 'var(--text)', overflowWrap: 'break-word' }}>{title}</h1>
             <p className="text-base max-w-2xl leading-relaxed"
               style={{ color: 'var(--muted)', fontFamily: 'Lora, serif', fontStyle: 'italic', overflowWrap: 'break-word' }}>{description}</p>
+            {CHEAT_SHEET_FOR_PATH[pathname] && (
+              <p className="mt-4 mb-0">
+                <Link href={CHEAT_SHEET_FOR_PATH[pathname].href}
+                  style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
+                  {CHEAT_SHEET_FOR_PATH[pathname].label} →
+                </Link>
+              </p>
+            )}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-4 text-xs font-mono" style={{ color: 'var(--muted)' }}>
               {readTime  && <span className="flex items-center gap-1"><Clock size={11} /> {readTime}</span>}
               {lessonNav ? (

@@ -5,6 +5,7 @@ import lessonDates from '@/data/lesson-updated.json'
 import type { Lesson, NonLessonKind, Track } from './types'
 import type { LessonNavLink, LessonNavLinks, TrackSummaries } from '@/lib/lesson-nav'
 import type { LessonEntry } from '@/lib/up-next'
+import { CHEAT_SHEET_FOR_PATH } from '@/lib/cheatsheet-links'
 
 export type { Lesson, LessonStatus, NonLessonKind, Track, TrackArea } from './types'
 export { TRACKS }
@@ -154,7 +155,9 @@ export const NON_LESSON_ROUTES: Record<string, NonLessonKind> = {
   '/learn/interview': 'hub',
   '/learn/industry': 'hub',
   '/learn/find-video': 'tool',
-  '/learn/sql/cheatsheet': 'tool',
+  ...Object.fromEntries(
+    Object.values(CHEAT_SHEET_FOR_PATH).map(link => [link.href, 'tool' as const]),
+  ),
   '/learn/sql/playground': 'tool',
   '/learn/sql/joins': 'tool',
   '/learn/networking/topology-preview': 'preview',

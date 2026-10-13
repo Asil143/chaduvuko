@@ -1,0 +1,20 @@
+/** Track overview path → its cheat sheet. Strings only, safe for client components. */
+export const CHEAT_SHEET_FOR_PATH: Record<string, { href: string; label: string }> = {
+  '/learn/what-is-data-engineering': { href: '/learn/what-is-data-engineering/cheatsheet', label: 'Foundations cheat sheet and project ideas' },
+  '/learn/data-engineering': { href: '/learn/data-engineering/cheatsheet', label: 'Data engineering cheat sheet and project ideas' },
+  '/learn/sql': { href: '/learn/sql/cheatsheet', label: 'SQL cheat sheet and project ideas' },
+  '/learn/apache-kafka': { href: '/learn/apache-kafka/cheatsheet', label: 'Kafka cheat sheet and project ideas' },
+  '/learn/dbt': { href: '/learn/dbt/cheatsheet', label: 'dbt cheat sheet and project ideas' },
+  '/learn/snowflake': { href: '/learn/snowflake/cheatsheet', label: 'Snowflake cheat sheet and project ideas' },
+  '/learn/aws/introduction': { href: '/learn/aws/cheatsheet', label: 'AWS cheat sheet and project ideas' },
+  '/learn/azure/introduction': { href: '/learn/azure/cheatsheet', label: 'Azure cheat sheet and project ideas' },
+  '/learn/gcp/introduction': { href: '/learn/gcp/cheatsheet', label: 'Google Cloud cheat sheet and project ideas' },
+  '/learn/python': { href: '/learn/python/cheatsheet', label: 'Python cheat sheet and project ideas' },
+  '/learn/html-css': { href: '/learn/html-css/cheatsheet', label: 'HTML & CSS cheat sheet and project ideas' },
+  '/learn/dsa': { href: '/learn/dsa/cheatsheet', label: 'DSA cheat sheet and project ideas' },
+  '/learn/dbms': { href: '/learn/dbms/cheatsheet', label: 'DBMS cheat sheet and project ideas' },
+  '/learn/networking': { href: '/learn/networking/cheatsheet', label: 'Networking cheat sheet and project ideas' },
+  '/learn/cybersecurity': { href: '/learn/cybersecurity/cheatsheet', label: 'Cybersecurity cheat sheet and project ideas' },
+  '/learn/ai-ml': { href: '/learn/ai-ml/cheatsheet', label: 'AI & ML cheat sheet and project ideas' },
+  '/learn/data-science': { href: '/learn/data-science/cheatsheet', label: 'Data science cheat sheet and project ideas' },
+}
