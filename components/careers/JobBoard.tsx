@@ -13,7 +13,7 @@ export function JobBoard() {
   const [dir, setDir] = useState<'asc' | 'desc'>('asc')
 
   const subjects = useMemo(
-    () => [...new Set(CAREER_ROLES.map(role => role.subject))].sort((a, b) => a.localeCompare(b)),
+    () => Array.from(new Set(CAREER_ROLES.map(role => role.subject))).sort((a, b) => a.localeCompare(b)),
     [],
   )
 
