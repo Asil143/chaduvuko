@@ -1,5 +1,13 @@
 export const CAREERS_EMAIL = 'hello@chaduvuko.com'
 
+export function careerApplyHref(title: string) {
+  return `mailto:${CAREERS_EMAIL}?subject=${encodeURIComponent(`YouTube — ${title}`)}`
+}
+
+export function getCareerRole(slug: string) {
+  return CAREER_ROLES.find(role => role.slug === slug)
+}
+
 export type CareerTrack = {
   href: string
   label: string
