@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { CAREER_ROLES, CAREERS_EMAIL } from '@/data/careers'
+import { CAREER_ROLES, CAREERS_EMAIL, HIRING_STEPS } from '@/data/careers'
 
 export const metadata: Metadata = {
   title: 'Careers',
@@ -15,8 +15,18 @@ export default function CareersPage() {
       <h1 className="font-display">Open roles</h1>
       <p className="jobs-lead">
         We are hiring instructors to record lesson series for the Chaduvuko YouTube channel.
-        Record in clear spoken English. Compensation is agreed after we review a sample of your teaching.
+        Record in clear spoken English. The outline, the schedule, and the pay are agreed after we watch a sample of your teaching.
       </p>
+
+      <ol className="hire-steps">
+        {HIRING_STEPS.map((step, index) => (
+          <li key={step.title}>
+            <span className="hire-num">{index + 1}</span>
+            <strong>{step.title}</strong>
+            <span>{step.body}</span>
+          </li>
+        ))}
+      </ol>
 
       <section className="jobs-section" aria-labelledby="youtube-roles">
         <div className="jobs-section-label" id="youtube-roles">
@@ -35,8 +45,9 @@ export default function CareersPage() {
           ))}
         </ul>
         <p className="jobs-foot">
-          Open a role to read the work and apply. Applications go to{' '}
+          Open a role for the full posting. Applications go to{' '}
           <a href={`mailto:${CAREERS_EMAIL}`}>{CAREERS_EMAIL}</a>.
+          We do not ask applicants for money.
         </p>
       </section>
     </div>

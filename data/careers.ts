@@ -8,6 +8,34 @@ export function getCareerRole(slug: string) {
   return CAREER_ROLES.find(role => role.slug === slug)
 }
 
+export const SERIES_DELIVERABLES = [
+  'A title, a short description, and chapter times.',
+  'A one-page outline of what the viewer should be able to do after the video.',
+  'Spoken English a learner can follow for the full lesson. If you also teach the subject in another language, say so when you apply.',
+  'A screen, board, or diagram large enough to read, and audio a student can follow without straining.',
+]
+
+export const HIRING_STEPS = [
+  {
+    title: 'Send a sample',
+    body: 'Email a few minutes of you teaching one idea from the role. Use the screen or board you would use for the series, and your real voice.',
+  },
+  {
+    title: 'We watch the teaching',
+    body: 'We look for whether a learner can follow the idea. A studio reel is not required.',
+  },
+  {
+    title: 'Then we agree the work',
+    body: 'If the sample fits, we agree the outline, the recording schedule, and the pay. None of those are fixed before the sample.',
+  },
+]
+
+export const CAREERS_ABOUT =
+  'Chaduvuko publishes free written technical lessons. These roles are for the YouTube channel. Where a written track already exists, the videos sit beside it. Where it does not, the series is the first version of that subject.'
+
+export const CAREERS_PAY =
+  'Compensation is agreed after we review your sample. This page does not list a rate. We do not ask applicants to pay a fee, buy equipment from us, or subscribe to anything in order to be considered.'
+
 export type CareerTrack = {
   href: string
   label: string
@@ -18,9 +46,16 @@ export type CareerRole = {
   title: string
   subject: string
   summary: string
+  /** Who the series is for. No audience size. */
+  learner: string
+  /** How this assignment actually runs. */
+  assignment: string[]
   /** Written Chaduvuko track this series should sit beside, when one exists. */
   track: CareerTrack | null
+  /** The span of the series. */
   make: string[]
+  /** Hard limits on what the series will not become. */
+  boundaries: string[]
   bring: string[]
   preferred: string[]
 }
@@ -32,6 +67,13 @@ export const CAREER_ROLES: CareerRole[] = [
     subject: 'Amazon Web Services',
     summary:
       'Teach AWS from a new account through a system you deploy, explain, and tear down. The series is the course, not a tour of service names.',
+    learner:
+      'A person opening a new AWS account who needs to deploy one real system, explain it, and turn it off without a surprise bill.',
+    assignment: [
+      'You propose the lesson order. We agree it from your sample before you record a long batch.',
+      'You teach from the console and the CLI as they are on the day you record.',
+      'Each service has to earn its place in the system the viewer is building.',
+    ],
     track: { href: '/learn/aws/introduction', label: 'the AWS lessons' },
     make: [
       'A lesson sequence that starts with an account, a billing alarm, and IAM, then earns each later service.',
@@ -40,8 +82,8 @@ export const CAREER_ROLES: CareerRole[] = [
       'One database you provision, connect to, and protect, with the reason you chose it over a file in a bucket.',
       'A serverless path, including Lambda and a way to call it, plus the logs and metrics you read when it fails.',
       'One end-to-end project a viewer can rebuild: a small application or a data job, narrated service by service.',
-      'For every video: a title, a short description, chapter times, and a one-page outline of what the viewer should be able to do afterward.',
     ],
+    boundaries: [],
     bring: [
       'You have built on AWS yourself and can teach from an empty account, not from a diagram of the product catalog.',
       'You say why a service exists before you click it, and you can slow down on identity, networking, and cost.',
@@ -60,6 +102,13 @@ export const CAREER_ROLES: CareerRole[] = [
     subject: 'DSA',
     summary:
       'Teach the structures and algorithms a student meets in class and in interviews, with the picture, the code, and the cost of each choice.',
+    learner:
+      'A student meeting these ideas in class, or preparing for interviews, who needs the picture and the reason, not only a finished function.',
+    assignment: [
+      'You propose the lesson order, starting from how to reason about a problem. We agree it from your sample before a long batch.',
+      'You pick one language and stay with it. Python is the best fit for this channel. Say so if you will use another.',
+      'Every structure gets a diagram before the code, and a spoken time and space cost.',
+    ],
     track: { href: '/learn/dsa', label: 'the DSA lessons' },
     make: [
       'A series that starts with how to reason about a solution, then complexity in plain language, before the catalog of structures.',
@@ -68,8 +117,9 @@ export const CAREER_ROLES: CareerRole[] = [
       'The time and space cost spoken out loud, including why a different structure changed it.',
       'The approach that fails, then the repair. Viewers should hear the decision, not only see a finished function.',
       'Code in one language you can teach cleanly. Python is the best fit for this channel. Say so in your application if you use another.',
-      'For every video: a title, a short description, chapter times, and the problem the viewer should try before the next lesson.',
+      'One problem the viewer should try before the next lesson.',
     ],
+    boundaries: [],
     bring: [
       'You can solve the problems you teach and explain why that structure was the one to reach for.',
       'You draw or animate the data. A pasted solution with no picture is not a lesson.',
@@ -88,6 +138,13 @@ export const CAREER_ROLES: CareerRole[] = [
     subject: 'Python',
     summary:
       'Teach Python from a working installation through the core language, and finish with a small program a beginner can change on their own.',
+    learner:
+      'A beginner who needs a working installation, the core language, and one small program they can change without you in the room.',
+    assignment: [
+      'You propose the lesson order from installation through a closing project. We agree it from your sample before a long batch.',
+      'Programs run on screen, including the error, what it means, and the fix.',
+      'Examples finish inside the lesson and are still worth finishing.',
+    ],
     track: { href: '/learn/python', label: 'the Python lessons' },
     make: [
       'A first video that installs Python, creates an environment, and runs a real file. No skipped setup.',
@@ -96,8 +153,8 @@ export const CAREER_ROLES: CareerRole[] = [
       'Programs run on screen, including the error message, what it means, and the fix.',
       'One closing project a viewer can finish in a few sittings: a data script, a command-line tool, or a file processor that uses the earlier lessons.',
       'Short pauses where the viewer tries a change before you show the answer.',
-      'For every video: a title, a short description, chapter times, and a one-page outline.',
     ],
+    boundaries: [],
     bring: [
       'You write Python and can teach it from a blank file.',
       'You explain what a line does, not only the keys to press.',
@@ -116,6 +173,13 @@ export const CAREER_ROLES: CareerRole[] = [
     subject: 'Mathematics',
     summary:
       'Teach the mathematics a programming, data, or machine-learning student needs, from algebra through probability, linear algebra, and the idea of a derivative.',
+    learner:
+      'A programming, data, or machine-learning student who needs this mathematics in order to read the next subject, and who may not have a classroom.',
+    assignment: [
+      'You propose an order a motivated beginner can start. Each video says what is about to be used and what can wait.',
+      'We agree that order from your sample before you record a long batch.',
+      'You mark, on screen, where a picture is intuition and where it is a proof.',
+    ],
     track: null,
     make: [
       'A series a motivated beginner can start without a classroom. Each video states what is about to be used and what can wait.',
@@ -125,8 +189,8 @@ export const CAREER_ROLES: CareerRole[] = [
       'Vectors, matrices, and the dot product, tied to a small table of data the viewer can compute by hand.',
       'The derivative and the gradient as “what changes when this number changes,” connected to one learning example. Mark clearly where you are giving intuition instead of a proof.',
       'One problem at the end of each video, with the worked answer in a later chapter or a short follow-up.',
-      'For every video: a title, a short description, chapter times, and a one-page outline.',
     ],
+    boundaries: [],
     bring: [
       'You can teach this span correctly, and you can say when a picture is only an intuition.',
       'Your board, slides, or notebook stay readable. Equations are large enough to follow.',
@@ -145,6 +209,13 @@ export const CAREER_ROLES: CareerRole[] = [
     subject: 'Physics',
     summary:
       'Teach introductory physics as a course: motion, forces, energy, waves, electricity and magnetism, and a first look at modern physics.',
+    learner:
+      'A student who needs an introductory physics course they can follow in order, including the numericals, not a set of unrelated clips.',
+    assignment: [
+      'You propose one ordered series. Each video names the idea it depends on.',
+      'We agree that order from your sample before you record a long batch.',
+      'Problems run from the diagram to the final number, with units, on camera.',
+    ],
     track: null,
     make: [
       'An ordered series, not a set of unrelated clips. Each video names the idea it depends on.',
@@ -153,8 +224,8 @@ export const CAREER_ROLES: CareerRole[] = [
       'A first look at modern physics that says what the earlier mechanics can no longer explain.',
       'The reason for a formula before it is used, and the assumption that makes it fail.',
       'A demonstration the viewer can follow on a screen: a simple experiment, a simulation, or a carefully drawn sequence.',
-      'For every video: a title, a short description, chapter times, and a one-page outline.',
     ],
+    boundaries: [],
     bring: [
       'You know this physics and can teach it without skipping the step where students usually stall.',
       'You check units on camera and keep equations large enough to read.',
@@ -173,6 +244,13 @@ export const CAREER_ROLES: CareerRole[] = [
     subject: 'Microsoft Azure',
     summary:
       'Teach Azure as a platform a beginner can operate: identity, a network, compute, storage, a database, and one system they deploy and remove.',
+    learner:
+      'A person new to Azure who needs to create a resource, use it, understand the bill, and delete it.',
+    assignment: [
+      'You propose the lesson order, starting from the tenant and the subscription. We agree it from your sample before a long batch.',
+      'You teach the portal and the CLI as they are on the day you record.',
+      'Identity and access appear in the lesson that needs them, not in a detached finale.',
+    ],
     track: { href: '/learn/azure/introduction', label: 'the Azure lessons' },
     make: [
       'A series that starts with a tenant, Entra ID, a subscription, and a resource group, before any product tour.',
@@ -180,8 +258,8 @@ export const CAREER_ROLES: CareerRole[] = [
       'Identity and role-based access shown inside the lesson that needs them, not saved for a final video.',
       'One application path with App Service or Functions, including the log you open when the request fails.',
       'A closing project the viewer deploys and deletes, with a check of what the subscription was charged for.',
-      'For every video: a title, a short description, chapter times, and a one-page outline.',
     ],
+    boundaries: [],
     bring: [
       'You have built on Azure and can teach both the portal and the CLI.',
       'You explain regions, resource groups, and identity before the service names pile up.',
@@ -200,6 +278,13 @@ export const CAREER_ROLES: CareerRole[] = [
     subject: 'Google Cloud',
     summary:
       'Teach Google Cloud from a project and a bill through compute, storage, data, and one service the viewer deploys.',
+    learner:
+      'A person new to Google Cloud who needs a project, a bill they understand, and one service they can deploy and shut off.',
+    assignment: [
+      'You propose the lesson order, starting from projects, IAM, and billing. We agree it from your sample before a long batch.',
+      'You teach the console and the gcloud CLI as they are on the day you record.',
+      'A failed deploy stays in the lesson long enough to read the log.',
+    ],
     track: { href: '/learn/gcp/introduction', label: 'the Google Cloud lessons' },
     make: [
       'A first stretch on projects, IAM, and billing, which is the model the rest of the platform hangs on.',
@@ -207,8 +292,8 @@ export const CAREER_ROLES: CareerRole[] = [
       'One database path, and BigQuery taught as a warehouse a beginner can load and query.',
       'Cloud Run or Cloud Functions, and Cloud Logging when the deploy fails.',
       'One small project the viewer can rebuild and shut off, including how they confirm it is no longer costing money.',
-      'For every video: a title, a short description, chapter times, and a one-page outline.',
     ],
+    boundaries: [],
     bring: [
       'You have built on Google Cloud and can teach the console and the gcloud CLI.',
       'You can explain a project, a service account, and a role without treating them as the same idea.',
@@ -227,6 +312,13 @@ export const CAREER_ROLES: CareerRole[] = [
     subject: 'Cybersecurity',
     summary:
       'Teach security from the goals of the field through how a defender works. Practice stays on systems you own or on labs built for training.',
+    learner:
+      'A person who wants to work as a defender and needs the goals of the field, the evidence an incident leaves, and the controls that matter.',
+    assignment: [
+      'You propose the lesson order from what security protects through a first incident on lab data. We agree it from your sample before a long batch.',
+      'Networking and operating-system basics come before product names.',
+      'Any demonstration runs in a lab you control or a practice environment built for training.',
+    ],
     track: { href: '/learn/cybersecurity', label: 'the cybersecurity lessons' },
     make: [
       'A series from what security is protecting (confidentiality, integrity, availability) through identity, logging, and a first response to an incident.',
@@ -235,7 +327,11 @@ export const CAREER_ROLES: CareerRole[] = [
       'Identity, phishing as a human problem, web risk at the level of the main weakness classes, and how a log line tells you something happened.',
       'A home lab or free-tier lab the viewer can build, and one short incident walkthrough that uses lab data only.',
       'Career context after the skills: what a first security job tends to ask for, without pretending a certificate replaces practice.',
-      'For every video: a title, a short description, chapter times, and a one-page outline. State the legal boundary in any video where a viewer might be tempted to try a technique outside a lab.',
+    ],
+    boundaries: [
+      'Practice stays on systems you own or in a lab built for training.',
+      'The series does not include exploit steps, payloads, malware, or a proof of concept against a system the viewer does not own.',
+      'When a video mentions an attack, it says what the defender should notice and which control would have mattered, and it states that boundary on camera.',
     ],
     bring: [
       'You have done security work, or serious lab work, and you can tell study from theater.',
@@ -255,6 +351,13 @@ export const CAREER_ROLES: CareerRole[] = [
     subject: 'Blockchain',
     summary:
       'Teach how a chain works, how a person uses one, and what a small smart contract can and cannot promise. This is a technical series, not an investment show.',
+    learner:
+      'A person who wants the mechanism: how a transaction, a key, and a small contract actually work.',
+    assignment: [
+      'You propose a technical order from the mechanism to one contract on a test network. We agree it from your sample before a long batch.',
+      'You separate the mechanism from the market in every lesson where a viewer could confuse the two.',
+      'You teach what to check before signing. You do not teach a catalog of attack steps.',
+    ],
     track: null,
     make: [
       'A picture of the mechanism: hashes, blocks, transactions, wallets, and consensus, including who is trusted to do what.',
@@ -262,7 +365,10 @@ export const CAREER_ROLES: CareerRole[] = [
       'One small smart contract the viewer can read, deployed on a test network, with each important line explained.',
       'A clear split between the mechanism and the market. No price predictions, no urging viewers to buy a token, and no second product pitched inside the lesson.',
       'The failures a learner must recognize as concepts: lost keys, fake applications, and the risk in a contract or a bridge. Explain what to check before signing. Do not turn the lesson into a catalog of attack steps.',
-      'For every video: a title, a short description, chapter times, and a one-page outline.',
+    ],
+    boundaries: [
+      'No price targets, no advice to buy or sell, and no token or product pitched inside the lesson.',
+      'Lost keys, fake applications, and the risk in a contract or a bridge are taught as checks a person can make, not as attack procedures.',
     ],
     bring: [
       'You can draw the mechanism and correct a common myth without sneering at the viewer who believed it.',
