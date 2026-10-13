@@ -6,6 +6,7 @@ import {
   CAREERS_ABOUT,
   CAREERS_EMAIL,
   CAREERS_PAY,
+  CAREERS_POSTED,
   HIRING_STEPS,
   SERIES_DELIVERABLES,
   careerApplyHref,
@@ -20,20 +21,11 @@ export const dynamicParams = false
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const role = getCareerRole(params.slug)
-  if (!role) return { title: 'Careers' }
+  if (!role) return { title: 'Job openings' }
   return {
     title: role.title,
     description: role.summary,
   }
-}
-
-function Block({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="job-block">
-      <h2>{title}</h2>
-      {children}
-    </section>
-  )
 }
 
 function Items({ items }: { items: string[] }) {
@@ -50,102 +42,73 @@ export default function CareerRolePage({ params }: { params: { slug: string } })
   const href = careerApplyHref(role.title)
 
   return (
-    <article className="jobs-wrap">
-      <Link className="job-back" href="/careers">All roles</Link>
-      <div className="job-head">
-        <h1 className="font-display">{role.title}</h1>
+    <article className="jobs-wrap job-doc">
+      <Link className="job-back" href="/careers">Job openings</Link>
+      <h1 className="font-display">{role.title}</h1>
+      <p className="job-apply-row">
         <a className="job-apply" href={href}>Apply</a>
-      </div>
+      </p>
+      <p className="job-meta-line"><strong>Reference:</strong> {role.slug}</p>
+      <p className="job-meta-line"><strong>Posted:</strong> {CAREERS_POSTED}</p>
+      <p className="job-meta-line"><strong>Subject:</strong> {role.subject}</p>
+      <p className="job-meta-line"><strong>Team:</strong> YouTube</p>
+      <p className="job-meta-line"><strong>Language:</strong> Spoken English</p>
 
-      <dl className="job-facts">
-        <div>
-          <dt>Team</dt>
-          <dd>YouTube</dd>
-        </div>
-        <div>
-          <dt>Subject</dt>
-          <dd>{role.subject}</dd>
-        </div>
-        <div>
-          <dt>Language</dt>
-          <dd>Spoken English</dd>
-        </div>
-        <div>
-          <dt>Compensation</dt>
-          <dd>Agreed after a sample</dd>
-        </div>
-      </dl>
+      <h2>Who we are</h2>
+      <p>{CAREERS_ABOUT}</p>
 
-      <p className="job-summary">{role.summary}</p>
-
-      <Block title="The learner">
-        <p>{role.learner}</p>
-      </Block>
-
-      <Block title="The role">
-        <Items items={role.assignment} />
-        {role.track ? (
-          <p className="job-note">
-            Chaduvuko already teaches this in writing. Read{' '}
-            <Link href={role.track.href}>{role.track.label}</Link> before you outline the videos, and do not contradict them.
-          </p>
-        ) : (
-          <p className="job-note">
-            This series is new. There is no written {role.subject.toLowerCase()} track on the site yet, so the videos are the first version of the subject.
-          </p>
-        )}
-      </Block>
-
-      <Block title="The series">
-        <Items items={role.make} />
-      </Block>
-
-      <Block title="Every video">
-        <Items items={SERIES_DELIVERABLES} />
-      </Block>
-
+      <h2>Job description</h2>
+      <p>{role.summary}</p>
+      <h3>The learner</h3>
+      <p>{role.learner}</p>
+      <h3>The work</h3>
+      <Items items={role.assignment} />
+      {role.track ? (
+        <p className="job-note">
+          Chaduvuko already teaches this in writing. Read{' '}
+          <Link href={role.track.href}>{role.track.label}</Link> before you outline the videos, and do not contradict them.
+        </p>
+      ) : (
+        <p className="job-note">
+          This series is new. There is no written {role.subject.toLowerCase()} track on the site yet, so the videos are the first version of the subject.
+        </p>
+      )}
+      <h3>The series</h3>
+      <Items items={role.make} />
+      <h3>Every video</h3>
+      <Items items={SERIES_DELIVERABLES} />
       {role.boundaries.length > 0 && (
-        <Block title="Limits of this series">
+        <>
+          <h3>Limits of this series</h3>
           <Items items={role.boundaries} />
-        </Block>
+        </>
       )}
 
-      <Block title="Minimum qualifications">
-        <Items items={role.bring} />
-      </Block>
+      <h2>Job requirements</h2>
+      <Items items={role.bring} />
+      <h3>Preferred</h3>
+      <Items items={role.preferred} />
 
-      <Block title="Preferred qualifications">
-        <Items items={role.preferred} />
-      </Block>
+      <h2>How we hire</h2>
+      <ol>
+        {HIRING_STEPS.map(step => (
+          <li key={step.title}>
+            <strong>{step.title}.</strong> {step.body}
+          </li>
+        ))}
+      </ol>
 
-      <Block title="How we hire">
-        <ol className="hire-detail">
-          {HIRING_STEPS.map(step => (
-            <li key={step.title}>
-              <strong>{step.title}</strong>
-              <span>{step.body}</span>
-            </li>
-          ))}
-        </ol>
-      </Block>
-
-      <Block title="Compensation">
-        <p>{CAREERS_PAY}</p>
-      </Block>
-
-      <Block title="About Chaduvuko">
-        <p>{CAREERS_ABOUT}</p>
-      </Block>
+      <h2>Compensation</h2>
+      <p>{CAREERS_PAY}</p>
 
       <p className="job-equal">
-        We consider each sample on the teaching. Questions about the role go to{' '}
-        <a href={`mailto:${CAREERS_EMAIL}`}>{CAREERS_EMAIL}</a>.
+        We consider each sample on the teaching. We do not ask applicants for money.
+        Questions go to <a href={`mailto:${CAREERS_EMAIL}`}>{CAREERS_EMAIL}</a>.
       </p>
 
-      <div className="job-apply-bar">
+      <p className="job-apply-row">
         <a className="job-apply" href={href}>Apply for this role</a>
-        <span className="job-subject">Subject: YouTube — {role.title}</span>
-      </div>
+      </p>
     </article>
   )
 }

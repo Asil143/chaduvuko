@@ -1,5 +1,8 @@
 export const CAREERS_EMAIL = 'hello@chaduvuko.com'
 
+/** Day these instructor roles were posted. One date, because they opened together. */
+export const CAREERS_POSTED = '10/13/2026'
+
 export function careerApplyHref(title: string) {
   return `mailto:${CAREERS_EMAIL}?subject=${encodeURIComponent(`YouTube — ${title}`)}`
 }
