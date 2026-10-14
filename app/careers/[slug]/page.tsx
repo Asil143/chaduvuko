@@ -3,12 +3,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import {
   CAREER_ROLES,
-  CAREERS_ABOUT,
   CAREERS_EMAIL,
-  CAREERS_PAY,
   CAREERS_POSTED,
   HIRING_STEPS,
-  SERIES_DELIVERABLES,
   careerApplyHref,
   getCareerRole,
 } from '@/data/careers'
@@ -43,58 +40,67 @@ export default function CareerRolePage({ params }: { params: { slug: string } })
 
   return (
     <article className="jobs-wrap job-doc">
-      <Link className="job-back" href="/careers">Job openings</Link>
+      <Link className="job-back" href="/careers">← Job openings</Link>
       <h1 className="font-display">{role.title}</h1>
+
+      {/* Compact header: the facts a candidate scans first, then Apply. */}
+      <div className="job-headline">
+        <p className="job-meta-line"><strong>Location:</strong> {role.location}</p>
+        <p className="job-meta-line"><strong>Engagement:</strong> {role.employment}</p>
+        <p className="job-meta-line"><strong>Experience:</strong> {role.experience}</p>
+        <p className="job-meta-line"><strong>Compensation:</strong> {role.compensation}</p>
+      </div>
       <p className="job-apply-row">
         <a className="job-apply" href={href}>Apply</a>
       </p>
-      <p className="job-meta-line"><strong>Reference:</strong> {role.slug}</p>
-      <p className="job-meta-line"><strong>Posted:</strong> {CAREERS_POSTED}</p>
-      <p className="job-meta-line"><strong>Subject:</strong> {role.subject}</p>
-      <p className="job-meta-line"><strong>Department:</strong> {role.team}</p>
-      <p className="job-meta-line"><strong>Location:</strong> {role.location}</p>
-      <p className="job-meta-line"><strong>Engagement:</strong> {role.employment}</p>
-      <p className="job-meta-line"><strong>Experience:</strong> {role.experience}</p>
-      <p className="job-meta-line"><strong>Language:</strong> Spoken English</p>
+      <p className="job-subtle">
+        Reference {role.slug} · {role.team} · {role.subject} · {role.language} · Posted {CAREERS_POSTED}
+      </p>
 
-      <h2>Who we are</h2>
-      <p>{CAREERS_ABOUT}</p>
+      <h2>Build the Agentic AI learning track at Chaduvuko</h2>
+      {role.intro.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
 
-      <h2>Job description</h2>
-      <p>{role.summary}</p>
-      <h3>The learner</h3>
-      <p>{role.learner}</p>
-      <h3>Responsibilities</h3>
-      <Items items={role.assignment} />
-      {role.track ? (
-        <p className="job-note">
-          Chaduvuko already teaches this in writing. Read{' '}
-          <Link href={role.track.href}>{role.track.label}</Link> before you outline the videos, and do not contradict them.
-        </p>
-      ) : (
-        <p className="job-note">
-          The {role.subject} curriculum will be agreed before recording begins. Foundations and
-          prerequisites must come before advanced topics.
-        </p>
-      )}
-      <h3>Curriculum and projects</h3>
-      <Items items={role.make} />
-      <h3>Lesson deliverables</h3>
-      <Items items={SERIES_DELIVERABLES} />
-      {role.boundaries.length > 0 && (
-        <>
-          <h3>Limits of this series</h3>
-          <Items items={role.boundaries} />
-        </>
-      )}
+      <h2>What you will own</h2>
+      <p>{role.own.lead}</p>
+      <Items items={role.own.items} />
+      <p>{role.own.close}</p>
 
-      <h2>Required skills and qualifications</h2>
-      <Items items={role.bring} />
-      <h3>Preferred skills and qualifications</h3>
-      <Items items={role.preferred} />
+      <h2>What you will teach</h2>
+      <p>{role.teach.lead}</p>
+      {role.teach.sections.map(section => (
+        <div key={section.heading}>
+          <h3>{section.heading}</h3>
+          <Items items={section.items} />
+        </div>
+      ))}
 
-      <h2>Performance expectations</h2>
-      <Items items={role.expectations} />
+      <h2>What we are looking for</h2>
+      <p>{role.looking.lead}</p>
+      <h3>Required skills</h3>
+      <Items items={role.looking.required} />
+      <p>You should also be comfortable reasoning about:</p>
+      <Items items={role.looking.reasoning} />
+      <h3>Teaching ability matters</h3>
+      <p>{role.looking.teachingLead}</p>
+      <Items items={role.looking.teaching} />
+      <p className="job-note">{role.looking.teachingNote}</p>
+      <h3>Preferred experience</h3>
+      <p>{role.looking.preferredLead}</p>
+      <Items items={role.looking.preferred} />
+      <p className="job-note">{role.looking.preferredNote}</p>
+      <h3>Experience philosophy</h3>
+      {role.looking.philosophy.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
+
+      <h2>Content and lesson standards</h2>
+      <p>Each lesson should have:</p>
+      <Items items={role.standards.items} />
+      <p>Typical target durations:</p>
+      <Items items={role.standards.durations} />
+      <p className="job-note">{role.standards.note}</p>
+
+      <h2>What success looks like</h2>
+      <Items items={role.success.items} />
+      <p className="job-note">{role.success.note}</p>
 
       <h2>How we hire</h2>
       <ol>
@@ -106,23 +112,21 @@ export default function CareerRolePage({ params }: { params: { slug: string } })
       </ol>
 
       <h2>Compensation</h2>
-      <p>{role.compensation}</p>
-      <p>{CAREERS_PAY}</p>
+      {role.compensationDetail.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
 
       <h2>How to apply</h2>
-      <p>Email <a href={href}>{CAREERS_EMAIL}</a> with the role title in the subject and include:</p>
-      <Items items={role.application} />
+      <p>
+        Apply through <Link href="/careers">Chaduvuko Careers</Link> or email{' '}
+        <a href={href}>{CAREERS_EMAIL}</a>. {role.application.lead}
+      </p>
+      <Items items={role.application.items} />
 
       <h3>Candidate privacy</h3>
-      <p>
-        Send only job-related materials. Do not include identity documents, bank details, or other
-        sensitive records during initial screening. Questions about your application data or requests
-        to withdraw your application go to <a href={`mailto:${CAREERS_EMAIL}`}>{CAREERS_EMAIL}</a>.
-      </p>
+      <p>{role.application.note}</p>
 
       <p className="job-equal">
-        We assess engineering work and teaching ability through job-related review. We do not ask applicants for money.
-        Questions go to <a href={`mailto:${CAREERS_EMAIL}`}>{CAREERS_EMAIL}</a>.
+        Build. Teach. Help others grow. If you enjoy building modern AI systems and can explain the
+        engineering behind them — not just demonstrate a framework — we would like to hear from you.
       </p>
 
       <p className="job-apply-row">

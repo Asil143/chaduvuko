@@ -170,6 +170,22 @@
   line-height: 1.5;
 }
 .job-meta-line strong { color: var(--text); }
+/* Compact header: the facts a candidate scans before the Apply button. */
+.job-headline {
+  margin: 14px 0 6px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg2);
+}
+.job-headline .job-meta-line:last-child { margin-bottom: 0; }
+/* Secondary facts, de-emphasised below the Apply button. */
+.job-subtle {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
 .job-doc h2 {
   margin: 32px 0 10px;
   color: var(--text);
