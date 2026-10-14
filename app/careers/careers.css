@@ -264,23 +264,40 @@
   border-radius: 50%;
   background: var(--muted);
 }
-.job-doc ol { counter-reset: step; }
-.job-doc ol > li {
-  counter-increment: step;
+.hire-list {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.hire-list > li {
   display: grid;
-  grid-template-columns: 1.4em minmax(0, 1fr);
-  column-gap: 8px;
+  grid-template-columns: 28px minmax(0, 1fr);
+  column-gap: 12px;
   align-items: start;
   margin: 0;
-  padding: 6px 0;
+  padding: 14px 0;
+  border-top: 1px solid var(--border);
+}
+.hire-list > li:first-child { border-top: 0; padding-top: 2px; }
+.hire-num {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.hire-list strong {
+  display: block;
+  margin: 0 0 2px;
   color: var(--text);
   font-size: 15px;
-  line-height: 1.55;
-}
-.job-doc ol > li::before {
-  content: counter(step) ".";
-  color: var(--text);
   font-weight: 600;
+  line-height: 1.4;
+}
+.hire-list div > span {
+  display: block;
+  color: var(--text2);
+  font-size: 15px;
+  line-height: 1.55;
 }
 .job-note { margin-top: 2px; color: var(--text2); }
 .job-note a,

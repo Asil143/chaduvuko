@@ -126,10 +126,14 @@ export default function CareerRolePage({ params }: { params: { slug: string } })
       <p className="job-note">{role.success.note}</p>
 
       <h2>How we hire</h2>
-      <ol>
-        {HIRING_STEPS.map(step => (
+      <ol className="hire-list">
+        {HIRING_STEPS.map((step, index) => (
           <li key={step.title}>
-            <strong>{step.title}.</strong> {step.body}
+            <span className="hire-num">{index + 1}</span>
+            <div>
+              <strong>{step.title}</strong>
+              <span>{step.body}</span>
+            </div>
           </li>
         ))}
       </ol>
