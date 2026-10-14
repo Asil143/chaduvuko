@@ -7,50 +7,41 @@ type FooterLink = {
   external?: boolean
 }
 
-const footerSections: Record<string, FooterLink[]> = {
-  Learn: [
-    { label: 'What Is Chaduvuko?', href: '/about' },
-    { label: 'What Is Data Engineering?', href: '/learn/what-is-data-engineering' },
-    { label: 'Data Engineering Track', href: '/learn/data-engineering' },
-    { label: 'SQL Track', href: '/learn/sql' },
-    { label: 'Python Track', href: '/learn/python' },
-    { label: 'AI/ML Learning Hub', href: '/learn/ai-ml' },
-    { label: 'Cybersecurity Learning Hub', href: '/learn/cybersecurity' },
-    { label: 'What\'s New', href: '/blog' },
-  ],
-  Resources: [
-    { label: 'Getting Started', href: '/learn' },
-    { label: 'Learning Dashboard', href: '/dashboard' },
-    { label: 'Roadmaps', href: '/learn/roadmap' },
-    { label: 'Projects Library', href: '/learn/projects' },
-    { label: 'SQL Cheatsheet', href: '/learn/sql/cheatsheet' },
-    { label: 'Interview Prep', href: '/learn/interview' },
-    { label: 'Industry Guide', href: '/learn/industry' },
-    { label: 'Newsletter', href: '/newsletter' },
-  ],
-  Developers: [
-    { label: 'Builder Playground', href: '/playground' },
-    { label: 'SQL Playground', href: '/learn/sql/playground' },
-    { label: 'HTML & CSS Track', href: '/learn/html-css' },
-    { label: 'DSA Track', href: '/learn/dsa' },
-    { label: 'DBMS Track', href: '/learn/dbms' },
-    { label: 'Apache Kafka Track', href: '/learn/apache-kafka' },
-    { label: 'dbt Track', href: '/learn/dbt' },
-    { label: 'Snowflake Track', href: '/learn/snowflake' },
-    { label: 'Networking Track', href: '/learn/networking' },
-  ],
-  Cloud: [
-    { label: 'AWS Track', href: '/learn/aws/introduction' },
-    { label: 'Azure Track', href: '/learn/azure/introduction' },
-    { label: 'GCP Track', href: '/learn/gcp/introduction' },
-  ],
-  Help: [
-    { label: 'Contact', href: 'mailto:hello@chaduvuko.com', external: true },
-    { label: 'Careers', href: '/careers' },
-    { label: 'Find a Video', href: '/learn/find-video' },
-    { label: 'Sitemap', href: '/sitemap.xml' },
-  ],
-}
+const footerSections: { title: string; links: FooterLink[] }[] = [
+  {
+    title: 'Learning paths',
+    links: [
+      { label: 'Explore all learning', href: '/learn' },
+      { label: 'Data Engineering', href: '/learn/data-engineering' },
+      { label: 'Python', href: '/learn/python' },
+      { label: 'AI & Machine Learning', href: '/learn/ai-ml' },
+      { label: 'Cybersecurity', href: '/learn/cybersecurity' },
+      { label: 'AWS', href: '/learn/aws/introduction' },
+      { label: 'Azure', href: '/learn/azure/introduction' },
+      { label: 'Google Cloud', href: '/learn/gcp/introduction' },
+    ],
+  },
+  {
+    title: 'Practice & grow',
+    links: [
+      { label: 'Roadmaps', href: '/learn/roadmap' },
+      { label: 'Hands-on projects', href: '/learn/projects' },
+      { label: 'SQL practice', href: '/learn/sql/playground' },
+      { label: 'Interview preparation', href: '/learn/interview' },
+      { label: 'Learning dashboard', href: '/dashboard' },
+    ],
+  },
+  {
+    title: 'Chaduvuko',
+    links: [
+      { label: 'About us', href: '/about' },
+      { label: 'Careers', href: '/careers' },
+      { label: 'Latest updates', href: '/blog' },
+      { label: 'Newsletter', href: '/newsletter' },
+      { label: 'Contact us', href: 'mailto:hello@chaduvuko.com' },
+    ],
+  },
+]
 
 const socialLinks: FooterLink[] = [
   { label: 'X', href: 'https://x.com/Asil143', external: true },
@@ -60,150 +51,76 @@ const socialLinks: FooterLink[] = [
 
 const legalLinks: FooterLink[] = [
   { label: 'Privacy', href: '/privacy' },
-  { label: 'Site terms', href: '/terms' },
+  { label: 'Terms', href: '/terms' },
+  { label: 'Sitemap', href: '/sitemap.xml' },
 ]
 
 function FooterAnchor({ link }: { link: FooterLink }) {
-  const style = {
-    color: 'var(--muted)',
-    textDecoration: 'none',
-    transition: 'color 0.2s ease',
-  }
-
   if (link.external) {
     return (
-      <a href={link.href} target="_blank" rel="noreferrer" className="footer-link" style={style}>
+      <a href={link.href} target="_blank" rel="noreferrer" className="footer-link">
         {link.label}
+        <span className="footer-external-mark" aria-hidden="true"> ↗</span>
       </a>
     )
   }
 
-  return (
-    <Link href={link.href} className="footer-link" style={style}>
-      {link.label}
-    </Link>
-  )
+  if (link.href.startsWith('mailto:')) {
+    return <a href={link.href} className="footer-link">{link.label}</a>
+  }
+
+  return <Link href={link.href} className="footer-link">{link.label}</Link>
 }
 
 export function Footer() {
   return (
-    <footer
-      style={{
-        borderTop: '1px solid var(--border)',
-        background: 'var(--bg)',
-        color: 'var(--muted)',
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '1180px',
-          margin: '0 auto',
-          padding: '36px 28px 28px',
-        }}
-      >
-        <Link
-          href="/"
-          aria-label="Chaduvuko home"
-          className="inline-flex mb-8 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]"
-        >
-          <BrandLogo variant="footer" />
-        </Link>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
-            gap: '32px',
-          }}
-        >
-          {Object.entries(footerSections).map(([title, sectionLinks]) => (
-            <nav key={title} aria-label={title}>
-              <h2
-                style={{
-                  margin: '0 0 14px',
-                  color: 'var(--text)',
-                  fontSize: '13px',
-                  fontWeight: 800,
-                  letterSpacing: '0',
-                }}
-              >
-                {title}
-              </h2>
-              <ul
-                style={{
-                  listStyle: 'none',
-                  margin: 0,
-                  padding: 0,
-                  display: 'grid',
-                  gap: '9px',
-                  fontSize: '12px',
-                  lineHeight: 1.45,
-                }}
-              >
-                {sectionLinks.map(link => (
-                  <li key={link.href}>
-                    <FooterAnchor link={link} />
-                  </li>
+    <footer className="site-footer">
+      <div className="site-footer-inner">
+        <section className="footer-cta" aria-labelledby="footer-cta-title">
+          <div>
+            <p className="footer-eyebrow">LEARNING FOR WHAT’S NEXT</p>
+            <h2 id="footer-cta-title">Make your next skill count.</h2>
+            <p>Follow a clear learning path, practise with purpose, and build skills you can use.</p>
+          </div>
+          <Link href="/learn" className="footer-cta-link">
+            Explore learning paths <span aria-hidden="true">→</span>
+          </Link>
+        </section>
+
+        <div className="footer-main">
+          <div className="footer-brand">
+            <Link
+              href="/"
+              aria-label="Chaduvuko home"
+              className="footer-logo-link"
+            >
+              <BrandLogo variant="footer" />
+            </Link>
+            <p>Practical, structured IT learning—built to take you from the foundations to real-world projects.</p>
+          </div>
+
+          {footerSections.map(section => (
+            <nav key={section.title} aria-label={section.title} className="footer-section">
+              <h2>{section.title}</h2>
+              <ul>
+                {section.links.map(link => (
+                  <li key={link.href}><FooterAnchor link={link} /></li>
                 ))}
               </ul>
             </nav>
           ))}
         </div>
 
-        <div
-          style={{
-            marginTop: '34px',
-            padding: '18px 0',
-            borderTop: '1px solid var(--border)',
-            borderBottom: '1px solid var(--border)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '14px',
-            fontSize: '12px',
-          }}
-        >
-          <a href="#top" className="footer-link" style={{ color: 'var(--text)', fontWeight: 700, textDecoration: 'none' }}>
-            Back to top
-          </a>
-          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-            {socialLinks.map(link => (
-              <FooterAnchor key={link.href} link={link} />
-            ))}
-          </div>
-        </div>
-
-        <p
-          style={{
-            margin: '20px 0 0',
-            maxWidth: '820px',
-            fontSize: '11px',
-            lineHeight: 1.55,
-          }}
-        >
-          Chaduvuko is building free, practical IT education for learners and career switchers. As
-          we grow, we welcome builders, teachers, writers, and engineers who care about making high
-          quality learning accessible.
-        </p>
-
-        <div
-          style={{
-            marginTop: '18px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '10px',
-            fontSize: '11px',
-            lineHeight: 1.5,
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
-            {legalLinks.map(link => (
-              <FooterAnchor key={link.href} link={link} />
-            ))}
-          </div>
-          <span>© {new Date().getFullYear()} Chaduvuko. Built by Asil. All rights reserved.</span>
+        <div className="footer-bottom">
+          <p className="footer-copyright">
+            © {new Date().getFullYear()} Chaduvuko. Learn. Build. Grow.
+          </p>
+          <nav className="footer-legal" aria-label="Legal">
+            {legalLinks.map(link => <FooterAnchor key={link.href} link={link} />)}
+          </nav>
+          <nav className="footer-social" aria-label="Creator profiles">
+            {socialLinks.map(link => <FooterAnchor key={link.href} link={link} />)}
+          </nav>
         </div>
       </div>
     </footer>
