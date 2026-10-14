@@ -114,7 +114,11 @@ export function TracksMenuDesktop({ header, completedByTrack, active, onOpenChan
   const pathname = usePathname()
   const panelId = useId()
   const { open, setOpen, close, containerRef, buttonRef } = useMenuDisclosure()
-  const toggle = () => setOpen(isOpen => { onOpenChange?.(!isOpen); return !isOpen })
+  const toggle = () => {
+    const nextOpen = !open
+    if (nextOpen) onOpenChange?.(true)
+    setOpen(nextOpen)
+  }
   const navigate = () => setOpen(false)
 
   return (
@@ -126,14 +130,11 @@ export function TracksMenuDesktop({ header, completedByTrack, active, onOpenChan
         aria-current={active ? 'location' : undefined}
         aria-controls={panelId}
         onClick={toggle}
-        className="site-nav-control relative flex items-center gap-1 h-10 px-3 rounded-lg text-sm transition-colors"
-        style={{ color: active || open ? 'var(--text)' : 'var(--text2)', fontWeight: active || open ? 600 : 400, background: open ? 'var(--brand-soft)' : 'transparent' }}
+        className="site-nav-control relative flex items-center gap-1 h-11 px-3 rounded-xl text-sm transition-colors"
+        style={{ color: active || open ? 'var(--text)' : 'var(--text2)', fontWeight: active || open ? 600 : 500, background: open ? 'var(--brand-soft)' : 'transparent' }}
       >
-        Tracks
+        Learning paths
         <ChevronDown size={13} aria-hidden="true" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s', transformOrigin: 'center' }} />
-        {active && (
-          <span aria-hidden="true" className="absolute left-3 right-3 bottom-0.5 h-0.5 rounded-full" style={{ background: 'var(--accent)' }} />
-        )}
       </button>
 
       {open && (
@@ -141,11 +142,19 @@ export function TracksMenuDesktop({ header, completedByTrack, active, onOpenChan
           id={panelId}
           data-menu-panel
           role="dialog"
-          aria-label="Tracks"
-          className="fixed left-0 right-0 top-16 z-40 max-h-[calc(100vh-4rem)] overflow-y-auto"
-          style={{ background: 'var(--bg2)', borderBottom: '1px solid var(--border2)', boxShadow: 'var(--shadow-lg)' }}
+          aria-label="Learning paths"
+          className="site-header-menu fixed left-1/2 top-[80px] z-40 w-[min(1320px,calc(100vw-48px))] -translate-x-1/2 max-h-[calc(100vh-6rem)] overflow-y-auto"
         >
-          <div className="relative max-w-[1400px] mx-auto px-8 pt-6 pb-5 pr-16">
+          <div className="relative px-7 pt-6 pb-5 sm:px-8 sm:pt-7">
+            <div className="mb-5 flex items-end justify-between gap-4 border-b pb-4 pr-14" style={{ borderColor: 'var(--border)' }}>
+              <div>
+                <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Explore learning paths</p>
+                <p className="mt-1 text-xs" style={{ color: 'var(--muted)' }}>Structured lessons to help you build practical skills, step by step.</p>
+              </div>
+              <span className="hidden rounded-full px-3 py-1 text-xs font-medium sm:inline-flex" style={{ background: 'var(--brand-soft)', color: 'var(--brand-green)' }}>
+                {header.trackCount} paths · {header.lessonCount} lessons
+              </span>
+            </div>
             <div className="grid grid-cols-3 gap-10">
               {COLUMNS.map((areas, i) => (
                 <div key={i} className="flex flex-col gap-6">
@@ -157,22 +166,21 @@ export function TracksMenuDesktop({ header, completedByTrack, active, onOpenChan
             </div>
             <button
               type="button"
-              aria-label="Close tracks"
+              aria-label="Close learning paths"
               onClick={close}
-              className="absolute right-6 top-4 w-10 h-10 flex items-center justify-center rounded-lg"
-              style={{ background: 'var(--bg3)', color: 'var(--text2)' }}
+              className="site-header-icon-button absolute right-5 top-4 w-10 h-10 flex items-center justify-center rounded-xl"
             >
               <X size={16} aria-hidden="true" />
             </button>
           </div>
-          <div className="max-w-[1400px] mx-auto px-8 py-3 flex flex-wrap justify-between gap-2 text-[13px]" style={{ borderTop: '1px solid var(--border)', color: 'var(--muted)' }}>
+          <div className="px-7 py-3.5 flex flex-wrap justify-between gap-2 text-[13px] sm:px-8" style={{ borderTop: '1px solid var(--border)', color: 'var(--muted)' }}>
             <span>
-              {header.lessonCount} lessons in {header.trackCount} tracks ·{' '}
-              <Link href={TRACKS_HREF} onClick={navigate} style={{ color: 'var(--accent)' }}>Browse all tracks</Link>
+              {header.lessonCount} lessons across {header.trackCount} learning paths ·{' '}
+              <Link href={TRACKS_HREF} onClick={navigate} style={{ color: 'var(--brand-green)' }}>Browse all paths</Link>
             </span>
             <span>
-              Progress is saved in this browser, no account needed ·{' '}
-              <Link href={PROGRESS_HREF} onClick={navigate} style={{ color: 'var(--accent)' }}>Your progress</Link>
+              Your learning progress is saved in this browser ·{' '}
+              <Link href={PROGRESS_HREF} onClick={navigate} style={{ color: 'var(--brand-green)' }}>View progress</Link>
             </span>
           </div>
         </div>
@@ -205,10 +213,10 @@ export function TracksListMobile({ header, completedByTrack, resumeTrack, active
         aria-current={active ? 'location' : undefined}
         aria-controls={listId}
         onClick={() => setExpanded(isExpanded => { if (!isExpanded) onExpand?.(); return !isExpanded })}
-        className="w-full min-h-[50px] flex items-center justify-between px-3 text-base font-semibold rounded-lg"
+        className="w-full min-h-[50px] flex items-center justify-between px-3 text-base font-semibold rounded-xl"
         style={{ color: 'var(--text)', background: active ? 'var(--bg2)' : 'transparent' }}
       >
-        Tracks
+        Learning paths
         <span className="flex items-center gap-2 text-[13px] font-normal" style={{ color: 'var(--muted)' }}>
           {header.trackCount}
           <ChevronDown size={14} aria-hidden="true" style={{ transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s', transformOrigin: 'center' }} />
@@ -218,7 +226,7 @@ export function TracksListMobile({ header, completedByTrack, resumeTrack, active
         <div id={listId} className="px-3 pt-1 pb-3 space-y-4">
           {yours.length > 0 && (
             <div>
-              <div className="pb-1 font-mono text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Your tracks</div>
+              <div className="pb-1 font-mono text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Your learning</div>
               <ul>
                 {yours.map(([slug, track]) => (
                   <TrackRow key={slug} slug={slug} track={track} completed={completedByTrack[slug] ?? 0} pathname={pathname} onNavigate={onNavigate} tall />
@@ -229,8 +237,8 @@ export function TracksListMobile({ header, completedByTrack, resumeTrack, active
           {COLUMNS.flat().map(area => (
             <AreaGroup key={area} idPrefix={listId} area={area} header={header} completedByTrack={{}} pathname={pathname} onNavigate={onNavigate} tall />
           ))}
-          <Link href={TRACKS_HREF} onClick={onNavigate} className="flex items-center min-h-11 text-sm font-semibold" style={{ color: 'var(--accent)' }}>
-            All {header.trackCount} tracks →
+          <Link href={TRACKS_HREF} onClick={onNavigate} className="flex items-center min-h-11 text-sm font-semibold" style={{ color: 'var(--brand-green)' }}>
+            All {header.trackCount} learning paths →
           </Link>
         </div>
       )}

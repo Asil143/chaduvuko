@@ -21,7 +21,7 @@ function nextName(link: LessonNavLink) {
   return link.label === 'Next' ? `Next lesson: ${link.title}` : `Track complete: ${link.title}`
 }
 
-const CHIP = 'flex items-center h-11 lg:h-10 rounded-[10px] text-[13px] whitespace-nowrap flex-shrink-0'
+const CHIP = 'site-header-icon-button flex items-center h-11 min-[1200px]:h-10 rounded-xl text-[13px] whitespace-nowrap flex-shrink-0'
 
 /**
  * Lesson controls inside the site header: track, position, the lesson title when it fits,
@@ -54,8 +54,8 @@ export function LessonHeaderControls({ nav }: { nav: LessonNavLinks }) {
           href={prev.href}
           aria-label={prevName(prev)}
           title={prev.title}
-          className={`${CHIP} hidden sm:flex justify-center w-11 lg:w-auto lg:px-3`}
-          style={{ border: '1px solid var(--border2)', color: 'var(--text)' }}
+          className={`${CHIP} hidden sm:flex justify-center w-11 min-[1200px]:w-auto min-[1200px]:px-3`}
+          style={{ color: 'var(--text)' }}
         >
           <span aria-hidden="true">←</span>
           <span className="hidden lg:inline min-[1200px]:hidden">&nbsp;Previous</span>
@@ -67,8 +67,8 @@ export function LessonHeaderControls({ nav }: { nav: LessonNavLinks }) {
           href={next.href}
           aria-label={nextName(next)}
           title={next.title}
-          className={`${CHIP} px-3 font-bold`}
-          style={{ background: 'var(--green)', color: '#04140a' }}
+          className="site-header-cta flex items-center h-11 min-[1200px]:h-10 px-3 rounded-xl text-[13px] font-semibold whitespace-nowrap flex-shrink-0"
+          style={{ background: 'var(--brand-green)', color: 'var(--brand-green-text)' }}
         >
           {next.label === 'Next' ? (
             <>
@@ -138,8 +138,8 @@ function LessonPicker({ nav }: { nav: LessonNavLinks }) {
         aria-controls={panelId}
         aria-label={`${label}, lesson ${context.position} of ${context.total}`}
         onClick={() => setOpen(isOpen => !isOpen)}
-        className={`${CHIP} gap-1 px-2 lg:px-3`}
-        style={{ border: '1px solid var(--border2)', color: 'var(--text)', background: open ? 'var(--bg3)' : 'transparent' }}
+        className={`${CHIP} gap-1 px-2 min-[1200px]:px-3`}
+        style={{ color: 'var(--text)', background: open ? 'var(--bg3)' : 'var(--surface)' }}
       >
         <span className="lg:hidden font-mono text-xs" style={{ color: 'var(--text2)' }}>{context.position} of {context.total}</span>
         <span className="hidden lg:inline whitespace-nowrap">Lesson {context.position} of {context.total}</span>

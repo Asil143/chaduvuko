@@ -62,8 +62,8 @@ export function Navbar({ header }: { header: HeaderData }) {
 
   return (
     <header
-      className="site-header fixed top-0 left-0 right-0 z-50 h-16 flex items-center gap-1 sm:gap-2"
-      style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)' }}
+      className="site-header fixed top-0 left-0 right-0 z-50 h-[72px] flex items-center gap-2 sm:gap-3"
+      style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}
     >
       <a
         href="#main-content"
@@ -76,7 +76,7 @@ export function Navbar({ header }: { header: HeaderData }) {
       <Link
         href="/"
         aria-label="Chaduvuko home"
-        className="brand flex items-center flex-shrink-0 lg:mr-4 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+        className="brand flex items-center flex-shrink-0 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
       >
         <BrandLogo priority />
       </Link>
@@ -84,8 +84,8 @@ export function Navbar({ header }: { header: HeaderData }) {
       {lesson ? (
         <LessonHeaderControls nav={lesson} />
       ) : (
-        <nav aria-label="Main" className="desktop-nav hidden lg:block">
-          <ul className="flex items-center gap-1">
+        <nav aria-label="Main" className="desktop-nav hidden min-[1200px]:block">
+          <ul className="flex items-center gap-1.5">
             <li>
               <TracksMenuDesktop
                 header={header}
@@ -104,7 +104,7 @@ export function Navbar({ header }: { header: HeaderData }) {
       <div className="ml-auto flex items-center gap-1 sm:gap-2 flex-shrink-0">
         <SiteSearch resume={resume} tracks={searchTracks} />
         {!lesson && (
-          <div className="header-theme hidden lg:block">
+          <div className="header-theme hidden min-[1200px]:block">
             <ThemeMenu />
           </div>
         )}
@@ -145,7 +145,7 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
   }, [open, onOpenChange])
 
   return (
-    <div ref={containerRef} className="header-menu lg:hidden">
+    <div ref={containerRef} className="header-menu min-[1200px]:hidden">
       <button
         ref={buttonRef}
         type="button"
@@ -169,7 +169,7 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
           className="fixed inset-0 z-[60] flex flex-col"
           style={{ background: 'var(--surface)' }}
         >
-          <div className="h-16 flex-shrink-0 flex items-center justify-between px-3" style={{ borderBottom: '1px solid var(--border)' }}>
+          <div className="h-[72px] flex-shrink-0 flex items-center justify-between px-3" style={{ borderBottom: '1px solid var(--border)' }}>
             <span aria-hidden="true">
               <BrandLogo />
             </span>
@@ -241,8 +241,8 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
  * since Next is the action there. While progress loads, an invisible Start keeps the width.
  */
 function ResumeSlot({ learner, tracks }: { learner: LearnerProgress; tracks: HeaderData['tracks'] }) {
-  const base = 'site-header-cta resume-slot flex items-center h-11 lg:h-10 px-3 lg:px-3.5 rounded-[10px] text-sm font-bold whitespace-nowrap flex-shrink-0'
-  const style = { background: 'var(--green)', color: '#04140a', textDecoration: 'none' }
+  const base = 'site-header-cta resume-slot flex items-center h-11 min-[1200px]:h-10 px-3 min-[1200px]:px-3.5 rounded-xl text-sm font-semibold whitespace-nowrap flex-shrink-0'
+  const style = { background: 'var(--brand-green)', color: 'var(--brand-green-text)', textDecoration: 'none' }
 
   if (learner.status === 'ready' && learner.resume) {
     const { href, title, track, position, trackSize } = learner.resume
@@ -256,7 +256,7 @@ function ResumeSlot({ learner, tracks }: { learner: LearnerProgress; tracks: Hea
         style={style}
       >
         <span>Continue</span>
-        <span className="hidden lg:inline xl:hidden font-medium">&nbsp;· Lesson {position}</span>
+        <span className="hidden min-[1200px]:inline xl:hidden font-medium">&nbsp;· Lesson {position}</span>
         <span className="hidden xl:inline font-medium truncate">&nbsp;· {title}</span>
       </Link>
     )
@@ -270,8 +270,8 @@ function ResumeSlot({ learner, tracks }: { learner: LearnerProgress; tracks: Hea
       className={`${base} ${learner.status === 'pending' ? 'invisible' : ''}`}
       style={style}
     >
-      <span className="lg:hidden">Start learning</span>
-      <span className="hidden lg:inline">Start learning →</span>
+      <span className="min-[1200px]:hidden">Start learning</span>
+      <span className="hidden min-[1200px]:inline">Start learning&nbsp;→</span>
     </Link>
   )
 }
@@ -281,13 +281,10 @@ function DesktopLink({ item, active }: { item: NavItem; active: boolean }) {
     <Link
       href={item.href}
       aria-current={active ? 'page' : undefined}
-      className="site-nav-control relative flex items-center h-10 px-3 rounded-lg text-sm transition-colors whitespace-nowrap"
-      style={{ color: active ? 'var(--text)' : 'var(--text2)', fontWeight: active ? 600 : 400 }}
+      className="site-nav-control relative flex items-center h-11 px-3 rounded-xl text-sm transition-colors whitespace-nowrap"
+      style={{ color: active ? 'var(--text)' : 'var(--text2)', fontWeight: active ? 600 : 500 }}
     >
       {item.label}
-      {active && (
-        <span aria-hidden="true" className="absolute left-3 right-3 bottom-0.5 h-0.5 rounded-full" style={{ background: 'var(--accent)' }} />
-      )}
     </Link>
   )
 }

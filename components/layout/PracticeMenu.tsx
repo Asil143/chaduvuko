@@ -26,14 +26,11 @@ export function PracticeMenuDesktop({ activeHref, projectCount }: { activeHref: 
         aria-current={active ? 'location' : undefined}
         aria-controls={panelId}
         onClick={() => setOpen(isOpen => !isOpen)}
-        className="site-nav-control relative flex items-center gap-1 h-10 px-3 rounded-lg text-sm transition-colors"
-        style={{ color: active || open ? 'var(--text)' : 'var(--text2)', fontWeight: active || open ? 600 : 400, background: open ? 'var(--brand-soft)' : 'transparent' }}
+        className="site-nav-control relative flex items-center gap-1 h-11 px-3 rounded-xl text-sm transition-colors"
+        style={{ color: active || open ? 'var(--text)' : 'var(--text2)', fontWeight: active || open ? 600 : 500, background: open ? 'var(--brand-soft)' : 'transparent' }}
       >
         Practice
         <ChevronDown size={13} aria-hidden="true" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s', transformOrigin: 'center' }} />
-        {active && (
-          <span aria-hidden="true" className="absolute left-3 right-3 bottom-0.5 h-0.5 rounded-full" style={{ background: 'var(--accent)' }} />
-        )}
       </button>
 
       {open && (
@@ -42,7 +39,7 @@ export function PracticeMenuDesktop({ activeHref, projectCount }: { activeHref: 
           data-menu-panel
           role="dialog"
           aria-label="Practice"
-          className="absolute left-0 top-full mt-2 w-[320px] p-2 rounded-xl z-50"
+          className="site-header-popover absolute left-0 top-full mt-2 w-[340px] max-w-[calc(100vw-24px)] p-2 z-50"
           style={{ background: 'var(--surface)', border: '1px solid var(--border2)', boxShadow: 'var(--shadow-lg)' }}
         >
           <ul>

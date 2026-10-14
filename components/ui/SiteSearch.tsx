@@ -182,13 +182,13 @@ export function SiteSearch({ resume, tracks }: { resume: SearchResume | null; tr
         aria-label="Search lessons, tracks, roadmaps, practice and interview prep"
         aria-haspopup="dialog"
         aria-expanded={open}
-        className="site-header-icon-button search-trigger flex items-center justify-center lg:justify-start gap-2 h-11 w-11 lg:h-10 lg:w-auto lg:px-3 xl:w-[260px] xl:min-w-[220px] rounded-[10px] text-sm flex-shrink-0"
-        style={{ background: 'var(--bg2)', border: '1px solid var(--border)', color: 'var(--muted)' }}
+        className="site-header-icon-button search-trigger flex items-center justify-center min-[640px]:justify-start gap-2 h-11 w-11 min-[640px]:h-10 min-[640px]:w-[220px] min-[640px]:px-3 min-[900px]:w-[260px] xl:w-[280px] rounded-xl text-sm flex-shrink-0"
+        style={{ background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--muted)' }}
       >
         <Search size={15} aria-hidden="true" />
-        <span className="hidden lg:inline flex-1 text-left text-sm">Search</span>
+        <span className="hidden min-[640px]:inline flex-1 text-left text-sm">Search courses &amp; lessons</span>
         {shortcut && (
-          <kbd className="hidden lg:inline text-xs font-mono px-1.5 py-0.5 rounded"
+          <kbd className="hidden min-[900px]:inline text-xs font-mono px-1.5 py-0.5 rounded"
             style={{ background: 'var(--bg3)', border: '1px solid var(--border)', fontSize: '0.65rem' }}>
             {shortcut}
           </kbd>
