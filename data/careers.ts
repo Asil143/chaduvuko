@@ -1,10 +1,8 @@
 export const CAREERS_EMAIL = 'hello@chaduvuko.com'
-
-/** Day these instructor roles were posted. One date, because they opened together. */
 export const CAREERS_POSTED = '10/13/2026'
 
 export function careerApplyHref(title: string) {
-  return `mailto:${CAREERS_EMAIL}?subject=${encodeURIComponent(`YouTube — ${title}`)}`
+  return `mailto:${CAREERS_EMAIL}?subject=${encodeURIComponent(`Application — ${title}`)}`
 }
 
 export function getCareerRole(slug: string) {
@@ -12,32 +10,45 @@ export function getCareerRole(slug: string) {
 }
 
 export const SERIES_DELIVERABLES = [
-  'A title, a short description, and chapter times.',
-  'A one-page outline of what the viewer should be able to do after the video.',
-  'Spoken English a learner can follow for the full lesson. If you also teach the subject in another language, say so when you apply.',
-  'A screen, board, or diagram large enough to read, and audio a student can follow without straining.',
+  'One clear learning objective, named prerequisites, a lesson outline, and supporting resources.',
+  'Focused lessons: typically 8–15 minutes for concepts, 15–25 minutes for demos, and 15–30 minutes for project lessons. Split longer topics into logical parts.',
+  'Clear spoken English, readable code and diagrams, clean audio, chapter times, and accurate English captions.',
+  'Runnable source code and setup instructions for demos and projects, with practice tasks or assessments where relevant.',
+  'Technical review, corrections, and agreed revisions before publishing.',
 ]
 
 export const HIRING_STEPS = [
   {
-    title: 'Send a sample',
-    body: 'Email a few minutes of you teaching one idea from the role. Use the screen or board you would use for the series, and your real voice.',
+    title: 'Apply and consent',
+    body: 'Email your resume or professional profile, project links, a teaching sample if available, and consent to review these materials for this role.',
   },
   {
-    title: 'We watch the teaching',
-    body: 'We look for whether a learner can follow the idea. A studio reel is not required.',
+    title: 'Portfolio screening and teaching demo',
+    body: 'We review your engineering work and ask for a short explanation of one relevant concept. An existing lesson or a simple screen recording is enough; a studio reel is not required.',
   },
   {
-    title: 'Then we agree the work',
-    body: 'If the sample fits, we agree the outline, the recording schedule, and the pay. None of those are fixed before the sample.',
+    title: 'Technical assessment or interview',
+    body: 'Walk through an agent project, its architecture, failure cases, evaluation, and deployment choices. We also discuss how you would sequence the curriculum.',
+  },
+  {
+    title: 'Paid pilot',
+    body: 'We agree the scope, payment, and review criteria in writing before you create a pilot lesson or module. Substantial trial work is paid.',
+  },
+  {
+    title: 'Quality review and selection',
+    body: 'We assess technical accuracy, teaching clarity, code quality, and your response to feedback, then communicate the selection decision.',
+  },
+  {
+    title: 'Written agreement and onboarding',
+    body: 'Before the main engagement, we agree contractor or employee status, compensation, deliverables, milestones, revision limits, confidentiality, content ownership, and termination terms. Any relevant verification and onboarding follow.',
   },
 ]
 
 export const CAREERS_ABOUT =
-  'Chaduvuko publishes free written technical lessons. These roles are for the YouTube channel. Where a written track already exists, the videos sit beside it. Where it does not, the series is the first version of that subject.'
+  'Chaduvuko is a practical learning platform built around structured lessons, hands-on demonstrations, real-world projects, and career preparation. Our Agentic AI track will help learners progress from the required Python and LLM foundations to building, evaluating, and deploying agent systems.'
 
 export const CAREERS_PAY =
-  'Compensation is agreed after we review your sample. This page does not list a rate. We do not ask applicants to pay a fee, buy equipment from us, or subscribe to anything in order to be considered.'
+  'Course and module contracts use agreed milestone payments. Part-time compensation depends on the scope and time commitment. Final compensation and engagement terms are confirmed in writing before work begins. There are no recruitment fees, required purchases, or paid subscriptions to apply.'
 
 export type CareerTrack = {
   href: string
@@ -48,341 +59,79 @@ export type CareerRole = {
   slug: string
   title: string
   subject: string
+  team: string
+  location: string
+  employment: string
+  experience: string
+  compensation: string
   summary: string
-  /** Who the series is for. No audience size. */
   learner: string
-  /** How this assignment actually runs. */
   assignment: string[]
-  /** Written Chaduvuko track this series should sit beside, when one exists. */
   track: CareerTrack | null
-  /** The span of the series. */
   make: string[]
-  /** Hard limits on what the series will not become. */
   boundaries: string[]
   bring: string[]
   preferred: string[]
+  expectations: string[]
+  application: string[]
 }
 
 export const CAREER_ROLES: CareerRole[] = [
   {
-    slug: 'aws',
-    title: 'AWS Instructor',
-    subject: 'Amazon Web Services',
+    slug: 'agentic-ai',
+    title: 'Agentic AI Engineer & Technical Instructor',
+    subject: 'Agentic AI & Automation',
+    team: 'Learning & Content',
+    location: 'Remote — India',
+    employment: 'Contract / Part-Time / Full-Time. A course or module contract is preferred for the initial engagement.',
+    experience: '3–7+ years of relevant software, AI/ML, or related engineering experience. Agentic AI expertise is assessed through real projects and practical demonstrations.',
+    compensation: 'Indicative full-time budget: ₹60,000–₹1,20,000 per month, depending on experience and the agreed scope. This is a planning range; final terms are agreed before the engagement.',
     summary:
-      'Teach AWS from a new account through a system you deploy, explain, and tear down. The series is the course, not a tour of service names.',
+      'Own the Agentic AI curriculum and teach learners to build reliable LLM-powered agents. Combine engineering, curriculum design, clear English instruction, live coding, and real-world projects for the Chaduvuko learning platform and YouTube channel.',
     learner:
-      'A person opening a new AWS account who needs to deploy one real system, explain it, and turn it off without a surprise bill.',
+      'A developer progressing from Python, APIs, and LLM fundamentals into agent engineering. This is an advanced path: prerequisite lessons come before orchestration, multi-agent systems, and production deployment.',
     assignment: [
-      'You propose the lesson order. We agree it from your sample before you record a long batch.',
-      'You teach from the console and the CLI as they are on the day you record.',
-      'Each service has to earn its place in the system the viewer is building.',
-    ],
-    track: { href: '/learn/aws/introduction', label: 'the AWS lessons' },
-    make: [
-      'A lesson sequence that starts with an account, a billing alarm, and IAM, then earns each later service.',
-      'Networking a beginner can follow: VPC, subnets, routing, and security groups, shown in the console and checked from the CLI.',
-      'Compute and storage with EC2 and S3, including what you are paying for and what happens when access is wrong.',
-      'One database you provision, connect to, and protect, with the reason you chose it over a file in a bucket.',
-      'A serverless path, including Lambda and a way to call it, plus the logs and metrics you read when it fails.',
-      'One end-to-end project a viewer can rebuild: a small application or a data job, narrated service by service.',
-    ],
-    boundaries: [],
-    bring: [
-      'You have built on AWS yourself and can teach from an empty account, not from a diagram of the product catalog.',
-      'You say why a service exists before you click it, and you can slow down on identity, networking, and cost.',
-      'You record a screen a student can read and a voice they can follow for a full lesson.',
-      'You correct a changed console label on camera instead of reciting a stale script.',
-    ],
-    preferred: [
-      'A Solutions Architect certification, or an equal amount of project work you can walk through.',
-      'Infrastructure as code, with CloudFormation or Terraform, taught after the console path is clear.',
-      'A public write-up, repo, or video of something you shipped on AWS.',
-    ],
-  },
-  {
-    slug: 'dsa',
-    title: 'Data Structures and Algorithms Instructor',
-    subject: 'DSA',
-    summary:
-      'Teach the structures and algorithms a student meets in class and in interviews, with the picture, the code, and the cost of each choice.',
-    learner:
-      'A student meeting these ideas in class, or preparing for interviews, who needs the picture and the reason, not only a finished function.',
-    assignment: [
-      'You propose the lesson order, starting from how to reason about a problem. We agree it from your sample before a long batch.',
-      'You pick one language and stay with it. Python is the best fit for this channel. Say so if you will use another.',
-      'Every structure gets a diagram before the code, and a spoken time and space cost.',
-    ],
-    track: { href: '/learn/dsa', label: 'the DSA lessons' },
-    make: [
-      'A series that starts with how to reason about a solution, then complexity in plain language, before the catalog of structures.',
-      'Arrays, strings, linked lists, stacks, queues, hash tables, trees, heaps, and graphs, each with a diagram before the code.',
-      'Sorting, searching, recursion, greedy methods, backtracking, and dynamic programming, each with one worked problem.',
-      'The time and space cost spoken out loud, including why a different structure changed it.',
-      'The approach that fails, then the repair. Viewers should hear the decision, not only see a finished function.',
-      'Code in one language you can teach cleanly. Python is the best fit for this channel. Say so in your application if you use another.',
-      'One problem the viewer should try before the next lesson.',
-    ],
-    boundaries: [],
-    bring: [
-      'You can solve the problems you teach and explain why that structure was the one to reach for.',
-      'You draw or animate the data. A pasted solution with no picture is not a lesson.',
-      'You are patient on recursion, references, and graphs, which is where viewers get lost.',
-      'You record an editor and a board or diagram the viewer can read, with clear audio.',
-    ],
-    preferred: [
-      'Tutoring, a course you have taught, or interview coaching with real students.',
-      'A public set of explained solutions, not only accepted submissions.',
-      'Comfort stating when a solution is correct but not the one an interview is asking for.',
-    ],
-  },
-  {
-    slug: 'python',
-    title: 'Python Instructor',
-    subject: 'Python',
-    summary:
-      'Teach Python from a working installation through the core language, and finish with a small program a beginner can change on their own.',
-    learner:
-      'A beginner who needs a working installation, the core language, and one small program they can change without you in the room.',
-    assignment: [
-      'You propose the lesson order from installation through a closing project. We agree it from your sample before a long batch.',
-      'Programs run on screen, including the error, what it means, and the fix.',
-      'Examples finish inside the lesson and are still worth finishing.',
-    ],
-    track: { href: '/learn/python', label: 'the Python lessons' },
-    make: [
-      'A first video that installs Python, creates an environment, and runs a real file. No skipped setup.',
-      'Lessons on values and types, strings, decisions, loops, functions, lists, dictionaries, files, modules, and errors.',
-      'A practical introduction to objects: enough to read and write a small class, not a tour of every language feature.',
-      'Programs run on screen, including the error message, what it means, and the fix.',
-      'One closing project a viewer can finish in a few sittings: a data script, a command-line tool, or a file processor that uses the earlier lessons.',
-      'Short pauses where the viewer tries a change before you show the answer.',
-    ],
-    boundaries: [],
-    bring: [
-      'You write Python and can teach it from a blank file.',
-      'You explain what a line does, not only the keys to press.',
-      'Your examples are small enough to finish inside the lesson and realistic enough to be worth finishing.',
-      'You record the editor and the terminal so both are readable, with a voice a student can follow.',
-    ],
-    preferred: [
-      'One next step you can teach after the core language: the standard library, pandas, automation, or a very small web app.',
-      'Tutoring, a workshop, or a public notebook or video in your own voice.',
-      'Habit of showing the traceback instead of cutting it out of the edit.',
-    ],
-  },
-  {
-    slug: 'mathematics',
-    title: 'Mathematics Instructor',
-    subject: 'Mathematics',
-    summary:
-      'Teach the mathematics a programming, data, or machine-learning student needs, from algebra through probability, linear algebra, and the idea of a derivative.',
-    learner:
-      'A programming, data, or machine-learning student who needs this mathematics in order to read the next subject, and who may not have a classroom.',
-    assignment: [
-      'You propose an order a motivated beginner can start. Each video says what is about to be used and what can wait.',
-      'We agree that order from your sample before you record a long batch.',
-      'You mark, on screen, where a picture is intuition and where it is a proof.',
+      'Design a curriculum with clear prerequisites, levels, modules, lesson objectives, practice, projects, and assessments. Get the full curriculum approved before recording begins.',
+      'Create scripts, technical explanations, live coding demos, and project walkthroughs in clear English. Own the lesson sequence and explain engineering decisions as you build.',
+      'Build and maintain runnable examples, source repositories, assignments, quizzes, and learner resources.',
+      'Show debugging and failure scenarios, evaluation, security, deployment, monitoring, and cost tradeoffs alongside the working implementation.',
+      'Collaborate with technical reviewers and editors, address review feedback, and revise lessons and code before publishing.',
     ],
     track: null,
     make: [
-      'A series a motivated beginner can start without a classroom. Each video states what is about to be used and what can wait.',
-      'Algebra, functions, exponents, and logarithms, with numbers worked on screen.',
-      'Sets, counting, and the discrete ideas that show up when students later study algorithms.',
-      'Probability and introductory statistics, including expectation and a plain account of Bayes, with the assumption of each formula named.',
-      'Vectors, matrices, and the dot product, tied to a small table of data the viewer can compute by hand.',
-      'The derivative and the gradient as “what changes when this number changes,” connected to one learning example. Mark clearly where you are giving intuition instead of a proof.',
-      'One problem at the end of each video, with the worked answer in a later chapter or a short follow-up.',
+      'Prerequisites and foundations: Python, APIs, LLM concepts, prompt engineering, tool/function calling, and structured outputs.',
+      'Retrieval-augmented generation (RAG), embeddings, and vector databases, including retrieval quality and grounding.',
+      'Agent state, memory, planning, workflow control, and human-in-the-loop decisions.',
+      'LangGraph or a comparable orchestration framework, Model Context Protocol (MCP), and multi-agent collaboration where it serves the task.',
+      'Testing, evaluation datasets, tracing, observability, guardrails, and security, including tool permissions and prompt-injection risks.',
+      'Deployment, monitoring, latency, reliability, and cost management for real applications.',
+      'End-to-end projects learners can rebuild, such as a retrieval assistant or a tool-using workflow, with source code, exercises, and assessments.',
     ],
     boundaries: [],
     bring: [
-      'You can teach this span correctly, and you can say when a picture is only an intuition.',
-      'Your board, slides, or notebook stay readable. Equations are large enough to follow.',
-      'You connect a formula to a computing example without skipping the mathematics that makes the example true.',
-      'You record clear audio and write slowly enough that a viewer can copy a step.',
+      'Strong Python and API engineering skills, with LLM-powered applications or agent projects you can demonstrate and explain.',
+      'Hands-on understanding of tool calling, structured outputs, RAG, vector databases, and agent orchestration using LangGraph or a comparable framework.',
+      'Ability to reason about agent state, memory, planning, human review, and the tradeoffs of multi-agent designs.',
+      'Experience testing, evaluating, debugging, and deploying applications, with practical attention to security, reliability, and cost.',
+      'Ability to teach in clear English, sequence prerequisites, explain code and architecture, and record readable demonstrations with clear audio.',
+      'A professional profile, portfolio, or project walkthrough that shows your engineering contribution. Demonstrable work matters more than an arbitrary number of years in Agentic AI.',
     ],
     preferred: [
-      'Teaching or tutoring at school, early university, or with adult learners changing careers.',
-      'Linear algebra or probability you have used in code, so the computing examples are real.',
-      'A sample lesson, even a short one, that works a problem from the question to the last line.',
+      'Production agent or RAG applications with evaluation, tracing, monitoring, and measurable improvements.',
+      'MCP integrations, multi-agent workflows, or LLMOps experience.',
+      'Prior teaching, workshops, technical writing, or educational videos.',
+      'Public repositories or technical write-ups, and experience collaborating with reviewers or editors.',
     ],
-  },
-  {
-    slug: 'physics',
-    title: 'Physics Instructor',
-    subject: 'Physics',
-    summary:
-      'Teach introductory physics as a course: motion, forces, energy, waves, electricity and magnetism, and a first look at modern physics.',
-    learner:
-      'A student who needs an introductory physics course they can follow in order, including the numericals, not a set of unrelated clips.',
-    assignment: [
-      'You propose one ordered series. Each video names the idea it depends on.',
-      'We agree that order from your sample before you record a long batch.',
-      'Problems run from the diagram to the final number, with units, on camera.',
+    expectations: [
+      'Deliver the approved curriculum and milestones reliably. Lesson count follows prerequisites and scope rather than a fixed video quota.',
+      'Keep explanations accurate, code reproducible, and projects practical; incorporate agreed review feedback and revisions.',
+      'Evaluate success through teaching clarity, curriculum completeness, project quality, delivery reliability, and learner engagement. YouTube views are one signal, not the sole measure.',
     ],
-    track: null,
-    make: [
-      'An ordered series, not a set of unrelated clips. Each video names the idea it depends on.',
-      'Motion, forces, energy, and momentum, with free-body diagrams and numericals worked in full, including units.',
-      'Waves, then electricity and magnetism, at an introductory level a student can use in a later engineering class.',
-      'A first look at modern physics that says what the earlier mechanics can no longer explain.',
-      'The reason for a formula before it is used, and the assumption that makes it fail.',
-      'A demonstration the viewer can follow on a screen: a simple experiment, a simulation, or a carefully drawn sequence.',
-    ],
-    boundaries: [],
-    bring: [
-      'You know this physics and can teach it without skipping the step where students usually stall.',
-      'You check units on camera and keep equations large enough to read.',
-      'You can hold one problem from the diagram to the final number without jumping to the answer.',
-      'You record a board or tablet and clear audio. Phone-quality sound with a careful explanation beats a studio with a rushed one.',
-    ],
-    preferred: [
-      'Teaching or tutoring physics.',
-      'A sample numerical you are willing to put in the application.',
-      'Comfort repairing the algebra a problem needs, in a short aside, instead of waving it through.',
-    ],
-  },
-  {
-    slug: 'azure',
-    title: 'Azure Instructor',
-    subject: 'Microsoft Azure',
-    summary:
-      'Teach Azure as a platform a beginner can operate: identity, a network, compute, storage, a database, and one system they deploy and remove.',
-    learner:
-      'A person new to Azure who needs to create a resource, use it, understand the bill, and delete it.',
-    assignment: [
-      'You propose the lesson order, starting from the tenant and the subscription. We agree it from your sample before a long batch.',
-      'You teach the portal and the CLI as they are on the day you record.',
-      'Identity and access appear in the lesson that needs them, not in a detached finale.',
-    ],
-    track: { href: '/learn/azure/introduction', label: 'the Azure lessons' },
-    make: [
-      'A series that starts with a tenant, Entra ID, a subscription, and a resource group, before any product tour.',
-      'Networking, compute, storage, and one database, each created, used, and priced in the portal.',
-      'Identity and role-based access shown inside the lesson that needs them, not saved for a final video.',
-      'One application path with App Service or Functions, including the log you open when the request fails.',
-      'A closing project the viewer deploys and deletes, with a check of what the subscription was charged for.',
-    ],
-    boundaries: [],
-    bring: [
-      'You have built on Azure and can teach both the portal and the CLI.',
-      'You explain regions, resource groups, and identity before the service names pile up.',
-      'You record a readable screen and a steady explanation.',
-      'You notice when the portal has renamed a blade and you teach the screen in front of you.',
-    ],
-    preferred: [
-      'A data path you can demonstrate: Data Factory, Synapse, Databricks, or Microsoft Fabric, taught only as far as you have used it.',
-      'A Microsoft certification or an equal project you can show.',
-      'A habit of stating the shared-responsibility line: what Azure runs, and what the viewer still has to configure.',
-    ],
-  },
-  {
-    slug: 'gcp',
-    title: 'Google Cloud Instructor',
-    subject: 'Google Cloud',
-    summary:
-      'Teach Google Cloud from a project and a bill through compute, storage, data, and one service the viewer deploys.',
-    learner:
-      'A person new to Google Cloud who needs a project, a bill they understand, and one service they can deploy and shut off.',
-    assignment: [
-      'You propose the lesson order, starting from projects, IAM, and billing. We agree it from your sample before a long batch.',
-      'You teach the console and the gcloud CLI as they are on the day you record.',
-      'A failed deploy stays in the lesson long enough to read the log.',
-    ],
-    track: { href: '/learn/gcp/introduction', label: 'the Google Cloud lessons' },
-    make: [
-      'A first stretch on projects, IAM, and billing, which is the model the rest of the platform hangs on.',
-      'VPC networking, Compute Engine, and Cloud Storage, with access shown rather than described.',
-      'One database path, and BigQuery taught as a warehouse a beginner can load and query.',
-      'Cloud Run or Cloud Functions, and Cloud Logging when the deploy fails.',
-      'One small project the viewer can rebuild and shut off, including how they confirm it is no longer costing money.',
-    ],
-    boundaries: [],
-    bring: [
-      'You have built on Google Cloud and can teach the console and the gcloud CLI.',
-      'You can explain a project, a service account, and a role without treating them as the same idea.',
-      'You record a screen a student can read and audio they can follow.',
-      'You would rather show a failed deploy and the log than cut to a working one.',
-    ],
-    preferred: [
-      'Deeper BigQuery or data work you can teach after the warehouse introduction.',
-      'An Associate-level certification or a public project of similar depth.',
-      'Comfort comparing a Google Cloud choice with the AWS or Azure idea a viewer may already know, without turning the video into a vendor argument.',
-    ],
-  },
-  {
-    slug: 'cybersecurity',
-    title: 'Cybersecurity Instructor',
-    subject: 'Cybersecurity',
-    summary:
-      'Teach security from the goals of the field through how a defender works. Practice stays on systems you own or on labs built for training.',
-    learner:
-      'A person who wants to work as a defender and needs the goals of the field, the evidence an incident leaves, and the controls that matter.',
-    assignment: [
-      'You propose the lesson order from what security protects through a first incident on lab data. We agree it from your sample before a long batch.',
-      'Networking and operating-system basics come before product names.',
-      'Any demonstration runs in a lab you control or a practice environment built for training.',
-    ],
-    track: { href: '/learn/cybersecurity', label: 'the cybersecurity lessons' },
-    make: [
-      'A series from what security is protecting (confidentiality, integrity, availability) through identity, logging, and a first response to an incident.',
-      'The networking and operating-system basics a security learner needs, taught before product names.',
-      'Common attacks explained at a defender’s level: what the attacker is trying to achieve, what evidence it leaves, and which control would have mattered. Demonstrations stay inside a lab you control or a purpose-built practice environment.',
-      'Identity, phishing as a human problem, web risk at the level of the main weakness classes, and how a log line tells you something happened.',
-      'A home lab or free-tier lab the viewer can build, and one short incident walkthrough that uses lab data only.',
-      'Career context after the skills: what a first security job tends to ask for, without pretending a certificate replaces practice.',
-    ],
-    boundaries: [
-      'Practice stays on systems you own or in a lab built for training.',
-      'The series does not include exploit steps, payloads, malware, or a proof of concept against a system the viewer does not own.',
-      'When a video mentions an attack, it says what the defender should notice and which control would have mattered, and it states that boundary on camera.',
-    ],
-    bring: [
-      'You have done security work, or serious lab work, and you can tell study from theater.',
-      'You teach defense and legal practice. You say, on camera, when something must not be run against a system the viewer does not own.',
-      'You can explain a control, a configuration mistake, and a log line in ordinary language.',
-      'You record clear audio and a screen where command output is readable.',
-    ],
-    preferred: [
-      'Experience in a SOC, incident response, cloud security, or security engineering.',
-      'Security+ or a harder practical certification, or a public lab write-up.',
-      'A home lab you can show in the application.',
-    ],
-  },
-  {
-    slug: 'blockchain',
-    title: 'Blockchain Instructor',
-    subject: 'Blockchain',
-    summary:
-      'Teach how a chain works, how a person uses one, and what a small smart contract can and cannot promise. This is a technical series, not an investment show.',
-    learner:
-      'A person who wants the mechanism: how a transaction, a key, and a small contract actually work.',
-    assignment: [
-      'You propose a technical order from the mechanism to one contract on a test network. We agree it from your sample before a long batch.',
-      'You separate the mechanism from the market in every lesson where a viewer could confuse the two.',
-      'You teach what to check before signing. You do not teach a catalog of attack steps.',
-    ],
-    track: null,
-    make: [
-      'A picture of the mechanism: hashes, blocks, transactions, wallets, and consensus, including who is trusted to do what.',
-      'How a person sends value or data, what a key and an address are, and what is lost when a key is lost.',
-      'One small smart contract the viewer can read, deployed on a test network, with each important line explained.',
-      'A clear split between the mechanism and the market. No price predictions, no urging viewers to buy a token, and no second product pitched inside the lesson.',
-      'The failures a learner must recognize as concepts: lost keys, fake applications, and the risk in a contract or a bridge. Explain what to check before signing. Do not turn the lesson into a catalog of attack steps.',
-    ],
-    boundaries: [
-      'No price targets, no advice to buy or sell, and no token or product pitched inside the lesson.',
-      'Lost keys, fake applications, and the risk in a contract or a bridge are taught as checks a person can make, not as attack procedures.',
-    ],
-    bring: [
-      'You can draw the mechanism and correct a common myth without sneering at the viewer who believed it.',
-      'You have used a test network or written a small contract you can explain line by line.',
-      'You will keep the series educational. You will not sell a token, a trading system, or a paid funnel from these videos.',
-      'You record diagrams and a screen that stay readable, with clear audio.',
-    ],
-    preferred: [
-      'A public educational repo or a lecture you can link.',
-      'Care around keys, approvals, and what a signature actually authorizes.',
-      'Comfort teaching why a design costs money and time without sliding into investment advice.',
+    application: [
+      'Email your resume or professional profile and links to relevant agent, RAG, or LLM application projects. Explain your own contribution and one engineering decision.',
+      'Include a teaching sample if you have one, or say which concept you would demonstrate in the teaching stage.',
+      'State your availability, preferred engagement type, expected compensation, and ability to record clear English lessons.',
+      'Include a short note confirming that Chaduvuko may review your application materials for recruitment for this role.',
     ],
   },
 ]

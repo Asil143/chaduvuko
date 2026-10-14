@@ -82,7 +82,7 @@ export function JobBoard() {
       ) : (
         <div className="board-scroll">
           <table className="board-table">
-            <caption className="sr-only">Open YouTube instructor roles</caption>
+            <caption className="sr-only">Open roles at Chaduvuko</caption>
             <thead>
               <tr>
                 <th scope="col" aria-sort={sort === 'title' ? (dir === 'asc' ? 'ascending' : 'descending') : 'none'}>
@@ -92,6 +92,7 @@ export function JobBoard() {
                   <button type="button" onClick={() => toggleSort('subject')}>Subject</button>
                 </th>
                 <th scope="col">Team</th>
+                <th scope="col">Location</th>
                 <th scope="col">Date posted</th>
               </tr>
             </thead>
@@ -102,7 +103,8 @@ export function JobBoard() {
                     <Link href={`/careers/${role.slug}`}>{role.title}</Link>
                   </td>
                   <td data-label="Subject">{role.subject}</td>
-                  <td data-label="Team">YouTube</td>
+                  <td data-label="Team">{role.team}</td>
+                  <td data-label="Location">{role.location}</td>
                   <td data-label="Date posted">{CAREERS_POSTED}</td>
                 </tr>
               ))}
