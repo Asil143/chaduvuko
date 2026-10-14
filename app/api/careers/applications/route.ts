@@ -44,11 +44,14 @@ export async function POST(req: NextRequest) {
   const graduationYear = field(form, 'graduationYear', 4)
   const yearsExperience = field(form, 'yearsExperience', 4)
   const currentRole = field(form, 'currentRole', 160)
+  const certifications = field(form, 'certifications', 1500)
+  const rawWorkHistory = field(form, 'workHistory', 20000)
   const engagementPreference = field(form, 'engagementPreference', 40)
   const availability = field(form, 'availability', 160)
   const compensationExpectation = field(form, 'compensationExpectation', 160)
   const skills = field(form, 'skills')
   const projectDetails = field(form, 'projectDetails')
+  const teachingApproach = field(form, 'teachingApproach', 2500)
   const projectLinks = field(form, 'projectLinks', 1200)
   const githubUrl = field(form, 'githubUrl', 500)
   const linkedinUrl = field(form, 'linkedinUrl', 500)
@@ -74,12 +77,49 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Enter a valid number of years of relevant experience.' }, { status: 400 })
   if (!['contract', 'part-time', 'full-time'].includes(engagementPreference))
     return NextResponse.json({ error: 'Choose a valid engagement preference.' }, { status: 400 })
-  if (!skills || !projectDetails || !motivation || consent !== 'yes')
+  if (!skills || !projectDetails || !teachingApproach || !motivation || consent !== 'yes')
     return NextResponse.json({ error: 'Complete the required role questions and privacy consent.' }, { status: 400 })
 
   const optionalUrls = [githubUrl, linkedinUrl, portfolioUrl, teachingSampleUrl]
   if (optionalUrls.some(url => url && !/^https:\/\/\S+$/i.test(url)))
     return NextResponse.json({ error: 'Optional profile and sample links must be secure https:// URLs.' }, { status: 400 })
+
+  const projectLinkList = projectLinks.split(/\r?\n/).map(link => link.trim()).filter(Boolean)
+  if (projectLinkList.some(link => !/^https:\/\/\S+$/i.test(link)))
+    return NextResponse.json({ error: 'Project links must be secure https:// URLs, one per line.' }, { status: 400 })
+
+  let workHistory: {
+    employer: string
+    title: string
+    startDate: string
+    endDate: string
+    details: string
+  }[]
+  try {
+    const parsed: unknown = JSON.parse(rawWorkHistory || '[]')
+    if (!Array.isArray(parsed) || parsed.length > 20) throw new Error('Invalid work history')
+    workHistory = parsed.map(entry => {
+      if (!entry || typeof entry !== 'object') throw new Error('Invalid work history entry')
+      const record = entry as Record<string, unknown>
+      const employer = typeof record.employer === 'string' ? record.employer.trim().slice(0, 160) : ''
+      const title = typeof record.title === 'string' ? record.title.trim().slice(0, 160) : ''
+      const startDate = typeof record.startDate === 'string' ? record.startDate.trim() : ''
+      const endDate = typeof record.endDate === 'string' ? record.endDate.trim() : ''
+      const details = typeof record.details === 'string' ? record.details.trim().slice(0, 1500) : ''
+      if (!employer || !title) throw new Error('Each work history entry needs an employer and job title.')
+      if ((startDate && !/^\d{4}-(0[1-9]|1[0-2])$/.test(startDate)) ||
+          (endDate && !/^\d{4}-(0[1-9]|1[0-2])$/.test(endDate)) ||
+          (startDate && endDate && endDate < startDate))
+        throw new Error('Enter valid work history dates.')
+      return { employer, title, startDate, endDate, details }
+    })
+  } catch (error) {
+    return NextResponse.json({
+      error: error instanceof Error && error.message !== 'Invalid work history' && error.message !== 'Invalid work history entry'
+        ? error.message
+        : 'Enter valid work history details.',
+    }, { status: 400 })
+  }
 
   let resumePath: string | null = null
   if (resume instanceof File && resume.size > 0) {
@@ -113,11 +153,14 @@ export async function POST(req: NextRequest) {
     graduation_year: Number(graduationYear),
     years_experience: Number(yearsExperience),
     current_position: currentRole || null,
+    work_history: workHistory,
+    certifications: certifications || null,
     engagement_preference: engagementPreference,
     availability: availability || null,
     compensation_expectation: compensationExpectation || null,
     skills,
     project_details: projectDetails,
+    teaching_approach: teachingApproach,
     project_links: projectLinks || null,
     github_url: githubUrl || null,
     linkedin_url: linkedinUrl || null,

@@ -26,11 +26,20 @@ interface CareerApplication {
   graduation_year: number
   years_experience: number
   current_position: string | null
+  work_history: {
+    employer: string
+    title: string
+    startDate: string
+    endDate: string
+    details: string
+  }[]
+  certifications: string | null
   engagement_preference: string
   availability: string | null
   compensation_expectation: string | null
   skills: string
   project_details: string
+  teaching_approach: string
   project_links: string | null
   github_url: string | null
   linkedin_url: string | null
@@ -262,6 +271,27 @@ export default function AdminPage() {
                   </div>
                   <div className="sm:col-span-2"><dt className="font-semibold" style={{ color: 'var(--muted)' }}>Projects and contribution</dt>
                     <dd className="whitespace-pre-wrap">{application.project_details}</dd>
+                  </div>
+                  {application.work_history.length > 0 && (
+                    <div className="sm:col-span-2"><dt className="font-semibold" style={{ color: 'var(--muted)' }}>Relevant work history</dt>
+                      <dd className="mt-2 space-y-3">
+                        {application.work_history.map((position, index) => (
+                          <div key={`${position.employer}-${index}`}>
+                            <strong>{position.title} · {position.employer}</strong>
+                            <div>{position.startDate || 'Start not provided'} – {position.endDate || 'Present'}</div>
+                            {position.details && <p className="whitespace-pre-wrap">{position.details}</p>}
+                          </div>
+                        ))}
+                      </dd>
+                    </div>
+                  )}
+                  {application.certifications && (
+                    <div className="sm:col-span-2"><dt className="font-semibold" style={{ color: 'var(--muted)' }}>Certifications and training</dt>
+                      <dd className="whitespace-pre-wrap">{application.certifications}</dd>
+                    </div>
+                  )}
+                  <div className="sm:col-span-2"><dt className="font-semibold" style={{ color: 'var(--muted)' }}>Teaching approach</dt>
+                    <dd className="whitespace-pre-wrap">{application.teaching_approach}</dd>
                   </div>
                   <div className="sm:col-span-2"><dt className="font-semibold" style={{ color: 'var(--muted)' }}>Why this role</dt>
                     <dd className="whitespace-pre-wrap">{application.motivation}</dd>
