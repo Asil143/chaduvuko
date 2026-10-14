@@ -130,10 +130,10 @@ export function TracksMenuDesktop({ header, completedByTrack, active, onOpenChan
         aria-current={active ? 'location' : undefined}
         aria-controls={panelId}
         onClick={toggle}
-        className="site-nav-control relative flex items-center gap-1 h-11 px-3 rounded-xl text-sm transition-colors"
+        className="site-nav-control relative flex items-center gap-1 h-11 px-1.5 min-[900px]:px-2 min-[1200px]:px-2 rounded-xl text-[13px] min-[1200px]:text-sm transition-colors whitespace-nowrap"
         style={{ color: active || open ? 'var(--text)' : 'var(--text2)', fontWeight: active || open ? 600 : 500, background: open ? 'var(--brand-soft)' : 'transparent' }}
       >
-        Learning paths
+        Courses
         <ChevronDown size={13} aria-hidden="true" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s', transformOrigin: 'center' }} />
       </button>
 
@@ -142,13 +142,13 @@ export function TracksMenuDesktop({ header, completedByTrack, active, onOpenChan
           id={panelId}
           data-menu-panel
           role="dialog"
-          aria-label="Learning paths"
+          aria-label="Courses"
           className="site-header-menu fixed left-1/2 top-[80px] z-40 w-[min(1320px,calc(100vw-48px))] -translate-x-1/2 max-h-[calc(100vh-6rem)] overflow-y-auto"
         >
           <div className="relative px-7 pt-6 pb-5 sm:px-8 sm:pt-7">
             <div className="mb-5 flex items-end justify-between gap-4 border-b pb-4 pr-14" style={{ borderColor: 'var(--border)' }}>
               <div>
-                <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Explore learning paths</p>
+                <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Explore courses</p>
                 <p className="mt-1 text-xs" style={{ color: 'var(--muted)' }}>Structured lessons to help you build practical skills, step by step.</p>
               </div>
               <span className="hidden rounded-full px-3 py-1 text-xs font-medium sm:inline-flex" style={{ background: 'var(--brand-soft)', color: 'var(--brand-green)' }}>

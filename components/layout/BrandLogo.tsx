@@ -11,7 +11,7 @@ export function BrandLogo({ variant = 'header', priority = false }: {
         alt="Chaduvuko — LEARN. BUILD. GROW."
         width={1536}
         height={1024}
-        sizes={variant === 'footer' ? '332px' : '(min-width: 640px) 80px, 72px'}
+        sizes={variant === 'footer' ? '332px' : '(min-width: 1200px) 76px, (min-width: 640px) 64px, 56px'}
         priority={priority}
       />
     </span>

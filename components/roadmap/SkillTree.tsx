@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import { Check, Download } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import Link from 'next/link'
+import { ArrowLeftRight, Check, Circle, Download, LocateFixed, LockKeyhole, Map, Route } from 'lucide-react'
 import type { Roadmap, RoadmapNode } from '@/data/roadmaps/types'
 import { useProgress } from '@/lib/progress'
 import { TopicDrawer, type TopicLesson, type TopicStatus } from '@/components/roadmap/TopicDrawer'
@@ -20,6 +21,14 @@ const P = {
 } as const
 
 const SITE = 'https://chaduvuko.com'
+
+function getStartScrollLeft(viewport: HTMLDivElement, node: RoadmapNode) {
+  const paddingLeft = Number.parseFloat(window.getComputedStyle(viewport).paddingLeft) || 0
+  return Math.max(
+    0,
+    (node.x ?? 0) + (node.width ?? 0) / 2 + paddingLeft - viewport.clientWidth / 2,
+  )
+}
 
 /** Statuses the reader set by hand. Older saves also held 'locked'/'available', which are derived now. */
 function readSaved(key: string): Record<string, TopicStatus> {
@@ -43,6 +52,8 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
   const [manual, setManual] = useState<Record<string, TopicStatus>>({})
   const [selected, setSelected] = useState<string | null>(null)
   const [hiddenTypes, setHiddenTypes] = useState<Set<string>>(new Set())
+  const [viewMode, setViewMode] = useState<'guided' | 'map'>('guided')
+  const canvasViewportRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setManual(readSaved(KEY))
@@ -84,9 +95,59 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
   const doneCount = roadmap.nodes.filter(node => status[node.id].status === 'done').length
   const learningCount = roadmap.nodes.filter(node => status[node.id].status === 'in-progress').length
   const selectedNode = selected ? roadmap.nodes.find(n => n.id === selected) : null
+  const stages = useMemo(() => {
+    const getStageKey = (node: RoadmapNode) => node.row ?? node.y ?? 0
+    const keys = Array.from(new Set(roadmap.nodes.map(getStageKey))).sort((a, b) => a - b)
+    const labels = ['Foundations', 'Core skills', 'Build practical skills', 'Production skills', 'Career-ready']
+
+    return keys.map((key, index) => {
+      const nodes = roadmap.nodes.filter(node => getStageKey(node) === key)
+      const section = roadmap.sections?.find(item => item.row === key)
+      const done = nodes.filter(node => status[node.id].status === 'done').length
+      const actionable = nodes.filter(node => status[node.id].status !== 'done' && prerequisitesDone(node))
+      const requiredNodes = nodes.filter(node => node.type === 'required' || node.type === 'chaduvuko')
+      const requiredDone = requiredNodes.filter(node => status[node.id].status === 'done').length
+
+      return {
+        key,
+        label: section?.label ?? labels[index] ?? `Stage ${index + 1}`,
+        description: section?.description,
+        nodes,
+        done,
+        actionable,
+        requiredDone,
+        requiredCount: requiredNodes.length,
+      }
+    })
+  }, [roadmap.nodes, roadmap.sections, status])
+
+  const firstActionableNode = stages.flatMap(stage => stage.actionable)[0]
+  const completedPercent = roadmap.nodes.length ? Math.round(doneCount / roadmap.nodes.length * 100) : 0
 
   const canvasW = Math.max(...roadmap.nodes.map(n => (n.x ?? 0) + (n.width ?? 0))) + 40
   const canvasH = Math.max(...roadmap.nodes.map(n => (n.y ?? 0) + (n.height ?? 0))) + 40
+  const startNode = roadmap.nodes.find(node => node.id === 'root') ?? roadmap.nodes[0]
+
+  useEffect(() => {
+    if (viewMode !== 'map') return
+    const viewport = canvasViewportRef.current
+    if (!viewport || !startNode) return
+
+    const centerStart = () => {
+      if (viewport.scrollWidth <= viewport.clientWidth) return
+      viewport.scrollTo({ left: getStartScrollLeft(viewport, startNode), behavior: 'auto' })
+    }
+
+    centerStart()
+    window.addEventListener('resize', centerStart)
+    return () => window.removeEventListener('resize', centerStart)
+  }, [roadmap.id, canvasW, startNode, viewMode])
+
+  const returnToStart = () => {
+    const viewport = canvasViewportRef.current
+    if (!viewport || !startNode) return
+    viewport.scrollTo({ left: getStartScrollLeft(viewport, startNode), behavior: 'smooth' })
+  }
 
   return (
     <>
@@ -109,10 +170,39 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
           </button>
         </div>
 
+        {/* View mode */}
+        <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3" style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg2)' }}>
+          <div role="group" aria-label="Roadmap view" className="inline-flex gap-1 rounded-xl p-1" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+            {([
+              { id: 'guided', label: 'Guided path', icon: Route },
+              { id: 'map', label: 'Explore map', icon: Map },
+            ] as const).map(({ id, label, icon: Icon }) => (
+              <button
+                key={id}
+                type="button"
+                aria-pressed={viewMode === id}
+                onClick={() => setViewMode(id)}
+                className="inline-flex min-h-10 items-center gap-2 rounded-lg px-3 text-sm font-semibold transition-colors"
+                style={{ background: viewMode === id ? 'var(--brand-green)' : 'transparent', color: viewMode === id ? 'var(--brand-green-text)' : 'var(--text2)' }}
+              >
+                <Icon size={16} aria-hidden="true" /> {label}
+              </button>
+            ))}
+          </div>
+          <span className="text-xs font-medium" style={{ color: 'var(--muted)' }}>
+            {completedPercent}% complete
+          </span>
+        </div>
+
+        <div className="h-1.5 w-full" role="progressbar" aria-label="Roadmap completion" aria-valuemin={0} aria-valuemax={100} aria-valuenow={completedPercent} style={{ background: 'var(--border)' }}>
+          <div className="h-full transition-[width] duration-300" style={{ width: `${completedPercent}%`, background: 'var(--brand-green)' }} />
+        </div>
+
         {/* Filters */}
-        <div style={{ padding: '9px 18px', display: 'flex', gap: 6, flexWrap: 'wrap' as const, borderBottom: '1px solid var(--border)', background: 'var(--bg2)' }}>
+        {viewMode === 'map' && <div style={{ padding: '9px 18px', display: 'flex', gap: 6, flexWrap: 'wrap' as const, borderBottom: '1px solid var(--border)', background: 'var(--bg2)' }}>
           {([
             { ty: 'required',  label: 'Required',     borderC: '#0a8c3e', color: '#065f2c', bg: '#e6f9ed' },
+            { ty: 'recommended', label: 'Recommended', borderC: '#b06a00', color: '#7a4a00', bg: '#fff3d6' },
             { ty: 'optional',  label: 'Optional',     borderC: 'var(--border)', color: 'var(--muted)', bg: 'var(--surface)' },
             { ty: 'chaduvuko', label: '✦ Chaduvuko',  borderC: '#6c4fc9', color: '#3d26a0', bg: '#ece8ff' },
           ] as const).map(f => (
@@ -134,10 +224,125 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
               {f.label}
             </button>
           ))}
+        </div>}
+
+        {viewMode === 'guided' ? (
+          <div className="px-4 py-5 sm:px-6 sm:py-7" style={{ background: 'var(--bg2)' }}>
+            <div className="mx-auto max-w-3xl">
+              <div className="mb-6 rounded-2xl p-5 sm:p-6" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
+                <p className="text-xs font-bold uppercase tracking-[0.14em]" style={{ color: 'var(--brand-green)' }}>Your learning journey</p>
+                <h2 className="mt-2 text-xl font-bold tracking-tight sm:text-2xl" style={{ color: 'var(--text)' }}>
+                  {doneCount === roadmap.nodes.length ? 'Roadmap complete — great work!' : firstActionableNode ? `Your next step: ${firstActionableNode.title}` : 'Your roadmap is ready'}
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
+                  {doneCount === roadmap.nodes.length
+                    ? 'You have completed every topic in this roadmap.'
+                    : firstActionableNode
+                      ? `Complete this topic to unlock the next steps. ${firstActionableNode.time ? `Estimated time: ${firstActionableNode.time}.` : ''}`
+                      : 'Mark a topic complete to reveal the next steps in your path.'}
+                </p>
+                {firstActionableNode && (
+                  <button type="button" onClick={() => setSelected(firstActionableNode.id)} className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl px-4 text-sm font-bold" style={{ background: 'var(--brand-green)', color: 'var(--brand-green-text)' }}>
+                    {status[firstActionableNode.id].status === 'in-progress' ? 'Continue this topic' : 'Start this topic'}
+                  </button>
+                )}
+              </div>
+
+              <ol className="relative flex flex-col gap-4 before:absolute before:bottom-8 before:left-[17px] before:top-8 before:w-px before:bg-[var(--border2)] before:content-[''] sm:gap-5">
+                {stages.map((stage, stageIndex) => {
+                  const milestoneDone = stage.requiredCount > 0 && stage.requiredDone === stage.requiredCount
+                  const currentStage = stage.actionable.length > 0 && stages.slice(0, stageIndex).every(item => item.requiredDone === item.requiredCount)
+                  return (
+                    <li key={stage.key} className="relative rounded-2xl p-4 pl-12 sm:p-5 sm:pl-14" style={{ background: 'var(--bg)', border: `1px solid ${currentStage ? 'var(--brand-green)' : 'var(--border)'}`, boxShadow: currentStage ? '0 4px 18px rgba(21,128,61,.08)' : 'none' }}>
+                      <span aria-hidden="true" className="absolute left-2.5 top-4 flex h-8 w-8 items-center justify-center rounded-full" style={{ background: milestoneDone ? 'var(--brand-green)' : currentStage ? 'var(--brand-soft)' : 'var(--bg2)', color: milestoneDone ? 'var(--brand-green-text)' : currentStage ? 'var(--brand-green)' : 'var(--muted)', border: '1px solid var(--border)' }}>
+                        {milestoneDone ? <Check size={16} /> : <span className="text-xs font-bold">{stageIndex + 1}</span>}
+                      </span>
+                      <div className="flex flex-wrap items-start justify-between gap-2">
+                        <div>
+                          <p className="text-xs font-bold uppercase tracking-[0.12em]" style={{ color: currentStage ? 'var(--brand-green)' : 'var(--muted)' }}>{currentStage ? 'Current stage' : `Stage ${stageIndex + 1}`}</p>
+                          <h3 className="mt-1 text-lg font-bold" style={{ color: 'var(--text)' }}>{stage.label}</h3>
+                        </div>
+                        <span className="rounded-full px-2.5 py-1 text-xs font-semibold" style={{ background: 'var(--bg2)', color: 'var(--text2)' }}>
+                          {stage.done}/{stage.nodes.length} topics
+                        </span>
+                      </div>
+                      {stage.description && <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>{stage.description}</p>}
+                      <p className="mt-3 text-xs" style={{ color: milestoneDone ? 'var(--brand-green)' : 'var(--muted)' }}>
+                        Milestone: {milestoneDone ? 'Core topics complete' : `${stage.requiredDone} of ${stage.requiredCount} required topics complete`}
+                      </p>
+                      <ul className="mt-3 flex flex-col gap-2">
+                        {stage.nodes.map(node => {
+                          const nodeStatus = status[node.id].status
+                          const ready = prerequisitesDone(node)
+                          const stateLabel = nodeStatus === 'done' ? 'Done' : nodeStatus === 'in-progress' ? 'In progress' : ready ? (node.id === firstActionableNode?.id ? 'Up next' : 'Ready') : 'Locked'
+                          const stateColor = nodeStatus === 'done' ? 'var(--brand-green)' : ready ? 'var(--text2)' : 'var(--muted)'
+                          const lesson = (topicLessons[node.id] ?? []).find(item => !completed?.[item.href])
+                          return (
+                            <li key={node.id} className="flex flex-col gap-3 rounded-xl p-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-4" style={{ background: 'var(--surface)', border: `1px solid ${node.id === firstActionableNode?.id ? 'var(--brand-green)' : 'var(--border)'}` }}>
+                              <button type="button" onClick={() => setSelected(node.id)} className="min-w-0 flex-1 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2" style={{ borderRadius: 4 }}>
+                                <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                                  <span className="font-semibold" style={{ color: 'var(--text)' }}>{node.title}</span>
+                                  <span className="inline-flex items-center gap-1 text-xs font-semibold" style={{ color: stateColor }}>
+                                    {nodeStatus === 'done' ? <Check size={13} aria-hidden="true" /> : !ready ? <LockKeyhole size={12} aria-hidden="true" /> : <Circle size={10} aria-hidden="true" />}
+                                    {stateLabel}
+                                  </span>
+                                </span>
+                                <span className="mt-1 block text-xs" style={{ color: 'var(--muted)' }}>
+                                  {[node.time, node.difficulty, `${(topicLessons[node.id] ?? []).length} lesson${(topicLessons[node.id] ?? []).length === 1 ? '' : 's'}`].filter(Boolean).join(' · ')}
+                                </span>
+                                {!ready && nodeStatus !== 'done' && (
+                                  <span className="mt-1 block text-xs" style={{ color: 'var(--muted)' }}>
+                                    Learn first: {(node.prerequisites ?? []).filter(id => status[id]?.status !== 'done').map(id => roadmap.nodes.find(item => item.id === id)?.title).filter(Boolean).join(', ')}
+                                  </span>
+                                )}
+                              </button>
+                              {lesson ? (
+                                <Link href={lesson.href} className="inline-flex min-h-10 flex-shrink-0 items-center justify-center rounded-lg px-3 text-sm font-semibold" style={{ background: node.id === firstActionableNode?.id ? 'var(--brand-green)' : 'var(--bg2)', color: node.id === firstActionableNode?.id ? 'var(--brand-green-text)' : 'var(--text2)' }}>
+                                  {nodeStatus === 'in-progress' ? 'Continue lesson' : 'Start lesson'}
+                                </Link>
+                              ) : (
+                                <button type="button" onClick={() => setSelected(node.id)} className="min-h-10 flex-shrink-0 rounded-lg px-3 text-sm font-semibold" style={{ background: 'var(--bg2)', color: 'var(--text2)' }}>
+                                  {ready ? 'Explore topic' : 'View prerequisites'}
+                                </button>
+                              )}
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </li>
+                  )
+                })}
+              </ol>
+            </div>
+          </div>
+        ) : (
+        <>
+
+        {/* Diagram navigation */}
+        <div className="flex min-h-11 items-center justify-between gap-3 px-4" style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg)' }}>
+          <span className="flex min-w-0 items-center gap-2 text-xs" style={{ color: 'var(--muted)' }}>
+            <ArrowLeftRight size={15} aria-hidden="true" className="flex-shrink-0" />
+            <span>Scroll sideways to explore; follow prerequisites from the top</span>
+          </span>
+          <button
+            type="button"
+            onClick={returnToStart}
+            className="inline-flex min-h-9 flex-shrink-0 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold"
+            style={{ color: 'var(--text2)', border: '1px solid var(--border)', background: 'var(--surface)' }}
+          >
+            <LocateFixed size={14} aria-hidden="true" /> Start
+          </button>
         </div>
 
         {/* Canvas */}
-        <div style={{ overflowX: 'auto', padding: '20px 18px', background: 'var(--bg2)' }}>
+        <div
+          ref={canvasViewportRef}
+          role="region"
+          aria-label={`${roadmap.title} roadmap diagram. Scroll horizontally to explore all topics.`}
+          tabIndex={0}
+          className="roadmap-diagram-viewport focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px]"
+          style={{ overflow: 'auto', padding: '20px 18px', background: 'var(--bg2)', scrollbarWidth: 'thin', scrollbarColor: 'var(--border2) transparent' }}
+        >
           <div style={{ position: 'relative', width: canvasW, height: canvasH }}>
 
             {/* Edges */}
@@ -157,9 +362,9 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
                     key={`${edge.from}-${edge.to}`}
                     d={`M${ax},${ay} C${ax},${my} ${bx},${my} ${bx},${by}`}
                     fill="none"
-                    stroke={fromDone ? col : '#888'}
-                    strokeOpacity={fromDone && toDone ? 1 : fromDone ? 0.45 : 0.2}
-                    strokeWidth={fromDone && toDone ? 2 : fromDone ? 1.5 : 1}
+                    stroke={fromDone ? col : 'var(--muted)'}
+                    strokeOpacity={fromDone && toDone ? 1 : fromDone ? 0.65 : 0.42}
+                    strokeWidth={fromDone && toDone ? 2.5 : fromDone ? 2 : 1.5}
                     strokeDasharray={fromDone && toDone ? '7,3' : fromDone ? 'none' : '4,4'}
                   />
                 )
@@ -180,7 +385,7 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
                   key={node.id}
                   type="button"
                   aria-haspopup="dialog"
-                  aria-label={`${node.title}, ${p.label.replace('✦ ', '')}${s === 'done' ? ', done' : s === 'in-progress' ? ', learning' : ''}${lessonCount ? `, ${lessonCount} Chaduvuko lesson${lessonCount > 1 ? 's' : ''}` : ''}`}
+                  aria-label={`${node.title}, ${p.label.replace('✦ ', '')}${muted ? ', prerequisites incomplete' : ''}${s === 'done' ? ', done' : s === 'in-progress' ? ', learning' : ''}${lessonCount ? `, ${lessonCount} Chaduvuko lesson${lessonCount > 1 ? 's' : ''}` : ''}`}
                   onClick={() => setSelected(node.id)}
                   className="text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                   style={{
@@ -189,17 +394,17 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
                     width: node.width ?? 0, height: node.height ?? 0,
                     borderRadius: 10,
                     cursor: 'pointer',
-                    opacity: muted ? 0.6 : 1,
+                    opacity: 1,
                     background: muted ? 'var(--surface)' : p.bg,
-                    border: s === 'not-started' ? `1.5px solid ${muted ? 'var(--border)' : p.border}` : `2px solid ${p.solid}`,
-                    borderLeft: `3px solid ${muted ? 'var(--border)' : p.solid}`,
-                    boxShadow: s === 'not-started' ? (muted ? 'none' : '0 2px 8px rgba(0,0,0,.1)') : `0 3px 14px ${p.solid}30`,
+                    border: s === 'not-started' ? `1.5px solid ${muted ? 'var(--border2)' : p.border}` : `2px solid ${p.solid}`,
+                    borderLeft: `3px solid ${muted ? 'var(--border2)' : p.solid}`,
+                    boxShadow: s === 'not-started' ? (muted ? '0 1px 3px rgba(0,0,0,.06)' : '0 2px 8px rgba(0,0,0,.1)') : `0 3px 14px ${p.solid}30`,
                     outline: selected === node.id ? `2px solid ${p.solid}` : undefined,
                     outlineOffset: 3,
                   }}
                 >
                   <span style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '6px 8px 0 10px' }}>
-                    <span style={{ fontSize: 9, fontWeight: 500, letterSpacing: '.07em', textTransform: 'uppercase' as const, padding: '2px 8px', borderRadius: 20, background: s === 'in-progress' ? p.solid : muted ? 'var(--surface)' : p.bg, color: s === 'in-progress' ? '#fff' : muted ? 'var(--muted)' : p.text, border: `0.5px solid ${muted ? 'var(--border)' : p.border}`, lineHeight: 1.5 }}>
+                    <span style={{ fontSize: 9, fontWeight: 600, letterSpacing: '.07em', textTransform: 'uppercase' as const, padding: '2px 8px', borderRadius: 20, background: s === 'in-progress' ? p.solid : muted ? 'var(--bg2)' : p.bg, color: s === 'in-progress' ? '#fff' : muted ? 'var(--text2)' : p.text, border: `0.5px solid ${muted ? 'var(--border2)' : p.border}`, lineHeight: 1.5 }}>
                       {s === 'in-progress' ? 'Learning' : p.label}
                     </span>
                     {s === 'done' ? (
@@ -212,7 +417,7 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
                       </span>
                     )}
                   </span>
-                  <span title={node.title} style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', margin: '2px 8px 0 10px', fontSize: 12, fontWeight: 500, lineHeight: 1.3, color: muted ? 'var(--muted)' : p.text }}>
+                  <span title={node.title} style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', margin: '2px 8px 0 10px', fontSize: 12, fontWeight: 600, lineHeight: 1.3, color: muted ? 'var(--text2)' : p.text }}>
                     {node.title}
                   </span>
                 </button>
@@ -224,6 +429,8 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
         <p style={{ padding: '0 18px 14px', margin: 0, fontSize: 12, color: 'var(--muted)', background: 'var(--bg2)' }}>
           Select a topic to see what it covers and the Chaduvuko lessons that teach it.
         </p>
+        </>
+        )}
 
         {/* Salary reveal */}
         {doneCount >= 5 && roadmap.salaryData && (

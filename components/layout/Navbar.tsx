@@ -2,12 +2,13 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import { FolderKanban, Menu, X } from 'lucide-react'
 import { ThemeChoice, ThemeMenu } from '@/components/ui/ThemePicker'
 import { SiteSearch, type SearchResume } from '@/components/ui/SiteSearch'
 import { TRACKS_HREF, TracksListMobile, TracksMenuDesktop } from '@/components/layout/TracksMenu'
 import { PRACTICE_ITEMS, PracticeListMobile, PracticeMenuDesktop } from '@/components/layout/PracticeMenu'
 import { RoadmapsListMobile, RoadmapsMenuDesktop } from '@/components/layout/RoadmapsMenu'
+import { RESOURCE_ITEMS, ResourcesListMobile, ResourcesMenuDesktop } from '@/components/layout/ResourcesMenu'
 import { LessonHeaderControls } from '@/components/layout/LessonRow'
 import { ReadingLine } from '@/components/layout/ReadingLine'
 import { useLessonChrome } from '@/lib/lesson-chrome'
@@ -21,12 +22,13 @@ type NavItem = { label: string; href: string }
 
 // Blog and the Industry guide live in the footer and search.
 const ROADMAPS: NavItem = { label: 'Roadmaps', href: '/learn/roadmap' }
-const INTERVIEW: NavItem = { label: 'Interview Prep', href: '/learn/interview' }
+const PROJECTS: NavItem = { label: 'Projects', href: '/learn/projects' }
+const CAREER_PREP: NavItem = { label: 'Career prep', href: '/learn/interview' }
 
 // Longest matching prefix wins, so /learn/roadmap/x highlights Roadmaps and
 // /learn/sql/playground highlights Practice, not Tracks.
 function getActiveHref(pathname: string): string | null {
-  const candidates = [TRACKS_HREF, ROADMAPS.href, INTERVIEW.href, ...PRACTICE_ITEMS.map(i => i.href)]
+  const candidates = [TRACKS_HREF, ROADMAPS.href, PROJECTS.href, CAREER_PREP.href, ...PRACTICE_ITEMS.map(i => i.href), ...RESOURCE_ITEMS.map(i => i.href)]
   let best: string | null = null
   for (const href of candidates) {
     const matches = pathname === href || pathname.startsWith(href + '/')
@@ -62,7 +64,7 @@ export function Navbar({ header }: { header: HeaderData }) {
 
   return (
     <header
-      className="site-header fixed top-0 left-0 right-0 z-50 h-[72px] flex items-center gap-2 sm:gap-3"
+      className="site-header fixed top-0 left-0 right-0 z-50 h-[72px] flex items-center gap-1 min-[1200px]:gap-3"
       style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}
     >
       <a
@@ -84,8 +86,8 @@ export function Navbar({ header }: { header: HeaderData }) {
       {lesson ? (
         <LessonHeaderControls nav={lesson} />
       ) : (
-        <nav aria-label="Main" className="desktop-nav hidden min-[1200px]:block">
-          <ul className="flex items-center gap-1.5">
+        <nav aria-label="Main" className="desktop-nav hidden min-[768px]:block">
+          <ul className="site-primary-nav flex items-center gap-0 min-[1200px]:gap-1">
             <li>
               <TracksMenuDesktop
                 header={header}
@@ -95,13 +97,15 @@ export function Navbar({ header }: { header: HeaderData }) {
               />
             </li>
             <li><RoadmapsMenuDesktop header={header} active={activeHref === ROADMAPS.href} /></li>
-            <li><PracticeMenuDesktop activeHref={activeHref} projectCount={projectCount} /></li>
-            <li><DesktopLink item={INTERVIEW} active={activeHref === INTERVIEW.href} /></li>
+            <li><DesktopLink item={PROJECTS} active={activeHref === PROJECTS.href} count={projectCount} /></li>
+            <li><PracticeMenuDesktop activeHref={activeHref} /></li>
+            <li><DesktopLink item={CAREER_PREP} active={activeHref === CAREER_PREP.href} /></li>
+            <li><ResourcesMenuDesktop activeHref={activeHref} /></li>
           </ul>
         </nav>
       )}
 
-      <div className="ml-auto flex items-center gap-1 sm:gap-2 flex-shrink-0">
+      <div className="ml-auto flex items-center gap-1 min-[1200px]:gap-2 flex-shrink-0">
         <SiteSearch resume={resume} tracks={searchTracks} />
         {!lesson && (
           <div className="header-theme hidden min-[1200px]:block">
@@ -145,7 +149,7 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
   }, [open, onOpenChange])
 
   return (
-    <div ref={containerRef} className="header-menu min-[1200px]:hidden">
+    <div ref={containerRef} className="header-menu min-[768px]:hidden">
       <button
         ref={buttonRef}
         type="button"
@@ -203,7 +207,7 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
                 onClick={navigate}
                 aria-label={`Continue ${resume.detail}: ${resume.title}`}
                 className="block mb-2 px-3.5 py-3 rounded-xl"
-                style={{ background: 'rgba(0,230,118,0.08)', border: '1px solid rgba(0,230,118,0.3)' }}
+                style={{ background: 'var(--brand-soft)', border: '1px solid var(--border2)' }}
               >
                 <span className="block font-mono text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--green)' }}>
                   Continue · {header.tracks[learner.resume!.track]?.title}
@@ -220,8 +224,10 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
               onNavigate={navigate}
             />
             <RoadmapsListMobile header={header} active={activeHref === ROADMAPS.href} onNavigate={navigate} />
-            <PracticeListMobile activeHref={activeHref} projectCount={projectCount} onNavigate={navigate} />
-            <MobileLink item={INTERVIEW} active={activeHref === INTERVIEW.href} onNavigate={navigate} />
+            <MobileLink item={PROJECTS} active={activeHref === PROJECTS.href} onNavigate={navigate} count={projectCount} />
+            <PracticeListMobile activeHref={activeHref} onNavigate={navigate} />
+            <MobileLink item={CAREER_PREP} active={activeHref === CAREER_PREP.href} onNavigate={navigate} />
+            <ResourcesListMobile activeHref={activeHref} onNavigate={navigate} />
             <div className="mt-2 pt-2" style={{ borderTop: '1px solid var(--border)' }}>
               <ThemeChoice />
               <p className="px-3 pt-1 pb-2 text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>
@@ -241,8 +247,8 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
  * since Next is the action there. While progress loads, an invisible Start keeps the width.
  */
 function ResumeSlot({ learner, tracks }: { learner: LearnerProgress; tracks: HeaderData['tracks'] }) {
-  const base = 'site-header-cta resume-slot flex items-center h-11 min-[1200px]:h-10 px-3 min-[1200px]:px-3.5 rounded-xl text-sm font-semibold whitespace-nowrap flex-shrink-0'
-  const style = { background: 'var(--brand-green)', color: 'var(--brand-green-text)', textDecoration: 'none' }
+  const base = 'site-header-cta resume-slot flex items-center h-11 min-[1200px]:h-10 px-3 min-[1200px]:px-2.5 rounded-xl text-sm font-semibold whitespace-nowrap flex-shrink-0'
+  const style = { textDecoration: 'none' }
 
   if (learner.status === 'ready' && learner.resume) {
     const { href, title, track, position, trackSize } = learner.resume
@@ -256,8 +262,8 @@ function ResumeSlot({ learner, tracks }: { learner: LearnerProgress; tracks: Hea
         style={style}
       >
         <span>Continue</span>
-        <span className="hidden min-[1200px]:inline xl:hidden font-medium">&nbsp;· Lesson {position}</span>
-        <span className="hidden xl:inline font-medium truncate">&nbsp;· {title}</span>
+        <span className="hidden min-[1440px]:inline min-[1600px]:hidden font-medium">&nbsp;· Lesson {position}</span>
+        <span className="hidden min-[1600px]:inline font-medium truncate">&nbsp;· {title}</span>
       </Link>
     )
   }
@@ -276,29 +282,32 @@ function ResumeSlot({ learner, tracks }: { learner: LearnerProgress; tracks: Hea
   )
 }
 
-function DesktopLink({ item, active }: { item: NavItem; active: boolean }) {
+function DesktopLink({ item, active, count }: { item: NavItem; active: boolean; count?: number }) {
   return (
     <Link
       href={item.href}
       aria-current={active ? 'page' : undefined}
-      className="site-nav-control relative flex items-center h-11 px-3 rounded-xl text-sm transition-colors whitespace-nowrap"
+      className="site-nav-control relative flex items-center gap-1.5 h-11 px-1.5 min-[900px]:px-2 min-[1200px]:px-2 rounded-xl text-[13px] min-[1200px]:text-sm transition-colors whitespace-nowrap"
       style={{ color: active ? 'var(--text)' : 'var(--text2)', fontWeight: active ? 600 : 500 }}
     >
+      {item.href === PROJECTS.href && <FolderKanban className="hidden min-[1440px]:block" size={14} aria-hidden="true" />}
       {item.label}
+      {count !== undefined && <span className="hidden min-[1200px]:inline-flex min-w-5 justify-center rounded-full px-1 text-[10px] font-medium" style={{ background: 'var(--bg2)', color: 'var(--muted)' }}>{count}</span>}
     </Link>
   )
 }
 
-function MobileLink({ item, active, onNavigate }: { item: NavItem; active: boolean; onNavigate: () => void }) {
+function MobileLink({ item, active, onNavigate, count }: { item: NavItem; active: boolean; onNavigate: () => void; count?: number }) {
   return (
     <Link
       href={item.href}
       aria-current={active ? 'page' : undefined}
-      className="flex items-center min-h-[50px] px-3 text-base font-semibold rounded-lg"
+      className="flex items-center justify-between min-h-[50px] px-3 text-base font-semibold rounded-lg"
       style={{ color: 'var(--text)', background: active ? 'var(--bg2)' : 'transparent' }}
       onClick={onNavigate}
     >
       {item.label}
+      {count !== undefined && <span className="text-sm font-normal" style={{ color: 'var(--muted)' }}>{count}</span>}
     </Link>
   )
 }

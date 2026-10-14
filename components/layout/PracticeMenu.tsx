@@ -7,12 +7,9 @@ import { useMenuDisclosure } from '@/components/layout/useMenuDisclosure'
 export const PRACTICE_ITEMS = [
   { label: 'Code Playground', href: '/playground',           desc: 'Write and run code in the browser' },
   { label: 'SQL Playground',  href: '/learn/sql/playground', desc: 'Query a real sample database' },
-  { label: 'Projects',        href: '/learn/projects',       desc: 'End-to-end builds for your portfolio' },
 ]
 
-const PROJECTS_HREF = '/learn/projects'
-
-export function PracticeMenuDesktop({ activeHref, projectCount }: { activeHref: string | null; projectCount: number }) {
+export function PracticeMenuDesktop({ activeHref }: { activeHref: string | null }) {
   const panelId = useId()
   const { open, setOpen, containerRef, buttonRef } = useMenuDisclosure()
   const active = PRACTICE_ITEMS.some(item => item.href === activeHref)
@@ -26,7 +23,7 @@ export function PracticeMenuDesktop({ activeHref, projectCount }: { activeHref: 
         aria-current={active ? 'location' : undefined}
         aria-controls={panelId}
         onClick={() => setOpen(isOpen => !isOpen)}
-        className="site-nav-control relative flex items-center gap-1 h-11 px-3 rounded-xl text-sm transition-colors"
+        className="site-nav-control relative flex items-center gap-1 h-11 px-1.5 min-[900px]:px-2 min-[1200px]:px-2 rounded-xl text-[13px] min-[1200px]:text-sm transition-colors whitespace-nowrap"
         style={{ color: active || open ? 'var(--text)' : 'var(--text2)', fontWeight: active || open ? 600 : 500, background: open ? 'var(--brand-soft)' : 'transparent' }}
       >
         Practice
@@ -55,7 +52,6 @@ export function PracticeMenuDesktop({ activeHref, projectCount }: { activeHref: 
                   >
                     <span className="flex justify-between text-sm" style={{ color: 'var(--text)', fontWeight: 600 }}>
                       {item.label}
-                      {item.href === PROJECTS_HREF && <span className="font-normal" style={{ color: 'var(--muted)' }}>{projectCount}</span>}
                     </span>
                     <span className="block text-[13px] mt-0.5" style={{ color: 'var(--muted)' }}>{item.desc}</span>
                   </Link>
@@ -69,7 +65,7 @@ export function PracticeMenuDesktop({ activeHref, projectCount }: { activeHref: 
   )
 }
 
-export function PracticeListMobile({ activeHref, projectCount, onNavigate }: { activeHref: string | null; projectCount: number; onNavigate: () => void }) {
+export function PracticeListMobile({ activeHref, onNavigate }: { activeHref: string | null; onNavigate: () => void }) {
   return (
     <div className="py-1">
       <div className="px-3 pt-2 pb-1 font-mono text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--muted)' }}>
@@ -88,7 +84,6 @@ export function PracticeListMobile({ activeHref, projectCount, onNavigate }: { a
                 style={{ color: active ? 'var(--text)' : 'var(--text2)', fontWeight: active ? 600 : 400, background: active ? 'var(--bg2)' : 'transparent' }}
               >
                 {item.label}
-                {item.href === PROJECTS_HREF && <span className="text-[13px]" style={{ color: 'var(--muted)' }}>{projectCount}</span>}
               </Link>
             </li>
           )

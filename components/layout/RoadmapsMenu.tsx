@@ -22,7 +22,7 @@ export function RoadmapsMenuDesktop({ header, active }: { header: HeaderData; ac
         aria-current={active ? 'location' : undefined}
         aria-controls={panelId}
         onClick={() => setOpen(isOpen => !isOpen)}
-        className="site-nav-control relative flex items-center gap-1 h-11 px-3 rounded-xl text-sm transition-colors"
+        className="site-nav-control relative flex items-center gap-1 h-11 px-1.5 min-[900px]:px-2 min-[1200px]:px-2 rounded-xl text-[13px] min-[1200px]:text-sm transition-colors whitespace-nowrap"
         style={{ color: active || open ? 'var(--text)' : 'var(--text2)', fontWeight: active || open ? 600 : 500, background: open ? 'var(--brand-soft)' : 'transparent' }}
       >
         Roadmaps
