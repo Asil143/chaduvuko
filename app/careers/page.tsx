@@ -14,8 +14,8 @@ export default function CareersPage() {
       <h1 className="font-display">Job openings</h1>
       <p className="jobs-lead">
         We’re hiring an Agentic AI Engineer &amp; Technical Instructor to build our curriculum and teach
-        practical agent engineering. Open the role for the full posting. Applications go to{' '}
-        <a href={`mailto:${CAREERS_EMAIL}`}>{CAREERS_EMAIL}</a>.
+        practical agent engineering. Open the role to review the posting and complete the application.
+        Questions? Email <a href={`mailto:${CAREERS_EMAIL}`}>{CAREERS_EMAIL}</a>.
       </p>
       <JobBoard />
     </div>

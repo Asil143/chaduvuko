@@ -83,7 +83,7 @@ export const CAREER_ROLES: CareerRole[] = [
     language: 'Professional spoken English',
     compensation: '₹60,000–₹1,20,000/month for suitable full-time engagements, or milestone-based compensation for course and module contracts',
     summary:
-      'Design, build, debug, evaluate, and teach modern AI agent systems — and turn that expertise into a structured learning journey from strong foundations to production-ready implementations. You will help define and own Chaduvuko’s Agentic AI & Automation track across the learning platform and YouTube channel.',
+      'Lead Chaduvuko’s Agentic AI curriculum and create practical lessons, demos, and projects that teach learners to build and ship reliable, production-ready AI agent systems.',
     intro: [
       'Chaduvuko is looking for an Agentic AI Engineer & Technical Instructor who can do more than explain frameworks. We want someone who can design, build, debug, evaluate, and teach modern AI agent systems — and turn that expertise into a structured learning journey that takes learners from strong foundations to production-ready implementations.',
       'This role combines AI engineering, curriculum design, technical teaching, live coding, and educational content creation. You will help define and own Chaduvuko’s Agentic AI & Automation track across our learning platform and YouTube channel.',

@@ -30,6 +30,12 @@ export default function PrivacyPage() {
         video searches are also looked up on YouTube.
       </p>
       <p style={{ color: 'var(--text2)', lineHeight: 1.7 }}>
+        If you apply for a role, we collect the contact, education, experience, project, and other
+        application details you provide, plus an optional resume. We use this information to assess
+        your application and contact you about hiring. Application records and resumes are stored
+        privately and are available only to authorized hiring administrators.
+      </p>
+      <p style={{ color: 'var(--text2)', lineHeight: 1.7 }}>
         We do not sell learner data. If you contact us, subscribe, sign in, comment, or use
         interactive tools, we use that information to provide the requested feature, protect the
         service, and understand what content is useful.
@@ -38,7 +44,7 @@ export default function PrivacyPage() {
         For privacy questions, contact hello@chaduvuko.com.
       </p>
       <p style={{ color: 'var(--muted)', fontSize: '13px', lineHeight: 1.6 }}>
-        Last updated: October 9, 2026
+        Last updated: October 13, 2026
       </p>
     </div>
   )

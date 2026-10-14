@@ -13,6 +13,34 @@ interface Comment {
   created_at: string
 }
 
+interface CareerApplication {
+  id: string
+  job_title: string
+  full_name: string
+  email: string
+  phone: string
+  location: string
+  highest_qualification: string
+  field_of_study: string
+  institution: string
+  graduation_year: number
+  years_experience: number
+  current_position: string | null
+  engagement_preference: string
+  availability: string | null
+  compensation_expectation: string | null
+  skills: string
+  project_details: string
+  project_links: string | null
+  github_url: string | null
+  linkedin_url: string | null
+  portfolio_url: string | null
+  teaching_sample_url: string | null
+  motivation: string
+  resume_url: string | null
+  created_at: string
+}
+
 function timeAgo(date: string) {
   const s = Math.floor((Date.now() - new Date(date).getTime()) / 1000)
   if (s < 60) return 'just now'
@@ -25,9 +53,10 @@ export default function AdminPage() {
   const [key,      setKey]      = useState('')
   const [authed,   setAuthed]   = useState(false)
   const [comments, setComments] = useState<Comment[]>([])
+  const [applications, setApplications] = useState<CareerApplication[]>([])
   const [loading,  setLoading]  = useState(false)
   const [error,    setError]    = useState('')
-  const [tab,      setTab]      = useState<'flagged' | 'all'>('flagged')
+  const [tab,      setTab]      = useState<'flagged' | 'all' | 'applications'>('flagged')
 
   async function login() {
     setLoading(true)
@@ -61,6 +90,22 @@ export default function AdminPage() {
     setComments(data.comments || [])
     setTab('flagged')
     setLoading(false)
+  }
+
+  async function loadApplications() {
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/careers/applications', { headers: { 'x-admin-key': key } })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Could not load applications.')
+      setApplications(data.applications || [])
+      setTab('applications')
+    } catch (loadError) {
+      setError(loadError instanceof Error ? loadError.message : 'Could not load applications.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   async function deleteComment(id: string) {
@@ -122,7 +167,9 @@ export default function AdminPage() {
               Admin Panel
             </h1>
             <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
-              {comments.length} comment{comments.length !== 1 ? 's' : ''} shown
+                {tab === 'applications'
+                  ? `${applications.length} application${applications.length !== 1 ? 's' : ''}`
+                  : `${comments.length} comment${comments.length !== 1 ? 's' : ''} shown`}
             </p>
           </div>
           <div className="flex gap-2">
@@ -144,13 +191,84 @@ export default function AdminPage() {
               }}>
               <Eye size={11} /> All
             </button>
+            <button onClick={loadApplications}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-mono"
+              style={{
+                background: tab === 'applications' ? 'var(--accent)' : 'var(--surface)',
+                color: tab === 'applications' ? '#fff' : 'var(--muted)',
+                border: '1px solid var(--border)',
+              }}>
+              Applications
+            </button>
           </div>
         </div>
 
-        {/* Comments */}
+        {error && <p className="mb-4 text-sm" role="alert" style={{ color: '#ff6b6b' }}>{error}</p>}
+
         {loading ? (
           <div className="text-center py-20 text-sm font-mono" style={{ color: 'var(--muted)' }}>
             Loading...
+          </div>
+        ) : tab === 'applications' ? applications.length === 0 ? (
+          <div className="text-center py-20 rounded-2xl"
+            style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+            <p className="font-display font-semibold" style={{ color: 'var(--text)' }}>No applications yet</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {applications.map(application => (
+              <article key={application.id} className="rounded-2xl p-5 md:p-6"
+                style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+                <div className="flex flex-wrap items-start justify-between gap-3 mb-5">
+                  <div>
+                    <h2 className="font-display font-bold text-lg" style={{ color: 'var(--text)' }}>
+                      {application.full_name}
+                    </h2>
+                    <p className="text-xs mt-1" style={{ color: 'var(--muted)' }}>{application.job_title}</p>
+                  </div>
+                  <time className="text-xs" style={{ color: 'var(--muted)' }}
+                    dateTime={application.created_at}>{new Date(application.created_at).toLocaleString()}</time>
+                </div>
+                <dl className="grid gap-4 sm:grid-cols-2 text-sm">
+                  <div><dt className="font-semibold" style={{ color: 'var(--muted)' }}>Contact</dt>
+                    <dd><a href={`mailto:${application.email}`} className="underline">{application.email}</a> · {application.phone}</dd>
+                  </div>
+                  <div><dt className="font-semibold" style={{ color: 'var(--muted)' }}>Location</dt>
+                    <dd>{application.location}</dd>
+                  </div>
+                  <div><dt className="font-semibold" style={{ color: 'var(--muted)' }}>Education</dt>
+                    <dd>{application.highest_qualification} in {application.field_of_study}, {application.institution} ({application.graduation_year})</dd>
+                  </div>
+                  <div><dt className="font-semibold" style={{ color: 'var(--muted)' }}>Experience / preference</dt>
+                    <dd>{application.years_experience} years{application.current_position ? ` · ${application.current_position}` : ''} · {application.engagement_preference}</dd>
+                  </div>
+                  <div><dt className="font-semibold" style={{ color: 'var(--muted)' }}>Availability / compensation</dt>
+                    <dd>{application.availability || 'Not provided'} · {application.compensation_expectation || 'Not provided'}</dd>
+                  </div>
+                  <div><dt className="font-semibold" style={{ color: 'var(--muted)' }}>Links / resume</dt>
+                    <dd className="flex flex-wrap gap-x-3">
+                      {application.github_url && <a href={application.github_url} target="_blank" rel="noreferrer" className="underline">GitHub</a>}
+                      {application.linkedin_url && <a href={application.linkedin_url} target="_blank" rel="noreferrer" className="underline">LinkedIn</a>}
+                      {application.portfolio_url && <a href={application.portfolio_url} target="_blank" rel="noreferrer" className="underline">Portfolio</a>}
+                      {application.teaching_sample_url && <a href={application.teaching_sample_url} target="_blank" rel="noreferrer" className="underline">Teaching sample</a>}
+                      {application.resume_url && <a href={application.resume_url} target="_blank" rel="noreferrer" className="underline">Download resume</a>}
+                      {application.project_links && <span className="basis-full whitespace-pre-wrap">{application.project_links}</span>}
+                      {!application.github_url && !application.linkedin_url && !application.portfolio_url &&
+                        !application.teaching_sample_url && !application.resume_url && !application.project_links && 'None provided'}
+                    </dd>
+                  </div>
+                  <div className="sm:col-span-2"><dt className="font-semibold" style={{ color: 'var(--muted)' }}>Technical skills</dt>
+                    <dd className="whitespace-pre-wrap">{application.skills}</dd>
+                  </div>
+                  <div className="sm:col-span-2"><dt className="font-semibold" style={{ color: 'var(--muted)' }}>Projects and contribution</dt>
+                    <dd className="whitespace-pre-wrap">{application.project_details}</dd>
+                  </div>
+                  <div className="sm:col-span-2"><dt className="font-semibold" style={{ color: 'var(--muted)' }}>Why this role</dt>
+                    <dd className="whitespace-pre-wrap">{application.motivation}</dd>
+                  </div>
+                </dl>
+              </article>
+            ))}
           </div>
         ) : comments.length === 0 ? (
           <div className="text-center py-20 rounded-2xl"
