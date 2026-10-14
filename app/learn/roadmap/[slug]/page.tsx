@@ -140,8 +140,13 @@ export default function RoadmapPage({ params }: Props) {
               padding: '28px 26px',
             }}
           >
-            <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--green)', marginBottom: 16 }}>
-              📖 Complete Curriculum Guide
+            <div style={{ marginBottom: 18 }}>
+              <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--green)', marginBottom: 7 }}>
+                📖 Complete Curriculum Guide
+              </div>
+              <p style={{ margin: 0, color: 'var(--muted)', fontSize: 13, lineHeight: 1.6, maxWidth: 640 }}>
+                Explore the topics, practice ideas, and milestones behind this roadmap. Expand any section when you want more detail.
+              </p>
             </div>
             <CurriculumGuide markdown={CURRICULUM[params.slug]} />
           </div>

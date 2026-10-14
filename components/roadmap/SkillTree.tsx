@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeftRight, Check, Circle, Download, LocateFixed, LockKeyhole, Map, Route } from 'lucide-react'
+import { ArrowLeftRight, Check, Circle, Download, LocateFixed, LockKeyhole, Map, Maximize2, Route, ZoomIn, ZoomOut } from 'lucide-react'
 import type { Roadmap, RoadmapNode } from '@/data/roadmaps/types'
 import { useProgress } from '@/lib/progress'
 import { TopicDrawer, type TopicLesson, type TopicStatus } from '@/components/roadmap/TopicDrawer'
@@ -22,11 +22,11 @@ const P = {
 
 const SITE = 'https://chaduvuko.com'
 
-function getStartScrollLeft(viewport: HTMLDivElement, node: RoadmapNode) {
+function getStartScrollLeft(viewport: HTMLDivElement, node: RoadmapNode, zoom = 1) {
   const paddingLeft = Number.parseFloat(window.getComputedStyle(viewport).paddingLeft) || 0
   return Math.max(
     0,
-    (node.x ?? 0) + (node.width ?? 0) / 2 + paddingLeft - viewport.clientWidth / 2,
+    ((node.x ?? 0) + (node.width ?? 0) / 2) * zoom + paddingLeft - viewport.clientWidth / 2,
   )
 }
 
@@ -53,7 +53,11 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
   const [selected, setSelected] = useState<string | null>(null)
   const [hiddenTypes, setHiddenTypes] = useState<Set<string>>(new Set())
   const [viewMode, setViewMode] = useState<'guided' | 'map'>('guided')
+  const [mapZoom, setMapZoom] = useState(1)
+  const [mapScrollProgress, setMapScrollProgress] = useState(0)
+  const [hoveredMapNode, setHoveredMapNode] = useState<string | null>(null)
   const canvasViewportRef = useRef<HTMLDivElement>(null)
+  const mapZoomRef = useRef(1)
 
   useEffect(() => {
     setManual(readSaved(KEY))
@@ -63,6 +67,7 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
   useEffect(() => {
     if (!loaded) return
     try { localStorage.setItem(KEY, JSON.stringify({ states: manual })) } catch {}
+    window.dispatchEvent(new Event('chaduvuko:roadmap-progress-change'))
   }, [manual, loaded, KEY])
 
   // A topic is done when the reader says so or every one of its lessons is complete; it is
@@ -78,6 +83,24 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
       else if (set) result[node.id] = { status: set, fromLessons: false }
       else result[node.id] = { status: done > 0 ? 'in-progress' : 'not-started', fromLessons: false }
     }
+
+    const recordedStatus = { ...result }
+    for (let pass = 0; pass < roadmap.nodes.length; pass++) {
+      const nextStatus: typeof result = {}
+      for (const node of roadmap.nodes) {
+        const prerequisitesComplete = (node.prerequisites ?? []).every(id => result[id]?.status === 'done')
+        nextStatus[node.id] = prerequisitesComplete
+          ? recordedStatus[node.id]
+          : { status: 'not-started', fromLessons: false }
+      }
+      const stable = roadmap.nodes.every(node =>
+        nextStatus[node.id].status === result[node.id].status &&
+        nextStatus[node.id].fromLessons === result[node.id].fromLessons,
+      )
+      Object.assign(result, nextStatus)
+      if (stable) break
+    }
+
     return result
   }, [roadmap.nodes, topicLessons, completed, manual])
 
@@ -123,6 +146,24 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
 
   const firstActionableNode = stages.flatMap(stage => stage.actionable)[0]
   const completedPercent = roadmap.nodes.length ? Math.round(doneCount / roadmap.nodes.length * 100) : 0
+  const focusedMapNode = hoveredMapNode ?? selected
+  const highlightedMapNodes = useMemo(() => {
+    if (!focusedMapNode) return null
+    const related = new Set([focusedMapNode])
+    const visit = (nodeId: string, direction: 'upstream' | 'downstream') => {
+      const connected = (roadmap.edges ?? [])
+        .filter(edge => direction === 'upstream' ? edge.to === nodeId : edge.from === nodeId)
+        .map(edge => direction === 'upstream' ? edge.from : edge.to)
+      for (const id of connected) {
+        if (related.has(id)) continue
+        related.add(id)
+        visit(id, direction)
+      }
+    }
+    visit(focusedMapNode, 'upstream')
+    visit(focusedMapNode, 'downstream')
+    return related
+  }, [focusedMapNode, roadmap.edges])
 
   const canvasW = Math.max(...roadmap.nodes.map(n => (n.x ?? 0) + (n.width ?? 0))) + 40
   const canvasH = Math.max(...roadmap.nodes.map(n => (n.y ?? 0) + (n.height ?? 0))) + 40
@@ -134,19 +175,75 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
     if (!viewport || !startNode) return
 
     const centerStart = () => {
-      if (viewport.scrollWidth <= viewport.clientWidth) return
-      viewport.scrollTo({ left: getStartScrollLeft(viewport, startNode), behavior: 'auto' })
+      if (viewport.scrollWidth > viewport.clientWidth) {
+        viewport.scrollTo({ left: getStartScrollLeft(viewport, startNode, mapZoomRef.current), behavior: 'auto' })
+      }
+    }
+    const updateScrollProgress = () => {
+      const maxScroll = viewport.scrollWidth - viewport.clientWidth
+      setMapScrollProgress(maxScroll > 0 ? Math.round(viewport.scrollLeft / maxScroll * 100) : 100)
     }
 
     centerStart()
+    updateScrollProgress()
+    viewport.addEventListener('scroll', updateScrollProgress, { passive: true })
     window.addEventListener('resize', centerStart)
-    return () => window.removeEventListener('resize', centerStart)
+    return () => {
+      viewport.removeEventListener('scroll', updateScrollProgress)
+      window.removeEventListener('resize', centerStart)
+    }
   }, [roadmap.id, canvasW, startNode, viewMode])
 
   const returnToStart = () => {
     const viewport = canvasViewportRef.current
     if (!viewport || !startNode) return
-    viewport.scrollTo({ left: getStartScrollLeft(viewport, startNode), behavior: 'smooth' })
+    viewport.scrollTo({ left: getStartScrollLeft(viewport, startNode, mapZoom), behavior: 'smooth' })
+  }
+
+  const scrollToMapNode = (nodeId: string) => {
+    const viewport = canvasViewportRef.current
+    const node = viewport?.querySelector<HTMLElement>(`[data-roadmap-node="${nodeId}"]`)
+    if (!viewport || !node) return
+    viewport.scrollTo({
+      left: node.offsetLeft * mapZoom + node.offsetWidth / 2 * mapZoom - viewport.clientWidth / 2,
+      top: node.offsetTop * mapZoom + node.offsetHeight / 2 * mapZoom - viewport.clientHeight / 2,
+      behavior: 'smooth',
+    })
+    setHoveredMapNode(nodeId)
+  }
+
+  const changeMapZoom = (nextZoom: number) => {
+    const viewport = canvasViewportRef.current
+    if (viewport) {
+      const logicalCenterX = (viewport.scrollLeft + viewport.clientWidth / 2) / mapZoomRef.current
+      const logicalCenterY = (viewport.scrollTop + viewport.clientHeight / 2) / mapZoomRef.current
+      requestAnimationFrame(() => {
+        const currentViewport = canvasViewportRef.current
+        if (!currentViewport) return
+        currentViewport.scrollTo({
+          left: logicalCenterX * nextZoom - currentViewport.clientWidth / 2,
+          top: logicalCenterY * nextZoom - currentViewport.clientHeight / 2,
+          behavior: 'auto',
+        })
+      })
+    }
+    mapZoomRef.current = nextZoom
+    setMapZoom(nextZoom)
+  }
+
+  const fitMapToWidth = () => {
+    const viewport = canvasViewportRef.current
+    if (!viewport) return
+    const padding = Number.parseFloat(window.getComputedStyle(viewport).paddingLeft) || 0
+    const fitZoom = Math.max(0.4, Math.min(1, (viewport.clientWidth - padding * 2) / canvasW))
+    mapZoomRef.current = fitZoom
+    setMapZoom(fitZoom)
+    requestAnimationFrame(() => {
+      const currentViewport = canvasViewportRef.current
+      if (currentViewport && startNode) {
+        currentViewport.scrollTo({ left: getStartScrollLeft(currentViewport, startNode, fitZoom), top: 0, behavior: 'smooth' })
+      }
+    })
   }
 
   return (
@@ -199,31 +296,50 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
         </div>
 
         {/* Filters */}
-        {viewMode === 'map' && <div style={{ padding: '9px 18px', display: 'flex', gap: 6, flexWrap: 'wrap' as const, borderBottom: '1px solid var(--border)', background: 'var(--bg2)' }}>
-          {([
-            { ty: 'required',  label: 'Required',     borderC: '#0a8c3e', color: '#065f2c', bg: '#e6f9ed' },
-            { ty: 'recommended', label: 'Recommended', borderC: '#b06a00', color: '#7a4a00', bg: '#fff3d6' },
-            { ty: 'optional',  label: 'Optional',     borderC: 'var(--border)', color: 'var(--muted)', bg: 'var(--surface)' },
-            { ty: 'chaduvuko', label: '✦ Chaduvuko',  borderC: '#6c4fc9', color: '#3d26a0', bg: '#ece8ff' },
-          ] as const).map(f => (
+        {viewMode === 'map' && <div className="flex flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3" style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg2)' }}>
+          <span className="text-xs font-semibold" style={{ color: 'var(--muted)' }}>Show</span>
+          <div role="group" aria-label="Filter by learning priority" className="flex flex-wrap items-center gap-2">
+            {([
+              { ty: 'required', label: 'Core', detail: 'Required', borderC: '#0a8c3e', color: '#065f2c', bg: '#e6f9ed' },
+              { ty: 'recommended', label: 'Recommended', borderC: '#b06a00', color: '#7a4a00', bg: '#fff3d6' },
+              { ty: 'optional', label: 'Optional', borderC: 'var(--border)', color: 'var(--muted)', bg: 'var(--surface)' },
+            ] as const).filter(f => roadmap.nodes.some(node => node.type === f.ty)).map(f => (
+              <button
+                key={f.ty}
+                type="button"
+                aria-pressed={!hiddenTypes.has(f.ty)}
+                aria-label={`${f.label} topics (${roadmap.nodes.filter(node => node.type === f.ty).length})`}
+                title={f.ty === 'required' ? 'Core topics are required and may be prerequisites for later topics.' : `${f.label} topics`}
+                onClick={() => toggleFilter(f.ty)}
+                className="inline-flex min-h-9 items-center gap-2 rounded-lg px-2.5 text-xs font-semibold transition-opacity"
+                style={{
+                  cursor: 'pointer', border: `1px solid ${f.borderC}`,
+                  background: f.bg, color: f.color,
+                  opacity: hiddenTypes.has(f.ty) ? 0.4 : 1,
+                }}
+              >
+                <span aria-hidden="true" style={{ width: 8, height: 8, borderRadius: 3, background: f.borderC, flexShrink: 0 }} />
+                {f.label}
+                {f.ty === 'required' && <span style={{ opacity: 0.72 }}>· {f.detail}</span>}
+                <span className="tabular-nums" style={{ opacity: 0.72 }}>{roadmap.nodes.filter(node => node.type === f.ty).length}</span>
+              </button>
+            ))}
+          </div>
+          {roadmap.nodes.some(node => node.type === 'chaduvuko') && <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filter by learning resource">
+            <span className="text-xs font-medium" style={{ color: 'var(--muted)' }}>Projects</span>
             <button
-              key={f.ty}
               type="button"
-              aria-pressed={!hiddenTypes.has(f.ty)}
-              onClick={() => toggleFilter(f.ty)}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-                padding: '5px 13px', borderRadius: 20, fontSize: 11, fontWeight: 500,
-                cursor: 'pointer', border: `1.5px solid ${f.borderC}`,
-                background: f.bg, color: f.color,
-                opacity: hiddenTypes.has(f.ty) ? 0.35 : 1,
-                transition: 'opacity .15s',
-              }}
+              aria-pressed={!hiddenTypes.has('chaduvuko')}
+              aria-label={`Chaduvuko projects (${roadmap.nodes.filter(node => node.type === 'chaduvuko').length})`}
+              onClick={() => toggleFilter('chaduvuko')}
+              className="inline-flex min-h-9 items-center gap-2 rounded-lg px-2.5 text-xs font-semibold transition-opacity"
+              style={{ cursor: 'pointer', border: '1px solid #b8a8f0', background: '#ece8ff', color: '#3d26a0', opacity: hiddenTypes.has('chaduvuko') ? 0.4 : 1 }}
             >
-              <span style={{ width: 8, height: 8, borderRadius: 2, background: f.borderC, flexShrink: 0 }} />
-              {f.label}
+              <span aria-hidden="true" style={{ width: 8, height: 8, borderRadius: 3, background: '#6c4fc9', flexShrink: 0 }} />
+              Chaduvuko projects
+              <span className="tabular-nums" style={{ opacity: 0.72 }}>{roadmap.nodes.filter(node => node.type === 'chaduvuko').length}</span>
             </button>
-          ))}
+          </div>}
         </div>}
 
         {viewMode === 'guided' ? (
@@ -248,13 +364,13 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
                 )}
               </div>
 
-              <ol className="relative flex flex-col gap-4 before:absolute before:bottom-8 before:left-[17px] before:top-8 before:w-px before:bg-[var(--border2)] before:content-[''] sm:gap-5">
+              <ol className="relative flex flex-col gap-4 before:absolute before:bottom-8 before:left-1/2 before:top-8 before:w-0.5 before:-translate-x-1/2 before:bg-[var(--border2)] before:content-[''] sm:gap-5">
                 {stages.map((stage, stageIndex) => {
                   const milestoneDone = stage.requiredCount > 0 && stage.requiredDone === stage.requiredCount
                   const currentStage = stage.actionable.length > 0 && stages.slice(0, stageIndex).every(item => item.requiredDone === item.requiredCount)
                   return (
-                    <li key={stage.key} className="relative rounded-2xl p-4 pl-12 sm:p-5 sm:pl-14" style={{ background: 'var(--bg)', border: `1px solid ${currentStage ? 'var(--brand-green)' : 'var(--border)'}`, boxShadow: currentStage ? '0 4px 18px rgba(21,128,61,.08)' : 'none' }}>
-                      <span aria-hidden="true" className="absolute left-2.5 top-4 flex h-8 w-8 items-center justify-center rounded-full" style={{ background: milestoneDone ? 'var(--brand-green)' : currentStage ? 'var(--brand-soft)' : 'var(--bg2)', color: milestoneDone ? 'var(--brand-green-text)' : currentStage ? 'var(--brand-green)' : 'var(--muted)', border: '1px solid var(--border)' }}>
+                    <li key={stage.key} className="relative rounded-2xl p-4 pt-14 sm:p-5 sm:pt-14" style={{ background: 'var(--bg)', border: `1px solid ${currentStage ? 'var(--brand-green)' : 'var(--border)'}`, boxShadow: currentStage ? '0 4px 18px rgba(21,128,61,.08)' : 'none' }}>
+                      <span aria-hidden="true" className="absolute left-1/2 top-3 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full" style={{ background: milestoneDone ? 'var(--brand-green)' : currentStage ? 'var(--brand-soft)' : 'var(--bg2)', color: milestoneDone ? 'var(--brand-green-text)' : currentStage ? 'var(--brand-green)' : 'var(--muted)', border: '1px solid var(--border)' }}>
                         {milestoneDone ? <Check size={16} /> : <span className="text-xs font-bold">{stageIndex + 1}</span>}
                       </span>
                       <div className="flex flex-wrap items-start justify-between gap-2">
@@ -296,7 +412,7 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
                                   </span>
                                 )}
                               </button>
-                              {lesson ? (
+                              {lesson && ready ? (
                                 <Link href={lesson.href} className="inline-flex min-h-10 flex-shrink-0 items-center justify-center rounded-lg px-3 text-sm font-semibold" style={{ background: node.id === firstActionableNode?.id ? 'var(--brand-green)' : 'var(--bg2)', color: node.id === firstActionableNode?.id ? 'var(--brand-green-text)' : 'var(--text2)' }}>
                                   {nodeStatus === 'in-progress' ? 'Continue lesson' : 'Start lesson'}
                                 </Link>
@@ -319,19 +435,35 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
         <>
 
         {/* Diagram navigation */}
-        <div className="flex min-h-11 items-center justify-between gap-3 px-4" style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg)' }}>
-          <span className="flex min-w-0 items-center gap-2 text-xs" style={{ color: 'var(--muted)' }}>
-            <ArrowLeftRight size={15} aria-hidden="true" className="flex-shrink-0" />
-            <span>Scroll sideways to explore; follow prerequisites from the top</span>
-          </span>
-          <button
-            type="button"
-            onClick={returnToStart}
-            className="inline-flex min-h-9 flex-shrink-0 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold"
-            style={{ color: 'var(--text2)', border: '1px solid var(--border)', background: 'var(--surface)' }}
-          >
-            <LocateFixed size={14} aria-hidden="true" /> Start
-          </button>
+        <div className="flex flex-col gap-2 px-3 py-2.5 sm:px-4" style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg)' }}>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="flex min-w-0 items-center gap-2 text-xs" style={{ color: 'var(--muted)' }}>
+              <ArrowLeftRight size={15} aria-hidden="true" className="flex-shrink-0" />
+              <span>Pan to explore · Select a topic to trace its connections</span>
+            </span>
+            <div className="flex flex-wrap items-center gap-1.5">
+              {firstActionableNode && (
+                <button type="button" onClick={() => scrollToMapNode(firstActionableNode.id)} className="inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold" style={{ color: 'var(--brand-green)', border: '1px solid var(--brand-green)', background: 'var(--brand-soft)' }}>
+                  <LocateFixed size={14} aria-hidden="true" /> Next available
+                </button>
+              )}
+              <button type="button" onClick={returnToStart} className="inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold" style={{ color: 'var(--text2)', border: '1px solid var(--border)', background: 'var(--surface)' }}>
+                <LocateFixed size={14} aria-hidden="true" /> Start
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div role="group" aria-label="Map zoom controls" className="inline-flex items-center gap-1">
+              <button type="button" aria-label="Zoom out" title="Zoom out" disabled={mapZoom <= 0.4} onClick={() => changeMapZoom(Math.max(0.4, Number((mapZoom - 0.1).toFixed(2))))} className="flex h-9 w-9 items-center justify-center rounded-lg disabled:opacity-40" style={{ color: 'var(--text2)', border: '1px solid var(--border)', background: 'var(--surface)' }}><ZoomOut size={15} aria-hidden="true" /></button>
+              <span className="min-w-12 text-center text-xs font-semibold tabular-nums" style={{ color: 'var(--text2)' }}>{Math.round(mapZoom * 100)}%</span>
+              <button type="button" aria-label="Zoom in" title="Zoom in" disabled={mapZoom >= 1.75} onClick={() => changeMapZoom(Math.min(1.75, Number((mapZoom + 0.1).toFixed(2))))} className="flex h-9 w-9 items-center justify-center rounded-lg disabled:opacity-40" style={{ color: 'var(--text2)', border: '1px solid var(--border)', background: 'var(--surface)' }}><ZoomIn size={15} aria-hidden="true" /></button>
+              <button type="button" onClick={fitMapToWidth} className="inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold" style={{ color: 'var(--text2)', border: '1px solid var(--border)', background: 'var(--surface)' }}><Maximize2 size={13} aria-hidden="true" /> Fit width</button>
+            </div>
+            <span className="text-xs tabular-nums" aria-live="polite" style={{ color: 'var(--muted)' }}>Map position {mapScrollProgress}%</span>
+          </div>
+          <div role="progressbar" aria-label="Horizontal map position" aria-valuemin={0} aria-valuemax={100} aria-valuenow={mapScrollProgress} className="h-1 overflow-hidden rounded-full" style={{ background: 'var(--border)' }}>
+            <div className="h-full rounded-full transition-[width] duration-150" style={{ width: `${mapScrollProgress}%`, background: 'var(--accent)' }} />
+          </div>
         </div>
 
         {/* Canvas */}
@@ -341,9 +473,10 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
           aria-label={`${roadmap.title} roadmap diagram. Scroll horizontally to explore all topics.`}
           tabIndex={0}
           className="roadmap-diagram-viewport focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px]"
-          style={{ overflow: 'auto', padding: '20px 18px', background: 'var(--bg2)', scrollbarWidth: 'thin', scrollbarColor: 'var(--border2) transparent' }}
+          style={{ overflow: 'auto', padding: '20px 18px', background: 'var(--bg2)', scrollbarWidth: 'thin', scrollbarColor: 'var(--border2) transparent', touchAction: 'pan-x pan-y' }}
         >
-          <div style={{ position: 'relative', width: canvasW, height: canvasH }}>
+          <div style={{ position: 'relative', width: canvasW * mapZoom, height: canvasH * mapZoom }}>
+          <div style={{ position: 'absolute', left: 0, top: 0, width: canvasW, height: canvasH, transform: `scale(${mapZoom})`, transformOrigin: 'top left' }}>
 
             {/* Edges */}
             <svg aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, width: canvasW, height: canvasH, pointerEvents: 'none' }}>
@@ -357,14 +490,16 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
                 const fromDone = status[edge.from]?.status === 'done'
                 const toDone = status[edge.to]?.status === 'done'
                 const col = P[b.type].solid
+                const pathActive = !highlightedMapNodes || (highlightedMapNodes.has(edge.from) && highlightedMapNodes.has(edge.to))
+                const edgeFiltered = hiddenTypes.has(a.type) || hiddenTypes.has(b.type)
                 return (
                   <path
                     key={`${edge.from}-${edge.to}`}
                     d={`M${ax},${ay} C${ax},${my} ${bx},${my} ${bx},${by}`}
                     fill="none"
-                    stroke={fromDone ? col : 'var(--muted)'}
-                    strokeOpacity={fromDone && toDone ? 1 : fromDone ? 0.65 : 0.42}
-                    strokeWidth={fromDone && toDone ? 2.5 : fromDone ? 2 : 1.5}
+                    stroke={fromDone ? col : pathActive ? 'var(--text2)' : 'var(--muted)'}
+                    strokeOpacity={!pathActive ? 0.1 : edgeFiltered ? 0.12 : fromDone && toDone ? 1 : fromDone ? 0.8 : highlightedMapNodes ? 0.72 : 0.42}
+                    strokeWidth={!pathActive ? 1 : highlightedMapNodes ? 2.5 : fromDone && toDone ? 2.5 : fromDone ? 2 : 1.5}
                     strokeDasharray={fromDone && toDone ? '7,3' : fromDone ? 'none' : '4,4'}
                   />
                 )
@@ -373,20 +508,26 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
 
             {/* Nodes */}
             {roadmap.nodes.map(node => {
-              if (hiddenTypes.has(node.type)) return null
               const s = status[node.id].status
               const p = P[node.type]
               const ready = prerequisitesDone(node)
               const lessonCount = (topicLessons[node.id] ?? []).length
               const muted = s === 'not-started' && !ready
+              const filtered = hiddenTypes.has(node.type)
+              const pathActive = !highlightedMapNodes || highlightedMapNodes.has(node.id)
 
               return (
                 <button
                   key={node.id}
                   type="button"
+                  data-roadmap-node={node.id}
                   aria-haspopup="dialog"
-                  aria-label={`${node.title}, ${p.label.replace('✦ ', '')}${muted ? ', prerequisites incomplete' : ''}${s === 'done' ? ', done' : s === 'in-progress' ? ', learning' : ''}${lessonCount ? `, ${lessonCount} Chaduvuko lesson${lessonCount > 1 ? 's' : ''}` : ''}`}
+                  aria-label={`${node.title}, ${p.label.replace('✦ ', '')}${muted ? ', prerequisites incomplete' : ''}${s === 'done' ? ', done' : s === 'in-progress' ? ', learning' : ''}${lessonCount ? `, ${lessonCount} Chaduvuko lesson${lessonCount > 1 ? 's' : ''}` : ''}. Highlights prerequisite and dependent topics.`}
                   onClick={() => setSelected(node.id)}
+                  onMouseEnter={() => setHoveredMapNode(node.id)}
+                  onMouseLeave={() => setHoveredMapNode(null)}
+                  onFocus={() => setHoveredMapNode(node.id)}
+                  onBlur={() => setHoveredMapNode(null)}
                   className="text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                   style={{
                     position: 'absolute',
@@ -394,13 +535,14 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
                     width: node.width ?? 0, height: node.height ?? 0,
                     borderRadius: 10,
                     cursor: 'pointer',
-                    opacity: 1,
                     background: muted ? 'var(--surface)' : p.bg,
                     border: s === 'not-started' ? `1.5px solid ${muted ? 'var(--border2)' : p.border}` : `2px solid ${p.solid}`,
                     borderLeft: `3px solid ${muted ? 'var(--border2)' : p.solid}`,
-                    boxShadow: s === 'not-started' ? (muted ? '0 1px 3px rgba(0,0,0,.06)' : '0 2px 8px rgba(0,0,0,.1)') : `0 3px 14px ${p.solid}30`,
                     outline: selected === node.id ? `2px solid ${p.solid}` : undefined,
                     outlineOffset: 3,
+                    opacity: filtered ? (pathActive ? 0.2 : 0.08) : pathActive ? 1 : 0.2,
+                    filter: pathActive ? 'none' : 'saturate(.45)',
+                    boxShadow: focusedMapNode === node.id ? `0 0 0 3px ${p.solid}66, 0 0 20px ${p.solid}30` : s === 'not-started' ? (muted ? '0 1px 3px rgba(0,0,0,.06)' : '0 2px 8px rgba(0,0,0,.1)') : `0 3px 14px ${p.solid}30`,
                   }}
                 >
                   <span style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '6px 8px 0 10px' }}>
@@ -423,6 +565,7 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
                 </button>
               )
             })}
+          </div>
           </div>
         </div>
 
@@ -461,11 +604,15 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
           completed={completed}
           status={status[selectedNode.id].status}
           statusFromLessons={status[selectedNode.id].fromLessons}
+          locked={!prerequisitesDone(selectedNode)}
           prerequisites={(selectedNode.prerequisites ?? []).flatMap(id => {
             const pre = roadmap.nodes.find(n => n.id === id)
             return pre ? [{ node: pre, done: status[id]?.status === 'done' }] : []
           })}
-          onStatus={next => setManual(prev => ({ ...prev, [selectedNode.id]: next }))}
+          onStatus={next => {
+            if (!prerequisitesDone(selectedNode)) return
+            setManual(prev => ({ ...prev, [selectedNode.id]: next }))
+          }}
           onClose={() => setSelected(null)}
         />
       )}

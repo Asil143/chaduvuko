@@ -6,7 +6,7 @@ import { renderSimpleMarkdown } from '@/lib/simpleMarkdown'
 
 export function CurriculumGuide({ markdown }: { markdown: string }) {
   const sections = parseCurriculumSections(markdown)
-  const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
   const [allOpen, setAllOpen] = useState(false)
 
   if (sections.length === 0) return null
@@ -15,7 +15,10 @@ export function CurriculumGuide({ markdown }: { markdown: string }) {
     <div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
         <button
+          type="button"
           onClick={() => { setAllOpen(v => !v); setOpenIndex(null) }}
+          aria-expanded={allOpen}
+          aria-controls="curriculum-guide-sections"
           style={{
             fontSize: 11,
             fontWeight: 600,
@@ -30,7 +33,7 @@ export function CurriculumGuide({ markdown }: { markdown: string }) {
         </button>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div id="curriculum-guide-sections" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {sections.map((section, i) => {
           const isOpen = allOpen || openIndex === i
           return (
@@ -44,7 +47,10 @@ export function CurriculumGuide({ markdown }: { markdown: string }) {
               }}
             >
               <button
+                type="button"
                 onClick={() => { setAllOpen(false); setOpenIndex(isOpen ? null : i) }}
+                aria-expanded={isOpen}
+                aria-controls={`curriculum-section-${i}`}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -72,7 +78,7 @@ export function CurriculumGuide({ markdown }: { markdown: string }) {
                 </span>
               </button>
               {isOpen && (
-                <div style={{ padding: '0 18px 18px' }}>
+                <div id={`curriculum-section-${i}`} style={{ padding: '0 18px 18px' }}>
                   {renderSimpleMarkdown(section.body)}
                 </div>
               )}

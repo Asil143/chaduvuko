@@ -218,7 +218,13 @@ Create `.env.local`:
 ```
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+OPENAI_API_KEY=your_openai_api_key
+OPENAI_MODEL=gpt-4o-mini
 ```
+
+Keep `OPENAI_API_KEY` in server-side environment variables only. Do not use a
+`NEXT_PUBLIC_` prefix or commit the key. For production, add the same variables
+to the hosting provider's environment configuration.
 
 ```bash
 npm run dev

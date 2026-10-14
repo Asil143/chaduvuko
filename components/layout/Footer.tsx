@@ -78,13 +78,18 @@ export function Footer() {
       <div className="site-footer-inner">
         <section className="footer-cta" aria-labelledby="footer-cta-title">
           <div>
-            <p className="footer-eyebrow">LEARNING FOR WHAT’S NEXT</p>
-            <h2 id="footer-cta-title">Make your next skill count.</h2>
-            <p>Follow a clear learning path, practise with purpose, and build skills you can use.</p>
+            <p className="footer-eyebrow">LEARN. BUILD. GROW.</p>
+            <h2 id="footer-cta-title">Build skills for what’s next.</h2>
+            <p>Choose a learning path, practise with purpose, and turn new skills into real projects.</p>
           </div>
-          <Link href="/learn" className="footer-cta-link">
-            Explore learning paths <span aria-hidden="true">→</span>
-          </Link>
+          <div className="footer-cta-actions">
+            <Link href="/learn" className="footer-cta-link">
+              Explore learning paths <span aria-hidden="true">→</span>
+            </Link>
+            <Link href="/newsletter" className="footer-cta-secondary">
+              Get learning updates
+            </Link>
+          </div>
         </section>
 
         <div className="footer-main">
@@ -96,7 +101,7 @@ export function Footer() {
             >
               <BrandLogo variant="footer" />
             </Link>
-            <p>Practical, structured IT learning—built to take you from the foundations to real-world projects.</p>
+            <p>Structured, practical IT learning that takes you from the foundations to real-world projects.</p>
           </div>
 
           {footerSections.map(section => (

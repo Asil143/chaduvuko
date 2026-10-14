@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { groqComplete } from '@/lib/groq'
 
 const SYSTEM = `You are Chaduvuko's learning assistant — a friendly senior developer mentoring students breaking into tech, specifically the US job market.
 
@@ -33,21 +32,87 @@ IMPORTANT: Only answer questions about learning tech, programming, data engineer
 
 const FALLBACK_REPLY = "Sorry, I'm having trouble responding right now — try again in a moment."
 
+type ChatMessage = {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+function isChatMessage(message: unknown): message is ChatMessage {
+  if (typeof message !== 'object' || message === null) return false
+  if (!('role' in message) || !('content' in message)) return false
+  return (message.role === 'user' || message.role === 'assistant')
+    && typeof message.content === 'string'
+}
+
+type OpenAIChatResponse = {
+  choices?: Array<{
+    message?: {
+      content?: string | null
+    }
+  }>
+  error?: {
+    code?: string
+  }
+}
+
 export async function POST(req: NextRequest) {
+  const apiKey = process.env.OPENAI_API_KEY
+  if (!apiKey) {
+    console.error('POST /api/chat: OPENAI_API_KEY is not set')
+    return NextResponse.json({ reply: FALLBACK_REPLY }, { status: 503 })
+  }
+
   try {
-    const { messages, pageContext } = await req.json()
-    const systemWithContext = SYSTEM + (pageContext || '')
+    const body: unknown = await req.json()
+    const payload = typeof body === 'object' && body !== null ? body : {}
+    const messages = 'messages' in payload ? payload.messages : undefined
+    const pageContext = 'pageContext' in payload && typeof payload.pageContext === 'string'
+      ? payload.pageContext
+      : ''
 
-    const result = await groqComplete(
-      process.env.GROQ_API_KEY,
-      [{ role: 'system', content: systemWithContext }, ...messages],
-      { maxTokens: 800, temperature: 0.7 }
-    )
+    if (
+      !Array.isArray(messages)
+      || messages.length === 0
+      || !messages.every(isChatMessage)
+    ) {
+      console.warn('POST /api/chat: invalid messages payload')
+      return NextResponse.json(
+        { reply: 'Your message could not be sent. Please try again.' },
+        { status: 400 }
+      )
+    }
 
-    if (!result.ok) return NextResponse.json({ reply: FALLBACK_REPLY })
-    return NextResponse.json({ reply: result.reply })
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+        max_completion_tokens: 800,
+        temperature: 0.7,
+        messages: [
+          { role: 'system', content: SYSTEM + pageContext },
+          ...messages.slice(-20),
+        ],
+      }),
+    })
+    const data = await response.json() as OpenAIChatResponse
+
+    if (!response.ok) {
+      console.error('POST /api/chat: OpenAI request failed', response.status, data.error?.code)
+      return NextResponse.json({ reply: FALLBACK_REPLY }, { status: 502 })
+    }
+
+    const reply = data.choices?.[0]?.message?.content?.trim()
+    if (!reply) {
+      console.error('POST /api/chat: OpenAI returned an empty reply')
+      return NextResponse.json({ reply: FALLBACK_REPLY }, { status: 502 })
+    }
+    return NextResponse.json({ reply })
   } catch (error) {
     console.error('POST /api/chat: exception', error)
-    return NextResponse.json({ reply: FALLBACK_REPLY })
+    return NextResponse.json({ reply: FALLBACK_REPLY }, { status: 500 })
   }
 }
