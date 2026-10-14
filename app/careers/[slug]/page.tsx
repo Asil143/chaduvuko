@@ -40,22 +40,43 @@ export default function CareerRolePage({ params }: { params: { slug: string } })
 
   return (
     <article className="jobs-wrap job-doc">
-      <Link className="job-back" href="/careers">← Job openings</Link>
-      <h1 className="font-display">{role.title}</h1>
-
-      {/* Compact header: the facts a candidate scans first, then Apply. */}
-      <div className="job-headline">
-        <p className="job-meta-line"><strong>Location:</strong> {role.location}</p>
-        <p className="job-meta-line"><strong>Engagement:</strong> {role.employment}</p>
-        <p className="job-meta-line"><strong>Experience:</strong> {role.experience}</p>
-        <p className="job-meta-line"><strong>Compensation:</strong> {role.compensation}</p>
-      </div>
-      <p className="job-apply-row">
-        <a className="job-apply" href={href}>Apply</a>
-      </p>
-      <p className="job-subtle">
-        Reference {role.slug} · {role.team} · {role.subject} · {role.language} · Posted {CAREERS_POSTED}
-      </p>
+      <Link className="job-back" href="/careers">Job openings</Link>
+      <header className="job-hero">
+        <div className="job-hero-row">
+          <h1 className="font-display">{role.title}</h1>
+          <a className="job-apply" href={href}>Apply</a>
+        </div>
+        <dl className="job-facts">
+          <div>
+            <dt>Location</dt>
+            <dd>{role.location}</dd>
+          </div>
+          <div>
+            <dt>Engagement</dt>
+            <dd>{role.employment}</dd>
+          </div>
+          <div>
+            <dt>Experience</dt>
+            <dd>{role.experience}</dd>
+          </div>
+          <div>
+            <dt>Team</dt>
+            <dd>{role.team}</dd>
+          </div>
+          <div>
+            <dt>Language</dt>
+            <dd>{role.language}</dd>
+          </div>
+          <div>
+            <dt>Posted</dt>
+            <dd>{CAREERS_POSTED}</dd>
+          </div>
+          <div className="job-fact-wide">
+            <dt>Compensation</dt>
+            <dd>{role.compensation}</dd>
+          </div>
+        </dl>
+      </header>
 
       <h2>Build the Agentic AI learning track at Chaduvuko</h2>
       {role.intro.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
@@ -67,12 +88,14 @@ export default function CareerRolePage({ params }: { params: { slug: string } })
 
       <h2>What you will teach</h2>
       <p>{role.teach.lead}</p>
-      {role.teach.sections.map(section => (
-        <div key={section.heading}>
-          <h3>{section.heading}</h3>
-          <Items items={section.items} />
-        </div>
-      ))}
+      <div className="job-topics">
+        {role.teach.sections.map(section => (
+          <div key={section.heading}>
+            <h3>{section.heading}</h3>
+            <Items items={section.items} />
+          </div>
+        ))}
+      </div>
 
       <h2>What we are looking for</h2>
       <p>{role.looking.lead}</p>
