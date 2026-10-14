@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { BrandLogo } from '@/components/layout/BrandLogo'
 
 type FooterLink = {
   label: string
@@ -100,6 +101,13 @@ export function Footer() {
           padding: '36px 28px 28px',
         }}
       >
+        <Link
+          href="/"
+          aria-label="Chaduvuko home"
+          className="inline-flex mb-8 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]"
+        >
+          <BrandLogo variant="footer" />
+        </Link>
         <div
           style={{
             display: 'grid',

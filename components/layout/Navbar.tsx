@@ -15,6 +15,7 @@ import { useLearnerProgress, type LearnerProgress } from '@/components/layout/us
 import { useMenuDisclosure } from '@/components/layout/useMenuDisclosure'
 import { useIsLessonPage } from '@/lib/lesson-page'
 import type { HeaderData } from '@/lib/lesson-nav'
+import { BrandLogo } from '@/components/layout/BrandLogo'
 
 type NavItem = { label: string; href: string }
 
@@ -75,11 +76,9 @@ export function Navbar({ header }: { header: HeaderData }) {
       <Link
         href="/"
         aria-label="Chaduvuko home"
-        className="brand flex items-center flex-shrink-0 lg:mr-4"
-        style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1, textDecoration: 'none' }}
+        className="brand flex items-center flex-shrink-0 lg:mr-4 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
       >
-        <span style={{ color: 'var(--text)' }}>Chadu</span>
-        <span style={{ color: 'var(--brand-green)' }}>vuko</span>
+        <BrandLogo priority />
       </Link>
 
       {lesson ? (
@@ -171,8 +170,8 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
           style={{ background: 'var(--surface)' }}
         >
           <div className="h-16 flex-shrink-0 flex items-center justify-between pl-3.5 pr-2" style={{ borderBottom: '1px solid var(--border)' }}>
-            <span aria-hidden="true" style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.03em' }}>
-              <span style={{ color: 'var(--text)' }}>Chadu</span><span style={{ color: 'var(--brand-green)' }}>vuko</span>
+            <span aria-hidden="true">
+              <BrandLogo />
             </span>
             <button
               type="button"
