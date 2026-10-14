@@ -75,7 +75,7 @@ export function ThemeMenu() {
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen(isOpen => !isOpen)}
-        className="flex items-center justify-center w-10 h-10 rounded-[10px] flex-shrink-0"
+        className="site-header-icon-button flex items-center justify-center w-10 h-10 rounded-[10px] flex-shrink-0"
         style={{ background: open ? 'var(--bg3)' : 'var(--bg2)', border: '1px solid var(--border)', color: 'var(--text2)' }}
       >
         <ThemeIcon preference={preference} />

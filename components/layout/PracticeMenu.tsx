@@ -26,8 +26,8 @@ export function PracticeMenuDesktop({ activeHref, projectCount }: { activeHref: 
         aria-current={active ? 'location' : undefined}
         aria-controls={panelId}
         onClick={() => setOpen(isOpen => !isOpen)}
-        className="relative flex items-center gap-1 h-10 px-3 rounded-lg text-sm transition-colors"
-        style={{ color: active || open ? 'var(--text)' : 'var(--text2)', fontWeight: active || open ? 600 : 400, background: open ? 'var(--bg2)' : 'transparent' }}
+        className="site-nav-control relative flex items-center gap-1 h-10 px-3 rounded-lg text-sm transition-colors"
+        style={{ color: active || open ? 'var(--text)' : 'var(--text2)', fontWeight: active || open ? 600 : 400, background: open ? 'var(--brand-soft)' : 'transparent' }}
       >
         Practice
         <ChevronDown size={13} aria-hidden="true" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s', transformOrigin: 'center' }} />

@@ -62,7 +62,7 @@ export function Navbar({ header }: { header: HeaderData }) {
 
   return (
     <header
-      className="site-header fixed top-0 left-0 right-0 z-50 h-16 flex items-center gap-1 sm:gap-2 pl-3.5 pr-2 sm:px-4 lg:px-6"
+      className="site-header fixed top-0 left-0 right-0 z-50 h-16 flex items-center gap-1 sm:gap-2"
       style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)' }}
     >
       <a
@@ -85,7 +85,7 @@ export function Navbar({ header }: { header: HeaderData }) {
         <LessonHeaderControls nav={lesson} />
       ) : (
         <nav aria-label="Main" className="desktop-nav hidden lg:block">
-          <ul className="flex items-center gap-0.5">
+          <ul className="flex items-center gap-1">
             <li>
               <TracksMenuDesktop
                 header={header}
@@ -149,7 +149,7 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
       <button
         ref={buttonRef}
         type="button"
-        className="w-11 h-11 flex items-center justify-center rounded-[10px] flex-shrink-0"
+        className="site-header-icon-button w-11 h-11 flex items-center justify-center rounded-[10px] flex-shrink-0"
         aria-label="Menu"
         aria-haspopup="dialog"
         aria-expanded={open}
@@ -169,7 +169,7 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
           className="fixed inset-0 z-[60] flex flex-col"
           style={{ background: 'var(--surface)' }}
         >
-          <div className="h-16 flex-shrink-0 flex items-center justify-between pl-3.5 pr-2" style={{ borderBottom: '1px solid var(--border)' }}>
+          <div className="h-16 flex-shrink-0 flex items-center justify-between px-3" style={{ borderBottom: '1px solid var(--border)' }}>
             <span aria-hidden="true">
               <BrandLogo />
             </span>
@@ -177,8 +177,7 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
               type="button"
               aria-label="Close menu"
               onClick={close}
-              className="w-11 h-11 flex items-center justify-center rounded-[10px]"
-              style={{ background: 'var(--bg2)' }}
+              className="site-header-icon-button w-11 h-11 flex items-center justify-center rounded-[10px]"
             >
               <X size={20} aria-hidden="true" style={{ color: 'var(--text)' }} />
             </button>
@@ -242,7 +241,7 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
  * since Next is the action there. While progress loads, an invisible Start keeps the width.
  */
 function ResumeSlot({ learner, tracks }: { learner: LearnerProgress; tracks: HeaderData['tracks'] }) {
-  const base = 'resume-slot flex items-center h-11 lg:h-10 px-3 lg:px-3.5 rounded-[10px] text-sm font-bold whitespace-nowrap flex-shrink-0'
+  const base = 'site-header-cta resume-slot flex items-center h-11 lg:h-10 px-3 lg:px-3.5 rounded-[10px] text-sm font-bold whitespace-nowrap flex-shrink-0'
   const style = { background: 'var(--green)', color: '#04140a', textDecoration: 'none' }
 
   if (learner.status === 'ready' && learner.resume) {
@@ -271,7 +270,7 @@ function ResumeSlot({ learner, tracks }: { learner: LearnerProgress; tracks: Hea
       className={`${base} ${learner.status === 'pending' ? 'invisible' : ''}`}
       style={style}
     >
-      <span className="lg:hidden">Start</span>
+      <span className="lg:hidden">Start learning</span>
       <span className="hidden lg:inline">Start learning →</span>
     </Link>
   )
@@ -282,7 +281,7 @@ function DesktopLink({ item, active }: { item: NavItem; active: boolean }) {
     <Link
       href={item.href}
       aria-current={active ? 'page' : undefined}
-      className="relative flex items-center h-10 px-3 rounded-lg text-sm transition-colors whitespace-nowrap"
+      className="site-nav-control relative flex items-center h-10 px-3 rounded-lg text-sm transition-colors whitespace-nowrap"
       style={{ color: active ? 'var(--text)' : 'var(--text2)', fontWeight: active ? 600 : 400 }}
     >
       {item.label}
