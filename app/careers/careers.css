@@ -137,19 +137,30 @@
   border: 0;
 }
 
-.job-doc { max-width: 800px; }
+.job-doc {
+  max-width: 720px;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.7;
+}
+.job-doc h1 {
+  font-size: clamp(34px, 4vw, 42px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
 .job-back {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  margin: 0 0 12px;
+  margin: 0 0 8px;
   color: var(--accent);
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
 }
 .job-back:hover { text-decoration: underline; }
-.job-apply-row { margin: 16px 0; }
+.job-apply-row { margin: 18px 0 10px; }
 .job-apply {
   display: inline-flex;
   align-items: center;
@@ -160,75 +171,129 @@
   background: var(--green);
   color: #04140a;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
 }
-.job-meta-line {
-  margin: 0 0 4px;
-  color: var(--text2);
-  font-size: 15px;
-  line-height: 1.5;
-}
-.job-meta-line strong { color: var(--text); }
-/* Compact header: the facts a candidate scans before the Apply button. */
 .job-headline {
-  margin: 14px 0 6px;
-  padding: 16px 18px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--bg2);
+  margin: 22px 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
-.job-headline .job-meta-line:last-child { margin-bottom: 0; }
-/* Secondary facts, de-emphasised below the Apply button. */
+.job-meta-line {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 16px;
+  align-items: baseline;
+  margin: 0;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.45;
+}
+.job-headline .job-meta-line:first-child { border-top: 1px solid var(--border); }
+.job-meta-line strong {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
 .job-subtle {
-  margin: 0 0 8px;
+  margin: 0;
   color: var(--muted);
   font-size: 13px;
   line-height: 1.6;
 }
 .job-doc h2 {
-  margin: 32px 0 10px;
+  margin: 40px 0 12px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
   color: var(--text);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  text-transform: none;
+}
+.job-doc h2:first-of-type {
+  margin-top: 28px;
+  padding-top: 0;
+  border-top: 0;
 }
 .job-doc h3 {
-  margin: 18px 0 6px;
+  margin: 22px 0 6px;
   color: var(--text);
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
 }
 .job-doc p {
-  margin: 0 0 10px;
-  max-width: 42em;
-  color: var(--text2);
-  font-size: 15px;
-  line-height: 1.65;
+  margin: 0 0 14px;
+  max-width: none;
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.7;
 }
 .job-doc ul,
 .job-doc ol {
-  margin: 0 0 8px;
-  padding-left: 20px;
+  margin: 2px 0 16px;
+  padding: 0;
+  list-style: none;
 }
-.job-doc li {
+.job-doc ul > li {
+  position: relative;
   margin: 0;
-  padding: 4px 0;
-  color: var(--text2);
-  font-size: 15px;
-  line-height: 1.6;
+  padding: 6px 0 6px 22px;
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.65;
 }
-.job-note { margin-top: 12px; }
+.job-doc ul > li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.78em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text);
+}
+.job-doc ol { counter-reset: step; }
+.job-doc ol > li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 1.5em minmax(0, 1fr);
+  column-gap: 8px;
+  align-items: start;
+  margin: 0;
+  padding: 8px 0;
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.65;
+}
+.job-doc ol > li::before {
+  content: counter(step) ".";
+  color: var(--text);
+  font-weight: 600;
+}
+.job-note { margin-top: 4px; }
 .job-note a,
 .job-equal a { color: var(--accent); font-weight: 600; }
-.job-equal { margin-top: 28px; }
+.job-equal {
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
 
 @media (max-width: 720px) {
   .jobs-wrap { padding: 88px 16px 80px; }
   .board-form { grid-template-columns: 1fr; }
   .board-search { width: 100%; }
   .job-apply { width: 100%; }
+  .job-meta-line { grid-template-columns: 1fr; gap: 2px; padding: 10px 0; }
+  .job-doc h2 { font-size: 20px; }
   .board-table { min-width: 0; }
   .board-table thead { display: none; }
   .board-table,
