@@ -50,6 +50,14 @@ interface CareerApplication {
   created_at: string
 }
 
+interface LessonFeedback {
+  id: string
+  lesson_href: string
+  category: 'helpful' | 'unclear' | 'incorrect'
+  details: string | null
+  created_at: string
+}
+
 function timeAgo(date: string) {
   const s = Math.floor((Date.now() - new Date(date).getTime()) / 1000)
   if (s < 60) return 'just now'
@@ -63,9 +71,10 @@ export default function AdminPage() {
   const [authed,   setAuthed]   = useState(false)
   const [comments, setComments] = useState<Comment[]>([])
   const [applications, setApplications] = useState<CareerApplication[]>([])
+  const [feedback, setFeedback] = useState<LessonFeedback[]>([])
   const [loading,  setLoading]  = useState(false)
   const [error,    setError]    = useState('')
-  const [tab,      setTab]      = useState<'flagged' | 'all' | 'applications'>('flagged')
+  const [tab,      setTab]      = useState<'flagged' | 'all' | 'applications' | 'feedback'>('flagged')
 
   async function login() {
     setLoading(true)
@@ -112,6 +121,22 @@ export default function AdminPage() {
       setTab('applications')
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Could not load applications.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function loadFeedback() {
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/admin/lesson-feedback', { headers: { 'x-admin-key': key } })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Could not load lesson feedback.')
+      setFeedback(data.feedback || [])
+      setTab('feedback')
+    } catch (loadError) {
+      setError(loadError instanceof Error ? loadError.message : 'Could not load lesson feedback.')
     } finally {
       setLoading(false)
     }
@@ -178,6 +203,8 @@ export default function AdminPage() {
             <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
                 {tab === 'applications'
                   ? `${applications.length} application${applications.length !== 1 ? 's' : ''}`
+                  : tab === 'feedback'
+                    ? `${feedback.length} lesson feedback item${feedback.length !== 1 ? 's' : ''}`
                   : `${comments.length} comment${comments.length !== 1 ? 's' : ''} shown`}
             </p>
           </div>
@@ -209,6 +236,15 @@ export default function AdminPage() {
               }}>
               Applications
             </button>
+            <button onClick={loadFeedback}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-mono"
+              style={{
+                background: tab === 'feedback' ? 'var(--accent)' : 'var(--surface)',
+                color: tab === 'feedback' ? '#fff' : 'var(--muted)',
+                border: '1px solid var(--border)',
+              }}>
+              Lesson feedback
+            </button>
           </div>
         </div>
 
@@ -217,6 +253,31 @@ export default function AdminPage() {
         {loading ? (
           <div className="text-center py-20 text-sm font-mono" style={{ color: 'var(--muted)' }}>
             Loading...
+          </div>
+        ) : tab === 'feedback' ? feedback.length === 0 ? (
+          <div className="text-center py-20 rounded-2xl"
+            style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+            <p className="font-display font-semibold" style={{ color: 'var(--text)' }}>No lesson feedback yet</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {feedback.map(item => (
+              <article key={item.id} className="rounded-2xl p-5"
+                style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <span className="text-sm font-semibold capitalize" style={{ color: 'var(--text)' }}>
+                      {item.category === 'unclear' ? 'Something was unclear' : item.category}
+                    </span>
+                    <p className="text-xs mt-1" style={{ color: 'var(--accent)' }}>{item.lesson_href}</p>
+                  </div>
+                  <time className="text-xs" style={{ color: 'var(--muted)' }} dateTime={item.created_at}>
+                    {new Date(item.created_at).toLocaleString()}
+                  </time>
+                </div>
+                {item.details && <p className="mt-4 text-sm whitespace-pre-wrap" style={{ color: 'var(--text2)' }}>{item.details}</p>}
+              </article>
+            ))}
           </div>
         ) : tab === 'applications' ? applications.length === 0 ? (
           <div className="text-center py-20 rounded-2xl"

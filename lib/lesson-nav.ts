@@ -6,6 +6,7 @@ export interface TrackSummary {
   title: string
   area: TrackArea
   lessons: number
+  status?: 'coming-soon'
   /** True when most of the track is still unpublished. Short finished tracks stay unmarked. */
   early: boolean
   /** One line under the name in the header. Omitted outside the header. */

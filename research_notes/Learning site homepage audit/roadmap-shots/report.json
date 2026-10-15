@@ -1,0 +1,5723 @@
+{
+  "1440": {
+    "cookie": {
+      "clicked": true,
+      "text": "Reject All"
+    },
+    "preCookie": {
+      "inView": [
+        {
+          "tag": "BUTTON",
+          "text": "Open Navigation Dropdown",
+          "x": 302,
+          "y": 32,
+          "w": 20,
+          "h": 36
+        },
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "x": 252,
+          "y": 35,
+          "w": 30,
+          "h": 30
+        },
+        {
+          "tag": "A",
+          "text": "Roadmaps",
+          "x": 342,
+          "y": 38,
+          "w": 77,
+          "h": 24
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "x": 439,
+          "y": 38,
+          "w": 57,
+          "h": 24
+        },
+        {
+          "tag": "A",
+          "text": "Packs",
+          "x": 515,
+          "y": 38,
+          "w": 43,
+          "h": 24
+        },
+        {
+          "tag": "A",
+          "text": "Newsletters",
+          "x": 578,
+          "y": 38,
+          "w": 86,
+          "h": 24
+        },
+        {
+          "tag": "H1",
+          "text": "Developer Roadmaps",
+          "x": 252,
+          "y": 148,
+          "w": 936,
+          "h": 48
+        },
+        {
+          "tag": "P",
+          "text": "Skill up with community created roadmaps, guides, and courses.",
+          "x": 252,
+          "y": 208,
+          "w": 936,
+          "h": 28
+        },
+        {
+          "tag": "INPUT",
+          "text": "What do you want to learn today?",
+          "x": 296,
+          "y": 268,
+          "w": 834,
+          "h": 32
+        },
+        {
+          "tag": "P",
+          "text": "Search available roadmaps or learn anything with AI.",
+          "x": 252,
+          "y": 320,
+          "w": 936,
+          "h": 20
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Roadmaps",
+          "x": 252,
+          "y": 396,
+          "w": 77,
+          "h": 38
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Lesson Packs NEW",
+          "x": 361,
+          "y": 396,
+          "w": 143,
+          "h": 38
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Project Ideas",
+          "x": 536,
+          "y": 396,
+          "w": 94,
+          "h": 38
+        },
+        {
+          "tag": "SPAN",
+          "text": "NEW",
+          "x": 467,
+          "y": 399,
+          "w": 37,
+          "h": 19
+        },
+        {
+          "tag": "H2",
+          "text": "Role-based",
+          "x": 252,
+          "y": 482,
+          "w": 76,
+          "h": 20
+        },
+        {
+          "tag": "SPAN",
+          "text": "31",
+          "x": 1173,
+          "y": 485,
+          "w": 15,
+          "h": 16
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Learn with AI",
+          "x": 252,
+          "y": 514,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Frontend",
+          "x": 567,
+          "y": 514,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Backend",
+          "x": 881,
+          "y": 514,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 852,
+          "y": 521,
+          "w": 14,
+          "h": 14
+        }
+      ],
+      "cookie": true,
+      "ih": 900,
+      "iw": 1440
+    },
+    "after": {
+      "url": "https://roadmap.sh/",
+      "title": "Developer Roadmaps - roadmap.sh",
+      "iw": 1440,
+      "ih": 900,
+      "scrollH": 5293,
+      "h1": [
+        "Developer Roadmaps"
+      ],
+      "headings": [
+        {
+          "tag": "H1",
+          "text": "Developer Roadmaps",
+          "x": 252,
+          "y": 148,
+          "absY": 148,
+          "w": 936,
+          "h": 48,
+          "visible": true
+        },
+        {
+          "tag": "H2",
+          "text": "Role-based",
+          "x": 252,
+          "y": 482,
+          "absY": 482,
+          "w": 76,
+          "h": 20,
+          "visible": true
+        },
+        {
+          "tag": "H2",
+          "text": "Skill-based",
+          "x": 252,
+          "y": 1236,
+          "absY": 1236,
+          "w": 74,
+          "h": 20,
+          "visible": true
+        },
+        {
+          "tag": "H2",
+          "text": "Best Practices",
+          "x": 252,
+          "y": 2548,
+          "absY": 2548,
+          "w": 95,
+          "h": 20,
+          "visible": true
+        },
+        {
+          "tag": "H3",
+          "text": "Git Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Internet Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "HTML Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "CSS Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "JavaScript Foundations",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Build CLI Apps with Node.js",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Linux and the Command Line",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Docker Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Build APIs with Node.js",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "RegEx for Everyone",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H2",
+          "text": "Guides",
+          "x": 252,
+          "y": 2808,
+          "absY": 2808,
+          "w": 936,
+          "h": 36,
+          "visible": true
+        }
+      ],
+      "tabs": [
+        {
+          "text": "Open Navigation Dropdown",
+          "aria": "",
+          "x": 302,
+          "y": 32,
+          "absY": 32,
+          "w": 20,
+          "h": 36
+        },
+        {
+          "text": "Roadmaps",
+          "aria": "true",
+          "x": 252,
+          "y": 396,
+          "absY": 396,
+          "w": 77,
+          "h": 38
+        },
+        {
+          "text": "Lesson Packs NEW",
+          "aria": "false",
+          "x": 361,
+          "y": 396,
+          "absY": 396,
+          "w": 143,
+          "h": 38
+        },
+        {
+          "text": "Project Ideas",
+          "aria": "false",
+          "x": 536,
+          "y": 396,
+          "absY": 396,
+          "w": 94,
+          "h": 38
+        },
+        {
+          "text": "Learn with AI",
+          "aria": "",
+          "x": 252,
+          "y": 514,
+          "absY": 514,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 852,
+          "y": 521,
+          "absY": 521,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 1167,
+          "y": 521,
+          "absY": 521,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 538,
+          "y": 583,
+          "absY": 583,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 852,
+          "y": 583,
+          "absY": 583,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 1167,
+          "y": 583,
+          "absY": 583,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 538,
+          "y": 645,
+          "absY": 645,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 852,
+          "y": 645,
+          "absY": 645,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 1167,
+          "y": 645,
+          "absY": 645,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 538,
+          "y": 707,
+          "absY": 707,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 852,
+          "y": 707,
+          "absY": 707,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 1167,
+          "y": 707,
+          "absY": 707,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 538,
+          "y": 769,
+          "absY": 769,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 852,
+          "y": 769,
+          "absY": 769,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 1167,
+          "y": 769,
+          "absY": 769,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 538,
+          "y": 831,
+          "absY": 831,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 852,
+          "y": 831,
+          "absY": 831,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 1167,
+          "y": 831,
+          "absY": 831,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 538,
+          "y": 893,
+          "absY": 893,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 852,
+          "y": 893,
+          "absY": 893,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 1167,
+          "y": 893,
+          "absY": 893,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 538,
+          "y": 955,
+          "absY": 955,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 852,
+          "y": 955,
+          "absY": 955,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 1167,
+          "y": 955,
+          "absY": 955,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 538,
+          "y": 1017,
+          "absY": 1017,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 852,
+          "y": 1017,
+          "absY": 1017,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 1167,
+          "y": 1017,
+          "absY": 1017,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 538,
+          "y": 1079,
+          "absY": 1079,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 852,
+          "y": 1079,
+          "absY": 1079,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 1167,
+          "y": 1079,
+          "absY": 1079,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 538,
+          "y": 1141,
+          "absY": 1141,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 852,
+          "y": 1141,
+          "absY": 1141,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 538,
+          "y": 1275,
+          "absY": 1275,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 852,
+          "y": 1275,
+          "absY": 1275,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 1167,
+          "y": 1275,
+          "absY": 1275,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 538,
+          "y": 1337,
+          "absY": 1337,
+          "w": 14,
+          "h": 14
+        }
+      ],
+      "hits": [
+        {
+          "text": "Frontend",
+          "href": "/frontend",
+          "x": 567,
+          "y": 514,
+          "absY": 514,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "text": "AI Engineer",
+          "href": "/ai-engineer",
+          "x": 567,
+          "y": 700,
+          "absY": 700,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "text": "Data Engineer",
+          "href": "/data-engineer",
+          "x": 252,
+          "y": 762,
+          "absY": 762,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "text": "Machine Learning",
+          "href": "/machine-learning",
+          "x": 567,
+          "y": 762,
+          "absY": 762,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "text": "Cyber Security",
+          "href": "/cyber-security",
+          "x": 881,
+          "y": 886,
+          "absY": 886,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "text": "Frontend Performance",
+          "href": "/frontend-performance-best-practices",
+          "x": 252,
+          "y": 2642,
+          "absY": 2642,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "text": "View All Guides \u2192",
+          "href": "/guides",
+          "x": 252,
+          "y": 3456,
+          "absY": 3456,
+          "w": 128,
+          "h": 31
+        },
+        {
+          "text": "26 Mar, 2026 Scala Roadmap, AI Engineer Review",
+          "href": "/changelog#69c4edd431e228f31bc86f88",
+          "x": 411,
+          "y": 3991,
+          "absY": 3991,
+          "w": 618,
+          "h": 24
+        }
+      ],
+      "search": [
+        {
+          "ph": "",
+          "aria": "Enable Functional",
+          "visible": false,
+          "x": 355,
+          "y": 1472,
+          "absY": 1472,
+          "w": 44,
+          "h": 24
+        },
+        {
+          "ph": "",
+          "aria": "Enable Analytics",
+          "visible": false,
+          "x": 355,
+          "y": 1581,
+          "absY": 1581,
+          "w": 44,
+          "h": 24
+        },
+        {
+          "ph": "",
+          "aria": "Enable Performance",
+          "visible": false,
+          "x": 355,
+          "y": 1690,
+          "absY": 1690,
+          "w": 44,
+          "h": 24
+        },
+        {
+          "ph": "",
+          "aria": "Enable Advertisement",
+          "visible": false,
+          "x": 355,
+          "y": 1799,
+          "absY": 1799,
+          "w": 44,
+          "h": 24
+        },
+        {
+          "ph": "What do you want to learn today?",
+          "aria": "",
+          "visible": true,
+          "x": 296,
+          "y": 268,
+          "absY": 268,
+          "w": 834,
+          "h": 32
+        }
+      ],
+      "fixed": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "sticky top-0 z-35 border-b border-b-[#1e293c] transition-colors",
+          "text": "Roadmaps Lesson Packs NEW Project Ideas",
+          "pos": "sticky",
+          "x": 0,
+          "y": 384,
+          "absY": 384,
+          "w": 1440,
+          "h": 50
+        }
+      ],
+      "inView": [
+        {
+          "tag": "BUTTON",
+          "text": "Open Navigation Dropdown",
+          "x": 302,
+          "y": 32,
+          "w": 20,
+          "h": 36
+        },
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "x": 252,
+          "y": 35,
+          "w": 30,
+          "h": 30
+        },
+        {
+          "tag": "A",
+          "text": "Roadmaps",
+          "x": 342,
+          "y": 38,
+          "w": 77,
+          "h": 24
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "x": 439,
+          "y": 38,
+          "w": 57,
+          "h": 24
+        },
+        {
+          "tag": "A",
+          "text": "Packs",
+          "x": 515,
+          "y": 38,
+          "w": 43,
+          "h": 24
+        },
+        {
+          "tag": "A",
+          "text": "Newsletters",
+          "x": 578,
+          "y": 38,
+          "w": 86,
+          "h": 24
+        },
+        {
+          "tag": "H1",
+          "text": "Developer Roadmaps",
+          "x": 252,
+          "y": 148,
+          "w": 936,
+          "h": 48
+        },
+        {
+          "tag": "P",
+          "text": "Skill up with community created roadmaps, guides, and courses.",
+          "x": 252,
+          "y": 208,
+          "w": 936,
+          "h": 28
+        },
+        {
+          "tag": "INPUT",
+          "text": "What do you want to learn today?",
+          "x": 296,
+          "y": 268,
+          "w": 834,
+          "h": 32
+        },
+        {
+          "tag": "P",
+          "text": "Search available roadmaps or learn anything with AI.",
+          "x": 252,
+          "y": 320,
+          "w": 936,
+          "h": 20
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Roadmaps",
+          "x": 252,
+          "y": 396,
+          "w": 77,
+          "h": 38
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Lesson Packs NEW",
+          "x": 361,
+          "y": 396,
+          "w": 143,
+          "h": 38
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Project Ideas",
+          "x": 536,
+          "y": 396,
+          "w": 94,
+          "h": 38
+        },
+        {
+          "tag": "SPAN",
+          "text": "NEW",
+          "x": 467,
+          "y": 399,
+          "w": 37,
+          "h": 19
+        },
+        {
+          "tag": "H2",
+          "text": "Role-based",
+          "x": 252,
+          "y": 482,
+          "w": 76,
+          "h": 20
+        },
+        {
+          "tag": "SPAN",
+          "text": "31",
+          "x": 1173,
+          "y": 485,
+          "w": 15,
+          "h": 16
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Learn with AI",
+          "x": 252,
+          "y": 514,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Frontend",
+          "x": 567,
+          "y": 514,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Backend",
+          "x": 881,
+          "y": 514,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 852,
+          "y": 521,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 1167,
+          "y": 521,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "Full Stack",
+          "x": 252,
+          "y": 576,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Android",
+          "x": 567,
+          "y": 576,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "DevOps",
+          "x": 881,
+          "y": 576,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 538,
+          "y": 583,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 852,
+          "y": 583,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 1167,
+          "y": 583,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "DevSecOps",
+          "x": 252,
+          "y": 638,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Data Analyst",
+          "x": 567,
+          "y": 638,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "SEO New",
+          "x": 881,
+          "y": 638,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 538,
+          "y": 645,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 852,
+          "y": 645,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 1167,
+          "y": 645,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "SPAN",
+          "text": "SEO",
+          "x": 896,
+          "y": 656,
+          "w": 31,
+          "h": 18
+        },
+        {
+          "tag": "SPAN",
+          "text": "New",
+          "x": 1139,
+          "y": 669,
+          "w": 40,
+          "h": 16
+        },
+        {
+          "tag": "A",
+          "text": "Inference Engineering New",
+          "x": 252,
+          "y": 700,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "AI Engineer",
+          "x": 567,
+          "y": 700,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "AI and Data Scientist",
+          "x": 881,
+          "y": 700,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 538,
+          "y": 707,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 852,
+          "y": 707,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 1167,
+          "y": 707,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "SPAN",
+          "text": "Inference Engineering",
+          "x": 267,
+          "y": 718,
+          "w": 158,
+          "h": 18
+        },
+        {
+          "tag": "A",
+          "text": "Data Engineer",
+          "x": 252,
+          "y": 762,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Machine Learning",
+          "x": 567,
+          "y": 762,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Product Design",
+          "x": 881,
+          "y": 762,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 538,
+          "y": 769,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 852,
+          "y": 769,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 1167,
+          "y": 769,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "PostgreSQL",
+          "x": 252,
+          "y": 824,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "iOS",
+          "x": 567,
+          "y": 824,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Blockchain",
+          "x": 881,
+          "y": 824,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 538,
+          "y": 831,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 852,
+          "y": 831,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 1167,
+          "y": 831,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "QA",
+          "x": 252,
+          "y": 886,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Software Architect",
+          "x": 567,
+          "y": 886,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Cyber Security",
+          "x": 881,
+          "y": 886,
+          "w": 307,
+          "h": 54
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 538,
+          "y": 893,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 852,
+          "y": 893,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 1167,
+          "y": 893,
+          "w": 14,
+          "h": 14
+        }
+      ],
+      "cookieFlag": false
+    },
+    "scrolls": {
+      "roles": 402,
+      "skills": 1156,
+      "practices": 2468,
+      "guides": 2728,
+      "community": 4314
+    },
+    "tabs": {
+      "Lesson Packs": {
+        "click": {
+          "ok": true,
+          "text": "Lesson Packs NEW"
+        },
+        "headings": [
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 252,
+            "y": 148,
+            "absY": 148,
+            "w": 936,
+            "h": 48,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Role-based",
+            "x": 252,
+            "y": 482,
+            "absY": 482,
+            "w": 76,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Skill-based",
+            "x": 252,
+            "y": 1236,
+            "absY": 1236,
+            "w": 74,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Best Practices",
+            "x": 252,
+            "y": 2548,
+            "absY": 2548,
+            "w": 95,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Guides",
+            "x": 252,
+            "y": 2808,
+            "absY": 2808,
+            "w": 936,
+            "h": 36,
+            "visible": true
+          }
+        ],
+        "inView": [
+          {
+            "tag": "BUTTON",
+            "text": "Open Navigation Dropdown",
+            "x": 302,
+            "y": 32,
+            "w": 20,
+            "h": 36
+          },
+          {
+            "tag": "A",
+            "text": "Roadmap Logo",
+            "x": 252,
+            "y": 35,
+            "w": 30,
+            "h": 30
+          },
+          {
+            "tag": "A",
+            "text": "Roadmaps",
+            "x": 342,
+            "y": 38,
+            "w": 77,
+            "h": 24
+          },
+          {
+            "tag": "A",
+            "text": "AI Tutor",
+            "x": 439,
+            "y": 38,
+            "w": 57,
+            "h": 24
+          },
+          {
+            "tag": "A",
+            "text": "Packs",
+            "x": 515,
+            "y": 38,
+            "w": 43,
+            "h": 24
+          },
+          {
+            "tag": "A",
+            "text": "Newsletters",
+            "x": 578,
+            "y": 38,
+            "w": 86,
+            "h": 24
+          },
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 252,
+            "y": 148,
+            "w": 936,
+            "h": 48
+          },
+          {
+            "tag": "P",
+            "text": "Skill up with community created roadmaps, guides, and courses.",
+            "x": 252,
+            "y": 208,
+            "w": 936,
+            "h": 28
+          },
+          {
+            "tag": "INPUT",
+            "text": "What do you want to learn today?",
+            "x": 296,
+            "y": 268,
+            "w": 834,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Search available roadmaps or learn anything with AI.",
+            "x": 252,
+            "y": 320,
+            "w": 936,
+            "h": 20
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Roadmaps",
+            "x": 252,
+            "y": 396,
+            "w": 77,
+            "h": 38
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Lesson Packs NEW",
+            "x": 361,
+            "y": 396,
+            "w": 143,
+            "h": 38
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Project Ideas",
+            "x": 536,
+            "y": 396,
+            "w": 94,
+            "h": 38
+          },
+          {
+            "tag": "SPAN",
+            "text": "NEW",
+            "x": 467,
+            "y": 399,
+            "w": 37,
+            "h": 19
+          },
+          {
+            "tag": "H2",
+            "text": "Role-based",
+            "x": 252,
+            "y": 482,
+            "w": 76,
+            "h": 20
+          },
+          {
+            "tag": "SPAN",
+            "text": "31",
+            "x": 1173,
+            "y": 485,
+            "w": 15,
+            "h": 16
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Learn with AI",
+            "x": 252,
+            "y": 514,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "A",
+            "text": "Frontend",
+            "x": 567,
+            "y": 514,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "A",
+            "text": "Backend",
+            "x": 881,
+            "y": 514,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 852,
+            "y": 521,
+            "w": 14,
+            "h": 14
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 1167,
+            "y": 521,
+            "w": 14,
+            "h": 14
+          },
+          {
+            "tag": "A",
+            "text": "Full Stack",
+            "x": 252,
+            "y": 576,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "A",
+            "text": "Android",
+            "x": 567,
+            "y": 576,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "A",
+            "text": "DevOps",
+            "x": 881,
+            "y": 576,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 538,
+            "y": 583,
+            "w": 14,
+            "h": 14
+          }
+        ],
+        "scrollH": 5293
+      },
+      "Project Ideas": {
+        "click": {
+          "ok": true,
+          "text": "Project Ideas"
+        },
+        "headings": [
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 252,
+            "y": 148,
+            "absY": 148,
+            "w": 936,
+            "h": 48,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Role-based",
+            "x": 252,
+            "y": 482,
+            "absY": 482,
+            "w": 76,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Skill-based",
+            "x": 252,
+            "y": 1236,
+            "absY": 1236,
+            "w": 74,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Best Practices",
+            "x": 252,
+            "y": 2548,
+            "absY": 2548,
+            "w": 95,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Guides",
+            "x": 252,
+            "y": 2808,
+            "absY": 2808,
+            "w": 936,
+            "h": 36,
+            "visible": true
+          }
+        ],
+        "inView": [
+          {
+            "tag": "BUTTON",
+            "text": "Open Navigation Dropdown",
+            "x": 302,
+            "y": 32,
+            "w": 20,
+            "h": 36
+          },
+          {
+            "tag": "A",
+            "text": "Roadmap Logo",
+            "x": 252,
+            "y": 35,
+            "w": 30,
+            "h": 30
+          },
+          {
+            "tag": "A",
+            "text": "Roadmaps",
+            "x": 342,
+            "y": 38,
+            "w": 77,
+            "h": 24
+          },
+          {
+            "tag": "A",
+            "text": "AI Tutor",
+            "x": 439,
+            "y": 38,
+            "w": 57,
+            "h": 24
+          },
+          {
+            "tag": "A",
+            "text": "Packs",
+            "x": 515,
+            "y": 38,
+            "w": 43,
+            "h": 24
+          },
+          {
+            "tag": "A",
+            "text": "Newsletters",
+            "x": 578,
+            "y": 38,
+            "w": 86,
+            "h": 24
+          },
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 252,
+            "y": 148,
+            "w": 936,
+            "h": 48
+          },
+          {
+            "tag": "P",
+            "text": "Skill up with community created roadmaps, guides, and courses.",
+            "x": 252,
+            "y": 208,
+            "w": 936,
+            "h": 28
+          },
+          {
+            "tag": "INPUT",
+            "text": "What do you want to learn today?",
+            "x": 296,
+            "y": 268,
+            "w": 834,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Search available roadmaps or learn anything with AI.",
+            "x": 252,
+            "y": 320,
+            "w": 936,
+            "h": 20
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Roadmaps",
+            "x": 252,
+            "y": 396,
+            "w": 77,
+            "h": 38
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Lesson Packs NEW",
+            "x": 361,
+            "y": 396,
+            "w": 143,
+            "h": 38
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Project Ideas",
+            "x": 536,
+            "y": 396,
+            "w": 94,
+            "h": 38
+          },
+          {
+            "tag": "SPAN",
+            "text": "NEW",
+            "x": 467,
+            "y": 399,
+            "w": 37,
+            "h": 19
+          },
+          {
+            "tag": "H2",
+            "text": "Role-based",
+            "x": 252,
+            "y": 482,
+            "w": 76,
+            "h": 20
+          },
+          {
+            "tag": "SPAN",
+            "text": "31",
+            "x": 1173,
+            "y": 485,
+            "w": 15,
+            "h": 16
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Learn with AI",
+            "x": 252,
+            "y": 514,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "A",
+            "text": "Frontend",
+            "x": 567,
+            "y": 514,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "A",
+            "text": "Backend",
+            "x": 881,
+            "y": 514,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 852,
+            "y": 521,
+            "w": 14,
+            "h": 14
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 1167,
+            "y": 521,
+            "w": 14,
+            "h": 14
+          },
+          {
+            "tag": "A",
+            "text": "Full Stack",
+            "x": 252,
+            "y": 576,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "A",
+            "text": "Android",
+            "x": 567,
+            "y": 576,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "A",
+            "text": "DevOps",
+            "x": 881,
+            "y": 576,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 538,
+            "y": 583,
+            "w": 14,
+            "h": 14
+          }
+        ],
+        "scrollH": 5293
+      },
+      "Roadmaps": {
+        "click": {
+          "ok": true,
+          "text": "Roadmaps"
+        },
+        "headings": [
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 252,
+            "y": 148,
+            "absY": 148,
+            "w": 936,
+            "h": 48,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Role-based",
+            "x": 252,
+            "y": 482,
+            "absY": 482,
+            "w": 76,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Skill-based",
+            "x": 252,
+            "y": 1236,
+            "absY": 1236,
+            "w": 74,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Best Practices",
+            "x": 252,
+            "y": 2548,
+            "absY": 2548,
+            "w": 95,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Guides",
+            "x": 252,
+            "y": 2808,
+            "absY": 2808,
+            "w": 936,
+            "h": 36,
+            "visible": true
+          }
+        ],
+        "inView": [
+          {
+            "tag": "BUTTON",
+            "text": "Open Navigation Dropdown",
+            "x": 302,
+            "y": 32,
+            "w": 20,
+            "h": 36
+          },
+          {
+            "tag": "A",
+            "text": "Roadmap Logo",
+            "x": 252,
+            "y": 35,
+            "w": 30,
+            "h": 30
+          },
+          {
+            "tag": "A",
+            "text": "Roadmaps",
+            "x": 342,
+            "y": 38,
+            "w": 77,
+            "h": 24
+          },
+          {
+            "tag": "A",
+            "text": "AI Tutor",
+            "x": 439,
+            "y": 38,
+            "w": 57,
+            "h": 24
+          },
+          {
+            "tag": "A",
+            "text": "Packs",
+            "x": 515,
+            "y": 38,
+            "w": 43,
+            "h": 24
+          },
+          {
+            "tag": "A",
+            "text": "Newsletters",
+            "x": 578,
+            "y": 38,
+            "w": 86,
+            "h": 24
+          },
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 252,
+            "y": 148,
+            "w": 936,
+            "h": 48
+          },
+          {
+            "tag": "P",
+            "text": "Skill up with community created roadmaps, guides, and courses.",
+            "x": 252,
+            "y": 208,
+            "w": 936,
+            "h": 28
+          },
+          {
+            "tag": "INPUT",
+            "text": "What do you want to learn today?",
+            "x": 296,
+            "y": 268,
+            "w": 834,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Search available roadmaps or learn anything with AI.",
+            "x": 252,
+            "y": 320,
+            "w": 936,
+            "h": 20
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Roadmaps",
+            "x": 252,
+            "y": 396,
+            "w": 77,
+            "h": 38
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Lesson Packs NEW",
+            "x": 361,
+            "y": 396,
+            "w": 143,
+            "h": 38
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Project Ideas",
+            "x": 536,
+            "y": 396,
+            "w": 94,
+            "h": 38
+          },
+          {
+            "tag": "SPAN",
+            "text": "NEW",
+            "x": 467,
+            "y": 399,
+            "w": 37,
+            "h": 19
+          },
+          {
+            "tag": "H2",
+            "text": "Role-based",
+            "x": 252,
+            "y": 482,
+            "w": 76,
+            "h": 20
+          },
+          {
+            "tag": "SPAN",
+            "text": "31",
+            "x": 1173,
+            "y": 485,
+            "w": 15,
+            "h": 16
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Learn with AI",
+            "x": 252,
+            "y": 514,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "A",
+            "text": "Frontend",
+            "x": 567,
+            "y": 514,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "A",
+            "text": "Backend",
+            "x": 881,
+            "y": 514,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 852,
+            "y": 521,
+            "w": 14,
+            "h": 14
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 1167,
+            "y": 521,
+            "w": 14,
+            "h": 14
+          },
+          {
+            "tag": "A",
+            "text": "Full Stack",
+            "x": 252,
+            "y": 576,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "A",
+            "text": "Android",
+            "x": 567,
+            "y": 576,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "A",
+            "text": "DevOps",
+            "x": 881,
+            "y": 576,
+            "w": 307,
+            "h": 54
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 538,
+            "y": 583,
+            "w": 14,
+            "h": 14
+          }
+        ],
+        "scrollH": 5293
+      }
+    },
+    "search": {
+      "how": "input",
+      "active": "INPUT What do you want to learn today?",
+      "before": "",
+      "after": "",
+      "bodyHas": false
+    }
+  },
+  "390": {
+    "cookie": {
+      "clicked": true,
+      "text": "Reject All"
+    },
+    "preCookie": {
+      "inView": [
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "x": 16,
+          "y": 20,
+          "w": 30,
+          "h": 30
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "x": 66,
+          "y": 23,
+          "w": 57,
+          "h": 24
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Menu",
+          "x": 358,
+          "y": 27,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "tag": "H1",
+          "text": "Developer Roadmaps",
+          "x": 16,
+          "y": 94,
+          "w": 358,
+          "h": 32
+        },
+        {
+          "tag": "P",
+          "text": "Skill up with community created roadmaps, guides, and courses.",
+          "x": 16,
+          "y": 132,
+          "w": 358,
+          "h": 48
+        },
+        {
+          "tag": "INPUT",
+          "text": "What do you want to learn today?",
+          "x": 60,
+          "y": 208,
+          "w": 302,
+          "h": 32
+        },
+        {
+          "tag": "P",
+          "text": "Search available roadmaps or learn anything with AI.",
+          "x": 16,
+          "y": 260,
+          "w": 358,
+          "h": 20
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Roadmaps",
+          "x": 16,
+          "y": 324,
+          "w": 68,
+          "h": 34
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Lesson Packs NEW",
+          "x": 108,
+          "y": 324,
+          "w": 132,
+          "h": 34
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Project Ideas",
+          "x": 264,
+          "y": 324,
+          "w": 84,
+          "h": 34
+        },
+        {
+          "tag": "SPAN",
+          "text": "NEW",
+          "x": 204,
+          "y": 325,
+          "w": 37,
+          "h": 18
+        },
+        {
+          "tag": "H2",
+          "text": "Role-based",
+          "x": 16,
+          "y": 390,
+          "w": 76,
+          "h": 20
+        },
+        {
+          "tag": "SPAN",
+          "text": "31",
+          "x": 359,
+          "y": 393,
+          "w": 15,
+          "h": 16
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Learn with AI",
+          "x": 16,
+          "y": 422,
+          "w": 358,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Frontend",
+          "x": 16,
+          "y": 484,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 353,
+          "y": 491,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "Backend",
+          "x": 16,
+          "y": 538,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 353,
+          "y": 545,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "Full Stack",
+          "x": 16,
+          "y": 592,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 353,
+          "y": 599,
+          "w": 14,
+          "h": 14
+        }
+      ],
+      "cookie": false,
+      "ih": 844,
+      "iw": 390
+    },
+    "after": {
+      "url": "https://roadmap.sh/",
+      "title": "Developer Roadmaps - roadmap.sh",
+      "iw": 390,
+      "ih": 844,
+      "scrollH": 8765,
+      "h1": [
+        "Developer Roadmaps"
+      ],
+      "headings": [
+        {
+          "tag": "H1",
+          "text": "Developer Roadmaps",
+          "x": 16,
+          "y": 94,
+          "absY": 94,
+          "w": 358,
+          "h": 32,
+          "visible": true
+        },
+        {
+          "tag": "H2",
+          "text": "Role-based",
+          "x": 16,
+          "y": 390,
+          "absY": 390,
+          "w": 76,
+          "h": 20,
+          "visible": true
+        },
+        {
+          "tag": "H2",
+          "text": "Skill-based",
+          "x": 16,
+          "y": 2190,
+          "absY": 2190,
+          "w": 74,
+          "h": 20,
+          "visible": true
+        },
+        {
+          "tag": "H2",
+          "text": "Best Practices",
+          "x": 16,
+          "y": 5440,
+          "absY": 5440,
+          "w": 95,
+          "h": 20,
+          "visible": true
+        },
+        {
+          "tag": "H3",
+          "text": "Git Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Internet Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "HTML Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "CSS Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "JavaScript Foundations",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Build CLI Apps with Node.js",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Linux and the Command Line",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Docker Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Build APIs with Node.js",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "RegEx for Everyone",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H2",
+          "text": "Guides",
+          "x": 16,
+          "y": 5794,
+          "absY": 5794,
+          "w": 358,
+          "h": 32,
+          "visible": true
+        }
+      ],
+      "tabs": [
+        {
+          "text": "Menu",
+          "aria": "",
+          "x": 358,
+          "y": 27,
+          "absY": 27,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "text": "Roadmaps",
+          "aria": "true",
+          "x": 16,
+          "y": 324,
+          "absY": 324,
+          "w": 68,
+          "h": 34
+        },
+        {
+          "text": "Lesson Packs NEW",
+          "aria": "false",
+          "x": 108,
+          "y": 324,
+          "absY": 324,
+          "w": 132,
+          "h": 34
+        },
+        {
+          "text": "Project Ideas",
+          "aria": "false",
+          "x": 264,
+          "y": 324,
+          "absY": 324,
+          "w": 84,
+          "h": 34
+        },
+        {
+          "text": "Learn with AI",
+          "aria": "",
+          "x": 16,
+          "y": 422,
+          "absY": 422,
+          "w": 358,
+          "h": 54
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 491,
+          "absY": 491,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 545,
+          "absY": 545,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 599,
+          "absY": 599,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 653,
+          "absY": 653,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 707,
+          "absY": 707,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 761,
+          "absY": 761,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 815,
+          "absY": 815,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 869,
+          "absY": 869,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 923,
+          "absY": 923,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 977,
+          "absY": 977,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1031,
+          "absY": 1031,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1085,
+          "absY": 1085,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1139,
+          "absY": 1139,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1193,
+          "absY": 1193,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1247,
+          "absY": 1247,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1301,
+          "absY": 1301,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1355,
+          "absY": 1355,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1409,
+          "absY": 1409,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1463,
+          "absY": 1463,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1517,
+          "absY": 1517,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1571,
+          "absY": 1571,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1625,
+          "absY": 1625,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1679,
+          "absY": 1679,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1733,
+          "absY": 1733,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1787,
+          "absY": 1787,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1841,
+          "absY": 1841,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1895,
+          "absY": 1895,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 1949,
+          "absY": 1949,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 2003,
+          "absY": 2003,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 2057,
+          "absY": 2057,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 2111,
+          "absY": 2111,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 2229,
+          "absY": 2229,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 2283,
+          "absY": 2283,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 2337,
+          "absY": 2337,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 353,
+          "y": 2391,
+          "absY": 2391,
+          "w": 14,
+          "h": 14
+        }
+      ],
+      "hits": [
+        {
+          "text": "Frontend",
+          "href": "/frontend",
+          "x": 16,
+          "y": 484,
+          "absY": 484,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "text": "AI Engineer",
+          "href": "/ai-engineer",
+          "x": 16,
+          "y": 970,
+          "absY": 970,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "text": "Data Engineer",
+          "href": "/data-engineer",
+          "x": 16,
+          "y": 1078,
+          "absY": 1078,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "text": "Machine Learning",
+          "href": "/machine-learning",
+          "x": 16,
+          "y": 1132,
+          "absY": 1132,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "text": "Cyber Security",
+          "href": "/cyber-security",
+          "x": 16,
+          "y": 1510,
+          "absY": 1510,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "text": "Frontend Performance",
+          "href": "/frontend-performance-best-practices",
+          "x": 16,
+          "y": 5634,
+          "absY": 5634,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "text": "View All Guides \u2192",
+          "href": "/guides",
+          "x": 16,
+          "y": 6448,
+          "absY": 6448,
+          "w": 358,
+          "h": 38
+        },
+        {
+          "text": "26 Mar, 2026 Scala Roadmap, AI Engineer Review",
+          "href": "/changelog#69c4edd431e228f31bc86f88",
+          "x": 16,
+          "y": 7015,
+          "absY": 7015,
+          "w": 358,
+          "h": 44
+        }
+      ],
+      "search": [
+        {
+          "ph": "",
+          "aria": "Enable Functional",
+          "visible": false,
+          "x": 588,
+          "y": 1579,
+          "absY": 1579,
+          "w": 38,
+          "h": 21
+        },
+        {
+          "ph": "",
+          "aria": "Enable Analytics",
+          "visible": false,
+          "x": 588,
+          "y": 1688,
+          "absY": 1688,
+          "w": 38,
+          "h": 21
+        },
+        {
+          "ph": "",
+          "aria": "Enable Performance",
+          "visible": false,
+          "x": 588,
+          "y": 1797,
+          "absY": 1797,
+          "w": 38,
+          "h": 21
+        },
+        {
+          "ph": "",
+          "aria": "Enable Advertisement",
+          "visible": false,
+          "x": 588,
+          "y": 1906,
+          "absY": 1906,
+          "w": 38,
+          "h": 21
+        },
+        {
+          "ph": "What do you want to learn today?",
+          "aria": "",
+          "visible": true,
+          "x": 60,
+          "y": 208,
+          "absY": 208,
+          "w": 302,
+          "h": 32
+        }
+      ],
+      "fixed": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "sticky top-0 z-35 border-b border-b-[#1e293c] transition-colors",
+          "text": "Roadmaps Lesson Packs NEW Project Ideas",
+          "pos": "sticky",
+          "x": 0,
+          "y": 312,
+          "absY": 312,
+          "w": 390,
+          "h": 46
+        }
+      ],
+      "inView": [
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "x": 16,
+          "y": 20,
+          "w": 30,
+          "h": 30
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "x": 66,
+          "y": 23,
+          "w": 57,
+          "h": 24
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Menu",
+          "x": 358,
+          "y": 27,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "tag": "H1",
+          "text": "Developer Roadmaps",
+          "x": 16,
+          "y": 94,
+          "w": 358,
+          "h": 32
+        },
+        {
+          "tag": "P",
+          "text": "Skill up with community created roadmaps, guides, and courses.",
+          "x": 16,
+          "y": 132,
+          "w": 358,
+          "h": 48
+        },
+        {
+          "tag": "INPUT",
+          "text": "What do you want to learn today?",
+          "x": 60,
+          "y": 208,
+          "w": 302,
+          "h": 32
+        },
+        {
+          "tag": "P",
+          "text": "Search available roadmaps or learn anything with AI.",
+          "x": 16,
+          "y": 260,
+          "w": 358,
+          "h": 20
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Roadmaps",
+          "x": 16,
+          "y": 324,
+          "w": 68,
+          "h": 34
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Lesson Packs NEW",
+          "x": 108,
+          "y": 324,
+          "w": 132,
+          "h": 34
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Project Ideas",
+          "x": 264,
+          "y": 324,
+          "w": 84,
+          "h": 34
+        },
+        {
+          "tag": "SPAN",
+          "text": "NEW",
+          "x": 204,
+          "y": 325,
+          "w": 37,
+          "h": 18
+        },
+        {
+          "tag": "H2",
+          "text": "Role-based",
+          "x": 16,
+          "y": 390,
+          "w": 76,
+          "h": 20
+        },
+        {
+          "tag": "SPAN",
+          "text": "31",
+          "x": 359,
+          "y": 393,
+          "w": 15,
+          "h": 16
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Learn with AI",
+          "x": 16,
+          "y": 422,
+          "w": 358,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Frontend",
+          "x": 16,
+          "y": 484,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 353,
+          "y": 491,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "Backend",
+          "x": 16,
+          "y": 538,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 353,
+          "y": 545,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "Full Stack",
+          "x": 16,
+          "y": 592,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 353,
+          "y": 599,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "Android",
+          "x": 16,
+          "y": 646,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 353,
+          "y": 653,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "DevOps",
+          "x": 16,
+          "y": 700,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 353,
+          "y": 707,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "DevSecOps",
+          "x": 16,
+          "y": 754,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 353,
+          "y": 761,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "Data Analyst",
+          "x": 16,
+          "y": 808,
+          "w": 358,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 353,
+          "y": 815,
+          "w": 14,
+          "h": 14
+        }
+      ],
+      "cookieFlag": false
+    },
+    "scrolls": {
+      "roles": 310,
+      "skills": 2110,
+      "practices": 5360,
+      "guides": 5714,
+      "community": 7424
+    },
+    "tabs": {
+      "Lesson Packs": {
+        "click": {
+          "ok": true,
+          "text": "Lesson Packs NEW"
+        },
+        "headings": [
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 16,
+            "y": 94,
+            "absY": 94,
+            "w": 358,
+            "h": 32,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "Git Fundamentals",
+            "x": 33,
+            "y": 494,
+            "absY": 494,
+            "w": 324,
+            "h": 28,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "Internet Fundamentals",
+            "x": 35,
+            "y": 654,
+            "absY": 654,
+            "w": 320,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "HTML Fundamentals",
+            "x": 35,
+            "y": 842,
+            "absY": 842,
+            "w": 320,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "CSS Fundamentals",
+            "x": 35,
+            "y": 1030,
+            "absY": 1030,
+            "w": 320,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "JavaScript Foundations",
+            "x": 35,
+            "y": 1218,
+            "absY": 1218,
+            "w": 320,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "Build CLI Apps with Node.js",
+            "x": 35,
+            "y": 1406,
+            "absY": 1406,
+            "w": 320,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "Linux and the Command Line",
+            "x": 35,
+            "y": 1617,
+            "absY": 1617,
+            "w": 320,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "Docker Fundamentals",
+            "x": 35,
+            "y": 1805,
+            "absY": 1805,
+            "w": 320,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "Build APIs with Node.js",
+            "x": 35,
+            "y": 1993,
+            "absY": 1993,
+            "w": 320,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "RegEx for Everyone",
+            "x": 35,
+            "y": 2181,
+            "absY": 2181,
+            "w": 320,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Guides",
+            "x": 16,
+            "y": 2375,
+            "absY": 2375,
+            "w": 358,
+            "h": 32,
+            "visible": true
+          }
+        ],
+        "inView": [
+          {
+            "tag": "A",
+            "text": "Roadmap Logo",
+            "x": 16,
+            "y": 20,
+            "w": 30,
+            "h": 30
+          },
+          {
+            "tag": "A",
+            "text": "AI Tutor",
+            "x": 66,
+            "y": 23,
+            "w": 57,
+            "h": 24
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Menu",
+            "x": 358,
+            "y": 27,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 16,
+            "y": 94,
+            "w": 358,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Skill up with community created roadmaps, guides, and courses.",
+            "x": 16,
+            "y": 132,
+            "w": 358,
+            "h": 48
+          },
+          {
+            "tag": "INPUT",
+            "text": "What do you want to learn today?",
+            "x": 60,
+            "y": 208,
+            "w": 302,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Search available roadmaps or learn anything with AI.",
+            "x": 16,
+            "y": 260,
+            "w": 358,
+            "h": 20
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Roadmaps",
+            "x": 16,
+            "y": 324,
+            "w": 68,
+            "h": 34
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Lesson Packs NEW",
+            "x": 108,
+            "y": 324,
+            "w": 132,
+            "h": 34
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Project Ideas",
+            "x": 264,
+            "y": 324,
+            "w": 84,
+            "h": 34
+          },
+          {
+            "tag": "SPAN",
+            "text": "NEW",
+            "x": 204,
+            "y": 325,
+            "w": 37,
+            "h": 18
+          },
+          {
+            "tag": "P",
+            "text": "Included with Pro.Every pack starts with free lessons, so you can try before you upgrade.",
+            "x": 16,
+            "y": 390,
+            "w": 358,
+            "h": 42
+          },
+          {
+            "tag": "SPAN",
+            "text": "Included with Pro.",
+            "x": 16,
+            "y": 390,
+            "w": 142,
+            "h": 20
+          },
+          {
+            "tag": "A",
+            "text": "NEW Added Sep 14 Git Fundamentals Learn enough Git to work confidently on real projects with a team. 14 lessons Explore pack",
+            "x": 16,
+            "y": 448,
+            "w": 358,
+            "h": 175
+          },
+          {
+            "tag": "SPAN",
+            "text": "NEW Added Sep 14",
+            "x": 33,
+            "y": 465,
+            "w": 324,
+            "h": 19
+          },
+          {
+            "tag": "SPAN",
+            "text": "Added Sep 14",
+            "x": 78,
+            "y": 467,
+            "w": 79,
+            "h": 16
+          },
+          {
+            "tag": "H3",
+            "text": "Git Fundamentals",
+            "x": 33,
+            "y": 494,
+            "w": 324,
+            "h": 28
+          },
+          {
+            "tag": "P",
+            "text": "Learn enough Git to work confidently on real projects with a team.",
+            "x": 33,
+            "y": 532,
+            "w": 324,
+            "h": 40
+          },
+          {
+            "tag": "SPAN",
+            "text": "14 lessons Explore pack",
+            "x": 33,
+            "y": 586,
+            "w": 324,
+            "h": 20
+          },
+          {
+            "tag": "SPAN",
+            "text": "Explore pack",
+            "x": 252,
+            "y": 586,
+            "w": 105,
+            "h": 20
+          },
+          {
+            "tag": "SPAN",
+            "text": "14 lessons",
+            "x": 33,
+            "y": 588,
+            "w": 85,
+            "h": 16
+          },
+          {
+            "tag": "SPAN",
+            "text": "14",
+            "x": 53,
+            "y": 588,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "tag": "A",
+            "text": "Internet Fundamentals How the internet actually works: DNS, HTTP, hosting, and browsers. 6 lessons",
+            "x": 16,
+            "y": 635,
+            "w": 358,
+            "h": 176
+          },
+          {
+            "tag": "H3",
+            "text": "Internet Fundamentals",
+            "x": 35,
+            "y": 654,
+            "w": 320,
+            "h": 23
+          },
+          {
+            "tag": "P",
+            "text": "How the internet actually works: DNS, HTTP, hosting, and browsers.",
+            "x": 35,
+            "y": 685,
+            "w": 320,
+            "h": 40
+          }
+        ],
+        "scrollH": 5346
+      },
+      "Project Ideas": {
+        "click": {
+          "ok": true,
+          "text": "Project Ideas"
+        },
+        "headings": [
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 16,
+            "y": 94,
+            "absY": 94,
+            "w": 358,
+            "h": 32,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Guides",
+            "x": 16,
+            "y": 820,
+            "absY": 820,
+            "w": 358,
+            "h": 32,
+            "visible": true
+          }
+        ],
+        "inView": [
+          {
+            "tag": "A",
+            "text": "Roadmap Logo",
+            "x": 16,
+            "y": 20,
+            "w": 30,
+            "h": 30
+          },
+          {
+            "tag": "A",
+            "text": "AI Tutor",
+            "x": 66,
+            "y": 23,
+            "w": 57,
+            "h": 24
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Menu",
+            "x": 358,
+            "y": 27,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 16,
+            "y": 94,
+            "w": 358,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Skill up with community created roadmaps, guides, and courses.",
+            "x": 16,
+            "y": 132,
+            "w": 358,
+            "h": 48
+          },
+          {
+            "tag": "INPUT",
+            "text": "What do you want to learn today?",
+            "x": 60,
+            "y": 208,
+            "w": 302,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Search available roadmaps or learn anything with AI.",
+            "x": 16,
+            "y": 260,
+            "w": 358,
+            "h": 20
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Roadmaps",
+            "x": 16,
+            "y": 324,
+            "w": 68,
+            "h": 34
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Lesson Packs NEW",
+            "x": 108,
+            "y": 324,
+            "w": 132,
+            "h": 34
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Project Ideas",
+            "x": 264,
+            "y": 324,
+            "w": 84,
+            "h": 34
+          },
+          {
+            "tag": "SPAN",
+            "text": "NEW",
+            "x": 204,
+            "y": 325,
+            "w": 37,
+            "h": 18
+          },
+          {
+            "tag": "A",
+            "text": "Frontend",
+            "x": 16,
+            "y": 390,
+            "w": 358,
+            "h": 46
+          },
+          {
+            "tag": "A",
+            "text": "Backend",
+            "x": 16,
+            "y": 444,
+            "w": 358,
+            "h": 46
+          },
+          {
+            "tag": "A",
+            "text": "DevOps",
+            "x": 16,
+            "y": 498,
+            "w": 358,
+            "h": 46
+          },
+          {
+            "tag": "A",
+            "text": "HTML",
+            "x": 16,
+            "y": 552,
+            "w": 358,
+            "h": 46
+          },
+          {
+            "tag": "A",
+            "text": "CSS",
+            "x": 16,
+            "y": 606,
+            "w": 358,
+            "h": 46
+          },
+          {
+            "tag": "A",
+            "text": "JavaScript",
+            "x": 16,
+            "y": 660,
+            "w": 358,
+            "h": 46
+          },
+          {
+            "tag": "A",
+            "text": "Node.js",
+            "x": 16,
+            "y": 714,
+            "w": 358,
+            "h": 46
+          },
+          {
+            "tag": "H2",
+            "text": "Guides",
+            "x": 16,
+            "y": 820,
+            "w": 358,
+            "h": 32
+          }
+        ],
+        "scrollH": 3791
+      },
+      "Roadmaps": {
+        "click": {
+          "ok": true,
+          "text": "Roadmaps"
+        },
+        "headings": [
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 16,
+            "y": 94,
+            "absY": 94,
+            "w": 358,
+            "h": 32,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Role-based",
+            "x": 16,
+            "y": 390,
+            "absY": 390,
+            "w": 76,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Skill-based",
+            "x": 16,
+            "y": 2190,
+            "absY": 2190,
+            "w": 74,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Best Practices",
+            "x": 16,
+            "y": 5440,
+            "absY": 5440,
+            "w": 95,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Guides",
+            "x": 16,
+            "y": 5794,
+            "absY": 5794,
+            "w": 358,
+            "h": 32,
+            "visible": true
+          }
+        ],
+        "inView": [
+          {
+            "tag": "A",
+            "text": "Roadmap Logo",
+            "x": 16,
+            "y": 20,
+            "w": 30,
+            "h": 30
+          },
+          {
+            "tag": "A",
+            "text": "AI Tutor",
+            "x": 66,
+            "y": 23,
+            "w": 57,
+            "h": 24
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Menu",
+            "x": 358,
+            "y": 27,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 16,
+            "y": 94,
+            "w": 358,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Skill up with community created roadmaps, guides, and courses.",
+            "x": 16,
+            "y": 132,
+            "w": 358,
+            "h": 48
+          },
+          {
+            "tag": "INPUT",
+            "text": "What do you want to learn today?",
+            "x": 60,
+            "y": 208,
+            "w": 302,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Search available roadmaps or learn anything with AI.",
+            "x": 16,
+            "y": 260,
+            "w": 358,
+            "h": 20
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Roadmaps",
+            "x": 16,
+            "y": 324,
+            "w": 68,
+            "h": 34
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Lesson Packs NEW",
+            "x": 108,
+            "y": 324,
+            "w": 132,
+            "h": 34
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Project Ideas",
+            "x": 264,
+            "y": 324,
+            "w": 84,
+            "h": 34
+          },
+          {
+            "tag": "SPAN",
+            "text": "NEW",
+            "x": 204,
+            "y": 325,
+            "w": 37,
+            "h": 18
+          },
+          {
+            "tag": "H2",
+            "text": "Role-based",
+            "x": 16,
+            "y": 390,
+            "w": 76,
+            "h": 20
+          },
+          {
+            "tag": "SPAN",
+            "text": "31",
+            "x": 359,
+            "y": 393,
+            "w": 15,
+            "h": 16
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Learn with AI",
+            "x": 16,
+            "y": 422,
+            "w": 358,
+            "h": 54
+          },
+          {
+            "tag": "A",
+            "text": "Frontend",
+            "x": 16,
+            "y": 484,
+            "w": 358,
+            "h": 46
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 353,
+            "y": 491,
+            "w": 14,
+            "h": 14
+          },
+          {
+            "tag": "A",
+            "text": "Backend",
+            "x": 16,
+            "y": 538,
+            "w": 358,
+            "h": 46
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 353,
+            "y": 545,
+            "w": 14,
+            "h": 14
+          },
+          {
+            "tag": "A",
+            "text": "Full Stack",
+            "x": 16,
+            "y": 592,
+            "w": 358,
+            "h": 46
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 353,
+            "y": 599,
+            "w": 14,
+            "h": 14
+          },
+          {
+            "tag": "A",
+            "text": "Android",
+            "x": 16,
+            "y": 646,
+            "w": 358,
+            "h": 46
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 353,
+            "y": 653,
+            "w": 14,
+            "h": 14
+          },
+          {
+            "tag": "A",
+            "text": "DevOps",
+            "x": 16,
+            "y": 700,
+            "w": 358,
+            "h": 46
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 353,
+            "y": 707,
+            "w": 14,
+            "h": 14
+          },
+          {
+            "tag": "A",
+            "text": "DevSecOps",
+            "x": 16,
+            "y": 754,
+            "w": 358,
+            "h": 46
+          }
+        ],
+        "scrollH": 8765
+      }
+    },
+    "search": null
+  },
+  "320": {
+    "cookie": {
+      "clicked": true,
+      "text": "Reject All"
+    },
+    "preCookie": {
+      "inView": [
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "x": 16,
+          "y": 20,
+          "w": 30,
+          "h": 30
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "x": 66,
+          "y": 23,
+          "w": 57,
+          "h": 24
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Menu",
+          "x": 288,
+          "y": 27,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "tag": "H1",
+          "text": "Developer Roadmaps",
+          "x": 16,
+          "y": 94,
+          "w": 288,
+          "h": 32
+        },
+        {
+          "tag": "P",
+          "text": "Skill up with community created roadmaps, guides, and courses.",
+          "x": 16,
+          "y": 132,
+          "w": 288,
+          "h": 48
+        },
+        {
+          "tag": "INPUT",
+          "text": "What do you want to learn today?",
+          "x": 60,
+          "y": 208,
+          "w": 232,
+          "h": 32
+        },
+        {
+          "tag": "P",
+          "text": "Search available roadmaps or learn anything with AI.",
+          "x": 16,
+          "y": 260,
+          "w": 288,
+          "h": 40
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Roadmaps",
+          "x": 16,
+          "y": 344,
+          "w": 68,
+          "h": 34
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Lesson Packs NEW",
+          "x": 108,
+          "y": 344,
+          "w": 132,
+          "h": 34
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Project Ideas",
+          "x": 264,
+          "y": 344,
+          "w": 84,
+          "h": 34
+        },
+        {
+          "tag": "SPAN",
+          "text": "NEW",
+          "x": 204,
+          "y": 345,
+          "w": 37,
+          "h": 18
+        },
+        {
+          "tag": "H2",
+          "text": "Role-based",
+          "x": 16,
+          "y": 410,
+          "w": 76,
+          "h": 20
+        },
+        {
+          "tag": "SPAN",
+          "text": "31",
+          "x": 289,
+          "y": 413,
+          "w": 15,
+          "h": 16
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Learn with AI",
+          "x": 16,
+          "y": 442,
+          "w": 288,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Frontend",
+          "x": 16,
+          "y": 504,
+          "w": 288,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 283,
+          "y": 511,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "Backend",
+          "x": 16,
+          "y": 558,
+          "w": 288,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 283,
+          "y": 565,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "Full Stack",
+          "x": 16,
+          "y": 612,
+          "w": 288,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 283,
+          "y": 619,
+          "w": 14,
+          "h": 14
+        }
+      ],
+      "cookie": false,
+      "ih": 700,
+      "iw": 320
+    },
+    "after": {
+      "url": "https://roadmap.sh/",
+      "title": "Developer Roadmaps - roadmap.sh",
+      "iw": 320,
+      "ih": 700,
+      "scrollH": 9102,
+      "h1": [
+        "Developer Roadmaps"
+      ],
+      "headings": [
+        {
+          "tag": "H1",
+          "text": "Developer Roadmaps",
+          "x": 16,
+          "y": 94,
+          "absY": 94,
+          "w": 288,
+          "h": 32,
+          "visible": true
+        },
+        {
+          "tag": "H2",
+          "text": "Role-based",
+          "x": 16,
+          "y": 410,
+          "absY": 410,
+          "w": 76,
+          "h": 20,
+          "visible": true
+        },
+        {
+          "tag": "H2",
+          "text": "Skill-based",
+          "x": 16,
+          "y": 2210,
+          "absY": 2210,
+          "w": 74,
+          "h": 20,
+          "visible": true
+        },
+        {
+          "tag": "H2",
+          "text": "Best Practices",
+          "x": 16,
+          "y": 5460,
+          "absY": 5460,
+          "w": 95,
+          "h": 20,
+          "visible": true
+        },
+        {
+          "tag": "H3",
+          "text": "Git Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Internet Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "HTML Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "CSS Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "JavaScript Foundations",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Build CLI Apps with Node.js",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Linux and the Command Line",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Docker Fundamentals",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "Build APIs with Node.js",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H3",
+          "text": "RegEx for Everyone",
+          "x": 0,
+          "y": 0,
+          "absY": 0,
+          "w": 0,
+          "h": 0,
+          "visible": false
+        },
+        {
+          "tag": "H2",
+          "text": "Guides",
+          "x": 16,
+          "y": 5814,
+          "absY": 5814,
+          "w": 288,
+          "h": 32,
+          "visible": true
+        }
+      ],
+      "tabs": [
+        {
+          "text": "Menu",
+          "aria": "",
+          "x": 288,
+          "y": 27,
+          "absY": 27,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "text": "Roadmaps",
+          "aria": "true",
+          "x": 16,
+          "y": 344,
+          "absY": 344,
+          "w": 68,
+          "h": 34
+        },
+        {
+          "text": "Lesson Packs NEW",
+          "aria": "false",
+          "x": 108,
+          "y": 344,
+          "absY": 344,
+          "w": 132,
+          "h": 34
+        },
+        {
+          "text": "Project Ideas",
+          "aria": "false",
+          "x": 264,
+          "y": 344,
+          "absY": 344,
+          "w": 84,
+          "h": 34
+        },
+        {
+          "text": "Learn with AI",
+          "aria": "",
+          "x": 16,
+          "y": 442,
+          "absY": 442,
+          "w": 288,
+          "h": 54
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 511,
+          "absY": 511,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 565,
+          "absY": 565,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 619,
+          "absY": 619,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 673,
+          "absY": 673,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 727,
+          "absY": 727,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 781,
+          "absY": 781,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 835,
+          "absY": 835,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 889,
+          "absY": 889,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 943,
+          "absY": 943,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 997,
+          "absY": 997,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1051,
+          "absY": 1051,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1105,
+          "absY": 1105,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1159,
+          "absY": 1159,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1213,
+          "absY": 1213,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1267,
+          "absY": 1267,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1321,
+          "absY": 1321,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1375,
+          "absY": 1375,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1429,
+          "absY": 1429,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1483,
+          "absY": 1483,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1537,
+          "absY": 1537,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1591,
+          "absY": 1591,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1645,
+          "absY": 1645,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1699,
+          "absY": 1699,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1753,
+          "absY": 1753,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1807,
+          "absY": 1807,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1861,
+          "absY": 1861,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1915,
+          "absY": 1915,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 1969,
+          "absY": 1969,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 2023,
+          "absY": 2023,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 2077,
+          "absY": 2077,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 2131,
+          "absY": 2131,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 2249,
+          "absY": 2249,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 2303,
+          "absY": 2303,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 2357,
+          "absY": 2357,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "text": "Add to favorites",
+          "aria": "",
+          "x": 283,
+          "y": 2411,
+          "absY": 2411,
+          "w": 14,
+          "h": 14
+        }
+      ],
+      "hits": [
+        {
+          "text": "Frontend",
+          "href": "/frontend",
+          "x": 16,
+          "y": 504,
+          "absY": 504,
+          "w": 288,
+          "h": 46
+        },
+        {
+          "text": "AI Engineer",
+          "href": "/ai-engineer",
+          "x": 16,
+          "y": 990,
+          "absY": 990,
+          "w": 288,
+          "h": 46
+        },
+        {
+          "text": "Data Engineer",
+          "href": "/data-engineer",
+          "x": 16,
+          "y": 1098,
+          "absY": 1098,
+          "w": 288,
+          "h": 46
+        },
+        {
+          "text": "Machine Learning",
+          "href": "/machine-learning",
+          "x": 16,
+          "y": 1152,
+          "absY": 1152,
+          "w": 288,
+          "h": 46
+        },
+        {
+          "text": "Cyber Security",
+          "href": "/cyber-security",
+          "x": 16,
+          "y": 1530,
+          "absY": 1530,
+          "w": 288,
+          "h": 46
+        },
+        {
+          "text": "Frontend Performance",
+          "href": "/frontend-performance-best-practices",
+          "x": 16,
+          "y": 5654,
+          "absY": 5654,
+          "w": 288,
+          "h": 46
+        },
+        {
+          "text": "View All Guides \u2192",
+          "href": "/guides",
+          "x": 16,
+          "y": 6668,
+          "absY": 6668,
+          "w": 288,
+          "h": 38
+        },
+        {
+          "text": "26 Mar, 2026 Scala Roadmap, AI Engineer Review",
+          "href": "/changelog#69c4edd431e228f31bc86f88",
+          "x": 16,
+          "y": 7259,
+          "absY": 7259,
+          "w": 288,
+          "h": 44
+        }
+      ],
+      "search": [
+        {
+          "ph": "",
+          "aria": "Enable Functional",
+          "visible": false,
+          "x": 623,
+          "y": 1301,
+          "absY": 1301,
+          "w": 38,
+          "h": 21
+        },
+        {
+          "ph": "",
+          "aria": "Enable Analytics",
+          "visible": false,
+          "x": 623,
+          "y": 1410,
+          "absY": 1410,
+          "w": 38,
+          "h": 21
+        },
+        {
+          "ph": "",
+          "aria": "Enable Performance",
+          "visible": false,
+          "x": 623,
+          "y": 1519,
+          "absY": 1519,
+          "w": 38,
+          "h": 21
+        },
+        {
+          "ph": "",
+          "aria": "Enable Advertisement",
+          "visible": false,
+          "x": 623,
+          "y": 1628,
+          "absY": 1628,
+          "w": 38,
+          "h": 21
+        },
+        {
+          "ph": "What do you want to learn today?",
+          "aria": "",
+          "visible": true,
+          "x": 60,
+          "y": 208,
+          "absY": 208,
+          "w": 232,
+          "h": 32
+        }
+      ],
+      "fixed": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "sticky top-0 z-35 border-b border-b-[#1e293c] transition-colors",
+          "text": "Roadmaps Lesson Packs NEW Project Ideas",
+          "pos": "sticky",
+          "x": 0,
+          "y": 332,
+          "absY": 332,
+          "w": 320,
+          "h": 46
+        }
+      ],
+      "inView": [
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "x": 16,
+          "y": 20,
+          "w": 30,
+          "h": 30
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "x": 66,
+          "y": 23,
+          "w": 57,
+          "h": 24
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Menu",
+          "x": 288,
+          "y": 27,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "tag": "H1",
+          "text": "Developer Roadmaps",
+          "x": 16,
+          "y": 94,
+          "w": 288,
+          "h": 32
+        },
+        {
+          "tag": "P",
+          "text": "Skill up with community created roadmaps, guides, and courses.",
+          "x": 16,
+          "y": 132,
+          "w": 288,
+          "h": 48
+        },
+        {
+          "tag": "INPUT",
+          "text": "What do you want to learn today?",
+          "x": 60,
+          "y": 208,
+          "w": 232,
+          "h": 32
+        },
+        {
+          "tag": "P",
+          "text": "Search available roadmaps or learn anything with AI.",
+          "x": 16,
+          "y": 260,
+          "w": 288,
+          "h": 40
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Roadmaps",
+          "x": 16,
+          "y": 344,
+          "w": 68,
+          "h": 34
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Lesson Packs NEW",
+          "x": 108,
+          "y": 344,
+          "w": 132,
+          "h": 34
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Project Ideas",
+          "x": 264,
+          "y": 344,
+          "w": 84,
+          "h": 34
+        },
+        {
+          "tag": "SPAN",
+          "text": "NEW",
+          "x": 204,
+          "y": 345,
+          "w": 37,
+          "h": 18
+        },
+        {
+          "tag": "H2",
+          "text": "Role-based",
+          "x": 16,
+          "y": 410,
+          "w": 76,
+          "h": 20
+        },
+        {
+          "tag": "SPAN",
+          "text": "31",
+          "x": 289,
+          "y": 413,
+          "w": 15,
+          "h": 16
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Learn with AI",
+          "x": 16,
+          "y": 442,
+          "w": 288,
+          "h": 54
+        },
+        {
+          "tag": "A",
+          "text": "Frontend",
+          "x": 16,
+          "y": 504,
+          "w": 288,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 283,
+          "y": 511,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "Backend",
+          "x": 16,
+          "y": 558,
+          "w": 288,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 283,
+          "y": 565,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "Full Stack",
+          "x": 16,
+          "y": 612,
+          "w": 288,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 283,
+          "y": 619,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "tag": "A",
+          "text": "Android",
+          "x": 16,
+          "y": 666,
+          "w": 288,
+          "h": 46
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Add to favorites",
+          "x": 283,
+          "y": 673,
+          "w": 14,
+          "h": 14
+        }
+      ],
+      "cookieFlag": false
+    },
+    "scrolls": {
+      "roles": 330,
+      "skills": 2130,
+      "practices": 5380,
+      "guides": 5734,
+      "community": 7692
+    },
+    "tabs": {
+      "Lesson Packs": {
+        "click": {
+          "ok": true,
+          "text": "Lesson Packs NEW"
+        },
+        "headings": [
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 16,
+            "y": 94,
+            "absY": 94,
+            "w": 288,
+            "h": 32,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "Git Fundamentals",
+            "x": 33,
+            "y": 534,
+            "absY": 534,
+            "w": 254,
+            "h": 28,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "Internet Fundamentals",
+            "x": 35,
+            "y": 694,
+            "absY": 694,
+            "w": 250,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "HTML Fundamentals",
+            "x": 35,
+            "y": 882,
+            "absY": 882,
+            "w": 250,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "CSS Fundamentals",
+            "x": 35,
+            "y": 1070,
+            "absY": 1070,
+            "w": 250,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "JavaScript Foundations",
+            "x": 35,
+            "y": 1258,
+            "absY": 1258,
+            "w": 250,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "Build CLI Apps with Node.js",
+            "x": 35,
+            "y": 1451,
+            "absY": 1451,
+            "w": 250,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "Linux and the Command Line",
+            "x": 35,
+            "y": 1661,
+            "absY": 1661,
+            "w": 250,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "Docker Fundamentals",
+            "x": 35,
+            "y": 1849,
+            "absY": 1849,
+            "w": 250,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "Build APIs with Node.js",
+            "x": 35,
+            "y": 2037,
+            "absY": 2037,
+            "w": 250,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H3",
+            "text": "RegEx for Everyone",
+            "x": 35,
+            "y": 2225,
+            "absY": 2225,
+            "w": 250,
+            "h": 23,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Guides",
+            "x": 16,
+            "y": 2420,
+            "absY": 2420,
+            "w": 288,
+            "h": 32,
+            "visible": true
+          }
+        ],
+        "inView": [
+          {
+            "tag": "A",
+            "text": "Roadmap Logo",
+            "x": 16,
+            "y": 20,
+            "w": 30,
+            "h": 30
+          },
+          {
+            "tag": "A",
+            "text": "AI Tutor",
+            "x": 66,
+            "y": 23,
+            "w": 57,
+            "h": 24
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Menu",
+            "x": 288,
+            "y": 27,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 16,
+            "y": 94,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Skill up with community created roadmaps, guides, and courses.",
+            "x": 16,
+            "y": 132,
+            "w": 288,
+            "h": 48
+          },
+          {
+            "tag": "INPUT",
+            "text": "What do you want to learn today?",
+            "x": 60,
+            "y": 208,
+            "w": 232,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Search available roadmaps or learn anything with AI.",
+            "x": 16,
+            "y": 260,
+            "w": 288,
+            "h": 40
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Roadmaps",
+            "x": 16,
+            "y": 344,
+            "w": 68,
+            "h": 34
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Lesson Packs NEW",
+            "x": 108,
+            "y": 344,
+            "w": 132,
+            "h": 34
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Project Ideas",
+            "x": 264,
+            "y": 344,
+            "w": 84,
+            "h": 34
+          },
+          {
+            "tag": "SPAN",
+            "text": "NEW",
+            "x": 204,
+            "y": 345,
+            "w": 37,
+            "h": 18
+          },
+          {
+            "tag": "P",
+            "text": "Included with Pro.Every pack starts with free lessons, so you can try before you upgrade.",
+            "x": 16,
+            "y": 410,
+            "w": 288,
+            "h": 62
+          },
+          {
+            "tag": "SPAN",
+            "text": "Included with Pro.",
+            "x": 16,
+            "y": 410,
+            "w": 142,
+            "h": 20
+          },
+          {
+            "tag": "A",
+            "text": "NEW Added Sep 14 Git Fundamentals Learn enough Git to work confidently on real projects with a team. 14 lessons Explore pack",
+            "x": 16,
+            "y": 488,
+            "w": 288,
+            "h": 175
+          },
+          {
+            "tag": "SPAN",
+            "text": "NEW Added Sep 14",
+            "x": 33,
+            "y": 505,
+            "w": 254,
+            "h": 19
+          },
+          {
+            "tag": "SPAN",
+            "text": "Added Sep 14",
+            "x": 78,
+            "y": 507,
+            "w": 79,
+            "h": 16
+          },
+          {
+            "tag": "H3",
+            "text": "Git Fundamentals",
+            "x": 33,
+            "y": 534,
+            "w": 254,
+            "h": 28
+          },
+          {
+            "tag": "P",
+            "text": "Learn enough Git to work confidently on real projects with a team.",
+            "x": 33,
+            "y": 572,
+            "w": 254,
+            "h": 40
+          },
+          {
+            "tag": "SPAN",
+            "text": "14 lessons Explore pack",
+            "x": 33,
+            "y": 626,
+            "w": 254,
+            "h": 20
+          },
+          {
+            "tag": "SPAN",
+            "text": "Explore pack",
+            "x": 182,
+            "y": 626,
+            "w": 105,
+            "h": 20
+          },
+          {
+            "tag": "SPAN",
+            "text": "14 lessons",
+            "x": 33,
+            "y": 628,
+            "w": 85,
+            "h": 16
+          },
+          {
+            "tag": "SPAN",
+            "text": "14",
+            "x": 53,
+            "y": 628,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "tag": "A",
+            "text": "Internet Fundamentals How the internet actually works: DNS, HTTP, hosting, and browsers. 6 lessons",
+            "x": 16,
+            "y": 675,
+            "w": 288,
+            "h": 176
+          },
+          {
+            "tag": "H3",
+            "text": "Internet Fundamentals",
+            "x": 35,
+            "y": 694,
+            "w": 250,
+            "h": 23
+          }
+        ],
+        "scrollH": 5708
+      },
+      "Project Ideas": {
+        "click": {
+          "ok": true,
+          "text": "Project Ideas"
+        },
+        "headings": [
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 16,
+            "y": 94,
+            "absY": 94,
+            "w": 288,
+            "h": 32,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Guides",
+            "x": 16,
+            "y": 840,
+            "absY": 840,
+            "w": 288,
+            "h": 32,
+            "visible": true
+          }
+        ],
+        "inView": [
+          {
+            "tag": "A",
+            "text": "Roadmap Logo",
+            "x": 16,
+            "y": 20,
+            "w": 30,
+            "h": 30
+          },
+          {
+            "tag": "A",
+            "text": "AI Tutor",
+            "x": 66,
+            "y": 23,
+            "w": 57,
+            "h": 24
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Menu",
+            "x": 288,
+            "y": 27,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 16,
+            "y": 94,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Skill up with community created roadmaps, guides, and courses.",
+            "x": 16,
+            "y": 132,
+            "w": 288,
+            "h": 48
+          },
+          {
+            "tag": "INPUT",
+            "text": "What do you want to learn today?",
+            "x": 60,
+            "y": 208,
+            "w": 232,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Search available roadmaps or learn anything with AI.",
+            "x": 16,
+            "y": 260,
+            "w": 288,
+            "h": 40
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Roadmaps",
+            "x": 16,
+            "y": 344,
+            "w": 68,
+            "h": 34
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Lesson Packs NEW",
+            "x": 108,
+            "y": 344,
+            "w": 132,
+            "h": 34
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Project Ideas",
+            "x": 264,
+            "y": 344,
+            "w": 84,
+            "h": 34
+          },
+          {
+            "tag": "SPAN",
+            "text": "NEW",
+            "x": 204,
+            "y": 345,
+            "w": 37,
+            "h": 18
+          },
+          {
+            "tag": "A",
+            "text": "Frontend",
+            "x": 16,
+            "y": 410,
+            "w": 288,
+            "h": 46
+          },
+          {
+            "tag": "A",
+            "text": "Backend",
+            "x": 16,
+            "y": 464,
+            "w": 288,
+            "h": 46
+          },
+          {
+            "tag": "A",
+            "text": "DevOps",
+            "x": 16,
+            "y": 518,
+            "w": 288,
+            "h": 46
+          },
+          {
+            "tag": "A",
+            "text": "HTML",
+            "x": 16,
+            "y": 572,
+            "w": 288,
+            "h": 46
+          },
+          {
+            "tag": "A",
+            "text": "CSS",
+            "x": 16,
+            "y": 626,
+            "w": 288,
+            "h": 46
+          },
+          {
+            "tag": "A",
+            "text": "JavaScript",
+            "x": 16,
+            "y": 680,
+            "w": 288,
+            "h": 46
+          }
+        ],
+        "scrollH": 4128
+      },
+      "Roadmaps": {
+        "click": {
+          "ok": true,
+          "text": "Roadmaps"
+        },
+        "headings": [
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 16,
+            "y": 94,
+            "absY": 94,
+            "w": 288,
+            "h": 32,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Role-based",
+            "x": 16,
+            "y": 410,
+            "absY": 410,
+            "w": 76,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Skill-based",
+            "x": 16,
+            "y": 2210,
+            "absY": 2210,
+            "w": 74,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Best Practices",
+            "x": 16,
+            "y": 5460,
+            "absY": 5460,
+            "w": 95,
+            "h": 20,
+            "visible": true
+          },
+          {
+            "tag": "H2",
+            "text": "Guides",
+            "x": 16,
+            "y": 5814,
+            "absY": 5814,
+            "w": 288,
+            "h": 32,
+            "visible": true
+          }
+        ],
+        "inView": [
+          {
+            "tag": "A",
+            "text": "Roadmap Logo",
+            "x": 16,
+            "y": 20,
+            "w": 30,
+            "h": 30
+          },
+          {
+            "tag": "A",
+            "text": "AI Tutor",
+            "x": 66,
+            "y": 23,
+            "w": 57,
+            "h": 24
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Menu",
+            "x": 288,
+            "y": 27,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "tag": "H1",
+            "text": "Developer Roadmaps",
+            "x": 16,
+            "y": 94,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Skill up with community created roadmaps, guides, and courses.",
+            "x": 16,
+            "y": 132,
+            "w": 288,
+            "h": 48
+          },
+          {
+            "tag": "INPUT",
+            "text": "What do you want to learn today?",
+            "x": 60,
+            "y": 208,
+            "w": 232,
+            "h": 32
+          },
+          {
+            "tag": "P",
+            "text": "Search available roadmaps or learn anything with AI.",
+            "x": 16,
+            "y": 260,
+            "w": 288,
+            "h": 40
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Roadmaps",
+            "x": 16,
+            "y": 344,
+            "w": 68,
+            "h": 34
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Lesson Packs NEW",
+            "x": 108,
+            "y": 344,
+            "w": 132,
+            "h": 34
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Project Ideas",
+            "x": 264,
+            "y": 344,
+            "w": 84,
+            "h": 34
+          },
+          {
+            "tag": "SPAN",
+            "text": "NEW",
+            "x": 204,
+            "y": 345,
+            "w": 37,
+            "h": 18
+          },
+          {
+            "tag": "H2",
+            "text": "Role-based",
+            "x": 16,
+            "y": 410,
+            "w": 76,
+            "h": 20
+          },
+          {
+            "tag": "SPAN",
+            "text": "31",
+            "x": 289,
+            "y": 413,
+            "w": 15,
+            "h": 16
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Learn with AI",
+            "x": 16,
+            "y": 442,
+            "w": 288,
+            "h": 54
+          },
+          {
+            "tag": "A",
+            "text": "Frontend",
+            "x": 16,
+            "y": 504,
+            "w": 288,
+            "h": 46
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 283,
+            "y": 511,
+            "w": 14,
+            "h": 14
+          },
+          {
+            "tag": "A",
+            "text": "Backend",
+            "x": 16,
+            "y": 558,
+            "w": 288,
+            "h": 46
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 283,
+            "y": 565,
+            "w": 14,
+            "h": 14
+          },
+          {
+            "tag": "A",
+            "text": "Full Stack",
+            "x": 16,
+            "y": 612,
+            "w": 288,
+            "h": 46
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 283,
+            "y": 619,
+            "w": 14,
+            "h": 14
+          },
+          {
+            "tag": "A",
+            "text": "Android",
+            "x": 16,
+            "y": 666,
+            "w": 288,
+            "h": 46
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Add to favorites",
+            "x": 283,
+            "y": 673,
+            "w": 14,
+            "h": 14
+          }
+        ],
+        "scrollH": 9102
+      }
+    },
+    "search": null
+  }
+}

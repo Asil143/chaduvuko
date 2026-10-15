@@ -218,13 +218,34 @@ Create `.env.local`:
 ```
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 OPENAI_API_KEY=your_openai_api_key
 OPENAI_MODEL=gpt-4o-mini
 ```
 
 Keep `OPENAI_API_KEY` in server-side environment variables only. Do not use a
 `NEXT_PUBLIC_` prefix or commit the key. For production, add the same variables
-to the hosting provider's environment configuration.
+to the hosting provider's environment configuration. `SUPABASE_SERVICE_ROLE_KEY`
+must also remain server-side and must never use a `NEXT_PUBLIC_` prefix.
+
+### Enable learner progress sync
+
+Learner progress remains browser-local unless a learner signs in. To enable
+passwordless email sign-in and cross-device sync:
+
+1. Apply `supabase/migrations/20261014_learner_progress.sql` and
+   `supabase/migrations/20261014_lesson_feedback.sql` to the Supabase project.
+2. In Supabase Authentication settings, enable email sign-in and add
+   `http://localhost:3000/auth/callback` and
+   `https://chaduvuko.com/auth/callback` to the redirect allowlist.
+3. Configure `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in
+   the app environment. Keep `SUPABASE_SERVICE_ROLE_KEY` server-side only; it
+   is required for admin-only feedback review and account deletion.
+
+Learners can sign in or delete their account from the dashboard. Sync merges
+locally saved lesson, quiz, roadmap, practice, project, and goal progress with
+their cloud record. Feedback submitted on a lesson is stored for admin review
+without linking it to the learner account.
 
 ```bash
 npm run dev

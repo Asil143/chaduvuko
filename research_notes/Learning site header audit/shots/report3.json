@@ -1,0 +1,25 @@
+{
+  "target": {
+    "x": 707.217529296875,
+    "y": 824.64013671875
+  },
+  "clickDone": {
+    "found": true
+  },
+  "afterDone": {
+    "url": "https://roadmap.sh/data-engineer",
+    "dialog": [
+      "Login or Signup You must be logged in to perform this action. Continue with GitHub Continue with Google Continue with LinkedIn Continue with Apple OR Use your email address By continuing to use our services, you acknowledge that you have both read and agree to our Terms of Service and Privacy Policy. Close"
+    ]
+  },
+  "locked": {
+    "status": 200,
+    "url": "https://roadmap.sh/packs/git/set-up-git-and-create-a-repository",
+    "title": "Set Up Git and Create a Repository · Git Fundamentals",
+    "text": "Back to\nGit Fundamentals\nGit Fundamentals\nLearn enough Git to work confidently on real projects with a team.\n0 / 14 complete\n0%\nLESSONS\n1\nWhat Is Git?\nFREE\n2\nSet Up Git and Create a Repository\n3\nThe Three Places Your Changes Live\n4\nInspect Changes Before You Commit\nFREE\n5\nMake Commits That Explain the Work\n6\nRead the Project's History\n7\nBranches Are Pointers\n8\nBring Branches Together With Merge\n9\nResolve a Merge Conflict\n10\nClone a Repository and Understand Remotes\n11\nWhat Fetch, Pull, and Push Actually Change\n12\nFollow an Everyday Team Workflow\n13\nPause Work With Stash\n14\nUndo Mistakes Without Losing Work\nSet Up Git and Create a Repository\nBefore Git can record a project's history, Git must be available on your computer and the project folder must be a Git repository. We will not cover installation of Git in this lesson but you can follow the instructions on this page to install it on your operating system.\nIn this lesson we will take the example of the developer-handbook project from the previous lesson. You will verify that Git is installed, check the author details Git will attach to future commits, and turn an ordinary folder into a repository.\nPRO LESSON\nSign in to continue\nSign in to read the full lesson and explore the rest of the pack.\nSign in to continue\nPrevious Lesson\nNext Lesson\nAI Tutor\nHello, how can I help you today?\nSome questions you might have about this lesson:\nWhy does git status return an error before initializing a repository\nHow do you check which auth"
+  },
+  "fav": {
+    "url": "https://roadmap.sh/data-engineer",
+    "dialog": ""
+  }
+}

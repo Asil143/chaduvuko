@@ -1,0 +1,4053 @@
+{
+  "home-1440-clean": {
+    "url": "https://roadmap.sh/",
+    "width": 1440,
+    "cookies": true,
+    "info": {
+      "headerTag": "NAV",
+      "headerH": 36,
+      "headerText": "Roadmaps AI Tutor Packs Newsletters Upgrade Login Sign Up",
+      "items": [
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "aria": "Roadmap Logo",
+          "href": "/",
+          "placeholder": null,
+          "title": null,
+          "x": 252,
+          "y": 35,
+          "w": 30,
+          "h": 30,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Open Navigation Dropdown",
+          "aria": "Open Navigation Dropdown",
+          "href": null,
+          "placeholder": null,
+          "title": null,
+          "x": 302,
+          "y": 32,
+          "w": 20,
+          "h": 36,
+          "visible": true,
+          "display": "inline-flex"
+        },
+        {
+          "tag": "A",
+          "text": "Roadmaps",
+          "aria": null,
+          "href": "/roadmaps",
+          "placeholder": null,
+          "title": null,
+          "x": 342,
+          "y": 38,
+          "w": 77,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "aria": null,
+          "href": "/ai",
+          "placeholder": null,
+          "title": null,
+          "x": 439,
+          "y": 38,
+          "w": 57,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Packs",
+          "aria": null,
+          "href": "/packs",
+          "placeholder": null,
+          "title": null,
+          "x": 515,
+          "y": 38,
+          "w": 43,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Newsletters",
+          "aria": null,
+          "href": "/newsletters",
+          "placeholder": null,
+          "title": null,
+          "x": 578,
+          "y": 38,
+          "w": 86,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Upgrade",
+          "aria": null,
+          "href": "/premium",
+          "placeholder": null,
+          "title": null,
+          "x": 684,
+          "y": 38,
+          "w": 86,
+          "h": 24,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "A",
+          "text": "Login",
+          "aria": null,
+          "href": "/login",
+          "placeholder": null,
+          "title": null,
+          "x": 1020,
+          "y": 38,
+          "w": 40,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Sign Up",
+          "aria": null,
+          "href": "/signup",
+          "placeholder": null,
+          "title": null,
+          "x": 1076,
+          "y": 34,
+          "w": 112,
+          "h": 32,
+          "visible": true,
+          "display": "flex"
+        }
+      ]
+    },
+    "tabOrder": [
+      {
+        "tag": "A",
+        "text": "Roadmap Logo",
+        "href": "/",
+        "x": 252,
+        "y": 35,
+        "w": 30,
+        "h": 30
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Open Navigation Dropdown",
+        "href": null,
+        "x": 302,
+        "y": 32,
+        "w": 20,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "Roadmaps",
+        "href": "/roadmaps",
+        "x": 342,
+        "y": 38,
+        "w": 77,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "AI Tutor",
+        "href": "/ai",
+        "x": 439,
+        "y": 38,
+        "w": 57,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Packs",
+        "href": "/packs",
+        "x": 515,
+        "y": 38,
+        "w": 43,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Newsletters",
+        "href": "/newsletters",
+        "x": 578,
+        "y": 38,
+        "w": 86,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Upgrade",
+        "href": "/premium",
+        "x": 684,
+        "y": 38,
+        "w": 86,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Login",
+        "href": "/login",
+        "x": 1020,
+        "y": 38,
+        "w": 40,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Sign Up",
+        "href": "/signup",
+        "x": 1076,
+        "y": 34,
+        "w": 112,
+        "h": 32
+      },
+      {
+        "tag": "INPUT",
+        "text": "What do you want to learn today?",
+        "href": null,
+        "x": 296,
+        "y": 268,
+        "w": 834,
+        "h": 32
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Roadmaps",
+        "href": null,
+        "x": 252,
+        "y": 396,
+        "w": 77,
+        "h": 38
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Learn with AI",
+        "href": null,
+        "x": 252,
+        "y": 514,
+        "w": 307,
+        "h": 54
+      },
+      {
+        "tag": "A",
+        "text": "Frontend",
+        "href": "/frontend",
+        "x": 567,
+        "y": 514,
+        "w": 307,
+        "h": 54
+      },
+      {
+        "tag": "A",
+        "text": "Backend",
+        "href": "/backend",
+        "x": 881,
+        "y": 514,
+        "w": 307,
+        "h": 54
+      },
+      {
+        "tag": "A",
+        "text": "Full Stack",
+        "href": "/full-stack",
+        "x": 252,
+        "y": 576,
+        "w": 307,
+        "h": 54
+      },
+      {
+        "tag": "A",
+        "text": "Android",
+        "href": "/android",
+        "x": 567,
+        "y": 576,
+        "w": 307,
+        "h": 54
+      },
+      {
+        "tag": "A",
+        "text": "DevOps",
+        "href": "/devops",
+        "x": 881,
+        "y": 576,
+        "w": 307,
+        "h": 54
+      },
+      {
+        "tag": "A",
+        "text": "DevSecOps",
+        "href": "/devsecops",
+        "x": 252,
+        "y": 638,
+        "w": 307,
+        "h": 54
+      }
+    ]
+  },
+  "home1440Menu": {
+    "dropdown": {
+      "found": true,
+      "aria": "Open Navigation Dropdown"
+    },
+    "menuText": {
+      "dropdownClicked": true,
+      "all": [
+        {
+          "text": "SQL Course Our premium SQL course",
+          "href": "/courses/sql",
+          "y": 82
+        },
+        {
+          "text": "Get Started Pick a path and get started",
+          "href": "/get-started",
+          "y": 146
+        },
+        {
+          "text": "Projects Skill-up with real-world projects",
+          "href": "/projects",
+          "y": 210
+        },
+        {
+          "text": "Guides In-depth articles and tutorials",
+          "href": "/guides",
+          "y": 274
+        },
+        {
+          "text": "Teams Collaborate with your team",
+          "href": "/teams",
+          "y": 338
+        },
+        {
+          "text": "Advertise Promote your product or service",
+          "href": "/advertise",
+          "y": 402
+        },
+        {
+          "text": "Roadmaps",
+          "href": null,
+          "y": 396
+        },
+        {
+          "text": "Lesson Packs NEW",
+          "href": null,
+          "y": 396
+        },
+        {
+          "text": "Learn with AI",
+          "href": null,
+          "y": 514
+        },
+        {
+          "text": "Full Stack",
+          "href": "/full-stack",
+          "y": 576
+        },
+        {
+          "text": "DevSecOps",
+          "href": "/devsecops",
+          "y": 638
+        }
+      ]
+    }
+  },
+  "search-home": {
+    "url": "https://roadmap.sh/",
+    "width": 1440,
+    "clicked": "input:What do you want to learn today?",
+    "empty": {
+      "text": "",
+      "groups": [],
+      "dialogRole": "dialog"
+    },
+    "queried": ""
+  },
+  "search-git": {
+    "url": "https://roadmap.sh/packs/git",
+    "width": 1440,
+    "clicked": "btn:Search",
+    "empty": {
+      "text": "",
+      "groups": [],
+      "dialogRole": "dialog"
+    },
+    "queried": ""
+  },
+  "search-home-390": {
+    "url": "https://roadmap.sh/",
+    "width": 390,
+    "clicked": "input:What do you want to learn today?",
+    "empty": {
+      "text": "",
+      "groups": [],
+      "dialogRole": "dialog"
+    },
+    "queried": ""
+  },
+  "home-1440-ui": {
+    "url": "https://roadmap.sh/",
+    "width": 1440,
+    "cookies": true,
+    "info": {
+      "headerTag": "NAV",
+      "headerH": 36,
+      "headerText": "Roadmaps AI Tutor Packs Newsletters Upgrade Login Sign Up",
+      "items": [
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "aria": "Roadmap Logo",
+          "href": "/",
+          "placeholder": null,
+          "title": null,
+          "x": 252,
+          "y": 35,
+          "w": 30,
+          "h": 30,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Open Navigation Dropdown",
+          "aria": "Open Navigation Dropdown",
+          "href": null,
+          "placeholder": null,
+          "title": null,
+          "x": 302,
+          "y": 32,
+          "w": 20,
+          "h": 36,
+          "visible": true,
+          "display": "inline-flex"
+        },
+        {
+          "tag": "A",
+          "text": "Roadmaps",
+          "aria": null,
+          "href": "/roadmaps",
+          "placeholder": null,
+          "title": null,
+          "x": 342,
+          "y": 38,
+          "w": 77,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "aria": null,
+          "href": "/ai",
+          "placeholder": null,
+          "title": null,
+          "x": 439,
+          "y": 38,
+          "w": 57,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Packs",
+          "aria": null,
+          "href": "/packs",
+          "placeholder": null,
+          "title": null,
+          "x": 515,
+          "y": 38,
+          "w": 43,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Newsletters",
+          "aria": null,
+          "href": "/newsletters",
+          "placeholder": null,
+          "title": null,
+          "x": 578,
+          "y": 38,
+          "w": 86,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Upgrade",
+          "aria": null,
+          "href": "/premium",
+          "placeholder": null,
+          "title": null,
+          "x": 684,
+          "y": 38,
+          "w": 86,
+          "h": 24,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "A",
+          "text": "Login",
+          "aria": null,
+          "href": "/login",
+          "placeholder": null,
+          "title": null,
+          "x": 1020,
+          "y": 38,
+          "w": 40,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Sign Up",
+          "aria": null,
+          "href": "/signup",
+          "placeholder": null,
+          "title": null,
+          "x": 1076,
+          "y": 34,
+          "w": 112,
+          "h": 32,
+          "visible": true,
+          "display": "flex"
+        }
+      ]
+    },
+    "tabOrder": [
+      {
+        "tag": "A",
+        "text": "Roadmap Logo",
+        "href": "/",
+        "x": 252,
+        "y": 35,
+        "w": 30,
+        "h": 30
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Open Navigation Dropdown",
+        "href": null,
+        "x": 302,
+        "y": 32,
+        "w": 20,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "Roadmaps",
+        "href": "/roadmaps",
+        "x": 342,
+        "y": 38,
+        "w": 77,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "AI Tutor",
+        "href": "/ai",
+        "x": 439,
+        "y": 38,
+        "w": 57,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Packs",
+        "href": "/packs",
+        "x": 515,
+        "y": 38,
+        "w": 43,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Newsletters",
+        "href": "/newsletters",
+        "x": 578,
+        "y": 38,
+        "w": 86,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Upgrade",
+        "href": "/premium",
+        "x": 684,
+        "y": 38,
+        "w": 86,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Login",
+        "href": "/login",
+        "x": 1020,
+        "y": 38,
+        "w": 40,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Sign Up",
+        "href": "/signup",
+        "x": 1076,
+        "y": 34,
+        "w": 112,
+        "h": 32
+      },
+      {
+        "tag": "INPUT",
+        "text": "What do you want to learn today?",
+        "href": null,
+        "x": 296,
+        "y": 268,
+        "w": 834,
+        "h": 32
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Roadmaps",
+        "href": null,
+        "x": 252,
+        "y": 396,
+        "w": 77,
+        "h": 38
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Learn with AI",
+        "href": null,
+        "x": 252,
+        "y": 514,
+        "w": 307,
+        "h": 54
+      },
+      {
+        "tag": "A",
+        "text": "Frontend",
+        "href": "/frontend",
+        "x": 567,
+        "y": 514,
+        "w": 307,
+        "h": 54
+      },
+      {
+        "tag": "A",
+        "text": "Backend",
+        "href": "/backend",
+        "x": 881,
+        "y": 514,
+        "w": 307,
+        "h": 54
+      },
+      {
+        "tag": "A",
+        "text": "Full Stack",
+        "href": "/full-stack",
+        "x": 252,
+        "y": 576,
+        "w": 307,
+        "h": 54
+      },
+      {
+        "tag": "A",
+        "text": "Android",
+        "href": "/android",
+        "x": 567,
+        "y": 576,
+        "w": 307,
+        "h": 54
+      },
+      {
+        "tag": "A",
+        "text": "DevOps",
+        "href": "/devops",
+        "x": 881,
+        "y": 576,
+        "w": 307,
+        "h": 54
+      },
+      {
+        "tag": "A",
+        "text": "DevSecOps",
+        "href": "/devsecops",
+        "x": 252,
+        "y": 638,
+        "w": 307,
+        "h": 54
+      }
+    ]
+  },
+  "home-390-ui": {
+    "url": "https://roadmap.sh/",
+    "width": 390,
+    "cookies": true,
+    "info": {
+      "headerTag": "NAV",
+      "headerH": 30,
+      "headerText": "AI Tutor",
+      "items": [
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "aria": "Roadmap Logo",
+          "href": "/",
+          "placeholder": null,
+          "title": null,
+          "x": 16,
+          "y": 20,
+          "w": 30,
+          "h": 30,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "aria": null,
+          "href": "/ai",
+          "placeholder": null,
+          "title": null,
+          "x": 66,
+          "y": 23,
+          "w": 57,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Menu",
+          "aria": "Menu",
+          "href": null,
+          "placeholder": null,
+          "title": null,
+          "x": 358,
+          "y": 27,
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "display": "block"
+        }
+      ]
+    },
+    "tabOrder": [
+      {
+        "tag": "A",
+        "text": "Roadmap Logo",
+        "href": "/",
+        "x": 16,
+        "y": 20,
+        "w": 30,
+        "h": 30
+      },
+      {
+        "tag": "A",
+        "text": "AI Tutor",
+        "href": "/ai",
+        "x": 66,
+        "y": 23,
+        "w": 57,
+        "h": 24
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Menu",
+        "href": null,
+        "x": 358,
+        "y": 27,
+        "w": 16,
+        "h": 16
+      },
+      {
+        "tag": "INPUT",
+        "text": "What do you want to learn today?",
+        "href": null,
+        "x": 60,
+        "y": 208,
+        "w": 302,
+        "h": 32
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Roadmaps",
+        "href": null,
+        "x": 16,
+        "y": 324,
+        "w": 68,
+        "h": 34
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Learn with AI",
+        "href": null,
+        "x": 16,
+        "y": 422,
+        "w": 358,
+        "h": 54
+      },
+      {
+        "tag": "A",
+        "text": "Frontend",
+        "href": "/frontend",
+        "x": 16,
+        "y": 484,
+        "w": 358,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "Backend",
+        "href": "/backend",
+        "x": 16,
+        "y": 538,
+        "w": 358,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "Full Stack",
+        "href": "/full-stack",
+        "x": 16,
+        "y": 592,
+        "w": 358,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "Android",
+        "href": "/android",
+        "x": 16,
+        "y": 646,
+        "w": 358,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "DevOps",
+        "href": "/devops",
+        "x": 16,
+        "y": 700,
+        "w": 358,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "DevSecOps",
+        "href": "/devsecops",
+        "x": 16,
+        "y": 754,
+        "w": 358,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "Data Analyst",
+        "href": "/data-analyst",
+        "x": 16,
+        "y": 808,
+        "w": 358,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "SEO New",
+        "href": "/seo",
+        "x": 16,
+        "y": 855,
+        "w": 358,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "Inference Engineering New",
+        "href": "/inference-engineering",
+        "x": 16,
+        "y": 427,
+        "w": 358,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "AI Engineer",
+        "href": "/ai-engineer",
+        "x": 16,
+        "y": 481,
+        "w": 358,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "AI and Data Scientist",
+        "href": "/ai-data-scientist",
+        "x": 16,
+        "y": 535,
+        "w": 358,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "Data Engineer",
+        "href": "/data-engineer",
+        "x": 16,
+        "y": 589,
+        "w": 358,
+        "h": 46
+      }
+    ]
+  },
+  "home-320-ui": {
+    "url": "https://roadmap.sh/",
+    "width": 320,
+    "cookies": true,
+    "info": {
+      "headerTag": "NAV",
+      "headerH": 30,
+      "headerText": "AI Tutor",
+      "items": [
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "aria": "Roadmap Logo",
+          "href": "/",
+          "placeholder": null,
+          "title": null,
+          "x": 16,
+          "y": 20,
+          "w": 30,
+          "h": 30,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "aria": null,
+          "href": "/ai",
+          "placeholder": null,
+          "title": null,
+          "x": 66,
+          "y": 23,
+          "w": 57,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Menu",
+          "aria": "Menu",
+          "href": null,
+          "placeholder": null,
+          "title": null,
+          "x": 288,
+          "y": 27,
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "display": "block"
+        }
+      ]
+    },
+    "tabOrder": [
+      {
+        "tag": "A",
+        "text": "Roadmap Logo",
+        "href": "/",
+        "x": 16,
+        "y": 20,
+        "w": 30,
+        "h": 30
+      },
+      {
+        "tag": "A",
+        "text": "AI Tutor",
+        "href": "/ai",
+        "x": 66,
+        "y": 23,
+        "w": 57,
+        "h": 24
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Menu",
+        "href": null,
+        "x": 288,
+        "y": 27,
+        "w": 16,
+        "h": 16
+      },
+      {
+        "tag": "INPUT",
+        "text": "What do you want to learn today?",
+        "href": null,
+        "x": 60,
+        "y": 208,
+        "w": 232,
+        "h": 32
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Roadmaps",
+        "href": null,
+        "x": 16,
+        "y": 344,
+        "w": 68,
+        "h": 34
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Learn with AI",
+        "href": null,
+        "x": 16,
+        "y": 442,
+        "w": 288,
+        "h": 54
+      },
+      {
+        "tag": "A",
+        "text": "Frontend",
+        "href": "/frontend",
+        "x": 16,
+        "y": 504,
+        "w": 288,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "Backend",
+        "href": "/backend",
+        "x": 16,
+        "y": 558,
+        "w": 288,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "Full Stack",
+        "href": "/full-stack",
+        "x": 16,
+        "y": 612,
+        "w": 288,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "Android",
+        "href": "/android",
+        "x": 16,
+        "y": 666,
+        "w": 288,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "DevOps",
+        "href": "/devops",
+        "x": 16,
+        "y": 720,
+        "w": 288,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "DevSecOps",
+        "href": "/devsecops",
+        "x": 16,
+        "y": 774,
+        "w": 288,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "Data Analyst",
+        "href": "/data-analyst",
+        "x": 16,
+        "y": 828,
+        "w": 288,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "SEO New",
+        "href": "/seo",
+        "x": 16,
+        "y": 855,
+        "w": 288,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "Inference Engineering New",
+        "href": "/inference-engineering",
+        "x": 16,
+        "y": 427,
+        "w": 288,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "AI Engineer",
+        "href": "/ai-engineer",
+        "x": 16,
+        "y": 481,
+        "w": 288,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "AI and Data Scientist",
+        "href": "/ai-data-scientist",
+        "x": 16,
+        "y": 535,
+        "w": 288,
+        "h": 46
+      },
+      {
+        "tag": "A",
+        "text": "Data Engineer",
+        "href": "/data-engineer",
+        "x": 16,
+        "y": 589,
+        "w": 288,
+        "h": 46
+      }
+    ]
+  },
+  "de-1440-ui": {
+    "url": "https://roadmap.sh/data-engineer",
+    "width": 1440,
+    "cookies": true,
+    "info": {
+      "headerTag": "NAV",
+      "headerH": 36,
+      "headerText": "Roadmaps AI Tutor Packs Newsletters Upgrade Login Sign Up",
+      "items": [
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "aria": "Roadmap Logo",
+          "href": "/",
+          "placeholder": null,
+          "title": null,
+          "x": 252,
+          "y": 35,
+          "w": 30,
+          "h": 30,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Open Navigation Dropdown",
+          "aria": "Open Navigation Dropdown",
+          "href": null,
+          "placeholder": null,
+          "title": null,
+          "x": 302,
+          "y": 32,
+          "w": 20,
+          "h": 36,
+          "visible": true,
+          "display": "inline-flex"
+        },
+        {
+          "tag": "A",
+          "text": "Roadmaps",
+          "aria": null,
+          "href": "/roadmaps",
+          "placeholder": null,
+          "title": null,
+          "x": 342,
+          "y": 38,
+          "w": 77,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "aria": null,
+          "href": "/ai",
+          "placeholder": null,
+          "title": null,
+          "x": 439,
+          "y": 38,
+          "w": 57,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Packs",
+          "aria": null,
+          "href": "/packs",
+          "placeholder": null,
+          "title": null,
+          "x": 515,
+          "y": 38,
+          "w": 43,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Newsletters",
+          "aria": null,
+          "href": "/newsletters",
+          "placeholder": null,
+          "title": null,
+          "x": 578,
+          "y": 38,
+          "w": 86,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Upgrade",
+          "aria": null,
+          "href": "/premium",
+          "placeholder": null,
+          "title": null,
+          "x": 684,
+          "y": 38,
+          "w": 86,
+          "h": 24,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "A",
+          "text": "Login",
+          "aria": null,
+          "href": "/login",
+          "placeholder": null,
+          "title": null,
+          "x": 1020,
+          "y": 38,
+          "w": 40,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Sign Up",
+          "aria": null,
+          "href": "/signup",
+          "placeholder": null,
+          "title": null,
+          "x": 1076,
+          "y": 34,
+          "w": 112,
+          "h": 32,
+          "visible": true,
+          "display": "flex"
+        }
+      ]
+    },
+    "tabOrder": [
+      {
+        "tag": "A",
+        "text": "Roadmap Logo",
+        "href": "/",
+        "x": 252,
+        "y": 35,
+        "w": 30,
+        "h": 30
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Open Navigation Dropdown",
+        "href": null,
+        "x": 302,
+        "y": 32,
+        "w": 20,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "Roadmaps",
+        "href": "/roadmaps",
+        "x": 342,
+        "y": 38,
+        "w": 77,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "AI Tutor",
+        "href": "/ai",
+        "x": 439,
+        "y": 38,
+        "w": 57,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Packs",
+        "href": "/packs",
+        "x": 515,
+        "y": 38,
+        "w": 43,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Newsletters",
+        "href": "/newsletters",
+        "x": 578,
+        "y": 38,
+        "w": 86,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Upgrade",
+        "href": "/premium",
+        "x": 684,
+        "y": 38,
+        "w": 86,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Login",
+        "href": "/login",
+        "x": 1020,
+        "y": 38,
+        "w": 40,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Sign Up",
+        "href": "/signup",
+        "x": 1076,
+        "y": 34,
+        "w": 112,
+        "h": 32
+      },
+      {
+        "tag": "INPUT",
+        "text": "What do you want to learn today?",
+        "href": null,
+        "x": 296,
+        "y": 100,
+        "w": 834,
+        "h": 32
+      },
+      {
+        "tag": "A",
+        "text": "← All Roadmaps",
+        "href": "/roadmaps",
+        "x": 273,
+        "y": 193,
+        "w": 110,
+        "h": 20
+      },
+      {
+        "tag": "A",
+        "text": "Prefer us on Google",
+        "href": "https://www.google.com/preferences/source?q=roadmap.sh",
+        "x": 921,
+        "y": 191,
+        "w": 56,
+        "h": 32
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Weekly Newsletter",
+        "href": null,
+        "x": 981,
+        "y": 191,
+        "w": 32,
+        "h": 32
+      },
+      {
+        "tag": "A",
+        "text": "Download",
+        "href": "#",
+        "x": 1017,
+        "y": 191,
+        "w": 114,
+        "h": 32
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Share Roadmap",
+        "href": null,
+        "x": 1135,
+        "y": 191,
+        "w": 40,
+        "h": 32
+      },
+      {
+        "tag": "A",
+        "text": "AI Tutor",
+        "href": "/ai/roadmap-chat/data-engineer",
+        "x": 381,
+        "y": 412,
+        "w": 89,
+        "h": 32
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Personalize",
+        "href": null,
+        "x": 1071,
+        "y": 411,
+        "w": 96,
+        "h": 32
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Join 8,048+ others tracking their progress on this roadmap Sign up free",
+        "href": null,
+        "x": 253,
+        "y": 455,
+        "w": 934,
+        "h": 44
+      }
+    ]
+  },
+  "de-390-ui": {
+    "url": "https://roadmap.sh/data-engineer",
+    "width": 390,
+    "cookies": true,
+    "info": {
+      "headerTag": "NAV",
+      "headerH": 30,
+      "headerText": "AI Tutor",
+      "items": [
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "aria": "Roadmap Logo",
+          "href": "/",
+          "placeholder": null,
+          "title": null,
+          "x": 16,
+          "y": 20,
+          "w": 30,
+          "h": 30,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "aria": null,
+          "href": "/ai",
+          "placeholder": null,
+          "title": null,
+          "x": 66,
+          "y": 23,
+          "w": 57,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Menu",
+          "aria": "Menu",
+          "href": null,
+          "placeholder": null,
+          "title": null,
+          "x": 358,
+          "y": 27,
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "display": "block"
+        }
+      ]
+    },
+    "tabOrder": [
+      {
+        "tag": "A",
+        "text": "Roadmap Logo",
+        "href": "/",
+        "x": 16,
+        "y": 20,
+        "w": 30,
+        "h": 30
+      },
+      {
+        "tag": "A",
+        "text": "AI Tutor",
+        "href": "/ai",
+        "x": 66,
+        "y": 23,
+        "w": 57,
+        "h": 24
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Menu",
+        "href": null,
+        "x": 358,
+        "y": 27,
+        "w": 16,
+        "h": 16
+      },
+      {
+        "tag": "INPUT",
+        "text": "What do you want to learn today?",
+        "href": null,
+        "x": 60,
+        "y": 74,
+        "w": 302,
+        "h": 32
+      },
+      {
+        "tag": "A",
+        "text": "Back to roadmaps",
+        "href": "/roadmaps",
+        "x": 21,
+        "y": 147,
+        "w": 32,
+        "h": 28
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Prefer roadmap.sh on Google",
+        "href": null,
+        "x": 189,
+        "y": 147,
+        "w": 56,
+        "h": 28
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Subscribe",
+        "href": null,
+        "x": 249,
+        "y": 147,
+        "w": 32,
+        "h": 28
+      },
+      {
+        "tag": "A",
+        "text": "Download Roadmap",
+        "href": "#",
+        "x": 285,
+        "y": 147,
+        "w": 40,
+        "h": 28
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Share Roadmap",
+        "href": null,
+        "x": 329,
+        "y": 147,
+        "w": 40,
+        "h": 28
+      },
+      {
+        "tag": "A",
+        "text": "AI",
+        "href": "/ai/roadmap-chat/data-engineer",
+        "x": 125,
+        "y": 290,
+        "w": 51,
+        "h": 32
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Join 8,048+ tracking this roadmap Sign up free",
+        "href": null,
+        "x": 17,
+        "y": 333,
+        "w": 356,
+        "h": 44
+      },
+      {
+        "tag": "BUTTON",
+        "text": "AI Tutor Ask anything",
+        "href": null,
+        "x": 76,
+        "y": 836,
+        "w": 239,
+        "h": 44
+      },
+      {
+        "tag": "A",
+        "text": "6th most starred project on GitHub",
+        "href": "https://github.com/search?o=desc&q=stars%3A%3E100000&s=stars&type=Repositories",
+        "x": 135,
+        "y": 441,
+        "w": 231,
+        "h": 17
+      },
+      {
+        "tag": "A",
+        "text": "Star us on GitHub Help us reach #1",
+        "href": "https://github.com/kamranahmedse/developer-roadmap",
+        "x": 16,
+        "y": 595,
+        "w": 162,
+        "h": 56
+      },
+      {
+        "tag": "A",
+        "text": "Register yourself Commit to your growth",
+        "href": "/signup",
+        "x": 16,
+        "y": 739,
+        "w": 165,
+        "h": 56
+      },
+      {
+        "tag": "A",
+        "text": "Join on Discord Join the community",
+        "href": "https://roadmap.sh/discord",
+        "x": 16,
+        "y": 844,
+        "w": 150,
+        "h": 56
+      },
+      {
+        "tag": "A",
+        "text": "Roadmaps",
+        "href": "/roadmaps",
+        "x": 16,
+        "y": 431,
+        "w": 358,
+        "h": 37
+      },
+      {
+        "tag": "A",
+        "text": "Guides",
+        "href": "/guides",
+        "x": 16,
+        "y": 468,
+        "w": 358,
+        "h": 37
+      }
+    ]
+  },
+  "de-320-ui": {
+    "url": "https://roadmap.sh/data-engineer",
+    "width": 320,
+    "cookies": true,
+    "info": {
+      "headerTag": "NAV",
+      "headerH": 30,
+      "headerText": "AI Tutor",
+      "items": [
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "aria": "Roadmap Logo",
+          "href": "/",
+          "placeholder": null,
+          "title": null,
+          "x": 16,
+          "y": 20,
+          "w": 30,
+          "h": 30,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "aria": null,
+          "href": "/ai",
+          "placeholder": null,
+          "title": null,
+          "x": 66,
+          "y": 23,
+          "w": 57,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Menu",
+          "aria": "Menu",
+          "href": null,
+          "placeholder": null,
+          "title": null,
+          "x": 288,
+          "y": 27,
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "display": "block"
+        }
+      ]
+    },
+    "tabOrder": [
+      {
+        "tag": "A",
+        "text": "Roadmap Logo",
+        "href": "/",
+        "x": 16,
+        "y": 20,
+        "w": 30,
+        "h": 30
+      },
+      {
+        "tag": "A",
+        "text": "AI Tutor",
+        "href": "/ai",
+        "x": 66,
+        "y": 23,
+        "w": 57,
+        "h": 24
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Menu",
+        "href": null,
+        "x": 288,
+        "y": 27,
+        "w": 16,
+        "h": 16
+      },
+      {
+        "tag": "INPUT",
+        "text": "What do you want to learn today?",
+        "href": null,
+        "x": 60,
+        "y": 74,
+        "w": 232,
+        "h": 32
+      },
+      {
+        "tag": "A",
+        "text": "Back to roadmaps",
+        "href": "/roadmaps",
+        "x": 21,
+        "y": 147,
+        "w": 32,
+        "h": 28
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Prefer roadmap.sh on Google",
+        "href": null,
+        "x": 119,
+        "y": 147,
+        "w": 56,
+        "h": 28
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Subscribe",
+        "href": null,
+        "x": 179,
+        "y": 147,
+        "w": 32,
+        "h": 28
+      },
+      {
+        "tag": "A",
+        "text": "Download Roadmap",
+        "href": "#",
+        "x": 215,
+        "y": 147,
+        "w": 40,
+        "h": 28
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Share Roadmap",
+        "href": null,
+        "x": 259,
+        "y": 147,
+        "w": 40,
+        "h": 28
+      },
+      {
+        "tag": "A",
+        "text": "AI",
+        "href": "/ai/roadmap-chat/data-engineer",
+        "x": 125,
+        "y": 290,
+        "w": 51,
+        "h": 32
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Join 8,048+ tracking this roadmap Sign up free",
+        "href": null,
+        "x": 17,
+        "y": 333,
+        "w": 286,
+        "h": 44
+      },
+      {
+        "tag": "BUTTON",
+        "text": "AI Tutor Ask anything",
+        "href": null,
+        "x": 41,
+        "y": 836,
+        "w": 239,
+        "h": 44
+      },
+      {
+        "tag": "A",
+        "text": "6th most starred project on GitHub",
+        "href": "https://github.com/search?o=desc&q=stars%3A%3E100000&s=stars&type=Repositories",
+        "x": 16,
+        "y": 430,
+        "w": 280,
+        "h": 40
+      },
+      {
+        "tag": "A",
+        "text": "Star us on GitHub Help us reach #1",
+        "href": "https://github.com/kamranahmedse/developer-roadmap",
+        "x": 16,
+        "y": 585,
+        "w": 162,
+        "h": 56
+      },
+      {
+        "tag": "A",
+        "text": "Register yourself Commit to your growth",
+        "href": "/signup",
+        "x": 16,
+        "y": 729,
+        "w": 165,
+        "h": 56
+      },
+      {
+        "tag": "A",
+        "text": "Join on Discord Join the community",
+        "href": "https://roadmap.sh/discord",
+        "x": 16,
+        "y": 844,
+        "w": 150,
+        "h": 56
+      },
+      {
+        "tag": "A",
+        "text": "Roadmaps",
+        "href": "/roadmaps",
+        "x": 16,
+        "y": 432,
+        "w": 288,
+        "h": 37
+      },
+      {
+        "tag": "A",
+        "text": "Guides",
+        "href": "/guides",
+        "x": 16,
+        "y": 469,
+        "w": 288,
+        "h": 37
+      }
+    ]
+  },
+  "gitpack-1440-ui": {
+    "url": "https://roadmap.sh/packs/git",
+    "width": 1440,
+    "cookies": true,
+    "info": {
+      "headerTag": "NAV",
+      "headerH": 36,
+      "headerText": "Roadmaps AI Tutor Packs Newsletters Search Upgrade Login Sign Up",
+      "items": [
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "aria": "Roadmap Logo",
+          "href": "/",
+          "placeholder": null,
+          "title": null,
+          "x": 252,
+          "y": 35,
+          "w": 30,
+          "h": 30,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Open Navigation Dropdown",
+          "aria": "Open Navigation Dropdown",
+          "href": null,
+          "placeholder": null,
+          "title": null,
+          "x": 302,
+          "y": 32,
+          "w": 20,
+          "h": 36,
+          "visible": true,
+          "display": "inline-flex"
+        },
+        {
+          "tag": "A",
+          "text": "Roadmaps",
+          "aria": null,
+          "href": "/roadmaps",
+          "placeholder": null,
+          "title": null,
+          "x": 342,
+          "y": 38,
+          "w": 77,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "aria": null,
+          "href": "/ai",
+          "placeholder": null,
+          "title": null,
+          "x": 439,
+          "y": 38,
+          "w": 57,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Packs",
+          "aria": null,
+          "href": "/packs",
+          "placeholder": null,
+          "title": null,
+          "x": 515,
+          "y": 38,
+          "w": 43,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Newsletters",
+          "aria": null,
+          "href": "/newsletters",
+          "placeholder": null,
+          "title": null,
+          "x": 578,
+          "y": 38,
+          "w": 86,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Search",
+          "aria": null,
+          "href": null,
+          "placeholder": null,
+          "title": null,
+          "x": 684,
+          "y": 34,
+          "w": 144,
+          "h": 32,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "A",
+          "text": "Upgrade",
+          "aria": null,
+          "href": "/premium",
+          "placeholder": null,
+          "title": null,
+          "x": 914,
+          "y": 38,
+          "w": 86,
+          "h": 24,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "A",
+          "text": "Login",
+          "aria": null,
+          "href": "/login",
+          "placeholder": null,
+          "title": null,
+          "x": 1020,
+          "y": 38,
+          "w": 40,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "A",
+          "text": "Sign Up",
+          "aria": null,
+          "href": "/signup",
+          "placeholder": null,
+          "title": null,
+          "x": 1076,
+          "y": 34,
+          "w": 112,
+          "h": 32,
+          "visible": true,
+          "display": "flex"
+        }
+      ]
+    },
+    "tabOrder": [
+      {
+        "tag": "A",
+        "text": "Roadmap Logo",
+        "href": "/",
+        "x": 252,
+        "y": 35,
+        "w": 30,
+        "h": 30
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Open Navigation Dropdown",
+        "href": null,
+        "x": 302,
+        "y": 32,
+        "w": 20,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "Roadmaps",
+        "href": "/roadmaps",
+        "x": 342,
+        "y": 38,
+        "w": 77,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "AI Tutor",
+        "href": "/ai",
+        "x": 439,
+        "y": 38,
+        "w": 57,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Packs",
+        "href": "/packs",
+        "x": 515,
+        "y": 38,
+        "w": 43,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Newsletters",
+        "href": "/newsletters",
+        "x": 578,
+        "y": 38,
+        "w": 86,
+        "h": 24
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Search",
+        "href": null,
+        "x": 684,
+        "y": 34,
+        "w": 144,
+        "h": 32
+      },
+      {
+        "tag": "A",
+        "text": "Upgrade",
+        "href": "/premium",
+        "x": 914,
+        "y": 38,
+        "w": 86,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Login",
+        "href": "/login",
+        "x": 1020,
+        "y": 38,
+        "w": 40,
+        "h": 24
+      },
+      {
+        "tag": "A",
+        "text": "Sign Up",
+        "href": "/signup",
+        "x": 1076,
+        "y": 34,
+        "w": 112,
+        "h": 32
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Unlock with Pro",
+        "href": null,
+        "x": 285,
+        "y": 317,
+        "w": 170,
+        "h": 40
+      },
+      {
+        "tag": "A",
+        "text": "Preview Pack",
+        "href": "/packs/git/what-is-git",
+        "x": 467,
+        "y": 317,
+        "w": 130,
+        "h": 40
+      },
+      {
+        "tag": "A",
+        "text": "01 What Is Git? What Git is, how it saves your work, and how it differs from Git",
+        "href": "/packs/git/what-is-git",
+        "x": 253,
+        "y": 468,
+        "w": 934,
+        "h": 76
+      },
+      {
+        "tag": "A",
+        "text": "02 Set Up Git and Create a Repository Install and configure Git, then create you",
+        "href": "/packs/git/set-up-git-and-create-a-repository",
+        "x": 253,
+        "y": 545,
+        "w": 934,
+        "h": 76
+      },
+      {
+        "tag": "A",
+        "text": "03 The Three Places Your Changes Live Follow one change through Git's three plac",
+        "href": "/packs/git/the-three-places-your-changes-live",
+        "x": 253,
+        "y": 622,
+        "w": 934,
+        "h": 76
+      },
+      {
+        "tag": "A",
+        "text": "04 Inspect Changes Before You Commit Use status and diff to see your changes bef",
+        "href": "/packs/git/inspect-changes-before-you-commit",
+        "x": 253,
+        "y": 699,
+        "w": 934,
+        "h": 76
+      },
+      {
+        "tag": "A",
+        "text": "05 Make Commits That Explain the Work Group related changes and write commit mes",
+        "href": "/packs/git/make-commits-that-explain-the-work",
+        "x": 253,
+        "y": 776,
+        "w": 934,
+        "h": 76
+      },
+      {
+        "tag": "A",
+        "text": "06 Read the Project's History Read a project's history with log and show, and co",
+        "href": "/packs/git/read-the-projects-history",
+        "x": 253,
+        "y": 824,
+        "w": 934,
+        "h": 76
+      }
+    ]
+  },
+  "gitpack-390-ui": {
+    "url": "https://roadmap.sh/packs/git",
+    "width": 390,
+    "cookies": true,
+    "info": {
+      "headerTag": "NAV",
+      "headerH": 30,
+      "headerText": "AI Tutor",
+      "items": [
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "aria": "Roadmap Logo",
+          "href": "/",
+          "placeholder": null,
+          "title": null,
+          "x": 16,
+          "y": 20,
+          "w": 30,
+          "h": 30,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "aria": null,
+          "href": "/ai",
+          "placeholder": null,
+          "title": null,
+          "x": 66,
+          "y": 23,
+          "w": 57,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Menu",
+          "aria": "Menu",
+          "href": null,
+          "placeholder": null,
+          "title": null,
+          "x": 358,
+          "y": 27,
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "display": "block"
+        }
+      ]
+    },
+    "tabOrder": [
+      {
+        "tag": "A",
+        "text": "Roadmap Logo",
+        "href": "/",
+        "x": 16,
+        "y": 20,
+        "w": 30,
+        "h": 30
+      },
+      {
+        "tag": "A",
+        "text": "AI Tutor",
+        "href": "/ai",
+        "x": 66,
+        "y": 23,
+        "w": 57,
+        "h": 24
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Menu",
+        "href": null,
+        "x": 358,
+        "y": 27,
+        "w": 16,
+        "h": 16
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Unlock with Pro",
+        "href": null,
+        "x": 20,
+        "y": 238,
+        "w": 170,
+        "h": 40
+      },
+      {
+        "tag": "A",
+        "text": "Preview Pack",
+        "href": "/packs/git/what-is-git",
+        "x": 202,
+        "y": 238,
+        "w": 130,
+        "h": 40
+      },
+      {
+        "tag": "A",
+        "text": "01 What Is Git? What Git is, how it saves your work, and how it differs from Git",
+        "href": "/packs/git/what-is-git",
+        "x": 21,
+        "y": 429,
+        "w": 348,
+        "h": 116
+      },
+      {
+        "tag": "A",
+        "text": "02 Set Up Git and Create a Repository Install and configure Git, then create you",
+        "href": "/packs/git/set-up-git-and-create-a-repository",
+        "x": 21,
+        "y": 546,
+        "w": 348,
+        "h": 116
+      },
+      {
+        "tag": "A",
+        "text": "03 The Three Places Your Changes Live Follow one change through Git's three plac",
+        "href": "/packs/git/the-three-places-your-changes-live",
+        "x": 21,
+        "y": 663,
+        "w": 348,
+        "h": 136
+      },
+      {
+        "tag": "A",
+        "text": "04 Inspect Changes Before You Commit Use status and diff to see your changes bef",
+        "href": "/packs/git/inspect-changes-before-you-commit",
+        "x": 21,
+        "y": 764,
+        "w": 348,
+        "h": 136
+      },
+      {
+        "tag": "A",
+        "text": "05 Make Commits That Explain the Work Group related changes and write commit mes",
+        "href": "/packs/git/make-commits-that-explain-the-work",
+        "x": 21,
+        "y": 382,
+        "w": 348,
+        "h": 136
+      },
+      {
+        "tag": "A",
+        "text": "06 Read the Project's History Read a project's history with log and show, and co",
+        "href": "/packs/git/read-the-projects-history",
+        "x": 21,
+        "y": 519,
+        "w": 348,
+        "h": 136
+      },
+      {
+        "tag": "A",
+        "text": "07 Branches Are Pointers See how branches and HEAD move as you commit and switch",
+        "href": "/packs/git/branches-are-pointers",
+        "x": 21,
+        "y": 656,
+        "w": 348,
+        "h": 116
+      },
+      {
+        "tag": "A",
+        "text": "08 Bring Branches Together With Merge Merge a feature branch into main and clean",
+        "href": "/packs/git/bring-branches-together-with-merge",
+        "x": 21,
+        "y": 764,
+        "w": 348,
+        "h": 136
+      },
+      {
+        "tag": "A",
+        "text": "09 Resolve a Merge Conflict Read conflict markers, pick the right result, and fi",
+        "href": "/packs/git/resolve-a-merge-conflict",
+        "x": 21,
+        "y": 382,
+        "w": 348,
+        "h": 136
+      },
+      {
+        "tag": "A",
+        "text": "10 Clone a Repository and Understand Remotes Clone a project and see how your co",
+        "href": "/packs/git/clone-a-repository-and-understand-remotes",
+        "x": 21,
+        "y": 519,
+        "w": 348,
+        "h": 136
+      },
+      {
+        "tag": "A",
+        "text": "11 What Fetch, Pull, and Push Actually Change See what fetch, pull, and push act",
+        "href": "/packs/git/what-fetch-pull-and-push-actually-change",
+        "x": 21,
+        "y": 656,
+        "w": 348,
+        "h": 136
+      },
+      {
+        "tag": "A",
+        "text": "12 Follow an Everyday Team Workflow Work on a feature branch, open a pull reques",
+        "href": "/packs/git/follow-an-everyday-team-workflow",
+        "x": 21,
+        "y": 764,
+        "w": 348,
+        "h": 136
+      },
+      {
+        "tag": "A",
+        "text": "13 Pause Work With Stash Put unfinished work aside with stash, then pick it up a",
+        "href": "/packs/git/pause-work-with-stash",
+        "x": 21,
+        "y": 392,
+        "w": 348,
+        "h": 116
+      }
+    ]
+  },
+  "gitpack-320-ui": {
+    "url": "https://roadmap.sh/packs/git",
+    "width": 320,
+    "cookies": true,
+    "info": {
+      "headerTag": "NAV",
+      "headerH": 30,
+      "headerText": "AI Tutor",
+      "items": [
+        {
+          "tag": "A",
+          "text": "Roadmap Logo",
+          "aria": "Roadmap Logo",
+          "href": "/",
+          "placeholder": null,
+          "title": null,
+          "x": 16,
+          "y": 20,
+          "w": 30,
+          "h": 30,
+          "visible": true,
+          "display": "flex"
+        },
+        {
+          "tag": "A",
+          "text": "AI Tutor",
+          "aria": null,
+          "href": "/ai",
+          "placeholder": null,
+          "title": null,
+          "x": 66,
+          "y": 23,
+          "w": 57,
+          "h": 24,
+          "visible": true,
+          "display": "block"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Menu",
+          "aria": "Menu",
+          "href": null,
+          "placeholder": null,
+          "title": null,
+          "x": 288,
+          "y": 27,
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "display": "block"
+        }
+      ]
+    },
+    "tabOrder": [
+      {
+        "tag": "A",
+        "text": "Roadmap Logo",
+        "href": "/",
+        "x": 16,
+        "y": 20,
+        "w": 30,
+        "h": 30
+      },
+      {
+        "tag": "A",
+        "text": "AI Tutor",
+        "href": "/ai",
+        "x": 66,
+        "y": 23,
+        "w": 57,
+        "h": 24
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Menu",
+        "href": null,
+        "x": 288,
+        "y": 27,
+        "w": 16,
+        "h": 16
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Unlock with Pro",
+        "href": null,
+        "x": 20,
+        "y": 260,
+        "w": 151,
+        "h": 40
+      },
+      {
+        "tag": "A",
+        "text": "Preview Pack",
+        "href": "/packs/git/what-is-git",
+        "x": 183,
+        "y": 260,
+        "w": 117,
+        "h": 40
+      },
+      {
+        "tag": "A",
+        "text": "01 What Is Git? What Git is, how it saves your work, and how it differs from Git",
+        "href": "/packs/git/what-is-git",
+        "x": 21,
+        "y": 451,
+        "w": 278,
+        "h": 176
+      },
+      {
+        "tag": "A",
+        "text": "02 Set Up Git and Create a Repository Install and configure Git, then create you",
+        "href": "/packs/git/set-up-git-and-create-a-repository",
+        "x": 21,
+        "y": 628,
+        "w": 278,
+        "h": 176
+      },
+      {
+        "tag": "A",
+        "text": "03 The Three Places Your Changes Live Follow one change through Git's three plac",
+        "href": "/packs/git/the-three-places-your-changes-live",
+        "x": 21,
+        "y": 724,
+        "w": 278,
+        "h": 176
+      },
+      {
+        "tag": "A",
+        "text": "04 Inspect Changes Before You Commit Use status and diff to see your changes bef",
+        "href": "/packs/git/inspect-changes-before-you-commit",
+        "x": 21,
+        "y": 332,
+        "w": 278,
+        "h": 236
+      },
+      {
+        "tag": "A",
+        "text": "05 Make Commits That Explain the Work Group related changes and write commit mes",
+        "href": "/packs/git/make-commits-that-explain-the-work",
+        "x": 21,
+        "y": 569,
+        "w": 278,
+        "h": 196
+      },
+      {
+        "tag": "A",
+        "text": "06 Read the Project's History Read a project's history with log and show, and co",
+        "href": "/packs/git/read-the-projects-history",
+        "x": 21,
+        "y": 704,
+        "w": 278,
+        "h": 196
+      },
+      {
+        "tag": "A",
+        "text": "07 Branches Are Pointers See how branches and HEAD move as you commit and switch",
+        "href": "/packs/git/branches-are-pointers",
+        "x": 21,
+        "y": 362,
+        "w": 278,
+        "h": 176
+      },
+      {
+        "tag": "A",
+        "text": "08 Bring Branches Together With Merge Merge a feature branch into main and clean",
+        "href": "/packs/git/bring-branches-together-with-merge",
+        "x": 21,
+        "y": 539,
+        "w": 278,
+        "h": 216
+      },
+      {
+        "tag": "A",
+        "text": "09 Resolve a Merge Conflict Read conflict markers, pick the right result, and fi",
+        "href": "/packs/git/resolve-a-merge-conflict",
+        "x": 21,
+        "y": 724,
+        "w": 278,
+        "h": 176
+      },
+      {
+        "tag": "A",
+        "text": "10 Clone a Repository and Understand Remotes Clone a project and see how your co",
+        "href": "/packs/git/clone-a-repository-and-understand-remotes",
+        "x": 21,
+        "y": 342,
+        "w": 278,
+        "h": 216
+      },
+      {
+        "tag": "A",
+        "text": "11 What Fetch, Pull, and Push Actually Change See what fetch, pull, and push act",
+        "href": "/packs/git/what-fetch-pull-and-push-actually-change",
+        "x": 21,
+        "y": 559,
+        "w": 278,
+        "h": 216
+      },
+      {
+        "tag": "A",
+        "text": "12 Follow an Everyday Team Workflow Work on a feature branch, open a pull reques",
+        "href": "/packs/git/follow-an-everyday-team-workflow",
+        "x": 21,
+        "y": 704,
+        "w": 278,
+        "h": 196
+      },
+      {
+        "tag": "A",
+        "text": "13 Pause Work With Stash Put unfinished work aside with stash, then pick it up a",
+        "href": "/packs/git/pause-work-with-stash",
+        "x": 21,
+        "y": 372,
+        "w": 278,
+        "h": 156
+      }
+    ]
+  },
+  "lesson-1440-ui": {
+    "url": "https://roadmap.sh/packs/git/what-is-git",
+    "width": 1440,
+    "cookies": true,
+    "info": {
+      "headerTag": "BODY",
+      "headerH": 9258,
+      "headerText": "Back to Git Fundamentals Git Fundamentals Learn enough Git to work confidently on real projects with a team. 0 / 14 complete 0% LESSONS 1 What Is Git? FREE 2 Set Up Git and Create a Repository 3 The Three Places Your Changes Live 4 Inspect Changes Before You Commit FREE 5 Make Commits That Explain the Work 6 Read the Project's History 7 Branches Are Pointers 8 Bring Branches Together With Merge 9 Resolve a Merge Conflict 10 Clone a Repository and Understand Remotes 11 What Fetch, Pull, and Push ",
+      "items": [
+        {
+          "tag": "A",
+          "text": "Back to Git Fundamentals",
+          "aria": null,
+          "href": "/packs/git",
+          "placeholder": null,
+          "title": null,
+          "x": 0,
+          "y": 0,
+          "w": 299,
+          "h": 37,
+          "visible": true,
+          "display": "flex"
+        }
+      ]
+    },
+    "tabOrder": [
+      {
+        "tag": "A",
+        "text": "Back to Git Fundamentals",
+        "href": "/packs/git",
+        "x": 0,
+        "y": 0,
+        "w": 299,
+        "h": 37
+      },
+      {
+        "tag": "A",
+        "text": "1 What Is Git? FREE",
+        "href": "/packs/git/what-is-git",
+        "x": 0,
+        "y": 233,
+        "w": 299,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "2 Set Up Git and Create a Repository",
+        "href": "/packs/git/set-up-git-and-create-a-repository",
+        "x": 0,
+        "y": 269,
+        "w": 299,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "3 The Three Places Your Changes Live",
+        "href": "/packs/git/the-three-places-your-changes-live",
+        "x": 0,
+        "y": 305,
+        "w": 299,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "4 Inspect Changes Before You Commit FREE",
+        "href": "/packs/git/inspect-changes-before-you-commit",
+        "x": 0,
+        "y": 341,
+        "w": 299,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "5 Make Commits That Explain the Work",
+        "href": "/packs/git/make-commits-that-explain-the-work",
+        "x": 0,
+        "y": 377,
+        "w": 299,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "6 Read the Project's History",
+        "href": "/packs/git/read-the-projects-history",
+        "x": 0,
+        "y": 413,
+        "w": 299,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "7 Branches Are Pointers",
+        "href": "/packs/git/branches-are-pointers",
+        "x": 0,
+        "y": 449,
+        "w": 299,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "8 Bring Branches Together With Merge",
+        "href": "/packs/git/bring-branches-together-with-merge",
+        "x": 0,
+        "y": 485,
+        "w": 299,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "9 Resolve a Merge Conflict",
+        "href": "/packs/git/resolve-a-merge-conflict",
+        "x": 0,
+        "y": 521,
+        "w": 299,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "10 Clone a Repository and Understand Remotes",
+        "href": "/packs/git/clone-a-repository-and-understand-remotes",
+        "x": 0,
+        "y": 557,
+        "w": 299,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "11 What Fetch, Pull, and Push Actually Change",
+        "href": "/packs/git/what-fetch-pull-and-push-actually-change",
+        "x": 0,
+        "y": 593,
+        "w": 299,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "12 Follow an Everyday Team Workflow",
+        "href": "/packs/git/follow-an-everyday-team-workflow",
+        "x": 0,
+        "y": 629,
+        "w": 299,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "13 Pause Work With Stash",
+        "href": "/packs/git/pause-work-with-stash",
+        "x": 0,
+        "y": 665,
+        "w": 299,
+        "h": 36
+      },
+      {
+        "tag": "A",
+        "text": "14 Undo Mistakes Without Losing Work",
+        "href": "/packs/git/undo-mistakes-without-losing-work",
+        "x": 0,
+        "y": 701,
+        "w": 299,
+        "h": 36
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 966,
+        "y": 438,
+        "w": 24,
+        "h": 24
+      },
+      {
+        "tag": "PRE",
+        "text": "developer-handbook/ └── README.md",
+        "href": null,
+        "x": 317,
+        "y": 471,
+        "w": 685,
+        "h": 72
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 966,
+        "y": 709,
+        "w": 24,
+        "h": 24
+      }
+    ]
+  },
+  "lesson-390-ui": {
+    "url": "https://roadmap.sh/packs/git/what-is-git",
+    "width": 390,
+    "cookies": true,
+    "info": {
+      "headerTag": "BODY",
+      "headerH": 13007,
+      "headerText": "Git Fundamentals What Is Git? Git is a version control system. It records the history of a project so you can compare changes, return to earlier states, and collaborate without relying on manual backup copies. Imagine you are writing an essay or report. Every time you make major changes, you save a new copy named essay_v1.docx, essay_v2.docx, or essay_final_EDITED.docx. After spending some time writing, your folder turns into a cluttered mess, and you lose track of what changed in each file. Git",
+      "items": [
+        {
+          "tag": "BUTTON",
+          "text": "Open lesson list",
+          "aria": "Open lesson list",
+          "href": null,
+          "placeholder": null,
+          "title": null,
+          "x": 12,
+          "y": 6,
+          "w": 36,
+          "h": 36,
+          "visible": true,
+          "display": "flex"
+        }
+      ]
+    },
+    "tabOrder": [
+      {
+        "tag": "BUTTON",
+        "text": "Open lesson list",
+        "href": null,
+        "x": 12,
+        "y": 6,
+        "w": 36,
+        "h": 36
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 336,
+        "y": 438,
+        "w": 24,
+        "h": 24
+      },
+      {
+        "tag": "PRE",
+        "text": "developer-handbook/ └── README.md",
+        "href": null,
+        "x": 17,
+        "y": 471,
+        "w": 355,
+        "h": 72
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 336,
+        "y": 817,
+        "w": 24,
+        "h": 24
+      },
+      {
+        "tag": "PRE",
+        "text": "developer-handbook/ developer-handbook-backup/ developer-handbook-final/ develop",
+        "href": null,
+        "x": 17,
+        "y": 788,
+        "w": 355,
+        "h": 112
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 336,
+        "y": 438,
+        "w": 24,
+        "h": 24
+      },
+      {
+        "tag": "PRE",
+        "text": "A ----- B ----- C A: Create the handbook overview (README.md) B: Add local setup",
+        "href": null,
+        "x": 17,
+        "y": 471,
+        "w": 355,
+        "h": 132
+      },
+      {
+        "tag": "CODE",
+        "text": "A ----- B ----- C A: Create the handbook overview (README.md) B: Add local setup",
+        "href": null,
+        "x": 17,
+        "y": 471,
+        "w": 355,
+        "h": 132
+      },
+      {
+        "tag": "DIV",
+        "text": "Commit Project snapshot contents A README.md B README.md and docs/setup.md C REA",
+        "href": null,
+        "x": 16,
+        "y": 339,
+        "w": 357,
+        "h": 222
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 336,
+        "y": 438,
+        "w": 24,
+        "h": 24
+      },
+      {
+        "tag": "PRE",
+        "text": "Developer A repository: A ----- B ----- C Developer B repository: A ----- B Shar",
+        "href": null,
+        "x": 17,
+        "y": 471,
+        "w": 355,
+        "h": 92
+      },
+      {
+        "tag": "CODE",
+        "text": "Developer A repository: A ----- B ----- C Developer B repository: A ----- B Shar",
+        "href": null,
+        "x": 17,
+        "y": 471,
+        "w": 355,
+        "h": 92
+      },
+      {
+        "tag": "DIV",
+        "text": "Term What it is What it does Git Version control software on your device Tracks ",
+        "href": null,
+        "x": 16,
+        "y": 310,
+        "w": 357,
+        "h": 280
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 336,
+        "y": 438,
+        "w": 24,
+        "h": 24
+      },
+      {
+        "tag": "PRE",
+        "text": "A ----- B ----- C ----- D A: Create README.md B: Add docs/setup.md C: Add docs/r",
+        "href": null,
+        "x": 17,
+        "y": 471,
+        "w": 355,
+        "h": 152
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 267,
+        "y": 442,
+        "w": 24,
+        "h": 16
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 332,
+        "y": 442,
+        "w": 24,
+        "h": 16
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Reset Progress",
+        "href": null,
+        "x": 29,
+        "y": 556,
+        "w": 323,
+        "h": 20
+      }
+    ]
+  },
+  "lesson-320-ui": {
+    "url": "https://roadmap.sh/packs/git/what-is-git",
+    "width": 320,
+    "cookies": true,
+    "info": {
+      "headerTag": "BODY",
+      "headerH": 15336,
+      "headerText": "Git Fundamentals What Is Git? Git is a version control system. It records the history of a project so you can compare changes, return to earlier states, and collaborate without relying on manual backup copies. Imagine you are writing an essay or report. Every time you make major changes, you save a new copy named essay_v1.docx, essay_v2.docx, or essay_final_EDITED.docx. After spending some time writing, your folder turns into a cluttered mess, and you lose track of what changed in each file. Git",
+      "items": [
+        {
+          "tag": "BUTTON",
+          "text": "Open lesson list",
+          "aria": "Open lesson list",
+          "href": null,
+          "placeholder": null,
+          "title": null,
+          "x": 12,
+          "y": 6,
+          "w": 36,
+          "h": 36,
+          "visible": true,
+          "display": "flex"
+        }
+      ]
+    },
+    "tabOrder": [
+      {
+        "tag": "BUTTON",
+        "text": "Open lesson list",
+        "href": null,
+        "x": 12,
+        "y": 6,
+        "w": 36,
+        "h": 36
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 266,
+        "y": 438,
+        "w": 24,
+        "h": 24
+      },
+      {
+        "tag": "PRE",
+        "text": "developer-handbook/ └── README.md",
+        "href": null,
+        "x": 17,
+        "y": 471,
+        "w": 285,
+        "h": 72
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 266,
+        "y": 853,
+        "w": 24,
+        "h": 24
+      },
+      {
+        "tag": "PRE",
+        "text": "developer-handbook/ developer-handbook-backup/ developer-handbook-final/ develop",
+        "href": null,
+        "x": 17,
+        "y": 788,
+        "w": 285,
+        "h": 112
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 266,
+        "y": 438,
+        "w": 24,
+        "h": 24
+      },
+      {
+        "tag": "PRE",
+        "text": "A ----- B ----- C A: Create the handbook overview (README.md) B: Add local setup",
+        "href": null,
+        "x": 17,
+        "y": 471,
+        "w": 285,
+        "h": 132
+      },
+      {
+        "tag": "CODE",
+        "text": "A ----- B ----- C A: Create the handbook overview (README.md) B: Add local setup",
+        "href": null,
+        "x": 17,
+        "y": 471,
+        "w": 285,
+        "h": 132
+      },
+      {
+        "tag": "DIV",
+        "text": "Commit Project snapshot contents A README.md B README.md and docs/setup.md C REA",
+        "href": null,
+        "x": 16,
+        "y": 339,
+        "w": 287,
+        "h": 222
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 266,
+        "y": 438,
+        "w": 24,
+        "h": 24
+      },
+      {
+        "tag": "PRE",
+        "text": "Developer A repository: A ----- B ----- C Developer B repository: A ----- B Shar",
+        "href": null,
+        "x": 17,
+        "y": 471,
+        "w": 285,
+        "h": 92
+      },
+      {
+        "tag": "CODE",
+        "text": "Developer A repository: A ----- B ----- C Developer B repository: A ----- B Shar",
+        "href": null,
+        "x": 17,
+        "y": 471,
+        "w": 285,
+        "h": 92
+      },
+      {
+        "tag": "DIV",
+        "text": "Term What it is What it does Git Version control software on your device Tracks ",
+        "href": null,
+        "x": 16,
+        "y": 310,
+        "w": 287,
+        "h": 280
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 266,
+        "y": 438,
+        "w": 24,
+        "h": 24
+      },
+      {
+        "tag": "PRE",
+        "text": "A ----- B ----- C ----- D A: Create README.md B: Add docs/setup.md C: Add docs/r",
+        "href": null,
+        "x": 17,
+        "y": 471,
+        "w": 285,
+        "h": 152
+      },
+      {
+        "tag": "CODE",
+        "text": "A ----- B ----- C ----- D A: Create README.md B: Add docs/setup.md C: Add docs/r",
+        "href": null,
+        "x": 17,
+        "y": 471,
+        "w": 285,
+        "h": 152
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 197,
+        "y": 442,
+        "w": 24,
+        "h": 16
+      },
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "href": null,
+        "x": 262,
+        "y": 442,
+        "w": 24,
+        "h": 16
+      }
+    ]
+  },
+  "lessonDeep": {
+    "title": "What Is Git? · Git Fundamentals",
+    "text": "Back to\nGit Fundamentals\nGit Fundamentals\n\nLearn enough Git to work confidently on real projects with a team.\n\n0 / 14 complete\n0%\nLESSONS\n1\nWhat Is Git?\nFREE\n2\nSet Up Git and Create a Repository\n3\nThe Three Places Your Changes Live\n4\nInspect Changes Before You Commit\nFREE\n5\nMake Commits That Explain the Work\n6\nRead the Project's History\n7\nBranches Are Pointers\n8\nBring Branches Together With Merge\n9\nResolve a Merge Conflict\n10\nClone a Repository and Understand Remotes\n11\nWhat Fetch, Pull, and Push Actually Change\n12\nFollow an Everyday Team Workflow\n13\nPause Work With Stash\n14\nUndo Mistakes Without Losing Work\nWhat Is Git?\n\nGit is a version control system. It records the history of a project so you can compare changes, return to earlier states, and collaborate without relying on manual backup copies.\n\nImagine you are writing an essay or report. Every time you make major changes, you save a new copy named essay_v1.docx, essay_v2.docx, or essay_final_EDITED.docx. After spending some time writing, your folder turns into a cluttered mess, and you lose track of what changed in each file.\n\nGit solves this exact problem for software projects. It tracks the history of your files inside a single project folder. Instead of creating endless duplicate files, you record specific snapshots of your work that you can review, compare, or restore whenever you need to.\n\nThat is the core idea of version control: maintaining a clean timeline of your work rather than overwriting old files or manually creating extra copies.\n\nWhen you use Git, you can quickly answer questions that a standard folder cannot answer:\n\nWhat changed in this project, and when?\n\nWho made a specific change, and why?\n\nWhat did the project look like last week or last month?\n\nHow can we safely undo a mistake and restore an earlier working version?\n\nHow can two or more developers work on the same code without stepping on each other's toes?\n\nLater in this guide, you will also see why we call Git distributed. That concept makes much more sense after you see how Git saves history locally, so we will return to it shortly.\n\nThe problem Git solves\n\nSoftware projects change constantly. You write new code, update documentation, fix errors, and occasionally throw away ideas that did not work out.\n\nNow bring that idea into a real development project. This course follows a small project called developer-handbook, a shared documentation project for new engineers. At first, the project contains just one main overview file:\n\ntxt\ndeveloper-handbook/\n└── README.md\n\nAs team members contribute, the project expands to include setup guides and review checklists. Without a tool like Git, developers often try to save progress by making duplicate copies of the folder on disk:\n\ntxt\ndeveloper-handbook/\ndeveloper-handbook-backup/\ndeveloper-handbook-final/\ndeveloper-handbook-final-2/\n\nThis habit creates confusion very quickly. Folder names do not explain what changed, who made the changes, or how to combine edits from two teammates.\n\nGit replaces this clutter with an organized, timeline-based history inside a single project folder. Instead of making duplicate folders, you tell Git to record a commit whenever you reach a meaningful step in your work.\n\nA commit is a recorded snapshot of your tracked project at a specific point in time. Saving a file in your text editor updates that file on disk, but it does not create a commit. Creating a commit is a separate, intentional step you take when you want to record your progr",
+    "links": [
+      {
+        "text": "Close",
+        "href": null,
+        "y": 1314,
+        "x": 375
+      },
+      {
+        "text": "Show more",
+        "href": null,
+        "y": 1445,
+        "x": -216
+      },
+      {
+        "text": "Necessary",
+        "href": null,
+        "y": 1492,
+        "x": -376
+      },
+      {
+        "text": "Functional",
+        "href": null,
+        "y": 1601,
+        "x": -376
+      },
+      {
+        "text": "Analytics",
+        "href": null,
+        "y": 1710,
+        "x": -376
+      },
+      {
+        "text": "Performance",
+        "href": null,
+        "y": 1819,
+        "x": -376
+      },
+      {
+        "text": "Advertisement",
+        "href": null,
+        "y": 1928,
+        "x": -376
+      },
+      {
+        "text": "Uncategorised",
+        "href": null,
+        "y": 2037,
+        "x": -376
+      },
+      {
+        "text": "Reject All",
+        "href": null,
+        "y": 2012,
+        "x": -398
+      },
+      {
+        "text": "Save My Preferences",
+        "href": null,
+        "y": 2012,
+        "x": -157
+      },
+      {
+        "text": "Accept All",
+        "href": null,
+        "y": 2012,
+        "x": 160
+      },
+      {
+        "text": "Back to Git Fundamentals",
+        "href": "/packs/git",
+        "y": 0,
+        "x": 0
+      },
+      {
+        "text": "1 What Is Git? FREE",
+        "href": "/packs/git/what-is-git",
+        "y": 233,
+        "x": 0
+      },
+      {
+        "text": "2 Set Up Git and Create a Repository",
+        "href": "/packs/git/set-up-git-and-create-a-repository",
+        "y": 269,
+        "x": 0
+      },
+      {
+        "text": "3 The Three Places Your Changes Live",
+        "href": "/packs/git/the-three-places-your-changes-live",
+        "y": 305,
+        "x": 0
+      },
+      {
+        "text": "4 Inspect Changes Before You Commit FREE",
+        "href": "/packs/git/inspect-changes-before-you-commit",
+        "y": 341,
+        "x": 0
+      },
+      {
+        "text": "5 Make Commits That Explain the Work",
+        "href": "/packs/git/make-commits-that-explain-the-work",
+        "y": 377,
+        "x": 0
+      },
+      {
+        "text": "6 Read the Project's History",
+        "href": "/packs/git/read-the-projects-history",
+        "y": 413,
+        "x": 0
+      },
+      {
+        "text": "7 Branches Are Pointers",
+        "href": "/packs/git/branches-are-pointers",
+        "y": 449,
+        "x": 0
+      },
+      {
+        "text": "8 Bring Branches Together With Merge",
+        "href": "/packs/git/bring-branches-together-with-merge",
+        "y": 485,
+        "x": 0
+      },
+      {
+        "text": "9 Resolve a Merge Conflict",
+        "href": "/packs/git/resolve-a-merge-conflict",
+        "y": 521,
+        "x": 0
+      },
+      {
+        "text": "10 Clone a Repository and Understand Remotes",
+        "href": "/packs/git/clone-a-repository-and-understand-remotes",
+        "y": 557,
+        "x": 0
+      },
+      {
+        "text": "11 What Fetch, Pull, and Push Actually Change",
+        "href": "/packs/git/what-fetch-pull-and-push-actually-change",
+        "y": 593,
+        "x": 0
+      },
+      {
+        "text": "12 Follow an Everyday Team Workflow",
+        "href": "/packs/git/follow-an-everyday-team-workflow",
+        "y": 629,
+        "x": 0
+      },
+      {
+        "text": "13 Pause Work With Stash",
+        "href": "/packs/git/pause-work-with-stash",
+        "y": 665,
+        "x": 0
+      },
+      {
+        "text": "14 Undo Mistakes Without Losing Work",
+        "href": "/packs/git/undo-mistakes-without-losing-work",
+        "y": 701,
+        "x": 0
+      },
+      {
+        "text": "",
+        "href": null,
+        "y": 1891,
+        "x": 966
+      },
+      {
+        "text": "",
+        "href": null,
+        "y": 2162,
+        "x": 966
+      },
+      {
+        "text": "",
+        "href": null,
+        "y": 2869,
+        "x": 966
+      },
+      {
+        "text": "",
+        "href": null,
+        "y": 4816,
+        "x": 966
+      },
+      {
+        "text": "",
+        "href": null,
+        "y": 6963,
+        "x": 966
+      },
+      {
+        "text": "",
+        "href": null,
+        "y": 8220,
+        "x": 889
+      },
+      {
+        "text": "",
+        "href": null,
+        "y": 8220,
+        "x": 954
+      },
+      {
+        "text": "Reset",
+        "href": null,
+        "y": 8250,
+        "x": 794
+      },
+      {
+        "text": "Click to Reveal the Answer",
+        "href": null,
+        "y": 8653,
+        "x": 564
+      },
+      {
+        "text": "Hide the Answer",
+        "href": null,
+        "y": 8890,
+        "x": 600
+      },
+      {
+        "text": "Already Know that",
+        "href": null,
+        "y": 8731,
+        "x": 316
+      },
+      {
+        "text": "Didn't Know that",
+        "href": null,
+        "y": 8731,
+        "x": 549
+      },
+      {
+        "text": "Skip Question",
+        "href": null,
+        "y": 8731,
+        "x": 782
+      },
+      {
+        "text": "Sign in to continue",
+        "href": null,
+        "y": 9065,
+        "x": 567
+      },
+      {
+        "text": "Next Lesson",
+        "href": "/packs/git/set-up-git-and-create-a-repository",
+        "y": 957,
+        "x": 874
+      },
+      {
+        "text": "How does Git differ from GitHub",
+        "href": null,
+        "y": 699,
+        "x": 1032
+      },
+      {
+        "text": "How does Git differ from manual folder backups",
+        "href": null,
+        "y": 739,
+        "x": 1032
+      },
+      {
+        "text": "Does Git require a server to function?",
+        "href": null,
+        "y": 779,
+        "x": 1032
+      },
+      {
+        "text": "What does the commit message explain",
+        "href": null,
+        "y": 819,
+        "x": 1032
+      },
+      {
+        "text": "Why are Git commits considered snapshots",
+        "href": null,
+        "y": 859,
+        "x": 1032
+      },
+      {
+        "text": "Can you use Git without an internet connection",
+        "href": null,
+        "y": 899,
+        "x": 1032
+      },
+      {
+        "text": "",
+        "href": null,
+        "y": 962,
+        "x": 1408
+      },
+      {
+        "text": "Sign in to use the AI Tutor",
+        "href": null,
+        "y": 947,
+        "x": 1020
+      }
+    ]
+  },
+  "lessonBottom": "ME.md in commit D erase it from commit C or earlier history?\n\nCan a developer inspect all four commits on their laptop without an active internet connection?\n\nIf the shared remote repository currently stops at commit B, will it automatically receive commits C and D?\n\nCheck your answers\n\nCommit B first contains docs/setup.md.\n\nCommit D contains docs/setup.md and docs/review-checklist.md. It does not contain README.md, because that file was removed when D was recorded.\n\nRemoving README.md in commit D does not alter commit C. Earlier commits remain recorded, so Git can still reconstruct the version of README.md stored in C.\n\nThe developer can inspect all four commits offline because the history lives in the local repository.\n\nThe shared remote remains at commit B until the developer explicitly sends the newer commits.\n\n0 / 8\nKnew\n0 Items\nLearnt\n0 Items\nSkipped\n0 Items\nReset\nTest Your Understanding\n\nWhat is Git?\n\nClick to Reveal the Answer\n\nGit is a version control system. It tracks project history by recording snapshots of your tracked files at different points in time. You can use it to compare changes, inspect older versions, and recover files from earlier commits.\n\nHide the Answer\nAlready Know that\nDidn't Know that\nSkip Question\n\nFREE LESSON\n\nThat one was on us\n\nUnlock every Pro lesson in this pack and every other pack with one subscription. Includes the AI Tutor.\n\nSign in to continue\nPrevious Lesson\nNext Lesson\nAI Tutor\n\nHello, how can I help you today?\n\nSome questions you might have about this lesson:\n\nHow does Git differ from GitHub\nHow does Git differ from manual folder backups\nDoes Git require a server to function?\nWhat does the commit message explain\nWhy are Git commits considered snapshots\nCan you use Git without an internet connection\nSign in to use the AI Tutor",
+  "lesson390": {
+    "vh": 844,
+    "fixed": [
+      {
+        "text": "Close",
+        "href": null,
+        "pos": "static",
+        "y": 1290,
+        "bottom": 1314,
+        "h": 24,
+        "w": 24
+      },
+      {
+        "text": "Show more",
+        "href": null,
+        "pos": "static",
+        "y": 1421,
+        "bottom": 1445,
+        "h": 24,
+        "w": 72
+      },
+      {
+        "text": "Necessary",
+        "href": null,
+        "pos": "static",
+        "y": 1468,
+        "bottom": 1492,
+        "h": 24,
+        "w": 82
+      },
+      {
+        "text": "Functional",
+        "href": null,
+        "pos": "static",
+        "y": 1577,
+        "bottom": 1601,
+        "h": 24,
+        "w": 81
+      },
+      {
+        "text": "Analytics",
+        "href": null,
+        "pos": "static",
+        "y": 1686,
+        "bottom": 1710,
+        "h": 24,
+        "w": 72
+      },
+      {
+        "text": "Performance",
+        "href": null,
+        "pos": "static",
+        "y": 1795,
+        "bottom": 1819,
+        "h": 24,
+        "w": 101
+      },
+      {
+        "text": "Advertisement",
+        "href": null,
+        "pos": "static",
+        "y": 1904,
+        "bottom": 1928,
+        "h": 24,
+        "w": 114
+      },
+      {
+        "text": "Uncategorised",
+        "href": null,
+        "pos": "static",
+        "y": 2013,
+        "bottom": 2037,
+        "h": 24,
+        "w": 114
+      },
+      {
+        "text": "Reject All",
+        "href": null,
+        "pos": "static",
+        "y": 2042,
+        "bottom": 2086,
+        "h": 44,
+        "w": 797
+      },
+      {
+        "text": "Save My Preferences",
+        "href": null,
+        "pos": "static",
+        "y": 1988,
+        "bottom": 2032,
+        "h": 44,
+        "w": 797
+      },
+      {
+        "text": "Accept All",
+        "href": null,
+        "pos": "static",
+        "y": 1934,
+        "bottom": 1978,
+        "h": 44,
+        "w": 797
+      },
+      {
+        "text": "Open lesson list",
+        "href": null,
+        "pos": "static",
+        "y": 6,
+        "bottom": 42,
+        "h": 36,
+        "w": 36
+      },
+      {
+        "text": "",
+        "href": null,
+        "pos": "static",
+        "y": -9441,
+        "bottom": -9417,
+        "h": 24,
+        "w": 24
+      },
+      {
+        "text": "",
+        "href": null,
+        "pos": "static",
+        "y": -9062,
+        "bottom": -9038,
+        "h": 24,
+        "w": 24
+      },
+      {
+        "text": "",
+        "href": null,
+        "pos": "static",
+        "y": -8067,
+        "bottom": -8043,
+        "h": 24,
+        "w": 24
+      },
+      {
+        "text": "",
+        "href": null,
+        "pos": "static",
+        "y": -5148,
+        "bottom": -5124,
+        "h": 24,
+        "w": 24
+      },
+      {
+        "text": "",
+        "href": null,
+        "pos": "static",
+        "y": -1921,
+        "bottom": -1897,
+        "h": 24,
+        "w": 24
+      },
+      {
+        "text": "",
+        "href": null,
+        "pos": "static",
+        "y": -168,
+        "bottom": -152,
+        "h": 16,
+        "w": 24
+      },
+      {
+        "text": "",
+        "href": null,
+        "pos": "static",
+        "y": -168,
+        "bottom": -152,
+        "h": 16,
+        "w": 24
+      },
+      {
+        "text": "Reset Progress",
+        "href": null,
+        "pos": "static",
+        "y": -54,
+        "bottom": -34,
+        "h": 20,
+        "w": 323
+      },
+      {
+        "text": "Next",
+        "href": "/packs/git/set-up-git-and-create-a-repository",
+        "pos": "static",
+        "y": 801,
+        "bottom": 835,
+        "h": 34,
+        "w": 80
+      },
+      {
+        "text": "",
+        "href": null,
+        "pos": "fixed",
+        "y": 800,
+        "bottom": 836,
+        "h": 36,
+        "w": 36
+      }
+    ],
+    "bodyTail": "p.md into the project?\n\nWhich files exist in the project snapshot at commit D?\n\nDoes deleting README.md in commit D erase it from commit C or earlier history?\n\nCan a developer inspect all four commits on their laptop without an active internet connection?\n\nIf the shared remote repository currently stops at commit B, will it automatically receive commits C and D?\n\nCheck your answers\n\nCommit B first contains docs/setup.md.\n\nCommit D contains docs/setup.md and docs/review-checklist.md. It does not contain README.md, because that file was removed when D was recorded.\n\nRemoving README.md in commit D does not alter commit C. Earlier commits remain recorded, so Git can still reconstruct the version of README.md stored in C.\n\nThe developer can inspect all four commits offline because the history lives in the local repository.\n\nThe shared remote remains at commit B until the developer explicitly sends the newer commits.\n\n0 / 8\nKnew\n0 Items\nLearnt\n0 Items\nSkipped\n0 Items\nReset\nProgress\n\nWhat is Git?\n\nClick to Reveal the Answer\n\nGit is a version control system. It tracks project history by recording snapshots of your tracked files at different points in time. You can use it to compare changes, inspect older versions, and recover files from earlier commits.\n\nHide the Answer\nAlready Know that\nDidn't Know that\nSkip Question\n\nFREE LESSON\n\nThat one was on us\n\nUnlock every Pro lesson in this pack and every other pack with one subscription. Includes the AI Tutor.\n\nSign in to continue\nPrev\nNext"
+  },
+  "deMeta": {
+    "title": "Data Engineer Roadmap",
+    "text": "←  All Roadmaps\nPrefer us on Google\nWeekly Newsletter\nDownload\nData Engineer Roadmap\n\nStep by step guide to becoming a Data Engineer in 2026\n\nRoadmap\nAI Tutor\nPersonalize\nJoin 8,048+ others tracking their progress on this roadmap\nSign up free\nData Engineer\nPre-requisites\nPython for Data Analysis\nSQL Roadmap\nRelated Roadmaps\nAI & Data Scientist Roadmap\nBI Analyst Roadmap\nData Analyst Roadmap\nIntroduction\nWhat is Data Engineering?\nData Eng. vs Data Science\nSkills & Responsibilities\nData Engineering Lifecycle\nChoosing the Right Technologies\nProgramming Skills\nPython\nJava\nScala\nGo\nPython is recommended\nData Structures & Algorithms\nGit and GitHub\nLinux Basics\nNetworking Fundamentals\nDistributed Systems Basics\nData Generation\nData Storage\nData Ingestion\nData Serving\nData Engineering Lifecycle\nUnderstand Different Steps\nSources of Data\nDatabase\nAPIs\nLogs\nMobile Apps\nIoT\nData Collection Ideas\nDatabase Fundamentals\nData Normalization\nData Modelling Techniques\nCAP Theorem\nOLTP vs OLAP\nSlowly Changing Dimension\nHorizontal vs Vertical Scaling\nStar vs Snowflake Schema\nRelational Databases\nLearn SQL\nIndexing\nTransactions\nRelational Databases\nMySQL\nPostgreSQL\nMariaDB\nAurora DB\nOracle\nMS SQL\nNoSQL Databases\nDocument\nMongoDB\nElasticSearch\nCosmosDB\nCouchDB\nColumn\nCassandra\nBigTable\nHBase\nGraph\nNeo4j\nNeptune\nKey-Value\nRedis\nMemcached\nDynamoDB\nWhat is Data Warehouse?\nData Warehouse Architectures\nData Warehouse\nGoogle BigQuery\nSnowflake\nAmazon Redshift\nData Mart\nData Lake\nDatabricks Delta Lake\nSnowflake\nOnehouse\nData Mesh\nOther Data Architectures\nData Fabric\nData Hub\nMetadata-first Architecture\nServerless Options\nCloud Computing\nCloud Architectures\nCloud Providers\nAWS\nAmazon EC2 ( Compute)\nS3 (Storage)\nAmazon RDS (Database)\nGlue (ETL)\nAzure Virtual Machines\nAzure Blob Storage\nAzure SQL Database\nData Factory (ETL)\nAzure\nCompute Engine (Compute)\nGoogle Cloud Storage\nCloud SQL (Database)\nDataflow\nGoogle Cloud\nTypes of Data Ingestion\nBatch\nHybrid\nRealtime\nData Pipelines\nETL Process\nExtract Data\nTransform Data\nLoad Data\nData Pipeline Tools\nApache Airflow\ndbt\nLuigi\nPrefect\nCluster Computing Basics\nWhat is Cluster Computing\nDistributed File Systems\nJob Scheduling\nCluster Management Tools\nKubernetes\nApache Hadoop YARN\nHDFS\nBig Data Tools\nHadoop Ecosystem\nHDFS\nMapReduce\nYARN\nApache Spark\nContainers & Orchestration\nDocker\nKubernetes\nGoogle Cloud GKE\nAWS EKS\nCI/CD\nGitLab CI\nCircle CI\nGitHub Actions\nArgoCD\nMonitoring\nPrometheus\nDatadog\nSentry\nNew Relic\nTesting\nIntegration Testing\nUnit Tes",
+    "buttons": [
+      {
+        "text": "Roadmap Logo",
+        "aria": "Roadmap Logo",
+        "href": "/",
+        "y": 35
+      },
+      {
+        "text": "Open Navigation Dropdown",
+        "aria": "Open Navigation Dropdown",
+        "href": null,
+        "y": 32
+      },
+      {
+        "text": "Roadmaps",
+        "aria": null,
+        "href": "/roadmaps",
+        "y": 38
+      },
+      {
+        "text": "AI Tutor",
+        "aria": null,
+        "href": "/ai",
+        "y": 38
+      },
+      {
+        "text": "Packs",
+        "aria": null,
+        "href": "/packs",
+        "y": 38
+      },
+      {
+        "text": "Newsletters",
+        "aria": null,
+        "href": "/newsletters",
+        "y": 38
+      },
+      {
+        "text": "Upgrade",
+        "aria": null,
+        "href": "/premium",
+        "y": 38
+      },
+      {
+        "text": "Login",
+        "aria": null,
+        "href": "/login",
+        "y": 38
+      },
+      {
+        "text": "Sign Up",
+        "aria": null,
+        "href": "/signup",
+        "y": 34
+      },
+      {
+        "text": "← All Roadmaps",
+        "aria": "Back to All Roadmaps",
+        "href": "/roadmaps",
+        "y": 193
+      },
+      {
+        "text": "Add to favorites",
+        "aria": "Add to favorites",
+        "href": null,
+        "y": 200
+      },
+      {
+        "text": "Prefer us on Google",
+        "aria": "Prefer roadmap.sh on Google",
+        "href": "https://www.google.com/preferences/source?q=roadmap.sh",
+        "y": 191
+      },
+      {
+        "text": "Weekly Newsletter",
+        "aria": "Subscribe",
+        "href": null,
+        "y": 191
+      },
+      {
+        "text": "Download",
+        "aria": "Download Roadmap",
+        "href": "#",
+        "y": 191
+      },
+      {
+        "text": "Share Roadmap",
+        "aria": "Share Roadmap",
+        "href": null,
+        "y": 191
+      },
+      {
+        "text": "AI Tutor",
+        "aria": null,
+        "href": "/ai/roadmap-chat/data-engineer",
+        "y": 412
+      },
+      {
+        "text": "Personalize",
+        "aria": null,
+        "href": null,
+        "y": 411
+      },
+      {
+        "text": "Join 8,048+ others tracking their progress on this roadmap Sign up free",
+        "aria": null,
+        "href": null,
+        "y": 455
+      }
+    ]
+  },
+  "deClick": {
+    "ok": true,
+    "tag": "text",
+    "text": "Introduction",
+    "x": 707.217529296875,
+    "y": 824.64013671875
+  },
+  "dePopup": {
+    "text": "Roadmaps\nAI Tutor\nPacks\nNewsletters\nUpgrade\nLogin\nSign Up\n⌘ K\n←  All Roadmaps\nPrefer us on Google\nWeekly Newsletter\nDownload\nData Engineer Roadmap\n\nStep by step guide to becoming a Data Engineer in 2026\n\nRoadmap\nAI Tutor\nPersonalize\nJoin 8,048+ others tracking their progress on this roadmap\nSign up free\nData Engineer\nPre-requisites\nPython for Data Analysis\nSQL Roadmap\nRelated Roadmaps\nAI & Data Scientist Roadmap\nBI Analyst Roadmap\nData Analyst Roadmap\nIntroduction\nWhat is Data Engineering?\nData Eng. vs Data Science\nSkills & Responsibilities\nData Engineering Lifecycle\nChoosing the Right Technologies\nProgramming Skills\nPython\nJava\nScala\nGo\nPython is recommended\nData Structures & Algorithms\nGit and GitHub\nLinux Basics\nNetworking Fundamentals\nDistributed Systems Basics\nData Generation\nData Storage\nData Ingestion\nData Serving\nData Engineering Lifecycle\nUnderstand Different Steps\nSources of Data\nDatabase\nAPIs\nLogs\nMobile Apps\nIoT\nData Collection Ideas\nDatabase Fundamentals\nData Normalization\nData Modelling Techniques\nCAP Theorem\nOLTP vs OLAP\nSlowly Changing Dimension\nHorizontal vs Vertical Scaling\nStar vs Snowflake Schema\nRelational Databases\nLearn SQL\nIndexing\nTransactions\nRelational Databases\nMySQL\nPostgreSQL\nMariaDB\nAurora DB\nOracle\nMS SQL\nNoSQL Databases\nDocument\nMongoDB\nElasticSearch\nCosmosDB\nCouchDB\nColumn\nCassandra\nBigTable\nHBase\nGraph\nNeo4j\nNeptune\nKey-Value\nRedis\nMemcached\nDynamoDB\nWhat is Data Warehouse?\nData Warehouse Architectures\nData Warehouse\nGoogle BigQuery\nSnowflake\nAmazon Redshift\nData Mart\nData Lake\nDatabricks Delta Lake\nSnowflake\nOnehouse\nData Mesh\nOther Data Architectures\nData Fabric\nData Hub\nMetadata-first Architecture\nServerless Options\nCloud Computing\nCloud Architectures\nCloud Providers\nAWS\nAmazon EC2 ( Compute)\nS3 (Storage)\nAmazon RDS (Database)\nGlue ",
+    "links": [
+      {
+        "text": "Featured CourseDataCamp - Associate Data Engineer in SQL",
+        "href": "https://datacamp.pxf.io/WOP6XG"
+      },
+      {
+        "text": "Featured CourseDataCamp - Data Engineer in Python",
+        "href": "https://datacamp.pxf.io/JkYLbr"
+      },
+      {
+        "text": "Guides",
+        "href": "/guides"
+      }
+    ]
+  },
+  "deProgress": {
+    "hits": [
+      "Login",
+      "Sign Up",
+      "track",
+      "progress",
+      "Done",
+      "Learning",
+      "Skip",
+      "Personalize",
+      "Download"
+    ],
+    "snippetAroundTrack": "Join 8,048+ others tracking their progress on this roadmap"
+  },
+  "de390header": {
+    "headerTag": "NAV",
+    "headerH": 30,
+    "headerText": "AI Tutor",
+    "items": [
+      {
+        "tag": "A",
+        "text": "Roadmap Logo",
+        "aria": "Roadmap Logo",
+        "href": "/",
+        "placeholder": null,
+        "title": null,
+        "x": 16,
+        "y": 20,
+        "w": 30,
+        "h": 30,
+        "visible": true,
+        "display": "flex"
+      },
+      {
+        "tag": "A",
+        "text": "AI Tutor",
+        "aria": null,
+        "href": "/ai",
+        "placeholder": null,
+        "title": null,
+        "x": 66,
+        "y": 23,
+        "w": 57,
+        "h": 24,
+        "visible": true,
+        "display": "block"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Menu",
+        "aria": "Menu",
+        "href": null,
+        "placeholder": null,
+        "title": null,
+        "x": 358,
+        "y": 27,
+        "w": 16,
+        "h": 16,
+        "visible": true,
+        "display": "block"
+      }
+    ]
+  },
+  "de390controls": [
+    {
+      "text": "Roadmap Logo",
+      "href": "/",
+      "x": 16,
+      "y": 20,
+      "w": 30,
+      "h": 30
+    },
+    {
+      "text": "AI Tutor",
+      "href": "/ai",
+      "x": 66,
+      "y": 23,
+      "w": 57,
+      "h": 24
+    },
+    {
+      "text": "Menu",
+      "href": null,
+      "x": 358,
+      "y": 27,
+      "w": 16,
+      "h": 16
+    },
+    {
+      "text": "Back to roadmaps",
+      "href": "/roadmaps",
+      "x": 21,
+      "y": 147,
+      "w": 32,
+      "h": 28
+    },
+    {
+      "text": "Add to favorites",
+      "href": null,
+      "x": 155,
+      "y": 154,
+      "w": 16,
+      "h": 16
+    },
+    {
+      "text": "Prefer roadmap.sh on Google",
+      "href": null,
+      "x": 189,
+      "y": 147,
+      "w": 56,
+      "h": 28
+    },
+    {
+      "text": "Subscribe",
+      "href": null,
+      "x": 249,
+      "y": 147,
+      "w": 32,
+      "h": 28
+    },
+    {
+      "text": "Download Roadmap",
+      "href": "#",
+      "x": 285,
+      "y": 147,
+      "w": 40,
+      "h": 28
+    },
+    {
+      "text": "Share Roadmap",
+      "href": null,
+      "x": 329,
+      "y": 147,
+      "w": 40,
+      "h": 28
+    }
+  ],
+  "de320controls": [
+    {
+      "text": "Roadmap Logo",
+      "href": "/",
+      "x": 16,
+      "w": 30,
+      "h": 30
+    },
+    {
+      "text": "AI Tutor",
+      "href": "/ai",
+      "x": 66,
+      "w": 57,
+      "h": 24
+    },
+    {
+      "text": "Menu",
+      "href": null,
+      "x": 288,
+      "w": 16,
+      "h": 16
+    },
+    {
+      "text": "What do you want to learn today?",
+      "href": null,
+      "x": 60,
+      "w": 232,
+      "h": 32
+    },
+    {
+      "text": "Back to roadmaps",
+      "href": "/roadmaps",
+      "x": 21,
+      "w": 32,
+      "h": 28
+    },
+    {
+      "text": "Add to favorites",
+      "href": null,
+      "x": 85,
+      "w": 16,
+      "h": 16
+    },
+    {
+      "text": "Prefer roadmap.sh on Google",
+      "href": null,
+      "x": 119,
+      "w": 56,
+      "h": 28
+    },
+    {
+      "text": "Subscribe",
+      "href": null,
+      "x": 179,
+      "w": 32,
+      "h": 28
+    },
+    {
+      "text": "Download Roadmap",
+      "href": "#",
+      "x": 215,
+      "w": 40,
+      "h": 28
+    },
+    {
+      "text": "Share Roadmap",
+      "href": null,
+      "x": 259,
+      "w": 40,
+      "h": 28
+    }
+  ]
+}

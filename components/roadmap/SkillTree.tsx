@@ -50,6 +50,7 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
   const completed = progress?.completed ?? null
   const [loaded, setLoaded] = useState(false)
   const [manual, setManual] = useState<Record<string, TopicStatus>>({})
+  const [stateUpdatedAt, setStateUpdatedAt] = useState<Record<string, string>>({})
   const [selected, setSelected] = useState<string | null>(null)
   const [hiddenTypes, setHiddenTypes] = useState<Set<string>>(new Set())
   const [viewMode, setViewMode] = useState<'guided' | 'map'>('guided')
@@ -61,14 +62,24 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
 
   useEffect(() => {
     setManual(readSaved(KEY))
+    try {
+      const saved = JSON.parse(localStorage.getItem(KEY) ?? '{}')
+      if (saved?.stateUpdatedAt && typeof saved.stateUpdatedAt === 'object') setStateUpdatedAt(saved.stateUpdatedAt)
+    } catch {
+      setStateUpdatedAt({})
+    }
     setLoaded(true)
   }, [KEY])
 
   useEffect(() => {
     if (!loaded) return
-    try { localStorage.setItem(KEY, JSON.stringify({ states: manual })) } catch {}
+    try {
+      localStorage.setItem(KEY, JSON.stringify({ states: manual, stateUpdatedAt, lastVisitedAt: new Date().toISOString() }))
+    } catch (error) {
+      console.error('Could not save roadmap progress:', error)
+    }
     window.dispatchEvent(new Event('chaduvuko:roadmap-progress-change'))
-  }, [manual, loaded, KEY])
+  }, [manual, stateUpdatedAt, loaded, KEY])
 
   // A topic is done when the reader says so or every one of its lessons is complete; it is
   // being learned when the reader says so or some of its lessons are complete.
@@ -612,6 +623,7 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
           onStatus={next => {
             if (!prerequisitesDone(selectedNode)) return
             setManual(prev => ({ ...prev, [selectedNode.id]: next }))
+            setStateUpdatedAt(prev => ({ ...prev, [selectedNode.id]: new Date().toISOString() }))
           }}
           onClose={() => setSelected(null)}
         />

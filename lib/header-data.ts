@@ -20,6 +20,7 @@ const TRACK_BLURBS: Record<string, string> = {
   networking: 'OSI, TCP/IP, DNS, and how traffic moves',
   cybersecurity: 'OWASP, detection, and how attacks work',
   'ai-ml': 'Classical ML, deep learning, and GenAI',
+  'generative-ai': 'LLM applications, RAG, evaluation, and agents',
   'data-science': 'pandas, statistics, and modeling',
 }
 

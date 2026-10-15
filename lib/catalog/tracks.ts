@@ -1,6 +1,7 @@
 import type { Track } from './types'
+import { PLANNED_TRACKS } from '@/data/planned-tracks'
 
-export const TRACKS: Track[] = [
+const LIVE_TRACKS: Track[] = [
   { slug: 'foundations',      title: 'Data Engineering Foundations', area: 'data',        indexHref: '/learn/what-is-data-engineering' },
   { slug: 'data-engineering', title: 'Data Engineering',             area: 'data',        indexHref: '/learn/data-engineering' },
   { slug: 'sql',              title: 'SQL',                          area: 'data',        indexHref: '/learn/sql' },
@@ -19,4 +20,15 @@ export const TRACKS: Track[] = [
   { slug: 'ai-ml',            title: 'AI & Machine Learning',        area: 'ai',          indexHref: '/learn/ai-ml' },
   { slug: 'data-science',     title: 'Data Science',                 area: 'ai',          indexHref: '/learn/data-science' },
   { slug: 'projects',         title: 'Projects',                     area: 'practice',    indexHref: '/learn/projects' },
+]
+
+export const TRACKS: Track[] = [
+  ...LIVE_TRACKS,
+  ...PLANNED_TRACKS.map((track): Track => ({
+    slug: track.slug,
+    title: track.title,
+    area: track.area,
+    indexHref: track.href,
+    status: 'coming-soon',
+  })),
 ]

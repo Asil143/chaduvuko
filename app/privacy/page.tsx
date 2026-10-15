@@ -17,16 +17,26 @@ export default function PrivacyPage() {
       </p>
       <p style={{ color: 'var(--text2)', lineHeight: 1.7 }}>
         In your browser, localStorage keeps your learning progress (lessons you mark complete,
-        quizzes you pass, when each happened, and the last lesson you opened), roadmap progress,
+        quizzes you pass, when each happened, and the last lesson you opened), roadmap and practice
+        progress, project milestones, weekly goals,
         playground code and activity (such as runs, streaks, languages used, and the name you enter),
         your commenting identity (a guest name and optional email, or your GitHub profile and a
         sign-in token) with an anonymous voter ID, and preferences such as your theme. It stays on
         your device unless you post or submit it.
       </p>
       <p style={{ color: 'var(--text2)', lineHeight: 1.7 }}>
+        Learner accounts are optional. If you request a passwordless email sign-in link, Supabase
+        processes your email address to authenticate you. While signed in, learning, quiz, roadmap,
+        practice, project, and weekly-goal progress is synced to a private account record in
+        Supabase so it can be used on your devices. You can sign out or delete your learner account
+        from the dashboard. Deleting the account deletes its synced progress; browser-local progress
+        remains on that device.
+      </p>
+      <p style={{ color: 'var(--text2)', lineHeight: 1.7 }}>
         Comments, newsletter emails, GitHub sign-in data used for comments, and page-view records
-        may be stored in Supabase. Chat messages, playground code you send for review, custom
-        roadmap requests, and Find a Video searches are sent to Groq so the AI features can respond;
+        may be stored in Supabase. Lesson feedback you submit is stored for Chaduvuko team review
+        without attaching your learner account. Chat messages, playground code you send for review,
+        custom roadmap requests, and Find a Video searches are sent to OpenAI so the AI features can respond;
         video searches are also looked up on YouTube.
       </p>
       <p style={{ color: 'var(--text2)', lineHeight: 1.7 }}>
@@ -44,7 +54,7 @@ export default function PrivacyPage() {
         For privacy questions, contact hello@chaduvuko.com.
       </p>
       <p style={{ color: 'var(--muted)', fontSize: '13px', lineHeight: 1.6 }}>
-        Last updated: October 13, 2026
+        Last updated: October 14, 2026
       </p>
     </div>
   )

@@ -1,0 +1,991 @@
+{
+  "url": "https://www.geeksforgeeks.org/",
+  "title": "GeeksforGeeks | Your All-in-One Learning Portal",
+  "vw": 320,
+  "vh": 700,
+  "scrollW": 320,
+  "scrollH": 3983,
+  "clientW": 320,
+  "h1": 0,
+  "inputs": [],
+  "headings": [
+    {
+      "tag": "H2",
+      "text": "Explore",
+      "docY": 305,
+      "x": 28,
+      "w": 158,
+      "h": 36,
+      "size": "24px",
+      "weight": "600"
+    },
+    {
+      "tag": "H2",
+      "text": "Courses",
+      "docY": 1911,
+      "x": 28,
+      "w": 158,
+      "h": 36,
+      "size": "24px",
+      "weight": "600"
+    },
+    {
+      "tag": "H2",
+      "text": "Must Explore",
+      "docY": 2308,
+      "x": 28,
+      "w": 158,
+      "h": 36,
+      "size": "24px",
+      "weight": "600"
+    }
+  ],
+  "hero": {
+    "text": "Start Your Learning Today!",
+    "x": 36,
+    "y": 160,
+    "docY": 160,
+    "w": 247,
+    "h": 28,
+    "font": "20px",
+    "weight": "600",
+    "bg": "rgba(0, 0, 0, 0)",
+    "color": "rgb(14, 14, 18)"
+  },
+  "homeTop": {
+    "x": 0,
+    "y": 95,
+    "w": 320
+  },
+  "chips": [
+    {
+      "text": "Placement 360",
+      "x": 4,
+      "y": 208,
+      "docY": 208,
+      "w": 89,
+      "h": 32,
+      "font": "10.5px",
+      "weight": "400",
+      "bg": "rgb(0, 137, 94)",
+      "color": "rgb(233, 233, 234)",
+      "href": "https://www.geeksforgeeks.org/courses/placement-360-cip-complete-tech-interview",
+      "target": "_blank"
+    },
+    {
+      "text": "Data Science 360",
+      "x": 112,
+      "y": 208,
+      "docY": 208,
+      "w": 101,
+      "h": 32,
+      "font": "10.5px",
+      "weight": "400",
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(29, 29, 31)",
+      "href": "https://www.geeksforgeeks.org/courses/complete-data-science-course-with-machine-learning",
+      "target": "_blank"
+    },
+    {
+      "text": "Full Stack Dev",
+      "x": 230,
+      "y": 208,
+      "docY": 208,
+      "w": 86,
+      "h": 32,
+      "font": "10.5px",
+      "weight": "400",
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(29, 29, 31)",
+      "href": "https://www.geeksforgeeks.org/courses/category/development-testing",
+      "target": "_blank"
+    }
+  ],
+  "explore": [
+    {
+      "text": "Data Structure and Algorithms View more",
+      "href": "https://www.geeksforgeeks.org/learn-data-structures-and-algorithms-dsa-tutorial/",
+      "target": "_blank",
+      "x": 28,
+      "docY": 372,
+      "w": 264,
+      "h": 190,
+      "inFirst": true
+    },
+    {
+      "text": "Web Development View more",
+      "href": "https://www.geeksforgeeks.org/web-development/",
+      "target": "_blank",
+      "x": 28,
+      "docY": 584,
+      "w": 264,
+      "h": 190,
+      "inFirst": true
+    },
+    {
+      "text": "AI ML & Data Science View more",
+      "href": "https://www.geeksforgeeks.org/ai-ml-ds/",
+      "target": "_blank",
+      "x": 28,
+      "docY": 796,
+      "w": 264,
+      "h": 190,
+      "inFirst": false
+    },
+    {
+      "text": "Machine Learning View more",
+      "href": "https://www.geeksforgeeks.org/machine-learning/",
+      "target": "_blank",
+      "x": 28,
+      "docY": 1008,
+      "w": 264,
+      "h": 190,
+      "inFirst": false
+    },
+    {
+      "text": "Python View more",
+      "href": "https://www.geeksforgeeks.org/python-programming-language/",
+      "target": "_blank",
+      "x": 28,
+      "docY": 1220,
+      "w": 264,
+      "h": 190,
+      "inFirst": false
+    },
+    {
+      "text": "Java View more",
+      "href": "https://www.geeksforgeeks.org/java/java/",
+      "target": "_blank",
+      "x": 28,
+      "docY": 1432,
+      "w": 264,
+      "h": 190,
+      "inFirst": false
+    }
+  ],
+  "courses": [
+    {
+      "text": "4.9 DSA & System Design Course - SDE Interview Prep Beginner to Advanced 488k+ interested Geeks Explore now",
+      "href": "https://www.geeksforgeeks.org/courses/dsa-system-design-live-sde-interview-course/",
+      "target": "_blank",
+      "x": 28,
+      "docY": 1967,
+      "w": 262,
+      "h": 301,
+      "inFirst": false
+    },
+    {
+      "text": "4.7 AI Engineering Course - Generative AI & Agentic AI Intermediate and Advanced 124k+ interested Geeks Explore now",
+      "href": "https://www.geeksforgeeks.org/courses/generative-ai-training-program/",
+      "target": "_blank",
+      "x": 312,
+      "docY": 1967,
+      "w": 262,
+      "h": 301,
+      "inFirst": false
+    },
+    {
+      "text": "4.7 DevOps & Cloud Course - AWS, Docker, Kubernetes with AI Beginner to Advanced 214k+ interested Geeks Explore now",
+      "href": "https://www.geeksforgeeks.org/courses/devops-course-with-ibm-certification/",
+      "target": "_blank",
+      "x": 596,
+      "docY": 1967,
+      "w": 262,
+      "h": 301,
+      "inFirst": false
+    },
+    {
+      "text": "4.6 Java Backend Course - Spring Boot, Microservices with AI Intermediate and Advanced 454k+ interested Geeks Explore now",
+      "href": "https://www.geeksforgeeks.org/courses/Java-backend-live/",
+      "target": "_blank",
+      "x": 880,
+      "docY": 1967,
+      "w": 262,
+      "h": 301,
+      "inFirst": false
+    },
+    {
+      "text": "4.7 MERN Full Stack Course - React, Node & MongoDB with AI Beginner to Advanced 468k+ interested Geeks Explore now",
+      "href": "https://www.geeksforgeeks.org/courses/mern-full-stack-live-course-ibm-certifications/",
+      "target": "_blank",
+      "x": 1164,
+      "docY": 1967,
+      "w": 262,
+      "h": 301,
+      "inFirst": false
+    },
+    {
+      "text": "5.0 System Design Course - HLD, Scalability & Distributed Systems Beginner to Advanced 51k+ interested Geeks Explore now",
+      "href": "https://www.geeksforgeeks.org/courses/system-design-training-program/",
+      "target": "_blank",
+      "x": 1448,
+      "docY": 1967,
+      "w": 262,
+      "h": 301,
+      "inFirst": false
+    }
+  ],
+  "topics": [
+    {
+      "text": "Trending Now",
+      "href": "https://www.geeksforgeeks.org/trending/",
+      "target": "_blank",
+      "x": 31,
+      "docY": 2364,
+      "w": 200,
+      "h": 97,
+      "inFirst": false
+    },
+    {
+      "text": "Watch Videos",
+      "href": "https://www.geeksforgeeks.org/videos/",
+      "target": "_blank",
+      "x": 237,
+      "docY": 2364,
+      "w": 200,
+      "h": 97,
+      "inFirst": false
+    },
+    {
+      "text": "GfG Coding Contest",
+      "href": "https://www.geeksforgeeks.org/events",
+      "target": "_blank",
+      "x": 443,
+      "docY": 2364,
+      "w": 200,
+      "h": 97,
+      "inFirst": false
+    },
+    {
+      "text": "Advertise with Us",
+      "href": "https://www.geeksforgeeks.org/advertise-with-us/",
+      "target": "_blank",
+      "x": 649,
+      "docY": 2364,
+      "w": 200,
+      "h": 97,
+      "inFirst": false
+    }
+  ],
+  "ad": {
+    "text": "Interested in advertising with us? Get in touch",
+    "x": 28,
+    "y": 1707,
+    "docY": 1707,
+    "w": 264,
+    "h": 154,
+    "font": "16px",
+    "weight": "400",
+    "bg": "rgba(0, 0, 0, 0)",
+    "color": "rgb(17, 24, 28)"
+  },
+  "first": [
+    {
+      "tag": "BUTTON",
+      "text": "Sign In",
+      "x": -250,
+      "y": 60,
+      "w": 200,
+      "h": 44,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Courses",
+      "x": -285,
+      "y": 125,
+      "w": 270,
+      "h": 25,
+      "pos": "static"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Courses",
+      "x": -285,
+      "y": 126,
+      "w": 53,
+      "h": 24,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Tutorials",
+      "x": -285,
+      "y": 171,
+      "w": 270,
+      "h": 25,
+      "pos": "static"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Tutorials",
+      "x": -285,
+      "y": 172,
+      "w": 59,
+      "h": 24,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Interview Prep",
+      "x": -285,
+      "y": 217,
+      "w": 270,
+      "h": 25,
+      "pos": "static"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Interview Prep",
+      "x": -285,
+      "y": 218,
+      "w": 97,
+      "h": 24,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "DSA",
+      "x": 45,
+      "y": 63,
+      "w": 25,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Practice Problems",
+      "x": 90,
+      "y": 63,
+      "w": 111,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "C",
+      "x": 221,
+      "y": 63,
+      "w": 8,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "C++",
+      "x": 249,
+      "y": 63,
+      "w": 23,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Java",
+      "x": 292,
+      "y": 63,
+      "w": 28,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Python",
+      "x": 340,
+      "y": 63,
+      "w": 44,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "JavaScript",
+      "x": 404,
+      "y": 63,
+      "w": 64,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Data Science",
+      "x": 489,
+      "y": 63,
+      "w": 78,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Machine Learning",
+      "x": 587,
+      "y": 63,
+      "w": 108,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Courses",
+      "x": 715,
+      "y": 63,
+      "w": 49,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "DIV",
+      "text": "Start Your Learning Today! Placement 360 Data Science 360 Full Stack Dev",
+      "x": 0,
+      "y": 95,
+      "w": 320,
+      "h": 210,
+      "pos": "static"
+    },
+    {
+      "tag": "DIV",
+      "text": "Start Your Learning Today!",
+      "x": 36,
+      "y": 160,
+      "w": 247,
+      "h": 28,
+      "pos": "static"
+    },
+    {
+      "tag": "DIV",
+      "text": "Placement 360 Data Science 360 Full Stack Dev",
+      "x": 16,
+      "y": 188,
+      "w": 288,
+      "h": 52,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Placement 360",
+      "x": 4,
+      "y": 208,
+      "w": 89,
+      "h": 32,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Data Science 360",
+      "x": 112,
+      "y": 208,
+      "w": 101,
+      "h": 32,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Full Stack Dev",
+      "x": 230,
+      "y": 208,
+      "w": 86,
+      "h": 32,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Data Structure and Algorithms View more",
+      "x": 28,
+      "y": 372,
+      "w": 264,
+      "h": 190,
+      "pos": "static"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Data Structure and Algorithms",
+      "x": 43,
+      "y": 418,
+      "w": 234,
+      "h": 39,
+      "pos": "static"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "View more",
+      "x": 104,
+      "y": 480,
+      "w": 111,
+      "h": 36,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Web Development View more",
+      "x": 28,
+      "y": 584,
+      "w": 264,
+      "h": 190,
+      "pos": "static"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Web Development",
+      "x": 73,
+      "y": 630,
+      "w": 174,
+      "h": 39,
+      "pos": "static"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "View more",
+      "x": 104,
+      "y": 692,
+      "w": 111,
+      "h": 36,
+      "pos": "static"
+    }
+  ],
+  "fixed": [
+    {
+      "tag": "DIV",
+      "id": "",
+      "cls": "",
+      "x": 0,
+      "y": 0,
+      "w": 320,
+      "h": 95,
+      "pos": "sticky",
+      "z": "1000",
+      "text": "Sign In Courses Tutorials Interview Prep DSA Practice Problems C C++ Java Python JavaScript Data Sci"
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "cls": "headerSidebarWrapper",
+      "x": -300,
+      "y": 50,
+      "w": 300,
+      "h": 700,
+      "pos": "fixed",
+      "z": "999",
+      "text": "Sign In Courses Tutorials Interview Prep"
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "BUTTON",
+      "cls": "signinButton gfg_loginModalBtn login-modal-btn",
+      "text": "Sign In",
+      "x": -250,
+      "right": -50,
+      "y": 60,
+      "w": 200,
+      "h": 44
+    },
+    {
+      "tag": "A",
+      "cls": "",
+      "text": "Courses",
+      "x": -285,
+      "right": -15,
+      "y": 125,
+      "w": 270,
+      "h": 25
+    },
+    {
+      "tag": "SPAN",
+      "cls": "",
+      "text": "Courses",
+      "x": -285,
+      "right": -232,
+      "y": 126,
+      "w": 53,
+      "h": 24
+    },
+    {
+      "tag": "A",
+      "cls": "",
+      "text": "Tutorials",
+      "x": -285,
+      "right": -15,
+      "y": 171,
+      "w": 270,
+      "h": 25
+    },
+    {
+      "tag": "SPAN",
+      "cls": "",
+      "text": "Tutorials",
+      "x": -285,
+      "right": -226,
+      "y": 172,
+      "w": 59,
+      "h": 24
+    },
+    {
+      "tag": "A",
+      "cls": "",
+      "text": "Interview Prep",
+      "x": -285,
+      "right": -15,
+      "y": 217,
+      "w": 270,
+      "h": 25
+    },
+    {
+      "tag": "SPAN",
+      "cls": "",
+      "text": "Interview Prep",
+      "x": -285,
+      "right": -188,
+      "y": 218,
+      "w": 97,
+      "h": 24
+    },
+    {
+      "tag": "BUTTON",
+      "cls": "",
+      "text": "",
+      "x": -166,
+      "right": -124,
+      "y": 264,
+      "w": 42,
+      "h": 43
+    },
+    {
+      "tag": "A",
+      "cls": "link",
+      "text": "Python",
+      "x": 340,
+      "right": 384,
+      "y": 63,
+      "w": 44,
+      "h": 21
+    },
+    {
+      "tag": "A",
+      "cls": "link",
+      "text": "JavaScript",
+      "x": 404,
+      "right": 469,
+      "y": 63,
+      "w": 64,
+      "h": 21
+    },
+    {
+      "tag": "A",
+      "cls": "link",
+      "text": "Data Science",
+      "x": 489,
+      "right": 567,
+      "y": 63,
+      "w": 78,
+      "h": 21
+    },
+    {
+      "tag": "A",
+      "cls": "link",
+      "text": "Machine Learning",
+      "x": 587,
+      "right": 695,
+      "y": 63,
+      "w": 108,
+      "h": 21
+    },
+    {
+      "tag": "A",
+      "cls": "link",
+      "text": "Courses",
+      "x": 715,
+      "right": 764,
+      "y": 63,
+      "w": 49,
+      "h": 21
+    },
+    {
+      "tag": "A",
+      "cls": "HomePageCourseCard_homePageCourseCard__1Z34I",
+      "text": "4.7 AI Engineering Course - Generative AI & Agenti",
+      "x": 312,
+      "right": 574,
+      "y": 1967,
+      "w": 262,
+      "h": 301
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard--starRating--icon__odhp2",
+      "text": "",
+      "x": 527,
+      "right": 541,
+      "y": 1980,
+      "w": 14,
+      "h": 16
+    },
+    {
+      "tag": "IMG",
+      "cls": "HomePageCourseCard_homePageCourseCard_image__au041",
+      "text": "course-img",
+      "x": 313,
+      "right": 573,
+      "y": 1968,
+      "w": 260,
+      "h": 162
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_level--icon__z96MC",
+      "text": "",
+      "x": 322,
+      "right": 338,
+      "y": 2198,
+      "w": 17,
+      "h": 17
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_level--text__gdzdr",
+      "text": "Intermediate and Advanced",
+      "x": 342,
+      "right": 515,
+      "y": 2195,
+      "w": 173,
+      "h": 22
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_container_geeksCou",
+      "text": "",
+      "x": 320,
+      "right": 340,
+      "y": 2239,
+      "w": 19,
+      "h": 21
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_container_geeksCou",
+      "text": "124k+ interested Geeks",
+      "x": 342,
+      "right": 470,
+      "y": 2240,
+      "w": 128,
+      "h": 17
+    },
+    {
+      "tag": "BUTTON",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_container--cta__9a",
+      "text": "Explore now",
+      "x": 474,
+      "right": 568,
+      "y": 2236,
+      "w": 94,
+      "h": 26
+    },
+    {
+      "tag": "A",
+      "cls": "HomePageCourseCard_homePageCourseCard__1Z34I",
+      "text": "4.7 DevOps & Cloud Course - AWS, Docker, Kubernete",
+      "x": 596,
+      "right": 858,
+      "y": 1967,
+      "w": 262,
+      "h": 301
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard--starRating--icon__odhp2",
+      "text": "",
+      "x": 811,
+      "right": 825,
+      "y": 1980,
+      "w": 14,
+      "h": 16
+    },
+    {
+      "tag": "IMG",
+      "cls": "HomePageCourseCard_homePageCourseCard_image__au041",
+      "text": "course-img",
+      "x": 597,
+      "right": 857,
+      "y": 1968,
+      "w": 260,
+      "h": 162
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_level--icon__z96MC",
+      "text": "",
+      "x": 606,
+      "right": 622,
+      "y": 2198,
+      "w": 17,
+      "h": 17
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_level--text__gdzdr",
+      "text": "Beginner to Advanced",
+      "x": 626,
+      "right": 765,
+      "y": 2195,
+      "w": 139,
+      "h": 22
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_container_geeksCou",
+      "text": "",
+      "x": 604,
+      "right": 624,
+      "y": 2239,
+      "w": 19,
+      "h": 21
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_container_geeksCou",
+      "text": "214k+ interested Geeks",
+      "x": 626,
+      "right": 754,
+      "y": 2240,
+      "w": 128,
+      "h": 17
+    },
+    {
+      "tag": "BUTTON",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_container--cta__9a",
+      "text": "Explore now",
+      "x": 758,
+      "right": 852,
+      "y": 2236,
+      "w": 94,
+      "h": 26
+    },
+    {
+      "tag": "A",
+      "cls": "HomePageCourseCard_homePageCourseCard__1Z34I",
+      "text": "4.6 Java Backend Course - Spring Boot, Microservic",
+      "x": 880,
+      "right": 1142,
+      "y": 1967,
+      "w": 262,
+      "h": 301
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard--starRating--icon__odhp2",
+      "text": "",
+      "x": 1095,
+      "right": 1109,
+      "y": 1980,
+      "w": 14,
+      "h": 16
+    },
+    {
+      "tag": "IMG",
+      "cls": "HomePageCourseCard_homePageCourseCard_image__au041",
+      "text": "course-img",
+      "x": 881,
+      "right": 1141,
+      "y": 1968,
+      "w": 260,
+      "h": 162
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_level--icon__z96MC",
+      "text": "",
+      "x": 890,
+      "right": 906,
+      "y": 2198,
+      "w": 17,
+      "h": 17
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_level--text__gdzdr",
+      "text": "Intermediate and Advanced",
+      "x": 910,
+      "right": 1083,
+      "y": 2195,
+      "w": 173,
+      "h": 22
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_container_geeksCou",
+      "text": "",
+      "x": 888,
+      "right": 908,
+      "y": 2239,
+      "w": 19,
+      "h": 21
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_container_geeksCou",
+      "text": "454k+ interested Geeks",
+      "x": 910,
+      "right": 1038,
+      "y": 2240,
+      "w": 128,
+      "h": 17
+    },
+    {
+      "tag": "BUTTON",
+      "cls": "HomePageCourseCard_homePageCourseCard_textContainer_container--cta__9a",
+      "text": "Explore now",
+      "x": 1042,
+      "right": 1136,
+      "y": 2236,
+      "w": 94,
+      "h": 26
+    },
+    {
+      "tag": "A",
+      "cls": "HomePageCourseCard_homePageCourseCard__1Z34I",
+      "text": "4.7 MERN Full Stack Course - React, Node & MongoDB",
+      "x": 1164,
+      "right": 1426,
+      "y": 1967,
+      "w": 262,
+      "h": 301
+    },
+    {
+      "tag": "SPAN",
+      "cls": "HomePageCourseCard_homePageCourseCard--starRating--icon__odhp2",
+      "text": "",
+      "x": 1379,
+      "right": 1393,
+      "y": 1980,
+      "w": 14,
+      "h": 16
+    },
+    {
+      "tag": "IMG",
+      "cls": "HomePageCourseCard_homePageCourseCard_image__au041",
+      "text": "course-img",
+      "x": 1165,
+      "right": 1425,
+      "y": 1968,
+      "w": 260,
+      "h": 162
+    }
+  ],
+  "iframes": [],
+  "subheader": [
+    "DSA",
+    "Practice Problems",
+    "C",
+    "C++",
+    "Java",
+    "Python",
+    "JavaScript",
+    "Data Science",
+    "Machine Learning",
+    "Courses"
+  ],
+  "country": "",
+  "isMobileView": false,
+  "buildId": "2026-10-09T05-20-51-701Z",
+  "status": 304,
+  "uaName": "320"
+}

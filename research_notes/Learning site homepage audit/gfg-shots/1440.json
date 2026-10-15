@@ -1,0 +1,730 @@
+{
+  "url": "https://www.geeksforgeeks.org/",
+  "title": "GeeksforGeeks | Your All-in-One Learning Portal",
+  "vw": 1440,
+  "vh": 1000,
+  "scrollW": 1440,
+  "scrollH": 3642,
+  "clientW": 1440,
+  "h1": 0,
+  "inputs": [],
+  "headings": [
+    {
+      "tag": "H2",
+      "text": "Explore",
+      "docY": 315,
+      "x": 199,
+      "w": 625,
+      "h": 36,
+      "size": "24px",
+      "weight": "600"
+    },
+    {
+      "tag": "H2",
+      "text": "Courses",
+      "docY": 2151,
+      "x": 199,
+      "w": 625,
+      "h": 36,
+      "size": "24px",
+      "weight": "600"
+    },
+    {
+      "tag": "H2",
+      "text": "Must Explore",
+      "docY": 3039,
+      "x": 199,
+      "w": 625,
+      "h": 36,
+      "size": "24px",
+      "weight": "600"
+    }
+  ],
+  "hero": {
+    "text": "Start Your Learning Today!",
+    "x": 473,
+    "y": 154,
+    "docY": 154,
+    "w": 494,
+    "h": 50,
+    "font": "40px",
+    "weight": "600",
+    "bg": "rgba(0, 0, 0, 0)",
+    "color": "rgb(14, 14, 18)"
+  },
+  "homeTop": {
+    "x": 0,
+    "y": 95,
+    "w": 1440
+  },
+  "chips": [
+    {
+      "text": "Placement 360",
+      "x": 527,
+      "y": 224,
+      "docY": 224,
+      "w": 113,
+      "h": 32,
+      "font": "14px",
+      "weight": "400",
+      "bg": "rgb(0, 137, 94)",
+      "color": "rgb(233, 233, 234)",
+      "href": "https://www.geeksforgeeks.org/courses/placement-360-cip-complete-tech-interview",
+      "target": "_blank"
+    },
+    {
+      "text": "Data Science 360",
+      "x": 659,
+      "y": 224,
+      "docY": 224,
+      "w": 128,
+      "h": 32,
+      "font": "14px",
+      "weight": "400",
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(29, 29, 31)",
+      "href": "https://www.geeksforgeeks.org/courses/complete-data-science-course-with-machine-learning",
+      "target": "_blank"
+    },
+    {
+      "text": "Full Stack Dev",
+      "x": 805,
+      "y": 224,
+      "docY": 224,
+      "w": 108,
+      "h": 32,
+      "font": "14px",
+      "weight": "400",
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(29, 29, 31)",
+      "href": "https://www.geeksforgeeks.org/courses/category/development-testing",
+      "target": "_blank"
+    }
+  ],
+  "explore": [
+    {
+      "text": "Data Structure and Algorithms View more",
+      "href": "https://www.geeksforgeeks.org/learn-data-structures-and-algorithms-dsa-tutorial/",
+      "target": "_blank",
+      "x": 200,
+      "docY": 371,
+      "w": 499,
+      "h": 200,
+      "inFirst": true
+    },
+    {
+      "text": "Web Development View more",
+      "href": "https://www.geeksforgeeks.org/web-development/",
+      "target": "_blank",
+      "x": 741,
+      "docY": 371,
+      "w": 499,
+      "h": 200,
+      "inFirst": true
+    },
+    {
+      "text": "AI ML & Data Science View more",
+      "href": "https://www.geeksforgeeks.org/ai-ml-ds/",
+      "target": "_blank",
+      "x": 200,
+      "docY": 596,
+      "w": 499,
+      "h": 200,
+      "inFirst": true
+    },
+    {
+      "text": "Machine Learning View more",
+      "href": "https://www.geeksforgeeks.org/machine-learning/",
+      "target": "_blank",
+      "x": 741,
+      "docY": 596,
+      "w": 499,
+      "h": 200,
+      "inFirst": true
+    },
+    {
+      "text": "Python View more",
+      "href": "https://www.geeksforgeeks.org/python-programming-language/",
+      "target": "_blank",
+      "x": 200,
+      "docY": 821,
+      "w": 499,
+      "h": 200,
+      "inFirst": true
+    },
+    {
+      "text": "Java View more",
+      "href": "https://www.geeksforgeeks.org/java/java/",
+      "target": "_blank",
+      "x": 741,
+      "docY": 821,
+      "w": 499,
+      "h": 200,
+      "inFirst": true
+    },
+    {
+      "text": "System Design View more",
+      "href": "https://www.geeksforgeeks.org/system-design-tutorial/",
+      "target": "_blank",
+      "x": 200,
+      "docY": 1046,
+      "w": 499,
+      "h": 200,
+      "inFirst": false
+    },
+    {
+      "text": "DevOps View more",
+      "href": "https://www.geeksforgeeks.org/devops-tutorial/",
+      "target": "_blank",
+      "x": 741,
+      "docY": 1046,
+      "w": 499,
+      "h": 200,
+      "inFirst": false
+    },
+    {
+      "text": "Programming Languages View more",
+      "href": "https://www.geeksforgeeks.org/computer-science-fundamentals/programming-language-tutorials/",
+      "target": "_blank",
+      "x": 200,
+      "docY": 1271,
+      "w": 499,
+      "h": 200,
+      "inFirst": false
+    },
+    {
+      "text": "CS Subjects View more",
+      "href": "https://www.geeksforgeeks.org/software-engineering/articles-on-computer-science-subjects-gq/",
+      "target": "_blank",
+      "x": 741,
+      "docY": 1271,
+      "w": 499,
+      "h": 200,
+      "inFirst": false
+    },
+    {
+      "text": "Practice DSA View more",
+      "href": "https://www.geeksforgeeks.org/blogs/geeksforgeeks-practice-best-online-coding-platform/",
+      "target": "_blank",
+      "x": 200,
+      "docY": 1496,
+      "w": 499,
+      "h": 200,
+      "inFirst": false
+    },
+    {
+      "text": "Interview Preparation View more",
+      "href": "https://www.geeksforgeeks.org/interview-prep/interview-corner/",
+      "target": "_blank",
+      "x": 741,
+      "docY": 1496,
+      "w": 499,
+      "h": 200,
+      "inFirst": false
+    },
+    {
+      "text": "Databases View more",
+      "href": "https://www.geeksforgeeks.org/sql/guide-to-databases/",
+      "target": "_blank",
+      "x": 200,
+      "docY": 1721,
+      "w": 499,
+      "h": 200,
+      "inFirst": false
+    },
+    {
+      "text": "Software & Tools View more",
+      "href": "https://www.geeksforgeeks.org/websites-apps/software-and-tools-a-to-z-list/",
+      "target": "_blank",
+      "x": 741,
+      "docY": 1721,
+      "w": 499,
+      "h": 200,
+      "inFirst": false
+    }
+  ],
+  "courses": [
+    {
+      "text": "4.9 DSA & System Design Course - SDE Interview Prep Beginner to Advanced 488k+ interested Geeks Explore now",
+      "href": "https://www.geeksforgeeks.org/courses/dsa-system-design-live-sde-interview-course/",
+      "target": "_blank",
+      "x": 199,
+      "docY": 2207,
+      "w": 292,
+      "h": 354,
+      "inFirst": false
+    },
+    {
+      "text": "4.7 AI Engineering Course - Generative AI & Agentic AI Intermediate and Advanced 124k+ interested Geeks Explore now",
+      "href": "https://www.geeksforgeeks.org/courses/generative-ai-training-program/",
+      "target": "_blank",
+      "x": 574,
+      "docY": 2207,
+      "w": 292,
+      "h": 354,
+      "inFirst": false
+    },
+    {
+      "text": "4.7 DevOps & Cloud Course - AWS, Docker, Kubernetes with AI Beginner to Advanced 214k+ interested Geeks Explore now",
+      "href": "https://www.geeksforgeeks.org/courses/devops-course-with-ibm-certification/",
+      "target": "_blank",
+      "x": 949,
+      "docY": 2207,
+      "w": 292,
+      "h": 354,
+      "inFirst": false
+    },
+    {
+      "text": "4.6 Java Backend Course - Spring Boot, Microservices with AI Intermediate and Advanced 454k+ interested Geeks Explore now",
+      "href": "https://www.geeksforgeeks.org/courses/Java-backend-live/",
+      "target": "_blank",
+      "x": 199,
+      "docY": 2603,
+      "w": 292,
+      "h": 354,
+      "inFirst": false
+    },
+    {
+      "text": "4.7 MERN Full Stack Course - React, Node & MongoDB with AI Beginner to Advanced 468k+ interested Geeks Explore now",
+      "href": "https://www.geeksforgeeks.org/courses/mern-full-stack-live-course-ibm-certifications/",
+      "target": "_blank",
+      "x": 574,
+      "docY": 2603,
+      "w": 292,
+      "h": 354,
+      "inFirst": false
+    },
+    {
+      "text": "5.0 System Design Course - HLD, Scalability & Distributed Systems Beginner to Advanced 51k+ interested Geeks Explore now",
+      "href": "https://www.geeksforgeeks.org/courses/system-design-training-program/",
+      "target": "_blank",
+      "x": 949,
+      "docY": 2603,
+      "w": 292,
+      "h": 354,
+      "inFirst": false
+    }
+  ],
+  "topics": [
+    {
+      "text": "Trending Now",
+      "href": "https://www.geeksforgeeks.org/trending/",
+      "target": "_blank",
+      "x": 201,
+      "docY": 3095,
+      "w": 244,
+      "h": 104,
+      "inFirst": false
+    },
+    {
+      "text": "Watch Videos",
+      "href": "https://www.geeksforgeeks.org/videos/",
+      "target": "_blank",
+      "x": 466,
+      "docY": 3095,
+      "w": 244,
+      "h": 104,
+      "inFirst": false
+    },
+    {
+      "text": "GfG Coding Contest",
+      "href": "https://www.geeksforgeeks.org/events",
+      "target": "_blank",
+      "x": 730,
+      "docY": 3095,
+      "w": 244,
+      "h": 104,
+      "inFirst": false
+    },
+    {
+      "text": "Advertise with Us",
+      "href": "https://www.geeksforgeeks.org/advertise-with-us/",
+      "target": "_blank",
+      "x": 994,
+      "docY": 3095,
+      "w": 244,
+      "h": 104,
+      "inFirst": false
+    }
+  ],
+  "ad": {
+    "text": "Interested in advertising with us? Get in touch",
+    "x": 200,
+    "y": 1996,
+    "docY": 1996,
+    "w": 1040,
+    "h": 105,
+    "font": "16px",
+    "weight": "400",
+    "bg": "rgba(0, 0, 0, 0)",
+    "color": "rgb(17, 24, 28)"
+  },
+  "first": [
+    {
+      "tag": "DIV",
+      "text": "Courses",
+      "x": 571,
+      "y": 17,
+      "w": 52,
+      "h": 15,
+      "pos": "static"
+    },
+    {
+      "tag": "DIV",
+      "text": "Tutorials",
+      "x": 668,
+      "y": 17,
+      "w": 58,
+      "h": 15,
+      "pos": "static"
+    },
+    {
+      "tag": "DIV",
+      "text": "Interview Prep",
+      "x": 770,
+      "y": 17,
+      "w": 96,
+      "h": 15,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "DSA",
+      "x": 363,
+      "y": 63,
+      "w": 25,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Practice Problems",
+      "x": 408,
+      "y": 63,
+      "w": 111,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "C",
+      "x": 539,
+      "y": 63,
+      "w": 8,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "C++",
+      "x": 567,
+      "y": 63,
+      "w": 23,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Java",
+      "x": 610,
+      "y": 63,
+      "w": 28,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Python",
+      "x": 658,
+      "y": 63,
+      "w": 44,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "JavaScript",
+      "x": 722,
+      "y": 63,
+      "w": 64,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Data Science",
+      "x": 807,
+      "y": 63,
+      "w": 78,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Machine Learning",
+      "x": 905,
+      "y": 63,
+      "w": 108,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Courses",
+      "x": 1033,
+      "y": 63,
+      "w": 49,
+      "h": 21,
+      "pos": "static"
+    },
+    {
+      "tag": "DIV",
+      "text": "Start Your Learning Today! Placement 360 Data Science 360 Full Stack Dev",
+      "x": 0,
+      "y": 95,
+      "w": 1440,
+      "h": 220,
+      "pos": "static"
+    },
+    {
+      "tag": "DIV",
+      "text": "Start Your Learning Today!",
+      "x": 473,
+      "y": 154,
+      "w": 494,
+      "h": 50,
+      "pos": "static"
+    },
+    {
+      "tag": "DIV",
+      "text": "Placement 360 Data Science 360 Full Stack Dev",
+      "x": 518,
+      "y": 204,
+      "w": 404,
+      "h": 52,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Placement 360",
+      "x": 527,
+      "y": 224,
+      "w": 113,
+      "h": 32,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Data Science 360",
+      "x": 659,
+      "y": 224,
+      "w": 128,
+      "h": 32,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Full Stack Dev",
+      "x": 805,
+      "y": 224,
+      "w": 108,
+      "h": 32,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Data Structure and Algorithms View more",
+      "x": 200,
+      "y": 371,
+      "w": 499,
+      "h": 200,
+      "pos": "static"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Data Structure and Algorithms",
+      "x": 248,
+      "y": 419,
+      "w": 402,
+      "h": 39,
+      "pos": "static"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "View more",
+      "x": 379,
+      "y": 480,
+      "w": 140,
+      "h": 43,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Web Development View more",
+      "x": 741,
+      "y": 371,
+      "w": 499,
+      "h": 200,
+      "pos": "static"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Web Development",
+      "x": 869,
+      "y": 419,
+      "w": 244,
+      "h": 39,
+      "pos": "static"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "View more",
+      "x": 920,
+      "y": 480,
+      "w": 140,
+      "h": 43,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "AI ML & Data Science View more",
+      "x": 200,
+      "y": 596,
+      "w": 499,
+      "h": 200,
+      "pos": "static"
+    },
+    {
+      "tag": "SPAN",
+      "text": "AI ML & Data Science",
+      "x": 310,
+      "y": 644,
+      "w": 280,
+      "h": 39,
+      "pos": "static"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "View more",
+      "x": 379,
+      "y": 705,
+      "w": 140,
+      "h": 43,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Machine Learning View more",
+      "x": 741,
+      "y": 596,
+      "w": 499,
+      "h": 200,
+      "pos": "static"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Machine Learning",
+      "x": 876,
+      "y": 644,
+      "w": 229,
+      "h": 39,
+      "pos": "static"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "View more",
+      "x": 920,
+      "y": 705,
+      "w": 140,
+      "h": 43,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Python View more",
+      "x": 200,
+      "y": 821,
+      "w": 499,
+      "h": 200,
+      "pos": "static"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Python",
+      "x": 403,
+      "y": 869,
+      "w": 94,
+      "h": 39,
+      "pos": "static"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "View more",
+      "x": 379,
+      "y": 930,
+      "w": 140,
+      "h": 43,
+      "pos": "static"
+    },
+    {
+      "tag": "A",
+      "text": "Java View more",
+      "x": 741,
+      "y": 821,
+      "w": 499,
+      "h": 200,
+      "pos": "static"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Java",
+      "x": 963,
+      "y": 869,
+      "w": 55,
+      "h": 39,
+      "pos": "static"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "View more",
+      "x": 920,
+      "y": 930,
+      "w": 140,
+      "h": 43,
+      "pos": "static"
+    }
+  ],
+  "fixed": [
+    {
+      "tag": "DIV",
+      "id": "",
+      "cls": "",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 95,
+      "pos": "sticky",
+      "z": "1000",
+      "text": "Courses Tutorials Interview Prep Sign In DSA Practice Problems C C++ Java Python JavaScript Data Sci"
+    }
+  ],
+  "overflow": [],
+  "iframes": [],
+  "subheader": [
+    "DSA",
+    "Practice Problems",
+    "C",
+    "C++",
+    "Java",
+    "Python",
+    "JavaScript",
+    "Data Science",
+    "Machine Learning",
+    "Courses"
+  ],
+  "country": "",
+  "isMobileView": false,
+  "buildId": "2026-10-09T05-20-51-701Z",
+  "status": 200,
+  "uaName": "1440"
+}

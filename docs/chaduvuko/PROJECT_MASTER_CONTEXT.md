@@ -60,6 +60,17 @@ Domain → Track → Level → Module → Lesson → Practice → Project → As
 ### Curriculum master-sheet fields
 Lesson ID | Level | Module | Lesson | Prerequisites | Learning Objective | Theory/Demo/Project | Target Duration | Resources | Instructor | Script Status | Recording Status | QA Status | Publish Status
 
+### Track and skill planning before content
+- Map the potential learning tracks and their prerequisite-aware skills before writing lessons.
+- Show planned tracks and skills as **Coming Soon**; do not count skill-map entries as live lessons.
+- Preserve existing live lessons while the wider catalog is being planned.
+- After a track/skill map is reviewed, develop, technically review, and publish lessons incrementally.
+- Maintain a broad coverage map across software development, data/AI, cloud/operations, cybersecurity/privacy, IT support/networking, enterprise platforms, product/accessibility, hardware/embedded, robotics, games/spatial computing, and computer-science specializations.
+- Treat the catalog as a maintained map of major job families and skill domains, not a claim that every employer-specific title or emerging tool can be exhaustively listed.
+- Review adjacent and emerging areas periodically; when a domain is broad, map its distinct role pathways rather than implying one skill list prepares learners for every role.
+- Describe tracks and skill shortcuts with concrete technologies, tasks, and learning outcomes rather than broad promotional claims.
+- Order major tracks by Chaduvuko's stated priority list, then core foundations, then specialist paths; keep skills within each learning map in prerequisite-to-advanced sequence.
+
 ## 4. Priority learning tracks
 
 Primary technology areas discussed for Chaduvuko:

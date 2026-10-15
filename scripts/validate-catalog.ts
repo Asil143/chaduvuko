@@ -30,7 +30,9 @@ function checkCatalog() {
   }
 
   for (const track of TRACKS) {
-    if (!LIVE_LESSONS.some(lesson => lesson.track === track.slug)) fail(`track "${track.slug}" has no live lessons`)
+    if (!LIVE_LESSONS.some(lesson => lesson.track === track.slug) && track.status !== 'coming-soon') {
+      fail(`track "${track.slug}" has no live lessons and is not marked coming soon`)
+    }
   }
 }
 

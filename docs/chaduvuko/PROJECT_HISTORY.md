@@ -45,6 +45,19 @@ This is a recovered index of Chaduvuko-related work found across prior ChatGPT c
 - Target durations established for concept/demo/project lessons.
 - Decision: approve full curriculum before instructors record content.
 
+## October 14, 2026 — Learner engagement and progress sync
+- Dashboard expanded with weekly learning goals, a 12-week activity calendar, prerequisite-aware roadmap recommendations, guided portfolio-project milestones, and quiz-review suggestions.
+- Lesson pages include curated self-check practice that routes learners to existing interactive learning tools, plus optional feedback for team review.
+- Progress remains browser-local for anonymous learners. Optional passwordless email sign-in enables Supabase sync of learning, quiz, roadmap, practice, project, and goal state across devices.
+- Learners can sign out or delete their account and cloud-synced progress from the dashboard.
+- Supabase migrations define private learner progress with per-user row-level security and lesson feedback restricted to server-side admin handling.
+
+## October 15, 2026 — Generative AI curriculum planning
+- Decided to map potential learning tracks and the skills they cover before writing or publishing lesson content.
+- Existing live tracks and lessons remain available and unchanged.
+- Planned tracks are marked Coming Soon and show skills grouped by prerequisites, foundations, core skills, advanced/production, projects, and career preparation.
+- Lesson content will be developed only after the track/skill map is reviewed, then published incrementally.
+
 ## October 13, 2026 — Priority content tracks
 Discussed high-priority global technology tracks:
 - Generative AI / LLM Engineering
@@ -87,6 +100,19 @@ Recovered Library content shows a Chaduvuko practice product called **Pipeline P
 - Free/Pro model
 - $19 Pro pack concept
 - Progressive practice from foundations to advanced
+
+## October 15, 2026 — IT and computer-science coverage audit
+- Audited the learning directory and found gaps beyond its initial software, data, AI, and cloud emphasis.
+- Added planned skills maps for IT support and systems administration, networking and telecommunications, SRE/platform engineering, cloud architecture/FinOps, application security/DevSecOps, security governance/privacy, analytics engineering, data governance, accessibility, technical product/business analysis, enterprise platforms, technical communication/DevRel, game development/graphics, embedded/IoT, digital hardware/semiconductors, robotics, blockchain, XR, compiler engineering, high-performance/scientific computing, applied-AI specializations, and additional language ecosystems.
+- Expanded the directory filters so these job families are discoverable.
+- Kept all existing live lessons unchanged; new maps remain planning outlines, not published lesson content.
+- Defined catalog completeness as ongoing coverage of major role families and skill domains, not a promise to enumerate every employer-specific title or fast-changing tool.
+
+## October 15, 2026 — Track detail and priority ordering
+- Replaced generic learning-track summaries with descriptions of the technologies, tasks, and concepts in each path; clarified each browsable skill/tool card with a specific scope.
+- Ordered tracks using Chaduvuko's stated priorities first, then foundational/core paths, then specialist paths.
+- Ordered skill shortcuts by the priority of their parent track, retaining prerequisite-to-advanced stage order inside each skills map.
+- Added a concise, stage-aware learning objective beneath every skill in the planned-track maps.
 
 ## Ongoing rules
 - Keep StudyX Overseas separate.

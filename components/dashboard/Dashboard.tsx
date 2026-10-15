@@ -6,6 +6,8 @@ import { useProgress, type ProgressRecord } from '@/lib/progress'
 import { upNext, type LessonEntry } from '@/lib/up-next'
 import type { TrackSummaries } from '@/lib/lesson-nav'
 import type { NodeType } from '@/data/roadmaps/types'
+import { LearnerAccount } from '@/components/auth/LearnerAccount'
+import { ProjectMilestones } from '@/components/dashboard/ProjectMilestones'
 
 interface DashboardRoadmapNode {
   id: string
@@ -34,6 +36,9 @@ interface RoadmapSummary {
   currentStageDone: number
   currentStageTotal: number
   completeStages: string[]
+  nextNodeTitle: string
+  nextHref: string
+  lastVisitedAt: string
 }
 
 interface Props {
@@ -91,12 +96,24 @@ function learningStreak(progress: ProgressRecord): number {
 
 const formatDate = (iso: string) => new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
 
+function savedWeeklyGoal() {
+  try {
+    const goal = Number(localStorage.getItem('chaduvuko_dashboard_weekly_goal'))
+    return [3, 5, 7].includes(goal) ? goal : null
+  } catch (error) {
+    console.error('Could not read the saved weekly goal:', error)
+    return null
+  }
+}
+
 function readRoadmapSummaries(roadmaps: DashboardRoadmap[], progress: ProgressRecord): RoadmapSummary[] {
   return roadmaps.map(roadmap => {
     let savedStates: Record<string, string> = {}
+    let lastVisitedAt = ''
     try {
       const saved = JSON.parse(localStorage.getItem(`chaduvuko_rm_${roadmap.id}`) ?? '{}')
       if (saved?.states && typeof saved.states === 'object') savedStates = saved.states
+      if (typeof saved?.lastVisitedAt === 'string') lastVisitedAt = saved.lastVisitedAt
     } catch {
       savedStates = {}
     }
@@ -136,6 +153,11 @@ function readRoadmapSummaries(roadmaps: DashboardRoadmap[], progress: ProgressRe
       return { label, done, total: counted.length, complete: counted.length > 0 && done === counted.length }
     })
     const currentStage = stages.find(stage => !stage.complete) ?? stages.at(-1)
+    const nextNode = roadmap.nodes.find(node =>
+      effective[node.id] !== 'done' &&
+      node.prerequisites.every(id => effective[id] === 'done') &&
+      node.lessonHrefs.length > 0,
+    )
     return {
       id: roadmap.id,
       slug: roadmap.slug,
@@ -146,6 +168,9 @@ function readRoadmapSummaries(roadmaps: DashboardRoadmap[], progress: ProgressRe
       currentStageDone: currentStage?.done ?? 0,
       currentStageTotal: currentStage?.total ?? 0,
       completeStages: stages.filter(stage => stage.complete).map(stage => stage.label),
+      nextNodeTitle: nextNode?.title ?? '',
+      nextHref: nextNode?.lessonHrefs[0] ?? `/learn/roadmap/${roadmap.slug}`,
+      lastVisitedAt,
     }
   })
 }
@@ -157,6 +182,7 @@ export default function Dashboard({ lessons, tracks, quizLessons, roadmaps }: Pr
   const [roadmapProgressReady, setRoadmapProgressReady] = useState(false)
   const [weeklyGoal, setWeeklyGoal] = useState(3)
   const [goalReady, setGoalReady] = useState(false)
+  const [goalTouched, setGoalTouched] = useState(false)
   const [celebration, setCelebration] = useState<{ title: string; message: string } | null>(null)
   const previousMilestones = useRef<Set<string> | null>(null)
   const previousWeeklyGoal = useRef(weeklyGoal)
@@ -218,15 +244,34 @@ export default function Dashboard({ lessons, tracks, quizLessons, roadmaps }: Pr
   }, [progress, lessons, tracks, quizLessons])
 
   useEffect(() => {
-    const savedGoal = Number(localStorage.getItem('chaduvuko_dashboard_weekly_goal'))
-    if ([3, 5, 7].includes(savedGoal)) setWeeklyGoal(savedGoal)
+    const savedGoal = savedWeeklyGoal()
+    if (savedGoal) setWeeklyGoal(savedGoal)
     setGoalReady(true)
   }, [])
 
   useEffect(() => {
-    if (!goalReady) return
-    localStorage.setItem('chaduvuko_dashboard_weekly_goal', String(weeklyGoal))
-  }, [weeklyGoal, goalReady])
+    if (!goalReady || !goalTouched) return
+    const key = 'chaduvuko_dashboard_weekly_goal'
+    const next = String(weeklyGoal)
+    try {
+      const previous = localStorage.getItem(key)
+      if (previous === next) return
+      localStorage.setItem(key, next)
+      window.dispatchEvent(new Event('chaduvuko:sync-preference-change'))
+    } catch (error) {
+      console.error('Could not save the weekly learning goal:', error)
+    }
+  }, [weeklyGoal, goalReady, goalTouched])
+
+  useEffect(() => {
+    const onSync = () => {
+      if (goalTouched) return
+      const savedGoal = savedWeeklyGoal()
+      if (savedGoal) setWeeklyGoal(savedGoal)
+    }
+    window.addEventListener('chaduvuko:sync-applied', onSync)
+    return () => window.removeEventListener('chaduvuko:sync-applied', onSync)
+  }, [goalTouched])
 
   useEffect(() => {
     if (!progress) return
@@ -281,9 +326,11 @@ export default function Dashboard({ lessons, tracks, quizLessons, roadmaps }: Pr
   }, [view, roadmapSummaries, roadmapProgressReady, weeklyGoal, goalReady])
 
   const activeRoadmap = roadmapProgressReady ? roadmapSummaries
-    .filter(roadmap => roadmap.done > 0)
-    .sort((a, b) => (b.total ? b.done / b.total : 0) - (a.total ? a.done / a.total : 0))[0] : undefined
+    .filter(roadmap => roadmap.done > 0 || roadmap.lastVisitedAt)
+    .sort((a, b) => b.done - a.done || b.lastVisitedAt.localeCompare(a.lastVisitedAt))[0] : undefined
   const reviewLessons = view?.quizzesToReview ?? []
+  const recommendedHref = activeRoadmap?.nextNodeTitle ? activeRoadmap.nextHref : view?.next?.[0]
+  const recommendedTitle = activeRoadmap?.nextNodeTitle || view?.next?.[1]
 
   const pct = view ? Math.round((view.done.length / lessons.length) * 100) : 0
   const stat = (value: string | null) => value ?? '—'
@@ -391,6 +438,24 @@ export default function Dashboard({ lessons, tracks, quizLessons, roadmaps }: Pr
               </section>
             )}
 
+            <section className="dashboard-recommendation" aria-labelledby="dashboard-recommendation-title">
+              <div className="dashboard-recommendation-icon"><Compass size={19} aria-hidden="true" /></div>
+              <div className="dashboard-recommendation-copy">
+                <p className="dashboard-eyebrow">A GOOD NEXT STEP</p>
+                <h2 id="dashboard-recommendation-title">{recommendedTitle ?? 'Choose a learning path to get started'}</h2>
+                <p>
+                  {activeRoadmap?.nextNodeTitle
+                    ? `Recommended from ${activeRoadmap.title} · ${activeRoadmap.currentStage}. Prerequisites are complete.`
+                    : recommendedHref
+                      ? 'Continue your current learning path. You can also choose a roadmap to get prerequisite-aware guidance.'
+                      : 'Explore a roadmap for a clear, prerequisite-aware route through a skill.'}
+                </p>
+              </div>
+              <Link href={recommendedHref ?? '/learn/roadmap'}>
+                {recommendedHref ? 'Continue' : 'Explore roadmaps'} <ArrowRight size={15} aria-hidden="true" />
+              </Link>
+            </section>
+
             <div className="dashboard-engagement-grid">
               <section className="dashboard-feature-panel" aria-labelledby="dashboard-goal-title">
                 <div className="dashboard-section-heading">
@@ -400,7 +465,7 @@ export default function Dashboard({ lessons, tracks, quizLessons, roadmaps }: Pr
                   </div>
                   <label className="dashboard-goal-select">
                     <span className="sr-only">Lessons per week goal</span>
-                    <select value={weeklyGoal} onChange={event => setWeeklyGoal(Number(event.target.value))}>
+                    <select value={weeklyGoal} onChange={event => { setWeeklyGoal(Number(event.target.value)); setGoalTouched(true) }}>
                       {[3, 5, 7].map(goal => <option key={goal} value={goal}>{goal} lessons</option>)}
                     </select>
                   </label>
@@ -513,6 +578,9 @@ export default function Dashboard({ lessons, tracks, quizLessons, roadmaps }: Pr
                 )}
               </section>
             </div>
+
+            <ProjectMilestones />
+            <LearnerAccount />
 
             <section className="dashboard-track-panel" aria-labelledby="dashboard-track-title">
               <div className="dashboard-section-heading">

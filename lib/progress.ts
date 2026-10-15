@@ -11,6 +11,8 @@ export interface ProgressRecord {
   version: typeof PROGRESS_VERSION
   /** Lesson URL → ISO time it was marked complete. */
   completed: Record<string, string>
+  /** Completion removals let a signed-in learner sync unchecking across devices. */
+  completedRemoved?: Record<string, string>
   /** Lesson URL → ISO time its quiz was passed; null if passed before times were recorded. */
   quizzesPassed: Record<string, string | null>
   /** Most recently opened lesson. */
@@ -33,6 +35,12 @@ function parse(raw: string | null): ProgressRecord {
     for (const [href, at] of Object.entries(data.completed)) {
       if (href.startsWith('/') && typeof at === 'string') completed[href] = at
     }
+    const completedRemoved: Record<string, string> = {}
+    if (data.version === PROGRESS_VERSION && typeof data.completedRemoved === 'object' && data.completedRemoved !== null) {
+      for (const [href, at] of Object.entries(data.completedRemoved)) {
+        if (href.startsWith('/') && typeof at === 'string') completedRemoved[href] = at
+      }
+    }
     const quizzesPassed: Record<string, string | null> = {}
     if (data.version === PROGRESS_VERSION && typeof data.quizzesPassed === 'object' && data.quizzesPassed !== null) {
       for (const [href, at] of Object.entries(data.quizzesPassed)) {
@@ -43,7 +51,7 @@ function parse(raw: string | null): ProgressRecord {
     const lastVisited = last && typeof last.href === 'string' && last.href.startsWith('/') && typeof last.at === 'string'
       ? { href: last.href, at: last.at }
       : null
-    return { version: PROGRESS_VERSION, completed, quizzesPassed, lastVisited }
+    return { version: PROGRESS_VERSION, completed, completedRemoved, quizzesPassed, lastVisited }
   } catch {
     return emptyRecord()
   }
@@ -85,9 +93,15 @@ function update(change: (record: ProgressRecord) => ProgressRecord): boolean {
 export function setLessonComplete(href: string, complete: boolean) {
   update(record => {
     const completed = { ...record.completed }
-    if (complete) completed[href] = new Date().toISOString()
-    else delete completed[href]
-    return { ...record, completed }
+    const completedRemoved = { ...record.completedRemoved }
+    if (complete) {
+      completed[href] = new Date().toISOString()
+      delete completedRemoved[href]
+    } else {
+      delete completed[href]
+      completedRemoved[href] = new Date().toISOString()
+    }
+    return { ...record, completed, completedRemoved }
   })
 }
 

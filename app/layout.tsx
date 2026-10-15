@@ -61,6 +61,7 @@ import { Footer } from '@/components/layout/Footer'
 import { themeInitScript } from '@/lib/theme'
 import ChatBot from '@/components/ui/ChatBot'
 import { TITLE_TEMPLATE } from '@/lib/site-title'
+import { ProgressSync } from '@/components/auth/ProgressSync'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://chaduvuko.com'),
@@ -176,6 +177,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body id="top">
         <ServiceWorkerRegistration />
+        <ProgressSync />
         <Navbar header={getHeaderData()} />
         {/* Page top paddings assume a 32px band below the fixed header (formerly the announcement bar). */}
         <main id="main-content" style={{ paddingTop: '32px' }}>{children}</main>

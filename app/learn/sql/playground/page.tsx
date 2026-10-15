@@ -1,12 +1,13 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { LearnLayout } from '@/components/content/LearnLayout';
 import SQLPlayground from '@/components/sql/SQLPlayground';
 
 const SQL_COLOR = '#06b6d4';
 
 const CHALLENGES: {
+  id: string;
   label: string;
   category: string;
   color: string;
@@ -15,6 +16,7 @@ const CHALLENGES: {
   sql: string;
 }[] = [
   {
+    id: 'revenue-by-city',
     label: 'Revenue by city',
     category: 'Aggregation',
     color: '#10b981',
@@ -23,6 +25,7 @@ const CHALLENGES: {
     sql: `SELECT s.city,\n  COUNT(o.order_id)        AS total_orders,\n  ROUND(SUM(o.total_amount), 2) AS revenue\nFROM stores s\nJOIN orders o ON s.store_id = o.store_id\nGROUP BY s.city\nORDER BY revenue DESC;`,
   },
   {
+    id: 'gold-platinum-customers',
     label: 'Gold & Platinum customers',
     category: 'Filtering',
     color: '#f59e0b',
@@ -31,6 +34,7 @@ const CHALLENGES: {
     sql: `SELECT first_name, last_name, city, loyalty_tier\nFROM customers\nWHERE loyalty_tier IN ('Gold', 'Platinum')\nORDER BY city, last_name;`,
   },
   {
+    id: 'top-products',
     label: 'Top 10 products by units sold',
     category: 'JOIN + GROUP BY',
     color: '#8b5cf6',
@@ -39,6 +43,7 @@ const CHALLENGES: {
     sql: `SELECT\n  p.product_name,\n  p.category,\n  SUM(oi.quantity)           AS units_sold,\n  ROUND(SUM(oi.line_total), 2) AS revenue\nFROM products p\nJOIN order_items oi ON p.product_id = oi.product_id\nGROUP BY p.product_name, p.category\nORDER BY units_sold DESC\nLIMIT 10;`,
   },
   {
+    id: 'monthly-revenue',
     label: 'Monthly revenue trend',
     category: 'Date functions',
     color: '#06b6d4',
@@ -47,6 +52,7 @@ const CHALLENGES: {
     sql: `SELECT\n  STRFTIME('%Y-%m', order_date) AS month,\n  COUNT(*)                       AS total_orders,\n  ROUND(SUM(total_amount), 2)    AS revenue\nFROM orders\nGROUP BY month\nORDER BY month;`,
   },
   {
+    id: 'customers-zero-orders',
     label: 'Customers with zero orders',
     category: 'LEFT JOIN',
     color: '#f97316',
@@ -55,6 +61,7 @@ const CHALLENGES: {
     sql: `SELECT c.first_name, c.last_name, c.city, c.loyalty_tier\nFROM customers c\nLEFT JOIN orders o ON c.customer_id = o.customer_id\nWHERE o.order_id IS NULL\nORDER BY c.city;`,
   },
   {
+    id: 'average-order-value',
     label: 'Average order value by store',
     category: 'Window function',
     color: '#ec4899',
@@ -63,6 +70,7 @@ const CHALLENGES: {
     sql: `SELECT\n  s.store_name,\n  s.city,\n  ROUND(AVG(o.total_amount), 2)  AS store_avg,\n  ROUND(AVG(AVG(o.total_amount)) OVER (), 2) AS overall_avg\nFROM stores s\nJOIN orders o ON s.store_id = o.store_id\nGROUP BY s.store_name, s.city\nORDER BY store_avg DESC;`,
   },
   {
+    id: 'employee-salary-ranking',
     label: 'Employee salary ranking',
     category: 'Window function',
     color: '#a78bfa',
@@ -71,6 +79,7 @@ const CHALLENGES: {
     sql: `SELECT\n  first_name || ' ' || last_name AS name,\n  department,\n  role,\n  salary,\n  ROW_NUMBER() OVER (\n    PARTITION BY department\n    ORDER BY salary DESC\n  ) AS rank_in_dept\nFROM employees\nORDER BY department, rank_in_dept;`,
   },
   {
+    id: 'best-category-by-city',
     label: 'Best-selling category per city',
     category: 'CTE + RANK',
     color: '#ef4444',
@@ -92,7 +101,7 @@ export default function SQLPlaygroundPage() {
   const [playKey,  setPlayKey]    = useState(0);
   const playgroundRef = useRef<HTMLDivElement>(null);
 
-  function loadChallenge(idx: number) {
+  const loadChallenge = useCallback((idx: number) => {
     setSelected(idx);
     setPlayKey(k => k + 1); // remount playground with new query
     setMounted(true);
@@ -100,7 +109,13 @@ export default function SQLPlaygroundPage() {
     if (window.matchMedia('(max-width: 1199px)').matches) {
       requestAnimationFrame(() => playgroundRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get('challenge');
+    const index = CHALLENGES.findIndex(item => item.id === requested);
+    if (index >= 0) loadChallenge(index);
+  }, [loadChallenge]);
 
   const challenge = CHALLENGES[selected];
 

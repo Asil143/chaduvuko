@@ -70,6 +70,7 @@ export function getTrackSummaries(): TrackSummaries {
         title: track.title,
         area: track.area,
         lessons,
+        ...(track.status ? { status: track.status } : {}),
         // A handful of live lessons next to a large unpublished set (Data Science).
         // Networking's few remaining drafts do not qualify.
         early: unpublished > 0 && lessons < 15,

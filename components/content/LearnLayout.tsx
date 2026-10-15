@@ -17,6 +17,9 @@ import { getPageMeta, NEXT_PAGES, getNextPages } from '@/data/navigation'
 import { useLessonNav, useLessonQuick } from '@/components/content/LessonNavContext'
 import { QuickAnswer } from '@/components/content/QuickAnswer'
 import { QuickCheck } from '@/components/content/QuickCheck'
+import { LessonPractice } from '@/components/content/LessonPractice'
+import { LessonFeedback } from '@/components/content/LessonFeedback'
+import { LESSON_PRACTICE } from '@/data/lesson-practice'
 import { setLessonChrome } from '@/lib/lesson-chrome'
 import { CHEAT_SHEET_FOR_PATH } from '@/lib/cheatsheet-links'
 import { SuggestFix } from '@/components/content/SuggestFix'
@@ -351,7 +354,9 @@ export function LearnLayout({ children, title, description, section, readTime, u
               <ResumeBullets href={pathname} />
               <QuizSection pageHref={pathname} onPass={isLesson ? () => recordQuizPass(pathname) : undefined} />
               {quick?.check && <QuickCheck check={quick.check} onPass={() => recordQuizPass(pathname)} />}
+              {LESSON_PRACTICE[pathname] && <LessonPractice practice={LESSON_PRACTICE[pathname]} />}
               <LinkedInGenerator pageHref={pathname} />
+              {isLesson && <LessonFeedback lessonHref={pathname} />}
 
               {/* What to learn next */}
               {suggestedNext.length > 0 && (

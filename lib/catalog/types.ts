@@ -7,6 +7,7 @@ export interface Track {
   title: string
   area: TrackArea
   indexHref: string
+  status?: 'coming-soon'
 }
 
 export interface Lesson {
