@@ -58,6 +58,13 @@ interface LessonFeedback {
   created_at: string
 }
 
+interface TrackInterest {
+  id: string
+  email: string
+  track_slug: string
+  created_at: string
+}
+
 function timeAgo(date: string) {
   const s = Math.floor((Date.now() - new Date(date).getTime()) / 1000)
   if (s < 60) return 'just now'
@@ -72,9 +79,10 @@ export default function AdminPage() {
   const [comments, setComments] = useState<Comment[]>([])
   const [applications, setApplications] = useState<CareerApplication[]>([])
   const [feedback, setFeedback] = useState<LessonFeedback[]>([])
+  const [trackInterests, setTrackInterests] = useState<TrackInterest[]>([])
   const [loading,  setLoading]  = useState(false)
   const [error,    setError]    = useState('')
-  const [tab,      setTab]      = useState<'flagged' | 'all' | 'applications' | 'feedback'>('flagged')
+  const [tab,      setTab]      = useState<'flagged' | 'all' | 'applications' | 'feedback' | 'track-interest'>('flagged')
 
   async function login() {
     setLoading(true)
@@ -137,6 +145,22 @@ export default function AdminPage() {
       setTab('feedback')
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Could not load lesson feedback.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function loadTrackInterests() {
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/admin/track-interest', { headers: { 'x-admin-key': key } })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Could not load track interest.')
+      setTrackInterests(data.interests || [])
+      setTab('track-interest')
+    } catch (loadError) {
+      setError(loadError instanceof Error ? loadError.message : 'Could not load track interest.')
     } finally {
       setLoading(false)
     }
@@ -205,10 +229,12 @@ export default function AdminPage() {
                   ? `${applications.length} application${applications.length !== 1 ? 's' : ''}`
                   : tab === 'feedback'
                     ? `${feedback.length} lesson feedback item${feedback.length !== 1 ? 's' : ''}`
-                  : `${comments.length} comment${comments.length !== 1 ? 's' : ''} shown`}
+                    : tab === 'track-interest'
+                      ? `${trackInterests.length} track interest${trackInterests.length !== 1 ? 's' : ''}`
+                      : `${comments.length} comment${comments.length !== 1 ? 's' : ''} shown`}
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap justify-end gap-2">
             <button onClick={loadFlagged}
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-mono"
               style={{
@@ -245,6 +271,15 @@ export default function AdminPage() {
               }}>
               Lesson feedback
             </button>
+            <button onClick={loadTrackInterests}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-mono"
+              style={{
+                background: tab === 'track-interest' ? 'var(--accent)' : 'var(--surface)',
+                color: tab === 'track-interest' ? '#fff' : 'var(--muted)',
+                border: '1px solid var(--border)',
+              }}>
+              Track interest
+            </button>
           </div>
         </div>
 
@@ -276,6 +311,28 @@ export default function AdminPage() {
                   </time>
                 </div>
                 {item.details && <p className="mt-4 text-sm whitespace-pre-wrap" style={{ color: 'var(--text2)' }}>{item.details}</p>}
+              </article>
+            ))}
+          </div>
+        ) : tab === 'track-interest' ? trackInterests.length === 0 ? (
+          <div className="text-center py-20 rounded-2xl"
+            style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+            <p className="font-display font-semibold" style={{ color: 'var(--text)' }}>No track interest yet</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {trackInterests.map(item => (
+              <article key={item.id} className="rounded-2xl p-5"
+                style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <a className="underline" style={{ color: 'var(--text)' }} href={`mailto:${item.email}`}>{item.email}</a>
+                    <p className="text-xs mt-1" style={{ color: 'var(--muted)' }}>{item.track_slug}</p>
+                  </div>
+                  <time className="text-xs" style={{ color: 'var(--muted)' }} dateTime={item.created_at}>
+                    {new Date(item.created_at).toLocaleString()}
+                  </time>
+                </div>
               </article>
             ))}
           </div>

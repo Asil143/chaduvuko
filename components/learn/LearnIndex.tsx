@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import type { SiteStats, TrackSummaries } from '@/lib/lesson-nav'
 import { PLANNED_TRACKS } from '@/data/planned-tracks'
+import { ContinueLearning } from '@/components/learn/ContinueLearning'
 
 type Cat = 'all' | 'data' | 'ai' | 'prog' | 'web' | 'cs' | 'itops' | 'security' | 'hardware' | 'enterprise' | 'product' | 'games'
 
@@ -480,6 +481,8 @@ const keywordIcon = (keyword: string) => {
 }
 
 const quickLinks = (stats: SiteStats) => [
+  { icon: '🧭', label: 'Find Your Path',      href: '/learn/find-your-path', desc: 'Get a goal-based track order' },
+  { icon: '🔄', label: 'Sync Progress',        href: '/dashboard',            desc: 'Sign in to continue across devices' },
   { icon: '🗺️', label: 'Career Roadmaps',    href: '/learn/roadmap',   desc: `${stats.roadmaps} role-specific roadmaps` },
   { icon: '🏗️', label: 'Real Projects',       href: '/learn/projects',  desc: `${stats.projects} Azure end-to-end builds` },
   { icon: '🎯', label: 'Interview Prep',       href: '/learn/interview', desc: 'DE, ML, SQL, System Design' },
@@ -520,7 +523,8 @@ export default function LearnPage({ tracks, stats }: { tracks: TrackSummaries; s
   ]
 
   return (
-    <div style={{ maxWidth: 1100, margin: '0 auto', padding: '48px 24px 80px' }}>
+    <div style={{ maxWidth: 1480, margin: '0 auto', padding: '48px clamp(20px, 3vw, 48px) 80px' }}>
+      <ContinueLearning />
 
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <div style={{ marginBottom: 48 }}>

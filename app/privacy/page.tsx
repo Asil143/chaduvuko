@@ -40,6 +40,12 @@ export default function PrivacyPage() {
         video searches are also looked up on YouTube.
       </p>
       <p style={{ color: 'var(--text2)', lineHeight: 1.7 }}>
+        If you ask to hear about a planned learning track, we store your email address, the track
+        you selected, and the request time in Supabase. The Chaduvuko team can use this to understand
+        demand and send relevant track updates. You can ask us to remove your request by emailing
+        hello@chaduvuko.com.
+      </p>
+      <p style={{ color: 'var(--text2)', lineHeight: 1.7 }}>
         If you apply for a role, we collect the contact, education, experience, project, and other
         application details you provide, plus an optional resume. We use this information to assess
         your application and contact you about hiring. Application records and resumes are stored
@@ -54,7 +60,7 @@ export default function PrivacyPage() {
         For privacy questions, contact hello@chaduvuko.com.
       </p>
       <p style={{ color: 'var(--muted)', fontSize: '13px', lineHeight: 1.6 }}>
-        Last updated: October 14, 2026
+        Last updated: October 15, 2026
       </p>
     </div>
   )

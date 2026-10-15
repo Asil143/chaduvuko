@@ -114,6 +114,11 @@ Recovered Library content shows a Chaduvuko practice product called **Pipeline P
 - Ordered skill shortcuts by the priority of their parent track, retaining prerequisite-to-advanced stage order inside each skills map.
 - Added a concise, stage-aware learning objective beneath every skill in the planned-track maps.
 
+## October 15, 2026 — GenAI content rollout
+- Began the approved Generative AI path by linking existing AI & ML lessons in a prerequisite-friendly sequence rather than duplicating already-published content.
+- Added new lessons on context-window budgeting/model limits and inference parameters/model selection, each with a practical exercise and quick check.
+- Kept the dedicated GenAI track marked in progress while related lessons remain published under their original AI & ML routes.
+
 ## Ongoing rules
 - Keep StudyX Overseas separate.
 - Chaduvuko remains the primary EdTech project.

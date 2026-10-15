@@ -153,6 +153,7 @@ export const NON_LESSON_ROUTES: Record<string, NonLessonKind> = {
       .map(href => [href, 'track-index' as const]),
   ),
   '/learn/roadmap': 'roadmap',
+  '/learn/find-your-path': 'hub',
   '/learn/interview': 'hub',
   '/learn/industry': 'hub',
   '/learn/find-video': 'tool',

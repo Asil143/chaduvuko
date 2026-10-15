@@ -16,7 +16,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   if (!track) return { title: 'Learning Track Plan' }
   return {
     title: `${track.title} — Skills Plan`,
-    description: `Planned skill map for ${track.title}.`,
+    description: `Planned skill map for ${track.title}. ${track.description}`.slice(0, 300),
+    alternates: { canonical: track.href },
   }
 }
 

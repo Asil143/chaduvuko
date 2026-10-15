@@ -3,6 +3,7 @@ import { ArrowRight, ArrowUpRight, BookOpen, BriefcaseBusiness, Code2, Map, Wren
 import type { HeaderData } from '@/lib/lesson-nav'
 import type { TrackArea } from '@/lib/catalog/types'
 import { HomeHero } from '@/components/home/HomeHero'
+import { ContinueLearning } from '@/components/learn/ContinueLearning'
 
 export interface HomePreview {
   href: string
@@ -47,6 +48,10 @@ export default function HomePage({ data }: { data: HomeData }) {
   return (
     <div style={{ background: 'var(--bg)', color: 'var(--text)' }}>
       <HomeHero header={header} projects={projects} preview={preview} />
+
+      <div className="mx-auto max-w-[1320px] px-5 pt-6 sm:px-8">
+        <ContinueLearning />
+      </div>
 
       <section aria-labelledby="home-journey" className="border-b" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
         <div className="mx-auto max-w-[1320px] px-5 py-12 sm:px-8 sm:py-14">

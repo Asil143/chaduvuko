@@ -1593,6 +1593,68 @@ Generative:     write me a new email in this style    P(data)  -> sample`,
     },
   },
 
+  [`${A}/generative-ai/context-windows-model-limits`]: {
+    answer: 'A context window is a token budget for the model request. Budget instructions, the current question, history, retrieved passages, tool content, and output capacity according to the selected model and provider; fitting more text does not guarantee the model will use every detail reliably.',
+    points: [
+      'Token counts depend on the tokenizer and exact request content.',
+      'Reserve output capacity and count tool schemas and results as well as visible chat text.',
+      'Trim duplicate or low-relevance context, preserve critical constraints, and make omissions observable.',
+    ],
+    example: {
+      label: 'A hypothetical request budget',
+      lang: 'text',
+      code: `Instructions       600
+Current question   250
+History           1450
+Retrieved text    3500
+Tools               650
+Output reserve      900
+----------------------
+Total             7350  (350 above a 7000-token limit)`,
+      static: true,
+    },
+    check: {
+      question: 'What should you do first when a request exceeds the selected model’s context budget?',
+      options: [
+        'Silently delete the oldest messages',
+        'Count the full request, preserve required instructions and the current task, and trim low-value context explicitly',
+        'Remove the output reserve',
+        'Assume the provider will truncate it safely',
+      ],
+      answer: 1,
+      explanation: 'Count all request components, preserve required constraints and the current question, and make any trimming or summarisation explicit.',
+    },
+  },
+
+  [`${A}/generative-ai/inference-parameters-model-selection`]: {
+    answer: 'Choose models and inference settings by testing representative tasks against correctness, format reliability, latency, cost, and deployment requirements. Sampling parameters influence output selection but do not guarantee a correct answer, and parameter behavior varies by provider and model.',
+    points: [
+      'Record the exact model identifier and test date; names, limits, and features change.',
+      'Change one parameter at a time and evaluate with fixed examples and prompts.',
+      'Validate structured outputs and tool actions in the application even when model features constrain format.',
+    ],
+    example: {
+      label: 'Controlled comparison checklist',
+      lang: 'text',
+      code: `Hold fixed: evaluation inputs, prompt version, model version
+Change:    one supported parameter
+Measure:   task correctness, valid format, latency, token usage
+Keep:      the setting only if the task-specific trade-off improves`,
+      static: true,
+    },
+    check: {
+      question: 'What is the reliable way to choose a generation setting?',
+      options: [
+        'Always set temperature to zero',
+        'Change several settings until the answer sounds better',
+        'Compare one change at a time on fixed, representative tasks and measure the relevant outcomes',
+        'Use the same settings for every model provider',
+      ],
+      answer: 2,
+      explanation: 'Controlled comparisons isolate the effect of a setting, and task-specific measures show whether the change is useful.',
+    },
+  },
+
   [`${A}/generative-ai/gans-generator-discriminator`]: {
     answer: 'A GAN trains two networks against each other: a generator that turns random noise into fake data, and a discriminator that tries to tell real from fake. As the discriminator improves, it pushes the generator to make more convincing samples. Training is powerful but prone to instability and mode collapse.',
     points: [

@@ -179,6 +179,8 @@ export const AIML_SECTIONS: Section[] = [
       { slug: 'variational-autoencoders',                  title: 'Variational Autoencoders',                 status: 'live' },
       { slug: 'diffusion-models',      title: 'Diffusion Models and Stable Diffusion',    status: 'live' },
       { slug: 'llms-pretraining-rlhf',                  title: 'LLMs — Pretraining, RLHF and Scaling Laws', status: 'live' },
+      { slug: 'context-windows-model-limits', title: 'Context Windows and Model Limits', status: 'live' },
+      { slug: 'inference-parameters-model-selection', title: 'Inference Parameters and Model Selection', status: 'live' },
       { slug: 'llm-fine-tuning',       title: 'LLM Fine-Tuning in Practice',              status: 'live' },
       { slug: 'multimodal-models',            title: 'Multimodal Models — CLIP and LLaVA',       status: 'live' },
       { slug: 'advanced-rag',          title: 'Advanced RAG',                              status: 'live' },

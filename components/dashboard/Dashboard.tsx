@@ -48,13 +48,11 @@ interface Props {
   roadmaps: DashboardRoadmap[]
 }
 
-const BADGES = [
+const BASE_BADGES = [
   { id: 'first_lesson', icon: '🌱', label: 'First Step',  desc: 'Complete your first lesson' },
   { id: 'five_lessons', icon: '🔥', label: 'On Fire',     desc: 'Complete 5 lessons' },
   { id: 'ten_lessons',  icon: '⚡', label: 'Momentum',    desc: 'Complete 10 lessons' },
   { id: 'first_quiz',   icon: '🧠', label: 'Quiz Taker',  desc: 'Pass your first quiz' },
-  { id: 'azure_done',   icon: '☁️', label: 'Azure Ready', desc: 'Complete every Azure lesson' },
-  { id: 'aws_done',     icon: '🟧', label: 'AWS Ready',   desc: 'Complete every AWS lesson' },
   { id: 'streak_7',     icon: '📅', label: 'Week Streak', desc: '7-day learning streak' },
 ]
 
@@ -184,8 +182,33 @@ export default function Dashboard({ lessons, tracks, quizLessons, roadmaps }: Pr
   const [goalReady, setGoalReady] = useState(false)
   const [goalTouched, setGoalTouched] = useState(false)
   const [celebration, setCelebration] = useState<{ title: string; message: string } | null>(null)
+  const [badgeShareMessage, setBadgeShareMessage] = useState('')
   const previousMilestones = useRef<Set<string> | null>(null)
   const previousWeeklyGoal = useRef(weeklyGoal)
+
+  const BADGES = useMemo(() => [
+    ...BASE_BADGES,
+    ...Object.entries(tracks)
+      .filter(([, track]) => track.area !== 'practice' && track.lessons > 0 && !track.early)
+      .map(([slug, track]) => ({ id: `track_${slug}`, icon: '🏁', label: `${track.title} Complete`, desc: `Complete every ${track.title} lesson` })),
+  ], [tracks])
+
+  async function shareBadge(label: string) {
+    const text = `I earned the “${label}” badge on Chaduvuko. My progress is self-tracked and this is not a verified certificate. https://chaduvuko.com/dashboard`
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: `${label} — Chaduvuko`, text })
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(text)
+        setBadgeShareMessage('Share text copied.')
+      } else {
+        throw new Error('Sharing is not available in this browser.')
+      }
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') return
+      setBadgeShareMessage(error instanceof Error ? error.message : 'Could not share this badge.')
+    }
+  }
 
   const view = useMemo(() => {
     if (!progress) return null
@@ -203,8 +226,9 @@ export default function Dashboard({ lessons, tracks, quizLessons, roadmaps }: Pr
     if (done.length >= 5) earned.add('five_lessons')
     if (done.length >= 10) earned.add('ten_lessons')
     if (quizzesPassed.length >= 1) earned.add('first_quiz')
-    if (trackDone('azure')) earned.add('azure_done')
-    if (trackDone('aws')) earned.add('aws_done')
+    for (const [slug, track] of Object.entries(tracks)) {
+      if (track.area !== 'practice' && !track.early && trackDone(slug)) earned.add(`track_${slug}`)
+    }
     if (streak >= 7) earned.add('streak_7')
     const completedList = done
       .map(([href, title, track]) => ({ href, title, track, at: progress.completed[href], quiz: href in progress.quizzesPassed }))
@@ -646,19 +670,34 @@ export default function Dashboard({ lessons, tracks, quizLessons, roadmaps }: Pr
         )}
 
         {view && activeTab === 'badges' && (
-          <div className="dashboard-badge-grid">
-            {BADGES.map(badge => {
-              const earned = view.earned.has(badge.id)
-              return (
-                <div key={badge.id} className="dashboard-badge"
-                  style={{ background: earned ? 'var(--surface)' : 'var(--bg2)', border: '1px solid var(--border)', opacity: earned ? 1 : 0.58, filter: earned ? 'none' : 'grayscale(1)' }}>
-                  <div className="text-4xl mb-3">{badge.icon}</div>
-                  <div className="font-display font-semibold text-sm mb-1" style={{ color: 'var(--text)' }}>{badge.label}</div>
-                  <div className="text-xs font-mono" style={{ color: 'var(--muted)' }}>{badge.desc}</div>
-                  {earned && <div className="mt-2 text-xs font-mono" style={{ color: 'var(--green)' }}>✓ Earned</div>}
-                </div>
-              )
-            })}
+          <div>
+            <p className="mb-4 text-xs" style={{ color: 'var(--muted)' }}>
+              Badges reflect progress stored in this browser. They are shareable milestones, not verified certificates.
+            </p>
+            {badgeShareMessage && <p role="status" className="mb-3 text-xs" style={{ color: 'var(--muted)' }}>{badgeShareMessage}</p>}
+            <div className="dashboard-badge-grid">
+              {BADGES.map(badge => {
+                const earned = view.earned.has(badge.id)
+                return (
+                  <div key={badge.id} className="dashboard-badge"
+                    style={{ background: earned ? 'var(--surface)' : 'var(--bg2)', border: '1px solid var(--border)', opacity: earned ? 1 : 0.58, filter: earned ? 'none' : 'grayscale(1)' }}>
+                    <div className="text-4xl mb-3">{badge.icon}</div>
+                    <div className="font-display font-semibold text-sm mb-1" style={{ color: 'var(--text)' }}>{badge.label}</div>
+                    <div className="text-xs font-mono" style={{ color: 'var(--muted)' }}>{badge.desc}</div>
+                    {earned && (
+                      <>
+                        <div className="mt-2 text-xs font-mono" style={{ color: 'var(--green)' }}>✓ Earned</div>
+                        <button type="button" className="mt-3 rounded-lg px-3 py-2 text-xs font-mono"
+                          style={{ border: '1px solid var(--border)', color: 'var(--text)' }}
+                          onClick={() => void shareBadge(badge.label)}>
+                          Share milestone
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
           </div>
         )}
       </div>
