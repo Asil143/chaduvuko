@@ -61,6 +61,9 @@ export default function HomePage({ data }: { data: HomeData }) {
             <p className="mt-3 text-sm leading-6 sm:text-base" style={{ color: 'var(--muted)' }}>
               Build understanding in the right order, then put it to work.
             </p>
+            <Link href="/learn/find-your-path" className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl px-4 text-sm font-semibold" style={{ background: 'var(--header-cta)', color: 'var(--header-cta-text)' }}>
+              Not sure where to start? Find your path <ArrowRight size={14} aria-hidden="true" />
+            </Link>
           </div>
           <ol className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {[

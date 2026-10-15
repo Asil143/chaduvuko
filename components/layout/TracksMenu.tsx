@@ -177,6 +177,8 @@ export function TracksMenuDesktop({ header, completedByTrack, active, onOpenChan
             <span>
               {header.lessonCount} lessons across {header.trackCount} learning paths ·{' '}
               <Link href={TRACKS_HREF} onClick={navigate} style={{ color: 'var(--brand-green)' }}>Browse all paths</Link>
+              {' · '}
+              <Link href="/learn/find-your-path" onClick={navigate} style={{ color: 'var(--brand-green)' }}>Find your path</Link>
             </span>
             <span>
               Your learning progress is saved in this browser ·{' '}
@@ -239,6 +241,9 @@ export function TracksListMobile({ header, completedByTrack, resumeTrack, active
           ))}
           <Link href={TRACKS_HREF} onClick={onNavigate} className="flex items-center min-h-11 text-sm font-semibold" style={{ color: 'var(--brand-green)' }}>
             All {header.trackCount} learning paths →
+          </Link>
+          <Link href="/learn/find-your-path" onClick={onNavigate} className="flex items-center min-h-11 text-sm font-semibold" style={{ color: 'var(--brand-green)' }}>
+            Not sure? Find your path →
           </Link>
         </div>
       )}
