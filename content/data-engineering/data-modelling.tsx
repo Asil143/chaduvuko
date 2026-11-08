@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Data Modelling — Dimensional Modelling, Star Schema, Facts and Dimensions | Chaduvuko',
@@ -938,6 +939,29 @@ The pragmatic 2026 approach is a hybrid: build the canonical model as a star sch
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Catch revenue fan-out before it reaches a dashboard"
+        objective="Choose fact grain and aggregation rules that preserve amounts and ratios across joins."
+        prerequisites="SQL JOIN/GROUP BY and the difference between a business key and surrogate key.">
+        <p>One order worth 900 minor units has two item rows. Joining orders to items repeats 900 twice. The query can be syntactically correct and still report double revenue. Write the grain beside every table before drawing the star schema.</p>
+        <WorkshopCode language="python" expectedOutput={"wrong_order_total=1800\ncorrect_order_total=900\nweighted_conversion=10.00%"}>{`order = {"id": 7, "total_minor": 900}
+items = [{"order_id": 7, "sku": "A"}, {"order_id": 7, "sku": "B"}]
+wrong = sum(order["total_minor"] for item in items if item["order_id"] == order["id"])
+print(f"wrong_order_total={wrong}")
+print(f"correct_order_total={order['total_minor']}")
+segments = [{"conversions": 1, "visits": 2}, {"conversions": 9, "visits": 98}]
+rate = sum(s["conversions"] for s in segments) / sum(s["visits"] for s in segments)
+print(f"weighted_conversion={rate:.2%}")`}</WorkshopCode>
+        <p>Revenue belongs to the declared order or order-line grain; choose which fact owns it and how discounts/refunds are allocated. Conversion rate is a ratio of summed numerator and denominator, not generally the average of segment rates. Inventory balance is often additive across locations but not across dates.</p>
+        <h3>Practice: drill across two fact tables</h3>
+        <p>You need orders and refunds by customer and month. Why can directly joining both raw fact tables on customer_id multiply rows? Design a safer query shape.</p>
+        <WorkshopAnswer>
+          <p>Multiple orders and multiple refunds create a many-to-many join at customer grain. Aggregate each fact independently to the shared customer/month grain, then join those aggregates using conformed definitions. Preserve whether the date means order date, refund date or an attribution date.</p>
+          <p>Assessment: test fact uniqueness, relationship cardinality, unknown-dimension handling and reconciled measures. A surrogate dimension key helps version joins but does not remove the need for a stable business identity and an explicit grain.</p>
+        </WorkshopAnswer>
+        <p>Continue with <a href="/learn/data-engineering/slowly-changing-dimensions">historical dimension joins</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Dimensional modelling organises analytical data into facts (measurements of business events — numeric) and dimensions (context — who, what, where, when). The grain declares exactly what one row in the fact table represents and must be declared before any other design decision.',
         'Declare the grain first and keep every column honest to it. Every fact column must be a single value at the declared grain. Every dimension FK must apply at that grain. Mixing measurements at different granularities in the same fact table corrupts aggregations and is the hardest modelling error to fix after the fact.',

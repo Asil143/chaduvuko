@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'The Data Engineering Ecosystem — Data Engineering | Chaduvuko',
@@ -158,8 +159,9 @@ export default function DEEcosystemModule() {
 
         <Para>
           The data engineering tool landscape has changed dramatically every three years
-          for the past two decades. MapReduce replaced custom scripts. Hive replaced
-          MapReduce. Spark replaced Hive. Databricks packaged Spark. New formats like
+          for the past two decades. MapReduce introduced distributed batch execution, Hive added SQL
+          interfaces and Spark provided another processing engine. These technologies can coexist;
+          they are not a simple replacement chain. Databricks provides a broader platform. Formats like
           Delta Lake and Iceberg emerged. Tools that were industry standard in 2018
           are considered legacy in 2026.
         </Para>
@@ -1470,6 +1472,29 @@ I would not implement a table format (Delta Lake, Iceberg) or a formal data qual
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Choose a small stack with an evidence table"
+        objective="Select tools by workload requirements and operational evidence instead of popularity."
+        prerequisites="How Data Moves Through a Company; identify ingestion, storage, transformation and serving.">
+        <p>You have two engineers, a PostgreSQL source, 2 GB of daily changes and a dashboard needed by 09:00. Start with the smallest architecture that can meet those requirements: bounded extraction, durable storage, SQL transformations, scheduling, tests and monitoring. A stream processor is useful only when a measured requirement calls for it.</p>
+        <h3>Evaluate one category at a time</h3>
+        <WorkshopCode>{`Requirement             Evidence to collect in a proof of concept
+Incremental ingestion   Updates, deletes, initial snapshot and restart behavior
+Transformations         Correct joins, incremental builds and reproducible tests
+Orchestration           Dependency handling, backfill controls and failure recovery
+Storage                 Query latency, retention, access controls and restore
+Operating cost          Compute + storage + requests + egress + engineering time
+Portability             Export format, metadata access and migration procedure`}</WorkshopCode>
+        <p>Compare two candidates against the same dataset and acceptance tests. Record runtime, scanned bytes, recovery steps and operator effort. “Managed” moves some infrastructure duties to a provider; it does not transfer ownership of metric definitions, broken source contracts or incident communication.</p>
+        <h3>Practice: respond to a new requirement</h3>
+        <p>The fraud team now needs a signal within 10 seconds, but finance still needs a daily reconciled total. Decide whether to replace the entire batch platform or introduce a separate path. State how the two outputs will be reconciled.</p>
+        <WorkshopAnswer>
+          <p>A separate event path can serve the time-sensitive decision while the batch path remains the reconciled reporting source. Measure latency from the business event to the decision, including ingestion and serving. Define a shared event identifier and reconcile provisional event totals with settled financial records. Replacing working daily reporting is not required simply because one consumer needs lower latency.</p>
+          <p>Assessment: name a tool you rejected, the requirement it failed, the evidence behind that decision, and the trigger that would justify revisiting it.</p>
+        </WorkshopAnswer>
+        <p>Tool tutorials: <a href="/learn/apache-kafka">Kafka</a>, <a href="/learn/dbt">dbt</a> and <a href="/learn/snowflake">Snowflake</a>. Product versions and compatibility must be checked when executing a tool-specific lab.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'The data engineering ecosystem has ten categories. Every tool belongs to one of them: Languages, Source Systems, Ingestion, Message Brokers, Object Storage, Table Formats, Warehouses, Processing Engines, Orchestration, and Quality/Observability.',
         'Tools change every few years. Categories do not. Learn what each category solves and you can pick up any specific tool in that category within a week of focused practice.',

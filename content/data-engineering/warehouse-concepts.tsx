@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Data Warehouse Concepts — Data Engineering | Chaduvuko',
@@ -1251,6 +1252,29 @@ Fifth, check if the result cache was invalidated more frequently. If the pipelin
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Separate scan cost from queue and join cost"
+        objective="Use query-profile evidence to choose between reducing scanned data, fixing a join and changing compute."
+        prerequisites="Columnar formats, partitions and basic aggregate queries.">
+        <p>A dashboard query is slow. Before buying larger compute, inspect elapsed time by phase. A query can spend most of its time waiting for resources, scanning irrelevant partitions, shuffling a skewed join or spilling intermediate data to storage. Each needs a different remedy.</p>
+        <WorkshopCode language="python" expectedOutput={"full_scan_GB=100.0\nprojected_GB=5.0\nprojected_and_pruned_GB=0.5"}>{`table_bytes = 100 * 10**9
+total_columns, selected_columns = 40, 2
+matching_partition_fraction = 0.1
+projected = table_bytes * selected_columns / total_columns
+pruned = projected * matching_partition_fraction
+print(f"full_scan_GB={table_bytes / 10**9:.1f}")
+print(f"projected_GB={projected / 10**9:.1f}")
+print(f"projected_and_pruned_GB={pruned / 10**9:.1f}")`}</WorkshopCode>
+        <p>This is an illustrative equal-column-width estimate, not a warehouse billing formula. Real compression, metadata, caching and selected-column widths differ. Verify scan bytes and partition statistics in the engine's profile. A projection reduces input work; it does not guarantee an equivalent reduction in elapsed time or cost.</p>
+        <h3>Practice: design a fair comparison</h3>
+        <p>Run A finishes instantly from a result cache. Run B executes the query on cold compute. Can you use those two runs to prove one schema design is faster? Specify a fair test.</p>
+        <WorkshopAnswer>
+          <p>Control result reuse, compute size, concurrency, input version and workload. Measure cold and warm behavior separately and include queue delay. Compare repeated representative queries, scanned bytes, spill and output correctness. For concurrency pressure, workload isolation or scaling out may help; for one skewed join, larger compute may only hide the design problem temporarily.</p>
+          <p>Assessment: state the observed bottleneck, the proposed change and the metric expected to move. Include the maintenance cost of clustering or materialized results.</p>
+        </WorkshopAnswer>
+        <p>Further implementation: <a href="/learn/snowflake/performance-tuning">Snowflake performance tuning</a> and <a href="/learn/gcp/bigquery">BigQuery</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Columnar storage is faster for analytics because queries only read the columns they need. A query using 3 of 200 columns reads 1.5% of the data vs 100% in row storage. Columnar also compresses better — homogeneous column data enables run-length encoding, dictionary encoding, and delta encoding that mixed-type row blocks cannot match.',
         'Choose correct data types for maximum compression: DECIMAL for amounts (not VARCHAR), TIMESTAMPTZ for timestamps (enables delta encoding), BOOLEAN for flags (bit packing), properly-sized VARCHAR lengths. Never store numbers as strings — loses all numeric compression and comparison performance.',

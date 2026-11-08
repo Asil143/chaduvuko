@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import  { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
@@ -1561,6 +1562,40 @@ spark.sql("""
           </div>
         ))}
       </section>
+
+
+      <DEWorkshop title="Capstone: design, build and operate FreshCart's data product"
+        objective="Connect the whole track into a tested pipeline with explicit business, recovery and cost requirements."
+        prerequisites="Complete the preceding engineering, ingestion, storage, modeling, quality, streaming and production lessons. Start implementation with the local pipeline in Lesson 25.">
+        <p>Build a small order-and-payment reporting platform. Finance needs reconciled daily net revenue by store and currency at 08:00 business time; operations needs a provisional five-minute order count. Treat these as two consumer contracts over shared source facts rather than assuming one output meets both needs.</p>
+        <h3>1. Size the workload from declared assumptions</h3>
+        <WorkshopCode language="python" expectedOutput={"average_events_per_second=115.74\npeak_events_per_second=1157.41\nuncompressed_GB_per_day=10.00\n30_day_raw_GB=300.00"}>{`events_per_day = 10_000_000
+bytes_per_event = 1000
+peak_factor = 10
+daily_bytes = events_per_day * bytes_per_event
+average = events_per_day / 86400
+print(f"average_events_per_second={average:.2f}")
+print(f"peak_events_per_second={average * peak_factor:.2f}")
+print(f"uncompressed_GB_per_day={daily_bytes / 10**9:.2f}")
+print(f"30_day_raw_GB={daily_bytes * 30 / 10**9:.2f}")`}</WorkshopCode>
+        <p>These are exercise assumptions, not measurements of a named company. Add replication, compression, indexes, table versions, network transfer and burst duration when estimating actual capacity. Benchmark processing rate; event count alone cannot establish the number of workers.</p>
+        <h3>2. Build in dependent milestones</h3>
+        <ol>
+          <li>Define order, payment, refund and deletion events with stable IDs, versions, currency units and timestamps. Create a synthetic source and a source manifest.</li>
+          <li>Implement the local batch pipeline, then replace extraction/storage adapters with your chosen platform. Preserve fixed intervals, quarantine and commit-safe checkpoints.</li>
+          <li>Publish current entities and event history at separate grains. Build dimensions and a reconciled revenue mart with point-in-time joins where required.</li>
+          <li>Add a provisional event-time window path for operations. Test duplicate delivery, late events, state retention and sink updates.</li>
+          <li>Orchestrate validation and publication, add freshness/quality alerts, and run a backfill without overlapping live writers.</li>
+          <li>Apply scoped access, retention/deletion and secret handling; release reviewed code and infrastructure with reproducible manifests.</li>
+        </ol>
+        <h3>3. Demonstrate recovery before presenting the project</h3>
+        <p>Inject a source timeout, malformed record, duplicate update, stale delete replay, crash before commit, lost acknowledgement and a breaking schema change. Include an empty valid day. Document the final expected keys and totals for each scenario.</p>
+        <WorkshopAnswer>
+          <p>A successful submission contains runnable setup instructions, synthetic fixtures, source/data contracts, SQL models, tests, manifests, an operating runbook and a cost worksheet. Running the same interval twice must not duplicate business effects. A failed publication must leave the last verified version usable. A repair must identify its affected intervals and reconcile before becoming visible.</p>
+          <p>For an ML extension, add a point-in-time feature dataset and an online freshness/parity check. For an LLM document extension, version extraction/chunking/embedding steps and propagate updates/deletions to indexes. Keep these extensions after the reporting pipeline's correctness is established.</p>
+        </WorkshopAnswer>
+        <p>Supporting paths: <a href="/learn/apache-kafka">Kafka</a>, <a href="/learn/dbt">dbt</a>, <a href="/learn/snowflake">Snowflake</a> and <a href="/learn/projects">guided cloud projects</a>.</p>
+      </DEWorkshop>
 
       <KeyTakeaways items={[
         'Never start designing before asking requirements. Volume, velocity, latency SLA, consistency requirements, team size, and cost constraints determine every architectural decision. A design for 10k events/day and a design for 10M events/second have almost nothing in common.',

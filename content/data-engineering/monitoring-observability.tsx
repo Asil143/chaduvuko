@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Monitoring and Observability for Data Pipelines | Chaduvuko',
@@ -803,6 +804,29 @@ The practical implementation is a PipelineLogger class that wraps Python's loggi
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Measure freshness from the consumer's boundary"
+        objective="Distinguish task success from data availability and calculate an explicit service objective."
+        prerequisites="Pipeline run metadata, timestamps, quality checks and consumer delivery requirements.">
+        <p>The scheduler reports success at 08:00, but the newest complete business interval is two hours old. A task-success metric is healthy while the data product is stale. Record source progress, committed output progress and the consumer's last visible version separately.</p>
+        <WorkshopCode language="python" expectedOutput={"freshness_minutes=120\nfailed_runs_allowed=3\nremaining_budget=1"}>{`now_minute = 8 * 60
+latest_complete_minute = 6 * 60
+total_runs, target = 300, 0.99
+allowed = round(total_runs * (1 - target))
+failed = 2
+print(f"freshness_minutes={now_minute - latest_complete_minute}")
+print(f"failed_runs_allowed={allowed}")
+print(f"remaining_budget={allowed - failed}")`}</WorkshopCode>
+        <p>The 99% example counts 300 equally weighted runs. A production objective may instead count time or weighted business intervals; define the denominator and treatment of planned maintenance. Freshness based only on MAX(event_time) can hide missing partitions or stopped low-volume sources, so pair it with completeness and per-source progress.</p>
+        <h3>Practice: make an alert actionable</h3>
+        <p>Write an alert for a missed finance delivery. Include who is affected, the latest verified interval, the suspected boundary, a dashboard/query link and the first two investigation steps.</p>
+        <WorkshopAnswer>
+          <p>Page the accountable owner when the consumer objective is threatened, and link to the source-to-publication run history. First check whether ingestion reached the expected source position; next check whether staged output passed validation and was committed. A run ID and input/output version connect logs across tools. Deduplicate related alerts and track unresolved quarantine age.</p>
+          <p>Assessment: intentionally stop a quiet source and verify that the system detects absence even when no job throws an exception. Document recovery time and the data-loss window separately.</p>
+        </WorkshopAnswer>
+        <p>Related tutorial: <a href="/learn/data-engineering/error-handling-retries">retry and incident policies</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Monitoring catches fires you anticipated. Observability helps you understand fires you did not. The three signals: metrics (numeric time-series — row counts, durations, error rates), logs (structured JSON events with context — every run, every rejection with its reason), traces (end-to-end paths of specific events through the system). All three together make a pipeline diagnosable.',
         'SLI is the measured metric (pipeline duration). SLO is the internal target (complete within 90 minutes). SLA is the external promise to the business (data available by 08:00 ET). Set SLOs stricter than SLAs to create a buffer. Alert on SLO breach risk, not SLA breach — this gives response time before the business is affected.',

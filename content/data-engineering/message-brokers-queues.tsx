@@ -5,6 +5,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Message Brokers and Queues — How They Work Internally | Chaduvuko',
@@ -1342,6 +1343,37 @@ That broader case — read from topic A, process, write to topic B, and commit t
           </div>
         ))}
       </section>
+
+
+      <DEWorkshop title="Deduplicate a delivered event in the same transaction as its effect"
+        objective="Show why acknowledging after processing still requires idempotency at the consumer boundary."
+        prerequisites="Events, queues/logs, database primary keys and transactions.">
+        <p>A broker delivers payment event p1. The consumer updates a local total, but crashes before acknowledging the delivery. On restart the broker delivers p1 again. Track the event ID and business effect together so the second delivery does not apply twice.</p>
+        <WorkshopCode language="python" expectedOutput={"deliveries=3 unique_effects=2 total_minor=350"}>{`import sqlite3
+db = sqlite3.connect(":memory:")
+db.executescript("""
+CREATE TABLE inbox (event_id TEXT PRIMARY KEY);
+CREATE TABLE total (amount INTEGER NOT NULL);
+INSERT INTO total VALUES (0);
+""")
+deliveries = [("p1", 100), ("p1", 100), ("p2", 250)]
+for event_id, amount in deliveries:
+    with db:
+        fresh = db.execute("INSERT OR IGNORE INTO inbox VALUES (?)", (event_id,)).rowcount
+        if fresh:
+            db.execute("UPDATE total SET amount = amount + ?", (amount,))
+    # Acknowledge only after commit. A crash here causes a safe redelivery.
+count = db.execute("SELECT COUNT(*) FROM inbox").fetchone()[0]
+amount = db.execute("SELECT amount FROM total").fetchone()[0]
+print(f"deliveries={len(deliveries)} unique_effects={count} total_minor={amount}")`}</WorkshopCode>
+        <p>Persisting the inbox first in a separate transaction would be unsafe: a crash could mark an event processed before its effect existed. The example keeps both in one local database. If the effect is external, use a supported idempotency key, outbox or explicit reconciliation.</p>
+        <h3>Practice: two consumers need every event</h3>
+        <p>Billing and analytics both need the complete payment feed. Decide whether they share a competing-consumer queue/subscription or use independent consumption positions. Explain how long a stopped consumer can recover.</p>
+        <WorkshopAnswer>
+          <p>Use independent subscriptions or consumer groups when each application needs every event. Sharing a competing-consumer group divides work instead. Recovery is bounded by retained messages/log entries and the broker's acknowledgement/retention rules. A durable broker cannot recover events that were never successfully published or are no longer retained.</p>
+        </WorkshopAnswer>
+        <p>Further reading: <a href="/learn/apache-kafka">the Kafka track</a>; verify the selected broker's redelivery, dead-letter and ordering behavior.</p>
+      </DEWorkshop>
 
       <KeyTakeaways items={[
         'A broker decouples producers and consumers in three ways: temporal (consumer does not need to be running when producer writes), spatial (producer does not know consumer\'s address), and rate (producer and consumer can run at different speeds).',

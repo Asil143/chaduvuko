@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Infrastructure as Code for Data Engineering — Terraform | Chaduvuko',
@@ -156,7 +157,7 @@ export default function InfrastructureAsCodeModule() {
     key            = "data-platform/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
-    dynamodb_table = "freshcart-terraform-locks"   # prevents concurrent applies
+    dynamodb_table = "freshcart-terraform-locks"   # legacy example; see version note in the workshop
   }
 }
 
@@ -981,7 +982,7 @@ For the immediate recovery after an accidental delete: a Snowflake warehouse hol
           },
           {
             q: 'Marking a credential variable sensitive but forgetting to mark the output that exposes it',
-            a: 'sensitive = true on a variable does not automatically propagate to every output derived from it — an output block that references a sensitive variable must independently be marked output "db_password" { sensitive = true }, or the value prints in plain text the moment someone runs terraform output.',
+            a: 'Sensitive values propagate through expressions in Terraform. Outputs exposing them must be marked sensitive or Terraform reports an error. Display redaction is not encryption; protect state and plan artifacts independently.',
           },
           {
             q: 'Writing an S3 lifecycle rule and assuming the default scope is "this one prefix"',
@@ -1019,7 +1020,7 @@ For the immediate recovery after an accidental delete: a Snowflake warehouse hol
           {
             error: `terraform plan shows "-/+ resource 'snowflake_warehouse.analytics' must be replaced" — the warehouse will be destroyed and recreated`,
             cause: 'The snowflake_warehouse resource block was renamed in the Terraform configuration from analytics to analyst_wh. Terraform does not automatically understand that these refer to the same warehouse — it sees the old resource block gone (destroy it) and a new resource block added (create it). Alternatively, a field was changed that is marked as ForceNew in the Snowflake provider, meaning it cannot be updated in place and requires replacement.',
-            fix: 'For a rename: use a moved block to tell Terraform the resources are the same: moved { from = snowflake_warehouse.analytics; to = snowflake_warehouse.analyst_wh }. This updates the state without destroying anything. For a ForceNew field change: check if the change is truly necessary. If so, schedule it during a maintenance window, ensure no pipelines are actively using the warehouse, and apply with awareness of the brief interruption. Add lifecycle { prevent_destroy = true } to all production warehouses so that future accidental replacement attempts fail safely before applying.',
+            fix: 'For a rename: use a moved block to tell Terraform the resources are the same: moved { from = snowflake_warehouse.analytics; to = snowflake_warehouse.analyst_wh }. This updates the state without destroying anything. For a ForceNew field change: check if the change is truly necessary. If so, schedule it during a maintenance window, ensure no pipelines are actively using the warehouse, and apply with awareness of the brief interruption. Add lifecycle { prevent_destroy = true } to all production warehouses to block accidental replacement while that configuration is present. Removing the resource configuration also removes this safeguard.',
           },
           {
             error: `S3 bucket lifecycle policy deletes production Gold data after 30 days — the lifecycle rule was configured for landing/ but accidentally applied to all prefixes`,
@@ -1052,6 +1053,32 @@ For the immediate recovery after an accidental delete: a Snowflake warehouse hol
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Review the state boundary before applying infrastructure"
+        objective="Explain what Terraform state and plan files contain and test safe change coordination."
+        prerequisites="Cloud identities, least privilege, Git reviews and basic Terraform init/plan/apply. Cloud examples require the specified provider versions and a sandbox account.">
+        <p>A variable marked sensitive is usually hidden in CLI displays but may still be stored in state or plan artifacts. Treat those artifacts as privileged data. Separate environment state, protect it with access controls and encryption, and coordinate writers using a supported backend lock.</p>
+        <WorkshopCode>{`Before planning
+  Pin Terraform/provider versions and commit the dependency lock file.
+  Select the correct account, region, backend and environment.
+  Use a short-lived CI identity with only required privileges.
+Before applying
+  Inspect replacements, deletions, policy changes and lifecycle scope.
+  Apply the reviewed saved plan within the team's change process.
+  Ensure only one writer coordinates that environment's state.
+After applying
+  Check deployed permissions and a synthetic pipeline smoke test.
+  Record outputs, verify drift and retain protected recovery evidence.`}</WorkshopCode>
+        <p>Older S3-backend tutorials use DynamoDB locking. Current Terraform also supports S3 lockfiles, and the official backend documentation marks DynamoDB locking deprecated. Choose a backend strategy supported by the team's pinned Terraform version; migrate coordination deliberately rather than enabling incompatible settings on one developer's machine.</p>
+        <h3>Practice: a harmless rename plans a replacement</h3>
+        <p>A resource address changes and the plan proposes destroying a production table. Explain when a moved/import operation is appropriate and what prevent_destroy can and cannot protect.</p>
+        <WorkshopAnswer>
+          <p>If it is the same existing object, record the address move or import through the supported workflow and verify the resulting plan. prevent_destroy helps while its resource configuration remains present; deleting that configuration removes that protection. It also cannot prevent an administrator from deleting the object outside Terraform. State locks coordinate applies, not all operational changes.</p>
+          <p>Assessment: test recovery from state loss and verify offboarding across cloud roles, external identities, sessions and secrets. Removing one Terraform user block does not prove every access path was revoked.</p>
+        </WorkshopAnswer>
+        <p>References: <a href="https://developer.hashicorp.com/terraform/language/backend/s3">S3 backend locking</a> and <a href="https://developer.hashicorp.com/terraform/language/manage-sensitive-data">sensitive data in Terraform</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Infrastructure as Code treats cloud resources — S3 buckets, Snowflake warehouses, IAM roles — like software: defined in version-controlled files, reviewed in PRs, deployed through CI/CD. The benefits: reproducibility, auditability, drift prevention, cost visibility, security by default, and environment parity between dev and prod.',
         'Terraform core workflow: init (download providers, initialise backend) → plan (show what will change, no changes made) → apply (make the changes). Always read the plan before apply. The three change types: + (create), ~ (update in-place), - (destroy). Any destroy operation requires deliberate review.',

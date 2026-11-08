@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Git and Version Control for Data Projects — Data Engineering | Chaduvuko',
@@ -1414,6 +1415,29 @@ Step four: prevent recurrence. Add .env and any other credential-containing file
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Revert the code and repair the data separately"
+        objective="Create a release manifest that makes a dataset reproducible and explains the limits of a Git rollback."
+        prerequisites="Git add, commit, diff and branches; understand that pipeline runs write persistent external data.">
+        <p>A SQL change incorrectly excludes refunded orders. Reverting the commit restores the transformation logic for future runs, but yesterday's published table remains wrong until it is repaired. Treat code recovery and data recovery as two coordinated operations.</p>
+        <WorkshopCode>{`Release manifest
+  code_commit:       the reviewed Git commit
+  input_manifest:    object versions or snapshot ID, not just mutable paths
+  parameters:        interval start/end, business timezone, source version
+  runtime:           Python/container and dependency lock versions
+  output:            dataset version or table snapshot
+  checks:            grain, accepted/rejected counts, reconciled metric
+  recovery:          rebuild affected dates into staging and republish`}</WorkshopCode>
+        <p>The manifest links the versioned instructions to the input they actually processed. A commit hash alone cannot reproduce a run when “latest.csv” has changed. Store small synthetic fixtures in Git when appropriate, and keep production datasets and credentials in controlled systems.</p>
+        <h3>Practice: write the recovery pull request</h3>
+        <p>Describe a safe revert of a shared commit, the tests that reproduce the bug and the replay window needed to repair outputs. Explain which action rotates a leaked credential.</p>
+        <WorkshopAnswer>
+          <p>A reviewed git revert adds a compensating commit without erasing shared history. Add a fixture containing a refund and test the intended metric. Rebuild the affected interval using traceable source inputs and compare old/new results before publication. If a secret leaked, revoke or rotate it with the issuer; deleting a line or adding .gitignore does not invalidate the credential or remove existing history.</p>
+          <p>Assessment: explain why Git LFS is storage tooling rather than an access-control policy, and why publishing a sanitized fixture is safer than copying a production export into a repository.</p>
+        </WorkshopAnswer>
+        <p>Reference: <a href="https://git-scm.com/docs/git-revert">git revert</a> and <a href="https://git-scm.com/docs/gitignore">tracked files and gitignore</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Git has three areas: working directory (what you edit), staging area (what will be committed), and repository (committed history). git add moves changes to staging. git commit moves staged changes to history. git diff shows unstaged changes. git diff --staged shows staged changes not yet committed.',
         'GitHub Flow is the right branching strategy for most data teams: one protected main branch, short-lived feature branches, pull requests with CI, and merge-to-main triggers deployment. Keep branches alive for days, not weeks. Merge conflicts increase exponentially with branch age.',

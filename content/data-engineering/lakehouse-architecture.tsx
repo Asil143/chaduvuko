@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Lakehouse Architecture — Data Engineering | Chaduvuko',
@@ -1232,6 +1233,36 @@ My typical recommendation: if the team is building a new platform and has both M
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Observe an optimistic commit conflict"
+        objective="Explain how table metadata coordinates committed files and why a failed commit needs validation before retry."
+        prerequisites="Object storage, manifests, database transactions and file formats.">
+        <p>Two writers read snapshot 5 and prepare independent updates. Both must not simply replace the current metadata pointer using their stale view. A table commit protocol checks whether another valid commit occurred and whether the planned write is still safe.</p>
+        <WorkshopCode language="python" expectedOutput={"writer_A=True snapshot=6\nwriter_B=False snapshot=6"}>{`snapshot = 5
+
+def commit(expected_snapshot):
+    global snapshot
+    if snapshot != expected_snapshot:
+        return False
+    snapshot += 1
+    return True
+
+base_a = snapshot
+base_b = snapshot
+a = commit(base_a)
+print(f"writer_A={a} snapshot={snapshot}")
+b = commit(base_b)
+print(f"writer_B={b} snapshot={snapshot}")`}</WorkshopCode>
+        <p>This is a protocol simulation, not an implementation of a lakehouse transaction manager. Real protocols validate conflicts and may allow compatible append operations to retry without recomputing all work. An overlapping update may require re-reading current state. Atomic table commits do not automatically create transactions across several tables and external systems.</p>
+        <h3>Practice: test interoperability before selecting an engine</h3>
+        <p>One engine writes deletes and another reads the table. List the capabilities that must agree and what happens if a reader supports Parquet but not the table protocol.</p>
+        <WorkshopAnswer>
+          <p>Check table format version, delete representation, schema/field IDs, partition evolution, catalog authentication and snapshot semantics. Reading all Parquet files directly can include obsolete files or ignore delete metadata. Test reads after updates/deletes, concurrent writes and schema changes with the exact engine versions.</p>
+          <p>Snapshot expiration and orphan-file cleanup are separate operations. Retain files needed by active readers and recovery policy; time travel exists only while required metadata and data remain available.</p>
+        </WorkshopAnswer>
+        <p>References: <a href="https://iceberg.apache.org/docs/latest/reliability/">Iceberg reliability</a> and <a href="https://docs.delta.io/concurrency-control/">Delta Lake concurrency control</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'The lakehouse solves the two-system problem: organisations with both a data lake and a data warehouse maintain two copies of data, an ETL pipeline between them, and two sources of truth that diverge over time. The lakehouse eliminates the copy by adding ACID semantics directly to the lake storage layer.',
         'The lakehouse architecture has three components: cheap object storage (S3/ADLS/GCS) at the bottom, an open table format (Delta Lake, Iceberg, or Hudi) that adds ACID semantics in the middle, and multiple compute engines (Spark, Databricks SQL, Trino, Flink) that all read/write the same table format at the top.',

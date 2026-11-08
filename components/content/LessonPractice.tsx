@@ -40,7 +40,7 @@ export function LessonPractice({ practice }: { practice: LessonPracticeData }) {
 
   const destination = practice.challengeId === 'pipeline-plan'
     ? '/learn/projects/azure-batch-pipeline'
-    : `/learn/sql/playground?challenge=${encodeURIComponent(practice.challengeId)}`
+    : `${practice.challengeId.startsWith('sql-') ? '/learn/sql/playground' : '/playground'}?challenge=${encodeURIComponent(practice.challengeId)}`
 
   return (
     <section className="lesson-practice" aria-labelledby="lesson-practice-title">

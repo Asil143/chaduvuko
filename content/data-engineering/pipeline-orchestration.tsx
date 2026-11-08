@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Pipeline Orchestration — Airflow, DAGs, Scheduling, Dependency Management — Data Engineering | Chaduvuko',
@@ -1133,6 +1134,31 @@ Use Sensors when: you need to check an external condition that is not controlled
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Schedule a data interval, then backfill it safely"
+        objective="Distinguish run time from the interval being processed and make dependencies represent valid data."
+        prerequisites="Fixed extraction windows, idempotent writes, retries and publication checks.">
+        <p>A daily pipeline triggered on January 3 may process January 2. A manual backfill run in February can process that same interval. Compute input boundaries from the run's explicit interval, not from the worker's current clock.</p>
+        <WorkshopCode>{`Interval: [2026-01-02T00:00:00Z, 2026-01-03T00:00:00Z)
+extract(interval) -> validate_manifest -> transform_to_staging
+                                         |
+                                         v
+reconcile_checks ---------------------> publish_version -> notify_consumers
+
+Backfill parameters:
+  start/end intervals, source snapshot/version, code version
+  maximum active runs, source connection pool, sink writer limits
+  expected correction policy and validation before publication`}</WorkshopCode>
+        <p>Use half-open intervals so adjacent runs do not both include midnight. The interpretation of logical date and data intervals depends on the timetable and trigger type; manually triggered or event-driven runs must not be assumed to follow one daily cron rule. Match code examples to the installed orchestration version.</p>
+        <h3>Practice: a repair collides with the live schedule</h3>
+        <p>A historical backfill and the current daily run both write the same output partition. Explain the coordination mechanism and which run should publish.</p>
+        <WorkshopAnswer>
+          <p>Use a shared writer policy covering both scheduled and manual work. Build isolated staging outputs, validate them and publish through one coordinator or optimistic table commit. Give each run a manifest and reject stale publication when a newer authorized version already exists. A dependency on a task reporting success is useful only if that task also verifies its promised data contract.</p>
+          <p>Assessment: simulate an upstream failure, a skipped optional task and a retry after output commit. Check downstream trigger rules deliberately. Backfill every missing required interval rather than blindly skipping runs because an earlier one is still active.</p>
+        </WorkshopAnswer>
+        <p>Reference: <a href="https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dag-run.html">Airflow DAG runs and intervals</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'An orchestrator is not a fancy cron job. Cron tells you when to run. Airflow tells you what to run, in what order, on what conditions, with what resource limits, with what retry policy, and what to do when it fails. For multiple interdependent pipelines with shared resources and SLAs, an orchestrator is necessary.',
         'Airflow has five components: Webserver (UI, reads from metadata DB), Scheduler (creates DagRuns, queues tasks, continuously runs), Executor (dispatches tasks to workers), Metadata Database (single source of truth — PostgreSQL), Workers (actually run task code). The scheduler and workers must both be able to read DAG files.',

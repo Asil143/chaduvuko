@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Building a Batch Pipeline From Scratch — Data Engineering | Chaduvuko',
@@ -308,13 +309,15 @@ source_db_url
           The checkpoint is the pipeline&rsquo;s memory of where it left off. It must
           be written atomically — a crash during checkpoint write should leave
           the previous checkpoint intact, not a corrupted half-written file.
-          It must be read defensively — a missing or corrupt checkpoint should
-          start from a safe default, not crash the pipeline.
+          It must be read defensively. A new deployment needs an approved bootstrap
+          boundary. A corrupt checkpoint should fail visibly for controlled recovery,
+          rather than silently triggering an unbounded historical reload.
         </Para>
 
         <SubSubTitle>Loading the watermark — defensively</SubSubTitle>
 
         <CodeBox label="pipeline/checkpoint.py — reading the watermark">{`import json
+import os
 import logging
 from datetime import datetime, timezone
 from pathlib import Path
@@ -327,26 +330,33 @@ CHECKPOINT_FILE = config.checkpoint_dir / 'orders_watermark.json'
 
 def load_watermark() -> datetime:
     """Load the watermark from the last successful run.
-    Returns a safe default if no checkpoint exists or it is corrupt."""
+    A missing file requires explicit bootstrap; corruption fails visibly."""
     if not CHECKPOINT_FILE.exists():
-        default = datetime(2020, 1, 1, tzinfo=timezone.utc)
-        log.info('No checkpoint found — starting from default: %s', default.isoformat())
+        bootstrap = os.environ.get("PIPELINE_BOOTSTRAP_FROM")
+        if not bootstrap:
+            raise RuntimeError("Approve a bootstrap boundary via PIPELINE_BOOTSTRAP_FROM")
+        default = datetime.fromisoformat(bootstrap.replace("Z", "+00:00"))
+        if default.tzinfo is None:
+            raise ValueError("Bootstrap boundary requires a timezone")
+        log.info('No checkpoint found — approved bootstrap: %s', default.isoformat())
         return default
 
     try:
         data = json.loads(CHECKPOINT_FILE.read_text())
         wm = datetime.fromisoformat(data['watermark'])
+        if wm.tzinfo is None:
+            raise ValueError("Checkpoint requires a timezone")
         log.info('Loaded watermark: %s', wm.isoformat())
         return wm
     except (json.JSONDecodeError, KeyError, ValueError) as e:
-        # Corrupt checkpoint — do not crash, start fresh and alert
-        log.warning('Corrupt checkpoint file: %s — starting from default', str(e))
-        _archive_corrupt_checkpoint()
-        return datetime(2020, 1, 1, tzinfo=timezone.utc)`}</CodeBox>
+        # Preserve the file as evidence; do not silently reset progress.
+        log.error('Invalid checkpoint: %s', str(e))
+        raise RuntimeError("Checkpoint recovery requires review") from e`}</CodeBox>
 
         <Output>{`INFO Loaded watermark: 2026-08-20T02:45:00+00:00
 # on a fresh deploy with no checkpoint file yet:
-INFO No checkpoint found — starting from default: 2020-01-01T00:00:00+00:00`}</Output>
+INFO No checkpoint found — approved bootstrap: 2020-01-01T00:00:00+00:00
+# Set PIPELINE_BOOTSTRAP_FROM only after verifying source history and source-load limits.`}</Output>
 
         <SubSubTitle>Saving the watermark — atomically, and archiving corruption</SubSubTitle>
 
@@ -1648,6 +1658,77 @@ The overall philosophy: write pure functions wherever possible (transformation, 
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Run a complete local pipeline twice"
+        objective="Execute extraction, validation, merge, quarantine and checkpointing with reproducible end-to-end results."
+        prerequisites="Python functions and exceptions, SQL keys/transactions and incremental extraction. Python 3 with SQLite is sufficient; no cloud account is required.">
+        <p>Before configuring a cloud platform, prove the recovery rules locally. The source below contains two orders, an update and one malformed amount. The destination stores current order state, an event audit and a checkpoint. All three change in the same database transaction.</p>
+        <WorkshopCode language="python" expectedOutput={"events=4 accepted=3 quarantined=1\norders=2 total_minor=350 checkpoint=4\nsecond_run_applied=0"}>{`import json
+import sqlite3
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
+source = [
+    {"seq": 1, "id": 7, "amount": 100, "status": "new"},
+    {"seq": 2, "id": 8, "amount": 250, "status": "paid"},
+    {"seq": 3, "id": 7, "amount": 100, "status": "paid"},
+    {"seq": 4, "id": 9, "amount": "bad", "status": "new"},
+]
+
+def run(db):
+    checkpoint = db.execute("SELECT seq FROM checkpoint").fetchone()[0]
+    rows = [r for r in source if r["seq"] > checkpoint]
+    with db:
+        for row in rows:
+            valid = type(row["amount"]) is int and row["amount"] >= 0
+            reason = "" if valid else "amount must be nonnegative integer"
+            db.execute("INSERT INTO audit VALUES (?, ?, ?, ?)",
+                       (row["seq"], int(valid), reason, json.dumps(row)))
+            if valid:
+                db.execute("""
+                    INSERT INTO orders VALUES (?, ?, ?, ?)
+                    ON CONFLICT(id) DO UPDATE SET
+                      amount=excluded.amount, status=excluded.status, seq=excluded.seq
+                    WHERE excluded.seq > orders.seq
+                """, (row["id"], row["amount"], row["status"], row["seq"]))
+        if rows:
+            db.execute("UPDATE checkpoint SET seq = ?", (max(r["seq"] for r in rows),))
+    return len(rows)
+
+with TemporaryDirectory() as directory:
+    db = sqlite3.connect(str(Path(directory) / "warehouse.sqlite"))
+    db.executescript("""
+        CREATE TABLE orders (
+          id INTEGER PRIMARY KEY, amount INTEGER NOT NULL,
+          status TEXT NOT NULL, seq INTEGER NOT NULL
+        );
+        CREATE TABLE audit (
+          seq INTEGER PRIMARY KEY, accepted INTEGER, reason TEXT, payload TEXT
+        );
+        CREATE TABLE checkpoint (seq INTEGER NOT NULL);
+        INSERT INTO checkpoint VALUES (0);
+    """)
+    run(db)
+    again = run(db)
+    events, accepted = db.execute("SELECT COUNT(*), SUM(accepted) FROM audit").fetchone()
+    orders, total = db.execute("SELECT COUNT(*), SUM(amount) FROM orders").fetchone()
+    checkpoint = db.execute("SELECT seq FROM checkpoint").fetchone()[0]
+    assert events == accepted + (events - accepted)
+    assert (orders, total, checkpoint, again) == (2, 350, 4, 0)
+    print(f"events={events} accepted={accepted} quarantined={events - accepted}")
+    print(f"orders={orders} total_minor={total} checkpoint={checkpoint}")
+    print(f"second_run_applied={again}")
+    db.close()`}</WorkshopCode>
+        <p>The audit has four events but current state has two orders: event grain and entity grain differ. The rejected row is durable and includes a reason, so advancing the checkpoint does not silently discard it. A single-writer assumption keeps the example short; concurrent workers need an explicit claim/lock or serialization policy.</p>
+        <h3>Practice: inject a failure</h3>
+        <p>Raise an exception immediately after the first order write inside the transaction. Verify the audit, orders and checkpoint all roll back. Remove the fault and retry. Then add a fifth event correcting order 9 and confirm that it is loaded without duplicating the earlier orders.</p>
+        <WorkshopAnswer>
+          <p>After the injected exception, all three tables must retain their prior committed state. The retry processes the same source events safely. Event 5 creates order 9 while audit event 4 remains a historical rejection. If an approved process repairs event 4 in place instead, implement a distinct quarantine-replay path: the normal high-watermark extractor will not reread older sequence numbers.</p>
+          <p>Assessment: explain which guarantees come from the database transaction and which come from the source sequence and primary keys. A local test establishes these mechanics; it does not benchmark a distributed cloud system.</p>
+        </WorkshopAnswer>
+        <p>Reference: <a href="https://docs.python.org/3/library/sqlite3.html">SQLite connections, transactions and parameter binding</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Structure a pipeline into single-responsibility modules: config, checkpoint, extract, validate, transform, load, observability, main. Each module has one job. This makes every module independently testable, independently replaceable, and independently debuggable.',
         'Validate configuration with Pydantic BaseSettings at startup. Every missing required variable raises an error before any work starts — not mid-run with a cryptic attribute error. Use env_prefix to namespace variables. Add field validators for business constraints (no primary database URL).',

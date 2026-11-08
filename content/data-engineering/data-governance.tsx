@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Data Governance — Lineage, Cataloging, Access Control, and Data Mesh | Chaduvuko',
@@ -574,9 +575,9 @@ WHERE eventName = 'GetTable'
           GDPR (EU) and CCPA (California&rsquo;s Consumer Privacy Act, expanded by
           the CPRA in 2023) require that organisations know where personal data
           is stored, protect it with appropriate controls, and honour erasure
-          requests within a statutory window — GDPR requires erasure requests be
-          honoured within 30 days; CCPA/CPRA gives organisations 45 days,
-          extendable to 90. For a data platform, this means classifying which
+          requests through the approved rights process. GDPR Article 12 generally specifies
+          a one-month response with conditional extensions; California rules use different
+          periods and conditions. For a data platform, this means classifying which
           columns contain PII, masking or removing PII at the Silver layer
           boundary, and implementing a right-to-erasure pipeline that can
           delete or anonymise a specific customer&rsquo;s data across all layers.
@@ -658,22 +659,23 @@ PIIDetectionResult(column='contact_field', pii_level=1, pii_type='email', confid
         <SubSubTitle>Right-to-erasure — the GDPR delete pipeline</SubSubTitle>
 
         <Para>
-          The Medallion Architecture is designed for immutability — Bronze is
-          append-only, so a right-to-erasure request cannot simply
-          <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}> DELETE</code> rows.
-          The fix is to overwrite PII with a sentinel value while preserving
-          non-PII facts (order counts, amounts) for statistical use.
+          Bronze commonly preserves source observations, but immutability is an operating
+          convention rather than a prohibition on approved deletion. A transactional table can
+          support <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>DELETE</code>.
+          A permitted repair may delete records or replace selected fields. A sentinel alone
+          does not establish anonymization: identifiers, quasi-identifiers, object versions
+          and old table snapshots can remain. Validate every retained copy and derived dataset.
         </Para>
 
-        <CodeBox label="Step 1 — anonymising the Bronze layer">{`from datetime import date, datetime
+        <CodeBox label="Illustrative field redaction — not a complete erasure implementation">{`from datetime import date, datetime
 import hashlib
 
 DELETION_SENTINEL = 'GDPR_ERASED'
 
 def process_erasure_request(customer_id: int, request_date: date, conn) -> dict:
-    """Anonymise a customer's PII across all layers. Does NOT delete rows —
-    replaces PII values with a sentinel. Preserves non-PII columns for
-    statistical use."""
+    """Redact selected fields in one current table.
+    Not proof of anonymization: identifiers, derived fields and old copies remain.
+    A governed workflow must track and verify each affected destination."""
     results = {}
 
     # BRONZE is the raw layer. This is the ONLY time we UPDATE Bronze —
@@ -741,7 +743,7 @@ def process_erasure_request(customer_id: int, request_date: date, conn) -> dict:
 ✓ Masking at Silver boundary: PII replaced before analyst access
 ✓ Access control: Bronze (raw PII) not accessible to analysts
 ✓ Audit log: all accesses to PII-containing tables logged
-✓ Erasure pipeline: tested, runs within 30 days of request
+✓ Rights workflow: tested against the applicable verified deadline and exceptions
 ✓ Data retention: Bronze PII tables have lifecycle policies (max 2 years)
 ✓ Data residency: customer data stays in approved region (state law requirement)
 ✓ Consent log: when consent was given/revoked, stored in governance schema`}</CodeBox>
@@ -861,7 +863,7 @@ def process_erasure_request(customer_id: int, request_date: date, conn) -> dict:
           },
           {
             wrong: '"GDPR erasure means deleting the customer\'s rows from every table"',
-            right: 'Part 05 is explicit that rows are never deleted — PII values are overwritten with a sentinel (GDPR_ERASED) while non-PII facts (order counts, amounts) are preserved for statistical validity, and Bronze in particular is only ever UPDATEd for this one legally-mandated reason, not deleted from.',
+            right: 'An approved erasure flow may delete rows, rewrite files or irreversibly anonymize data where appropriate. Delta Lake supports transactional DELETE; it does not corrupt a table merely because rows were deleted. Older snapshots and files need a separate retention/deletion plan.',
           },
           {
             wrong: '"A data catalog is just a UI on top of a database schema browser"',
@@ -1017,15 +1019,15 @@ The same concept in AWS Lake Formation is implemented through column wildcards w
           },
           {
             q: 'Q4. A customer submits a GDPR right-to-erasure request. Walk through how you would fulfil it in a Medallion Architecture platform.',
-            a: `A GDPR right-to-erasure request (Article 17) requires that a customer's personal data be deleted or anonymised across all systems within 30 days. In a Medallion Architecture, this is complex because the Bronze layer is designed to be immutable — but legal compliance supersedes the immutability design principle.
+            a: `Confirm the request scope, applicable Article 17 grounds/exceptions and response deadline with the privacy process. Article 12 generally specifies a one-month response with conditional extensions, not a universal 30-day deletion rule.
 
-The approach is to replace PII values with a sentinel (like 'GDPR_ERASED') rather than deleting rows, because deleting rows from the middle of an append-only Bronze table causes partition corruption in Delta Lake and breaks the audit trail of how many orders existed. Anonymisation preserves non-PII facts (order counts, amounts) for statistical validity while removing identifying information.
+Locate active, historical and derived copies through inventory and lineage. Choose approved deletion, rewriting or irreversible anonymization as appropriate. Transactional Delta DELETE does not corrupt a table; older snapshots and files require their own lifecycle handling. Replacing names with a sentinel is field redaction, not proof that remaining records are anonymous.
 
-The process runs in order through all layers. Bronze first: UPDATE the customer's rows across all Bronze tables that contain PII — customer_email, phone_number, full_name, address — replacing them with the sentinel value. Set gdpr_erased=TRUE and gdpr_erased_at=NOW(). This is the only legitimate UPDATE to Bronze. Silver second: same approach, but Silver may have fewer raw PII fields since masking happened at ingestion. All versions of the SCD2 dimension rows for this customer_id are updated. Gold third: Gold aggregates generally do not contain PII (revenue by store is not personally identifying), but Gold wide tables like fct_orders_wide may have customer_city and customer_region that could be quasi-identifying — anonymise these too.
+Track a job for every relevant layer and destination, including historical dimensions, logs, exports, caches, feature/vector indexes and backup/restore procedures. Evaluate whether retained aggregates or pseudonymous keys can still identify a person. Do not assume a fixed Bronze-to-Gold order or one masking query covers every architecture.
 
-After processing: record the erasure in governance.erasure_requests with the timestamp and a list of all tables updated. Publish an erasure event to Kafka or a message queue so any downstream systems that consume from the platform can also process the deletion. ML models trained on this customer's data should be logged for the next scheduled model retraining, which will exclude the erased customer's data.
+Record minimal audit evidence and collect downstream acknowledgements. Sending an event means work was requested, not completed. Training-data and model-derived artifacts need an approved handling decision rather than an automatic promise that the next retraining solves every case.
 
-The entire process should be idempotent — running it twice for the same customer_id produces the same result. And it should complete within 25 days of receipt to leave buffer before the 30-day regulatory deadline.`,
+Test repeat requests, stale-event replay and restored backups so records do not reappear in active outputs. Close the request only after the approved verification criteria are met.`,
           },
           {
             q: 'Q5. What is data mesh and when would you recommend it? What are the risks of adopting it too early?',
@@ -1132,6 +1134,31 @@ For most organisations — anything below 100-200 engineers or fewer than 5-10 d
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Publish a data product with an accountable owner"
+        objective="Make ownership, semantics, access, lineage and lifecycle enforceable for a real dataset."
+        prerequisites="Data modeling, quality gates, storage boundaries and least-privilege access concepts.">
+        <p>Calling a table a data product does not make it usable. Give consumers a contract they can inspect and a team that owns changes. A catalog is useful only when its metadata corresponds to deployed permissions, current transformations and monitored delivery.</p>
+        <WorkshopCode>{`Product: finance.daily_net_revenue
+Owner: finance analytics; operational contact: data-platform on-call
+Grain/metric: day + currency; captures minus completed refunds
+Inputs: payment events, refund events, currency reference
+Delivery: complete prior-day interval by 08:00 business time
+Quality: unique grain, reconciled totals, explicit provisional/final status
+Access: finance role; raw identifiers excluded from general reporting
+Change process: versioned metric definition and consumer migration
+Lifecycle: approved retention, deletion propagation and restore handling
+Lineage: source fields -> transformations -> reports/exports/activation jobs`}</WorkshopCode>
+        <p>Include reverse ETL and operational activation destinations in lineage. Sending a segment to a CRM creates another governed copy; stopping access to the warehouse does not recall an export. Likewise, vector indexes, feature stores and cached model inputs must be inventoried when they contain or derive from identifiable records.</p>
+        <h3>Practice: review a metric change</h3>
+        <p>A team wants to add tips to net revenue. Identify affected consumers, the approver, versioning strategy and checks before you change the canonical model.</p>
+        <WorkshopAnswer>
+          <p>Use table/column lineage plus consumer registration to find dashboards, extracts and downstream services. Finance approves semantics. Publish an explicit new metric version or a coordinated migration and compare both outputs. Lineage can be incomplete for manual downloads and dynamic SQL, so document coverage gaps.</p>
+          <p>Assessment: test access using both an allowed and denied identity. For deletion, verify whether retained facts remain identifiable; replacing obvious names with a sentinel does not by itself establish anonymization or remove older snapshots.</p>
+        </WorkshopAnswer>
+        <p>References: <a href="https://openlineage.io/docs/">OpenLineage</a> and <a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng">GDPR Articles 5, 12 and 17</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Data governance has four practical pillars: Discoverability (analysts find the right table without asking on Slack), Lineage (every dataset traceable back to its source), Access Control (right people see right data, PII protected), Compliance (GDPR erasure fulfilled, retention enforced, audit logs maintained).',
         'Column-level lineage is more valuable than table-level lineage. It tells you exactly which source column produced each Gold column. Use it for impact analysis before any schema change: check every downstream consumer of the column you are changing before deploying.',
@@ -1140,7 +1167,7 @@ For most organisations — anything below 100-200 engineers or fewer than 5-10 d
         'Role-based access control: pipeline service account reads Bronze, writes Silver/Gold. Analyst role reads Silver/Gold only, never Bronze (which has raw PII). BI service account reads Gold only. Always use FUTURE GRANTS so new tables automatically inherit the correct permissions without manual grant statements.',
         'Column masking policies in Snowflake apply masking logic transparently based on the querying role — analysts always query silver.customers but see masked emails. Superior to maintaining separate views per role: one policy, one maintenance point, invisible to query writers. Masking does NOT apply to OWNERSHIP or ACCOUNTADMIN roles.',
         'PII classification levels: Level 1 (direct identifiers — email, phone, SSN), Level 2 (indirect — name, address, IP), Level 3 (quasi-identifiers — city, age), Level 4 (non-PII). Tag every column with its level in dbt schema.yml meta fields. Apply masking at Silver layer for Level 1 and Level 2.',
-        'GDPR right-to-erasure: replace PII values with a sentinel (GDPR_ERASED) rather than deleting rows. Update Bronze → Silver → Gold in that order. This is the only legitimate UPDATE to the append-only Bronze layer — legal compliance supersedes the immutability design principle. Record the erasure in governance.erasure_requests. Publish an erasure event for downstream systems.',
+        'Rights workflows require an inventory, an approved handling decision, verified destination completion and replay/restore controls. Sentinel replacement alone does not prove anonymization or erase retained snapshots.',
         'Data mesh is an organisational pattern, not a technology choice. Appropriate when a central DE team is a bottleneck at scale (200+ engineers, 10+ domains). Domain teams own their data products. Central platform team provides infrastructure and standards. Adopting it too early produces inconsistent quality across domains because domain teams lack DE capability.',
         'Lineage for impact analysis workflow: before changing a model, run dbt ls --select +model_name+ to find all downstream models. Cross-check in DataHub for non-dbt consumers (BI tools, APIs). Update all downstream models together in one deployment. Never change a Gold column definition without knowing all downstream consumers — one unplanned downstream breakage erodes team trust more than any performance issue.',
       ]} />

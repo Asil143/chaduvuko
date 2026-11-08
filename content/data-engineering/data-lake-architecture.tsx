@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Data Lake Architecture — Data Engineering | Chaduvuko',
@@ -1292,6 +1293,28 @@ For new projects in 2026, Iceberg is the most future-proof choice due to its eng
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Publish a file set through a manifest"
+        objective="Make a multi-file dataset complete and discoverable without assuming that a directory listing is a transaction."
+        prerequisites="File formats, object storage paths, pipeline staging and atomic publication.">
+        <p>A daily extract produces three files. A reader that lists the output prefix while the third file is still uploading may read a partial dataset even when each individual object write is consistent. The dataset needs a publication boundary above the individual object level.</p>
+        <WorkshopCode>{`1. Allocate an immutable run prefix: orders/run=R17/
+2. Write part-000, part-001 and part-002 there.
+3. Validate schema, row counts, business keys and expected source coverage.
+4. Write manifest-R17.json naming exact object versions/checksums and counts.
+5. Publish the validated manifest or commit a transactional table snapshot.
+6. Readers resolve the published version; they do not guess from file listings.
+7. Retire older versions according to the approved retention/recovery policy.`}</WorkshopCode>
+        <p>S3 provides strong consistency for its documented object operations. That does not turn a sequence of writes to several objects into one database transaction. Likewise, renaming a prefix may be implemented as copy/delete rather than a filesystem atomic rename. Use the storage and table protocol you actually deploy.</p>
+        <h3>Practice: recover two different failures</h3>
+        <p>The writer crashes after two files, before the manifest. On a different run it crashes after publishing the manifest but before sending a notification. Explain what readers see and how recovery works.</p>
+        <WorkshopAnswer>
+          <p>Before publication, readers continue using the previous complete version; unreferenced staged files can be investigated and cleaned later. After publication, the dataset is committed even if notification failed. Retry the notification with the same version ID, and let consumers deduplicate it. Do not create another business dataset solely because the acknowledgement was lost.</p>
+          <p>Assessment: define the owner, classification, allowed readers, retention, deletion propagation and restore test for every zone. A folder name is not an access-control policy.</p>
+        </WorkshopAnswer>
+        <p>Reference: <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html#ConsistencyModel">S3 consistency model</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'A data lake stores data in native raw format at any scale, with compute separated from storage and schema applied at query time. The four defining properties: any data format, any scale (object storage), schema-on-read, and compute-storage separation.',
         'Data lakes were invented to solve three warehouse limitations: warehouse storage was too expensive for large volumes of unstructured data, schema-on-write made adding new data types slow and rigid, and coupled compute-storage forced hardware scaling in both dimensions simultaneously.',

@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Data Quality — Dimensions, Testing, Monitoring, and Contracts | Chaduvuko',
@@ -984,6 +985,30 @@ The fifth step is fixing and reprocessing. Fix the root cause in code, then repr
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Test the data product's contract"
+        objective="Combine row rules, relationship checks and reconciliation into a publication decision."
+        prerequisites="SQL keys, Python validation and the difference between event and entity grain.">
+        <p>A non-null test alone cannot tell whether a delivery is complete. Write checks at three levels: valid individual rows, valid relationships between rows, and agreement with an independent source or expected interval. Give each check an owner and a failure action.</p>
+        <WorkshopCode language="python" expectedOutput={"valid=2 invalid=1\nconservation=True\nunique_business_keys=False\npublish=False"}>{`rows = [{"id": 7, "amount": 100}, {"id": 7, "amount": 100},
+        {"id": 8, "amount": None}]
+valid = [r for r in rows if type(r["amount"]) is int]
+invalid = [r for r in rows if type(r["amount"]) is not int]
+unique = len({r["id"] for r in valid}) == len(valid)
+print(f"valid={len(valid)} invalid={len(invalid)}")
+print(f"conservation={len(rows) == len(valid) + len(invalid)}")
+print(f"unique_business_keys={unique}")
+print(f"publish={unique and not invalid}")`}</WorkshopCode>
+        <p>The example blocks publication because this contract requires unique business keys and no invalid amounts. Another dataset may permit duplicates at event grain. Write the contract before selecting tests; applying a uniqueness rule at the wrong grain discards legitimate business events.</p>
+        <h3>Practice: design a schema change</h3>
+        <p>A producer adds a new status value. The data type remains text, so schema validation passes. List the semantic checks and release coordination needed before consumers receive the new value.</p>
+        <WorkshopAnswer>
+          <p>Check accepted-value semantics, downstream CASE expressions, metric inclusion/exclusion and business-owner approval. Version the contract and test old/new producer-consumer combinations. A new enum can be structurally compatible but semantically breaking. Emit rejection counts by source and reason, and reconcile quarantined records after the agreed repair.</p>
+          <p>Assessment: include freshness, missing-source detection, relationship completeness and independent financial reconciliation. Passing tests establishes only the properties those tests actually cover.</p>
+        </WorkshopAnswer>
+        <p>Continue with <a href="/learn/data-engineering/monitoring-observability">observing the contract in production</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Data quality is an engineering problem, not a monitoring problem. Every layer a quality issue traverses multiplies its cost by 10×. A validation check at Bronze ingestion prevents hours of investigation that the same problem causes at Gold. Build quality into every pipeline stage — not just at the end.',
         'The six dimensions: Completeness (all records present, required fields populated), Accuracy (values match real-world state), Consistency (same representation across systems), Timeliness (data available when expected), Uniqueness (no duplicate primary keys), Validity (values conform to format, range, and domain rules).',

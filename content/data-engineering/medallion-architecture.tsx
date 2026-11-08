@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Medallion Architecture — Bronze, Silver, Gold — Data Engineering | Chaduvuko',
@@ -469,9 +470,9 @@ def load_to_bronze(run_date: date) -> dict:
         </Para>
 
         <Para>
-          The critical Silver contract: Silver contains entity state, not event
-          history. The Bronze layer has every INSERT, UPDATE, and DELETE that
-          happened over three years. The Silver layer has one row per order_id —
+          In this worked design, one Silver table contains current entity state while
+          Bronze retains source events for its approved replay window. Silver may also contain
+          validated event history or SCD versions. Here, the current-state table has one row per order_id —
           the current state of that order, updated whenever Bronze receives a change.
           Silver answers &ldquo;what does the order look like now?&rdquo; Bronze answers
           &ldquo;what happened to this order and when?&rdquo;
@@ -1307,10 +1308,39 @@ This controlled propagation is why the architecture separates Bronze, Silver, an
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Give each layer an explicit grain"
+        objective="Use Bronze, Silver and Gold as quality contracts while preserving both event history and current entity state."
+        prerequisites="Ingestion, CDC, deduplication and declared table grain.">
+        <p>Bronze receives three updates about two orders and one malformed record. A current-state Silver table should not contain four rows simply because Bronze does. But a valid Silver event table may preserve all accepted events. The layer name does not determine the grain; the dataset contract does.</p>
+        <WorkshopCode language="python" expectedOutput={"bronze=4 accepted_events=3 quarantined=1\nsilver_current_orders=2\ngold_current_total=350"}>{`bronze = [
+    {"id": 7, "version": 1, "amount": 100},
+    {"id": 8, "version": 1, "amount": 250},
+    {"id": 7, "version": 2, "amount": 100},
+    {"id": 9, "version": 1, "amount": "bad"},
+]
+accepted = [r for r in bronze if type(r["amount"]) is int]
+quarantine = [r for r in bronze if type(r["amount"]) is not int]
+current = {}
+for row in sorted(accepted, key=lambda r: r["version"]):
+    current[row["id"]] = row
+print(f"bronze={len(bronze)} accepted_events={len(accepted)} quarantined={len(quarantine)}")
+print(f"silver_current_orders={len(current)}")
+print(f"gold_current_total={sum(r['amount'] for r in current.values())}")`}</WorkshopCode>
+        <p>The demonstration uses a known version order and a single currency. In production validate tied versions, late deletes and currency scale. Gold's current total is a specific metric; it is not automatically recognized revenue, settled cash or an event count.</p>
+        <h3>Practice: introduce a business correction</h3>
+        <p>Finance changes a metric definition while ingestion remains healthy. Identify which layers need rebuilding and how you preserve the prior report for comparison.</p>
+        <WorkshopAnswer>
+          <p>Rebuild the affected Gold model from the appropriate trusted inputs, using a recorded code and input version. Silver changes only if its own contract changed. Preserve or identify the previously published report version within retention policy. Compare the old and new definitions with finance before switching consumers.</p>
+          <p>Completion evidence: write the input contract, output grain, rejection policy and freshness target for each layer. Do not treat automatic schema widening as permission to expose newly arriving sensitive fields.</p>
+        </WorkshopAnswer>
+        <p>Related tutorial: <a href="/learn/data-engineering/data-quality">quality gates and reconciliation</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'The Medallion Architecture organises data into three layers with increasing quality guarantees. Bronze: raw and preserved. Silver: trusted, typed, deduplicated. Gold: business logic applied, ready to serve. Each layer has a contract — what it accepts, what it guarantees, who can use it.',
         'Bronze is append-only and immutable. It stores data exactly as received from the source. The only transformations are format conversion (to Parquet), Hive-style partitioning, and adding ingestion metadata. Never apply business logic, validation, or deduplication in Bronze.',
-        'Silver is current entity state (one row per business key). Bronze is event history (all changes over time). The Silver MERGE collapses Bronze events into current state. For complete change history, query Bronze. For current state, query Silver. This separation is fundamental to the architecture.',
+        'This example uses a current-state Silver table, but Silver can also hold validated events and historical dimensions. Declare each table\'s grain independently of its layer name and document the history actually retained.',
         'The Silver transformation checklist: type casting, deduplication with ROW_NUMBER(), NULL enforcement on required fields, business value validation, PII masking, referential validation. Rows that fail any check go to the DLQ — not to Silver, not silently discarded.',
         'Gold is built from Silver and is never the source of truth — Silver always is. When Gold is wrong, fix Silver and rebuild Gold. Gold serves specific consumers (finance dashboard, operations dashboard) — each Gold model is purpose-built, not a generic copy of Silver with aggregations.',
         'dbt handles Bronze→Silver staging and Silver→Gold transformations. Bronze ingestion (format conversion, partitioning) uses Spark/Python. Silver uses incremental materialisation with merge strategy. Gold uses table or incremental materialisation. The rule: SQL SELECT that fits in the warehouse → dbt. Python libraries, distributed compute, streaming → Spark/Python first.',

@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Data Engineer vs Analyst vs Scientist vs ML Engineer — Data Engineering | Chaduvuko',
@@ -1346,6 +1347,28 @@ The broader principle: data engineering success is measured by whether downstrea
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Assign responsibility for a broken recommendation feature"
+        objective="Separate ownership of data, analysis, models and serving while defining clear handoffs."
+        prerequisites="The Data Engineering Ecosystem and the source-to-consumer lifecycle.">
+        <p>A recommendation model suddenly performs worse. The training job completed, the feature pipeline is green and the API is available. There is no single owner implied by those job statuses. Work backward from the business symptom and assign evidence collection to people who own each boundary.</p>
+        <WorkshopCode>{`Question                                      Typical lead and evidence
+Did source events change?                     DE: schema, coverage, event versions
+Were training features correct at that time?   DE + DS: point-in-time dataset checks
+Did the model lose predictive quality?         DS: evaluation by segment and period
+Do online features match training features?    ML engineer + DE: freshness and parity
+Did user behavior or the metric change?        Analyst + product: cohort analysis
+Who coordinates the incident?                  Named incident lead, not a job title`}</WorkshopCode>
+        <p>These are typical responsibilities, not universal job descriptions. Analytics engineers often own modeled SQL datasets and tests. Platform engineers may own shared compute and deployment tooling. In a small team one person may hold several responsibilities, but each dataset and service still needs an accountable owner.</p>
+        <h3>Practice: write a useful handoff</h3>
+        <p>You discover that a source field changed from seconds to milliseconds. Write a handoff containing impact, affected interval, evidence, proposed repair and the owner needed for approval. Avoid “the model is bad” as the entire diagnosis.</p>
+        <WorkshopAnswer>
+          <p>A useful handoff states that feature age became 1,000 times larger after source version v2, identifies the first affected event and training run, and includes a query comparing raw and normalized timestamps. The source owner confirms the new unit, DE repairs normalization and rebuilds affected features, DS reevaluates the model, and the serving owner checks online parity before restoring normal traffic.</p>
+          <p>Assessment: explain why a successful pipeline does not prove model quality and why a model-quality alert does not prove that the data team caused the regression.</p>
+        </WorkshopAnswer>
+        <p>Further study: <a href="/learn/data-engineering/data-governance">dataset ownership and lineage</a> and <a href="/learn/ai-ml">the AI/ML learning path</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Each role asks a different core question. Data Engineer: "Is data moving reliably?" Analyst: "What happened?" Scientist: "What will happen?" ML Engineer: "How do predictions reach users at scale?" These questions require different skills and are not interchangeable.',
         'Data engineers own the pipeline and the platform — they build the infrastructure everyone else depends on. They do not build dashboards, train models, or deploy serving APIs.',

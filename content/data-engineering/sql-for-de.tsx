@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'SQL for Data Engineers — Beyond the Basics — Data Engineering | Chaduvuko',
@@ -1555,6 +1556,42 @@ Use UNION (without ALL) only when you genuinely want to find the set of distinct
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Deduplicate updates with a deterministic winner"
+        objective="Use ROW_NUMBER with an explicit tie breaker to build current state without losing event history."
+        prerequisites="SELECT, CTEs, GROUP BY, JOIN and window functions. This local Python example executes SQL in SQLite.">
+        <p>Order 7 arrives three times: two updates share the same timestamp but have different source sequence numbers. Ordering only by timestamp lets the engine choose either tied row. Declare a stable ordering derived from source semantics and keep raw events separately from current state.</p>
+        <WorkshopCode language="python" expectedOutput={"7 paid\n8 new"}>{`import sqlite3
+db = sqlite3.connect(":memory:")
+db.executescript("""
+CREATE TABLE updates (order_id INTEGER, updated_at TEXT, seq INTEGER, status TEXT);
+INSERT INTO updates VALUES
+ (7, '2026-01-01T10:00:00Z', 1, 'new'),
+ (7, '2026-01-01T11:00:00Z', 2, 'pending'),
+ (7, '2026-01-01T11:00:00Z', 3, 'paid'),
+ (8, '2026-01-01T09:00:00Z', 1, 'new');
+""")
+query = """
+WITH ranked AS (
+  SELECT *, ROW_NUMBER() OVER (
+    PARTITION BY order_id ORDER BY updated_at DESC, seq DESC
+  ) AS rn
+  FROM updates
+)
+SELECT order_id, status FROM ranked WHERE rn = 1 ORDER BY order_id
+"""
+for order_id, status in db.execute(query):
+    print(order_id, status)`}</WorkshopCode>
+        <p>The source sequence is meaningful here; an arbitrary hash is not evidence that an update happened later. If the source cannot order tied updates, preserve the ambiguity and define a resolution policy. SELECT DISTINCT removes identical rows but does not choose the correct business version.</p>
+        <h3>Practice: add a delete</h3>
+        <p>Add a newer deletion event. Should you filter deletes before or after ranking when constructing current state? Explain why one choice can resurrect a deleted entity.</p>
+        <WorkshopAnswer>
+          <p>Rank all versions first, then exclude entities whose winning event is a deletion. Filtering deletes first leaves an older live version as the winner. Preserve tombstones for as long as replay needs them, and keep historical events in their own model.</p>
+          <p>Assessment: add a uniqueness test at the output grain, compare the input key set with the output, and explain why event counts cannot be reconciled directly to current-state row counts.</p>
+        </WorkshopAnswer>
+        <p>Reference: <a href="https://www.postgresql.org/docs/current/tutorial-window.html">PostgreSQL window functions</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Window functions perform calculations across related rows without collapsing them like GROUP BY does. The OVER clause defines the window: PARTITION BY divides rows into groups, ORDER BY sequences them, and the frame clause (ROWS/RANGE BETWEEN) defines which rows are included per calculation.',
         'ROW_NUMBER, RANK, and DENSE_RANK all assign sequential numbers within a partition. Use ROW_NUMBER for deduplication — it guarantees exactly one row per group. RANK allows ties and skips numbers. DENSE_RANK allows ties without skipping. ROW_NUMBER is the correct choice when you need exactly one row kept per key.',

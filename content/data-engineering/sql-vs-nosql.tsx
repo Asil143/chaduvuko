@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'SQL vs NoSQL — The Real Difference — Data Engineering | Chaduvuko',
@@ -1411,6 +1412,27 @@ In practice, most data engineering work involves the relational model. Graph dat
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Choose a store from access patterns"
+        objective="Compare data stores using query shape, consistency, transaction scope and operational requirements."
+        prerequisites="Database internals and the difference between a key lookup, a join and an analytical scan.">
+        <p>A checkout service needs a conditional inventory decrement. An account page needs a user's latest preferences. Finance needs revenue by month across every customer. These are different access patterns; selecting one fashionable database for all three does not remove their different requirements.</p>
+        <WorkshopCode>{`Operation                 Requirement to establish before choosing a store
+Reserve last item         Atomic conditional write; prevent overselling
+Read preferences          Key lookup latency; acceptable stale-read window
+Monthly revenue           Large scans, exact amounts, joins and reconciled totals
+Update customer address   Which copies exist, and how do they converge?
+Replay a change feed      Ordering, delete representation, lag and retention`}</WorkshopCode>
+        <p>SQL describes a query language, while relational and document describe data models. Many systems cross those boundaries. A document store can validate schemas and offer transactions; a relational store can keep JSON; a key-value service may support strong reads or transactional operations with specific limits. Verify the chosen operation and consistency mode instead of inferring guarantees from “NoSQL.”</p>
+        <h3>Practice: repair denormalized copies</h3>
+        <p>A customer address is copied into a profile document, a search index and historical orders. The customer edits the profile. Decide which copies should change and how a pipeline verifies convergence.</p>
+        <WorkshopAnswer>
+          <p>The current profile and search representation may need updates, but an order's shipping address may intentionally remain the address used at purchase. Name those meanings separately. Send versioned changes, make updates idempotent, observe propagation lag and periodically reconcile current-state copies. Do not overwrite historical facts merely because a current entity changed.</p>
+          <p>Assessment: state the transaction boundary for inventory reservation, the acceptable staleness for profile reads and the extraction method that keeps analytical scans off the checkout database.</p>
+        </WorkshopAnswer>
+        <p>Further reading: <a href="/learn/data-engineering/distributed-systems">consistency and replication</a> and <a href="/learn/data-engineering/slowly-changing-dimensions">historical dimensions</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         '"SQL vs NoSQL" is the wrong framing. The right question is: what are the access patterns of this data? Relational databases provide flexible querying and strong consistency. NoSQL databases optimise specific access patterns at the cost of flexibility and sometimes consistency.',
         'There are four completely different NoSQL families, not one: Key-Value (Redis — extreme speed for key lookups), Document (MongoDB — flexible schema for entity-centric data), Column-Family (Cassandra — extreme write throughput with partition-key access), and Graph (Neo4j — fast multi-hop relationship traversal).',

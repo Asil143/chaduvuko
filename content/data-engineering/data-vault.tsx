@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Data Vault 2.0 — Data Engineering | Chaduvuko',
@@ -948,6 +949,32 @@ The critical mistake is choosing Data Vault because it sounds more enterprise-gr
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Hash an unambiguous business key"
+        objective="Define a canonical key encoding that survives source overlap and preserves meaningful distinctions."
+        prerequisites="Business keys, historical modeling and deterministic transformations. Python standard-library JSON and hashing are sufficient.">
+        <p>Customer 42 exists in two acquired systems. Hashing the bare value 42 merges unrelated people. Also, concatenating fields without a safe encoding can make different tuples look identical. Key definition comes before key hashing.</p>
+        <WorkshopCode language="python" expectedOutput={"same_source_same_key=True\ndifferent_sources_differ=True\nnull_differs_from_empty=True"}>{`import hashlib
+import json
+
+def hub_key(source_namespace, business_key):
+    payload = json.dumps([source_namespace, business_key],
+                         ensure_ascii=False, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+print(f"same_source_same_key={hub_key('crm', '42') == hub_key('crm', '42')}")
+print(f"different_sources_differ={hub_key('crm', '42') != hub_key('erp', '42')}")
+print(f"null_differs_from_empty={hub_key('crm', None) != hub_key('crm', '')}")`}</WorkshopCode>
+        <p>This example deliberately includes the source namespace. A real vault may define an enterprise business key that spans sources; make that rule explicit and reconcile identities deliberately. Canonicalization must specify field order, types, Unicode handling, whitespace and case. Never normalize away distinctions the source says are meaningful.</p>
+        <h3>Practice: evolve a satellite without rewriting the past</h3>
+        <p>A source adds a field and corrects yesterday's customer tier. Decide how to preserve arrival time, business-effective time, record source and the hash-diff rule.</p>
+        <WorkshopAnswer>
+          <p>Preserve both the previously received record and the correction with their load metadata. Track effective time separately when supplied. Version the hash-diff contract when its columns or normalization change; otherwise every historical row can appear changed merely because the hashing rule changed. Build consumer-ready dimensional marts from the integration history.</p>
+          <p>Assessment: explain why a deterministic hash is not guaranteed collision-free and is not anonymization. Low-entropy business IDs can be guessed; use appropriate privacy controls independently of warehouse key design.</p>
+        </WorkshopAnswer>
+        <p>Reference: <a href="https://docs.python.org/3/library/hashlib.html">Python hashing</a> and <a href="/learn/data-engineering/data-governance">identity and governance ownership</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Data Vault 2.0 has three table types: Hubs (store business keys — the existence of an entity), Links (store relationships between hubs), and Satellites (store descriptive attributes with full version history per source). Every table in a Raw Vault is exactly one of these three types.',
         'Hash keys (MD5 or SHA-256 of UPPER(TRIM(business_key))) are deterministic and computable from source data alone — no shared state, no sequence generator, no locks. This enables all hub, link, and satellite tables to load in complete parallel from the same source data simultaneously.',

@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Schemas, Tables, Keys and Indexes — Data Engineering | Chaduvuko',
@@ -686,7 +687,8 @@ FK in data warehouses (Snowflake, BigQuery):
           A unique constraint enforces that no two rows in a table have the same value
           in the constrained column (or combination of columns). Unlike a primary key,
           a table can have multiple unique constraints, and unique constraint columns can
-          be nullable (though only one NULL is allowed per column by standard SQL).
+          be nullable. NULL uniqueness depends on the engine: ordinary PostgreSQL UNIQUE
+          permits multiple NULLs; NULLS NOT DISTINCT changes that behavior.
         </Para>
 
         <CodeBox label="Unique keys — when and how to use them">{`-- Table with multiple unique constraints:
@@ -1046,15 +1048,13 @@ The difference between created_at and ingested_at:
   Our pipeline processed it at 2026-03-18 02:14:47 (ingested_at)
   These are different by 6 hours — both are useful for different analysis.`}</Output>
 
-        <SubTitle>The soft delete pattern — never actually delete rows</SubTitle>
+        <SubTitle>The soft delete pattern — preserve application history deliberately</SubTitle>
 
         <Para>
-          In most data platforms, rows should never be physically deleted. Instead,
-          add a deleted_at column and a is_deleted flag. Physical deletes break
-          pipeline reruns (data that existed is gone), break historical analysis
-          (the past is now different from what it was), and are impossible to reverse.
-          Soft deletes preserve the history while making deleted rows queryable and
-          filterable.
+          A deleted_at column or is_deleted flag preserves application deletion history.
+          It can support CDC and historical analysis, but does not physically remove data.
+          Define physical deletion, archival or anonymization separately, including downstream
+          tables, snapshots and the treatment of deleted records after backup restoration.
         </Para>
 
         <CodeBox label="Soft delete pattern — mark as deleted instead of removing">{`-- Add to any table where rows "go away":
@@ -1310,7 +1310,7 @@ The correct type for all monetary values is DECIMAL(p, s) — also called NUMERI
 
 A table can have exactly one primary key, but multiple unique keys. The primary key is the table's canonical identifier — the key used by other tables' foreign keys to reference this table. Unique keys are additional uniqueness constraints on other columns.
 
-A primary key column cannot contain NULL values. A unique key column can contain NULL — though standard SQL allows only one NULL per unique constraint column (since NULL is not equal to NULL, two NULLs are not considered duplicates). This distinction matters: a customers table might have a unique constraint on phone number, but phone is optional (NULL allowed), whereas customer_id must always be present.
+A primary key cannot contain NULL. A nullable UNIQUE column follows its database's NULL uniqueness rules. PostgreSQL ordinarily permits multiple NULLs; NULLS NOT DISTINCT treats them as equal. Test the target engine rather than assuming a universal rule.
 
 Both create an index automatically, so lookup performance is similar.
 
@@ -1453,6 +1453,42 @@ Third, DECIMAL type correction if financial amounts are stored as FLOAT. The flo
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Find the key that is unique only inside one tenant"
+        objective="Declare keys at the real business grain and test referential integrity with a concrete failure."
+        prerequisites="Basic SQL, schemas and primary/foreign key concepts. The example runs with Python's built-in SQLite.">
+        <p>Two shops both issue order number 1. A primary key on order_id alone would reject valid data or merge unrelated orders. Use the source's actual scope: tenant_id plus order_id. Carry the same scope into dependent tables, deduplication keys and CDC merges.</p>
+        <WorkshopCode language="python" expectedOutput={"orders=2\nrejected orphan line"}>{`import sqlite3
+
+db = sqlite3.connect(":memory:")
+db.execute("PRAGMA foreign_keys = ON")
+db.executescript("""
+CREATE TABLE orders (
+  tenant_id TEXT NOT NULL, order_id INTEGER NOT NULL,
+  PRIMARY KEY (tenant_id, order_id)
+);
+CREATE TABLE lines (
+  tenant_id TEXT NOT NULL, order_id INTEGER NOT NULL, line_id INTEGER NOT NULL,
+  PRIMARY KEY (tenant_id, order_id, line_id),
+  FOREIGN KEY (tenant_id, order_id) REFERENCES orders(tenant_id, order_id)
+);
+""")
+db.executemany("INSERT INTO orders VALUES (?, ?)", [("A", 1), ("B", 1)])
+print(f"orders={db.execute('SELECT COUNT(*) FROM orders').fetchone()[0]}")
+try:
+    db.execute("INSERT INTO lines VALUES ('C', 1, 1)")
+except sqlite3.IntegrityError:
+    print("rejected orphan line")`}</WorkshopCode>
+        <p>A declared warehouse key may be informational rather than enforced; add explicit tests when that is the engine's behavior. NULL uniqueness also varies: PostgreSQL's ordinary UNIQUE permits multiple NULLs, while NULLS NOT DISTINCT changes that behavior. Never assume all engines implement identical rules.</p>
+        <h3>Practice: distinguish identity from convenience</h3>
+        <p>You add a surrogate row ID for joins. Does that eliminate the need to test the tenant/order business key? What happens when an ingestion retry creates a second surrogate row for the same order?</p>
+        <WorkshopAnswer>
+          <p>The surrogate ID uniquely identifies a stored row, not necessarily a business fact. Two generated IDs can represent the same order and double revenue. Retain a uniqueness check or constraint at the business grain. Decide whether updates overwrite current state or create versioned history; each requires a different key.</p>
+          <p>Soft deletion records an application state but does not itself remove personal data. Physical deletion, archival and restoration behavior must follow the dataset's actual retention policy.</p>
+        </WorkshopAnswer>
+        <p>Reference: <a href="https://www.postgresql.org/docs/current/ddl-constraints.html">PostgreSQL constraints</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'A schema at the database level is a namespace that groups related tables. Data platforms use schemas to organise layers: landing, bronze, silver, gold. Schema-level access control (GRANT ON SCHEMA) is how you control who can access each layer.',
         'Every column\'s data type is a real decision. BIGINT for all IDs (INTEGER overflows at 2.1 billion). DECIMAL(10,2) for all money (FLOAT accumulates precision errors in financial calculations). TIMESTAMPTZ for all event timestamps (TIMESTAMP without timezone produces wrong results across timezones). VARCHAR(n) with a limit for bounded text.',

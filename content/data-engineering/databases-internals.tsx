@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Databases — What They Are and How They Work Internally — Data Engineering | Chaduvuko',
@@ -1390,6 +1391,35 @@ The correct architecture: run a scheduled pipeline that copies data from the OLT
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Observe an index instead of assuming it helps"
+        objective="Connect a query plan to physical access and explain the read/write trade-off of an index."
+        prerequisites="Schemas, rows and columns; basic SELECT and WHERE. Python 3 includes SQLite for this local demonstration.">
+        <p>The warehouse extract filters orders by customer_id. Without an index, the engine may inspect every row. Add an index and inspect the plan, but distinguish “the planner selected an index” from “the entire workload became faster.” An index also consumes storage and must be maintained on writes.</p>
+        <WorkshopCode language="python" expectedOutput={"before_uses_index=False\nafter_uses_index=True\nmatching_rows=10"}>{`import sqlite3
+
+db = sqlite3.connect(":memory:")
+db.execute("CREATE TABLE orders (id INTEGER PRIMARY KEY, customer_id INTEGER)")
+db.executemany("INSERT INTO orders VALUES (?, ?)",
+               [(i, i % 100) for i in range(1000)])
+query = "SELECT id FROM orders WHERE customer_id = 42"
+before = list(db.execute("EXPLAIN QUERY PLAN " + query))
+db.execute("CREATE INDEX orders_customer ON orders(customer_id)")
+after = list(db.execute("EXPLAIN QUERY PLAN " + query))
+uses_index = lambda plan: any("USING" in row[3] and "INDEX" in row[3] for row in plan)
+print(f"before_uses_index={uses_index(before)}")
+print(f"after_uses_index={uses_index(after)}")
+print(f"matching_rows={len(list(db.execute(query)))}")`}</WorkshopCode>
+        <p>Plan wording is engine specific. SQLite is used here to make the mechanism observable without a server. On your target database compare estimated and actual rows, buffers read, scan type and representative timings. A filter that returns most rows can favor a scan even when an index exists.</p>
+        <h3>Practice: change the workload</h3>
+        <p>Replace the equality filter with customer_id &gt;= 0. Predict whether the index is still useful. Then explain why adding indexes to every source column can make ingestion worse.</p>
+        <WorkshopAnswer>
+          <p>The new predicate matches every row, so the index offers little selectivity; a covering index may still be chosen because its pages are smaller. Measure the plan rather than requiring one answer. Every extra index adds update work, space and maintenance. Bound source extracts and coordinate new indexes with the source owner.</p>
+          <p>A write-ahead log supports recovery according to the database's rules. It is not a substitute for tested backups and restore procedures. Replication can also copy accidental deletes, so it does not replace a recovery plan.</p>
+        </WorkshopAnswer>
+        <p>References: <a href="https://sqlite.org/eqp.html">SQLite query plans</a> and <a href="https://www.postgresql.org/docs/current/using-explain.html">PostgreSQL EXPLAIN</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Every database is built on six internal concepts: storage engine, B-tree index, buffer pool, Write-Ahead Log, transactions and MVCC, and query execution. Learn these once and every database you encounter becomes understandable.',
         'B-tree storage engines store data in fixed-size pages organised as a tree. Lookups are O(log n) — fast. Full table scans read every page — slow. LSM-tree engines append writes to memory and flush to immutable disk files — writes are faster, reads require checking multiple files.',

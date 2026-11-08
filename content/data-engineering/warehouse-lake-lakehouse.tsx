@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Data Warehouse vs Data Lake vs Lakehouse — Data Engineering | Chaduvuko',
@@ -1314,6 +1315,28 @@ Expected outcome: keep 12 TB in Snowflake at $480/month, move 42 TB to S3 Delta 
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Separate storage, table metadata and query execution"
+        objective="Evaluate a warehouse, lake or lakehouse by the capabilities the workload actually needs."
+        prerequisites="File formats, database internals and SQL versus NoSQL.">
+        <p>A team says, “We already have Parquet in object storage, so we have a lakehouse.” Ask what coordinates concurrent writes, identifies committed files and defines a consistent snapshot. A file format answers how one file is encoded; a table format and catalog answer how files form a table; an engine executes queries.</p>
+        <WorkshopCode>{`Layer             Example responsibility                 Failure to test
+Object storage    Durable objects and access controls     Partial or missing uploads
+File format       Columns, types, encoding, statistics    Incompatible reader/schema
+Table metadata    Snapshots, commits, schema evolution    Conflicting concurrent writers
+Catalog           Table discovery and metadata pointers   Wrong permissions or stale location
+Query engine      Planning, joins, aggregation            Full scan or memory pressure
+Serving model     Trusted metrics and usable datasets     Wrong grain or stale result`}</WorkshopCode>
+        <p>A managed warehouse may package several layers together. A lakehouse can expose them separately. Neither name guarantees lower cost or identical interoperability across engines. Test the exact operation you need, such as updates, deletes, snapshot reads or schema changes, with the selected engine and version.</p>
+        <h3>Practice: pick for a constrained team</h3>
+        <p>Choose a design for 30 GB of daily tabular data, six analysts, hourly reports and two engineers. Then explain what changes if the organization adds 20 TB of image data for model training.</p>
+        <WorkshopAnswer>
+          <p>A managed warehouse with incremental loading and tested marts can be a reasonable starting point for the first workload. Keep a measured recovery and cost plan. Large binary assets may live in object storage with a governed metadata table while tabular reporting stays in the warehouse. A new workload need not force migration of every existing table.</p>
+          <p>Completion evidence: describe ownership of commits, catalog access, data deletion, cost attribution and restore. Show a proof-of-concept query and recovery test rather than relying on an architecture label.</p>
+        </WorkshopAnswer>
+        <p>Continue with <a href="/learn/data-engineering/lakehouse-architecture">lakehouse transactions and snapshots</a> and <a href="/learn/data-engineering/warehouse-concepts">warehouse execution</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'The data warehouse (1980s–2000s) is a structured, columnar, SQL-queryable analytical database. It enforces schema on write, delivers fast SQL queries, and provides strong governance — but is expensive per GB and cannot store unstructured data or accept schema changes without migrations.',
         'The data lake (2010s) is cheap object storage (S3/ADLS/GCS) that accepts any data in any format with no schema requirement. It solves the warehouse\'s cost and flexibility problems but creates new ones: no ACID transactions, no row-level updates, no schema enforcement, and the risk of becoming a data swamp.',

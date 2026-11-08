@@ -19,6 +19,7 @@ import { QuickAnswer } from '@/components/content/QuickAnswer'
 import { QuickCheck } from '@/components/content/QuickCheck'
 import { LessonPractice } from '@/components/content/LessonPractice'
 import { LessonFeedback } from '@/components/content/LessonFeedback'
+import { LessonStudyGuide } from '@/components/content/LessonStudyGuide'
 import { LESSON_PRACTICE } from '@/data/lesson-practice'
 import { setLessonChrome } from '@/lib/lesson-chrome'
 import { CHEAT_SHEET_FOR_PATH } from '@/lib/cheatsheet-links'
@@ -346,6 +347,14 @@ export function LearnLayout({ children, title, description, section, readTime, u
               <div className="prose-chaduvuko">
                 {children}
               </div>
+
+              {isLesson && !pathname.startsWith('/learn/data-engineering/') && (
+                <LessonStudyGuide
+                  title={title}
+                  section={section}
+                  next={next ? { href: next.href, title: next.title } : null}
+                />
+              )}
 
               {showSalary && (
                 <div className="mt-12"><SalaryWidget /></div>

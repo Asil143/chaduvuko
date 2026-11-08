@@ -5,6 +5,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Streaming Data — What It Is and How It Works | Chaduvuko',
@@ -201,11 +202,10 @@ export default function StreamingDataModule() {
 
         <HighlightBox>
           <Para>
-            <strong>Precise definition:</strong> A stream is an ordered, replayable,
-            append-only log of events. New events are always appended to the end.
-            Nothing is modified or deleted in place. The log can be replayed from
-            any point in history. This definition has three consequences that
-            affect every design decision you will ever make in streaming systems.
+            <strong>For this lesson:</strong> a stream is an unbounded sequence of records.
+            We use a durable partitioned log as the source example. It adds partition append
+            order and replay over retained history. Other streaming sources can provide
+            different ordering, retention and replay capabilities.
           </Para>
           <Para>
             <strong>Ordered</strong> — within a single partition, events have a
@@ -494,8 +494,8 @@ export default function StreamingDataModule() {
             arrive in order — which you almost certainly do — then all of C98765's
             events must go to the same partition every time. This is what the
             partition key controls. Hash(partition_key) mod number_of_partitions
-            determines which partition an event lands in. Same key, same partition,
-            always.
+            commonly determines which partition an event lands in. Same-key routing remains
+            stable only while the partition count, partitioner and routing contract stay compatible.
           </Para>
         </HighlightBox>
 
@@ -1015,13 +1015,11 @@ def process_order(event):
 
         <Para>
           The watermark moves forward as time progresses, but it lags behind
-          the current time by a configurable amount — the allowed lateness.
-          A watermark of "current time minus 5 minutes" means: process a
-          window as soon as it is 5 minutes in the past, and drop any events
-          that arrive more than 5 minutes late. The 5 minutes is a
-          business decision: longer allowed lateness = more accurate results
-          but higher output latency. Shorter allowed lateness = faster outputs
-          but more dropped late events.
+          event-time progress under an engine-specific policy. Watermarks, output triggers
+          and allowed-lateness/state-retention policies are related but distinct. Check whether
+          late records update results, enter a side output or are excluded after cleanup.
+          Longer retention costs state and may improve completeness, but does not prove
+          that all source events have arrived.
         </Para>
 
         <Callout type="tip">
@@ -1225,8 +1223,9 @@ event = {
         <Para>
           This is extremely powerful for audit trails, time travel, and
           rebuilding any projection of state. It is also extremely complex
-          operationally. Your event log must be retained forever (not just
-          7 days). Query patterns are expensive — "what is order ORD-001's
+          operationally. Retain the events or snapshots plus subsequent changes needed for
+          the promised reconstruction window, subject to retention/deletion policy.
+          Query patterns can be expensive — "what is order ORD-001's
           current status?" requires replaying potentially thousands of events.
           You mitigate this with snapshots (periodic materialised views of
           current state), but the operational overhead is significant.
@@ -1490,8 +1489,31 @@ So the watermark encodes a deliberate business trade-off: the allowed lateness s
         ))}
       </section>
 
+
+      <DEWorkshop title="Bound streaming state without hiding late events"
+        objective="Connect event-time windows, deduplication state and retention to a documented correction policy."
+        prerequisites="Batch versus streaming, event identifiers, partitions, offsets and idempotent writes.">
+        <p>A stream processor must remember enough past information to join, aggregate or deduplicate events. Keeping every event ID forever makes state grow without bound; expiring it too early lets old duplicates count again. Set state retention from the actual retry and replay policy.</p>
+        <WorkshopCode>{`Example contract
+Window: event-time intervals [10:00, 10:05), [10:05, 10:10), ...
+Normal output: provisional updates as events arrive
+Allowed lateness: documented from observed delays and consumer needs
+Late after state cleanup: quarantine or correction job, never silent ambiguity
+Duplicate key: event_id, preserved through retries
+Replay source: retained log/archive with compatible schema and code version
+Sink: upsert window key + output version, not blind append of every update`}</WorkshopCode>
+        <p>Distinguish the stream processor's state checkpoint from the broker offset and the sink's committed version. Recovery is correct only when those boundaries cooperate. A Kafka transaction does not automatically include an external database, email service or object store.</p>
+        <h3>Practice: restart with a shorter state window</h3>
+        <p>The broker retains seven days, but deduplication IDs expire after one hour. You replay yesterday. Will a replay into the live aggregate necessarily produce the same answer?</p>
+        <WorkshopAnswer>
+          <p>No. IDs may have expired, so yesterday's events can apply their effects again. Rebuild an isolated output from a fixed source range, or use durable keyed/versioned sink logic that absorbs replay. State the publication switch explicitly. Test duplicated events, late updates, restarted processors and partition reassignment.</p>
+          <p>Ordering is a scoped guarantee: a log preserves partition append order, not necessarily business-event time. Changing partition counts or routing rules can move a key. Global sequencing is possible with coordination, but it costs throughput and availability.</p>
+        </WorkshopAnswer>
+        <p>Follow <a href="/learn/apache-kafka/consumer-groups-offsets">Kafka offsets</a> and <a href="/learn/apache-kafka/delivery-semantics">delivery semantics</a> for concrete broker/client behavior.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
-        'A stream is an ordered, replayable, append-only log of events. These three properties — ordered, replayable, append-only — define every design decision in streaming.',
+        'A stream is an unbounded sequence of records. A durable partitioned log adds scoped ordering and retention-bounded replay; not every streaming source offers those capabilities.',
         'Streaming is not fast batch. Batch has bounded datasets; streaming has unbounded datasets. The processing model, state management, and failure recovery are fundamentally different.',
         'Events are immutable records of something that happened. They are never updated in place. Corrections are new events. This immutability is what makes replay and audit possible.',
         'Partitions are the unit of parallelism and the unit of ordering. Within one partition, ordering is guaranteed. Across partitions, there is no ordering guarantee. Choose your partition key to put related events in the same partition.',

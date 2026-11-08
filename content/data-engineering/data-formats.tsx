@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Data Formats — CSV, JSON, Parquet, Avro, ORC — Data Engineering | Chaduvuko',
@@ -330,10 +331,10 @@ COLUMNAR FORMAT (Parquet / ORC):
         <SubTitle>How CSV works internally</SubTitle>
 
         <Para>
-          A CSV file is a sequence of lines. Each line is one record. Within each
-          line, values are separated by a delimiter — usually a comma, sometimes a
-          tab (TSV), semicolon, or pipe. The first line is optionally a header
-          row naming the columns. That is the entire specification.
+          CSV contains logical records with delimiter-separated fields. Quoting and escaping
+          allow a field to contain a delimiter, quotation mark or even a newline, so one record
+          need not occupy one physical line. Agree on the producer's dialect, header, encoding
+          and null representation, then use a parser rather than splitting on punctuation.
         </Para>
 
         <CodeBox label="CSV internals — what the bytes actually look like">{`orders.csv — opened in a text editor:
@@ -455,9 +456,9 @@ Quoting rule (RFC 4180):
         <Para>
           A single JSON object is fine for one record. But how do you store a million
           records? A single JSON array containing a million objects works but has a
-          critical problem: you must read the entire file before you can parse any
-          record, because the array is not complete until the closing bracket.
-          This makes streaming and chunked processing impossible.
+          practical complication: ordinary json.load materializes the full array.
+          A specialized incremental parser can stream array elements without loading everything.
+          NDJSON makes independent record parsing simpler.
         </Para>
 
         <Para>
@@ -474,8 +475,8 @@ Quoting rule (RFC 4180):
   ... 999,998 more records ...
   {"order_id": 10284750, "amount": 540.00, "city": "Austin"}
 ]
-Problem: entire file must be read before any record can be parsed.
-         1 GB file = hold 1 GB in memory to read record 1.
+With json.load: the entire array is materialized in memory.
+With a streaming JSON parser: elements can be processed incrementally.
 
 CORRECT for large datasets — NDJSON / JSON Lines:
 {"order_id": 9284751, "amount": 380.00, "city": "Seattle"}
@@ -686,11 +687,10 @@ GZIP:   slower, better ratio (~4-5×) — use for archival storage`}</CodeBox>
         <SubTitle>Parquet schema evolution</SubTitle>
 
         <Para>
-          Parquet supports adding new columns without rewriting existing files. Old
-          files simply have NULL values for the new column when read by new readers.
-          This makes Parquet compatible with incremental schema changes — an important
-          property for long-running data lake tables where adding a column without
-          reprocessing all historical data is essential.
+          New Parquet files can add columns while older files keep their original schemas.
+          A compatible reader or table layer must reconcile those schemas and supply NULL for
+          missing optional fields when appropriate. Test field names or IDs, type changes
+          and the chosen reader's options; automatic schema reconciliation is not universal.
         </Para>
 
         <SubTitle>When to use Parquet</SubTitle>
@@ -733,11 +733,10 @@ GZIP:   slower, better ratio (~4-5×) — use for archival storage`}</CodeBox>
         </div>
 
         <Para>
-          Avro is a row-oriented binary serialisation format designed specifically
-          for the Kafka ecosystem and schema evolution. While Parquet dominates
-          analytical storage, Avro dominates event streaming and data serialisation
-          between services. Understanding the difference in their design goals
-          explains why both exist and why neither can replace the other.
+          Avro is a schema-based serialization system used for records, files and
+          messaging, including Kafka integrations. It was not designed specifically
+          for Kafka. Its writer/reader schema resolution serves a different purpose
+          from Parquet's column-oriented analytical file layout.
         </Para>
 
         <SubTitle>How Avro works — schema separation</SubTitle>
@@ -747,8 +746,9 @@ GZIP:   slower, better ratio (~4-5×) — use for archival storage`}</CodeBox>
           defines the structure of every record: field names, types, whether fields
           are nullable, and default values for missing fields. The data is stored
           in a compact binary format that does not repeat field names. To read an
-          Avro file, you need the schema. This schema separation is both Avro's
-          greatest strength and its primary source of operational complexity.
+          record, you need the writer schema. An Avro object-container file embeds
+          its writer schema in the header; individual message encodings may instead
+          reference a registry schema ID. Distinguish those two transport conventions.
         </Para>
 
         <SubSubTitle>The schema, and the binary data it describes</SubSubTitle>
@@ -1355,6 +1355,35 @@ I would present this to the analyst as a two-week migration project with measura
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Read the CSV record that spans two lines"
+        objective="Choose a parser and format based on record boundaries, types, projection and schema evolution."
+        prerequisites="Structured and semi-structured data; understand strings and encoding. Run the example with standard-library Python 3.">
+        <p>A supplier sends a customer name containing a comma and a note containing a newline. Splitting the file on commas or counting physical lines will misread the records. CSV is a family of dialects with quoting and escaping rules; use a parser configured for the producer's dialect.</p>
+        <WorkshopCode language="python" expectedOutput={"records=1\nname=Rao, Anika\nnote_lines=2\namount=12.50"}>{`import csv
+import io
+from decimal import Decimal
+
+buffer = io.StringIO(newline="")
+writer = csv.writer(buffer)
+writer.writerow(["id", "name", "note", "amount"])
+writer.writerow([1, "Rao, Anika", "first line" + chr(10) + "second line", "12.50"])
+buffer.seek(0)
+rows = list(csv.DictReader(buffer))
+print(f"records={len(rows)}")
+print(f"name={rows[0]['name']}")
+print(f"note_lines={len(rows[0]['note'].splitlines())}")
+print(f"amount={Decimal(rows[0]['amount']):.2f}")`}</WorkshopCode>
+        <p>This preserves text faithfully but still needs a separate type contract: CSV gives you strings. For analytical scans, Parquet or ORC can reduce column reads; actual pruning depends on statistics, encoding, engine support and the query. A Parquet file does not by itself provide a transaction log, concurrent-writer control or table snapshots.</p>
+        <h3>Practice: choose formats at three boundaries</h3>
+        <p>Choose a format for a finance export, a typed event stream and a queryable analytical table. Explain how adding an optional field affects an old reader and how you would test it.</p>
+        <WorkshopAnswer>
+          <p>CSV can fit an agreed human-facing export; Avro, Protobuf or validated JSON can fit events; Parquet or ORC can fit analytical files. A transactional lake table also needs a table format and compatible engine. Test both old-reader/new-writer and new-reader/old-writer combinations. Reader defaults, nullable fields and registry compatibility are distinct from simply adding a field to a JSON object.</p>
+          <p>Assessment: explain why NDJSON supports simple record streaming, why specialized parsers can stream a large JSON array too, and why compression ratio alone cannot predict query latency.</p>
+        </WorkshopAnswer>
+        <p>References: <a href="https://docs.python.org/3/library/csv.html">Python CSV dialects</a>, <a href="https://parquet.apache.org/docs/">Apache Parquet</a> and <a href="https://avro.apache.org/docs/current/specification/">Avro specification</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'The single most important format decision is row-oriented vs columnar. CSV, JSON, and Avro are row-oriented — fast for writing individual records. Parquet and ORC are columnar — fast for reading specific columns across millions of rows. Analytical queries need columnar. Streaming needs row-oriented.',
         'Parquet achieves its performance through two mechanisms working together: columnar storage (read only the columns a query needs) and predicate pushdown using row group statistics (skip entire chunks of rows that cannot match the filter). Combined, these can reduce I/O by 95%+ versus CSV for typical analytical queries.',

@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'What is Data Engineering? — Data Engineering | Chaduvuko',
@@ -1170,6 +1171,32 @@ Throughout this, I would communicate the timeline and trade-offs clearly to the 
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Turn a dashboard request into an engineering specification"
+        objective="Translate a business question into a dataset contract, delivery promise and testable acceptance criteria."
+        prerequisites="What is Data? Know the difference between a record, a file and a database.">
+        <p>FreshCart finance asks: “Show yesterday’s paid revenue before our morning meeting.” The request sounds simple, but revenue is undefined until you settle which events count. Does a cancelled order count? Does a partial refund change the original day or the refund day? Record these decisions before choosing tools.</p>
+        <h3>Work through a concrete agreement</h3>
+        <WorkshopCode>{`Dataset: daily_paid_revenue
+Grain: one row per business_date and currency
+Definition: captured payments minus completed refunds
+Business timezone: Asia/Kolkata
+Delivery: yesterday is available by 08:00 local time
+Owner: finance defines the metric; data engineering operates the pipeline
+Columns: business_date, currency, gross_minor, refunds_minor, net_minor
+Checks: unique grain; non-null keys; net = gross - refunds
+Recovery: replay source events and replace the affected date
+Correction policy: mark dates provisional until reconciliation completes`}</WorkshopCode>
+        <p>Suppose two captures are 1,250 and 750 minor units and a completed refund is 200. Gross is 2,000, refunds are 200, and net is 1,800. If a third capture arrives tomorrow carrying yesterday’s event time, your correction policy determines whether yesterday’s row changes. A green scheduler status cannot answer that business question.</p>
+        <h3>Practice: reject an incomplete requirement</h3>
+        <p>Write the three questions you would ask if finance changes the request to “all revenue in real time.” Then design one test for duplicates, one for an empty but valid day, and one for a missing source feed.</p>
+        <WorkshopAnswer>
+          <p>Clarify the decision that needs lower latency, the maximum acceptable delay, and whether provisional values may later change. A duplicate payment ID must not change the net total. A valid zero-activity day can publish zero after source completeness is established. A missing feed must publish an explicit incomplete status or retain the last verified result; silently reporting zero would mislead finance.</p>
+          <p>Completion evidence: submit the specification, a three-event reconciliation and an incident message explaining a missed delivery. These demonstrate the engineering role more clearly than a list of tool names.</p>
+        </WorkshopAnswer>
+        <p>Continue with <a href="/learn/data-engineering/how-data-moves">How Data Moves</a> to connect this specification to physical pipeline stages.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'A data engineer builds and maintains systems that move data from where it is created to where it needs to be used — reliably, at scale, and automatically.',
         'The data engineering lifecycle has six phases: Generation → Ingestion → Storage → Transformation → Serving → Orchestration. Every project lives somewhere in this cycle.',

@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Python for Data Engineering — Data Engineering | Chaduvuko',
@@ -1421,6 +1422,41 @@ For completeness verification, I would reconcile against an authoritative total 
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Build a transform you can test without the network"
+        objective="Separate parsing, validation and business transformation from I/O, then account for rejected records."
+        prerequisites="Python functions, dictionaries, exceptions and iterators. Review the Python track first if these are unfamiliar.">
+        <p>Start with a pure function: the same input produces the same output and no external write. That lets you test the difficult rules without depending on an API, database or scheduler. Keep rejected records observable rather than silently ignoring exceptions.</p>
+        <WorkshopCode language="python" expectedOutput={"accepted=2 rejected=1 total_minor=1250"}>{`def normalize(raw):
+    if not isinstance(raw.get("id"), str) or not raw["id"]:
+        raise ValueError("missing id")
+    amount = raw.get("amount_minor")
+    if type(amount) is not int or amount < 0:
+        raise ValueError("invalid amount_minor")
+    return {"id": raw["id"], "amount_minor": amount}
+
+raw_rows = [{"id": "a", "amount_minor": 1000},
+            {"id": "b", "amount_minor": 250},
+            {"id": "c", "amount_minor": "unknown"}]
+accepted, rejected = [], []
+for raw in raw_rows:
+    try:
+        accepted.append(normalize(raw))
+    except ValueError as error:
+        rejected.append({"record": raw, "reason": str(error)})
+assert len(raw_rows) == len(accepted) + len(rejected)
+print(f"accepted={len(accepted)} rejected={len(rejected)} "
+      f"total_minor={sum(row['amount_minor'] for row in accepted)}")`}</WorkshopCode>
+        <p>Using type(amount) is int deliberately rejects booleans, which Python otherwise treats as integers. The example fixes one source contract: amounts are integer minor units in one known currency. It does not infer units from value size. For a real stream, yield normalized rows and write rejected records to bounded durable storage instead of keeping both lists forever.</p>
+        <h3>Practice: extend the contract</h3>
+        <p>Add a required currency, a maximum amount and a test for each failure. Decide whether a negative amount is invalid or represents a refund in your chosen domain.</p>
+        <WorkshopAnswer>
+          <p>Use separate payment and refund semantics or an explicitly signed amount contract. Tests should cover zero, the maximum, one value above it, missing fields and an unexpected type. A broad except Exception that continues silently would hide programming defects and source failures. Catch expected validation failures at the record boundary; fail the run on unavailable storage or corrupted shared configuration.</p>
+          <p>Completion evidence: show the conservation check, rejection reasons and repeatable tests. Keep credentials and live network calls out of unit tests.</p>
+        </WorkshopAnswer>
+        <p>Reference: <a href="https://docs.python.org/3/library/unittest.html">Python unittest</a>. Continue to <a href="/learn/data-engineering/batch-pipeline-from-scratch">a complete batch pipeline</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Never load large files entirely into memory. Use pd.read_csv(chunksize=100_000) to process in chunks, or use PyArrow datasets for columnar projection and predicate pushdown. Memory usage should be constant regardless of file size.',
         'API calls need three things beyond a simple GET: authentication read from environment variables (never hardcoded), pagination that follows the API’s cursor or next-URL, and rate-limit handling that respects 429 responses. This lesson covers the minimum version — Lesson 18 covers all three in much more depth.',

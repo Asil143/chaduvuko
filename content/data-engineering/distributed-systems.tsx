@@ -5,6 +5,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Distributed Systems for Data Engineers — CAP Theorem, Partitioning, Fault Tolerance | Chaduvuko',
@@ -330,9 +331,9 @@ export default function DistributedSystemsModule() {
 
         <Para>
           This is why Cassandra with quorum reads is slower than Cassandra with
-          eventual consistency reads. The quorum read waits for a majority of
-          replicas to agree. The eventual consistency read returns whatever the
-          nearest replica has. For a data engineer choosing a storage system,
+          single-replica reads because more replica responses may be required.
+          Responses are reconciled under the database's versioning rules; replicas
+          do not simply vote on a value. For a data engineer choosing a storage system,
           the latency vs consistency trade-off during normal operation is often
           more practically important than the partition behaviour.
         </Para>
@@ -917,7 +918,8 @@ result = orders_salted.join(store_salted, on='salted_key', how='left')`}
 
         <Para>
           In a cluster of 200 machines, the probability that at least one machine
-          will fail on any given day approaches certainty. A single machine has
+          will fail on a given day can become significant. Assuming independent failures,
+          suppose each machine has
           perhaps a 0.1% daily failure probability. Two hundred machines:
           1 − (0.999)^200 ≈ 18% chance of at least one failure per day. At 1000
           machines: 63% per day. Distributed systems are not resilient to failures
@@ -1352,9 +1354,10 @@ def write_order_count(date: str, count: int, pipeline_run_id: str):
             one enterprise B2B customer accounts for 30% of all orders.
             After the shuffle join, one executor processes 30% of the dataset
             while others process 0.7% each. The straggler completes last,
-            but because it has been running under memory pressure for 4 hours,
-            it has been spilling to disk and producing slightly corrupted
-            partial aggregations. The fix is salting the join key. Understanding
+            and prolonged memory pressure causes spill and long runtimes.
+            Spill is a normal execution mechanism and should not silently corrupt results.
+            Investigate incorrect results separately; salting must preserve join multiplicity.
+            Understanding
             shuffle joins and data skew is what lets you find this in 2 hours
             instead of 2 weeks.
           </Para>
@@ -1556,12 +1559,34 @@ Sagas trade strict, immediate consistency for eventual consistency and no cross-
         ))}
       </section>
 
+
+      <DEWorkshop title="A quorum overlaps; it does not vote on truth"
+        objective="Reason about replica reads/writes, quorum intersection and the limits of consistency claims."
+        prerequisites="Replication, failure modes, partitions and source-version ordering.">
+        <p>With three replicas, a write acknowledged by one replica and a read from two can miss the write entirely. Raising the acknowledged write count to two creates overlap with every two-replica read. That intersection is useful, but it does not alone prove linearizability or resolve conflicting concurrent versions.</p>
+        <WorkshopCode language="python" expectedOutput={"W1_R2_overlap=False\nW2_R2_always_overlap=True"}>{`from itertools import combinations
+replicas = {"A", "B", "C"}
+write_one = {"A"}
+read_two = {"B", "C"}
+pairs = [set(p) for p in combinations(sorted(replicas), 2)]
+print(f"W1_R2_overlap={bool(write_one & read_two)}")
+print(f"W2_R2_always_overlap={all(bool(w & r) for w in pairs for r in pairs)}")`}</WorkshopCode>
+        <p>A replica read needs version reconciliation according to the database's protocol. It need not wait for replicas to “agree by majority.” Define consistency for the exact operation, acknowledge settings and failure case. Consensus, such as a leader committing a replicated log entry, solves a different coordination problem from simply choosing read/write quorum sizes.</p>
+        <h3>Practice: a network partition splits the replicas</h3>
+        <p>One node is isolated from two others. Which side can accept a majority-coordinated write? What should an application do after a write timeout when it does not know whether the write committed?</p>
+        <WorkshopAnswer>
+          <p>A majority protocol normally requires the two-node side to establish the required leadership/term conditions; the isolated node cannot safely commit independently. A timed-out client must handle an uncertain outcome through a stable operation key and read/reconciliation policy. Do not assume failure of the response means failure of the write.</p>
+          <p>For data processing, inspect skew and spill as performance signals. Disk spill is an ordinary execution mechanism; it should not silently corrupt correct aggregations. Investigate logic, nondeterministic operations or actual engine defects when results disagree.</p>
+        </WorkshopAnswer>
+        <p>Reference: <a href="https://raft.github.io/">Raft consensus resources</a> and <a href="/learn/data-engineering/idempotency-atomicity">ambiguous commit recovery</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'CAP theorem: a distributed system can guarantee at most two of Consistency, Availability, and Partition Tolerance. Since network partitions are unavoidable, the real choice is between consistency and availability during a partition. CP systems reject requests to stay consistent; AP systems respond with potentially stale data.',
         'Consistency is a spectrum: linearisable (every read sees the latest write, globally) → serialisable → read-your-writes → monotonic reads → eventual (replicas converge eventually, no timing guarantee). Financial data needs strong consistency; analytics dashboards tolerate eventual consistency.',
         'Leader-follower replication routes all writes to one leader and replicates to followers. Reads from followers may be stale — replication lag is normal. High lag means the follower is struggling. Route time-critical reads to the leader.',
         'Multi-leader replication allows writes from multiple nodes but creates write conflicts. Last-write-wins silently discards data. Conflict-free resolution requires CRDTs or application-level merge logic.',
-        'Leaderless replication uses quorums: W + R > N guarantees that at least one node in every read quorum has the latest write. Tuning W and R trades consistency for latency and availability.',
+        'For fixed replica sets, W + R > N gives quorum intersection. Correctness also depends on version reconciliation, concurrent writes and failure handling; intersection alone does not prove linearizability.',
         'Hash partitioning distributes data evenly for high-cardinality keys. Range partitioning enables efficient range scans. Hot partitions occur when the partition key has low cardinality or monotonically increases — one of the most common performance problems in distributed data systems.',
         'Shuffle joins require all-to-all network data transfer to co-locate matching rows. This is the most expensive operation in distributed processing. Broadcast joins eliminate the shuffle for small tables. Data skew causes stragglers — salt the join key to distribute hot keys across multiple partitions.',
         'Checkpointing saves computation state to durable storage. On failure, resume from the last checkpoint — not from the beginning. Checkpoints are only useful if your processing is idempotent; otherwise resuming from a checkpoint produces duplicate results.',

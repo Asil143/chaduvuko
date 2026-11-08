@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'What is Data? How Computers Store Information — Data Engineering | Chaduvuko',
@@ -151,14 +152,14 @@ export default function WhatIsDataModule() {
           When you tap the DoorDash app and order a biryani, a set of facts gets recorded: what you
           ordered, when you ordered it, from which restaurant, your delivery address, the price, the
           payment method, the device you used, your location coordinates. All of those facts together
-          form one order record. DoorDash processes over 3 million orders every single day. Each one
+          form an example order record. A delivery application can record many observations per order. Each one
           creates dozens of data points. That is data.
         </Para>
 
         <Para>
           When a Stripe payment gateway processes a transaction, it records: the merchant, the
           amount, the currency, the timestamp, the payment instrument used, the success or failure
-          status, the response time. Stripe handles over 500 million transactions every year.
+          status, the response time. This is an example of recorded fields, not a claim about company volume.
           Every single transaction is data.
         </Para>
 
@@ -184,7 +185,7 @@ export default function WhatIsDataModule() {
         <SubTitle>Data is meaningless without context</SubTitle>
 
         <Para>
-          The number 42 is not data. It is just a number. But "$42 — delivery charge — DoorDash order
+          The number 42 is data, but its meaning is unclear without context. "$42 — delivery charge — DoorDash order
           #8734621 — 14 March 2026 — New York" is data. It is a fact about something specific that
           happened. Context is what turns numbers and text into information.
         </Para>
@@ -211,11 +212,11 @@ export default function WhatIsDataModule() {
         </Para>
 
         <Para>
-          This is not a simplification. It is literally true. The reason computers use binary is
-          physical. A transistor — the fundamental building block of every processor and memory
-          chip — is essentially a tiny switch. It can be off or on. No current flowing, or current
-          flowing. Engineers mapped "off" to 0 and "on" to 1. Every piece of data you have ever
-          seen on a screen started as a pattern of these switches.
+          Binary is the logical representation exposed by ordinary digital systems.
+          Switching circuits use robust voltage ranges to represent bits. Physical storage can
+          be more complex: multilevel flash cells encode several bits using several voltage levels,
+          while controllers present a binary interface. Keep the logical bit model separate from
+          the engineering details of each storage device.
         </Para>
 
         <SubTitle>Why not use more than two states?</SubTitle>
@@ -313,23 +314,23 @@ Examples of what fits in 1 byte:
         <CodeBox label="Storage units — from byte to petabyte">{`1 Byte      (B)   = 8 bits
                          ≈ one character of text
 
-1 Kilobyte  (KB)  = 1,024 bytes
+1 Kilobyte  (kB)  = 1,000 bytes; 1 kibibyte (KiB) = 1,024 bytes
                          ≈ one short text message
                          ≈ half a page of plain text
 
-1 Megabyte  (MB)  = 1,024 KB  = ~1 million bytes
+1 Megabyte  (MB)  = 1,000,000 bytes; 1 MiB = 1,048,576 bytes
                          ≈ one medium-quality photo
                          ≈ one minute of compressed audio
 
-1 Gigabyte  (GB)  = 1,024 MB  = ~1 billion bytes
+1 Gigabyte  (GB)  = 1,000 MB = 1 billion bytes; 1 GiB = 1,024 MiB
                          ≈ one full HD movie (compressed)
                          ≈ 1,000 books as plain text
 
-1 Terabyte  (TB)  = 1,024 GB  = ~1 trillion bytes
+1 Terabyte  (TB)  = 1,000 GB = 1 trillion bytes; 1 TiB = 1,024 GiB
                          ≈ 200,000 photos
                          ≈ all books in a large library
 
-1 Petabyte  (PB)  = 1,024 TB  = ~1 quadrillion bytes
+1 Petabyte  (PB)  = 1,000 TB = 1 quadrillion bytes
                          ≈ Google processes ~20 PB per day
                          ≈ Amazon's data warehouse: multi-PB scale`}</CodeBox>
 
@@ -371,9 +372,10 @@ Examples of what fits in 1 byte:
 
         <Para>
           The reason this matters to you: the scale of data directly determines which tools and
-          approaches you use. A 10 MB CSV file can be opened in Excel. A 10 GB CSV takes seconds
-          to load in Python. A 10 TB dataset cannot fit on a single machine at all — you need
-          distributed systems. Understanding scale is how you know which solution is appropriate.
+          approaches you use. A small CSV may fit in a spreadsheet, subject to its row and column limits.
+          A 10 GB CSV can exceed available memory after parsing. A larger dataset can be processed with
+          disk-backed queries and bounded batches, or distributed when throughput and availability require it.
+          Measure the working set and service target before choosing distribution.
         </Para>
       </section>
 
@@ -416,15 +418,17 @@ Examples of what fits in 1 byte:
                            this ceiling at several real companies as their
                            row counts grew past ~2 billion
 
-64-bit integer  = 8 bytes  = values from 0 to ~18.4 quintillion
+64-bit integer  = 8 bytes  = signed: about -9.22 to +9.22 quintillion
+                           unsigned: 0 to about 18.4 quintillion
                            Use case: timestamps (Unix epoch in milliseconds),
                                      large financial transaction IDs`}</CodeBox>
 
         <Para>
-          Decimal numbers (like $349.99) are stored as <strong>floating point</strong> numbers.
+          Fractional numbers have several representations. Binary <strong>floating point</strong> is one;
+          fixed-scale integers and decimal types are alternatives for exact financial quantities.
           Floating point is a way of storing a number with a decimal point by recording a
           mantissa (the significant digits) and an exponent (how far to shift the decimal point).
-          This is how your computer stores $349.99 — not as the exact value, but as the closest
+          When a binary float is chosen, $349.99 is stored as the closest
           representable binary fraction.
         </Para>
 
@@ -575,20 +579,23 @@ barely notices. The file is smaller; some data is lost.`}</CodeBox>
 
         <CodeBox label="The memory hierarchy — speed vs size vs cost">{`Storage Type     Speed           Typical Size     Cost per GB
 ─────────────────────────────────────────────────────────────
-CPU Cache        ~1 ns           4–64 MB          Built into CPU
-RAM              ~100 ns         8–256 GB          ~$5–8/GB
-NVMe SSD         ~100 μs         256 GB–4 TB       ~$0.10/GB
-SATA SSD         ~500 μs         256 GB–8 TB       ~$0.06/GB
-HDD              ~10 ms          1–20 TB           ~$0.02/GB
-Network Storage  ~1 ms–100 ms    Unlimited (cloud) ~$0.02–0.05/GB
+CPU Cache        ~1 ns           Small            Built into CPU
+RAM              ~100 ns         Machine-specific Relatively high cost per byte
+NVMe SSD         ~100 μs         Device-specific  Capacity and I/O trade-off
+SATA SSD         ~500 μs         Device-specific  Capacity and I/O trade-off
+HDD              ~10 ms          Device-specific  Lower capacity cost; mechanical seeks
+Network Storage  ~1 ms–100 ms    Service-specific Requests, transfer and storage charges
+
+Illustrative latency orders of magnitude, not guarantees or current price quotes.
 
 ns = nanosecond (0.000000001 seconds)
 μs = microsecond (0.000001 seconds)
 ms = millisecond (0.001 seconds)`}</CodeBox>
 
         <Para>
-          When you run a Python script that reads a 50 GB CSV file, Python must load it from disk
-          into RAM before it can process anything. If your machine only has 16 GB of RAM, it
+          A script that materializes an entire 50 GB CSV needs memory for the parsed working set,
+          which may exceed the file size. A streaming reader can process records before reading the whole file.
+          If your machine only has 16 GB of RAM, it
           cannot hold 50 GB at once. It has to read, process, and discard data in chunks — or
           crash. This is why data engineers write code that processes data in batches, use
           generators instead of loading everything at once, and choose storage formats (like
@@ -1149,7 +1156,7 @@ Practically, this means: preserving source timestamps so analysts know when even
           {
             error: `ValueError: time data '14-03-2026' does not match format '%Y-%m-%d'`,
             cause: 'Date values in the file are formatted differently from what the parser expects. Different teams, different tools, and different regions use different date formats: DD-MM-YYYY, MM/DD/YYYY, YYYY-MM-DD, 14 Mar 2026, and many others. A single pipeline receiving data from multiple sources often encounters all of them.',
-            fix: 'Use pd.to_datetime(df["date"], infer_datetime_format=True) for flexible parsing, or explicitly handle each format: pd.to_datetime(df["date"], format="%d-%m-%Y"). The best long-term fix is to standardise all dates to ISO 8601 (YYYY-MM-DD) at the point of ingestion.',
+            fix: 'Choose an explicit format from the source contract, for example pd.to_datetime(df["date"], format="%d-%m-%Y", errors="raise"). Do not guess whether 03/04 means March 4 or April 3. Classify intentionally mixed formats and quarantine ambiguous values. Preserve timezone information for instants and choose the business timezone before deriving a calendar date.',
           },
           {
             error: `Database column "amount" type is FLOAT but financial reconciliation shows $0.02 discrepancy`,
@@ -1191,6 +1198,33 @@ Practically, this means: preserving source timestamps so analysts know when even
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Investigate the bytes behind an order"
+        objective="Distinguish characters, encoded bytes and exact monetary values by measuring a real record."
+        prerequisites="No programming background required for the explanation. To run the optional lab, use Python 3 and copy it into a new file.">
+        <p>A support ticket says a customer name is corrupted and the order total is off by a cent. These are two different representation problems. Start with a tiny record you can inspect instead of changing the entire pipeline.</p>
+        <h3>Predict, then run</h3>
+        <p>The word café contains four Unicode code points. UTF-8 encodes the final character using two bytes, so its byte length differs from its character length. A file-size limit concerns bytes; a display limit may concern visible characters. Even code points and visible characters can differ for combining accents and emoji.</p>
+        <WorkshopCode language="python" expectedOutput={"characters=4 bytes=5\nutf8=636166c3a9\namount=0.30\n1000000 bytes = 1.00 MB = 0.95 MiB"}>{`from decimal import Decimal
+
+name = "café"
+encoded = name.encode("utf-8")
+print(f"characters={len(name)} bytes={len(encoded)}")
+print(f"utf8={encoded.hex()}")
+amount = Decimal("0.10") + Decimal("0.20")
+print(f"amount={amount:.2f}")
+size = 1_000_000
+print(f"{size} bytes = {size / 10**6:.2f} MB = {size / 2**20:.2f} MiB")`}</WorkshopCode>
+        <p>Construct Decimal from the original decimal text. Converting an already rounded binary float does not recover the intended source amount. Carry a currency code and rounding policy too: the number of minor units is currency dependent.</p>
+        <h3>Practice: make the corruption visible</h3>
+        <p>Decode the UTF-8 bytes using Latin-1 and compare the result with the original name. Then decode using UTF-8 again. Explain why a decoder can succeed while producing the wrong text. Calculate the byte size of 10 million five-byte names before adding record separators, indexes, or object overhead.</p>
+        <WorkshopAnswer>
+          <p>The wrong decoder produces cafÃ© because it interprets each byte independently. The correct decoder restores café. The raw names occupy 50,000,000 bytes, or 50 MB; a list of Python strings consumes more memory because it also stores objects and references. Successful decoding alone does not establish correctness.</p>
+          <p>Assessment: explain why storing an identifier as text can be correct, why 00123 and 123 may be different identifiers, and why a file checksum cannot tell you whether a column contains dollars or cents.</p>
+        </WorkshopAnswer>
+        <p>Reference: <a href="https://docs.python.org/3/library/decimal.html">Python decimal arithmetic</a> and <a href="https://docs.python.org/3/howto/unicode.html">the Python Unicode HOWTO</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Data is a recorded observation — a fact about the world captured by a system. If it is not recorded, it is not data.',
         'Every computer stores everything as binary — patterns of 0s and 1s. Understanding this explains every storage decision you will ever make.',

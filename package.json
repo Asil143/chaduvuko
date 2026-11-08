@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "tsx scripts/validate-catalog.ts && tsx scripts/validate-seo.ts && tsx scripts/lesson-dates.ts --check && tsx scripts/quick-results.ts --check",
+    "postbuild": "tsx scripts/validate-catalog.ts && tsx scripts/validate-seo.ts && tsx scripts/lesson-dates.ts --check && tsx scripts/quick-results.ts --check && npm run validate:de",
     "validate:catalog": "tsx scripts/validate-catalog.ts",
+    "validate:de": "node --import tsx scripts/validate-de-workshops.ts && node --import tsx scripts/validate-de-code.ts",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "node scripts/copy-duckdb.mjs"

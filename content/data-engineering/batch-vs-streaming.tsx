@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Batch vs Streaming vs Micro-Batch — Data Engineering | Chaduvuko',
@@ -1236,6 +1237,29 @@ The one thing I would add is a data quality check: alert if the number of delive
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Count the same events by two different clocks"
+        objective="Explain how event time, arrival time and a late-data policy change the published answer."
+        prerequisites="Pipeline stages and timestamps; understand the difference between a business event and its ingestion.">
+        <p>Three orders happen before 10:05, but one reaches the platform at 10:12. An operational view at 10:06 sees only two orders. A later reconciled report sees three. Neither processing model removes the need to define which answer a consumer receives and when it can change.</p>
+        <WorkshopCode language="python" expectedOutput={"known_by_10:06=2\nevent_window_after_replay=3"}>{`events = [
+    {"event_minute": 1, "arrival_minute": 1},
+    {"event_minute": 3, "arrival_minute": 12},
+    {"event_minute": 4, "arrival_minute": 5},
+]
+observed = [e for e in events if e["arrival_minute"] <= 6]
+window = [e for e in events if 0 <= e["event_minute"] < 5]
+print(f"known_by_10:06={len(observed)}")
+print(f"event_window_after_replay={len(window)}")`}</WorkshopCode>
+        <p>A watermark is an engine's estimate or policy about event-time progress. It is not proof that every earlier event has arrived. Depending on the engine and operation, late events may update results, go to a side output or be excluded after state cleanup. Batch reports also need correction policies for late source data.</p>
+        <h3>Practice: spend a 30-second latency budget</h3>
+        <p>Ingestion takes 8 seconds, trigger wait takes up to 10, processing takes 7 and serving refresh takes 12. Does the system meet a 30-second event-to-visible target? Which metric would reveal a violation?</p>
+        <WorkshopAnswer>
+          <p>The worst-case sum is 37 seconds. Reduce a measured component or revise the target with the consumer. Observe event-to-visible delay, not just task duration. A batch or micro-batch schedule is not a latency guarantee, and one fast average does not establish a percentile target under load.</p>
+        </WorkshopAnswer>
+        <p>Further study: <a href="/learn/data-engineering/streaming-data">state, event time and streaming recovery</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Batch processing runs on a schedule, processes bounded data, exits, and waits for the next scheduled interval. It is simple, correct, cheap, and the right default for the majority of data engineering workloads. Choose batch unless there is a specific latency requirement that batch cannot meet.',
         'Streaming processing handles each event continuously as it arrives with no run boundary. It is always running, has millisecond-to-second latency, but is significantly more complex and expensive to operate. Choose streaming only when the latency requirement is genuinely below what micro-batch can provide.',

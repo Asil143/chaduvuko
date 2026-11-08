@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Change Data Capture (CDC) — Deep Dive — Data Engineering | Chaduvuko',
@@ -140,8 +141,8 @@ export default function CDCModule() {
         <Para>
           CDC is the most powerful and most complex ingestion pattern. It is powerful
           because it captures <em>everything</em> the database does — with no
-          polling delay, no missed deletes, and the before-image of every changed
-          row available for audit and historical analysis. It is complex because it
+          low polling delay and tracked deletes when the source/connector supports them.
+          Before-image coverage depends on replica identity and source settings. It
           introduces infrastructure (Kafka, Debezium, Schema Registry), operational
           requirements (WAL configuration, replication slot monitoring), and
           correctness challenges (event ordering, at-least-once delivery, schema
@@ -876,7 +877,7 @@ tiny files — unusable for analytics.
 CORRECT APPROACH: buffer in Kafka, write batches to Delta Lake on a
 micro-batch trigger.`}</CodeBox>
 
-        <SubSubTitle>Reading from Kafka and parsing the Avro payload</SubSubTitle>
+        <SubSubTitle>Reading flattened JSON from Kafka</SubSubTitle>
 
         <CodeBox label="Spark Structured Streaming — the read side">{`from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json, current_timestamp
@@ -894,32 +895,34 @@ raw = spark.readStream \\
     .option("maxOffsetsPerTrigger", 500_000) \\
     .load()
 
-orders_schema = StructType() \\
-    .add("order_id",   LongType()) \\
-    .add("status",     StringType()) \\
-    .add("amount",     StringType()) \\  # decimal as string
-    .add("updated_at", LongType()) \\    # microseconds epoch
-    .add("__op",       StringType()) \\  # operation type
-    .add("__lsn",      LongType())       # WAL LSN for ordering
+orders_schema = (StructType()
+    .add("order_id", LongType())
+    .add("status", StringType())
+    .add("amount", StringType())       # source-contract decimal text
+    .add("updated_at", LongType())     # source-contract epoch unit
+    .add("__op", StringType())
+    .add("__lsn", LongType())
+)
 
 parsed = raw.select(from_json(col("value").cast("string"), orders_schema).alias("e")) \\
     .select("e.*").withColumn("ingested_at", current_timestamp())`}</CodeBox>
 
         <SubSubTitle>Upserting to Delta Lake and starting the stream</SubSubTitle>
 
-        <CodeBox label="foreachBatch merge, and the 5-minute trigger">{`def upsert_to_delta(batch_df, batch_id):
-    from delta.tables import DeltaTable
-    if DeltaTable.isDeltaTable(spark, "s3://freshcart-lake/bronze/orders"):
-        delta_table = DeltaTable.forPath(spark, "s3://freshcart-lake/bronze/orders")
-        delta_table.alias("target").merge(
-            batch_df.alias("source"), "target.order_id = source.order_id"
-        ).whenMatchedUpdateAll().whenNotMatchedInsertAll().execute()
-    else:
-        batch_df.write.format("delta").mode("overwrite") \\
-            .partitionBy("date").save("s3://freshcart-lake/bronze/orders")
+        <CodeBox label="foreachBatch merge, and the 5-minute trigger">{`# Requires compatible Spark/Kafka/Delta packages and configured object storage.
+# This schema assumes flattened JSON events. Avro requires an Avro decoder.
+def append_to_bronze(batch_df, batch_id):
+    (batch_df.write.format("delta").mode("append")
+        .option("txnAppId", "orders-cdc-bronze-v1")
+        .option("txnVersion", batch_id)
+        .save("s3://freshcart-lake/bronze/orders"))
+
+# Stable txnAppId + batch_id absorbs a repeated micro-batch write.
+# A reset checkpoint requires a new application ID and an explicit replay plan.
+# Build current state in Silver, retaining deletes and source-version ordering.
 
 query = parsed.writeStream \\
-    .foreachBatch(upsert_to_delta) \\
+    .foreachBatch(append_to_bronze) \\
     .option("checkpointLocation", "s3://freshcart-lake/checkpoints/orders_cdc") \\
     .trigger(processingTime="5 minutes") \\
     .start()
@@ -1149,8 +1152,8 @@ FAILURE 5: Schema change breaks the consumer
             (applicable to users in the EU), customers can request deletion of their
             personal data. When a deletion request is processed by the application
             team, the customer row in PostgreSQL is hard-deleted. The data engineering
-            team has 30 days to ensure that data is also removed from the analytics
-            warehouse and all downstream systems.
+            team follows the privacy team's verified scope, exceptions and response deadline,
+            covering the warehouse and relevant downstream copies.
           </Para>
 
           <Para>
@@ -1220,15 +1223,15 @@ STEP 6: Verify compliance.
   SELECT COUNT(*) FROM gold.customer_ltv WHERE customer_id = {deleted_id};
   -- Must return 0`}</CodeBox>
 
-          <Output>{`Result: GDPR erasure complete within minutes of the application deletion,
-well within the 30-day compliance window.`}</Output>
+          <Output>{`Result: current-table delete propagation verified.
+Snapshots, retained files, exports and restore paths require separate checks.`}</Output>
 
           <Para>
             This pattern — CDC enabling reliable hard-delete propagation — is one of
             the most common business-driven reasons for adopting CDC beyond
-            analytics performance. Incremental ingestion simply cannot support
-            right-to-erasure requirements. CDC is the only alternative to full
-            periodic reloads for propagating deletions.
+            analytics performance. A timestamp-only extractor cannot observe hard deletes.
+            CDC, tombstone feeds, explicit deletion events and snapshot reconciliation are
+            alternative mechanisms; choose one whose completeness can be verified.
           </Para>
         </div>
       </section>
@@ -1419,6 +1422,39 @@ The entire pipeline from application deletion to warehouse erasure completes in 
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Apply CDC without resurrecting a deleted row"
+        objective="Build current state from ordered change versions while tolerating duplicate and stale delivery."
+        prerequisites="Ingestion patterns, primary keys, source change positions and at-least-once delivery.">
+        <p>A delete arrives, followed by an older update delayed in transit. Applying every event blindly resurrects the customer. Preserve the highest applied source version even when the current row is absent. The source connector determines how positions and transaction ordering should be compared.</p>
+        <WorkshopCode language="python" expectedOutput={"current={}\nlast_applied=3"}>{`events = [
+    {"key": 7, "seq": 1, "op": "upsert", "name": "A"},
+    {"key": 7, "seq": 3, "op": "delete"},
+    {"key": 7, "seq": 2, "op": "upsert", "name": "old"},
+    {"key": 7, "seq": 3, "op": "delete"},
+]
+current, versions = {}, {}
+for event in events:
+    key = event["key"]
+    if event["seq"] <= versions.get(key, -1):
+        continue
+    versions[key] = event["seq"]
+    if event["op"] == "delete":
+        current.pop(key, None)
+    else:
+        current[key] = event["name"]
+print(f"current={current}")
+print(f"last_applied={versions[7]}")`}</WorkshopCode>
+        <p>This simulation assumes a monotonic per-key integer sequence. Real log positions may be connector-specific tuples, and a sequence must not be compared as arbitrary text. Store applied versions and sink changes atomically. Retaining a deletion marker prevents stale replay from rebuilding deleted current state.</p>
+        <h3>Practice: plan the snapshot handoff</h3>
+        <p>Explain how you capture an initial snapshot while source writes continue. List what you must monitor if the connector stops for several hours.</p>
+        <WorkshopAnswer>
+          <p>Use the connector's supported snapshot/log-position coordination so changes during the snapshot are neither lost nor applied incorrectly. Monitor source retained-log capacity, replication-slot lag, connector offsets, broker retention and sink progress. A stopped consumer can exhaust source log retention before it exhausts Kafka retention.</p>
+          <p>CDC propagates source changes; it does not discover every downstream copy or prove a deletion request is complete. Track destinations, derived tables, snapshots, caches and restoration behavior. Before-images depend on source/replica-identity settings and may be incomplete.</p>
+        </WorkshopAnswer>
+        <p>Reference: <a href="https://debezium.io/documentation/reference/stable/connectors/postgresql.html">Debezium PostgreSQL connector</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'CDC reads the database WAL (Write-Ahead Log) — the database\'s own durability record. Every INSERT, UPDATE, and DELETE committed to PostgreSQL is recorded in the WAL before data pages are modified. Logical decoding converts binary WAL records into structured events with before/after images and operation type.',
         'PostgreSQL requires wal_level=logical for CDC. This cannot be changed on a running database — it requires a restart. It also requires creating a replication slot (which retains WAL until the consumer advances its LSN), a dedicated replication user, and a publication for the tables to capture.',

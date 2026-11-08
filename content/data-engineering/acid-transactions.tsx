@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'ACID Properties and Transactions — Data Engineering | Chaduvuko',
@@ -330,10 +331,10 @@ WITHOUT ATOMICITY (naive implementation):
         </Para>
 
         <Para>
-          This is why <strong>idempotency</strong> — the ability to safely rerun a pipeline —
-          is built on atomicity. If writes are atomic, a failed run leaves no
-          partial data behind. The next run can safely write the complete batch
-          without worrying about duplicating what was already written.
+          <strong>Idempotency</strong> is a separate requirement: repeating a committed operation
+          must not apply its effect twice. Atomicity prevents partial commits, but a retry after
+          a successful commit whose acknowledgement was lost still needs a stable request key
+          and a deliberate merge or replacement policy.
         </Para>
 
         <SubSubTitle>An atomic batch write, wrapped in try/except with an explicit rollback</SubSubTitle>
@@ -497,9 +498,9 @@ rules the database cannot express as constraints.`}</Output>
           Isolation is the guarantee that concurrent transactions are isolated from
           each other — a transaction in progress cannot see the uncommitted changes
           of another transaction, and two transactions do not produce inconsistent
-          results just because they run at the same time. Every transaction behaves
-          as if it were the only transaction running, even when thousands of
-          transactions execute simultaneously.
+          results outside the chosen isolation level's guarantees. Serializable execution
+          is equivalent to some serial order; weaker levels permit specific concurrency
+          anomalies that applications must account for.
         </Para>
 
         <Para>
@@ -669,8 +670,9 @@ PRACTICAL RULE FOR DATA ENGINEERS:
           Check the default isolation level for a database your pipelines query —
           in PostgreSQL, <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>SHOW TRANSACTION ISOLATION LEVEL;</code>.
           If you have a long-running analytical extraction, confirm it's actually
-          running under REPEATABLE READ rather than the plain default — a query that
-          takes 15 minutes under READ COMMITTED can see rows committed mid-run.
+          running with the intended snapshot semantics. In PostgreSQL, one SELECT at READ COMMITTED
+          uses a statement snapshot; separate statements can see newer commits. REPEATABLE READ
+          lets several extraction queries use the same transaction snapshot.
         </TryThis>
       </section>
 
@@ -1233,10 +1235,9 @@ THE SAFEST RULE:
             <strong>The root cause:</strong> The pipeline was loading settlement
             rows with plain INSERT statements without a transaction boundary.
             When the connection timed out, 8,240 rows were already committed.
-            The retry's ON CONFLICT DO UPDATE clause should have handled
-            duplicates — except that settlement_id (the conflict key) had no
-            UNIQUE constraint in the warehouse. The INSERT silently created
-            duplicate rows instead of upserting.
+            The retry used plain INSERT, and no constraint or merge policy stopped duplicates.
+            In PostgreSQL, ON CONFLICT with a specified key lacking a suitable unique index
+            would instead raise an error; it would not silently become a plain insert.
           </Para>
 
           <Para>
@@ -1370,7 +1371,7 @@ This is exactly what dbt tests are for. A unique test on order_id catches the du
           },
           {
             q: 'Relying on ON CONFLICT DO UPDATE to prevent duplicates without an actual UNIQUE constraint on the conflict column',
-            a: 'This lesson\'s Error Library and Part 09\'s Real World scenario both trace a real financial discrepancy back to exactly this gap — ON CONFLICT has nothing to detect a conflict against without a UNIQUE constraint on settlement_id, so duplicate inserts succeeded silently. The constraint isn\'t optional; the upsert clause depends on it existing.',
+            a: 'PostgreSQL rejects ON CONFLICT (settlement_id) when no matching unique index exists. Plain INSERT without that constraint can accept duplicates. Test the actual schema and the upsert statement together.',
           },
           {
             q: 'Using TRUNCATE + INSERT to reload a table without wrapping both steps in one transaction',
@@ -1450,6 +1451,42 @@ This is exactly what dbt tests are for. A unique test on order_id catches the du
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Crash between the debit and the credit"
+        objective="Show rollback and demonstrate why a successful transaction still needs an idempotency key for retries."
+        prerequisites="Database keys, constraints and basic INSERT/UPDATE. Run the local example with standard-library Python 3.">
+        <p>Atomicity prevents a half-transfer inside a transaction. It does not prevent the same complete transfer from being committed twice. A client can lose the acknowledgement after commit and retry a request whose first execution actually succeeded.</p>
+        <WorkshopCode language="python" expectedOutput={"after rollback=[(1, 1000), (2, 1000)]\nafter retry=[(1, 900), (2, 1100)]"}>{`import sqlite3
+
+db = sqlite3.connect(":memory:")
+db.executescript("""
+CREATE TABLE balances (id INTEGER PRIMARY KEY, cents INTEGER NOT NULL);
+INSERT INTO balances VALUES (1, 1000), (2, 1000);
+CREATE TABLE transfers (request_id TEXT PRIMARY KEY);
+""")
+try:
+    with db:
+        db.execute("UPDATE balances SET cents = cents - 100 WHERE id = 1")
+        raise RuntimeError("crash before credit")
+except RuntimeError:
+    pass
+print(f"after rollback={list(db.execute('SELECT * FROM balances ORDER BY id'))}")
+for _ in range(2):
+    with db:
+        first = db.execute("INSERT OR IGNORE INTO transfers VALUES ('r1')").rowcount
+        if first:
+            db.execute("UPDATE balances SET cents = cents - 100 WHERE id = 1")
+            db.execute("UPDATE balances SET cents = cents + 100 WHERE id = 2")
+print(f"after retry={list(db.execute('SELECT * FROM balances ORDER BY id'))}")`}</WorkshopCode>
+        <p>The request record and balance changes share one transaction. If the process fails before commit, neither survives; if it commits but the acknowledgement is lost, the repeated request ID prevents a second transfer. This small example omits authorization, insufficient-funds rules and currency handling, which a payment system must add.</p>
+        <h3>Practice: move one write outside the boundary</h3>
+        <p>Explain why sending an email or charging an external API inside this database transaction cannot be undone by a database rollback.</p>
+        <WorkshopAnswer>
+          <p>The database controls its own state only. Use an outbox record committed with the business update, then an independently retried publisher and an idempotent receiver. State the guarantee at each boundary. Isolation levels determine which concurrent anomalies are prevented; ordinary read committed is not the same as serial execution. Durability also depends on configured storage, replication and the failure being considered.</p>
+        </WorkshopAnswer>
+        <p>References: <a href="https://docs.python.org/3/library/sqlite3.html">Python SQLite transaction control</a> and <a href="https://www.postgresql.org/docs/current/transaction-iso.html">PostgreSQL isolation</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'ACID solves four problems that arise in concurrent databases: partial updates (Atomicity), constraint violations after update (Consistency), reading in-progress changes (Isolation), and losing committed data on crash (Durability). Every database without ACID is vulnerable to all four.',
         'Atomicity guarantees all-or-nothing execution. A transaction with ten operations either commits all ten or rolls back all ten. No partial state. Implemented via the WAL — changes are only made permanent after the commit record is flushed to disk.',

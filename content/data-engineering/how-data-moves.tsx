@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'How Data Moves Through a Company — Data Engineering | Chaduvuko',
@@ -513,7 +514,7 @@ Container: raw-landing
     events_1710664500.parquet
 
 Key rules for landing zones:
-  ✓ Never delete raw files (storage is cheap; source access is not guaranteed)
+  ✓ Preserve raw files for the approved replay window; enforce retention and deletion policies
   ✓ Partition by date and time for efficient downstream reads
   ✓ Store in original format — do not transform at this stage
   ✓ Add metadata: source name, ingestion timestamp, pipeline run ID
@@ -551,7 +552,7 @@ Key rules for landing zones:
 
 Bronze data is not clean. It contains duplicates, nulls, encoding issues, and inconsistencies. That is expected and acceptable. The purpose of Bronze is not to be clean — it is to be a complete, permanent record of exactly what was received and when.`,
             rules: [
-              'Never delete Bronze data — it is the source of truth for reprocessing',
+              'Retain Bronze for the documented replay window, subject to deletion and retention policies',
               'Add ingestion metadata: source, pipeline run ID, ingested_at timestamp',
               'Convert to Parquet or Delta Lake format for efficient storage',
               'Partition by date for fast time-range queries',
@@ -904,7 +905,7 @@ Most companies need streaming for: fraud detection, live inventory,
                            ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                     LANDING ZONE                                │
-│        Raw files, original format, never deleted                │
+│        Raw files, original format, governed retention           │
 │        Azure ADLS / Amazon S3 / Google Cloud Storage           │
 └──────────────────────────┬──────────────────────────────────────┘
                            │ format standardisation + partitioning
@@ -1252,14 +1253,35 @@ This systematic approach means I never spend more than 15–20 minutes finding t
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Find the first boundary that loses an order"
+        objective="Locate a data discrepancy by reconciling identifiers and totals at each pipeline boundary."
+        prerequisites="What is Data Engineering? Understand source systems, records and consumers.">
+        <p>The operations team sees 180 orders, while the application reports 200. Re-running every task risks duplicating data and destroys useful evidence. Begin by fixing the comparison interval, timezone and record grain. Compare order IDs, not just row counts.</p>
+        <WorkshopCode>{`Boundary             Rows   Distinct order IDs   Paid amount
+Source snapshot       200          200              10000
+Landing manifest      200          200              10000
+Cleaned orders        180          180               9000
+Published daily mart    1          n/a               9000`}</WorkshopCode>
+        <p>The first divergence is between landing and cleaning. Inspect rejected records and transformation predicates there. If the cleaning stage deliberately quarantines 20 malformed records, 200 = 180 accepted + 20 quarantined is a useful accounting identity. If those records are legitimate, the rule needs correction before replay.</p>
+        <h3>Practice: counts can agree while money is wrong</h3>
+        <p>A join adds promotions to orders. One order has two promotions, and another order has no match. An inner join duplicates the first order and drops the second, leaving the same total row count. Explain which two checks catch this when a row-count-only check passes.</p>
+        <WorkshopAnswer>
+          <p>Check uniqueness at the declared order grain and reconcile the set of order IDs against the input. Also compare paid amounts using the same metric definition. Preserve a legitimate many-to-many relationship in a bridge table or aggregate promotions to one row per order before joining; arbitrarily keeping one promotion can lose valid information.</p>
+          <p>For a repair, persist the input manifest, transformation version, rejected IDs and affected dates. Replay only the affected interval into staging, reconcile it, then publish atomically. Retain raw inputs according to an explicit retention and deletion policy rather than indefinitely.</p>
+        </WorkshopAnswer>
+        <p>Architecture note: a small warehouse-first pipeline may use source → staging → mart without a separate landing zone or three lake layers. The invariant is traceability and correct publication, not a mandatory number of layers.</p>
+        <p>Related tutorial: <a href="/learn/data-engineering/idempotency-atomicity">Idempotency and restartability</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
-        'Every piece of data follows the same journey: Source System → Landing Zone → Bronze → Silver → Gold → Consumer. Understanding this path means you can always find where data was lost or changed.',
+        'The example follows Source → Landing → Bronze → Silver → Gold → Consumer. Other architectures combine or omit layers; define and reconcile every actual boundary.',
         'Source systems are not built to serve analytics. They are built to run the business. The data engineer job is to capture data from them without disrupting their primary purpose.',
-        'The landing zone preserves raw data exactly as it arrived. Never delete it. It is your ability to reprocess everything from scratch when transformation logic changes.',
+        'Preserve raw data for a documented replay window. Retention, deletion, backup and access policies determine how long it remains available.',
         'Bronze preserves everything in a queryable columnar format. Silver cleans and conforms to one trusted record per entity. Gold aggregates and shapes data for specific business questions.',
         'Columnar storage (Parquet, Delta Lake) is the foundation of fast analytical queries. It allows reading only the columns needed and enables aggressive compression, making queries 10–100× faster than row-oriented stores.',
         'Batch ingestion is simple, cheap, and correct for most use cases. Streaming is expensive and complex. Choose streaming only when you can identify a specific business decision that requires data fresher than one hour.',
-        'The Medallion Architecture (Bronze-Silver-Gold) is the industry standard pattern. Learn it once and you understand the data platform structure at almost every modern company.',
+        'Medallion is one useful architecture pattern. Warehouse-first and other designs are also valid; choose layers for workload, ownership and recovery requirements.',
         'Data discrepancies should always be investigated by layer bisection — start at the dashboard, work backwards to the source, identify exactly where numbers diverge. Four queries, not four hours.',
         'A single data point — one Uber Eats order — can touch eight systems in 14 hours before it appears in a dashboard metric. Every system in that chain is something a data engineer owns.',
         'The serving layer is not just "put data in the warehouse." It means different things for different consumers: pre-aggregated Gold for analysts, Silver features for scientists, feature stores for ML engineers, reverse ETL for operational systems.',

@@ -119,6 +119,14 @@ Recovered Library content shows a Chaduvuko practice product called **Pipeline P
 - Added new lessons on context-window budgeting/model limits and inference parameters/model selection, each with a practical exercise and quick check.
 - Kept the dedicated GenAI track marked in progress while related lessons remain published under their original AI & ML routes.
 
+## November 8, 2026 — Data Engineering tutorial content revision
+
+- Revised all 47 existing Data Engineering lesson sources with authored guided workshops, specific prerequisite/objective context, worked cases, practice and explained answers.
+- Added a complete local SQLite pipeline and an integrated system-design capstone with recovery and correctness exercises.
+- Corrected identified issues in representation, transaction/retry boundaries, API checkpoints, shell locking, storage retention, historical modeling, distributed-system claims and privacy guidance using primary documentation.
+- Added repeatable verification for all workshops, 28 executable examples, 229 Python syntax blocks and eight local-pipeline recovery scenarios; aligned 41 curriculum reading-time labels with lesson pages.
+- Recorded module-by-module details, references and verification limits in `DATA_ENGINEERING_CONTENT_REVIEW.md`. Existing routes, 47-module order and the rest of the lesson catalog remain intact.
+
 ## Ongoing rules
 - Keep StudyX Overseas separate.
 - Chaduvuko remains the primary EdTech project.

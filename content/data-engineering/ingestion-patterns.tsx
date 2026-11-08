@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Data Ingestion Patterns — Full Load, Incremental, CDC — Data Engineering | Chaduvuko',
@@ -1007,6 +1008,27 @@ The correct monitoring setup: query pg_replication_slots regularly and alert whe
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Do not lose rows that share a watermark"
+        objective="Use a deterministic pagination boundary and explain what a timestamp watermark cannot capture."
+        prerequisites="ORDER BY, WHERE and incremental loading; familiarity with transactions and checkpoints.">
+        <p>You fetch two rows per page ordered by updated_at. The last row has timestamp 10. A third row also has timestamp 10. Saving only the timestamp and asking for updated_at &gt; 10 loses that third row. A tie breaker makes pagination deterministic within a stable extraction snapshot.</p>
+        <WorkshopCode language="python" expectedOutput={"timestamp_only=[4]\ncomposite_cursor=[3, 4]"}>{`rows = [(10, 1), (10, 2), (10, 3), (11, 4)]
+last = rows[1]
+wrong = [row_id for ts, row_id in rows if ts > last[0]]
+correct = [row_id for ts, row_id in rows if (ts, row_id) > last]
+print(f"timestamp_only={wrong}")
+print(f"composite_cursor={correct}")`}</WorkshopCode>
+        <p>Use the same ordering in the query and checkpoint. Fix an upper boundary for the run and advance progress only after durable output. This protects ties, but does not solve backdated updates, untracked hard deletes or records committed later with older timestamps. A lookback plus idempotent merge handles bounded lateness; CDC or reconciliation may be required for stronger completeness.</p>
+        <h3>Practice: choose per source table</h3>
+        <p>Pick a pattern for a 200-row reference table, a mutable billion-row table with a reliable update sequence, and a customer table requiring tracked hard deletes.</p>
+        <WorkshopAnswer>
+          <p>A full snapshot is often simplest for the reference table. A reliable monotonic change sequence can support incremental extraction for the large mutable table. For customer deletes, use CDC, a reliable deletion feed, tombstones or snapshot reconciliation. An updated_at predicate alone cannot find a row that no longer exists.</p>
+          <p>Assessment: inject a crash after sink commit but before checkpoint advancement and demonstrate safe replay. Then state exactly how long a source outage can last before the source's retained change history is insufficient.</p>
+        </WorkshopAnswer>
+        <p>Related tutorial: <a href="/learn/data-engineering/change-data-capture">snapshot and change-log coordination</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Three ingestion patterns cover every source: Full Load (read everything, replace destination), Incremental High-Watermark (read only changed rows since last checkpoint), and CDC (read the database transaction log for every operation). Every source table fits one of these three.',
         'Full load is the right choice for small reference tables (under 1 million rows), tables with no reliable change tracking, and tables where deletes must be reflected and CDC is too complex. Use the staging table swap variant to avoid the empty-table window that truncate-and-reload creates.',

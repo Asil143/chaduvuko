@@ -3,6 +3,7 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
@@ -642,10 +643,10 @@ class TestNormaliseOrder:
         raw = {'order_id': 'O1', 'total_cents': 100, 'status': 'placed',
                'city': '   ', 'created_at': '2026-03-20T00:00:00Z'}
         result = normalise_order(raw)
-        assert result['city'] is None`}
-        </CodeBox>
-        <CodeBox label="unit testing — type-coercion and required-field tests">
-{`    def test_float_total_cents_coerced_to_int(self):
+        assert result['city'] is None
+
+    # Additional tests remain inside TestNormaliseOrder.
+    def test_float_total_cents_coerced_to_int(self):
         # Source system sometimes sends "349.00" as a float string
         raw = {'order_id': 'O1', 'total_cents': '349.00', 'status': 'placed',
                'created_at': '2026-03-20T00:00:00Z'}
@@ -1672,10 +1673,10 @@ with DAG(
     catchup=False,                       # don't backfill missed runs on startup
     max_active_runs=1,                   # don't allow parallel runs of this DAG
     tags=['freshcart', 'daily', 'gold'],
-) as dag:`}
-        </CodeBox>
-        <CodeBox label="Airflow DAG — tasks 1 and 2: validate raw, then transform to silver">
-{`    # Task 1: validate raw data landed completely
+) as dag:
+
+    # Task declarations belong inside the DAG context.
+    # Task 1: validate raw data landed completely
     validate_raw = PythonOperator(
         task_id='validate_raw_completeness',
         python_callable=check_all_stores_landed,   # custom function
@@ -1688,10 +1689,10 @@ with DAG(
         application='s3://freshcart-jobs/silver_transform.py',
         application_args=['--date', '{{ ds }}'],
         conf={'spark.executor.memory': '4g'},
-    )`}
-        </CodeBox>
-        <CodeBox label="Airflow DAG — tasks 3 and 4: aggregate to gold, validate, and wire the chain">
-{`    # Task 3: run Spark gold layer aggregation
+    )
+
+    # Add the remaining tasks, then wire dependencies.
+    # Task 3: run Spark gold layer aggregation
     gold_aggregate = SparkSubmitOperator(
         task_id='aggregate_to_gold',
         application='s3://freshcart-jobs/gold_aggregate.py',
@@ -2949,6 +2950,32 @@ spark.sql("OPTIMIZE orders WHERE order_date >= '2026-01-01'")`}
           relevant through the next wave of platform changes.
         </Para>
       </QA>
+
+
+      <DEWorkshop title="Turn an answer into a testable engineering argument"
+        objective="Demonstrate assumptions, trade-offs, failure behavior and verification instead of memorizing tool claims."
+        prerequisites="Complete the Data Engineering track and prepare the capstone artifacts from System Design.">
+        <p>Use the questions as prompts for reasoning. A strong answer can be inspected: state the workload, the guarantee and its boundary, the failure case and how you would test it. If you have not operated a system, describe the lab evidence honestly rather than inventing production scale.</p>
+        <WorkshopCode>{`Practice prompt
+“Count each payment once despite retries and publish daily revenue.”
+
+A reviewable answer must state:
+  Identity: stable payment/event key and source update ordering
+  Metric: capture/refund rules, currency and business-day boundary
+  Recovery: sink commit versus acknowledgement/checkpoint timing
+  Quality: duplicate, missing-source and reconciliation checks
+  Publication: provisional/final status and correction policy
+  Operations: freshness objective, retained replay range and incident owner
+  Evidence: code, tests and a failure trace from your project`}</WorkshopCode>
+        <h3>Practice: score your own answer</h3>
+        <p>Give yourself 0–2 points for each of requirements, modeling, implementation, failure analysis, verification and communication. A 0 is missing; 1 is an assertion; 2 includes an example or evidence. Re-answer the weakest dimension using a concrete fixture.</p>
+        <WorkshopAnswer>
+          <p>For recovery, show the transaction/inbox example from Message Brokers and the crash test from the batch pipeline. For modeling, demonstrate that an order-to-items join does not double revenue. For time, explain half-open intervals and late corrections. For verification, reconcile keys and money rather than relying on “the job is green.”</p>
+          <p>Challenge absolutes: exactly-once has a scope; a hash is not anonymization; compaction is not an instantaneous snapshot; a watermark does not prove completeness; a cloud service does not remove application ownership. State version-specific behavior when discussing an API or engine.</p>
+          <p>Completion evidence: deliver a short design, a runnable demonstration and a repair runbook. Career preparation is complete when you can explain and defend the system you built, including the limitations you observed.</p>
+        </WorkshopAnswer>
+        <p>Revisit <a href="/learn/data-engineering/system-design-de">the capstone</a> and <a href="/learn/data-engineering/batch-pipeline-from-scratch">the runnable pipeline</a> to supply evidence for these answers.</p>
+      </DEWorkshop>
 
       <KeyTakeaways items={[
         'Python generators are the correct tool for processing large files in memory-constrained pipelines — yield one record at a time rather than loading everything into memory. Chain generators for a fully lazy, memory-efficient pipeline.',

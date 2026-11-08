@@ -60,7 +60,7 @@ print(warehouse, "| dropped", len(raw) - len(rows), "bad row")`,
   },
 
   [`${E}/how-data-moves`]: {
-    answer: 'Data moves through a company along one path: source systems → a landing zone with raw copies → bronze (raw, typed) → silver (cleaned) → gold (business-ready) → dashboards, models and apps. Knowing the path tells you where data was lost or changed.',
+    answer: 'Trace data through source, ingestion, validated storage, modeled outputs and consumers. Landing and Bronze/Silver/Gold are one useful design, not a mandatory path. Define and reconcile the boundaries actually operated.',
     points: [
       'Source systems run the business; pipelines must not slow them down.',
       'Never delete the landing zone: it lets you reprocess from scratch.',
@@ -747,7 +747,7 @@ with DAG("orders_daily", start_date=datetime(2024, 3, 1),
   [`${E}/data-lake-architecture`]: {
     answer: 'A data lake stores raw data of any format on cheap object storage, separates compute from storage, and applies schema when data is read. Organising it into zones (landing, bronze, silver, gold) with formats, partitions and a catalogue keeps it usable.',
     points: [
-      'Landing is immutable raw input.',
+      'Landing preserves approved source inputs within retention and deletion policy.',
       'Convert to Parquet and partition early.',
       'Without governance a lake becomes a swamp.',
     ],
@@ -769,10 +769,10 @@ s3://lake/gold/daily_revenue/                       business-ready`,
   },
 
   [`${E}/medallion-architecture`]: {
-    answer: 'The medallion architecture organises a lakehouse into three layers of rising quality: bronze holds raw data as received, silver holds cleaned, typed and deduplicated current records, and gold holds business-level aggregates ready for dashboards and models.',
+    answer: 'Medallion organizes datasets into layers of increasing quality: Bronze preserves approved source data, Silver contains validated models, and Gold serves consumers. Silver may contain current entities, events or historical dimensions; declare each dataset’s grain.',
     points: [
       'Bronze is append-only; never apply business logic there.',
-      'Silver is one row per business key; bronze keeps the history.',
+      'State each table’s grain and retained history independently of its layer name.',
       'Gold tables are shaped for specific consumers.',
     ],
     example: {
@@ -1027,12 +1027,12 @@ SELECT COUNT(*) AS remaining FROM customers WHERE customer_id = 20;`,
       question: 'Which right lets a person ask a company to delete their personal data?',
       options: ['Right to portability', 'Right to erasure', 'Right to object', 'Purpose limitation'],
       answer: 1,
-      explanation: 'GDPR\'s right to erasure (and CCPA\'s right to delete) require removing the person\'s data on request.',
+      explanation: 'These rights provide deletion mechanisms subject to each law’s scope, conditions and exceptions. Follow the approved request-handling process.',
     },
   },
 
   [`${E}/streaming-data`]: {
-    answer: 'A stream is an ordered, replayable, append-only log of immutable events. Producers append events, consumers read them at their own pace and track their position (offset), and partitions split a stream so many consumers can share the work.',
+    answer: 'A stream is an unbounded sequence of records. A durable partitioned log adds partition append order and replay within retention, while consumers track independent positions. Other streaming sources can provide different guarantees.',
     points: [
       'Streams are unbounded; there is no "end of the data".',
       'Corrections are new events; nothing is updated in place.',
@@ -1177,7 +1177,7 @@ jobs:
     answer: 'Infrastructure as code defines cloud resources (buckets, warehouses, roles) in version-controlled files and applies them with a tool such as Terraform: init, then plan to preview changes, then apply. State maps the code to real resources and is shared remotely with locking.',
     points: [
       'Always read the plan before applying.',
-      'Use remote state with locking (for example S3 plus DynamoDB).',
+      'Use protected remote state and backend locking supported by the pinned Terraform version.',
       'Changes go through pull requests like any other code.',
     ],
     example: {

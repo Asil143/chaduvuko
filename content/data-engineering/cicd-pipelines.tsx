@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'CI/CD for Data Pipelines — Testing, Deployment, and Environments | Chaduvuko',
@@ -868,6 +869,32 @@ The goal is not process for its own sake — it is making the data platform trus
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Deploy a schema change without breaking active consumers"
+        objective="Use a staged compatibility migration with reproducible test inputs and a data repair plan."
+        prerequisites="Git, tests, pipeline manifests, dataset grain and consumer contracts.">
+        <p>You want to rename net_revenue to net_revenue_minor. Renaming it in place can break dashboards even if all new model tests pass. During deployment old and new code may run at the same time, so compatibility is a property of version combinations, not one branch's unit tests.</p>
+        <WorkshopCode>{`Expand
+  Add net_revenue_minor while keeping the old consumer contract available.
+  Specify units/currency and compare values from both versions.
+Migrate
+  Move known consumers to the new field; track owners and usage.
+  Validate backfills using the same input snapshot and expected grain.
+Contract
+  Remove the old field only after the documented compatibility window.
+Recover
+  Revert code/config when appropriate; repair previously written outputs
+  using a recorded replay interval and validation before publication.`}</WorkshopCode>
+        <p>Use small synthetic fixtures for pure business rules and representative integration tests for engine behavior. A staging clone can still expose sensitive production data and consume compute; apply its access policy deliberately. Testing only changed models is useful when dependency metadata and downstream coverage are trustworthy.</p>
+        <h3>Practice: a green build still breaks finance</h3>
+        <p>The renamed column passes all tests, but a dashboard queries the old name directly. Which missing test or process would have caught this? What proves a rollback repaired yesterday's published output?</p>
+        <WorkshopAnswer>
+          <p>Add consumer contract checks or query smoke tests and register dashboard dependencies. Keep the old interface during migration. A Git revert repairs future instructions; reconcile and republish affected output versions separately. Record commit, dependency lock, input manifest, run parameters and tested outputs so the release can be reproduced.</p>
+          <p>Assessment: test fresh installation, incremental upgrade, mixed-version access, a failed migration and rollback/replay. Promote the same reviewed artifact instead of rebuilding an untracked variant for production.</p>
+        </WorkshopAnswer>
+        <p>Related tutorial: <a href="/learn/data-engineering/git-for-data">release manifests and data recovery</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Data pipeline CI/CD has higher stakes than software CI/CD. A software bug surfaces as a visible error. A data bug looks like normal data but produces wrong numbers — discovered hours or days later after decisions have been made. This asymmetry demands rigorous testing before production deployment.',
         'Three environments: Dev (individual developer sandbox, small data subset, isolated schema), Staging/CI (Zero-Copy Clone of production data, isolated per PR, created on PR open and torn down after merge), Production (full data, pipeline service accounts only, no direct developer write access).',

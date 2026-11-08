@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Slowly Changing Dimensions (SCD) — Data Engineering | Chaduvuko',
@@ -450,9 +451,9 @@ def load_dim_customer_scd2(
         <Para>
           dbt provides first-class support for SCD Type 2 through its snapshot
           feature. A dbt snapshot monitors a source query for changes to specified
-          columns and automatically manages the valid_from, valid_to, and
-          is_current columns. It is the standard way to implement Type 2 dimensions
-          in a dbt-based platform.
+          columns and maintains metadata such as dbt_valid_from, dbt_valid_to and dbt_scd_id.
+          Derive a current-row flag from the configured end-value policy; do not assume an
+          is_current column is automatically created. Snapshot options vary by dbt version.
         </Para>
 
         <SubSubTitle>Strategy 1 — timestamp</SubSubTitle>
@@ -1209,6 +1210,29 @@ The fix is to run snapshots frequently — every 15-30 minutes for dimensions th
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Join a fact to the version valid when it happened"
+        objective="Use non-overlapping half-open validity intervals and handle boundary events without duplicate matches."
+        prerequisites="Dimensional modeling, joins and event timestamps.">
+        <p>A customer moves from Chennai to Hyderabad at 12:00. An order exactly at 12:00 should match one version. If both intervals include the boundary, the join produces two rows. If neither includes it, the order loses its dimension.</p>
+        <WorkshopCode language="python" expectedOutput={"order_at_11=Chennai\norder_at_12=Hyderabad"}>{`versions = [
+    {"city": "Chennai", "valid_from": 0, "valid_to": 12},
+    {"city": "Hyderabad", "valid_from": 12, "valid_to": 24},
+]
+for order_hour in [11, 12]:
+    matches = [v for v in versions if v["valid_from"] <= order_hour < v["valid_to"]]
+    assert len(matches) == 1
+    print(f"order_at_{order_hour}={matches[0]['city']}")`}</WorkshopCode>
+        <p>Use the same timezone and precision for fact time and validity bounds. A NULL end can represent an open-ended version when the join handles it explicitly. Test that intervals do not overlap and that at most one current version exists per entity.</p>
+        <h3>Practice: the move is reported tomorrow</h3>
+        <p>The source tells you tomorrow that the move actually took effect at 10:00 today. Decide whether valid_from means business-effective time or the time the platform first observed the change. What happens to orders from 10:00 to 12:00?</p>
+        <WorkshopAnswer>
+          <p>If the model tracks business validity, split or repair the intervals and reattribute affected facts according to policy. If it tracks observation time, do not silently pretend the earlier state was known. For both questions retain effective time and recorded time separately. A polling snapshot cannot reconstruct changes that happened and disappeared between polls unless the source supplies history.</p>
+          <p>Completion evidence: tests for exact-boundary joins, overlapping versions, late facts, deleted entities and out-of-order corrections. Do not fabricate historical versions when bootstrapping a Type 2 dimension from a current-state-only source.</p>
+        </WorkshopAnswer>
+        <p>Further tutorial: <a href="/learn/dbt">dbt snapshots and tests</a>; compare source-effective timestamps with snapshot observation semantics.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'SCD patterns answer the question: when a dimension attribute changes, what should happen to the historical facts that referenced the old value? The answer depends entirely on whether historical accuracy matters for the business questions being answered.',
         'Type 0 (fixed) — attribute never changes. Type 1 (overwrite) — update in place, no history kept. Type 2 (add row) — new row per version, full history. Type 3 (add column) — current + one previous value. Type 4 (mini-dimension) — rapidly-changing attributes split into their own small dimension, referenced directly by the fact table. Type 6 (hybrid) — full history + current value in every row. Type 7 (durable key) — a stable durable key copied onto every dimension version and stored on the fact row alongside the Type 2 surrogate key, so the fact table is written once and never updated.',

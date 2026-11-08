@@ -3,11 +3,12 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Data Engineering in the US Job Market (2026) — Data Engineering | Chaduvuko',
   description:
-    'Real 2026 salary data, top hiring companies, in-demand skills, how to read a JD, how to break in from a non-CS background, and everything you need to navigate the US data engineering job market.',
+    'Research data engineering roles, compare compensation, interpret required skills and build portfolio evidence using traceable employer postings.',
 }
 
 // ── Local components ────────────────────────────────────────────────────────
@@ -133,11 +134,9 @@ export default function DEUsaJobMarketModule() {
         <SectionTitle>Data Engineering in the US — 2026 Reality</SectionTitle>
 
         <Para>
-          Data engineering is one of the fastest-growing and highest-compensating
-          technology disciplines in the US right now. The demand for skilled data
-          engineers significantly exceeds the supply — particularly for engineers who
-          understand both the engineering and the data architecture sides of the role,
-          not just the tools.
+          Data engineering roles differ by employer, level, location and the systems a team operates.
+          Research them using dated employer postings, clearly distinguish required and preferred skills,
+          and compare scope and expected ownership rather than relying on a title alone.
         </Para>
 
         <Para>
@@ -155,12 +154,12 @@ export default function DEUsaJobMarketModule() {
         <HighlightBox>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 20 }}>
             {[
-              { stat: '35,000+', label: 'DE job openings in the US', sub: 'Active listings, March 2026' },
-              { stat: '2.6×', label: 'Demand vs supply ratio', sub: 'Skilled DEs vs open roles' },
-              { stat: '14%', label: 'YoY salary growth', sub: 'Mid-level DE, national median' },
-              { stat: '$130K–$175K', label: 'Mid-level DE range', sub: 'Total comp, product co., national median' },
-              { stat: '8–9 months', label: 'Time to first job', sub: 'From non-CS with the right prep' },
-              { stat: '61%', label: 'Roles prefer cloud cert', sub: 'AWS, Azure, or GCP cert' },
+              { stat: 'Source', label: 'Employer postings', sub: 'Save URL, requisition ID and collection date' },
+              { stat: 'Scope', label: 'Responsibilities', sub: 'Distinguish pipeline, platform and analytics work' },
+              { stat: 'Level', label: 'Expected ownership', sub: 'Compare decisions and impact, not only titles' },
+              { stat: 'Pay', label: 'Compensation components', sub: 'Separate base salary, bonus and equity' },
+              { stat: 'Proof', label: 'Portfolio evidence', sub: 'Show tests, recovery and design reasoning' },
+              { stat: 'Fit', label: 'Practical constraints', sub: 'Review location and role requirements' },
             ].map((item) => (
               <div key={item.label} style={{
                 background: 'var(--bg2)', border: '1px solid var(--border)',
@@ -183,13 +182,11 @@ export default function DEUsaJobMarketModule() {
         </HighlightBox>
 
         <Callout type="info">
-          <strong>Data source:</strong> Salary figures in this lesson are sourced from
-          Levels.fyi, Glassdoor, LinkedIn Salary Insights, and BLS Occupational
-          Employment data, cross-referenced with data engineering community surveys.
-          All figures reflect March 2026 data. Figures are base salary unless
-          explicitly marked total comp — bonus and equity (RSUs) typically add
-          15–45% at product companies and public tech companies on top of base,
-          and can add significantly more at pre-IPO startups if the exit is favorable.
+          <strong>Interpret the examples carefully:</strong> The salary bands, city multipliers,
+          company comparisons and career timelines below are illustrative teaching scenarios.
+          A supporting survey is not supplied, so they must not be treated as verified 2026 market
+          statistics, live vacancies or promises of employment. Use current employer disclosures
+          for decisions and distinguish guaranteed cash from uncertain equity value.
         </Callout>
       </section>
 
@@ -197,8 +194,8 @@ export default function DEUsaJobMarketModule() {
 
       {/* ── Part 02 — Salary Data ────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
-        <SectionTag text="// Part 02 — Real Salary Data" />
-        <SectionTitle>Salaries — What Data Engineers Actually Earn in the US</SectionTitle>
+        <SectionTag text="// Part 02 — Comparing Compensation" />
+        <SectionTitle>Reading Salary Bands and Total Compensation</SectionTitle>
 
         <Para>
           Salary data for data engineering in the US is scattered and often
@@ -208,9 +205,9 @@ export default function DEUsaJobMarketModule() {
           with enough specificity to be genuinely useful for career planning.
         </Para>
 
-        <SubTitle>By experience level — national median, product company baseline</SubTitle>
+        <SubTitle>Illustrative experience bands — not national medians</SubTitle>
 
-        <CodeBox label="DE salary by experience — product company, national median (2026)">{`Level              Years     Base Salary Range    Total Comp (with equity)
+        <CodeBox label="Illustrative compensation scenarios — not a verified market survey">{`Level              Years     Base Salary Range    Total Comp (with equity)
 ──────────────────────────────────────────────────────────────────────
 Junior DE          0–2 yrs   $75K–$100K           $80K–$110K
                              Entry into DE from
@@ -294,7 +291,7 @@ Notes:
           same role, experience, and city.
         </Para>
 
-        <CodeBox label="Salary multiplier by company type — applied to national mid-level base">{`Company Type          Multiplier   Mid-level Total Comp  Why
+        <CodeBox label="Illustrative company comparisons — replace with dated employer disclosures">{`Company Type          Multiplier   Mid-level Total Comp  Why
 ──────────────────────────────────────────────────────────────────────
 FAANG / AI Labs       1.75×        $175K–$260K           Stock + high base,
 (Amazon, Google,                                          competitive global
@@ -646,9 +643,9 @@ AWS Certified Data Engineer            High        AWS has the largest market
 – Associate                                        share of DE job postings.
                                                     Directly relevant content.
 
-Microsoft Azure Data Engineer          High        Valuable specifically at
-Associate (DP-203)                                 companies already on Azure
-                                                    (common in large enterprises).
+Microsoft Fabric Data Engineer        Contextual  DP-700; match the target role
+Associate (DP-700)                                 and its actual Fabric workload.
+                                                    Azure DP-203 retired March 31, 2025.
 
 Google Cloud Professional              Medium-High Smaller market share than
 Data Engineer                                      AWS/Azure but growing,
@@ -769,7 +766,7 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
       {/* ── Part 09 — Real World ─────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 09 — Real World" />
-        <SectionTitle>From Retail Manager to Data Engineer — A Real Career Story</SectionTitle>
+        <SectionTitle>From Retail Manager to Data Engineer — An Illustrative Career Scenario</SectionTitle>
 
         <Para>
           Composite story based on common patterns among Chaduvuko learners who broke
@@ -969,6 +966,25 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Build a job-market dataset you can defend"
+        objective="Research a target role using traceable postings, comparable compensation fields and demonstrated skills."
+        prerequisites="Understand the responsibilities of data engineering and adjacent data roles. No paid tool is required.">
+        <p>Collect ten current employer postings for a location and level you can realistically target. Record the employer URL and collection date. Deduplicate reposts by employer and requisition ID; ten copies of one opening are one observation. This makes your research a small data-engineering exercise rather than a collection of impressions.</p>
+        <WorkshopCode>{`posting_id | collected_at | employer_url | location | level
+employment_type | required_skills | preferred_skills
+salary_currency | base_min | base_max | bonus | equity
+remote_policy | work_authorization_notes | missing_fields`}</WorkshopCode>
+        <p>Keep required and preferred skills separate. Preserve missing compensation as missing instead of inventing a value. An advertised salary band, an accepted offer and a self-reported total-compensation record measure different things. Do not pool them into one “national median.” Broad occupational statistics are context, not a direct salary estimate for every role named Data Engineer.</p>
+        <h3>Practice: turn evidence into a learning plan</h3>
+        <p>If SQL appears in 9 of your 10 postings, orchestration in 6 and a particular warehouse in 3, propose a four-week study plan. State what the sample cannot tell you about the whole US market.</p>
+        <WorkshopAnswer>
+          <p>Prioritize a tested SQL pipeline and an orchestrated replayable project, then study the warehouse used by your strongest target roles. Produce a README, data model, failure demonstration and reconciliation query. The sample describes your chosen employers and dates; it cannot establish national demand, a salary growth rate, a hiring probability or a guaranteed time to employment.</p>
+          <p>Completion evidence: share the source URLs, deduplication rule, missing-data policy and the project artifact supporting each claimed skill. Review credential status on the issuer’s site before paying for preparation.</p>
+        </WorkshopAnswer>
+        <p>Official references: <a href="https://www.bls.gov/ooh/computer-and-information-technology/database-administrators.htm">BLS database occupations</a>, <a href="https://learn.microsoft.com/en-us/credentials/certifications/azure-data-engineer/">retired Azure Data Engineer credential</a> and <a href="https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/">Fabric Data Engineer credential</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'A CS degree is one signal among several — a strong portfolio and cloud certification can substitute at most product companies and startups.',
         'Community college and bootcamp paths are well-worn and respected if the work produced is genuinely strong.',

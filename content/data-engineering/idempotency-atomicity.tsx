@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Idempotency, Atomicity, and Pipeline Restartability — Data Engineering | Chaduvuko',
@@ -360,7 +361,11 @@ def is_duplicate(event_id: str, redis_client) -> bool:
     result = redis_client.set(f'processed:{event_id}', '1', nx=True, ex=86400)
     return result is None   # None = key already existed = duplicate
 
-# Database-level, for pipelines that must guarantee exactly-once:
+# A cache claim is not atomic with the effect: a crash after SET NX can
+# lose work; expiry can allow an old duplicate. Use a coordinated design.
+
+# Database alternative: execute the following SQL, not Python.
+inbox_sql = """
 CREATE TABLE IF NOT EXISTS pipeline.processed_events (
     event_id VARCHAR(100) PRIMARY KEY, processed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -368,7 +373,9 @@ CREATE TABLE IF NOT EXISTS pipeline.processed_events (
 INSERT INTO pipeline.processed_events (event_id) VALUES ('evt_xxx')
 ON CONFLICT (event_id) DO NOTHING RETURNING event_id;
 -- returns a row  → first time seeing this event → process it
--- returns nothing → duplicate → skip it`}</CodeBox>
+-- returns nothing → duplicate → skip it
+"""
+# Commit inbox insertion and its database effect in the SAME transaction.`}</CodeBox>
 
         <Output>{`>>> INSERT ... ON CONFLICT (event_id) DO NOTHING RETURNING event_id  (2nd delivery of evt_xxx)
 (0 rows)
@@ -485,9 +492,10 @@ def write_parquet_atomically(df, final_path: str) -> None:
                         "FROM silver.orders WHERE ingested_at > NOW() - INTERVAL '7 days' GROUP BY 1) c")
             avg_daily = cur.fetchone()[0] or 0
             if avg_daily > 0 and abs(len(rows) - avg_daily) / avg_daily > 0.5:
-                raise ValueError(f'Staging row count {len(rows)} deviates >50% from 7-day average {avg_daily:.0f}')`}</CodeBox>
+                raise ValueError(f'Staging row count {len(rows)} deviates >50% from 7-day average {avg_daily:.0f}')
 
-        <CodeBox label="Phase 3 — promote, and always clean up staging either way">{`        # Phase 3: validation passed — atomically promote staging to production
+        # Phase 3 continues inside the same try block.
+        # Phase 3: validation passed — atomically promote staging to production
         with dest_conn:
             dest_conn.execute(f"""
                 INSERT INTO silver.orders SELECT * FROM {staging_table}
@@ -1094,6 +1102,30 @@ The broader principle: the pipeline should have no externally-visible side effec
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Retry an old update after a new update"
+        objective="Protect business state from stale replays and define exactly what remains unchanged across retries."
+        prerequisites="Transactions, business keys and upsert logic.">
+        <p>An upsert prevents duplicate keys but can still overwrite newer values with older ones. A pipeline that receives paid version 2 and then replays pending version 1 needs a version guard as well as a uniqueness constraint.</p>
+        <WorkshopCode language="python" expectedOutput={"naive=pending\nguarded=paid version=2"}>{`updates = [(2, "paid"), (1, "pending"), (2, "paid"), (1, "pending")]
+naive = None
+state = (-1, None)
+for version, status in updates:
+    naive = status
+    if version > state[0]:
+        state = (version, status)
+print(f"naive={naive}")
+print(f"guarded={state[1]} version={state[0]}")`}</WorkshopCode>
+        <p>State the rule for equal versions too: identical duplicates can be ignored, but different payloads with the same version indicate a contract violation. Separate operational fields such as last_attempt_at from source truth; a changing attempt timestamp need not mean the business result changed.</p>
+        <h3>Practice: fill the crash matrix</h3>
+        <p>For each point—before write, during transaction, after commit but before acknowledgement, after output commit but before checkpoint—state whether the next attempt repeats work and why the final result remains correct.</p>
+        <WorkshopAnswer>
+          <p>Before commit, no new durable output exists. During a failed transaction, changes roll back. After commit with lost acknowledgement, the operation may already have happened: a stable key/version must absorb repetition. After output commit but before checkpoint, the source interval is replayed; guarded merges or deterministic partition replacement prevent an extra business effect.</p>
+          <p>Restartability usually permits bounded replay from the last safe checkpoint; it does not require resuming at the exact CPU instruction that failed. Test both equal inputs and deliberately reordered updates.</p>
+        </WorkshopAnswer>
+        <p>Continue with <a href="/learn/data-engineering/error-handling-retries">retry budgets and error classification</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Idempotency means running a pipeline N times produces the same result as running it once. The three mechanisms: upserts (ON CONFLICT DO UPDATE) with UNIQUE constraints for database writes, fixed extraction windows (not relative NOW() windows) for extraction, and overwrite mode (not append) for file writes.',
         'Atomicity means each unit of work either completes fully or leaves no trace. For databases: wrap each batch in a transaction. For table swaps: use ALTER TABLE RENAME in a single transaction (PostgreSQL DDL is transactional) or ALTER TABLE SWAP WITH (Snowflake). For files: write to temp then rename; use Delta Lake for multi-file atomicity.',

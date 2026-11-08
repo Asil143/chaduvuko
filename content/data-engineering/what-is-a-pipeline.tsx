@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'What is a Data Pipeline? Anatomy and Design Principles — Data Engineering | Chaduvuko',
@@ -1182,6 +1183,28 @@ The distinction matters practically: a pipeline can exist without a DAG (a cron 
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Define what success means at every stage"
+        objective="Specify observable input/output contracts and prevent a successful task from publishing incomplete data."
+        prerequisites="Python/SQL basics and full versus incremental extraction.">
+        <p>Imagine a five-stage orders pipeline. Extraction returns zero rows because the source is genuinely quiet—or because an exception was swallowed. Both cases can produce an empty file. A useful pipeline records why it is empty and whether the source interval was successfully checked.</p>
+        <WorkshopCode>{`Stage        Required evidence before advancing
+Extract      fixed interval, source snapshot/cursor, request succeeded
+Land         manifest, record count, object version or checksum
+Validate     accepted + quarantined = extracted; required fields checked
+Transform    declared output grain and deterministic business rules
+Publish      reconciled staged output becomes visible as one version
+Complete     run ID, code/input versions, counts, freshness and outcome`}</WorkshopCode>
+        <p>A manifest says which inputs belong to this run. It prevents a listing operation from accidentally including an in-progress file or a file from another interval. Publication should depend on successful validation, not merely on a file appearing at a path.</p>
+        <h3>Practice: classify three outcomes</h3>
+        <p>For a valid empty day, a partial source response and a run with quarantined records, decide whether consumers may receive a new dataset version. Name the status each should carry.</p>
+        <WorkshopAnswer>
+          <p>A verified empty day can publish a complete empty result. A partial response cannot claim completeness. Quarantined records require an explicit consumer policy: finance may block publication while a less critical exploratory dataset may publish a visibly degraded result. All three need different operational signals.</p>
+          <p>Assessment: draw the boundary where staged work becomes consumer-visible, identify the idempotency key and show how a failure just before and just after publication is recovered.</p>
+        </WorkshopAnswer>
+        <p>Next implementation: <a href="/learn/data-engineering/batch-pipeline-from-scratch">build and test a complete local pipeline</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'A data pipeline moves data from sources to sinks through transformations. Every pipeline has the same anatomy: Source → Extraction → Transformation → Loading → Sink, with Orchestration and Monitoring around it. The technology changes; the anatomy does not.',
         'Extraction is either full (read everything, every run — simple, expensive) or incremental (read only changes since last run — efficient, requires a watermark column and checkpoint). Use incremental extraction for any table with more than 1 million rows.',

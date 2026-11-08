@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'ETL vs ELT — History, Difference, When to Use Each — Data Engineering | Chaduvuko',
@@ -1136,6 +1137,28 @@ ELT with good dbt tests is more reliable than ETL with the same quality checks, 
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Place each transformation at the right trust boundary"
+        objective="Design a hybrid ETL/ELT pipeline and prove a migration preserves business meaning."
+        prerequisites="Data flow, validation, warehouse/lake storage and basic SQL transformations.">
+        <p>A source record includes a payment token, customer email, timestamp text and item amounts. “Load everything first” is not a substitute for access policy. Decide which fields may enter each destination, which require tokenization or exclusion, and which transformations benefit from warehouse execution.</p>
+        <WorkshopCode>{`Transformation                   Placement and reason
+Reject malformed record          Ingestion boundary; preserve a safe rejection reason
+Exclude prohibited sensitive field Before destination; do not copy it to broad raw access
+Normalize source timestamp       Ingestion or staging; preserve the original and contract
+Deduplicate ordered updates      Staging/Silver; test the winner and business key
+Compute revenue by business day  Governed transformation; finance owns metric semantics
+Publish consumer mart            Serving layer; apply least-privilege access`}</WorkshopCode>
+        <p>“Raw” means source-faithful within an approved boundary. It does not mean unencrypted, accessible to everyone or retained forever. A full refresh can only reconstruct history if the required source versions and metadata remain available.</p>
+        <h3>Practice: compare the old and new pipeline</h3>
+        <p>The two versions have identical row counts and revenue totals. List three remaining checks before you switch consumers to the new version.</p>
+        <WorkshopAnswer>
+          <p>Compare keyed row contents, NULL/type distributions and results at important business segments and dates. Check late updates, deletes, duplicate retries and timezone boundaries. Two mistakes can cancel in an aggregate. Run both paths against the same input snapshot and record intentional differences with the metric owner.</p>
+          <p>Completion evidence: a transformation-placement table, input manifest, keyed comparison and rollback/replay plan. Also measure warehouse compute and source load so a successful migration does not create an operational regression.</p>
+        </WorkshopAnswer>
+        <p>Continue with <a href="/learn/dbt">dbt transformations and testing</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'ETL transforms before loading — raw data is processed in a separate engine and only clean data reaches the destination. ELT loads raw data first and transforms inside the destination using SQL. The letters describe where transformation happens, which determines tool choice, raw data preservation, and reprocessing capability.',
         'ETL dominated for 30 years because warehouse storage was expensive ($5,000–$50,000/TB). You could not afford to store raw data, so it had to be cleaned before entering. Cloud storage ($23/TB on S3) and cloud warehouses (cheap on-demand SQL compute) eliminated this constraint, making ELT economically rational.',

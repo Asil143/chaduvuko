@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Performance Tuning — Spark, SQL, and Pipeline Optimisation | Chaduvuko',
@@ -150,13 +151,12 @@ ONE ACTION = ONE JOB:
 
         <Para>
           That hierarchy matters because stage boundaries are where the real
-          cost lives. A job with one stage is cheap almost regardless of data
-          volume, while a job with three stages pays for two shuffles, each of
-          which serialises, moves, and re-reads every row across the network.
+          cost can accumulate. A one-stage job can still scan enormous data or perform expensive work.
+          Shuffle boundaries introduce data movement; stage count alone does not establish runtime or cost.
+          Inspect actual shuffle bytes, pruning, task distribution and the critical path instead.
           The dividing line between operations that create a new stage and
-          operations that don't is worth knowing outright — it's the fastest
-          way to predict how expensive a chain of transformations will be
-          before you ever run it.
+          operations that do not is a useful first clue. Confirm it with the actual
+          execution plan and representative task-level measurements.
         </Para>
 
         <CodeBox label="Which transformations cause a shuffle (new stage boundary)">{`SHUFFLE (= new stage boundary):
@@ -1122,6 +1122,27 @@ Fifth, check for architectural issues: is the same source data read multiple tim
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Optimize the part that dominates the run"
+        objective="Estimate the ceiling of an optimization and verify that it preserves data correctness."
+        prerequisites="Execution plans, partitions, joins, file layouts and run metrics.">
+        <p>A pipeline spends 60 minutes extracting, 30 transforming and 10 publishing. Making transformation three times faster saves 20 minutes, not two thirds of the whole run. A useful optimization report explains where elapsed time went and which part the change can affect.</p>
+        <WorkshopCode language="python" expectedOutput={"before_minutes=100\nafter_minutes=80\nspeedup=1.25x"}>{`extract, transform, publish = 60, 30, 10
+before = extract + transform + publish
+after = extract + transform / 3 + publish
+print(f"before_minutes={before}")
+print(f"after_minutes={after:.0f}")
+print(f"speedup={before / after:.2f}x")`}</WorkshopCode>
+        <p>For a DAG, measure the critical path rather than blindly summing parallel task times. For Spark, inspect actual input bytes, shuffle bytes, task skew, spill and executor utilization. A one-stage scan can still be expensive at high volume, and more stages do not by themselves prove worse performance.</p>
+        <h3>Practice: compare a broadcast join with the baseline</h3>
+        <p>A hint makes one test faster, but the supposedly small side can grow tenfold. Specify correctness, memory and cost checks before you keep the hint.</p>
+        <WorkshopAnswer>
+          <p>Use representative input versions and peak-size cases. Compare keyed results, row counts, exact financial totals and NULL handling. Inspect memory/spill, task distribution and end-to-end runtime. A forced broadcast must fit the relevant memory budget on each worker; if growth breaks that assumption, prefer a supported adaptive plan or revise the join strategy.</p>
+          <p>Assessment: report cost per validated interval or million accepted records alongside latency. Include maintenance work, retries, requests and data movement; a faster query is not automatically a cheaper data product.</p>
+        </WorkshopAnswer>
+        <p>Related tutorial: <a href="/learn/data-engineering/warehouse-concepts">warehouse query profiles and caching</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Diagnose before you optimise. The four bottleneck types — I/O bound (too much data read), CPU bound (expensive computation), memory bound (spill to disk), network bound (large shuffles) — have different fixes. Applying the wrong fix wastes time. Read the Spark UI Stages tab and Tasks histogram before touching any configuration.',
         'Spark execution: one action = one job. Jobs are split into stages at shuffle boundaries. Each stage has tasks, one per partition. Shuffles (groupBy, join, distinct, orderBy) are the most expensive operations — they write data to disk and move it across the network. Minimise shuffles, minimise the data that shuffles touch.',

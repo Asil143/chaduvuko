@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Working with APIs — REST, Auth, Pagination, Rate Limits — Data Engineering | Chaduvuko',
@@ -634,7 +635,7 @@ def is_jwt_expired(token, buffer_seconds=60):
         </Para>
 
         <CodeBox label="A cursor-paginated fetch loop, with a checkpoint you'll extend in Part 08">{`def fetch_all_cursor(url, headers, params, checkpoint_path=None):
-    cursor = load_checkpoint(checkpoint_path)   # None on a fresh start
+    cursor = None  # extraction-only example; caller owns durable checkpoints
 
     while True:
         request_params = {**params, **({'cursor': cursor} if cursor else {})}
@@ -646,16 +647,16 @@ def is_jwt_expired(token, buffer_seconds=60):
         yield from items
 
         cursor = data.get('cursor')
-        save_checkpoint(checkpoint_path, cursor)   # survives a mid-run crash
+        # Never persist a cursor before the caller commits the page's output.
 
         if not cursor or not items:
             break`}</CodeBox>
 
         <Para>
-          That checkpoint save is what makes cursor pagination genuinely
-          resumable, not just faster: if the process crashes on page 4,000,
-          the next run reads the saved cursor and picks up exactly there —
-          it does not silently restart from page 1 and re-fetch everything.
+          This generator fetches records but does not know whether the caller has committed them.
+          For resumability, commit each page and its next cursor together, or commit the page
+          first and allow idempotent replay if checkpoint persistence fails. Saving a cursor
+          while its records remain in a memory buffer can skip data after a crash.
         </Para>
 
         <SubSubTitle>Style 3 — Next-URL / Link header</SubSubTitle>
@@ -911,23 +912,18 @@ return {'status': 'accepted'}`}</CodeBox>
         <CodeBox label="A parser that accepts every format a real API actually sends">{`from decimal import Decimal, InvalidOperation
 
 def parse_amount(raw):
-    if raw is None:
-        return None
-    try:
-        if isinstance(raw, int):
-            value = Decimal(raw) / 100        # integer cents → dollars
-        else:
-            value = Decimal(str(raw).replace(',', '.'))  # float, string, or European comma
-        return value.quantize(Decimal('0.01'))  # always 2 decimal places, whatever format came in
-    except InvalidOperation:
-        return None`}</CodeBox>
+    # This example's source contract is USD integer cents.
+    # Other endpoints/currencies need their own explicit unit/scale mapping.
+    if type(raw) is not int:
+        raise ValueError("amount must be integer minor units for this endpoint")
+    return Decimal(raw) / Decimal(100)`}</CodeBox>
 
         <CodeBox label="Command">{`>>> parse_amount(3800)      # Stripe-style integer cents
 Decimal('38.00')
->>> parse_amount(38.00)     # a float already in dollars
-Decimal('38.00')
->>> parse_amount("38,00")   # a European-formatted string
-Decimal('38.00')`}</CodeBox>
+>>> parse_amount(38.00)     # wrong type for this endpoint
+ValueError: amount must be integer minor units for this endpoint
+>>> parse_amount("38,00")   # do not guess locale or units
+ValueError: amount must be integer minor units for this endpoint`}</CodeBox>
 
         <Para>
           Timestamps have the same problem — Unix seconds, Unix milliseconds,
@@ -935,17 +931,23 @@ Decimal('38.00')`}</CodeBox>
           API depending on the endpoint:
         </Para>
 
-        <CodeBox label="One function, every format">{`from datetime import datetime, timezone
+        <CodeBox label="Normalize timestamps using the source contract">{`from datetime import datetime, timezone
 
-def parse_timestamp(raw):
+def parse_timestamp(raw, epoch_unit="seconds"):
     if raw is None:
         return None
-    if isinstance(raw, (int, float)):
-        ts = raw / 1000 if raw > 1e10 else raw   # >1e10 means milliseconds, not seconds
+    if type(raw) in (int, float):
+        divisors = {"seconds": 1, "milliseconds": 1000, "microseconds": 1_000_000}
+        if epoch_unit not in divisors:
+            raise ValueError("unsupported source timestamp unit")
+        ts = raw / divisors[epoch_unit]
         return datetime.fromtimestamp(ts, tz=timezone.utc)
-    if isinstance(raw, str) and ('T' in raw or 'Z' in raw):
-        return datetime.fromisoformat(raw.replace('Z', '+00:00'))
-    return None`}</CodeBox>
+    if isinstance(raw, str):
+        parsed = datetime.fromisoformat(raw.replace('Z', '+00:00'))
+        if parsed.tzinfo is None:
+            raise ValueError("source instant is missing its timezone")
+        return parsed.astimezone(timezone.utc)
+    raise ValueError("unsupported source timestamp representation")`}</CodeBox>
 
         <Para>
           With both helpers in place, the actual record parser reads as a flat,
@@ -956,7 +958,7 @@ def parse_timestamp(raw):
     return {
         'payment_id': raw.get('id') or raw.get('payment_id'),
         'amount': parse_amount(raw.get('amount')),
-        'currency': raw.get('currency', 'USD'),
+        'currency': raw.get('currency'),  # validate against the endpoint contract
         'status': (raw.get('status') or '').lower() or None,
         'created_at': parse_timestamp(raw.get('created_at') or raw.get('created')),
         '_raw': raw,   # keep the original — never silently discard unknown data
@@ -1042,9 +1044,9 @@ def api_get(path, params, max_retries=5):
 
         <SubSubTitle>Step 3 — paginated fetch with a checkpoint</SubSubTitle>
 
-        <CodeBox label="The exact cursor-pagination pattern from Part 04, now checkpointed to a real file">{`def fetch_payments(from_ts, to_ts):
-    checkpoint_file = Path(f'/data/checkpoints/payments_{from_ts}_{to_ts}.json')
-    cursor = json.loads(checkpoint_file.read_text())['cursor'] if checkpoint_file.exists() else None
+        <CodeBox label="A bounded replay baseline; cursor persistence belongs after durable writes">{`def fetch_payments(from_ts, to_ts):
+    cursor = None
+    seen_cursors = set()
 
     while True:
         params = {'from': from_ts, 'to': to_ts, 'count': 100, **({'cursor': cursor} if cursor else {})}
@@ -1054,11 +1056,14 @@ def api_get(path, params, max_retries=5):
 
         cursor = data.get('cursor')
         if cursor:
-            checkpoint_file.write_text(json.dumps({'cursor': cursor}))
+            if cursor in seen_cursors:
+                raise RuntimeError("pagination cursor did not progress")
+            seen_cursors.add(cursor)
         if not cursor or not data.get('items'):
             break
 
-    checkpoint_file.unlink(missing_ok=True)   # clean up only on a full, successful run`}</CodeBox>
+    # A failed run restarts this fixed interval. Idempotent writes absorb replay.
+    # For large intervals, use page-level transactions with durable checkpoints.`}</CodeBox>
 
         <SubSubTitle>Step 4 — parse defensively, route failures to a dead-letter queue</SubSubTitle>
 
@@ -1086,7 +1091,7 @@ def api_get(path, params, max_retries=5):
         <CodeBox label="An upsert, keyed on the provider's own ID — the whole idempotency story in one query">{`from psycopg2.extras import execute_values
 
 def upsert_batch(records, conn):
-    rows = [(r['payment_id'], float(r['amount']), r['currency'], r['status'], r['created_at']) for r in records]
+    rows = [(r['payment_id'], r['amount'], r['currency'], r['status'], r['created_at']) for r in records]
     with conn.cursor() as cur:
         execute_values(cur, """
             INSERT INTO silver.payments (payment_id, amount, currency, status, created_at)
@@ -1098,10 +1103,10 @@ def upsert_batch(records, conn):
 
         <Para>
           <code style={inlineCode}>ON CONFLICT (payment_id) DO UPDATE</code> is
-          the entire idempotency guarantee in one line: running this pipeline
-          twice for the same date, or hitting the same record via both the
-          webhook path and the reconciliation poll, produces the same end
-          state either way — never a duplicate row.
+          one part of idempotency: it requires an enforced unique key and an intentional
+          update policy. Keep Decimal values exact through the database adapter. For changing
+          records, compare source versions so a stale replay cannot overwrite newer state.
+          This simplified query assumes one writer and authoritative ordered inputs.
         </Para>
 
         <SubSubTitle>Step 6 — put it together, with a fixed (not relative) time window</SubSubTitle>
@@ -1427,6 +1432,36 @@ The practical cost: an API-key pipeline sends the same string forever, while an 
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Checkpoint after durable processing"
+        objective="Place the pagination checkpoint at the durable write boundary and explain the failure behavior on both sides."
+        prerequisites="Python exceptions and file I/O, HTTP status codes, pagination, database transactions and business keys.">
+        <p>A cursor means “where extraction continues,” not “which records are safely published.” Saving page 2's cursor while page 1 only exists in a memory buffer can permanently skip page 1 after a crash. Either commit output and checkpoint in one transaction or allow replay with idempotent output.</p>
+        <WorkshopCode language="python" expectedOutput={"retry_start=0\ncommitted=[1, 2] checkpoint=2"}>{`pages = {0: ([{"id": 1}, {"id": 2}], 2)}
+store = {}
+checkpoint = 0
+rows, next_cursor = pages[checkpoint]
+
+try:
+    staged = {row["id"]: row for row in rows}
+    raise RuntimeError("crash before durable commit")
+except RuntimeError:
+    print(f"retry_start={checkpoint}")
+
+# Simulation: one database transaction commits rows AND checkpoint.
+store.update({row["id"]: row for row in rows})
+checkpoint = next_cursor
+print(f"committed={sorted(store)} checkpoint={checkpoint}")`}</WorkshopCode>
+        <p>The example is a state-transition simulation, not a persistent store. In a real implementation keep the rows and cursor in one database transaction, or commit rows first and persist the checkpoint afterward, accepting safe replay if the checkpoint write fails. A file replace is not atomic with a remote database transaction.</p>
+        <h3>Practice: design the remaining request policy</h3>
+        <p>Decide what to do for 429, an expired token, a request timeout and a repeated next cursor. State how you know an amount is dollars or cents and whether an HTTP success guarantees a valid response body.</p>
+        <WorkshopAnswer>
+          <p>Honor documented retry guidance for 429 within a bounded deadline. Refresh expired credentials only through the supported flow. Retry transient reads with capped backoff and jitter; retry writes only with documented idempotency or reconciliation. Detect non-progressing cursors. Validate response shape and content type. Amount units and currency scale come from the source contract, never from whether a JSON number is an integer or float.</p>
+          <p>Completion evidence: inject a failure before commit and after commit, verify no missing IDs, and reconcile accepted plus quarantined records with extracted records. Record safe metadata about failures without exposing tokens.</p>
+        </WorkshopAnswer>
+        <p>Related tutorial: <a href="/learn/data-engineering/idempotency-atomicity">safe retry boundaries</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Every API call is an HTTP request. 2xx means success, 4xx means your request is wrong (do not retry as-is), 5xx means retry with backoff. 429 specifically means back off and retry using the Retry-After header.',
         'API keys are static strings from environment variables, never hardcoded. OAuth 2.0 Client Credentials is for server-to-server access; Authorization Code is for user-specific data via a third party. HMAC signs requests with a shared secret and is how you verify incoming webhooks.',

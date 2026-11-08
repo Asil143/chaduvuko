@@ -4,6 +4,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -208,7 +209,7 @@ export default function SecurityCompliancePage() {
         marginBottom: 36,
       }}>
         <span style={{ fontSize: 9, opacity: 0.9 }}>✦</span>
-        Last verified August 2026 — GDPR (2018), CCPA/CPRA (2023)
+        Engineering guidance — consult the linked official rules for applicability and current requirements
       </div>
 
       {/* ── Why This Matters ───────────────────────────────────────────── */}
@@ -254,7 +255,7 @@ export default function SecurityCompliancePage() {
           {
             icon: '📋',
             title: 'Regulatory audit',
-            body: 'A regulator asks you to prove that user X\'s data was deleted within 30 days of their deletion request. Can you? Can you prove it?',
+            body: 'A reviewer asks whether a rights request met its verified scope and deadline. Show destination outcomes and replay/restore controls.',
           },
         ].map((item) => (
           <div key={item.title} style={{
@@ -541,9 +542,10 @@ ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
 
       <Para>
         GDPR (General Data Protection Regulation) is a European Union law that came into
-        force in 2018. It applies to any company that processes personal data of EU
-        residents — including US companies that have EU customers. Fines go up to 4%
-        of global annual revenue. Meta was fined €1.2 billion in 2023.
+        force in 2018. Its territorial scope is defined by Article 3, including establishment
+        in the Union and specified offering/monitoring of people in the Union. Residency alone
+        is not the applicability test. The engineering task is to implement the approved data
+        handling obligations and preserve evidence that those controls work.
       </Para>
       <Para>
         You don't need to read all 99 articles. As a data engineer, these are the 5 GDPR
@@ -554,8 +556,8 @@ ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
         {[
           {
             article: 'Right to Erasure (Art. 17)',
-            what: 'A user can request deletion of all their personal data.',
-            de_action: 'Your pipeline must be able to find and delete (or crypto-erase) all records for a given user across every table, every layer (raw, silver, gold), and every backup within 30 days.',
+            what: 'Article 17 provides a right to erasure in specified circumstances, with exceptions.',
+            de_action: 'Inventory relevant copies and implement the approved deletion or retention decision. Article 12 generally requires a response without undue delay and within one month, with conditional extensions; do not replace this with a universal 30-day rule or assume every backup must be rewritten identically.',
           },
           {
             article: 'Right to Access (Art. 15)',
@@ -569,12 +571,12 @@ ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
           },
           {
             article: 'Purpose Limitation (Art. 5)',
-            what: 'Data collected for one purpose cannot be used for a different purpose without new consent.',
-            de_action: 'If customers gave consent for order notifications, you cannot use their data to train an ML model without separate consent. Tag data with the consent purpose in your catalogue.',
+            what: 'Purpose limitation and lawful-basis requirements govern further processing; fresh consent is not the only possible basis.',
+            de_action: 'Record approved purposes and processing restrictions. Route a proposed new use, including model training, through the responsible privacy review before enabling the pipeline.',
           },
           {
             article: 'Data Breach Notification (Art. 33)',
-            what: 'If a data breach occurs, the regulator must be notified within 72 hours.',
+            what: 'Article 33 requires notification without undue delay and, where feasible, within 72 hours after awareness, unless the breach is unlikely to risk rights and freedoms.',
             de_action: 'Maintain audit logs. Know exactly what data was accessed, when, and by whom. Without logs, you cannot scope a breach.',
           },
         ].map((item) => (
@@ -601,13 +603,13 @@ ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
         ))}
       </div>
 
-      <H3>Crypto-erasure — the practical way to handle deletion in data lakes</H3>
+      <H3>Crypto-erasure — one possible design with strict preconditions</H3>
       <Para>
         Deleting a record from a data warehouse is easy. Deleting it from an immutable
-        data lake (S3/ADLS with versioning) is hard. The practical solution is
-        crypto-erasure: encrypt the user's PII with a user-specific key stored in a key
-        management service. To "delete" the user, delete their encryption key. All their
-        encrypted data becomes permanently unreadable without modifying any files.
+        data lake with retained versions needs a lifecycle plan. Crypto-erasure may help when
+        all relevant data is encrypted under controlled keys and no usable keys, plaintext
+        copies or recovery paths remain. Deleting one key does not prove that every copy is
+        erased. Validate the design and legal outcome through the responsible privacy process.
       </Para>
 
       <CodeBlock lang="python" code={`# Crypto-erasure pattern
@@ -617,9 +619,9 @@ ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
 import boto3
 kms = boto3.client('kms', region_name='us-east-1')
 
-def get_or_create_user_key(user_id: str) -> str:
-    """Return KMS key ARN for this user, creating if needed."""
-    # In practice, store key ARN in a mapping table
+def create_user_key(user_id: str) -> str:
+    """Creation primitive only; callers need an atomic persisted key mapping."""
+    # Review key quotas/costs and make retries safe; never create one key per retry.
     response = kms.create_key(
         Description=f'PII encryption key for user {user_id}',
         Tags=[{'TagKey': 'user_id', 'TagValue': user_id}]
@@ -628,15 +630,15 @@ def get_or_create_user_key(user_id: str) -> str:
 
 def erase_user(user_id: str, key_id: str):
     """
-    GDPR right to erasure via crypto-erasure.
+    Key-deletion scheduling illustration, not proof of legal erasure.
     Schedules key deletion — AWS KMS minimum waiting period is 7 days.
-    After deletion, all PII encrypted with this key is permanently unreadable.
+    Verify all keys, plaintext copies, caches and restore paths separately.
     """
     kms.schedule_key_deletion(
         KeyId=key_id,
         PendingWindowInDays=7  # Minimum allowed by AWS KMS
     )
-    print(f"Key for user {user_id} scheduled for deletion. PII will be unreadable in 7 days.")
+    print(f"Key deletion scheduled for {user_id}; verification remains required.")
     # Log this action to your audit trail
     log_audit_event('ERASURE_REQUESTED', user_id=user_id, key_id=key_id)`} />
 
@@ -653,12 +655,9 @@ def erase_user(user_id: str, key_id: str):
       </Para>
 
       <Callout type="info">
-        CCPA applies to any for-profit business that does business in California and meets
-        at least one threshold: more than $25 million in annual gross revenue, buys/sells/
-        shares personal information of 100,000+ California consumers or households
-        annually, or derives 50%+ of annual revenue from selling or sharing personal
-        information. If your company has California users and meets these thresholds,
-        this law applies to you.
+        CCPA applicability depends on statutory definitions, exemptions and qualifying thresholds,
+        including monetary thresholds that are adjusted. Check the <a href="https://cppa.ca.gov/regulations/">current CPPA law, rules and thresholds</a>
+        rather than copying a historical dollar figure into an engineering policy.
       </Callout>
 
       <H3>Key concepts in CCPA for data engineers</H3>
@@ -681,22 +680,21 @@ def erase_user(user_id: str, key_id: str):
       <Table
         headers={['Area', 'GDPR', 'CCPA/CPRA']}
         rows={[
-          ['Scope', 'EU residents\' data', 'California residents\' data (for qualifying businesses)'],
+          ['Scope', 'Territorial criteria in GDPR Article 3', 'California consumers and qualifying entities, subject to definitions/exemptions'],
           ['Legal basis', 'Consent, legitimate interest, contract, legal obligation, vital interest, public task', 'Notice-and-opt-out model — collection generally does not require consent, but sale/sharing requires an opt-out'],
-          ['Right to erasure', 'Yes — 30 days', 'Yes — 45 days (extendable to 90)'],
+          ['Rights-response timing', 'Generally one month; conditional extensions under Article 12', 'Generally 45 days for specified requests; conditional extension to 90 days total'],
           ['Right to access', 'Yes — detailed Subject Access Request', 'Yes — right to know what categories and specific pieces of data are collected'],
           ['Data breach notification', '72 hours to regulator', 'No fixed statutory deadline under CCPA itself; state breach-notification statutes apply separately'],
-          ['Fines', 'Up to €20M or 4% global revenue', 'Up to $2,500 per violation, $7,500 per intentional violation (enforced by the CPPA)'],
+          ['Penalties', 'Depend on the infringed provision and statutory criteria', 'Consult current adjusted amounts and enforcement rules'],
           ['DPO requirement', 'Required for certain organisations', 'No formal DPO requirement, but CPRA requires a cybersecurity audit and risk assessment for high-risk processing'],
           ['Cross-border transfer', 'Adequacy decisions or standard clauses', 'No CCPA-specific cross-border transfer restrictions'],
         ]}
       />
 
       <Callout type="tip">
-        The practical pipeline architecture that satisfies GDPR also satisfies CCPA/CPRA
-        for most requirements. Build for GDPR-level rigour and you will be compliant with
-        both — plus most of the other US state privacy laws, which are largely modeled on
-        CCPA. The differences are mainly in legal terminology and specific thresholds.
+        Shared capabilities such as inventory, access controls and deletion propagation help
+        implement several privacy regimes. They do not establish automatic compliance across
+        jurisdictions: applicability, rights, exceptions, notices and contractual duties differ.
       </Callout>
 
       {/* ── 7. Compliance by design ────────────────────────────────────── */}
@@ -883,7 +881,7 @@ connection_string = (
           },
           {
             wrong: '"If GDPR and CCPA seem similar, building for one automatically covers the other"',
-            right: 'Section 6\'s GDPR-vs-CCPA comparison table shows real differences — different erasure deadlines (30 days vs 45, extendable to 90), different legal bases, different fine structures. The Callout closing that section is precise: building for GDPR-level rigor covers most CCPA requirements, but "most" is not "all," and the specific thresholds and terminology still need separate verification.',
+            right: 'The regimes differ in scope, rights, response periods, exceptions and other duties. Shared technical capabilities help, but one architecture does not establish compliance with another law. Consult the official rules linked in this lesson.',
           },
           {
             wrong: '"Audit logging is a nice-to-have that can be added once the pipeline is stable"',
@@ -916,12 +914,11 @@ connection_string = (
 
         <Card title="At a healthcare company (Oscar Health / Teladoc)" accent="#0078d4">
           <Para>
-            Health data is "sensitive personal information" under CCPA and protected health
-            information under HIPAA. Your pipeline that ingests patient records into the data
-            warehouse must use customer-managed encryption keys, full audit logging on every
-            SELECT, and row-level security so only the assigned doctor's team can see their
-            patients' records. A senior engineer will review your pipeline and specifically
-            check these controls before approving.
+            Classify health information according to the applicable law and organization.
+            HIPAA's scope depends on regulated entities and protected information, not merely
+            a health-related field. Implement the approved risk assessment through access,
+            audit, encryption and recovery controls. Customer-managed keys or a particular
+            row-security model may be design choices rather than universal statutory mandates.
           </Para>
         </Card>
 
@@ -1041,7 +1038,7 @@ The trade-off is architectural commitment upfront — you need per-user encrypti
         <ErrorBlock
           error="SSL connection has been closed unexpectedly / SSL SYSCALL error"
           cause="The database requires an SSL connection (sslmode=require) but the client tried to connect without SSL, or the certificate validation failed."
-          fix="Add ?sslmode=require to the connection string. If using a self-signed certificate, provide the CA cert path with sslrootcert=/path/to/ca.pem. Never set sslmode=disable in production."
+          fix="For libpq clients, use sslmode=verify-full with the correct sslrootcert and expected hostname to authenticate the server as well as encrypt traffic. sslmode=require alone does not generally establish hostname verification. Investigate unexpected disconnects separately."
         />
 
         <ErrorBlock
@@ -1070,11 +1067,32 @@ The trade-off is architectural commitment upfront — you need per-user encrypti
       </section>
 
       {/* ── Key takeaways ──────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Prove access is denied and deleted data stays deleted"
+        objective="Test security controls and trace a deletion request across stored, derived and restored copies."
+        prerequisites="Dataset ownership, lineage, service identities, encryption and retention policy. Use synthetic records only.">
+        <p>Create one synthetic customer record and map every place it can travel: source, landing, tables, logs, exports, caches and backups. Then test permissions using the actual identities. A policy document or an encrypted disk does not prove that an overprivileged query cannot read personal data.</p>
+        <WorkshopCode>{`Identity                Allowed                          Must be denied
+Ingestion service       Write approved landing prefix    Read unrelated customer datasets
+Transformation service  Read inputs; write staging       Change access policies
+Analyst                 Read approved masked view        Read raw personal fields
+Deletion operator       Execute approved deletion flow   Unrestricted platform administration
+Audit reader            Inspect operation evidence       Read full deleted record payloads`}</WorkshopCode>
+        <p>Hashing an email or stable identifier usually creates a pseudonymous join key, not an anonymous dataset. Guessed inputs, linkage and retained mappings can identify a person. Classify derived identifiers and embeddings as carefully as obvious names when they retain such linkage.</p>
+        <h3>Practice: verify the complete deletion path</h3>
+        <p>Run a synthetic deletion, then replay an old input and restore an older backup in an isolated test. Explain what prevents the customer from reappearing in current outputs.</p>
+        <WorkshopAnswer>
+          <p>Use a governed suppression/deletion ledger, replay filters and restore procedures that reapply required deletions before making data available. Verify active table versions, object versions, retained snapshots, exports and downstream systems. Keep evidence about the request and checks without retaining an unnecessary copy of the deleted personal payload.</p>
+          <p>Crypto-erasure is a possible design only when all relevant keys, plaintext copies, caches, replicas and recovery paths are covered. Scheduling one key deletion is not proof of erasure. Legal applicability, response periods and exceptions must come from the responsible privacy process; one control set does not automatically satisfy every jurisdiction.</p>
+        </WorkshopAnswer>
+        <p>Official references: <a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng">GDPR</a>, <a href="https://oag.ca.gov/privacy/ccpa">California consumer rights</a>, and <a href="https://cppa.ca.gov/regulations/">current CPPA rules and monetary thresholds</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Encryption in transit (TLS) and at rest are separate problems — you need both.',
         'PII is any data that can identify a person, directly or in combination. Tag it, minimise it, mask it in dev, and control access to it in prod.',
         'GDPR and CCPA both require: purpose limitation, right to erasure, right to access, and breach-relevant audit trails. Build deletion and access-export capability into every pipeline that touches personal data.',
-        'Crypto-erasure is the practical solution for GDPR deletion in immutable data lakes — encrypt per user with a unique key, then delete the key.',
+        'Crypto-erasure requires control of all relevant keys and plaintext copies; verify retained snapshots, exports, backups and restore behavior independently.',
         'Audit logs must be immutable, append-only, and stored separately from the systems being audited.',
         'Never hardcode credentials. Use environment variables in dev, secrets managers in production, and managed identities where the cloud supports them.',
         'Compliance is cheapest when built in at design time. Retrofitting a non-compliant pipeline is 10× harder.',

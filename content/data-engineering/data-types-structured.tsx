@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Structured, Semi-Structured and Unstructured Data — Data Engineering | Chaduvuko',
@@ -157,21 +158,21 @@ export default function DataTypesStructuredModule() {
                 color: '#00e676',
                 oneline: 'Data with a rigid, predefined schema — rows and columns where every value has a known type and position.',
                 examples: 'PostgreSQL tables, CSV files, Excel sheets, Parquet, ORC',
-                pct: '~20% of all enterprise data',
+                pct: 'Validate column types and constraints',
               },
               {
                 type: 'Semi-Structured',
                 color: '#7b61ff',
                 oneline: 'Data with some organisation but no rigid schema — self-describing format where structure can vary between records.',
                 examples: 'JSON, XML, Avro, log files',
-                pct: '~40% of all enterprise data',
+                pct: 'Validate nested structure and schema versions',
               },
               {
                 type: 'Unstructured',
                 color: '#f97316',
                 oneline: 'Data with no predefined schema and no inherent organisation — raw content that requires interpretation to extract meaning.',
                 examples: 'Images, audio, video, free-text, PDFs, emails',
-                pct: '~80% of all data generated globally',
+                pct: 'Preserve content and version extracted signals',
               },
             ].map((item) => (
               <div key={item.type} style={{
@@ -384,7 +385,8 @@ Never assume a CSV is well-formed because it came from a "reliable" source.`}</C
 
         <Para>
           The strength: semi-structured formats can represent hierarchical, nested, and
-          variable-length data that relational tables cannot. A single JSON object can
+          variable-length data directly. Relational tables can also model these relationships
+          through child tables and, in many engines, JSON or array types. A JSON object can
           represent an order with a nested array of items, a nested customer object, and
           optional fields that only appear for some order types — all in one document
           without needing six related tables.
@@ -402,9 +404,9 @@ Never assume a CSV is well-formed because it came from a "reliable" source.`}</C
 
         <Para>
           JSON (JavaScript Object Notation) is the most common data format a data engineer
-          encounters. Every REST API returns JSON. Every modern event stream carries JSON
-          payloads. Every NoSQL database stores JSON documents. Understanding JSON deeply
-          is not optional.
+          encounters. Many APIs return JSON; others use XML or binary representations.
+          Streams may use Avro or Protobuf, and NoSQL includes models beyond documents.
+          Learn the actual format and validation contract for each source.
         </Para>
 
         <SubSubTitle>A single order, as an API actually returns it</SubSubTitle>
@@ -618,8 +620,8 @@ always push for structured JSON logging. It eliminates regex.`}</CodeBox>
           Unstructured data has no predefined schema and no inherent organisation that
           a machine can automatically interpret. It is raw content — the bytes of an
           image, the waveform of an audio file, the free text of a customer review,
-          the pages of a PDF contract. 80% of all data generated in the world is
-          unstructured.
+          the pages of a PDF contract. Its share varies by workload; no universal
+          percentage is needed to choose an ingestion and storage strategy.
         </Para>
 
         <Para>
@@ -733,9 +735,9 @@ Call recording pipeline:
         <SubTitle>The data lakehouse for unstructured data</SubTitle>
 
         <Para>
-          Unstructured data cannot live in a data warehouse — warehouses store tables,
-          not images or audio files. Object storage (S3, ADLS, GCS) is the only viable
-          storage at scale for unstructured data. The data engineer&rsquo;s job is to build
+          Object storage is a common choice for large binary assets. Some warehouses also
+          support binary values, managed files or external object access. Choose using
+          size, access patterns, extraction and lifecycle controls. The engineer's job includes building
           a metadata layer that makes the unstructured data discoverable and processable
           alongside the structured and semi-structured data.
         </Para>
@@ -1400,6 +1402,29 @@ Fourth, when storage cost of the repeated keys is a concern. JSON stores keys wi
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Flatten an order without multiplying its revenue"
+        objective="Separate a document's structure from its validation contract and preserve grain when expanding nested arrays."
+        prerequisites="Data fundamentals; basic Python dictionaries and lists, or follow the printed example before the Python track.">
+        <p>An order document contains a customer object, an item array and a total. Flattening it into one row per item repeats the order-level total. Summing that repeated total would overstate revenue. First name the grain of each output: one row per order in orders, and one row per order line in order_items.</p>
+        <WorkshopCode language="python" expectedOutput={"orders=[(7, 900)]\nitems=[(7, 1, 'A', 2), (7, 2, 'B', 1)]\norder revenue=900"}>{`order = {"order_id": 7, "total_minor": 900,
+         "items": [{"sku": "A", "qty": 2}, {"sku": "B", "qty": 1}]}
+orders = [(order["order_id"], order["total_minor"])]
+items = [(order["order_id"], line, item["sku"], item["qty"])
+         for line, item in enumerate(order["items"], start=1)]
+print(f"orders={orders}")
+print(f"items={items}")
+print(f"order revenue={sum(row[1] for row in orders)}")`}</WorkshopCode>
+        <p>The example keeps the order identifier as a relationship key. In production prefer a stable source line ID; array positions can change when an order is edited. Validate required fields, types and acceptable values before publishing. JSON syntax alone does not enforce an order contract, but JSON Schema or application validation can.</p>
+        <h3>Practice: handle empty, missing and malformed arrays</h3>
+        <p>Decide what to do with an empty items array, a missing items field and items set to the string “unknown.” Are these three cases equivalent? State whether an order is retained or quarantined in each case.</p>
+        <WorkshopAnswer>
+          <p>An empty array can represent a valid zero-item state if the business contract allows it: retain the order and publish no item rows. A missing field may mean an older schema version; handle it according to that version's contract. A string in place of the expected array is a type violation and should be quarantined with a reason. Do not quietly convert all three to an empty list.</p>
+          <p>For images and PDFs, retain object references, checksums, extraction version and confidence alongside extracted fields. OCR text is an interpretation, not proof that the original document contained an accurate fact.</p>
+        </WorkshopAnswer>
+        <p>Reference: <a href="https://docs.python.org/3/library/json.html">Python JSON parsing</a>. Follow <a href="/learn/data-engineering/data-modelling">data modeling</a> for parent/child grain and relationships.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Every data source belongs to one of three categories: Structured (fixed schema, enforced), Semi-Structured (self-describing, flexible), or Unstructured (no schema, requires interpretation). Identifying the category immediately tells you which tools, storage systems, and transformation approaches to use.',
         'Structured data has a rigid schema enforced externally — relational databases, CSVs with headers. It is easy to query with SQL but breaks pipelines when the schema changes. Always monitor source schema and handle changes explicitly.',

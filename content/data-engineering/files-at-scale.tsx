@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Working with Files at Scale — Data Engineering | Chaduvuko',
@@ -1392,6 +1393,29 @@ Fifth, check for missing or stale statistics. Query optimisers use column statis
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Calculate the small-file problem before choosing partitions"
+        objective="Estimate file counts and select partitions from query patterns and data volume."
+        prerequisites="Parquet row groups, compression, object storage and the difference between event time and ingestion time.">
+        <p>A writer runs every five minutes and touches 40 regions. Even if each batch is small, one file per touched region creates a large metadata workload. Separately estimate bytes, partitions and objects: the same data volume can be fast in hundreds of files and slow in millions.</p>
+        <WorkshopCode language="python" expectedOutput={"batches_per_day=288\nfiles_per_day=11520\nfiles_per_30_days=345600\navg_uncompressed_MiB_per_file=0.89"}>{`batches = 24 * 60 // 5
+regions = 40
+files = batches * regions
+daily_bytes = 10 * 2**30
+print(f"batches_per_day={batches}")
+print(f"files_per_day={files}")
+print(f"files_per_30_days={files * 30}")
+print(f"avg_uncompressed_MiB_per_file={daily_bytes / files / 2**20:.2f}")`}</WorkshopCode>
+        <p>The average is under 1 MiB before compression, so a high partition count is unlikely to help this workload. Consider daily partitioning plus clustering, larger write batches, or table-aware compaction. Target file sizes are measurement starting points; they depend on engine task scheduling, memory, compression and query selectivity.</p>
+        <h3>Practice: preserve a consistent table during compaction</h3>
+        <p>A reader is using yesterday's snapshot while compaction writes new files. Explain why deleting “old-looking” objects immediately can break the query and how you would choose a cleanup window.</p>
+        <WorkshopAnswer>
+          <p>The reader's snapshot may still reference those files. Use the table format's maintenance operations and retention rules, accounting for the longest active reads, replay and recovery needs. Do not manually remove files referenced by a valid table snapshot. Reconcile row counts and keyed contents before and after compaction; fewer files alone does not establish correctness.</p>
+          <p>Assessment: show an actual query plan proving partition or row-group pruning, and compare scanned bytes and listing overhead before accepting a new layout.</p>
+        </WorkshopAnswer>
+        <p>References: <a href="https://parquet.apache.org/docs/file-format/">Parquet file layout</a> and <a href="/learn/data-engineering/lakehouse-architecture">table snapshot maintenance</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'File naming must encode source, entity, date (ISO 8601 UTC), and a unique run identifier. ISO 8601 dates (YYYYMMDD) sort lexicographically in chronological order. Include the pipeline run ID in filenames to trace any file back to the run that created it. Never use mutable names like "latest" or "final."',
         'Hive-style partitioning (date=2026-03-17/ directories) enables partition pruning — query engines skip entire directories that cannot contain matching rows. A date-filtered query on a date-partitioned table reads 0.3% of data instead of 100%. Partition pruning is the single biggest performance lever in a data lake.',

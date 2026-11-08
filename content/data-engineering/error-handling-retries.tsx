@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Error Handling, Retries, and Dead Letter Queues — Data Engineering | Chaduvuko',
@@ -567,11 +568,10 @@ class CircuitBreaker:
             if self._opened_at and time.monotonic() - self._opened_at >= self.cooldown_s:
                 self._state, self._half_open_success = CircuitState.HALF_OPEN, 0
                 self._half_open_probe_in_flight = False
-                log.info('Circuit %s: OPEN → HALF_OPEN (cooldown elapsed)', self.name)`}</CodeBox>
+                log.info('Circuit %s: OPEN → HALF_OPEN (cooldown elapsed)', self.name)
 
-        <SubSubTitle>Calling through the breaker, and recording the outcome</SubSubTitle>
-
-        <CodeBox label="circuit_breaker.py — call(), _acquire(), _on_success(), _on_failure()">{`    def call(self, func, *args, **kwargs):
+    # Continue the same CircuitBreaker class.
+    def call(self, func, *args, **kwargs):
         self._acquire()   # raises CircuitOpenError if OPEN, or if HALF_OPEN with a probe already in flight
         try:
             result = func(*args, **kwargs)
@@ -1284,6 +1284,31 @@ The redesigned error flow: row-level data errors → DLQ (row processed, pipelin
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Budget retries against the delivery deadline"
+        objective="Compute a retry budget and separate transient failure, invalid input and an uncertain side effect."
+        prerequisites="Exceptions, HTTP status codes, idempotency and dataset freshness requirements.">
+        <p>A task has 120 seconds before its downstream deadline. Four attempts with 20-second timeouts and waits of 2, 4 and 8 seconds consume up to 94 seconds before parsing, queuing and publication. More retries are not automatically more reliable if they make every consumer late.</p>
+        <WorkshopCode language="python" expectedOutput={"request_budget=94\nremaining_seconds=26\naccepted=970 rejected=30 rejection_rate=3.0%"}>{`deadline = 120
+attempts = 4
+request_timeout = 20
+waits = [2, 4, 8]
+budget = attempts * request_timeout + sum(waits)
+print(f"request_budget={budget}")
+print(f"remaining_seconds={deadline - budget}")
+accepted, rejected = 970, 30
+print(f"accepted={accepted} rejected={rejected} "
+      f"rejection_rate={rejected / (accepted + rejected):.1%}")`}</WorkshopCode>
+        <p>The calculation is a request budget, not a guarantee: add queue delay, processing and any server Retry-After requirement. Put a total deadline around the operation. A timeout on a write can mean “committed but the response was lost,” so reconcile or use a documented idempotency key before repeating the side effect.</p>
+        <h3>Practice: decide whether 3% is acceptable</h3>
+        <p>All 30 rejected records are from one store. The aggregate rejection rate is only 3%. Should its revenue dashboard publish as complete?</p>
+        <WorkshopAnswer>
+          <p>No aggregate threshold proves that every consumer is safe. That store may be missing all its revenue. Add checks at critical cohorts and distinguish complete, degraded and failed publication. Route record validation failures to quarantine with source ID, reason, schema version and replay status. Infrastructure outages should not be disguised as millions of bad records.</p>
+          <p>Assessment: define maximum attempts and elapsed time, retryable operations, alert ownership and a reconciliation procedure for uncertain outcomes. Prove that exhausting retries fails visibly.</p>
+        </WorkshopAnswer>
+        <p>Related tutorial: <a href="/learn/data-engineering/monitoring-observability">freshness and quality alerts</a>.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'Classify every error before deciding what to do: transient errors (network timeout, 5xx, 429, deadlock) should be retried with backoff. Permanent errors (401, 403, schema mismatch, disk full, bad credentials) should fail immediately and alert. Never retry a permanent error — it wastes time and delays the human intervention the error requires.',
         'Exponential backoff formula: delay = min(base × 2^attempt, max_delay). Attempt 1: ~1s, attempt 2: ~2s, attempt 3: ~4s, attempt 4: ~8s. Always add jitter. Full jitter selects a random value between 0 and the computed cap, spreading retries from multiple parallel clients evenly across the window and preventing thundering herds.',

@@ -3,6 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { DEWorkshop, WorkshopCode, WorkshopAnswer } from '@/components/content/DEWorkshop'
 
 export const metadata: Metadata = {
   title: 'Linux and Shell Scripting for Data Engineers — Data Engineering | Chaduvuko',
@@ -1221,9 +1222,9 @@ set +a              # stop auto-exporting`}</CodeBox>
 set -euo pipefail`}</CodeBox>
 
         <Para>
-          This is the correct second line of every production bash script, without
-          exception. <code>-e</code> exits immediately the moment any command fails,
-          instead of bash's default of quietly continuing to the next line.{' '}
+          Strict mode is a useful starting point for this Bash wrapper, with important exceptions.
+          <code>-e</code> exits for many unhandled failures; test conditionals and compound commands.
+          Check expected nonzero statuses explicitly rather than relying on one flag.{' '}
           <code>-u</code> turns a typo like <code>$DATABSE_URL</code> into an
           immediate, clear error instead of silently substituting an empty string.{' '}
           <code>-o pipefail</code> makes a pipe fail if <em>any</em> stage of it
@@ -1255,35 +1256,33 @@ error() { log "ERROR" "$@"; }`}</CodeBox>
           call everywhere.
         </Para>
 
-        <SubSubTitle>Step 3 — a lock file, so cron can never run two copies at once</SubSubTitle>
+        <SubSubTitle>Step 3 — an atomic OS lock for one Linux host</SubSubTitle>
 
         <CodeBox label="orders_pipeline.sh — prevent overlapping runs">{`readonly LOCK_FILE="/tmp/orders_pipeline.lock"
 
-if [[ -f "$LOCK_FILE" ]]; then
-    pid=$(cat "$LOCK_FILE")
-    if kill -0 "$pid" 2>/dev/null; then
-        error "Another instance is already running (PID $pid). Exiting."
-        exit 1
-    fi
-    echo "Stale lock file found — removing"
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
+    error "Another instance holds the pipeline lock. Exiting."
+    exit 1
 fi
-echo $$ > "$LOCK_FILE"`}</CodeBox>
+# Keep descriptor 9 open while the protected work runs.
+# The lock file lives in a directory writable only by the pipeline service.
+# Multiple hosts require a shared coordination mechanism.`}</CodeBox>
 
         <Para>
           A pipeline that normally takes 30 minutes but occasionally runs long
           (from the earlier scenario: 2 hours) is a real risk if cron fires the
           next scheduled run before the first one finishes — now there are two
-          copies writing to the same output. This lock file, checked with the same{' '}
-          <code>kill -0</code> trick from Part 07, makes that structurally
-          impossible: a second invocation sees the lock, confirms the original
-          process is genuinely still alive, and exits immediately instead of racing it.
+          copies writing to the same output. <code>flock</code> acquires the OS lock atomically.
+          A separate “check PID file, then write PID file” sequence is racy: two processes can
+          both pass the check. Use an orchestrator or distributed lock for writers on several hosts.
         </Para>
 
         <SubSubTitle>Step 4 — cleanup that always runs, success or failure</SubSubTitle>
 
         <CodeBox label="orders_pipeline.sh — a trap that fires no matter how the script exits">{`cleanup() {
     local exit_code=$?
-    rm -f "$LOCK_FILE"
+    # Do not unlink a flock file: a new inode could permit a second lock.
     if [[ $exit_code -ne 0 ]]; then
         error "Script exited with code $exit_code"
     fi
@@ -1292,11 +1291,9 @@ trap cleanup EXIT`}</CodeBox>
 
         <Para>
           <code>trap cleanup EXIT</code> registers <code>cleanup</code> to run
-          automatically no matter <em>how</em> the script ends — a normal finish, an{' '}
-          <code>exit 1</code> from an earlier check, or a crash from{' '}
-          <code>set -e</code> catching a failed command. This is what guarantees
-          the lock file from Step 3 is always removed — without it, one failed run
-          would permanently lock out every future run.
+          on normal shell exit, including many error paths. It cannot run after SIGKILL or
+          a machine failure. The OS releases the lock when all descriptors holding it close;
+          keep the lock file and do not unlink it during cleanup.
         </Para>
 
         <SubSubTitle>Step 5 — preconditions, then the actual pipeline</SubSubTitle>
@@ -1648,6 +1645,26 @@ Fifth, spot-check a numeric column for bad values: awk -F',' 'NR>1 {print $3}' o
       </section>
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
+
+      <DEWorkshop title="Make the wrapper fail when an upstream command fails"
+        objective="Observe pipeline exit codes and choose a real concurrency control instead of a race-prone PID file."
+        prerequisites="A terminal and basic commands. Run the optional Bash examples in a scratch directory; they do not modify data.">
+        <p>Consider a failed extractor piped into a formatter. Bash normally reports the last command's status, so a successful formatter can hide the extraction failure. Test the wrapper's behavior explicitly instead of assuming its final log line proves success.</p>
+        <WorkshopCode language="bash">{`# Run in Bash. These commands only print an exit status.
+bash -c 'false | cat >/dev/null; printf "without pipefail: %s\n" "$?"'
+bash -o pipefail -c 'false | cat >/dev/null; printf "with pipefail: %s\n" "$?"'
+# Expected: without pipefail: 0
+#           with pipefail: 1`}</WorkshopCode>
+        <p>Strict mode is useful but has exceptions around conditionals, lists and subshells. Handle expected nonzero results deliberately: grep returning 1 means “no match,” not necessarily an operational incident. Record the actual pipeline process exit code, not the result of a later logging command.</p>
+        <h3>Practice: two schedulers start at once</h3>
+        <p>Two processes both check that a PID file is absent before either writes it. Explain why both can enter the critical section. Propose a mechanism that performs acquisition atomically.</p>
+        <WorkshopAnswer>
+          <p>The check and write are separate operations. Use an OS lock such as flock on Linux, an atomic lock-directory creation with ownership rules, or the orchestrator's concurrency controls. Multiple hosts need a coordination mechanism covering all writers. An EXIT trap cannot run after SIGKILL or a machine failure; lock release and recovery must tolerate those cases.</p>
+          <p>Also test disk-full, permission-denied and an empty valid input. Use a CSV parser for quoted CSV records: awk -F, and physical line counts are only valid when the source contract forbids embedded delimiters and newlines.</p>
+        </WorkshopAnswer>
+        <p>Reference: <a href="https://www.gnu.org/software/bash/manual/bash.html#Pipelines">Bash pipeline status</a>. For logs, include run ID, interval, source and record counts without printing credentials or full personal records.</p>
+      </DEWorkshop>
+
       <KeyTakeaways items={[
         'du -sh /path/* | sort -rh and df -h are the first two commands to run whenever a pipeline behaves strangely — a nearly-full disk causes symptoms that look like almost anything else.',
         'Permissions are three groups of rwx (owner, group, others). 755 for scripts, 644 for configs, 600 for secrets. Diagnose "Permission denied" with ls -lah plus id, not guessing.',

@@ -661,4 +661,5 @@ alerts          under-replicated > 0, billing lag > 10k for 5 min`,
       explanation: 'Each group keeps its own offsets and receives every message; a shared group would split messages between teams.',
     },
   },
+
 }
