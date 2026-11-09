@@ -792,8 +792,11 @@ class TokenBucketRateLimiter:
         <SectionTitle>Webhooks vs Polling — And Why Production Systems Use Both</SectionTitle>
 
         <Para>
-          Polling means your pipeline regularly asks "anything new?" Webhooks
-          mean the API calls <em>you</em> the moment something happens.
+          Pull-based ingestion (polling) means your pipeline requests changes on a
+          schedule. Push-based ingestion (often delivered by webhook) means the
+          provider sends an event to your endpoint. A webhook may be only a
+          notification that tells you what to fetch; check the provider's contract
+          and retain polling or reconciliation when delivery must be complete.
         </Para>
 
         <CompareTable

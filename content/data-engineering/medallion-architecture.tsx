@@ -922,18 +922,20 @@ OVERLAP WINDOW CONFIGURATION:
 
         <SubSubTitle>Bronze — full history, and Silver&rsquo;s default (SCD Type 1)</SubSubTitle>
 
-        <CodeBox label="Bronze keeps every event; Silver's MERGE collapses them to current state">{`BRONZE LAYER — Complete change history (all SCD types possible)
-  Bronze is append-only CDC events. Every change is stored:
+        <CodeBox label="An illustrative CDC history and current-state projection">{`BRONZE LAYER — Captured change records, subject to connector and retention policy
+  Example only: if these changes are captured and retained:
     order_id=9284751, status='placed',    created_at=2026-03-17 14:00, op='c'
     order_id=9284751, status='confirmed', updated_at=2026-03-17 14:02, op='u'
     order_id=9284751, status='delivered', updated_at=2026-03-17 15:30, op='u'
-  Bronze effectively stores all history needed for any SCD type.
+  The example can support replay for the retained records; it does not guarantee
+  a complete history or satisfy every SCD requirement by itself.
 
 SILVER LAYER — Current state (SCD Type 1 equivalent)
   Silver MERGE keeps one row per order_id — the most recent state.
   This is SCD Type 1: overwrite. No history in Silver itself.
     order_id=9284751, status='delivered', created_at=2026-03-17 14:00
-  If you need history: query Bronze directly.`}</CodeBox>
+  If you need history: verify the capture contract and retention, or build an
+  explicit SCD Type 2 model with the required effective-time semantics.`}</CodeBox>
 
         <SubSubTitle>SCD Type 2 in Silver — via dbt snapshot</SubSubTitle>
 
@@ -1134,25 +1136,25 @@ Without DLQ: the 12 orders would have been silently lost with no trace.`}</Outpu
             q: 'Q1. Explain the Medallion Architecture. What belongs in each layer and why?',
             a: `The Medallion Architecture organises a data lakehouse into three progressively refined layers: Bronze, Silver, and Gold. Each layer makes stronger guarantees about data quality and fitness for use than the previous.
 
-Bronze is the raw layer — it stores data exactly as it arrived from the source, with minimal transformation. The only operations are format conversion (JSON/CSV to Parquet), Hive-style partitioning for query efficiency, and adding ingestion metadata (ingested_at, source_system, pipeline_run_id). Bronze is append-only and immutable: once written, Bronze rows are never modified. It serves as the audit trail and the raw material for reprocessing. If a bug is found in the Silver transformation, Bronze provides the input to reprocess from.
+Bronze is commonly used as a source-faithful landing layer with ingestion metadata and limited transformation. Teams may choose append-oriented storage for replay and audit use cases, but immutability, captured changes, and retention depend on the implementation and policy. Reprocessing is possible only for the records and metadata still available.
 
 Silver is the trusted layer — it contains the current state of every entity with quality guarantees. Transformations at the Bronze-to-Silver boundary include type casting every column to its authoritative type, deduplication (one row per business key, keeping the most recent), NULL enforcement on required fields, business value validation, and PII masking. Silver answers "what does this entity look like right now?" It uses MERGE semantics via Delta Lake so that late-arriving updates from Bronze are correctly reflected.
 
-Gold is the business-ready layer — it contains pre-computed metrics, aggregations, and denormalised fact tables shaped for specific analytical consumers. All business logic (customer tier calculation, revenue attribution, cancellation rate) lives in Gold. Gold is built from Silver via dbt models and is rebuilt when Silver changes. Gold is never the source of truth — Silver always is.
+Gold commonly contains consumer-oriented metrics and aggregations built from curated data. The authoritative source for a value is defined by the data contract; it may be a source system or a governed canonical model. Rebuild and lineage behavior depend on the chosen architecture.
 
 The separation provides two key operational benefits: when data is wrong, the layer boundary localises where the problem is, making diagnosis fast. When a transformation bug is found months later, reprocessing from Bronze through Silver to Gold is possible without re-extracting from the source.`,
           },
           {
             q: 'Q2. Why is Silver "current state" while Bronze is "event history"? What does this mean practically?',
-            a: `Bronze is append-only and stores every event that was ever sent about an entity — every INSERT, UPDATE, and DELETE from CDC, every version of a row that arrived. For an order that was placed, confirmed, and delivered, Bronze has three rows: the INSERT for placed, the UPDATE for confirmed, and the UPDATE for delivered.
+            a: `In this design, Bronze is configured as an append-oriented landing layer for selected source changes. What it contains depends on connector capture settings, filters, delete handling, and retention. If an order's INSERT and two UPDATE events are captured and retained, those events can be replayed as a history for that order.
 
 Silver, in contrast, stores one row per business key — the current state of that entity. The three Bronze events for the order are collapsed by the Silver MERGE into a single row with status='delivered'. Silver answers the question "what is this order's current state?" Bronze answers "what happened to this order and in what sequence?"
 
-Practically, this means Bronze table row counts are an order of magnitude higher than Silver. Bronze for a two-year-old platform might have 500 million rows representing 10 million current orders — the difference is all the UPDATE events accumulated over time. This is expected and correct.
+Bronze may contain more rows than a current-state Silver table because it can retain multiple changes per entity. The size depends on source volume, capture configuration, compaction, and retention; estimate it from measured workload data.
 
-The practical consequences are several. First, analysts always query Silver (and Gold), never Bronze. Bronze is too large and the update semantics are complex — you would need to deduplicate yourself. Second, when you need historical analysis (what was this customer's tier on 2026-01-01?), you query Bronze with an event_time filter or you use Silver's SCD Type 2 snapshot if one was configured. Third, reprocessing: if Silver has a bug that introduced wrong data over the last 30 days, you fix the transformation and re-run Silver from Bronze. The last 30 days of Bronze data re-flows through the corrected transformation without needing to re-extract from the source.
+Analysts often use curated Silver or Gold models; engineers may inspect Bronze to debug ingestion. Historical analysis needs retained change records or a deliberately configured SCD Type 2 model. Reprocessing from Bronze works only for the records and metadata still available under the approved retention and deletion policy.
 
-The architecture is specifically designed so that Bronze never needs to be regenerated from source — it is too expensive and often impossible (sources have their own retention policies). Bronze is the foundation that all higher layers are built on.`,
+Bronze can support replay without re-extracting from the source only while the required records, metadata, and permissions remain available. Define retention and deletion policies, and confirm whether source re-extraction is still possible before treating Bronze as the recovery copy.`,
           },
           {
             q: 'Q3. How does dbt fit into the Medallion Architecture? What does it handle and what does it not handle?',
@@ -1339,7 +1341,7 @@ print(f"gold_current_total={sum(r['amount'] for r in current.values())}")`}</Wor
 
       <KeyTakeaways items={[
         'The Medallion Architecture organises data into three layers with increasing quality guarantees. Bronze: raw and preserved. Silver: trusted, typed, deduplicated. Gold: business logic applied, ready to serve. Each layer has a contract — what it accepts, what it guarantees, who can use it.',
-        'Bronze is append-only and immutable. It stores data exactly as received from the source. The only transformations are format conversion (to Parquet), Hive-style partitioning, and adding ingestion metadata. Never apply business logic, validation, or deduplication in Bronze.',
+        'Bronze is often append-oriented to support replay, but captured fields, mutability, deletion handling, and retention are implementation and policy choices. Keep raw-layer transformations limited to the documented ingestion contract.',
         'This example uses a current-state Silver table, but Silver can also hold validated events and historical dimensions. Declare each table\'s grain independently of its layer name and document the history actually retained.',
         'The Silver transformation checklist: type casting, deduplication with ROW_NUMBER(), NULL enforcement on required fields, business value validation, PII masking, referential validation. Rows that fail any check go to the DLQ — not to Silver, not silently discarded.',
         'Gold is built from Silver and is never the source of truth — Silver always is. When Gold is wrong, fix Silver and rebuild Gold. Gold serves specific consumers (finance dashboard, operations dashboard) — each Gold model is purpose-built, not a generic copy of Silver with aggregations.',

@@ -776,6 +776,14 @@ def project_to_dest_schema(row: dict) -> dict:
           atomic SQL statement.
         </Para>
 
+        <Callout type="info">
+          The local SQLite workshop is the runnable, locally validated pipeline. This Snowflake
+          section is an integration pattern, not a deployment-ready project: it requires compatible
+          Python, pandas, PyArrow, and Snowflake Connector dependencies, a configured Snowflake
+          account/warehouse/database/schema, and least-privilege credentials supplied outside
+          source control. Pin and test dependency versions in a non-production environment.
+        </Callout>
+
         <SubSubTitle>Staging and merging</SubSubTitle>
 
         <CodeBox label="pipeline/load.py — the MERGE and the upsert function">{`import logging
@@ -810,6 +818,7 @@ def upsert_batch(rows: list[dict], conn) -> int:
     success, nchunks, nrows, output = write_pandas(
         conn=conn, df=df, table_name='orders_staging', schema=config.dest_schema,
         overwrite=True, auto_create_table=True,
+        quote_identifiers=False,  # unquoted Snowflake SQL resolves these names as uppercase
         use_logical_type=True,   # required for the Decimal money columns to land as NUMBER, not FLOAT
     )
     if not success:

@@ -123,7 +123,7 @@ export default function HowDataMovesModule() {
   return (
     <LearnLayout
       title="How Data Moves Through a Company"
-      description="The complete end-to-end journey — from data creation to business decisions."
+      description="An illustrative end-to-end journey from data creation to business decisions."
       section="Data Engineering — Lesson 03"
       readTime="55 min"
     >
@@ -134,29 +134,27 @@ export default function HowDataMovesModule() {
         <SectionTitle>Follow One Data Point From Birth to Dashboard</SectionTitle>
 
         <Para>
-          The best way to understand how data moves through a company is to follow a single
-          data point from the moment it is created to the moment it influences a decision.
-          Not in theory — in the specific, concrete reality of what actually happens at the
-          system level.
+          The best way to understand how data moves is to follow an example from creation
+          to a decision. The FreshCart example below is a fictional teaching scenario, not
+          a description of any named company's production architecture.
         </Para>
 
         <Para>
-          The data point we will follow: a customer places an order on Uber Eats at 8:14 PM
-          on a Tuesday evening. They order one Butter Chicken and two Garlic Naan from a
-          restaurant in Capitol Hill, Seattle. The order total is $38.
+          In this hypothetical scenario, a FreshCart customer places an order at 8:14 PM on
+          a Tuesday evening. The fictional order is one Butter Chicken and two Garlic Naan
+          from a restaurant in Capitol Hill, Seattle, for a total of $38.
         </Para>
 
         <Para>
-          By the time the Uber Eats data team arrives at work the next morning, that single
-          order has touched at least eight different systems, been stored in at least four
-          different formats, been transformed at least three times, and contributed to at
-          least a dozen different metrics. Here is exactly how.
+          The example traces one hypothetical order across representative services, formats,
+          and transformations. Real architectures vary by company and are not established
+          by this teaching scenario.
         </Para>
 
         <SubSubTitle>The first 90 seconds — order placed, written, and fanned out to consumers</SubSubTitle>
-        <CodeBox label="The journey of one Uber Eats order — the first 90 seconds">{`8:14:32 PM  → Customer taps "Place Order" on the Uber Eats app
+        <CodeBox label="Illustrative order flow — the first 90 seconds">{`8:14:32 PM  → Customer taps "Place Order" in the FreshCart app
 
-8:14:32 PM  → Mobile app sends HTTP POST request to Uber Eats's
+8:14:32 PM  → Mobile app sends HTTP POST request to FreshCart's
                Order Service API with order details as JSON
 
 8:14:33 PM  → Order Service validates the request, assigns
@@ -180,7 +178,7 @@ export default function HowDataMovesModule() {
                Path: /raw/orders/2026/03/17/20/ZMT-9284751.json`}</CodeBox>
 
         <SubSubTitle>The overnight batch pipeline — from landing zone to the dashboard at 9 AM</SubSubTitle>
-        <CodeBox label="The journey of one Uber Eats order — overnight to the dashboard">{`11:00 PM    → Scheduled batch pipeline runs:
+        <CodeBox label="Illustrative order flow — overnight to the dashboard">{`11:00 PM    → Scheduled batch pipeline runs:
                Reads all new JSON files from the landing zone
                Validates, deduplicates, converts to Parquet format
                Writes to: /bronze/orders/date=2026-03-17/
@@ -202,7 +200,7 @@ export default function HowDataMovesModule() {
                Dashboard now shows last night's order data
                including our $38 Capitol Hill order
 
-9:00 AM     → Uber Eats growth manager opens the dashboard
+9:00 AM     → A FreshCart growth manager opens the dashboard
                Sees: Seattle GMV last night: $420,000
                Our order contributed $38 to that number`}</CodeBox>
 
@@ -276,7 +274,7 @@ export default function HowDataMovesModule() {
             type: 'IoT and Sensor Data',
             color: '#ff4757',
             examples: 'GPS trackers, temperature sensors, payment terminals, smart meters',
-            what: `Physical devices emit data continuously — a Uber Eats delivery agent's phone sends GPS coordinates every few seconds, a temperature sensor in a Amazon warehouse reports readings every minute, a payment terminal reports transaction attempts in real time. IoT data is characterised by extremely high volume, small payload size per event, and the need for real-time processing to be useful.`,
+            what: `Physical devices emit data continuously — a delivery agent's phone sends GPS coordinates every few seconds, a temperature sensor in a warehouse reports readings every minute, a payment terminal reports transaction attempts in real time. IoT data is characterised by extremely high volume, small payload size per event, and the need for real-time processing to be useful.`,
             characteristics: 'Very high volume · Small payload · Continuous stream · Device identity tracking · Out-of-order delivery possible',
           },
         ].map((item) => (
@@ -436,7 +434,7 @@ Question 3: How do you identify what has changed?
   Auto-increment ID exists    → Filter WHERE id > last_max_id
   Neither exists              → Use CDC (read the database transaction log)
   File-based source           → Track which files have been processed`}</CodeBox>
-        <Output>{`Real example — DoorDash orders ingestion decision:
+        <Output>{`Real example — FreshCart orders ingestion decision:
   Freshness needed: hourly for ops dashboards
   Source size: 3M+ rows per day, growing
   Change detection: order_time timestamp + order_id auto-increment
@@ -484,15 +482,15 @@ Question 3: How do you identify what has changed?
           Without a landing zone, the ingestion pipeline writes directly to the
           processing layer. If the processing logic has a bug, the pipeline must be
           stopped, the bug fixed, and all the data re-ingested from the source.
-          For sources that do not keep history (like some APIs and streaming systems),
-          that data may be gone forever.
+          If a source does not retain history, a failed extraction may be impossible to
+          reconstruct. Confirm source retention and recovery options before choosing a
+          replay strategy.
         </Para>
 
         <Para>
-          With a landing zone, the raw data is always preserved. If the processing
-          logic has a bug, you fix it and reprocess from the landing zone — the source
-          does not need to be touched. This pattern of preserving raw data permanently
-          is one of the most important principles in data engineering.
+          A landing zone can support replay when the required files and metadata are still
+          retained and accessible. Define retention, deletion, access-control, and recovery
+          policies explicitly; a landing zone does not preserve data permanently by itself.
         </Para>
 
         <CodeBox label="Landing zone file organisation — real folder structure">{`Landing zone: Azure Data Lake Storage (ADLS Gen2)
@@ -841,7 +839,7 @@ COLUMNAR STORAGE (Snowflake, BigQuery, Redshift):
           consumers with different freshness requirements.
         </Para>
 
-        <CodeBox label="Batch path vs streaming path — same source, different destinations">{`SOURCE: Uber Eats order events
+        <CodeBox label="Batch path vs streaming path — same source, different destinations">{`SOURCE: FreshCart order events
 
 BATCH PATH (runs every hour):
   Kafka → S3 landing zone → Bronze (Parquet) → Silver (cleaned) → Gold (aggregated)
@@ -1283,7 +1281,7 @@ Published daily mart    1          n/a               9000`}</WorkshopCode>
         'Batch ingestion is simple, cheap, and correct for most use cases. Streaming is expensive and complex. Choose streaming only when you can identify a specific business decision that requires data fresher than one hour.',
         'Medallion is one useful architecture pattern. Warehouse-first and other designs are also valid; choose layers for workload, ownership and recovery requirements.',
         'Data discrepancies should always be investigated by layer bisection — start at the dashboard, work backwards to the source, identify exactly where numbers diverge. Four queries, not four hours.',
-        'A single data point — one Uber Eats order — can touch eight systems in 14 hours before it appears in a dashboard metric. Every system in that chain is something a data engineer owns.',
+        'A single data point — one FreshCart order — can touch eight systems in 14 hours before it appears in a dashboard metric. Every system in that chain is something a data engineer owns.',
         'The serving layer is not just "put data in the warehouse." It means different things for different consumers: pre-aggregated Gold for analysts, Silver features for scientists, feature stores for ML engineers, reverse ETL for operational systems.',
       ]} />
 

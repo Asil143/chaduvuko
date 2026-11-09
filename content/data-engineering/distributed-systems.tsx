@@ -224,11 +224,11 @@ export default function DistributedSystemsModule() {
         <SectionTitle>CAP Theorem — What It Actually Says and How It Applies to Your Stack</SectionTitle>
 
         <Para>
-          CAP theorem, proved by Eric Brewer in 2000, states that a distributed
-          data system can guarantee at most two of three properties simultaneously:
-          Consistency, Availability, and Partition Tolerance. Every distributed
-          database and every distributed data system makes this trade-off — the
-          ones that don't advertise it are hiding it from you.
+          Eric Brewer introduced the CAP conjecture in 2000; Gilbert and Lynch
+          formalized its result in 2002. During a network partition, a distributed
+          service cannot guarantee both linearizable consistency and availability
+          for every request. This is a trade-off during the partition, not a rule
+          that a system permanently selects only two properties.
         </Para>
 
         <SubTitle>The three properties, precisely defined</SubTitle>
@@ -1406,11 +1406,11 @@ def write_order_count(date: str, count: int, pipeline_run_id: str):
         {[
           {
             q: 'Q1. Explain CAP theorem and how it applies to a real system you\'ve worked with or studied.',
-            a: `CAP theorem, proved by Eric Brewer, states a distributed data system can guarantee at most two of Consistency (every read gets the latest write), Availability (every request gets a non-error response), and Partition Tolerance (the system keeps working when nodes can't communicate).
+            a: `Brewer introduced the CAP conjecture in 2000, and Gilbert and Lynch formalized the result in 2002. During a network partition, a service cannot guarantee both linearizable consistency (reads reflect the latest completed write) and availability (every request receives a non-error response). This does not mean every system permanently chooses only two properties.
 
-The key insight from Part 02 is that network partitions are not optional to plan for — cables get unplugged, availability zones lose connectivity, switches fail. Since partition tolerance is effectively mandatory in any real distributed system, the actual live decision is between consistency and availability during a partition.
+The key insight from Part 02 is that network partitions must be planned for. During one, a service may reject or delay some requests to preserve consistency, or respond with data that may be stale to preserve availability. Outside a partition, both goals may be achievable.
 
-For a concrete example: Kafka configured with acks=all and min.insync.replicas=2 is CP for writes — if fewer than the minimum in-sync replicas are reachable during a partition, it refuses writes rather than risk losing data, at the cost of availability. Cassandra with a low consistency level is the opposite choice — it keeps serving reads and writes on all reachable nodes during a partition, accepting that some reads may return stale data. Neither choice is universally correct; it depends on whether the data is financial (favor consistency) or advisory, like a dashboard count (favor availability).`,
+The practical decision is workload- and configuration-specific. Define which operations may fail or return stale data during a partition, the consistency model required, and how the application recovers. Do not assign a single CP or AP label to a product without stating the operation and configuration.`,
           },
           {
             q: 'Q2. What is replication lag, and why can\'t you eliminate it just by adding more followers?',
@@ -1582,7 +1582,7 @@ print(f"W2_R2_always_overlap={all(bool(w & r) for w in pairs for r in pairs)}")`
       </DEWorkshop>
 
       <KeyTakeaways items={[
-        'CAP theorem: a distributed system can guarantee at most two of Consistency, Availability, and Partition Tolerance. Since network partitions are unavoidable, the real choice is between consistency and availability during a partition. CP systems reject requests to stay consistent; AP systems respond with potentially stale data.',
+        'CAP concerns behavior during a network partition: a service cannot guarantee both linearizable consistency and availability for every request. The application and deployment determine which requests may fail or return stale data; this is not a permanent two-of-three product label.',
         'Consistency is a spectrum: linearisable (every read sees the latest write, globally) → serialisable → read-your-writes → monotonic reads → eventual (replicas converge eventually, no timing guarantee). Financial data needs strong consistency; analytics dashboards tolerate eventual consistency.',
         'Leader-follower replication routes all writes to one leader and replicates to followers. Reads from followers may be stale — replication lag is normal. High lag means the follower is struggling. Route time-critical reads to the leader.',
         'Multi-leader replication allows writes from multiple nodes but creates write conflicts. Last-write-wins silently discards data. Conflict-free resolution requires CRDTs or application-level merge logic.',

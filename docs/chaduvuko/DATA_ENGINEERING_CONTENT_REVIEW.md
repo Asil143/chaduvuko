@@ -2,6 +2,8 @@
 
 Review date: November 8, 2026 (America/Los_Angeles).
 
+Follow-up: [actual content versus advertised statistics](DATA_ENGINEERING_STATISTICS_CONTENT_AUDIT.md) records a later inspection of all 47 live bodies and all 249 advertised topic entries. It identifies remaining coverage and implementation defects. The successful structural/example checks below must not be treated as universal factual or production-readiness approval.
+
 ## Scope and work delivered
 
 All 47 existing Data Engineering modules have changes in their authored `content/data-engineering/*.tsx` files. The original routes and module order are preserved. Each module now includes a unique guided workshop with a specific learning objective, prerequisites, worked case, practice task, explained answer and supporting references.

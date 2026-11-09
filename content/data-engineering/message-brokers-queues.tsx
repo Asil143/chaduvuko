@@ -738,13 +738,12 @@ export default function MessageBrokersQueuesModule() {
         <SubTitle>Strict global ordering — when you truly need it</SubTitle>
 
         <Para>
-          If your use case genuinely requires strict ordering across all events
-          in a topic (not just per key), the only correct solution is a single
-          partition. One partition means one sequential log, one writer at a
-          time, guaranteed global order. The cost: no horizontal scaling.
-          One partition can handle roughly 100 MB/second on modern hardware.
-          Beyond that, you need to rethink whether global ordering is actually
-          required or whether per-key ordering would suffice.
+          A single partition gives one append order for records accepted into that
+          partition, but it does not automatically order events by source time across
+          independent producers. It also limits parallelism. A sequencer or consensus
+          service can impose a broader order, with added coordination, latency, and
+          availability trade-offs. Measure throughput on the actual broker, message
+          size, replication, and hardware; there is no universal per-partition rate.
         </Para>
       </section>
 

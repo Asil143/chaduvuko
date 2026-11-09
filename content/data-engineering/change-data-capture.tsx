@@ -163,7 +163,7 @@ export default function CDCModule() {
               { num: '03', name: 'Schema Registry', desc: 'Why it exists, Avro schemas, compatibility modes.' },
               { num: '04', name: 'Outbox Pattern', desc: 'Solving dual-write with transactional outbox.' },
               { num: '05', name: 'Event ordering', desc: 'What CDC guarantees and where ordering breaks down.' },
-              { num: '06', name: 'Schema evolution', desc: 'How CDC handles DDL changes mid-stream.' },
+              { num: '06', name: 'Schema evolution', desc: 'Coordinate source DDL, connector metadata, and consumer compatibility.' },
               { num: '07', name: 'CDC for analytics', desc: 'Landing CDC events in a data lake efficiently.' },
               { num: '08', name: 'Production operations', desc: 'Monitoring, slot lag, failure recovery, scaling.' },
             ].map((item) => (
@@ -432,12 +432,12 @@ not a template bug. This is one of the few places in this lesson where
 "key.converter.schema.registry.url":   "http://schema-registry:8081",
 "value.converter.schema.registry.url": "http://schema-registry:8081"`}</CodeBox>
 
-        <SubSubTitle>Heartbeat and event flattening</SubSubTitle>
+        <SubSubTitle>Connector heartbeats and event flattening</SubSubTitle>
 
-        <CodeBox label="Keeping the slot moving, and simplifying the event shape">{`"heartbeat.interval.ms": "30000",  // emit heartbeat every 30 seconds
-// Without heartbeat: on low-write tables, the replication slot LSN never
-// advances, WAL accumulates, slot lag appears to grow forever. Heartbeat
-// emits a WAL record every N ms to advance the confirmed LSN.
+        <CodeBox label="Heartbeat configuration and event shape">{`"heartbeat.interval.ms": "30000",  // emit periodic connector heartbeat records
+// Heartbeats can help track connector progress for quiet captured tables,
+// but are not a substitute for monitoring slot lag and retained WAL.
+// Verify the behavior with the deployed connector, source activity, and config.
 
 "transforms":             "unwrap",
 "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
@@ -503,40 +503,25 @@ Serializes message:                    Stores schema:
 
         <SubSubTitle>Schema evolution — adding a column</SubSubTitle>
 
-        <CodeBox label="A backward-compatible schema change, and how consumers experience it">{`Source DBA adds: ALTER TABLE orders ADD COLUMN delivery_fee DECIMAL(6,2) DEFAULT 0;
+        <CodeBox label="An additive schema change requires coordinated metadata and readers">{`Source migration:
+  ALTER TABLE orders ADD COLUMN delivery_fee DECIMAL(6,2);
 
-Debezium detects the schema change from the WAL DDL record.
-New schema registers as version 2 (schema_id: 43):
-  Added field: {"name": "delivery_fee", "type": ["null", "float"], "default": null}
+PostgreSQL logical replication does not carry this DDL statement as an ordinary
+WAL change event. Connector metadata refresh and schema-change notifications
+depend on the connector version and configuration; verify the next row event.
 
-COMPATIBILITY CHECK:
-  Registry checks: is schema v2 backward-compatible with v1?
-  Rule: adding a field with a default value is backward-compatible. ✓
-  Rule: removing a required field is NOT backward-compatible. ✗
+If the serializer registers a new Avro schema, a decimal field is represented
+with the Avro decimal logical type, for example:
+  {"name":"delivery_fee","type":["null",{"type":"bytes","logicalType":"decimal","precision":6,"scale":2}],"default":null}
 
-CONSUMER BEHAVIOUR:
-  Old consumers (schema v1) reading a v2 message: delivery_fee is unknown → ignored ✓
-  New consumers (schema v2) reading a v1 message: delivery_fee missing → default null ✓
-  Both consumers continue working without redeployment.`}</CodeBox>
+BACKWARD checks whether the new reader can read data from the old writer.
+FORWARD checks whether the old reader can read data from the new writer.
+Test the actual schemas and consumer configuration; do not assume every client
+will ignore or default a field in the same way.`}</CodeBox>
 
         <SubSubTitle>Compatibility modes</SubSubTitle>
 
-        <CodeBox label="Four modes, from permissive to strict">{`BACKWARD (default):
-  New schema can read data produced by the previous schema.
-  Allows: adding fields with defaults, removing fields without defaults.
-  Prevents: adding required fields, changing types.
-  Best for: consumers that need to read old messages.
-
-FORWARD:
-  Previous schema can read data produced by the new schema.
-  Opposite of backward — protects old consumers from new producers.
-
-FULL:
-  Both backward and forward. Most restrictive. Only additive changes.
-  Best for: strict production environments.
-
-NONE:
-  No compatibility checking. Any change allowed. Use only in development.`}</CodeBox>
+        <CodeBox label="Schema Registry modes describe reader/writer directions">{`BACKWARD:\n  A new reader schema can read data written with the previous schema.\n\nFORWARD:\n  The previous reader schema can read data written with the new schema.\n\nFULL:\n  Both backward and forward checks must pass.\n\nNONE:\n  No compatibility checks are performed.\n\nDefaults, transitivity, and permitted schema changes depend on registry\nconfiguration and serialization format. Verify the configured mode and test\nthe actual writer/reader schema pair; do not assume only additive changes pass.`}</CodeBox>
 
         <SubSubTitle>Consuming Avro CDC events in Python</SubSubTitle>
 
@@ -678,10 +663,11 @@ WHY THIS WORKS:
   The outbox INSERT is in the same transaction as the business logic update.
   If the transaction commits: both the payment update AND the outbox event
   exist in the DB. If it rolls back: neither exists.
-  CDC reads the outbox and publishes to Kafka — CDC provides at-least-once
-  delivery. Downstream consumers handle duplicates with idempotency keys
-  (event_id). Result: exactly-once business semantics from at-least-once
-  delivery + idempotency.`}</CodeBox>
+  CDC reads the outbox and publishes to Kafka — delivery can be repeated.
+  Consumers use a stable event_id and an idempotent, atomic apply operation
+  so duplicate delivery does not repeat the business effect. The outbox
+  prevents the database/broker dual-write gap; it does not make every
+  downstream side effect exactly-once.`}</CodeBox>
 
         <Callout type="tip">
           <strong>The Outbox Pattern is the recommended architecture</strong> for
@@ -787,68 +773,65 @@ usually sufficient for analytical use cases.`}</CodeBox>
       {/* ── Part 07 — Schema Evolution Handling ──────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 07 — Schema Evolution" />
-        <SectionTitle>Schema Evolution — Handling DDL Changes Mid-Stream</SectionTitle>
+        <SectionTitle>Schema Evolution — Plan for DDL Changes Explicitly</SectionTitle>
 
         <Para>
-          The source database schema changes over time. Tables gain new columns,
-          columns are renamed, types are widened. CDC pipelines must handle these
-          changes gracefully — a schema change that causes Debezium or a consumer
-          to crash is an operational incident, not an expected upgrade.
+          PostgreSQL logical replication streams row changes; it does not carry arbitrary SQL DDL
+          statements as ordinary WAL change events. Connector versions can derive or publish schema
+          metadata in different ways. Do not assume that a DDL statement immediately creates a new
+          Avro schema or a schema-change event. Test the exact PostgreSQL, Debezium, converter, and
+          Schema Registry versions used by the deployment, including what happens on the next row
+          event after a DDL change.
         </Para>
 
-        <SubSubTitle>Scenario 1 — adding a column (backward-compatible)</SubSubTitle>
+        <CodeBox label="An additive change: coordinate source, connector, and consumers">{`-- Source migration; assess locks, backfill, and application compatibility first.
+ALTER TABLE orders ADD COLUMN delivery_fee DECIMAL(6,2);
 
-        <CodeBox label="The safe case, and its consumer + warehouse impact">{`Source: ALTER TABLE orders ADD COLUMN delivery_fee DECIMAL(6,2) DEFAULT 0;
+-- Roll out consumer/model support for the nullable field.
+-- Backfill existing rows in bounded batches if the product needs a value.
+-- Confirm connector metadata and the serialized schema on a test environment.
+-- Observe registry compatibility checks before deploying producer changes.
 
-Debezium behaviour:
-  - Detects DDL change from WAL, registers a new Avro schema
-  - New schema version is backward-compatible — Registry accepts it
+Avro decimal fields use a bytes-backed decimal logical type, for example:
+{"name":"delivery_fee","type":["null",{"type":"bytes","logicalType":"decimal","precision":6,"scale":2}],"default":null}`}</CodeBox>
 
-Messages BEFORE the DDL: delivery_fee absent, consumers use default null
-Messages AFTER the DDL:  delivery_fee present with value
+        <SubSubTitle>Compatibility directions are reader/writer relationships</SubSubTitle>
 
-Consumer impact: old consumers (schema v1) see null (backward-compatible) ✓
-new consumers (schema v2) see the correct value ✓ — NO crash, NO redeploy.
+        <CodeBox label="Schema Registry compatibility: state the direction">{`BACKWARD:
+  A new reader schema can read data written with the previous schema.
+  Example: a newly added optional field needs a default for Avro resolution.
 
-Data warehouse impact:
-  - dbt Silver model needs updating to SELECT delivery_fee
-  - ALTER TABLE silver.orders ADD COLUMN delivery_fee DECIMAL(6,2);
-  - Or: dbt run --full-refresh silver.orders`}</CodeBox>
+FORWARD:
+  The previous reader schema can read data written with the new schema.
+  This is the direction relevant to old consumers reading new records.
 
-        <SubSubTitle>Scenario 2 — renaming a column (breaking)</SubSubTitle>
+FULL:
+  Both backward and forward compatibility checks must pass.
 
-        <CodeBox label="Why renames break the Registry, and the safe migration path">{`Source: ALTER TABLE orders RENAME COLUMN order_amount TO amount;
+NONE:
+  No compatibility check is performed.
 
-Debezium behaviour:
-  - Removing "order_amount" WITHOUT a default: NOT backward-compatible!
-  - Schema Registry REJECTS this schema if compatibility mode = BACKWARD
-  - If blocked: connector pauses, requires manual intervention
+Registry defaults and transitive modes vary by deployment. Verify the configured
+mode and test the actual writer/reader schema pair; do not infer consumer behavior
+from the mode name alone.`}</CodeBox>
 
-SAFE MIGRATION APPROACH (avoid breaking changes):
-1. Add the NEW column: ALTER TABLE orders ADD COLUMN amount DECIMAL(10,2);
-2. Write to both columns temporarily (application change)
-3. Backfill: UPDATE orders SET amount = order_amount WHERE amount IS NULL;
-4. Consumer updated to read "amount" column
-5. Drop old column: ALTER TABLE orders DROP COLUMN order_amount;
-6. Update Debezium schema: new version removes order_amount
-This staged migration takes longer but never breaks the pipeline.`}</CodeBox>
+        <SubSubTitle>Renames and type changes need staged migrations</SubSubTitle>
 
-        <SubSubTitle>Scenario 3 — changing a column type, and the schema-change event</SubSubTitle>
+        <CodeBox label="Expand, migrate, then contract">{`For a rename from order_amount to amount:
+1. Add amount without removing order_amount.
+2. Dual-write or backfill while preserving the old field.
+3. Update and deploy consumers/models to read the new field.
+4. Verify all consumers and historical-data requirements.
+5. Stop writing the old field, then remove it in a later migration.
 
-        <CodeBox label="Widening is safe, narrowing is not; Debezium logs every DDL">{`Source: ALTER TABLE orders ALTER COLUMN status TYPE VARCHAR(50);  -- was VARCHAR(20)
+For a type change:
+- Check whether existing values fit the target type.
+- Test serialized schema compatibility in both required directions.
+- Use a new field and backfill when in-place conversion would break readers.
+- Coordinate DDL, connector metadata refresh, registry, and consumer rollout.
 
-Widening (VARCHAR(20) → VARCHAR(50)) is usually safe — values that were
-valid VARCHAR(20) are still valid VARCHAR(50). Debezium emits strings, so
-the width change is transparent.
-
-Narrowing (VARCHAR(50) → VARCHAR(20)) is dangerous — existing data may
-violate the new constraint. Debezium/Schema Registry may reject this if
-truncation is detected.
-
-DEBEZIUM SCHEMA CHANGE EVENT: on every DDL, Debezium emits an event to a
-separate topic ({server.name}.schema-changes.{database}) containing the
-raw DDL text and the full new column list. Useful for auditing schema
-changes and alerting when unexpected DDL occurs.`}</CodeBox>
+Compatibility is format- and configuration-dependent; a registry check does not
+replace integration tests or a rollback plan.`}</CodeBox>
       </section>
 
       <Divider />
@@ -1254,7 +1237,7 @@ The Outbox Pattern eliminates the dual-write by using the database as the single
 
 CDC then reads the outbox table via the WAL. When Debezium sees a new row inserted into the outbox table, it publishes it to Kafka. This step is at-least-once delivery — on Debezium restart, the same row might be published twice. Consumers handle this with idempotency keys from the event_id column: if the event was already processed, the duplicate is discarded.
 
-The result is exactly-once business semantics from at-least-once infrastructure: the business operation either happened (and the event was published) or did not happen (and no event exists). CDC is what makes this pattern operational — without CDC continuously watching the outbox table, you would need a polling job, which reintroduces delay and complexity.`,
+The outbox makes the business update and event record atomic in the database, avoiding the dual-write gap. CDC can deliver an event more than once, so consumers still need idempotent handling; any external side effect must also be designed for retries. CDC is one way to relay the outbox, alongside polling or other relays.`,
           },
           {
             q: 'Q2. What is the difference between the before and after images in a CDC event? When would you use each?',
@@ -1282,15 +1265,11 @@ The fix is to ensure events for the same order that need to be processed in orde
           },
           {
             q: 'Q4. How does Schema Registry prevent CDC consumers from breaking when the source table schema changes?',
-            a: `Schema Registry acts as a central contract between Debezium (the producer) and all consumers. Every schema version is registered before any messages using that schema are published to Kafka.
+            a: `Schema Registry can validate serialized schemas when the producer/converter is configured to register them. PostgreSQL logical replication does not carry arbitrary DDL statements as ordinary WAL change events, so do not assume Debezium receives a DDL event or immediately registers a schema after ALTER TABLE. Schema metadata refresh and schema-change notifications depend on the connector version and configuration; test them with the exact deployed versions.
 
-When Debezium detects a schema change from the WAL DDL events, it attempts to register the new schema version with the Schema Registry. The Registry evaluates whether the proposed change is compatible with previous versions according to the configured compatibility mode. With BACKWARD compatibility, the new schema must be readable by code written to parse the old schema — this means new fields must have default values so old consumers can safely ignore them.
+Compatibility describes reader/writer directions. BACKWARD means a new reader schema can read data written with the previous schema. FORWARD means the previous reader schema can read data written with the new schema. FULL requires both checks. A registry mode does not by itself guarantee that every consumer is using the expected reader schema or that application behavior is compatible.
 
-If the change is compatible, the Registry accepts the new schema and assigns it a new schema ID. Debezium begins embedding this new schema ID in messages. Consumers that request schema 42 (old) continue working for old messages. When they encounter a message with schema ID 43 (new), they fetch the new schema from the Registry and use it to deserialize. With a backward-compatible change like adding a column with a default, the old deserialization code works with the new schema without modification.
-
-If the change is incompatible — removing a column without a default, narrowing a type, renaming a field — the Registry rejects it. Debezium's connector enters a FAILED state and stops publishing events rather than silently breaking consumers. This is the correct behavior: it surfaces the breaking change immediately rather than allowing consumers to crash later with confusing deserialization errors.
-
-The practical operational requirement is that any source schema change must be coordinated with the CDC team before it is deployed. A DBA who runs ALTER TABLE orders DROP COLUMN promo_code without notice will cause the CDC connector to fail if Schema Registry rejects the new schema. The fix is to make this a deliberate migration: deprecate the column with a DEFAULT null before dropping it, allowing Schema Registry to register the change as backward-compatible.`,
+Coordinate source migrations with connector, serializer, registry, and consumer owners. For a rename or incompatible type change, use an expand-and-contract rollout: add a new field, backfill or dual-write as appropriate, migrate and verify consumers, then remove the old field in a later change. Test the actual serialized schema pair, source metadata refresh, and rollback procedure before production.`,
           },
           {
             q: 'Q5. You need to implement GDPR right-to-erasure for customer data. Customer rows are hard-deleted from the PostgreSQL source. How would you design a CDC-based pipeline to propagate these deletions to the analytics warehouse within the compliance window?',
@@ -1385,12 +1364,12 @@ The entire pipeline from application deletion to warehouse erasure completes in 
           {
             error: `PostgreSQL error: could not write to file "pg_wal/000000010000000100000000": No space left on device — source database disk full due to replication slot lag`,
             cause: 'The Debezium consumer has been stopped or is too slow to consume WAL events. PostgreSQL\'s replication slot retains WAL segments until the consumer confirms it has read them. With the consumer not advancing the confirmed_flush_lsn, PostgreSQL accumulated days or weeks of WAL on the source server\'s disk until it was full.',
-            fix: 'Emergency: immediately drop the replication slot to allow PostgreSQL to clean up WAL and free disk space: SELECT pg_drop_replication_slot(\'debezium_freshcart\'). This accepts data loss — accept it to prevent a complete database outage. Once disk pressure is resolved, create a new slot and restart Debezium with a fresh snapshot. Long-term: set up monitoring on pg_replication_slots lag with alerts at 1 GB and 10 GB thresholds. Add heartbeats to the connector. Consider setting a max_slot_wal_keep_size in postgresql.conf to limit how much WAL a slot can retain.',
+            fix: 'Treat this as a database-capacity incident and involve the database/on-call owner. Check free disk, retained WAL, slot state, connector health, and available archives/backups before changing the slot. Dropping it can release retained WAL, but the connector cannot resume from that slot; recovery may require a new snapshot or a verified backfill and can leave a data gap. Do not drop it as an automatic first step. If an authorized incident lead approves it to protect database availability, record the decision and follow the documented resnapshot/reconciliation plan. A configured max_slot_wal_keep_size can bound retention, but exceeding it can make the slot unusable and require resynchronization. Set thresholds from workload and recovery capacity, and monitor disk headroom and slot status continuously.',
           },
           {
             error: `CDC consumer produces duplicate rows in Silver table — the same order_id appears twice with different statuses after a Debezium connector restart`,
             cause: 'Debezium provides at-least-once delivery. On connector restart, it re-reads WAL events from the last confirmed replication slot LSN and re-publishes events that were already published to Kafka but whose Kafka offset was not yet confirmed before the restart. The consumer processed these duplicate events and inserted them with plain INSERT rather than upsert, creating duplicate rows.',
-            fix: 'Replace plain INSERT with upsert: INSERT ... ON CONFLICT (order_id) DO UPDATE SET status = EXCLUDED.status WHERE silver.orders.updated_at < EXCLUDED.updated_at. Ensure a UNIQUE constraint exists on order_id. Clean up existing duplicates: DELETE FROM silver.orders WHERE ctid NOT IN (SELECT MIN(ctid) FROM silver.orders GROUP BY order_id). Add a Kafka message deduplication step using the source.lsn field as an idempotency key — if a message with the same LSN was already processed, skip it.',
+            fix: 'Replace plain INSERT with an upsert and enforce a UNIQUE constraint on order_id. Apply the row update and the stored source version atomically, accepting an event only when its source position is newer for that key. Do not assume source.lsn alone uniquely identifies every row event; use connector-specific source coordinates plus a stable event/key identity, and verify ordering and replay behavior for the deployed connector.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1455,16 +1434,73 @@ print(f"last_applied={versions[7]}")`}</WorkshopCode>
         <p>Reference: <a href="https://debezium.io/documentation/reference/stable/connectors/postgresql.html">Debezium PostgreSQL connector</a>.</p>
       </DEWorkshop>
 
+      <section style={{ marginBottom: 64 }}>
+        <SectionTag text="// CDC implementation alternatives" />
+        <SectionTitle>Log-Based, Trigger-Based, and Query-Based Change Capture</SectionTitle>
+        <Para>
+          Log-based CDC reads the database's change log and is covered above. Trigger-based and
+          query-based designs are alternatives with different operational trade-offs; choose based
+          on source support, delete requirements, latency, write overhead, and recovery guarantees.
+        </Para>
+        <SubSubTitle>Trigger-based audit table (illustrative PostgreSQL pattern)</SubSubTitle>
+        <CodeBox label="Capture row changes transactionally in an audit table">{`CREATE TABLE order_change_log (
+  event_id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  operation text NOT NULL,
+  row_data jsonb NOT NULL,
+  captured_at timestamptz NOT NULL DEFAULT clock_timestamp()
+);
+
+CREATE FUNCTION capture_order_change() RETURNS trigger
+LANGUAGE plpgsql AS $$
+BEGIN
+  IF TG_OP = 'DELETE' THEN
+    INSERT INTO order_change_log (operation, row_data)
+    VALUES (TG_OP, to_jsonb(OLD));
+    RETURN OLD;
+  END IF;
+
+  INSERT INTO order_change_log (operation, row_data)
+  VALUES (TG_OP, to_jsonb(NEW));
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER orders_capture_changes
+AFTER INSERT OR UPDATE OR DELETE ON orders
+FOR EACH ROW EXECUTE FUNCTION capture_order_change();`}</CodeBox>
+        <Para>
+          The trigger and source write commit in the same transaction, but every source write now
+          performs additional work and the log needs retention, access control, monitoring, and a
+          cleanup policy. DDL is not captured by this row trigger. Test bulk-write overhead and
+          ensure downstream consumers checkpoint only after durable processing.
+        </Para>
+        <SubSubTitle>Query-based incremental extraction</SubSubTitle>
+        <CodeBox label="Use a stable composite cursor and overlap window">{`SELECT *
+FROM orders
+WHERE updated_at >= :last_success_minus_overlap
+ORDER BY updated_at, order_id;
+
+-- Persist a composite cursor (updated_at, order_id), not only a timestamp.
+-- Advance it only after the destination write commits.
+-- Reprocess the overlap idempotently to tolerate late/committed updates.`}</CodeBox>
+        <Para>
+          Polling is simple when the source has a reliable update column, but it can miss hard
+          deletes and depends on timestamp precision, clock behavior, retention, and a safe cursor.
+          Use explicit tombstones/soft deletes or a deletion log when deletes matter. A timestamp
+          tie-breaker and overlap alone do not provide full transaction-log semantics.
+        </Para>
+      </section>
+
       <KeyTakeaways items={[
         'CDC reads the database WAL (Write-Ahead Log) — the database\'s own durability record. Every INSERT, UPDATE, and DELETE committed to PostgreSQL is recorded in the WAL before data pages are modified. Logical decoding converts binary WAL records into structured events with before/after images and operation type.',
         'PostgreSQL requires wal_level=logical for CDC. This cannot be changed on a running database — it requires a restart. It also requires creating a replication slot (which retains WAL until the consumer advances its LSN), a dedicated replication user, and a publication for the tables to capture.',
         'Debezium is a Kafka Connect plugin that connects to PostgreSQL as a logical replication client. It decodes WAL events and publishes them to Kafka with the schema embedded. The connector stores its position (LSN) in a Kafka offset topic. On restart, it resumes from the last confirmed offset.',
-        'Schema Registry is non-negotiable in production. It registers Avro schemas and enforces compatibility rules, preventing source schema changes from silently breaking consumers. BACKWARD compatibility (new schema can read old messages) is the correct default — it allows adding fields with defaults without redeploying consumers.',
-        'The Outbox Pattern solves dual-write consistency. The application writes to both the business table and an outbox table in one transaction. CDC reads the outbox and publishes to Kafka. This gives exactly-once business semantics from at-least-once infrastructure, with idempotency at the consumer layer handling duplicate deliveries.',
-        'CDC guarantees ordering within a single Kafka partition (events for the same primary key are always ordered). CDC does not guarantee ordering across partitions or across tables. Never implement cross-table join logic in the CDC consumer — let dbt handle it in SQL, which is order-independent.',
+        'Schema Registry can enforce compatibility for serialized schemas when configured. Compatibility mode and transitivity are deployment choices: BACKWARD means a new reader can read prior data; FORWARD means an old reader can read new data. PostgreSQL logical replication does not carry arbitrary DDL statements as ordinary WAL events, so test connector schema-metadata behavior and the actual reader/writer schema pair.',
+        'The Outbox Pattern writes the business change and outbox record in one database transaction, avoiding the database/broker dual-write gap. CDC can deliver duplicates; consumers still need idempotent, atomic handling, and external side effects need their own retry strategy.',
+        'Kafka preserves append order within one partition. Per-key event order depends on routing all changes for that key to the same partition and on the source/connector ordering contract. Do not assume order across partitions or tables; design cross-table consumers for transaction boundaries, buffering, and reconciliation.',
         'The before image in an UPDATE event contains the row\'s previous values. PostgreSQL only records full before images when REPLICA IDENTITY FULL is set on the table. By default only primary key columns appear in the before image. Enable FULL replica identity for tables where you need audit trails or undo capabilities.',
-        'Replication slot monitoring is the most critical operational concern. Alert at 1 GB lag (warning) and 10 GB lag (critical). An unmonitored slot can fill the source database disk and crash the production application. Set heartbeat.interval.ms in Debezium to ensure the slot advances even during low-write periods.',
-        'CDC provides at-least-once delivery — events may be delivered more than once on connector restart. Every CDC consumer must use upsert (not INSERT) at the destination, with a UNIQUE constraint on the business key. Use the source LSN as an idempotency key for deduplication when exact-once processing is required.',
+        'Monitor replication-slot lag and available disk headroom with thresholds sized for the workload and recovery time; there is no universal safe GB threshold. A retained WAL backlog can exhaust disk. Heartbeat behavior is connector- and configuration-dependent, so verify it rather than treating it as a substitute for slot monitoring.',
+        'CDC delivery can repeat records after failures. Use a destination uniqueness constraint and an atomic upsert that tracks an appropriate source version per key. A source LSN alone may not uniquely identify each row event; validate connector coordinates, ordering, and replay semantics before using them for deduplication.',
         'CDC for data lakes: do not write each event directly to S3. Use a Spark Structured Streaming micro-batch consumer (5-minute trigger) that reads from Kafka and upserts to Delta Lake. Run Delta OPTIMIZE daily to compact the small files the micro-batch pattern creates. Handle DELETE events explicitly — mark as soft-deleted or use Delta MERGE DELETE clause.',
       ]} />
 

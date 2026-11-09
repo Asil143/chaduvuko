@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Asil',
+    title: 'Chaduvuko',
   },
   icons: {
     apple: '/icons/apple-touch-icon.png',
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
   },
 
   description:
-    'Free structured learning for every branch of IT — Data Engineering, Python, Web Dev, AI/ML, DevOps and more. Built for the US job market.',
+    'Free structured IT learning with practical lessons, projects, and interview preparation across data, programming, AI, cloud, and more.',
 
   keywords: [
     'data engineering',
@@ -125,7 +125,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Chaduvuko — Free IT Learning Platform',
     description:
-      'Free structured learning for every branch of IT — Data Engineering, Python, SQL, Web Dev, AI/ML and more. Built for the US job market. No paywall, ever.',
+      'Explore free structured lessons, hands-on projects, and interview preparation across data, programming, AI, cloud, and more.',
     type: 'website',
     url: 'https://chaduvuko.com',
     siteName: 'Chaduvuko',
@@ -140,7 +140,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Chaduvuko — Free IT Learning Platform',
     description:
-      'Free Data Engineering, Python, SQL, Web Dev, and AI/ML tutorials, real projects, and interview prep. Built by Asil — no paywall.',
+      'Free structured lessons, practical projects, and interview preparation across data, programming, AI, cloud, and more.',
     creator: '@Asil143',
     // No explicit `images` here either — see the openGraph comment above;
     // app/opengraph-image.tsx covers twitter:image too since no separate
@@ -156,7 +156,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Asil',
+    title: 'Chaduvuko',
   },
 
   icons: {

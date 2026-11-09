@@ -895,6 +895,25 @@ Recover
         <p>Related tutorial: <a href="/learn/data-engineering/git-for-data">release manifests and data recovery</a>.</p>
       </DEWorkshop>
 
+      <section style={{ marginBottom: 64 }}>
+        <SectionTag text="// GitOps" />
+        <SectionTitle>GitOps Adds Declarative Reconciliation and Drift Detection</SectionTitle>
+        <Para>
+          CI/CD builds, tests, and promotes an artifact. GitOps adds a controller that compares
+          the declared desired state in Git with the live environment and reconciles differences.
+          A Git-triggered deployment alone is not GitOps: the controller's reconciliation,
+          permissions, drift behavior, and deletion policy must be explicit.
+        </Para>
+        <CodeBox label="Illustrative Argo CD Application for a staging environment">{`apiVersion: argoproj.io/v1alpha1\nkind: Application\nmetadata:\n  name: data-platform-staging\n  namespace: argocd\nspec:\n  project: default\n  source:\n    repoURL: https://git.example.com/team/data-platform.git\n    targetRevision: main\n    path: environments/staging\n  destination:\n    server: https://kubernetes.default.svc\n    namespace: data-platform-staging\n  syncPolicy:\n    automated:\n      selfHeal: true\n      prune: false\n    syncOptions:\n      - CreateNamespace=true`}</CodeBox>
+        <Para>
+          In this example, the controller can correct live drift but does not automatically delete
+          resources removed from Git because pruning is disabled. Production promotion needs
+          reviewed changes, environment-specific access, secret management, health checks, and an
+          intentional recovery plan. Do not copy a sample manifest without verifying the controller
+          version and organizational policy.
+        </Para>
+      </section>
+
       <KeyTakeaways items={[
         'Data pipeline CI/CD has higher stakes than software CI/CD. A software bug surfaces as a visible error. A data bug looks like normal data but produces wrong numbers — discovered hours or days later after decisions have been made. This asymmetry demands rigorous testing before production deployment.',
         'Three environments: Dev (individual developer sandbox, small data subset, isolated schema), Staging/CI (Zero-Copy Clone of production data, isolated per PR, created on PR open and torn down after merge), Production (full data, pipeline service accounts only, no direct developer write access).',

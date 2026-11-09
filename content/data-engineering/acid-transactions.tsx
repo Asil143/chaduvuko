@@ -1278,7 +1278,7 @@ Consistency: the settlements table has a CHECK constraint that settlement_amount
 
 Isolation: while the settlements pipeline is loading March 14th data in its transaction, the finance team's reconciliation query is reading the settlements table. Because PostgreSQL uses READ COMMITTED isolation by default, the reconciliation query sees only records that were committed before its statement began. It does not see the in-progress March 14th records until the pipeline commits. Both operations run simultaneously without interfering.
 
-Durability: once the pipeline calls COMMIT, the settlements are permanent. If the server crashes one second after COMMIT returns, the data is still there when the server restarts — the WAL replay on startup recovers all committed data. The COMMIT response is only sent after the WAL is flushed to disk.`,
+Durability: a committed transaction is expected to survive failures covered by the database's durability configuration. Persistence depends on settings such as WAL flushing, storage guarantees, and replication policy. A successful COMMIT is not a backup and does not by itself protect against every hardware, operator, or site failure; verify the deployed configuration and recovery objectives.`,
           },
           {
             q: 'Q2. What is the difference between READ COMMITTED and REPEATABLE READ isolation levels? When would a data engineer use each?',

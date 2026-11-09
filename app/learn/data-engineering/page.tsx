@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import { TrackStats } from '@/components/content/TrackStats'
 import { DE_CURRICULUM } from '@/data/de-curriculum'
 
 type PhaseFilter = 'all' | '1' | '2' | '3' | '4' | '5' | '6'
@@ -47,17 +48,16 @@ export default function DataEngineeringTrack() {
       ? modules
       : modules.filter((m) => m.phase === parseInt(activePhase))
 
-  const totalTopics  = modules.reduce((sum, m) => sum + m.topics.length, 0)
-  const totalMinutes = modules.reduce((sum, m) => sum + parseInt(m.readTime), 0)
-  const totalHours   = Math.round(totalMinutes / 60)
+  const liveModules = modules.filter(m => m.status === 'live')
+  const totalTopics  = liveModules.reduce((sum, m) => sum + m.topics.length, 0)
 
   return (
     <LearnLayout
       title="Data Engineering"
-      description="From zero to production-grade DE — 47 lessons, no prerequisites"
+      description="A structured, 47-lesson Data Engineering path from core concepts to production patterns. Some modules assume Python and SQL foundations."
       section="Data Engineering"
       readTime="Self-paced"
-      updatedAt="March 2026"
+      updatedAt="November 2026"
     >
 
       {/* ── Who This Is For ────────────────────────────────────────────── */}
@@ -68,7 +68,7 @@ export default function DataEngineeringTrack() {
         marginBottom: 40,
       }}>
         {[
-          { icon: '🎓', label: 'Complete beginners — zero knowledge required' },
+          { icon: '🎓', label: 'New to Data Engineering — no prior DE job experience required' },
           { icon: '🔄', label: 'Non-IT background switching to tech' },
           { icon: '💼', label: 'Anyone preparing for DE interviews' },
           { icon: '📱', label: 'Students who want real depth, not just definitions' },
@@ -88,37 +88,13 @@ export default function DataEngineeringTrack() {
         ))}
       </div>
 
-      {/* ── Stats bar ──────────────────────────────────────────────────── */}
-      <div style={{
-        display: 'flex',
-        gap: 28,
-        flexWrap: 'wrap',
-        background: 'var(--surface)',
-        border: '1px solid var(--border)',
-        borderRadius: 12,
-        padding: '20px 28px',
-        marginBottom: 36,
-      }}>
-        {[
-          { value: `${modules.length}`, label: 'Lessons'        },
-          { value: '6',                 label: 'Phases'          },
-          { value: `${totalTopics}+`,   label: 'Topics covered'  },
-          { value: `${totalHours}h`,    label: 'Total content'   },
-          { value: '100%',              label: 'Free forever'    },
-        ].map((s) => (
-          <div key={s.label}>
-            <div style={{
-              fontSize: 24, fontWeight: 900,
-              color: 'var(--green)', fontFamily: 'var(--font-display)',
-            }}>
-              {s.value}
-            </div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{s.label}</div>
-          </div>
-        ))}
-      </div>
+      <TrackStats
+        lessons={liveModules.length}
+        phases={phaseInfo.length}
+        topics={totalTopics}
+      />
 
-      {/* ── No cloud tools note ────────────────────────────────────────── */}
+      {/* ── Tooling expectations ───────────────────────────────────────── */}
       <div style={{
         background: 'rgba(0,230,118,0.06)',
         border: '1px solid rgba(0,230,118,0.2)',
@@ -129,11 +105,17 @@ export default function DataEngineeringTrack() {
         color: 'var(--text)',
         lineHeight: 1.7,
       }}>
-        <strong style={{ color: 'var(--accent)' }}>No cloud tools in this track.</strong>{' '}
-        This is pure data engineering — concepts, architecture, pipelines, and patterns.
-        Azure, AWS, GCP, Spark, Airflow, and Kafka each have their own dedicated tracks.
-        This track makes you understand what any tool is actually doing before you touch it.
+        <strong style={{ color: 'var(--accent)' }}>Know what the examples require.</strong>{' '}
+        The lessons discuss cloud and platform tools including Azure, AWS, GCP, Spark, Airflow, Kafka, and Snowflake.
+        Most guided workshops use local or self-contained examples; some cloud examples require a separate account, setup,
+        and may incur provider charges. Check each lesson before running an external service.
       </div>
+
+      <p style={{ margin: '-20px 0 32px', color: 'var(--muted)', fontSize: 13, lineHeight: 1.7 }}>
+        No prior Data Engineering job experience is required. Lessons 14 and 15 assume Python and SQL basics; if needed,
+        start with <Link href="/learn/python" style={{ color: 'var(--accent)' }}>Python foundations</Link> and{' '}
+        <Link href="/learn/sql" style={{ color: 'var(--accent)' }}>SQL foundations</Link> first.
+      </p>
 
       {/* ── Curriculum heading + phase filter ─────────────────────────── */}
       <div style={{ marginTop: 48, marginBottom: 8 }}>
@@ -142,7 +124,7 @@ export default function DataEngineeringTrack() {
           textTransform: 'uppercase', color: 'var(--muted)',
           fontFamily: 'var(--font-mono)', marginBottom: 10,
         }}>
-          // Curriculum
+          {'// Curriculum'}
         </div>
 
         <div style={{
@@ -368,7 +350,7 @@ export default function DataEngineeringTrack() {
           textTransform: 'uppercase', color: 'var(--green)',
           fontFamily: 'var(--font-mono)', marginBottom: 14,
         }}>
-          // Ready to start?
+          {'// Ready to start?'}
         </div>
         <h3 style={{
           fontSize: 'clamp(18px, 2.5vw, 26px)', fontWeight: 900,

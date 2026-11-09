@@ -280,7 +280,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
               </p>
             )}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-4 text-xs font-mono" style={{ color: 'var(--muted)' }}>
-              {readTime  && <span className="flex items-center gap-1"><Clock size={11} /> {readTime}</span>}
+              {readTime  && <span className="flex items-center gap-1"><Clock size={11} /> Est. {readTime}</span>}
               {lessonNav ? (
                 lessonNav.context.updatedAt && (
                   <span className="flex items-center gap-1">
@@ -387,7 +387,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
                         <div className="flex-1 min-w-0">
                           <div className="text-sm font-display font-semibold truncate" style={{ color: 'var(--text)' }}>{page.title}</div>
                           <div className="text-xs font-mono mt-0.5" style={{ color: 'var(--muted)' }}>
-                            {page.section} · {page.readTime}
+                            {page.section} · Est. {page.readTime}
                           </div>
                         </div>
                         <ChevronRight size={14} className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"

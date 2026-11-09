@@ -273,10 +273,10 @@ export default function LakehouseArchitectureModule() {
 
         <Para>
           A lakehouse is not a product — it is an architectural pattern. It
-          consists of three components: cheap, durable object storage at the
-          bottom; an open table format layer that adds ACID semantics and metadata
-          management to the files on that storage; and multiple query engines on
-          top that all speak the same table format protocol.
+          commonly combines object storage, a transactional table format, catalog
+          and governance services, and one or more compute engines. An open table
+          format can improve interoperability, but engines do not necessarily
+          implement the same protocol versions or features.
         </Para>
 
         <SubSubTitle>The three layers, plus a cross-cutting governance layer</SubSubTitle>
@@ -286,37 +286,36 @@ export default function LakehouseArchitectureModule() {
 │  Spark (batch + streaming)   Databricks SQL Warehouse           │
 │  Trino / Athena (ad hoc)     dbt (transformations)              │
 │  Flink (streaming)           TensorFlow / PyTorch (ML)          │
-│  All engines speak the SAME table format protocol               │
+│  Engine support varies by format, protocol version, and feature │
 └──────────────────────────┬──────────────────────────────────────┘
                            │ reads/writes through table format API
 ┌──────────────────────────▼──────────────────────────────────────┐
 │                    OPEN TABLE FORMAT LAYER                      │
 │  Delta Lake (Databricks)  │  Apache Iceberg  │  Apache Hudi     │
-│  Provides: ACID transactions, time travel, schema enforcement,  │
-│  row-level DELETE/UPDATE, partition evolution, data skipping    │
-│  Implemented as: transaction log + Parquet data files           │
+│  Transaction, schema, delete, and partition features vary by    │
+│  table format and protocol version                              │
+│  Data files may use Parquet, Avro, or ORC, by format            │
 └──────────────────────────┬──────────────────────────────────────┘
                            │ raw files on object storage
 ┌──────────────────────────▼──────────────────────────────────────┐
 │                    OBJECT STORAGE LAYER                         │
 │  AWS S3  │  Azure ADLS Gen2  │  Google Cloud Storage            │
-│  Petabyte-scale, cheap ($23/TB/month), 11 nines durability,     │
-│  all data stored as open-format Parquet — no vendor lock-in     │
+│  Object storage durability, cost, retention, and access vary    │
+│  Parquet files do not remove catalog or compute dependencies    │
 └─────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────┐
 │                    GOVERNANCE LAYER (cross-cutting)             │
 │  Unity Catalog (Databricks)  │  Apache Polaris (open source)    │
 │  AWS Glue Data Catalog       │  Nessie (open source)            │
-│  Table discovery, column-level access control, cross-engine     │
-│  lineage, audit logging                                         │
+│  Catalog, access control, lineage, and audit support vary       │
+│  by product, version, and engine integration                    │
 └─────────────────────────────────────────────────────────────────┘`}</CodeBox>
 
-        <Output>{`KEY INSIGHT: every layer is replaceable.
-Replace Spark with Trino: same data, same governance, same ACID.
-Replace Delta Lake with Iceberg: change metadata format, same Parquet data.
-Replace S3 with ADLS: Iceberg adapts its path format.
-This composability is what the lakehouse pattern uniquely provides.`}</Output>
+        <Output>{`KEY INSIGHT: portability is conditional, not automatic.
+Changing an engine, table format, catalog, or storage provider can affect
+protocol support, transaction semantics, governance, permissions, and operations.
+Test the exact versions and workflows you need before claiming interchangeability.`}</Output>
 
         <SubTitle>Lake vs warehouse vs lakehouse — the three patterns today</SubTitle>
 
@@ -332,15 +331,15 @@ This composability is what the lakehouse pattern uniquely provides.`}</Output>
             { prop: 'Storage cost', lake: 'Very low (S3)', warehouse: 'Higher (managed)', lakehouse: 'Very low (S3)' },
             { prop: 'ACID transactions', lake: 'No', warehouse: 'Yes', lakehouse: 'Yes (via open table format)' },
             { prop: 'Row-level updates', lake: 'No (partition overwrite)', warehouse: 'Yes', lakehouse: 'Yes (MERGE, UPDATE, DELETE)' },
-            { prop: 'SQL analytics', lake: 'Limited (Presto/Athena)', warehouse: 'Excellent', lakehouse: 'Good (Databricks SQL, Trino)' },
-            { prop: 'ML training', lake: 'Excellent (Spark, Python)', warehouse: 'Poor (no Spark native)', lakehouse: 'Excellent (Spark reads same tables)' },
+            { prop: 'SQL analytics', lake: 'Depends on query engine', warehouse: 'Depends on service and workload', lakehouse: 'Depends on engine and table features' },
+            { prop: 'ML training', lake: 'Depends on available compute', warehouse: 'Depends on service and connectors', lakehouse: 'Use only with tested engine support' },
             { prop: 'Streaming ingestion', lake: 'Yes (Spark Streaming)', warehouse: 'Limited', lakehouse: 'Yes (Spark Streaming → same tables)' },
             { prop: 'Schema enforcement', lake: 'No (schema-on-read)', warehouse: 'Yes (schema-on-write)', lakehouse: 'Yes (enforced at commit time)' },
             { prop: 'Time travel', lake: 'No (plain Parquet)', warehouse: 'Limited', lakehouse: 'Yes (transaction log versions)' },
             { prop: 'Open format', lake: 'Yes (Parquet)', warehouse: 'No (proprietary)', lakehouse: 'Yes (Parquet + open table format)' },
-            { prop: 'Vendor lock-in', lake: 'Low', warehouse: 'High (Snowflake-specific SQL)', lakehouse: 'Low (open standards)' },
-            { prop: 'Data duplication', lake: 'Single copy (no warehouse)', warehouse: 'Often double (lake + warehouse)', lakehouse: 'Single copy (no warehouse needed)' },
-            { prop: 'Governance maturity', lake: 'Low (DIY)', warehouse: 'High (built-in)', lakehouse: 'Medium–High (Unity Catalog, Polaris)' },
+            { prop: 'Portability', lake: 'Depends on file formats and catalog', warehouse: 'Depends on APIs and proprietary features', lakehouse: 'Depends on format, catalog, engines, and governance' },
+            { prop: 'Data duplication', lake: 'May be one or more copies', warehouse: 'May coexist with a lake copy', lakehouse: 'Can share tables when consumers and engines support them' },
+            { prop: 'Governance', lake: 'Catalog and access-control dependent', warehouse: 'Service-specific capabilities', lakehouse: 'Catalog and engine capabilities vary' },
           ]}
         />
       </section>
@@ -732,16 +731,13 @@ per account. Multiple workspaces share the same metastore → same
 governance. Tables live on customer-owned S3/ADLS — Databricks never
 holds the data itself, only the metastore endpoint.`}</CodeBox>
 
-        <SubTitle>Apache Polaris — the open source Unity Catalog alternative</SubTitle>
+        <SubTitle>Apache Polaris — an Iceberg REST Catalog option</SubTitle>
 
         <Para>
-          Apache Polaris (incubating, donated by Snowflake in 2024) is the open
-          source implementation of the Iceberg REST Catalog specification with
-          governance features. It provides a vendor-neutral catalog that any
-          Iceberg-compatible engine can use — enabling Unity Catalog-like
-          governance without Databricks lock-in. As of 2026, Polaris is production-
-          ready and used by teams that want multi-engine governance without a single
-          vendor dependency.
+          Apache Polaris is an open-source implementation of the Iceberg REST Catalog
+          specification. Supported authentication, governance, and engine integrations depend
+          on the project release and surrounding services; verify the current capability set
+          for the exact deployment.
         </Para>
 
         <CodeBox label="The Iceberg REST Catalog spec, and pointing Spark at Polaris">{`ICEBERG REST CATALOG SPECIFICATION (standard REST API):
@@ -749,10 +745,10 @@ holds the data itself, only the metastore endpoint.`}</CodeBox>
   GET  /v1/namespaces/{ns}/tables                  list tables in namespace
   POST /v1/namespaces/{ns}/tables                  create table
 
-  ANY engine implementing this REST client can use ANY catalog server —
-  Spark, Flink, Trino, and Athena (via Glue Iceberg support) can all point
-  at the same Polaris REST catalog. This is the open standard equivalent
-  of Unity Catalog's proprietary API.
+  Engines that implement compatible parts of this REST API may connect to
+  compatible catalog servers. Validate authentication, authorization,
+  feature support, and protocol versions for each engine/catalog combination.
+  A shared API does not imply Unity Catalog feature parity.
 
 CONFIGURING SPARK TO USE POLARIS:
   spark.sql.catalog.freshcart = org.apache.iceberg.spark.SparkCatalog
@@ -1099,7 +1095,7 @@ Column masking policies dynamically mask or hash sensitive values based on the q
 
 Lineage is captured automatically from Spark queries, Databricks SQL, and dbt runs. For any Gold table, Unity Catalog can show which Silver columns contributed to which Gold columns, through which transformation. This is critical for impact analysis — before changing a Silver column, you can see every downstream Gold model affected.
 
-Apache Polaris is the open source alternative that implements the Iceberg REST Catalog specification with similar governance features, for teams that want equivalent capabilities without Databricks dependency.`,
+Apache Polaris is an open-source implementation of the Iceberg REST Catalog specification, but that does not make it feature-equivalent to Unity Catalog. Compare the current features and integrations required by the deployment.`,
           },
           {
             q: 'Q5. A team asks you whether they should migrate from Snowflake to a Databricks lakehouse. What questions would you ask and how would you evaluate the trade-off?',
@@ -1263,14 +1259,31 @@ print(f"writer_B={b} snapshot={snapshot}")`}</WorkshopCode>
         <p>References: <a href="https://iceberg.apache.org/docs/latest/reliability/">Iceberg reliability</a> and <a href="https://docs.delta.io/concurrency-control/">Delta Lake concurrency control</a>.</p>
       </DEWorkshop>
 
+      <section style={{ marginBottom: 64 }}>
+        <SectionTag text="// Open vs. Closed and Future Readiness" />
+        <SectionTitle>Evaluate Portability by Layer, Not by Label</SectionTitle>
+        <Para>
+          “Open” can describe a file format, table-format specification, catalog API, or license;
+          it does not mean every service is interchangeable or that governance is portable.
+          Define future readiness as an evaluation process: record the versions and capabilities
+          your workloads depend on, then retest them when engines or catalogs change.
+        </Para>
+        <CodeBox label="Portability checklist by layer">{`DATA FILES\n  Which file formats, encryption, and partition layouts are used?\n\nTABLE FORMAT\n  Which specification/version and features are required (deletes,\n  schema evolution, partition evolution, snapshots, change feeds)?\n\nCATALOG\n  Which catalog API, authentication, namespaces, and locking semantics?\n\nCOMPUTE\n  Can each required engine read and write the exact features in use?\n\nGOVERNANCE\n  How are identity, row/column policies, lineage, audit, and secrets handled?\n\nOPERATIONS\n  What are the migration, rollback, restore, retention, and exit procedures?`}</CodeBox>
+        <Para>
+          For example, Apache Polaris implements the Iceberg REST Catalog specification, while
+          Unity Catalog is a broader Databricks governance service. Compare the current supported
+          features and integrations for the required workflows; do not assume feature parity.
+        </Para>
+      </section>
+
       <KeyTakeaways items={[
-        'The lakehouse solves the two-system problem: organisations with both a data lake and a data warehouse maintain two copies of data, an ETL pipeline between them, and two sources of truth that diverge over time. The lakehouse eliminates the copy by adding ACID semantics directly to the lake storage layer.',
-        'The lakehouse architecture has three components: cheap object storage (S3/ADLS/GCS) at the bottom, an open table format (Delta Lake, Iceberg, or Hudi) that adds ACID semantics in the middle, and multiple compute engines (Spark, Databricks SQL, Trino, Flink) that all read/write the same table format at the top.',
+        'A lakehouse can reduce duplicate storage for workloads that share compatible tables and engines, but it does not automatically eliminate copies or create one source of truth. Define authoritative datasets and test actual consumers.',
+        'A lakehouse commonly combines object storage, a table format, catalog/governance services, and compute engines. Protocol versions, supported features, permissions, and operational behavior differ across implementations.',
         'Delta Lake achieves ACID on S3 via a transaction log (_delta_log/). New Parquet data files are written but invisible to readers until an atomic log entry commits them. The log entry is a single S3 PUT — atomic, all-or-nothing. Concurrent writers use optimistic concurrency with conflict detection and retry.',
         'Copy-on-Write (CoW) rewrites the entire affected file on every UPDATE/DELETE — fast reads, expensive writes. Merge-on-Read (MoR) writes small delete/change files and merges on read — cheap writes, more expensive reads. Choose CoW for analytics-heavy tables, MoR for high-velocity write workloads like CDC.',
         'Time travel queries return table state at a previous version or timestamp. Delta Lake uses VERSION AS OF and TIMESTAMP AS OF. Iceberg uses FOR SYSTEM_VERSION AS OF and FOR SYSTEM_TIME AS OF. Retention is configurable — longer retention enables longer time travel windows but increases storage cost.',
         'Iceberg partition evolution allows changing the partition strategy without rewriting any existing data. Old data retains its original partition spec in manifest metadata. New data uses the new spec. Queries efficiently prune both old and new data using the appropriate spec. Delta Lake lacks this feature — changing partition strategy requires full table rewrite.',
-        'Unity Catalog provides the governance layer for the Databricks lakehouse: three-level namespace (catalog.schema.table), column-level masking policies, row-level security, automatic cross-engine lineage, and audit logging. Apache Polaris is the open source equivalent for teams that want catalog-level governance without vendor lock-in.',
+        'Unity Catalog is a Databricks governance service; Apache Polaris implements the Iceberg REST Catalog specification. They are not interchangeable feature-for-feature. Compare supported identity, access control, lineage, audit, and engine integrations for the required versions.',
         'Streaming and batch can share the same Delta/Iceberg tables. Spark Structured Streaming writes CDC events to Bronze Delta Lake in micro-batches. dbt batch jobs read the same Silver Delta tables for Gold aggregation. ML training Spark jobs read the same tables for feature extraction. One copy, all consumers.',
         'Change Data Feed (CDF) on Delta Lake records which rows changed and how (insert/update/delete) alongside each write. Downstream Silver MERGE jobs can use CDF to read only the changed Bronze rows rather than scanning the entire Bronze table. Enable with ALTER TABLE SET TBLPROPERTIES (delta.enableChangeDataFeed = true).',
         'Choose the lakehouse when ML and SQL analytics must share data without duplication, data volume is large enough that duplication is expensive, multiple engines are required, or building a new platform. Stick with a managed warehouse (Snowflake, BigQuery) when the workload is primarily SQL analytics, team has no Spark expertise, sub-second interactive performance is critical, or an existing warehouse investment is in place.',

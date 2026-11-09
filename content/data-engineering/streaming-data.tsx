@@ -1065,13 +1065,12 @@ def process_order(event):
         </Para>
 
         <Para>
-          <strong>Globally across the entire topic: fundamentally impossible
-          at scale.</strong> A topic with 32 partitions on 8 machines, receiving
-          1 million events per second, cannot maintain a global total order.
-          The machines have independent clocks. Network delays are non-deterministic.
-          Any system claiming global ordering at that scale is either lying,
-          operating at extremely low throughput, or using a consensus protocol
-          that serialises every write — which kills your throughput entirely.
+          <strong>A global order has a coordination cost.</strong> A partitioned
+          topic does not provide one total order across its partitions. A single
+          partition provides an append order for that partition but limits parallel
+          writes; an external sequencer or consensus protocol can impose a broader
+          order with latency, availability, and capacity trade-offs. Benchmark the
+          actual workload instead of declaring global ordering impossible.
         </Para>
 
         <SubTitle>Designing around ordering constraints</SubTitle>
@@ -1521,7 +1520,7 @@ Sink: upsert window key + output version, not blind append of every update`}</Wo
         'Each partition is assigned to exactly one consumer in a consumer group at a time. Maximum parallelism equals the number of partitions. Adding more consumers than partitions wastes resources.',
         'At-most-once drops events on crash. At-least-once delivers events at least once — requires idempotent consumers. Exactly-once is the ideal but requires distributed transactions for multi-system outputs; most systems achieve it through at-least-once + idempotency.',
         'There are three clocks: event time (when it happened), ingestion time (when it hit the broker), processing time (when your consumer read it). Always aggregate business metrics on event time. Use watermarks to handle late-arriving events.',
-        'Global ordering across a topic is impossible at scale. Design your partition key so that events requiring relative ordering go to the same partition.',
+        'A partitioned topic provides ordering within each partition, not a total order across the topic. Use a stable key for per-entity ordering; a single sequencer or consensus design can provide broader ordering with explicit coordination and capacity trade-offs.',
         'Event notification (thin event + callback), event-carried state transfer (fat event, no callback), and event sourcing (log is the database) are three distinct patterns with different coupling, resilience, and complexity trade-offs.',
       ]} />
 

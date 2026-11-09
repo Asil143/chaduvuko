@@ -914,7 +914,9 @@ TRANSACTION LOG ENTRY (00000000000000000042.json):
   Consistency: schema validation at commit time
   Isolation:  optimistic concurrency — concurrent writes detected via
               log entry conflicts, one writer succeeds, other retries
-  Durability: S3 11-nines durability — once PUT, object is durable
+  Durability: follow the object store's documented durability model;
+              retention, deletion protection, availability, and backup
+              remain separate design and policy decisions
 
 TIME TRAVEL:
   Every commit in the log represents a version of the table.

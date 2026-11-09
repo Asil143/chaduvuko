@@ -28,15 +28,15 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
 }
 
 export async function generateStaticParams() {
-  return SNOWFLAKE_MODULES.map(module => ({ topic: module.slug }))
+  return SNOWFLAKE_MODULES.map(lesson => ({ topic: lesson.slug }))
 }
 
 export async function generateMetadata({ params }: { params: { topic: string } }): Promise<Metadata> {
-  const module = SNOWFLAKE_MODULE_BY_SLUG[params.topic]
-  if (!module) return { title: 'Snowflake' }
+  const lesson = SNOWFLAKE_MODULE_BY_SLUG[params.topic]
+  if (!lesson) return { title: 'Snowflake' }
   return {
-    title: `${module.title} | Snowflake`,
-    description: module.description,
+    title: `${lesson.title} | Snowflake`,
+    description: lesson.description,
   }
 }
 

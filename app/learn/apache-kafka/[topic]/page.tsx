@@ -32,21 +32,21 @@ const deepModuleMap: Record<string, () => Promise<{ default: React.ComponentType
 }
 
 export async function generateStaticParams() {
-  return KAFKA_MODULES.filter(module => module.status === 'live').map(module => ({ topic: module.slug }))
+  return KAFKA_MODULES.filter(lesson => lesson.status === 'live').map(lesson => ({ topic: lesson.slug }))
 }
 
 export async function generateMetadata({ params }: { params: { topic: string } }): Promise<Metadata> {
-  const module = KAFKA_MODULE_BY_SLUG[params.topic]
-  if (!module) return { title: 'Apache Kafka' }
+  const lesson = KAFKA_MODULE_BY_SLUG[params.topic]
+  if (!lesson) return { title: 'Apache Kafka' }
   return {
-    title: `${module.title} | Apache Kafka`,
-    description: module.description,
+    title: `${lesson.title} | Apache Kafka`,
+    description: lesson.description,
   }
 }
 
 export default async function ApacheKafkaTopicPage({ params }: { params: { topic: string } }) {
-  const module = KAFKA_MODULE_BY_SLUG[params.topic]
-  if (!module || module.status !== 'live') notFound()
+  const lesson = KAFKA_MODULE_BY_SLUG[params.topic]
+  if (!lesson || lesson.status !== 'live') notFound()
   const DeepContent = deepModuleMap[params.topic]
   if (DeepContent) {
     const { default: Content } = await DeepContent()

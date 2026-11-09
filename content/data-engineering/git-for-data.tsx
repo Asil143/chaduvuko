@@ -580,12 +580,27 @@ git push origin --force --tags
 # re-clone, since their local .git/objects still has the secret.
 
 # PREVENT RECURRENCE:
-# 1. Add .env to .gitignore (and commit the .gitignore)
-# 2. Add a pre-commit secret scanner:
-#    pip install detect-secrets
-#    detect-secrets scan > .secrets.baseline
-# 3. Enable GitHub secret scanning in repo settings
-# 4. Use git-secrets or gitleaks in pre-commit hooks`}</CodeBox>
+# 1. Add .env and credential files to .gitignore.
+# 2. Add this repository-root .pre-commit-config.yaml:
+#
+# repos:
+#   - repo: https://github.com/gitleaks/gitleaks
+#     rev: v8.24.2
+#     hooks:
+#       - id: gitleaks
+#
+# 3. Install and run the hook:
+python -m pip install pre-commit
+# Install Go if the selected hook environment requires it.
+pre-commit install
+pre-commit run --all-files
+#
+# Also enable server-side secret scanning in the repository.`}</CodeBox>
+        <Callout type="warning">
+          Client-side hooks can be bypassed and do not remove a secret already committed.
+          Enforce scanning in CI or on the server as well. If a credential is exposed, revoke
+          or rotate it with its issuer immediately; history cleanup is a separate, coordinated step.
+        </Callout>
       </section>
 
       <Divider />

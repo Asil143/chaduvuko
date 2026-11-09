@@ -347,7 +347,7 @@ class ParseResult:
     def __init__(self, record=None, error=None, raw=None):
         self.record = record   # OrderEvent if success
         self.error = error     # error message if failed
-        self.raw = raw         # original raw data — always preserved`}
+        self.raw = raw # original input available to the caller's retention policy`}
         </CodeBox>
         <Para>
           The parser itself never raises — it always returns a <code>ParseResult</code>,
@@ -2979,15 +2979,15 @@ A reviewable answer must state:
 
       <KeyTakeaways items={[
         'Python generators are the correct tool for processing large files in memory-constrained pipelines — yield one record at a time rather than loading everything into memory. Chain generators for a fully lazy, memory-efficient pipeline.',
-        'Window functions (RANK, DENSE_RANK, ROW_NUMBER, LAG, LEAD, AVG OVER) are the most commonly tested SQL feature in DE interviews. Know the difference between RANK (gaps) and DENSE_RANK (no gaps), and when ROWS BETWEEN vs RANGE BETWEEN matters.',
+        'Window functions (RANK, DENSE_RANK, ROW_NUMBER, LAG, LEAD, AVG OVER) are useful SQL interview practice. Know the difference between RANK (gaps) and DENSE_RANK (no gaps), and when ROWS BETWEEN vs RANGE BETWEEN matters; interview emphasis varies by employer.',
         'Idempotency is non-negotiable. Every pipeline write must produce the same result if run multiple times. The mechanism — UPSERT on natural key, partition overwrite, event_id deduplication — must be named explicitly in every design discussion.',
         'Data skew is the most common cause of unexpectedly slow Spark jobs. Diagnose via the Spark UI task duration histogram. Fix with broadcast joins (small table), salting (large-to-large join with hot key), or repartitioning on a better key.',
         'ETL vs ELT is a tool-capability question, not a philosophical preference. Use ELT when the destination (Snowflake, BigQuery) has sufficient compute for transformations. Use ETL when raw data contains PII that must never land in the destination.',
-        'SCD Type 2 is the standard for dimension history in data warehouses. One row per version of an entity, with valid_from, valid_to, and is_current columns. Surrogate keys (not natural keys) are what fact tables reference.',
-        'The medallion architecture (Bronze → Silver → Gold) is the standard lakehouse pattern. Bronze is raw and immutable. Silver is clean and typed. Gold is business-level and consumer-specific. Data only flows forward — never backward.',
-        'CAP theorem in practice: CP systems (HBase, Kafka with acks=all) reject requests during partitions to stay consistent. AP systems (Cassandra, DynamoDB with eventual consistency) respond with potentially stale data. Financial data = CP. Analytics dashboards = AP is acceptable.',
+        'SCD Type 2 is one common design for dimension history: retain versions with effective-time columns and a current-row indicator. Choose keys and temporal semantics to match the data contract and downstream joins.',
+        'Bronze → Silver → Gold is one medallion pattern, not a universal standard. Capture, mutability, retention, validation, and authority are implementation choices; define them explicitly for each layer.',
+        'CAP concerns behavior during a network partition: a service cannot guarantee both linearizable consistency and availability for every request. State the operation, consistency model, and configured behavior rather than labeling an entire product CP or AP.',
         'In behavioural questions, the evaluator wants to see: systematic thinking under pressure, ownership of failures (not blame), data-driven decision-making, and proactive communication with stakeholders. Generic "team player" answers fail.',
-        'The three trends to know going into 2026 interviews: Apache Iceberg as the open table format standard, AI-assisted pipeline development (know the tools and their limits), and streaming as the default for low-latency use cases that were previously batch-only.',
+        'Technology and hiring priorities change. Review dated job postings and official project documentation for the specific roles and tools you are targeting rather than relying on a fixed annual trend list.',
       ]} />
 
 

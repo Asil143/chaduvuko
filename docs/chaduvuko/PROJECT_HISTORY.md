@@ -127,6 +127,22 @@ Recovered Library content shows a Chaduvuko practice product called **Pipeline P
 - Added repeatable verification for all workshops, 28 executable examples, 229 Python syntax blocks and eight local-pipeline recovery scenarios; aligned 41 curriculum reading-time labels with lesson pages.
 - Recorded module-by-module details, references and verification limits in `DATA_ENGINEERING_CONTENT_REVIEW.md`. Existing routes, 47-module order and the rest of the lesson catalog remain intact.
 
+## November 8, 2026 — Data Engineering content versus statistics audit
+
+- Retrieved all 47 full live lesson bodies and mapped each of the 249 advertised topic entries to actual instructional evidence.
+- Recorded approximately 280,462 prose word units, 47 workshops and 60 interview answers. Matched all 28 executed Python examples to their live versions; the eight local-pipeline recovery checks and 229 syntax checks pass.
+- Flagged 24 topic entries for missing/limited treatment, instruction located elsewhere, unsupported factual claims or technical defects. Documented PostgreSQL CDC/DDL errors, an inconsistent Snowflake identifier pattern, an invalid AutomateDV macro example and incorrect CAP proof attribution. These were open at the time of the baseline audit; see the remediation entry below.
+- Recorded the 49-hour figure as the sum of unmeasured reading estimates, with actual-text reading scenarios and explicit practice/setup limits.
+- Added `DATA_ENGINEERING_STATISTICS_CONTENT_AUDIT.md`, a 249-entry CSV ledger and a per-lesson measurement/hash snapshot. This follow-up adds evidence and remaining issues beyond the earlier structural revision checks.
+
+## November 9, 2026 — Data Engineering audit remediation
+
+- Addressed and reconciled all 24 exceptions from the November 8 baseline audit; the current 249-entry ledger records instructional evidence for each topic.
+- Replaced unsupported job-market, salary, company-architecture, and career-scenario claims with scoped research exercises or clearly labeled fictional teaching examples.
+- Added missing serving, SSH, pre-commit, schema-evolution, push/pull, CDC-variant, anomaly-detection, and GitOps coverage; corrected or qualified CDC, Snowflake, AutomateDV, lakehouse portability, retention/order, and CAP-theorem content.
+- Verified with `npm run lint`, `npm run validate:de`, `npm run validate:catalog`, and `npm run build` including postbuild checks. Lint passes with three warnings in existing components.
+- The measurement/hash snapshot remains the November 8 live-site baseline. The changes are local and have not been deployed; external cloud integrations were not provisioned or tested.
+
 ## Ongoing rules
 - Keep StudyX Overseas separate.
 - Chaduvuko remains the primary EdTech project.

@@ -158,12 +158,12 @@ export default function DEEcosystemModule() {
         <SubTitle>The key insight — tools change, problems do not</SubTitle>
 
         <Para>
-          The data engineering tool landscape has changed dramatically every three years
-          for the past two decades. MapReduce introduced distributed batch execution, Hive added SQL
+          The data engineering tool landscape has changed over time. MapReduce introduced distributed batch execution, Hive added SQL
           interfaces and Spark provided another processing engine. These technologies can coexist;
           they are not a simple replacement chain. Databricks provides a broader platform. Formats like
-          Delta Lake and Iceberg emerged. Tools that were industry standard in 2018
-          are considered legacy in 2026.
+          Delta Lake and Iceberg emerged. Some tools are deprecated or replaced, while others remain
+          useful in particular environments; verify a tool's current support and fit instead of
+          assuming every older technology is obsolete.
         </Para>
 
         <Para>
@@ -204,16 +204,16 @@ export default function DEEcosystemModule() {
       {/* ── Part 02 — The Map ────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 02 — The Complete Map" />
-        <SectionTitle>Ten Categories. Every Tool Has a Home.</SectionTitle>
+        <SectionTitle>Eleven Common Categories. Most Tools Have a Home.</SectionTitle>
 
         <Para>
-          Every tool in data engineering belongs to one of ten categories. Some tools
-          span two categories — Airflow is both an orchestrator and a scheduler, dbt is
-          both a transformation tool and a testing framework. But every tool has a primary
-          category, and that is enough to understand where it fits.
+          Common data-platform tools can be grouped into eleven categories. Some tools
+          span categories — Airflow is both an orchestrator and a scheduler, dbt is
+          both a transformation tool and a testing framework. Infrastructure and platform
+          tools may sit alongside this map rather than fit neatly into one category.
         </Para>
 
-        <CodeBox label="The ten categories and their position in the data flow">{`DATA FLOW DIRECTION →
+        <CodeBox label="Eleven common categories across the data flow">{`DATA FLOW DIRECTION →
 
   [1. Programming     ]   Python, SQL, Scala, Bash
   [Languages         ]   The foundation everything else is written in
@@ -242,8 +242,12 @@ export default function DEEcosystemModule() {
   [9. Orchestration   ]   Apache Airflow, Prefect, Dagster, Luigi, AWS Step Functions
   [& Scheduling      ]   Schedule, sequence, monitor, and manage pipeline runs
 
-  [10. Quality        ]   Great Expectations, dbt tests, Monte Carlo, Soda, custom SQL
-  [& Observability   ]   Validate data correctness and monitor pipeline health`}</CodeBox>
+  [10. Serving        ]   Power BI, Tableau, Metabase, FastAPI, GraphQL
+  [& Consumption     ]   Deliver governed data to analysts and applications
+
+  [11. Quality        ]   Great Expectations, dbt tests, Monte Carlo, Soda, custom SQL
+  [& Observability   ]   Validate data correctness and monitor pipeline health
+                        (a cross-cutting concern across the flow)`}</CodeBox>
       </section>
 
       <Divider />
@@ -941,6 +945,57 @@ Airflow key concepts:
           background: 'var(--surface)', border: '1px solid var(--border)',
           borderRadius: 12, overflow: 'hidden', marginBottom: 20,
         }}>
+          <div style={{ height: 3, background: '#06b6d4', opacity: 0.8 }} />
+          <div style={{ padding: '24px 28px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+              <div style={{
+                width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+                background: 'rgba(6,182,212,0.12)', border: '1px solid rgba(6,182,212,0.3)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 13, fontWeight: 900, color: '#06b6d4',
+                fontFamily: 'var(--font-mono)',
+              }}>10</div>
+              <div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
+                  BI, API and Data Serving
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+                  Power BI · Tableau · Metabase · FastAPI · GraphQL
+                </div>
+              </div>
+            </div>
+
+            <Para>
+              Serving is the interface through which people and applications consume
+              curated data. BI tools query analytical models for dashboards and reports;
+              APIs expose selected data to product features. These are different delivery
+              paths with different access controls, freshness, latency and availability
+              requirements. A warehouse or processing engine may provide the data, but
+              it is not itself the whole serving experience.
+            </Para>
+
+            <CodeBox label="Match the serving path to the consumer">{`ANALYSTS
+  Curated warehouse models → BI tool (Power BI, Tableau, Metabase)
+  Optimize: consistent metric definitions, access controls, query performance
+
+APPLICATIONS
+  Curated operational view → API (for example, FastAPI or GraphQL)
+  Optimize: bounded latency, authentication, rate limits, stable contracts
+
+ML WORKLOADS
+  Validated training data → batch or feature-serving interface
+  Optimize: point-in-time correctness, freshness, reproducible versions
+
+Before choosing: identify the consumer, freshness target, access boundary,
+expected load, failure behavior, and owner of the served contract.`}</CodeBox>
+          </div>
+        </div>
+
+        {/* Category 11 */}
+        <div style={{
+          background: 'var(--surface)', border: '1px solid var(--border)',
+          borderRadius: 12, overflow: 'hidden', marginBottom: 20,
+        }}>
           <div style={{ height: 3, background: '#8b5cf6', opacity: 0.8 }} />
           <div style={{ padding: '24px 28px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
@@ -950,7 +1005,7 @@ Airflow key concepts:
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: 13, fontWeight: 900, color: '#8b5cf6',
                 fontFamily: 'var(--font-mono)',
-              }}>10</div>
+              }}>11</div>
               <div>
                 <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
                   Data Quality and Observability
@@ -1017,17 +1072,18 @@ Tools:
       {/* ── Part 04 — How the Stack Connects ────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 04 — The Stack in Practice" />
-        <SectionTitle>Three Real Company Stacks — Same Problems, Different Tools</SectionTitle>
+        <SectionTitle>Three Illustrative Data Platform Stacks</SectionTitle>
 
         <Para>
-          The same ten categories appear in every data platform. What changes between
-          companies is which specific tool they chose for each category. Here are three
-          real representative stacks you will encounter in 2026.
+          These fictional examples show how teams with different constraints might
+          choose tools across the same eleven common categories. They are teaching
+          scenarios, not claims about any specific company's architecture or current
+          hiring practices.
         </Para>
 
         {[
           {
-            type: 'Mid-size US Startup (Series B, ~200 employees)',
+            type: 'Product startup (illustrative scenario)',
             color: '#00e676',
             stack: [
               { cat: 'Languages', tool: 'Python + SQL', why: 'Small team, productivity over performance' },
@@ -1038,11 +1094,12 @@ Tools:
               { cat: 'Warehouse', tool: 'Snowflake', why: 'Analyst-friendly, scales with growth' },
               { cat: 'Processing', tool: 'dbt (SQL transforms) + PySpark for heavy jobs', why: 'Most transforms are warehouse-scale' },
               { cat: 'Orchestration', tool: 'Apache Airflow (managed on Astronomer)', why: 'Industry standard, good talent availability' },
+              { cat: 'Serving', tool: 'Metabase + internal API', why: 'Analyst dashboards and product features' },
               { cat: 'Quality', tool: 'dbt tests + custom SQL assertions', why: 'Built into transformation layer' },
             ],
           },
           {
-            type: 'Large Enterprise (Banking or Healthcare)',
+            type: 'Regulated enterprise (illustrative scenario)',
             color: '#0078d4',
             stack: [
               { cat: 'Languages', tool: 'Python + SQL + Scala', why: 'Large Spark workloads' },
@@ -1053,21 +1110,23 @@ Tools:
               { cat: 'Warehouse', tool: 'Azure Synapse Analytics', why: 'Native Microsoft integration, security controls' },
               { cat: 'Processing', tool: 'Azure Databricks (Spark) + dbt', why: 'Large data volumes, compliance requirements' },
               { cat: 'Orchestration', tool: 'Azure Data Factory + Airflow', why: 'ADF for Azure-native jobs, Airflow for complex DAGs' },
+              { cat: 'Serving', tool: 'Power BI + authenticated APIs', why: 'Separate analyst and application access paths' },
               { cat: 'Quality', tool: 'Great Expectations + Monte Carlo', why: 'Regulatory audit requirements' },
             ],
           },
           {
-            type: 'FAANG / High-Scale Consumer Platform',
+            type: 'High-scale consumer platform (illustrative scenario)',
             color: '#ff9900',
             stack: [
               { cat: 'Languages', tool: 'Python + SQL + Scala + Java', why: 'Scale requires all options' },
               { cat: 'Ingestion', tool: 'Custom internal platform + Kafka Connect', why: 'Scale makes custom tools cost-effective' },
-              { cat: 'Message Broker', tool: 'Apache Kafka (multi-cluster)', why: 'Billions of events per day' },
+              { cat: 'Message Broker', tool: 'Apache Kafka (multi-cluster)', why: 'High-volume event processing' },
               { cat: 'Object Storage', tool: 'Amazon S3 (multi-region)', why: 'AWS-native, multi-region redundancy' },
               { cat: 'Table Format', tool: 'Apache Iceberg', why: 'Engine-agnostic, works with Athena + Spark + Flink' },
               { cat: 'Warehouse', tool: 'Amazon Redshift + BigQuery', why: 'Different warehouses for different workloads' },
               { cat: 'Processing', tool: 'Apache Spark (custom EMR) + Flink + Trino', why: 'Different engines for different scale/latency needs' },
               { cat: 'Orchestration', tool: 'Internal platform + Airflow', why: 'Scale requires custom scheduling infrastructure' },
+              { cat: 'Serving', tool: 'BI platform + product data APIs', why: 'Different consumers need distinct contracts' },
               { cat: 'Quality', tool: 'Custom internal + Monte Carlo', why: 'Petabyte scale needs automated ML-based detection' },
             ],
           },
@@ -1117,12 +1176,12 @@ Tools:
         <SectionTitle>How to Read a Data Engineering Job Posting</SectionTitle>
 
         <Para>
-          Now apply the map to a real job posting. Here is a representative JD for a
-          mid-level data engineer role at a US fintech startup. Every technology
-          listed maps to one of the ten categories.
+          Apply the map to a job posting. The sample below is an illustrative,
+          fictional role description, not a live vacancy or employer quote. Each
+          technology maps to a category in the lesson.
         </Para>
 
-        <CodeBox label="Sample JD — Data Engineer, Fintech Startup, Seattle">{`We are looking for a Data Engineer to join our growing data team.
+        <CodeBox label="Illustrative job description — Data Engineer">{`We are looking for a Data Engineer to join a growing data team.
 
 Requirements:
   • 3+ years experience in data engineering
@@ -1134,11 +1193,12 @@ Requirements:
   • Familiarity with dbt for data transformation           ← Category 8: Processing (SQL)
   • Experience building ELT/ETL pipelines                  ← Category 3: Ingestion
   • Knowledge of data warehouse concepts (Redshift/Snowflake) ← Category 7: Warehouse
+  • Experience publishing datasets or APIs for consumers   ← Category 10: Serving
   • Understanding of data modelling (star schema, SCD)     ← Concepts, not a tool
 
 Nice to have:
   • Experience with Delta Lake or Apache Iceberg           ← Category 6: Table Formats
-  • Familiarity with Great Expectations or dbt tests       ← Category 10: Quality
+  • Familiarity with Great Expectations or dbt tests       ← Category 11: Quality
   • Terraform for infrastructure as code                   ← Infrastructure (IaC)
 
 What this JD is really asking:
@@ -1157,10 +1217,10 @@ What this JD is really asking:
   If you know Redshift, you can learn Snowflake. Categories are what count.`}</CodeBox>
 
         <TryThis>
-          Find a real data engineering job posting (LinkedIn, Indeed, a company
+          Find a current data engineering job posting (LinkedIn, Indeed, a company
           careers page) and annotate every technology it lists with its category
           number from Part 02, the way the sample JD above does. If a listed tool
-          doesn't fit cleanly into one of the ten categories, figure out which one
+          doesn't fit cleanly into one of the eleven categories, figure out which one
           it's closest to and why.
         </TryThis>
       </section>
@@ -1175,7 +1235,7 @@ What this JD is really asking:
         {[
           {
             wrong: '"You need to learn every tool in the ecosystem — Spark, Kafka, Airflow, dbt, Snowflake, and dozens more — before you can get hired"',
-            right: 'Part 01 is explicit that a job posting listing twenty tools is asking whether you understand the underlying categories — distributed processing, event streaming, orchestration — not whether you have hands-on experience with every named tool. Learn the ten categories from Part 02 and specific tools become fast to pick up.',
+            right: 'Part 01 is explicit that a job posting listing many tools is asking whether you understand the underlying categories — distributed processing, event streaming, orchestration — not whether you have hands-on experience with every named tool. Learn the eleven categories from Part 02 and specific tools become easier to evaluate.',
           },
           {
             wrong: '"Apache Spark is the industry-standard transformation tool, so every serious data engineer should default to it"',
@@ -1187,7 +1247,7 @@ What this JD is really asking:
           },
           {
             wrong: '"You should build your stack to match what FAANG companies use, since that\'s clearly the best technology"',
-            right: 'Part 04\'s three real company stacks show a Series B startup, a large enterprise, and a FAANG platform making completely different, equally valid tool choices for the same ten categories — each matched to their own scale and constraints. The Key Takeaways are explicit that a two-person team copying a billion-event-scale stack is a mismatch, not a best practice.',
+            right: 'Part 04\'s three fictional stacks illustrate different tool choices across the eleven categories. The examples show why teams should choose tools for their own scale, constraints and capabilities instead of copying a high-volume architecture without a matching requirement.',
           },
           {
             wrong: '"Kafka is essentially a message queue, interchangeable with something like RabbitMQ or SQS"',
@@ -1237,7 +1297,7 @@ What this JD is really asking:
           </Para>
 
           <Para>
-            Your thinking process — mapped to the ten categories:
+            Your thinking process — mapped to the eleven categories:
           </Para>
 
           <Para>
@@ -1496,7 +1556,7 @@ Portability             Export format, metadata access and migration procedure`}
       </DEWorkshop>
 
       <KeyTakeaways items={[
-        'The data engineering ecosystem has ten categories. Every tool belongs to one of them: Languages, Source Systems, Ingestion, Message Brokers, Object Storage, Table Formats, Warehouses, Processing Engines, Orchestration, and Quality/Observability.',
+        'Common data-platform tools can be grouped into eleven categories: Languages, Source Systems, Ingestion, Message Brokers, Object Storage, Table Formats, Warehouses, Processing Engines, Orchestration, Serving, and Quality/Observability. Infrastructure tools may sit alongside this map, and quality is cross-cutting.',
         'Tools change every few years. Categories do not. Learn what each category solves and you can pick up any specific tool in that category within a week of focused practice.',
         'Python and SQL are non-negotiable. Everything else is a choice based on company stack. A data engineer who writes excellent SQL and clean Python can do 80% of real production work.',
         'Managed ingestion connectors (Fivetran, Airbyte) save weeks of engineering time for standard SaaS sources. Custom Python is necessary for internal databases and non-standard sources. Most teams use both.',

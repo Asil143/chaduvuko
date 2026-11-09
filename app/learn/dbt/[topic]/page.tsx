@@ -27,21 +27,21 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
 }
 
 export async function generateStaticParams() {
-  return DBT_MODULES.filter(module => module.status === 'live').map(module => ({ topic: module.slug }))
+  return DBT_MODULES.filter(lesson => lesson.status === 'live').map(lesson => ({ topic: lesson.slug }))
 }
 
 export async function generateMetadata({ params }: { params: { topic: string } }): Promise<Metadata> {
-  const module = DBT_MODULE_BY_SLUG[params.topic]
-  if (!module) return { title: 'dbt' }
+  const lesson = DBT_MODULE_BY_SLUG[params.topic]
+  if (!lesson) return { title: 'dbt' }
   return {
-    title: `${module.title} | dbt`,
-    description: module.description,
+    title: `${lesson.title} | dbt`,
+    description: lesson.description,
   }
 }
 
 export default async function DbtTopicPage({ params }: { params: { topic: string } }) {
-  const module = DBT_MODULE_BY_SLUG[params.topic]
-  if (!module || module.status !== 'live') notFound()
+  const lesson = DBT_MODULE_BY_SLUG[params.topic]
+  if (!lesson || lesson.status !== 'live') notFound()
   const loader = moduleMap[params.topic]
   if (!loader) notFound()
   const { default: Content } = await loader()

@@ -972,9 +972,9 @@ INFO Wrote 199,999 rows to s3://freshcart-lake/bronze/orders_json/2026-03-17.par
         <SectionTitle>File Lifecycle — Retention, Archival, and Cleanup</SectionTitle>
 
         <Para>
-          A data lake without a lifecycle policy is a storage cost that grows
-          indefinitely. Every file written to S3 costs money per GB per month
-          forever, unless explicitly deleted or transitioned to cheaper storage.
+          A data lake without a lifecycle policy can retain unused files and incur
+          ongoing storage charges. Costs and retrieval behavior depend on storage
+          class, region, replication, requests, and the retention policy.
         </Para>
 
         <SubSubTitle>S3 lifecycle rules — automated tier transitions</SubSubTitle>
@@ -1012,7 +1012,7 @@ INFO Wrote 199,999 rows to s3://freshcart-lake/bronze/orders_json/2026-03-17.par
     transition { days = 730 storage_class = "GLACIER" }   # 2 years
   }
 
-  # Gold layer — usually small, kept hot forever, no rule needed
+  # Gold layer — choose retention and storage class for its consumers and recovery needs
 }`}</CodeBox>
 
         <CompareTable
@@ -1317,7 +1317,7 @@ Fifth, check for missing or stale statistics. Query optimisers use column statis
           },
           {
             q: 'Setting up a data lake with no lifecycle policy at all',
-            a: 'Storage cost on S3 Standard never goes away on its own — every file written, including ones nobody has read in two years, keeps billing at full price forever. Part 08\'s lifecycle rules (transition to Infrequent Access, then Glacier, then expire) are a one-time Terraform change that keeps this from becoming a growing, unnoticed cost.',
+            a: 'Retained objects can continue to incur storage charges, but the amount depends on storage class, region, replication, and applicable requests. Review lifecycle transitions and expiration against replay, legal, and recovery requirements; test lifecycle changes before applying them to production data.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1361,7 +1361,7 @@ Fifth, check for missing or stale statistics. Query optimisers use column statis
           {
             error: `Delta Lake AnalysisException: The schema of your Delta table has changed — cannot write because column 'delivery_fee' in the data does not match the table schema`,
             cause: 'A new column appeared in the source data that was not in the Delta table\'s schema when it was created. Delta Lake enforces schema-on-write by default and rejects writes where the input DataFrame has columns the table does not. This is schema enforcement working correctly — but it requires explicit handling to add the new column.',
-            fix: 'To add the new column and allow writes: enable schema evolution with the mergeSchema option: df.write.format("delta").option("mergeSchema", "true").mode("append").save(path). This automatically adds new columns from the DataFrame to the Delta table schema. Alternatively, explicitly alter the table schema first: ALTER TABLE silver.orders ADD COLUMNS (delivery_fee DECIMAL(6,2)). The mergeSchema approach is more automated but should be used carefully — you want to validate that the new column is expected, not silently accept any schema change from an upstream source change.',
+            fix: 'First compare the incoming schema with the approved data contract and verify the field name, type, nullability, and downstream impact. For a reviewed Delta Lake additive change, use mergeSchema or the platform-specific ALTER TABLE migration, then test readers and downstream models. mergeSchema is Delta-specific and should not be enabled as a blanket response to arbitrary upstream schema changes.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1415,6 +1415,38 @@ print(f"avg_uncompressed_MiB_per_file={daily_bytes / files / 2**20:.2f}")`}</Wor
         </WorkshopAnswer>
         <p>References: <a href="https://parquet.apache.org/docs/file-format/">Parquet file layout</a> and <a href="/learn/data-engineering/lakehouse-architecture">table snapshot maintenance</a>.</p>
       </DEWorkshop>
+
+      <section style={{ marginBottom: 64 }}>
+        <SectionTag text="// Schema Evolution" />
+        <SectionTitle>Change File and Table Schemas Deliberately</SectionTitle>
+        <Para>
+          A producer change can affect files already written, table metadata, readers, and
+          downstream models. Compatibility rules depend on the serialization format and table
+          format; do not assume that an additive change or an automatic merge is safe for every
+          consumer.
+        </Para>
+        <CodeBox label="Add a nullable field, then validate the migration">{`-- Example table-format SQL; verify exact syntax for your platform.
+ALTER TABLE silver.orders ADD COLUMNS (delivery_fee DECIMAL(6,2));
+
+-- Roll out readers that tolerate a missing/null value.
+-- Backfill in bounded, observable batches if required by the contract.
+-- Validate null rate, type conversion, row counts, and downstream models.
+-- Make the field required only after old writers and records are handled.`}</CodeBox>
+        <CodeBox label="Delta schema evolution is explicit and format-specific">{`# Use only after validating the exact expected schema change.
+df.write.format("delta") \\
+  .option("mergeSchema", "true") \\
+  .mode("append") \\
+  .save(path)
+
+# Do not enable automatic evolution for arbitrary untrusted source columns.
+# Record the approved schema change and test readers before deployment.`}</CodeBox>
+        <Para>
+          For renames and incompatible type changes, prefer an expand-and-contract rollout:
+          add a new field, dual-write or backfill, migrate readers, verify them, and remove the
+          old field in a later release. Preserve schema versions and source metadata for the
+          documented replay window, subject to deletion policy.
+        </Para>
+      </section>
 
       <KeyTakeaways items={[
         'File naming must encode source, entity, date (ISO 8601 UTC), and a unique run identifier. ISO 8601 dates (YYYYMMDD) sort lexicographically in chronological order. Include the pipeline run ID in filenames to trace any file back to the run that created it. Never use mutable names like "latest" or "final."',

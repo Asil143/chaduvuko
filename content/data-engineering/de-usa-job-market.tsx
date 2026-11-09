@@ -122,8 +122,8 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
 export default function DEUsaJobMarketModule() {
   return (
     <LearnLayout
-      title="Data Engineering in the US Job Market (2026)"
-      description="Salaries, companies, skills, JD decoding, and breaking in from a non-CS background."
+      title="Researching Data Engineering Roles and Compensation"
+      description="Use dated employer postings to research role scope, compensation disclosures, skill requirements, and career evidence."
       section="Data Engineering — Lesson 06"
       readTime="50 min"
     >
@@ -131,7 +131,7 @@ export default function DEUsaJobMarketModule() {
       {/* ── Part 01 — State of the Market ────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The State of the Market" />
-        <SectionTitle>Data Engineering in the US — 2026 Reality</SectionTitle>
+        <SectionTitle>Research Data Engineering Roles With Evidence</SectionTitle>
 
         <Para>
           Data engineering roles differ by employer, level, location and the systems a team operates.
@@ -140,15 +140,10 @@ export default function DEUsaJobMarketModule() {
         </Para>
 
         <Para>
-          The growth is being driven by three forces simultaneously. First, consumer
-          internet and fintech companies — DoorDash, Stripe, Airbnb, Brex, Robinhood,
-          Instacart — have scaled to tens of millions of users and are now generating
-          data volumes that require serious engineering to handle. Second, large
-          enterprises — JPMorgan, Walmart, Amazon, Microsoft, Google — are building
-          massive internal data platform teams, often paying well above the market
-          median for senior talent. Third, the AI and ML wave has increased demand for
-          the data pipelines that feed ML models — every company building AI features
-          needs data engineers to prepare the training and inference data.
+          Demand, job titles, team sizes, and technology choices change over time and vary
+          between employers. Rather than infer a market trend from a list of company names,
+          collect current postings for a defined role, location, and period, then report what
+          that sample does—and does not—show.
         </Para>
 
         <HighlightBox>
@@ -182,547 +177,198 @@ export default function DEUsaJobMarketModule() {
         </HighlightBox>
 
         <Callout type="info">
-          <strong>Interpret the examples carefully:</strong> The salary bands, city multipliers,
-          company comparisons and career timelines below are illustrative teaching scenarios.
-          A supporting survey is not supplied, so they must not be treated as verified 2026 market
-          statistics, live vacancies or promises of employment. Use current employer disclosures
-          for decisions and distinguish guaranteed cash from uncertain equity value.
+          <strong>Evidence note:</strong> This lesson does not contain a representative salary
+          survey or a verified live-vacancy list. The activities teach how to collect and compare
+          current employer information; they do not establish national market statistics or
+          promise employment outcomes.
         </Callout>
       </section>
 
       <Divider />
 
-      {/* ── Part 02 — Salary Data ────────────────────────────────────── */}
+      {/* ── Part 02 — Compensation Research ─────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
-        <SectionTag text="// Part 02 — Comparing Compensation" />
-        <SectionTitle>Reading Salary Bands and Total Compensation</SectionTitle>
-
+        <SectionTag text="// Part 02 — Compensation Research" />
+        <SectionTitle>Compare Compensation Without Inventing Market Benchmarks</SectionTitle>
         <Para>
-          Salary data for data engineering in the US is scattered and often
-          misleading — job boards conflate data analyst, data scientist, and data
-          engineer salaries, and the ranges are wide enough to be unhelpful without
-          context. Here is the breakdown by experience level, city, and company type
-          with enough specificity to be genuinely useful for career planning.
+          This lesson does not include a dated, representative salary dataset. It therefore does
+          not publish salary bands, city multipliers, or employer-type pay premiums as market
+          facts. Use the checklist below to build a traceable comparison for a specific role and
+          time period.
         </Para>
+        <CodeBox label="A repeatable compensation comparison checklist">{`For every posting or disclosure, record:
+  source URL and collection date
+  title, level, location, and responsibilities
+  stated base-pay range and currency/pay period
+  bonus and equity separately, including valuation caveats
+  whether the source is employer-posted or self-reported
 
-        <SubTitle>Illustrative experience bands — not national medians</SubTitle>
-
-        <CodeBox label="Illustrative compensation scenarios — not a verified market survey">{`Level              Years     Base Salary Range    Total Comp (with equity)
-──────────────────────────────────────────────────────────────────────
-Junior DE          0–2 yrs   $75K–$100K           $80K–$110K
-                             Entry into DE from
-                             non-CS or CS new grad
-
-Data Engineer      2–4 yrs   $100K–$140K          $130K–$175K
-                             Owns pipelines end-
-                             to-end independently
-
-Senior DE          4–7 yrs   $140K–$185K          $155K–$215K
-                             Designs systems,
-                             mentors, cross-team
-
-Staff / Lead DE    7–10 yrs  $185K–$240K          $215K–$290K
-                             Technical strategy,
-                             platform decisions
-
-Principal DE       10+ yrs   $240K–$320K+         $290K–$420K+
-                             Company-level data
-                             platform vision
-
-Notes:
-  → These are base salary ranges at well-paying product companies
-  → Consulting firms (Accenture/Deloitte) pay 25–35% below these ranges
-  → Large enterprises (JPMorgan, Walmart, banks) pay 10–20% above
-  → FAANG (Amazon, Google, Meta) pay 55–90% above via base + RSU value
-  → Equity at funded startups can add $20K–$300K+ in value if the exit lands`}</CodeBox>
-
-        <SubTitle>City multipliers — how location affects salary</SubTitle>
-
-        <Para>
-          The San Francisco Bay Area pays the most for data engineering in the US
-          and is the reference point for all comparisons. Other cities pay varying
-          multiples of the Bay Area base depending on the density of tech companies
-          and local cost of living.
-        </Para>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, marginBottom: 24 }}>
-          {[
-            { city: 'SF Bay Area', mult: '1.30×', note: 'Highest density of product companies and FAANG HQs', color: '#00e676', example: '$150K base → $195K' },
-            { city: 'Seattle', mult: '1.20×', note: 'Amazon, Microsoft, and a growing GCP presence', color: '#00e676', example: '$150K base → $180K' },
-            { city: 'New York City', mult: '1.20×', note: 'Strong fintech sector (Stripe, Robinhood, Brex)', color: '#00e676', example: '$150K base → $180K' },
-            { city: 'Austin', mult: '1.05×', note: 'Fast-growing hub, Tesla/Apple/Google offices', color: '#facc15', example: '$150K base → $157K' },
-            { city: 'Boston', mult: '1.05×', note: 'Mix of biotech, fintech, and established tech', color: '#facc15', example: '$150K base → $157K' },
-            { city: 'Chicago', mult: '0.95×', note: 'Reference city for enterprise benchmarking', color: '#f97316', example: '$150K base → $142K' },
-            { city: 'Remote (US)', mult: '1.10×', note: 'Many companies pay a premium to hire nationally', color: '#00e676', example: '$150K base → $165K' },
-            { city: 'Lower COL Metros', mult: '0.85×', note: 'Columbus, Raleigh, Tampa — growing but limited', color: '#ff4757', example: '$150K base → $127K' },
-          ].map((item) => (
-            <div key={item.city} style={{
-              background: 'var(--surface)', border: '1px solid var(--border)',
-              borderRadius: 10, padding: '14px 16px',
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
-                  {item.city}
-                </div>
-                <div style={{
-                  fontSize: 13, fontWeight: 900, color: item.color,
-                  fontFamily: 'var(--font-mono)',
-                }}>{item.mult}</div>
-              </div>
-              <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.5, marginBottom: 6 }}>
-                {item.note}
-              </div>
-              <div style={{
-                fontSize: 11, color: item.color, fontFamily: 'var(--font-mono)',
-                background: `${item.color}10`, borderRadius: 4, padding: '2px 8px',
-                display: 'inline-block',
-              }}>
-                {item.example}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <SubTitle>Company type multipliers — the biggest salary driver</SubTitle>
-
-        <Para>
-          Company type has a bigger impact on salary than city. The difference between
-          working at a consulting firm and a FAANG operation is often 2–3× for the
-          same role, experience, and city.
-        </Para>
-
-        <CodeBox label="Illustrative company comparisons — replace with dated employer disclosures">{`Company Type          Multiplier   Mid-level Total Comp  Why
-──────────────────────────────────────────────────────────────────────
-FAANG / AI Labs       1.75×        $175K–$260K           Stock + high base,
-(Amazon, Google,                                          competitive global
-Meta, OpenAI)                                             talent market
-
-Large Enterprise      1.15×        $150K–$185K           Stable pay bands,
-(JPMorgan, Walmart,                                       large-scale platform
-Banks, Insurance)                                          work
-
-High-Growth Startup   1.10×        $115K–$150K           Equity adds value,
-(Brex, Instacart,                                          high learning rate,
-Stripe, Robinhood)                                        higher risk
-
-Product Company       1.00×        $130K–$175K           Benchmark —
-(Mid-size, funded)                                        DoorDash, Shopify,
-                                                           Airbnb, Databricks
-
-Enterprise Software    0.95×        $125K–$165K           IBM, Oracle, SAP,
-(non-FAANG)                                                stable but slower-
-                                                            moving stacks
-
-Consulting             0.70×        $95K–$130K            Accenture, Deloitte, KPMG,
-(IT services)                                              Cognizant — volume
-                                                            hiring, lower pay
-
-Note: "Mid-level Total Comp" above is total compensation (base + bonus/
-equity), not base-only — see the experience-level table above for
-base-only figures by level.
-
-Note on consulting firms: While salary is lower, consulting firms provide
-structured training, large enterprise client exposure, and a recognizable
-brand on a resume. Many engineers start here and move to product companies
-after 2–3 years.`}</CodeBox>
-      </section>
-
-      <Divider />
-
-      {/* ── Part 03 — Top Hiring Companies ──────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
-        <SectionTag text="// Part 03 — Who Is Hiring" />
-        <SectionTitle>Top Companies Hiring Data Engineers in the US (2026)</SectionTitle>
-
-        <Para>
-          These are the companies with consistent, high-volume data engineering hiring
-          in the US right now. They are grouped by category with notes on what the
-          work actually looks like at each type.
-        </Para>
-
-        {[
-          {
-            category: 'High-Growth Product Companies',
-            color: '#00e676',
-            desc: 'The highest-learning environments for data engineering. Fast-growing data volumes, modern stacks, real production problems. Equity can be valuable at pre-IPO companies.',
-            companies: [
-              { name: 'DoorDash', roles: 'DE, Analytics Eng, Data Platform', stack: 'Spark, Kafka, Airflow, dbt, Snowflake', note: 'Strong data platform team, good mentorship' },
-              { name: 'Airbnb', roles: 'DE, Data Platform Eng', stack: 'Spark, Airflow, Druid, Kafka', note: 'Mature data platform, high engineering bar' },
-              { name: 'Shopify', roles: 'DE, Analytics Eng', stack: 'Spark, dbt, Redshift, Airflow', note: 'Fast-growing, significant data engineering investment' },
-              { name: 'Stripe', roles: 'DE, Data Infra', stack: 'Spark, Kafka, ClickHouse, Airflow', note: 'Payments data at scale, real-time requirements' },
-              { name: 'Brex', roles: 'DE, Analytics Eng', stack: 'dbt, Snowflake, Airflow, Kafka', note: 'Modern stack, strong engineering culture' },
-              { name: 'Robinhood', roles: 'DE, Data Eng', stack: 'Python, PostgreSQL, Redshift, Kafka', note: 'Fintech, growing data teams' },
-              { name: 'Instacart', roles: 'DE, Data Platform', stack: 'Kafka, Spark, BigQuery', note: 'Real-time supply chain and marketplace data' },
-              { name: 'Databricks / Snowflake', roles: 'DE, Analytics Eng', stack: 'Their own platforms, Python, SQL', note: 'Building the tools other data engineers use' },
-            ],
-          },
-          {
-            category: 'Large Enterprises',
-            color: '#4285f4',
-            desc: 'High absolute salaries at senior levels, with the most stable pay bands. Work on internal data platforms with access to enterprise-scale problems and often deep legacy systems to modernize.',
-            companies: [
-              { name: 'JPMorgan Chase', roles: 'DE, Data Platform, Quant Data Eng', stack: 'Spark, Python, internal platforms', note: 'Finance data at global scale, compliance-heavy' },
-              { name: 'Goldman Sachs', roles: 'DE, Data Engineer', stack: 'Slang (internal), Python, AWS', note: 'Proprietary tech stack, top-tier comp' },
-              { name: 'Walmart Global Tech', roles: 'DE, Data Platform Eng', stack: 'Spark, Kafka, Hive, Azure', note: 'Retail data at massive scale, legacy + modern mix' },
-              { name: 'Amazon (AWS/Retail)', roles: 'DE, SDE-Data', stack: 'AWS native, Redshift, Glue, Kinesis', note: 'AWS-first stack, data engineering at Amazon scale' },
-              { name: 'Microsoft', roles: 'DE, Data Eng (Azure)', stack: 'Azure-native, Databricks, Synapse', note: 'Azure stack depth, Azure certification valued' },
-              { name: 'Google', roles: 'DE, Data Eng', stack: 'GCP-native, BigQuery, Dataflow, Pub/Sub', note: 'GCP depth, SWE-like hiring bar' },
-            ],
-          },
-          {
-            category: 'Consulting Firms',
-            color: '#f97316',
-            desc: 'Lower salary but large data engineering teams with consistent hiring. Good for getting a first job and building structured experience before moving to product companies.',
-            companies: [
-              { name: 'Accenture', roles: 'Data Engineer, ETL Developer', stack: 'Informatica, SQL, basic Azure/AWS', note: 'Volume hiring, structured training programs' },
-              { name: 'Deloitte', roles: 'Data Engineer, Big Data Eng', stack: 'Hadoop, Spark, SQL, cloud basics', note: 'Structured training track, client placement' },
-              { name: 'KPMG', roles: 'Data Engineer, Analytics Dev', stack: 'Azure/AWS, SQL, Talend', note: 'Large data practice, many enterprise clients' },
-              { name: 'Cognizant', roles: 'Data Engineer, BI Developer', stack: 'SQL, SSIS, Azure, Power BI', note: 'Banking and healthcare client focus' },
-              { name: 'PwC', roles: 'Data Engineer, Cloud Data Eng', stack: 'Azure Databricks, ADF, Snowflake', note: 'Client-facing cloud data engineering work' },
-            ],
-          },
-          {
-            category: 'Analytics Consultancies and Niche Players',
-            color: '#7b61ff',
-            desc: 'Work across multiple client industries. Faster exposure to different data problems. Often a stepping stone to product companies.',
-            companies: [
-              { name: 'Palantir', roles: 'Forward Deployed Eng / Data Eng', stack: 'Python, SQL, custom platforms', note: 'Embedded consulting, proprietary training' },
-              { name: 'ThoughtWorks', roles: 'Data Engineer', stack: 'Modern cloud, dbt, Airflow, Spark', note: 'Strong engineering culture, client delivery focus' },
-              { name: 'Slalom', roles: 'Data Engineer', stack: 'AWS/Azure, Spark, dbt', note: 'Mid-size, specialised data engineering practice' },
-            ],
-          },
-        ].map((section) => (
-          <div key={section.category} style={{ marginBottom: 28 }}>
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10,
-            }}>
-              <div style={{
-                width: 10, height: 10, borderRadius: '50%',
-                background: section.color, flexShrink: 0,
-              }} />
-              <div style={{
-                fontSize: 13, fontWeight: 800, color: section.color,
-                fontFamily: 'var(--font-display)', letterSpacing: '-0.2px',
-              }}>{section.category}</div>
-            </div>
-            <div style={{
-              fontSize: 13, color: 'var(--muted)', lineHeight: 1.6,
-              marginBottom: 12, paddingLeft: 20,
-              borderLeft: `2px solid ${section.color}30`,
-            }}>
-              {section.desc}
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {section.companies.map((company) => (
-                <div key={company.name} style={{
-                  background: 'var(--surface)', border: '1px solid var(--border)',
-                  borderRadius: 10, padding: '14px 18px',
-                  display: 'grid',
-                  gridTemplateColumns: '140px 1fr 1fr',
-                  gap: 12, alignItems: 'start',
-                }}>
-                  <div style={{
-                    fontSize: 13, fontWeight: 800, color: 'var(--text)',
-                    fontFamily: 'var(--font-display)',
-                  }}>{company.name}</div>
-                  <div>
-                    <div style={{ fontSize: 11, color: section.color, fontFamily: 'var(--font-mono)', marginBottom: 2 }}>
-                      {company.roles}
-                    </div>
-                    <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
-                      {company.stack}
-                    </div>
-                  </div>
-                  <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5, fontStyle: 'italic' }}>
-                    {company.note}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </section>
-
-      <Divider />
-
-      {/* ── Part 04 — Skills in Demand ───────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
-        <SectionTag text="// Part 04 — Skills in Demand" />
-        <SectionTitle>What US Companies Actually Hire For — The Real Skill Map</SectionTitle>
-
-        <Para>
-          Job descriptions list dozens of tools, but hiring managers actually filter
-          on a much smaller set of core competencies. Here's what genuinely moves the
-          needle in a US data engineering interview, ranked by how often it appears
-          as a hard requirement rather than a "nice to have."
-        </Para>
-
-        <SubTitle>Tier 1 — Non-negotiable (appears in 90%+ of JDs)</SubTitle>
-        <CodeBox label="Core skills every US DE role expects">{`SQL (Advanced)        Window functions, CTEs, query optimization,
-                       reading EXPLAIN plans. This is tested in almost
-                       every interview loop, often live.
-
-Python                Clean, production-grade code — not notebooks.
-                       Comfortable with OOP, testing, and packaging.
-
-A Cloud Platform       AWS, Azure, or GCP — pick one and go deep rather
-(pick one)             than shallow across all three. AWS has the
-                       largest market share of DE job postings.
-
-Data Modeling          Star schema, dimensional modeling, understanding
-                       when to normalize vs. denormalize for analytics.
-
-Orchestration          Airflow is still the market standard, though
-                       Dagster and Prefect are gaining share at
-                       modern startups.`}</CodeBox>
-
-        <SubTitle>Tier 2 — Strong differentiators (appears in 40–70% of JDs)</SubTitle>
-        <CodeBox label="Skills that separate mid from senior candidates">{`Spark / Distributed Computing    Processing data at a scale where a
-                                  single machine can't keep up.
-
-dbt                               The default transformation layer at
-                                  modern data companies. Fast to learn,
-                                  expected at analytics-forward teams.
-
-Streaming (Kafka/Kinesis/Flink)   Increasingly expected for senior
-                                  roles as more companies move toward
-                                  real-time analytics.
-
-Data Warehouse Internals          Snowflake, BigQuery, or Redshift —
-                                  understanding partitioning, clustering,
-                                  and cost optimization, not just SQL.
-
-CI/CD & Infrastructure as Code    Terraform, Docker, GitHub Actions.
-                                  Senior DE roles expect you to own
-                                  deployment, not just write pipelines.`}</CodeBox>
-
-        <Callout type="tip">
-          Depth beats breadth. A candidate who can talk in real detail about one
-          production Spark pipeline they built and debugged will beat a candidate
-          who lists ten tools they've only used in tutorials. Interviewers probe for
-          depth within the first two follow-up questions.
-        </Callout>
-
+Compare roles with similar level and scope.
+Report sample size, date window, exclusions, and missing values.
+Do not infer a market median from a few postings.`}</CodeBox>
         <TryThis>
-          Take your own resume or portfolio and pick the single project you know
-          best. Write out, from memory, five follow-up questions an interviewer
-          could reasonably ask about it — then check whether you can actually
-          answer all five in real depth. Any gap is worth closing before you
-          list that project as a strength.
+          Select one role level and three locations. Collect current employer-posted ranges,
+          record source URLs and dates, and compare only entries with the same compensation
+          definition. If the sample is too small, state that instead of calculating a market median.
         </TryThis>
       </section>
 
       <Divider />
 
-      {/* ── Part 05 — Reading a JD ───────────────────────────────────── */}
+      {/* ── Part 03 — Employer Research ──────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
-        <SectionTag text="// Part 05 — Decoding Job Postings" />
-        <SectionTitle>How to Read a US DE Job Posting — What They Really Mean</SectionTitle>
-
+        <SectionTag text="// Part 03 — Employer Research" />
+        <SectionTitle>Find Current Openings From Employer Sources</SectionTitle>
         <Para>
-          US job postings use a specific vocabulary that isn't always literal. Knowing
-          how to translate it saves you from over-filtering yourself out of roles
-          you're actually qualified for, and from under-preparing for ones you're not.
+          This lesson does not verify which employers are hiring now, their hiring volume,
+          internal technology stacks, team culture, compensation, or interview practices.
+          Company names and stacks can become stale, so treat third-party summaries as leads
+          and check dated postings on the employer's careers site.
         </Para>
+        <CodeBox label="Employer-posting evidence log">{`Company | Official posting URL | Requisition ID | Collected date
+Role / level | Location | Required skills | Preferred skills
+Responsibilities | Compensation disclosure | Posting status
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
-          {[
-            { phrase: '"5+ years of experience required"', meaning: 'Often negotiable for strong candidates with 3+ years and a solid portfolio — especially at startups. Rigid at large enterprises and government-adjacent companies.' },
-            { phrase: '"Must be authorized to work in the US"', meaning: 'The company will not sponsor a visa for this role. This is a hard filter — read it literally. Roles that do sponsor usually say "sponsorship available" or list it explicitly in the benefits section.' },
-            { phrase: '"Bachelor\'s degree in CS or related field, or equivalent experience"', meaning: 'The "or equivalent experience" clause is real and increasingly common. A strong portfolio and demonstrated skill can substitute for the degree requirement at most product companies and startups — less so at large enterprises and government contractors.' },
-            { phrase: '"Fast-paced environment"', meaning: 'Expect ambiguity, shifting priorities, and less process than a large enterprise. Common at startups — not necessarily bad, but know what you\'re signing up for.' },
-            { phrase: '"Ownership mentality"', meaning: 'You will be expected to make decisions without a manager specifying every detail. Common at product companies and startups; less emphasized at large enterprises where process is more defined.' },
-            { phrase: '"Competitive salary + equity"', meaning: 'Always ask for the actual number and the equity details (RSUs vs. options, vesting schedule, current 409A valuation if a private company) before accepting an offer.' },
-          ].map((item) => (
-            <div key={item.phrase} style={{
-              background: 'var(--surface)', border: '1px solid var(--border)',
-              borderRadius: 10, padding: '16px 18px',
-            }}>
-              <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--accent)', fontFamily: 'var(--font-mono)', marginBottom: 6 }}>
-                {item.phrase}
-              </div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6 }}>
-                {item.meaning}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <Callout type="warning">
-          If you're an international student or on a visa that requires sponsorship,
-          filter job postings for this explicitly before applying — it saves significant
-          time. Many company career pages let you filter by sponsorship availability,
-          and it's a fair, direct question to ask a recruiter in a first screening call.
-        </Callout>
+Keep notes with the collection date. Recheck before calling a role current.
+A posting disappearing does not prove that the role was filled.`}</CodeBox>
       </section>
 
       <Divider />
 
-      {/* ── Part 06 — Breaking In From Non-CS ───────────────────────── */}
+      {/* ── Part 04 — Skill Research ────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
-        <SectionTag text="// Part 06 — The Non-CS Path" />
-        <SectionTitle>Breaking Into Data Engineering From a Non-CS Background</SectionTitle>
-
+        <SectionTag text="// Part 04 — Skill Research" />
+        <SectionTitle>Build a Skill Map From a Defined Posting Sample</SectionTitle>
         <Para>
-          A large share of working data engineers in the US did not start with a
-          computer science degree. The path is well-worn — community college
-          transfers, coding bootcamp graduates, and fully self-taught engineers all
-          land data engineering roles every year. What matters is what you can
-          demonstrably build, not what your degree says.
+          The categories below are a study checklist, not a ranking or claim about how often
+          US job descriptions mention a tool. Requirements vary by employer, role level, and
+          posting date. To make a frequency claim, define a sample, code each posting consistently,
+          and publish the denominator and collection window.
         </Para>
+        <CodeBox label="Skill categories to code in each sampled posting">{`SQL and data modeling
+Programming, testing, and packaging
+Cloud platform and storage
+Batch/stream processing and orchestration
+Warehouse/lakehouse and transformation tools
+Quality, security, CI/CD, and operations
 
-        <SubTitle>The three realistic entry paths</SubTitle>
-
-        <CodeBox label="Non-CS entry paths, ranked by typical time-to-first-job">{`Path                    Typical Timeline   Cost          Notes
-──────────────────────────────────────────────────────────────────
-Self-taught +           6–10 months        $0–$500       Slowest but
-Portfolio Projects                          (courses)     cheapest. Requires
-                                                            strong self-discipline
-                                                            and a genuinely
-                                                            impressive portfolio.
-
-Coding Bootcamp         4–6 months          $10K–$20K     Structured, includes
-(data-eng or SWE-        + job hunt                       job-search support.
-focused)                                                  Look for placement
-                                                           rate transparency.
-
-Community College /     1–2 years           $3K–$10K      Slower but builds
-Associate's Degree                                        genuine CS fundamentals
-                                                            and can transfer credit
-                                                            toward a 4-year degree.`}</CodeBox>
-
-        <SubTitle>What actually gets you hired without a CS degree</SubTitle>
-
-        <Para>
-          Hiring managers at product companies and startups care about three things,
-          in this order: can you demonstrably build a working data pipeline, can you
-          explain the tradeoffs in your design decisions, and can you communicate
-          clearly with non-technical stakeholders. A degree is a proxy for these
-          things — it is not the only proxy.
-        </Para>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12, marginBottom: 24 }}>
-          {[
-            { title: 'A real, end-to-end project', desc: 'Not a tutorial clone. Ingest real data (a public API or dataset), transform it, load it into a warehouse, and document your design decisions in a README.' },
-            { title: 'GitHub with clean commit history', desc: 'Recruiters and hiring managers do look. Clean code, meaningful commit messages, and a well-written README matter more than raw project count.' },
-            { title: 'One deep project beats five shallow ones', desc: 'A single pipeline you can discuss in real depth for 20 minutes in an interview is worth more than five weekend projects you can only describe at a surface level.' },
-            { title: 'A relevant cloud certification', desc: 'AWS or Azure fundamentals certifications signal genuine effort and give recruiters a concrete, verifiable data point when your resume otherwise lacks a CS pedigree.' },
-          ].map((item) => (
-            <div key={item.title} style={{
-              background: 'var(--bg2)', border: '1px solid var(--border)',
-              borderRadius: 10, padding: '16px',
-            }}>
-              <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)', marginBottom: 6, fontFamily: 'var(--font-display)' }}>
-                {item.title}
-              </div>
-              <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>
-                {item.desc}
-              </div>
-            </div>
-          ))}
-        </div>
+For each category, record required / preferred / absent.
+Count postings—not individual repeated keywords—as the denominator.`}</CodeBox>
+        <TryThis>
+          Collect a bounded set of current postings for one level and region. Remove duplicates,
+          label each skill as required or preferred, and report how many postings you reviewed.
+          Do not generalize the result to the whole market.
+        </TryThis>
       </section>
 
       <Divider />
 
-      {/* ── Part 07 — Certifications ─────────────────────────────────── */}
+      {/* ── Part 05 — Reading a Job Posting ─────────────────────────── */}
+      <section style={{ marginBottom: 64 }}>
+        <SectionTag text="// Part 05 — Reading a Job Posting" />
+        <SectionTitle>Separate What a Posting Says From What You Need to Verify</SectionTitle>
+        <Para>
+          Job-posting language is not a universal code. Interpret each requirement in context,
+          distinguish required from preferred qualifications, and ask the employer about unclear
+          details rather than assuming how a phrase applies.
+        </Para>
+        <CodeBox label="Questions to ask while reviewing a posting">{`Experience requirement:
+  Is the number a strict minimum, a preference, or a description of typical candidates?
+  Which responsibilities require that experience?
+
+Degree or equivalent experience:
+  What evidence does this employer accept as equivalent?
+
+Work authorization / sponsorship:
+  What does this specific role require, and when must the requirement be met?
+
+Compensation and equity:
+  What are the range, location basis, variable components, and applicable conditions?
+
+Role scope:
+  Which systems will this person own, and what does success look like?`}</CodeBox>
+        <TryThis>
+          Choose a current posting and highlight each statement as required, preferred, or
+          unclear. Write one specific question for every unclear requirement and check the
+          employer's official posting for updates before applying.
+        </TryThis>
+      </section>
+
+      <Divider />
+
+      {/* ── Part 06 — Demonstrating Skills ──────────────────────────── */}
+      <section style={{ marginBottom: 64 }}>
+        <SectionTag text="// Part 06 — Demonstrating Skills" />
+        <SectionTitle>Show Evidence That Matches the Role</SectionTitle>
+        <Para>
+          Education and experience requirements differ by employer. Read each posting literally,
+          distinguish required from preferred qualifications, and ask the recruiter about any
+          ambiguous requirement. A portfolio can demonstrate some skills, but it does not
+          automatically replace a stated degree, experience, or work-authorization requirement.
+        </Para>
+        <CodeBox label="A project brief for demonstrating data-engineering skills">{`Choose a public dataset and document its license and source.
+Build a small ingestion and transformation pipeline.
+Add schema and data-quality checks, plus tests for failure cases.
+Make the run repeatable and explain how retries avoid duplicates.
+Include a data model, architecture diagram, and clear README.
+Record what you would change for production scale and security.
+
+Describe your own contribution accurately. Do not claim production use
+or employer experience for a learning project.`}</CodeBox>
+        <TryThis>
+          Compare the project evidence with one current job posting. For every required skill,
+          note a specific artifact or experience that demonstrates it; mark gaps honestly and
+          identify the next practice task.
+        </TryThis>
+      </section>
+
+      <Divider />
+
+      {/* ── Part 07 — Certifications ────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 07 — Certifications" />
-        <SectionTitle>Which Certifications Actually Matter in the US (2026)</SectionTitle>
-
+        <SectionTitle>Evaluate Certifications as One Piece of Evidence</SectionTitle>
         <Para>
-          Certifications are not a substitute for real project experience, but they
-          are a fast, verifiable signal — especially valuable if you're coming from a
-          non-CS background or switching careers and don't yet have a work history in
-          tech to point to.
+          A certification can show structured study or familiarity with a vendor platform, but
+          it does not by itself establish practical skill or guarantee an interview. Certification
+          names, exam versions, eligibility rules, and availability change; check the issuing
+          provider's official page before planning or listing a credential.
         </Para>
+        <CodeBox label="Before spending time or money on a certification">{`Check the provider's official page for:
+  current exam status, version, price, and renewal rules
+  topics covered and required prerequisites
+  whether the target postings request or prefer the credential
+  whether a hands-on project would better demonstrate the same skill
 
-        <CodeBox label="Certifications ranked by hiring-manager relevance for DE roles">{`Certification                          Relevance   Notes
-──────────────────────────────────────────────────────────────
-AWS Certified Data Engineer            High        AWS has the largest market
-– Associate                                        share of DE job postings.
-                                                    Directly relevant content.
-
-Microsoft Fabric Data Engineer        Contextual  DP-700; match the target role
-Associate (DP-700)                                 and its actual Fabric workload.
-                                                    Azure DP-203 retired March 31, 2025.
-
-Google Cloud Professional              Medium-High Smaller market share than
-Data Engineer                                      AWS/Azure but growing,
-                                                    especially at AI-forward
-                                                    companies.
-
-Databricks Certified                   Medium      Valuable if the target
-Data Engineer Associate                            company uses Databricks —
-                                                    increasingly common.
-
-dbt Fundamentals                       Low-Medium  Free, fast to complete,
-                                                    signals familiarity with
-                                                    the modern data stack.`}</CodeBox>
-
-        <Callout type="tip">
-          Pick the certification that matches the cloud platform used by the
-          companies you're actually targeting — check their job postings and
-          engineering blog before choosing. A cert for a platform you'll never use
-          professionally wastes study time better spent on a portfolio project.
-        </Callout>
-
-        <TryThis>
-          Pull up the job postings of three companies you'd actually want to work
-          for and tally which cloud platform (AWS, Azure, GCP) appears most often.
-          Compare that against whichever certification you were already planning
-          to pursue — if they don't match, that's worth reconsidering before you
-          spend weeks studying for the wrong one.
-        </TryThis>
+Describe credentials accurately. Do not imply that a certificate is a license
+or proof of production experience.`}</CodeBox>
       </section>
 
       <Divider />
 
-      {/* ── Part 08 — Salary Negotiation ─────────────────────────────── */}
+      {/* ── Part 08 — Comparing an Offer ─────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
-        <SectionTag text="// Part 08 — Negotiation" />
-        <SectionTitle>Salary Negotiation for Data Engineers in the US — The Honest Guide</SectionTitle>
-
+        <SectionTag text="// Part 08 — Comparing an Offer" />
+        <SectionTitle>Ask Clear Questions About Compensation</SectionTitle>
         <Para>
-          US tech salary negotiation is different from most of the world in one key
-          way: it's expected, and companies build room into their initial offer
-          anticipating a counter. Not negotiating is the single most common way
-          candidates leave money on the table.
+          Compensation structures and negotiation practices differ by employer, location, and
+          role. There is no guaranteed script or universal rule about when to share a range.
+          Use employer disclosures and the written offer to understand what is actually being
+          offered, and seek qualified advice for tax, immigration, or contract questions.
         </Para>
+        <CodeBox label="Questions to clarify before comparing offers">{`What is the base salary, currency, and pay period?
+Is bonus guaranteed, target-based, or discretionary?
+For equity: what instrument, vesting schedule, and relevant terms apply?
+What benefits, work location, and start-date conditions apply?
+Which details will appear in the written offer?
 
-        <SubTitle>The core rules</SubTitle>
-
-        <CodeBox label="Negotiation principles that actually work">{`1. Never give the first number.
-   If asked for salary expectations, redirect: "I'd love to learn
-   more about the role first — what's the budgeted range?"
-
-2. Get competing offers before negotiating.
-   A single offer gives you almost no leverage. Two offers, even
-   if one is less exciting, gives you real negotiating power.
-
-3. Negotiate total compensation, not just base.
-   Base salary, signing bonus, equity (RSU count and vesting
-   schedule), and annual bonus target are all negotiable
-   independently. A lower base with more equity can be worth
-   more — or less — depending on the company's trajectory.
-
-4. Use data, not feelings.
-   Reference Levels.fyi and Glassdoor figures for the specific
-   company and level. "Based on public data for this level at
-   your company, I was expecting closer to $X" is far stronger
-   than "I think I deserve more."
-
-5. Get it in writing before you resign your current job.
-   Verbal offers can and do change. Wait for the signed offer
-   letter.`}</CodeBox>
-
-        <Callout type="example">
-          A candidate with a competing offer at $145K received an initial offer of
-          $155K base from their target company. By citing the competing offer and
-          Levels.fyi data for the role and level, they negotiated the final offer to
-          $172K base plus an increased equity grant — a 24% increase over the intial
-          offer, achieved in a single negotiation email.
-        </Callout>
+Compare guaranteed cash separately from variable or illiquid compensation.
+Do not treat a competing offer or public salary estimate as a guarantee.`}</CodeBox>
+        <TryThis>
+          Draft a short, factual email asking for any missing compensation details. Keep the tone
+          professional, avoid claims you cannot substantiate, and make any decision only after
+          reviewing the written terms.
+        </TryThis>
       </section>
 
       <Divider />
@@ -730,28 +376,27 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
       {/* ── Misconceptions ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="myth">
         <SectionTag text="// Misconceptions" />
-        <SectionTitle>Five Misconceptions About the US Data Engineering Job Market</SectionTitle>
-
+        <SectionTitle>Common Misconceptions About Data-Engineering Careers</SectionTitle>
         {[
           {
-            wrong: '"You need a CS degree to get hired as a data engineer in the US"',
-            right: 'Part 06 is explicit that a large share of working data engineers did not start with a CS degree — the "or equivalent experience" clause in job postings (Part 05) is real and increasingly common at product companies and startups. A strong portfolio and demonstrated skill substitute for the degree at most non-enterprise employers.',
+            wrong: '"A job title tells me exactly what the role involves"',
+            right: 'Titles vary by employer. Compare responsibilities, systems, level, and ownership in the actual posting.',
           },
           {
-            wrong: '"The salary number in a job posting or on Glassdoor is basically fixed — there\'s not much room to negotiate"',
-            right: 'Part 08 is direct that US tech salary negotiation is expected, and companies build room into their initial offer anticipating a counter — the worked example shows a 24% increase achieved in a single negotiation email. Not negotiating is called out as the single most common way candidates leave money on the table.',
+            wrong: '"One salary post or a few job ads establish the market rate"',
+            right: 'Sources can measure different things and cover different samples. Record dates, definitions, locations, and missing values before drawing comparisons.',
           },
           {
-            wrong: '"City determines your salary more than anything else — just move to San Francisco or Seattle"',
-            right: 'Part 02\'s "Company type multipliers" section is explicit that company type has a bigger impact on salary than city — the FAANG-vs-consulting gap for the same role, experience, and city is often 2-3×, larger than any city multiplier in that same Part.',
+            wrong: '"A certification guarantees an interview"',
+            right: 'A credential is one signal. Check what the role asks for and demonstrate relevant skills with accurate, reviewable evidence.',
           },
           {
-            wrong: '"Listing as many tools as possible on your resume maximizes your chances"',
-            right: 'Part 04\'s Callout and this lesson\'s first TryThis both make the opposite case: interviewers probe for depth within the first two follow-up questions, and a thin list of tools you can discuss deeply beats a long list that collapses under questioning.',
+            wrong: '"A non-CS degree automatically rules me out—or automatically substitutes for experience"',
+            right: 'Requirements differ by employer. Read the posting, ask about equivalencies where appropriate, and represent your experience accurately.',
           },
           {
-            wrong: '"If you\'re getting rejected or hearing silence, it means you\'re not qualified"',
-            right: 'Part 09\'s real career story reports roughly 100+ applications and single-digit interview conversion as the realistic range for a disciplined non-CS candidate — not evidence of being unqualified. This lesson\'s Common Mistakes and Error Library sections both cover the structural reasons (resume tailoring, ATS filtering) that explain most of this gap.',
+            wrong: '"A rejection proves I am not qualified"',
+            right: 'A hiring decision alone does not reveal the reason. Review any feedback you receive, improve the evidence you control, and avoid inferring a market-wide pattern from one outcome.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
@@ -763,59 +408,25 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
 
       <Divider />
 
-      {/* ── Part 09 — Real World ─────────────────────────────────────── */}
+      {/* ── Part 09 — Practice Scenario ───────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="story">
-        <SectionTag text="// Part 09 — Real World" />
-        <SectionTitle>From Retail Manager to Data Engineer — An Illustrative Career Scenario</SectionTitle>
-
+        <SectionTag text="// Part 09 — Practice Scenario" />
+        <SectionTitle>Plan a Career Transition With Evidence</SectionTitle>
         <Para>
-          Composite story based on common patterns among Chaduvuko learners who broke
-          into data engineering from a non-technical background.
+          The following is a hypothetical exercise, not a Chaduvuko learner outcome or a typical
+          hiring timeline. Its purpose is to practice turning a broad career goal into testable
+          learning tasks.
         </Para>
+        <CodeBox label="Hypothetical scenario">{`A retail operations professional wants to explore data engineering.
 
-        <HighlightBox>
-          <Para>
-            <strong>Starting point:</strong> A retail store manager with a bachelor's
-            degree in Business Administration, no programming background, working
-            60-hour weeks and looking for a career with better work-life balance and
-            higher earning ceiling.
-          </Para>
-          <Para>
-            <strong>Months 1–3:</strong> Learned Python and SQL fundamentals through
-            free resources during evenings and weekends. Built the first small project —
-            a script that pulled data from a public API and loaded it into a local
-            SQLite database. Unimpressive by portfolio standards, but it proved the
-            core loop was learnable.
-          </Para>
-          <Para>
-            <strong>Months 4–7:</strong> Enrolled in a part-time, remote data
-            engineering bootcamp while still working retail. Built two more
-            substantial projects: an Airflow-orchestrated pipeline pulling weather
-            data into a cloud data warehouse, and a dbt project transforming raw
-            e-commerce data into analytics-ready tables. Got AWS Cloud Practitioner
-            and then AWS Data Engineer Associate certified.
-          </Para>
-          <Para>
-            <strong>Months 8–9:</strong> Applied to roughly 120 positions.
-            Most were silence or rejection. Landed 6 first-round interviews, largely
-            from roles where the JD explicitly said "or equivalent experience."
-            Two progressed to technical rounds. One offer came through — Data
-            Engineer at a mid-size logistics startup, $92K base, fully remote.
-          </Para>
-          <Para>
-            <strong>Where they are now (18 months in):</strong> Promoted once,
-            now earning $118K base plus equity. Actively interviewing for senior
-            roles at larger product companies using the same portfolio-first
-            approach that got the first job.
-          </Para>
-        </HighlightBox>
+1. Review current postings in the target location and record recurring requirements.
+2. Learn the prerequisite Python, SQL, and data-modeling concepts.
+3. Build a small, tested pipeline using a public dataset.
+4. Document design choices, limitations, and recovery behavior.
+5. Seek feedback and compare the project with role requirements.
+6. Reassess the plan based on evidence, time, cost, and personal constraints.
 
-        <Callout type="info">
-          The honest numbers: roughly 100+ applications, single-digit interview
-          conversion, and 8–9 months from starting to learn to first offer. This is
-          the realistic range for a disciplined non-CS candidate, not the outlier
-          "landed a job in 6 weeks" stories that circulate online.
-        </Callout>
+No step guarantees an interview, offer, salary, or completion date.`}</CodeBox>
       </section>
 
       <Divider />
@@ -874,34 +485,18 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
 
       <Divider />
 
-      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      {/* ── Common Mistakes ─────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Common Mistakes" />
-        <SectionTitle>Mistakes You Will Make — And Exactly Why They Happen</SectionTitle>
+        <SectionTitle>Use Evidence Instead of Guessing About the Hiring Process</SectionTitle>
+        <CodeBox label="Practical checks for a job search">{`Tailor your application truthfully to the role's stated requirements.
+Track role, requisition ID, source, application date, and status.
+Do not treat silence or rejection as proof of a specific screening cause.
+Ask about unclear requirements, compensation, and work authorization.
+Review take-home scope and evaluation criteria before accepting the task.
+Read the written offer and clarify missing terms before making commitments.
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {[
-            { mistake: 'Applying to 200+ jobs with the same generic resume', why: 'Applicant tracking systems and human reviewers both filter fast. A resume tailored to the specific JD\'s keywords and requirements converts at a meaningfully higher rate than a one-size-fits-all version.' },
-            { mistake: 'Listing every tool you\'ve ever touched instead of what you can actually discuss in depth', why: 'Interviewers ask follow-up questions on anything listed. A thin list of tools you can discuss deeply beats a long list that collapses under two follow-up questions.' },
-            { mistake: 'Not clarifying work authorization status upfront if it requires sponsorship', why: 'This wastes both your time and the recruiter\'s if discovered late in the process. Address it directly and early — most experienced recruiters appreciate the directness.' },
-            { mistake: 'Negotiating with emotion instead of data', why: '"I really need this" is a weak negotiating position. "Based on public data for this level, the market rate is X" is a strong one. Always negotiate with a specific number and a specific source.' },
-            { mistake: 'Underestimating how long the US job search actually takes', why: 'Median time from active search to signed offer for a career switcher is realistically 3–6 months, not the 4–6 week timelines that circulate in viral success stories. Budget your finances and expectations accordingly.' },
-            { mistake: 'Skipping the behavioral interview prep because "it\'s just the technical round that matters"', why: 'Most US tech companies weight behavioral rounds heavily, often as a hard gate regardless of technical performance. Prepare specific, structured stories (the STAR format) in advance — don\'t improvise them live.' },
-          ].map((item) => (
-            <div key={item.mistake} style={{
-              background: 'var(--surface)', border: '1px solid var(--border)',
-              borderLeft: '3px solid #ff6b6b', borderRadius: '0 10px 10px 0',
-              padding: '14px 18px',
-            }}>
-              <div style={{ fontSize: 13, fontWeight: 800, color: '#ff6b6b', marginBottom: 6 }}>
-                {item.mistake}
-              </div>
-              <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>
-                {item.why}
-              </div>
-            </div>
-          ))}
-        </div>
+Employer processes and timelines vary; no approach guarantees an outcome.`}</CodeBox>
       </section>
 
       <Divider />
@@ -909,61 +504,26 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
-        <SectionTitle>Job Search Breakdowns — And Exactly Why They Happen</SectionTitle>
-
-        {[
-          {
-            error: `Application submitted through the company careers page — no response, no rejection email, complete silence after three weeks`,
-            cause: 'The resume was filtered out by the Applicant Tracking System (ATS) before any human reviewed it. Most large-company ATS software scores resumes against the exact keywords in the job description — a resume that says "data pipelines" when the JD says "ETL pipelines" can score low enough to never surface, even from a genuinely qualified candidate.',
-            fix: 'Mirror the exact terminology from the job description in the resume (without lying about experience) — if the JD says "data warehousing," use that phrase, not a close synonym. For roles at companies known to use aggressive ATS filtering, apply through a referral or direct recruiter message in parallel with the formal application, since a human-forwarded application usually bypasses the ATS scoring step entirely.',
-          },
-          {
-            error: `Recruiter phone screen ends abruptly right after the candidate states their salary expectation`,
-            cause: 'The stated number was either far below the role\'s actual level (signaling the candidate may be under-qualified or a poor culture fit for a more senior title) or far above the budgeted range for that specific req — either way, the recruiter has no room to continue the conversation productively.',
-            fix: 'Per Part 08, never give the first number — redirect and ask for the budgeted range instead. If pressed, research the specific level and company on Levels.fyi beforehand and give a wide, well-researched range rather than a single guessed figure, so the number reflects the actual role rather than a generic industry average.',
-          },
-          {
-            error: `Technical interview goes well, but the process goes silent after the take-home assignment is submitted`,
-            cause: 'Most take-home assignments are evaluated primarily on code quality, testing, and documentation — not just whether the output is correct. A working solution with no tests, no error handling, and no README explaining design decisions reads as unfinished, even if the core logic is right.',
-            fix: 'Treat every take-home as a portfolio piece, not just a puzzle to solve: include basic tests, handle at least the obvious edge cases, and write a short README explaining the design trade-offs made under the time constraint. This directly reflects the "explain the tradeoffs in your design decisions" criterion from Part 06.',
-          },
-          {
-            error: `A verbal offer is extended over a call, but the candidate resigns from their current job before receiving anything in writing — then the signed offer never arrives`,
-            cause: 'Verbal offers can and do change or fall through — a budget freeze, a hiring-manager change, or an internal approval that never finalizes can all cause a verbal offer to quietly disappear, and without a resignation already submitted, the downside is limited.',
-            fix: 'Part 08\'s negotiation rules are explicit: get the offer in writing before resigning a current job. This is not paranoia — it is standard practice, and no reputable company will consider it an unreasonable request from a candidate.',
-          },
-          {
-            error: `A candidate on a work visa gets to the final round, then the process ends with "we\'ve decided to go a different direction" with no further explanation`,
-            cause: 'Sponsorship requirements were not clarified early, and the company either does not sponsor visas for this role or has hit an internal cap on sponsorship approvals for the year — a constraint that has nothing to do with the candidate\'s technical performance, but surfaces only at the final stage when it becomes relevant to the hiring paperwork.',
-            fix: 'Per Part 05\'s Callout, filter for sponsorship availability before applying wherever possible, and ask the recruiter directly and early in the first screening call. This does not need to feel adversarial — most experienced recruiters would rather resolve this upfront than run a candidate through four interview rounds only for it to become a blocker at the end.',
-          },
-        ].map((item, i) => (
-          <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
-            <div style={{
-              fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--red,#ff4757)',
-              marginBottom: 12, background: 'rgba(255,71,87,0.08)',
-              border: '1px solid rgba(255,71,87,0.2)',
-              borderRadius: 6, padding: '8px 12px', lineHeight: 1.5,
-            }}>
-              {item.error}
-            </div>
-            <div style={{ marginBottom: 8 }}>
-              <span style={{
-                fontSize: 10, fontWeight: 700, color: 'var(--muted)',
-                fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase',
-              }}>Cause: </span>
-              <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.cause}</span>
-            </div>
-            <div>
-              <span style={{
-                fontSize: 10, fontWeight: 700, color: 'var(--accent)',
-                fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase',
-              }}>Fix: </span>
-              <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.fix}</span>
-            </div>
-          </div>
-        ))}
+        <SectionTitle>Diagnose Job-Search Outcomes Without Assuming the Cause</SectionTitle>
+        <Para>
+          A delayed response, rejected application, or changed offer can have many causes. Without
+          information from the employer, do not claim that an ATS, salary expectation, visa status,
+          or interview answer caused the result. Keep records, ask appropriate questions, and use
+          feedback you can verify.
+        </Para>
+        <CodeBox label="If an application has no update">{`1. Recheck the official posting and requisition status.
+2. Confirm the application was submitted and keep its reference number.
+3. Follow the employer's published contact or follow-up process.
+4. Continue evaluating other roles; do not infer a screening result.
+5. Update your tracking record when you receive verified information.`}</CodeBox>
+        <Para>
+          For compensation, work authorization, or contract questions, confirm the specific terms
+          with the employer and seek qualified advice when needed. General job-search anecdotes are
+          not a substitute for current, role-specific information.
+        </Para>
       </section>
+
+      <Divider />
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
 
@@ -986,15 +546,12 @@ remote_policy | work_authorization_notes | missing_fields`}</WorkshopCode>
       </DEWorkshop>
 
       <KeyTakeaways items={[
-        'A CS degree is one signal among several — a strong portfolio and cloud certification can substitute at most product companies and startups.',
-        'Community college and bootcamp paths are well-worn and respected if the work produced is genuinely strong.',
-        'One deep, well-documented project beats five shallow tutorial clones in every interview.',
-        'Large enterprises and government-adjacent companies are more rigid about degree requirements than startups and mid-size product companies.',
-        'Company type affects salary more than city — the FAANG-vs-consulting gap for the same role, experience, and city is often 2–3×, larger than any city multiplier.',
-        'Certifications are a fast, verifiable signal for non-CS candidates but never a substitute for a real, demonstrable project — pick the cloud platform your target companies actually use.',
-        'US salary negotiation is expected, not optional: never give the first number, get competing offers when possible, and negotiate total compensation — base, bonus, and equity — not just base.',
-        'The realistic non-CS timeline to a first offer is 8–9 months and roughly 100+ applications with single-digit interview conversion, not the viral "landed a job in 6 weeks" stories.',
-        'A resume tailored to mirror the exact terminology of the job description beats a generic one at getting past ATS filtering, and a verbal offer is never a reason to resign — wait for the signed offer letter.',
+        'Compare responsibilities, level, location, and ownership in the actual posting; job titles vary across employers.',
+        'Use dated employer disclosures for compensation research. Keep base, bonus, and equity separate, and report sample size and missing values.',
+        'Treat skill-frequency claims as sample-specific. Define the posting set and denominator before reporting prevalence.',
+        'Distinguish required from preferred qualifications and ask employers about unclear degree, experience, or work-authorization requirements.',
+        'A portfolio or certification can demonstrate selected skills but does not guarantee an interview or replace every employer requirement.',
+        'There is no guaranteed job-search timeline or negotiation script. Verify written offer details and evaluate them against your circumstances.',
       ]} />
 
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}

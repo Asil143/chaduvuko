@@ -827,6 +827,24 @@ print(f"remaining_budget={allowed - failed}")`}</WorkshopCode>
         <p>Related tutorial: <a href="/learn/data-engineering/error-handling-retries">retry and incident policies</a>.</p>
       </DEWorkshop>
 
+      <section style={{ marginBottom: 64 }}>
+        <SectionTag text="// Anomaly Detection" />
+        <SectionTitle>Detect Anomalies Against a Measured Baseline</SectionTitle>
+        <Para>
+          A static threshold is useful for known limits, but normal volume can vary by weekday,
+          season, backfill, and source behavior. Compare a metric with a relevant historical
+          baseline, require enough observations, and treat an anomaly as a signal to investigate
+          rather than proof that records are wrong.
+        </Para>
+        <CodeBox label="Illustrative SQL: compare with the prior four same-weekday observations">{`WITH scored AS (\n  SELECT\n    run_date,\n    weekday,\n    rows_loaded,\n    COUNT(*) OVER w AS baseline_days,\n    AVG(rows_loaded) OVER w AS baseline_avg,\n    STDDEV_POP(rows_loaded) OVER w AS baseline_sd\n  FROM daily_pipeline_counts\n  WINDOW w AS (\n    PARTITION BY weekday\n    ORDER BY run_date\n    ROWS BETWEEN 4 PRECEDING AND 1 PRECEDING\n  )\n)\nSELECT run_date, rows_loaded, baseline_avg, baseline_sd\nFROM scored\nWHERE baseline_days = 4\n  AND (\n    (baseline_sd = 0 AND rows_loaded <> baseline_avg)\n    OR ABS(rows_loaded - baseline_avg) > 3 * baseline_sd\n  );`}</CodeBox>
+        <Para>
+          This is a starting detector, not a universal threshold. Calibrate it with enough clean
+          history, handle holidays and planned backfills, and pair volume checks with freshness,
+          null-rate, uniqueness, and reconciliation metrics. Alerts should identify the affected
+          dataset, expected range, observed value, and an actionable owner.
+        </Para>
+      </section>
+
       <KeyTakeaways items={[
         'Monitoring catches fires you anticipated. Observability helps you understand fires you did not. The three signals: metrics (numeric time-series — row counts, durations, error rates), logs (structured JSON events with context — every run, every rejection with its reason), traces (end-to-end paths of specific events through the system). All three together make a pipeline diagnosable.',
         'SLI is the measured metric (pipeline duration). SLO is the internal target (complete within 90 minutes). SLA is the external promise to the business (data available by 08:00 ET). Set SLOs stricter than SLAs to create a buffer. Alert on SLO breach risk, not SLA breach — this gives response time before the business is affected.',

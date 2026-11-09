@@ -94,15 +94,15 @@ export async function generateMetadata({
   params: { topic: string };
 }): Promise<Metadata> {
   const allModules = SQL_CURRICULUM.flatMap(s => s.modules);
-  const module = allModules.find(m => m.slug === params.topic);
+  const lesson = allModules.find(m => m.slug === params.topic);
 
-  if (!module) {
+  if (!lesson) {
     return { title: 'SQL' };
   }
 
   return {
-    title: `${module.title} | SQL`,
-    description: module.description,
+    title: `${lesson.title} | SQL`,
+    description: lesson.description,
   };
 }
 

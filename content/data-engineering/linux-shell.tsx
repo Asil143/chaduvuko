@@ -861,10 +861,33 @@ echo $!`}</CodeBox>
           ]}
         />
 
+        <SubSubTitle>Connect to an authorized SSH host</SubSubTitle>
+
+        <Para>
+          Use SSH only with an account and host you are authorized to access. Ask the administrator
+          to register your public key and provide the host's expected fingerprint through a trusted
+          channel. Keep the private key local; do not email or copy it to the server.
+        </Para>
+
+        <CodeBox label="Create a key, verify the host, then connect">{`# Create a dedicated key pair; share only the .pub file with the administrator.
+ssh-keygen -t ed25519 -a 64 -f ~/.ssh/id_ed25519_pipeline -C "you@example.com"
+chmod 600 ~/.ssh/id_ed25519_pipeline
+cat ~/.ssh/id_ed25519_pipeline.pub  # send this public key to the administrator
+
+# On the first connection, compare the displayed host-key fingerprint
+# with the value provided through the trusted admin channel.
+ssh -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519_pipeline user@pipeline-01`}</CodeBox>
+
+        <Callout type="warning">
+          Do not blindly accept an unexpected host key or disable host-key checking. If a known
+          host's key changes, verify the new fingerprint with its administrator before updating
+          <code>known_hosts</code>. Never share the private key or enable agent forwarding unless
+          the access design explicitly requires it.
+        </Callout>
+
         <SubSubTitle>scp — simple and immediate</SubSubTitle>
 
-        <CodeBox label="Command">{`scp orders.csv user@pipeline-01:/data/landing/
-scp -i ~/.ssh/pipeline_key.pem orders.csv ec2-user@54.1.2.3:/data/`}</CodeBox>
+        <CodeBox label="Copy a file over the verified SSH connection">{`scp -i ~/.ssh/id_ed25519_pipeline orders.csv user@pipeline-01:/data/landing/`}</CodeBox>
 
         <SubSubTitle>rsync — the right choice for anything repeated or large</SubSubTitle>
 

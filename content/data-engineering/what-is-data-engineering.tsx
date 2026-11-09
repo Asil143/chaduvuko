@@ -420,7 +420,7 @@ Operations also means monitoring: tracking pipeline run times, data freshness, r
           meet the business's needs.
         </Para>
 
-        <CodeBox label="A real week's task list for a mid-level DE at a Seattle startup">{`Monday
+        <CodeBox label="Illustrative week's task list for a mid-level data engineer">{`Monday
   → Debug: revenue pipeline produced NULL for 3 stores yesterday
   → Root cause: source DB schema change added a new required field
   → Fix: update ingestion query, backfill yesterday's data
@@ -698,12 +698,12 @@ Friday
       {/* ── Part 06 — A Day in the Life ─────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 06 — A Day in the Life" />
-        <SectionTitle>A Day in the Life — Junior DE at a Seattle Startup</SectionTitle>
+        <SectionTitle>Illustrative Day in the Life — Junior Data Engineer</SectionTitle>
 
         <Para>
-          This is what the first year of a data engineering job actually looks like. Not the
-          glamorised version. The real one. Based on what data engineers at US startups
-          actually report their days looking like in 2026.
+          This fictional composite illustrates tasks a junior data engineer might encounter.
+          Responsibilities and schedules vary by employer, team, seniority, and production
+          environment; it is not a report of a specific person's or company's routine.
         </Para>
 
         {[
@@ -775,11 +775,10 @@ Friday
         ))}
 
         <Callout type="tip">
-          <strong>What this day reveals:</strong> A data engineer spends roughly 40% of their
-          time maintaining and debugging existing pipelines, 40% building new ones, and 20%
-          collaborating and reviewing. The debugging percentage surprises most beginners. Build
-          systems that are easy to debug — good logging, clear error messages, data quality
-          checks — and your debugging time drops significantly.
+          <strong>What this day illustrates:</strong> Data engineers may build new systems,
+          operate existing pipelines, debug incidents, and collaborate with other teams.
+          The balance varies by organization and workload. Clear logs, useful error messages,
+          and data-quality checks make systems easier to diagnose.
         </Callout>
       </section>
 
@@ -788,75 +787,60 @@ Friday
       {/* ── Part 07 — Career and Salary ─────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 07 — Career Growth and Salaries" />
-        <SectionTitle>The Data Engineering Career Path (2026)</SectionTitle>
+        <SectionTitle>Role Scope and Career Development</SectionTitle>
 
         <Para>
-          Data engineering is one of the highest-paying technology disciplines in the US right
-          now. The demand for data engineers significantly outstrips supply — particularly for
-          engineers who understand both the engineering and the data sides of the role. Here
-          is the honest picture of what the career looks like.
+          Career titles, responsibilities, and compensation vary by employer, location, and
+          level. Use current postings and employer disclosures when evaluating a role; this
+          lesson does not provide a sourced salary survey or a guaranteed route into the field.
         </Para>
 
-        <CodeBox label="DE career levels — US 2026 (Product Company)">{`Level              Experience     Salary Range          What Changes
-───────────────────────────────────────────────────────────────────────
-Junior DE          0–2 years      $75K–$100K            Learning tools,
-                                                         building under guidance
+        <CodeBox label="Career scope can grow in several dimensions">{`Early-career scope:
+  Complete well-defined pipeline tasks with review.
+  Add tests, document assumptions, and investigate failures.
 
-Data Engineer      2–4 years      $100K–$140K           Owns pipelines end-to-end,
-                                                         handles production incidents
+Independent ownership:
+  Design and operate pipelines, define data contracts,
+  measure reliability, and coordinate with data consumers.
 
-Senior DE          4–7 years      $140K–$185K           Designs systems,
-                                                         mentors juniors,
-                                                         cross-team influence
+Senior / staff-level scope (titles vary by employer):
+  Make cross-system design decisions, lead reliability work,
+  mentor others, and influence platform standards.
 
-Staff DE /         7–10 years     $185K–$240K           Technical strategy,
-Lead DE                                                   architectural decisions,
-                                                         org-wide standards
+These are illustrative responsibility patterns, not universal job levels
+or a promise of promotion. Compare the actual responsibilities in postings.`}</CodeBox>
 
-Principal /        10+ years      $240K–$320K+          Company-level data platform
-Staff+                                                    vision, external influence
-
-Notes:
-  Bay Area / Seattle / NYC multiplier: 1.2–1.4× national base
-  FAANG multiplier: ~1.5–2× product company rates
-  Consulting firms (Accenture, Cognizant, Deloitte): ~0.7× product company rates`}</CodeBox>
-
-        <SubTitle>What actually drives salary growth</SubTitle>
+        <SubTitle>Evidence that can support broader engineering scope</SubTitle>
 
         <Para>
-          Title and years of experience matter less than you think. The biggest salary jumps
-          in data engineering come from three things: demonstrated ability to own a system
-          end-to-end and keep it running in production; experience with scale — having worked
-          with data volumes that required distributed systems, not just single-machine scripts;
-          and the ability to translate business problems into data architecture decisions, not
-          just implement what you are told to build.
+          Employers may evaluate system ownership, production reliability, relevant scale,
+          and the ability to explain design trade-offs. The relative importance of these factors,
+          and their effect on title or compensation, depends on the role and employer.
         </Para>
 
         <SubTitle>Breaking in from a non-IT background</SubTitle>
 
         <Para>
-          Data engineering is one of the most accessible senior technology disciplines for
-          non-IT background candidates — more accessible than software engineering, and far
-          more accessible than ML engineering. Here is why: the core of the job is logical
-          thinking and understanding data, not algorithm knowledge or computer science theory.
+          People enter data engineering from varied educational and professional backgrounds.
+          There is no single route or guaranteed timeline: roles can require programming, SQL,
+          data modeling, testing, and operational problem-solving, with expectations set by
+          each employer.
         </Para>
 
         <Para>
-          The realistic path for a non-IT background candidate in 2026: learn Python and SQL
-          (both covered in this track), build 3–4 real pipeline projects on Azure or AWS
-          free tiers, put those projects on GitHub, and get the DP-203 Azure Data Engineer
-          certification or AWS Data Analytics certification. With this portfolio, you can
-          realistically target junior DE roles at service companies or small startups within
-          6–9 months of consistent work — and move to product companies within 2 years.
+          A practical starting plan is to learn Python and SQL, build projects whose inputs,
+          transformations, tests, and failure recovery you can explain, and compare your evidence
+          with current job postings. Cloud free-tier terms and certification availability change;
+          verify current terms. Projects and credentials can demonstrate skills, but do not
+          guarantee an interview or job.
         </Para>
 
         <Callout type="tip">
-          <strong>The most underrated advantage of non-IT backgrounds in data engineering:</strong>{' '}
-          Many of the best data engineers come from finance, operations, supply chain, or
-          healthcare — domains where they understand what the data means and why it matters.
-          A DE who both builds the pipeline and understands the business context of the data
-          is significantly more valuable than one who only knows the tools. Your domain knowledge
-          is a competitive advantage, not a liability.
+          <strong>When prior domain knowledge can help:</strong>{' '}
+          Experience in finance, operations, supply chain, healthcare, or another domain can
+          help you understand its data and workflows. Whether that background is valuable depends
+          on the role; connect it to specific responsibilities rather than assuming it replaces
+          engineering skills.
         </Callout>
       </section>
 
@@ -874,7 +858,7 @@ Notes:
           },
           {
             wrong: '"Once a pipeline is built and deployed, the work is basically done"',
-            right: 'Part 03\'s task breakdown and Part 06\'s day-in-the-life both show the opposite — a data engineer spends roughly 40% of their time maintaining and debugging pipelines that are already live, per the Callout closing Part 06. "Maintains" is in the one-sentence definition from Part 01 for a reason.',
+            right: 'Part 03 and Part 06 show that operating and debugging existing pipelines are part of the work alongside building new systems. The balance depends on the team and its workload.',
           },
           {
             wrong: '"You need to master every tool in the ecosystem — Spark, Kafka, Airflow, dbt, and dozens more — before you\'re job-ready"',
@@ -886,7 +870,7 @@ Notes:
           },
           {
             wrong: '"Without a CS degree or formal software background, data engineering isn\'t realistically accessible"',
-            right: 'Part 07\'s "Breaking in from a non-IT background" section makes the opposite case directly: the core of the job is logical thinking and understanding data, not algorithm theory, and it names data engineering as one of the most accessible senior technology disciplines for non-IT candidates — with domain knowledge from another field framed as a genuine advantage, not a gap to overcome.',
+            right: 'Part 07 explains that people enter from varied backgrounds, while employers set role-specific requirements. Prior domain knowledge can be relevant, but it does not automatically replace the engineering skills or experience in a posting.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
@@ -908,7 +892,12 @@ Notes:
         }}>
           💼 What This Looks Like at Work
         </div>
-        <SectionTitle>The First Task a New DE Gets at a Product Startup</SectionTitle>
+        <SectionTitle>An Illustrative First Task at a Product Startup</SectionTitle>
+
+        <Para>
+          This is a hypothetical work scenario, not a report about a specific employer or
+          Chaduvuko learner outcome. Team assignments and responsibilities vary.
+        </Para>
 
         <div style={{
           background: 'var(--surface)', border: '1px solid var(--border)',
@@ -921,7 +910,7 @@ Notes:
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — D2C E-commerce Startup, Austin · Week 1
+            Illustrative fictional scenario — D2C e-commerce startup · Week 1
           </div>
 
           <Para>
@@ -1079,7 +1068,7 @@ Throughout this, I would communicate the timeline and trade-offs clearly to the 
           },
           {
             q: 'Assuming a pipeline is "done" once it passes its first successful run',
-            a: 'Part 03\'s task list and Part 06\'s day-in-the-life both show a first successful run is the start of a pipeline\'s life, not the end — the Callout closing Part 06 puts real numbers on this: roughly 40% of a data engineer\'s time goes to maintaining pipelines already in production, not building new ones.',
+            a: 'A successful first run is not the end of a pipeline\'s lifecycle. Plan for monitoring, debugging, recovery, and maintenance as well as initial implementation.',
           },
           {
             q: 'Trying to learn every tool in every category before considering yourself job-ready',
@@ -1091,7 +1080,7 @@ Throughout this, I would communicate the timeline and trade-offs clearly to the 
           },
           {
             q: 'Assuming a non-CS or non-IT background is a disqualifying gap rather than a different kind of asset',
-            a: 'Part 07\'s "Breaking in from a non-IT background" section and this lesson\'s Misconceptions section both push back on this directly — domain knowledge from another field is named as a genuine competitive advantage for a data engineer, not a deficiency to compensate for.',
+            a: 'Part 07 notes that people enter from varied backgrounds. Prior domain knowledge may help with a role, but requirements differ and it does not automatically substitute for engineering skills or experience.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1200,14 +1189,14 @@ Correction policy: mark dates provisional until reconciliation completes`}</Work
       <KeyTakeaways items={[
         'A data engineer builds and maintains systems that move data from where it is created to where it needs to be used — reliably, at scale, and automatically.',
         'The data engineering lifecycle has six phases: Generation → Ingestion → Storage → Transformation → Serving → Orchestration. Every project lives somewhere in this cycle.',
-        'Data engineers spend roughly 40% of their time maintaining existing pipelines, 40% building new ones, and 20% collaborating. Debugging is a core skill, not an interruption.',
+        'Building, operating, debugging, and collaborating are all part of data engineering work. Their relative share varies by team, product, and stage of the system.',
         'Tools change constantly. Categories do not. Learn what problem each category of tool solves — ingestion, storage, processing, orchestration — and you can pick up any specific tool in that category quickly.',
         'Data engineering is the foundation that every other data role depends on. When data engineering is poor, analysts distrust data, scientists waste time cleaning it, and business decisions are made on bad information.',
         'The key difference between a data engineer and a software engineer is not the languages used but the systems built for: operational applications vs analytical data infrastructure.',
         'Reliable means four things: completes successfully, produces correct output, completes within SLA, and recovers from failures without human intervention.',
-        'Non-IT backgrounds are an advantage in data engineering, not a disadvantage. Domain knowledge of what the data means is genuinely rare and valuable.',
-        'In the US in 2026, data engineering salaries range from $75K–$100K at entry level to $240K–$320K+ at principal level, with FAANG roles paying significantly above typical product company rates.',
-        'The fastest path to a first DE job from a non-IT background: Python + SQL + 3 real projects on cloud free tiers + one cloud certification + GitHub portfolio. Achievable in 6–9 months of focused work.',
+        'Prior experience in a domain can help you understand its workflows and data, but its relevance depends on the role and does not replace required engineering skills.',
+        'Compensation varies by role, location, level, and employer. Use current, comparable employer disclosures rather than unsourced salary ranges or multipliers.',
+        'There is no guaranteed path or timeline into a first data-engineering role. Build demonstrable skills, compare them with current postings, and verify cloud and certification terms before investing.',
       ]} />
 
     

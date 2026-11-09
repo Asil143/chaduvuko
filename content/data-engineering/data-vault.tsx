@@ -112,9 +112,9 @@ export default function DataVaultModule() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
             {[
-              { problem: 'Multiple sources with conflicting keys', color: '#4285f4', detail: 'customer_id=4201938 in System A and customer_id=4201938 in System B are different customers. Data Vault\'s hash key plus record_source handles this natively — dimensional modelling has no clean answer.' },
-              { problem: 'Frequent source schema changes', color: '#7b61ff', detail: 'A new source attribute gets a new satellite column. Other satellites, all hubs, all links are untouched. Dimensional ETL pipelines break on schema changes — Data Vault does not.' },
-              { problem: 'Complete auditability', color: '#f97316', detail: 'Every row records when it was loaded, which source sent it, and the raw key. Nothing is ever overwritten. The complete history of every value from every source is preserved forever.' },
+              { problem: 'Multiple sources with conflicting keys', color: '#4285f4', detail: 'Source-qualified business keys can distinguish identical identifiers from different systems. A dimensional model can also support this with an explicit source-key mapping; the chosen identity rules must be documented.' },
+              { problem: 'Frequent source schema changes', color: '#7b61ff', detail: 'A new source attribute can be modeled in a satellite, but source contracts, transformations, and consumers still need coordinated schema changes and tests.' },
+              { problem: 'Historical traceability', color: '#f97316', detail: 'Load timestamps, source identifiers, and business keys can support auditability when captured and retained according to an approved policy. Data Vault does not preserve every value forever by itself.' },
             ].map((item) => (
               <div key={item.problem} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}25`, borderLeft: `3px solid ${item.color}`, borderRadius: 8, padding: '14px 16px' }}>
                 <div style={{ fontSize: 12, fontWeight: 800, color: item.color, fontFamily: 'var(--font-display)', marginBottom: 6 }}>{item.problem}</div>
@@ -596,17 +596,54 @@ Fast indexed equality joins replace slow range queries.`}</Output>
         <SectionTitle>Implementing Data Vault in dbt — AutomateDV</SectionTitle>
 
         <SubSubTitle>The staging model — every hash key pre-computed in one place</SubSubTitle>
-        <CodeBox label="AutomateDV — staging model with pre-computed hash keys">{`# STAGING MODEL (stg_orders.sql) — pre-compute all hash keys first:
-{{ config(materialized='view') }}
-SELECT
-    {{ automate_dv.hash('customer_id', 'MD5') }}                    AS hub_customer_hk,
-    {{ automate_dv.hash('order_id',    'MD5') }}                    AS hub_order_hk,
-    {{ automate_dv.hash(['order_id', 'customer_id'], 'MD5') }}      AS lnk_order_customer_hk,
-    {{ automate_dv.hash(['status', 'amount', 'delivery_fee'],'MD5') }} AS order_hashdiff,
-    order_id, customer_id, status, amount, delivery_fee,
-    CURRENT_TIMESTAMP()   AS load_dts,
-    'freshcart_orders_db' AS record_source
-FROM {{ source('staging', 'orders') }}`}</CodeBox>
+        <Para>
+          AutomateDV generates hash keys and hashdiffs through the <code>stage</code> macro's
+          <code>hashed_columns</code> configuration. A hashdiff is marked with
+          <code>is_hashdiff: true</code>; the macro generates the output aliases, so do not append
+          a second <code>AS</code>. The hash algorithm and normalization settings are project-level
+          variables, not arguments passed in place of a column alias.
+        </Para>
+        <CodeBox label="AutomateDV — staging model with hashed_columns metadata">{`# STAGING MODEL (stg_orders.sql)
+{% set yaml_metadata %}
+source_model:
+  staging: orders
+derived_columns:
+  LOAD_DTS: CURRENT_TIMESTAMP()
+  RECORD_SOURCE: "!freshcart_orders_db"
+hashed_columns:
+  HUB_CUSTOMER_HK: CUSTOMER_ID
+  HUB_ORDER_HK: ORDER_ID
+  LNK_ORDER_CUSTOMER_HK:
+    - HUB_CUSTOMER_HK
+    - HUB_ORDER_HK
+  ORDER_HASHDIFF:
+    is_hashdiff: true
+    columns:
+      - ORDER_ID
+      - STATUS
+      - AMOUNT
+      - DELIVERY_FEE
+{% endset %}
+
+{% set metadata_dict = fromyaml(yaml_metadata) %}
+{{ automate_dv.stage(
+    include_source_columns=true,
+    source_model=metadata_dict['source_model'],
+    derived_columns=metadata_dict['derived_columns'],
+    hashed_columns=metadata_dict['hashed_columns']
+) }}
+
+# dbt_project.yml controls hashing for the project:
+vars:
+  hash: MD5`}</CodeBox>
+        <Para>
+          The link hash uses the hub hash keys, and the hashdiff includes the business key with
+          payload columns. Check the installed AutomateDV version and its hash configuration before
+          adopting this example.
+        </Para>
+        <p>
+          Reference: <a href="https://automate-dv.readthedocs.io/en/v0.11.2/macros/stage_macro_configurations/">AutomateDV stage macro configurations</a>.
+        </p>
 
         <SubSubTitle>The hub, link, and satellite models — each just configuration over an AutomateDV macro</SubSubTitle>
         <CodeBox label="AutomateDV — hub, link, and satellite model configs">{`# HUB MODEL (hub_customer.sql):
@@ -982,9 +1019,9 @@ print(f"null_differs_from_empty={hub_key('crm', None) != hub_key('crm', '')}")`}
         'Each source system gets its own satellite. If two sources describe the same customer, there are two separate satellites. This preserves both versions for audit. Business Vault computed satellites (CSAT) apply the agreed source resolution rules for reporting — marts never join raw satellites directly.',
         'Point-in-Time (PIT) tables pre-compute which satellite row was current at each snapshot date, transforming expensive date-range satellite scans into fast equality joins. PIT tables are the primary query interface for building Information Marts from the vault.',
         'The four-layer architecture: Source → Staging (hash keys pre-computed) → Raw Vault (INSERT-only, no business rules, the source of truth) → Business Vault (PIT tables, SALs, source resolution) → Information Mart (dimensional model for analysts). Information Marts are rebuilt views — the Raw Vault is the source of truth.',
-        'Adding a new source system changes nothing in the existing Raw Vault. New hub rows are added with a new record_source. New satellites are created for new attributes. Existing satellites, hubs, and links are completely untouched. Existing analytics continue working unchanged.',
-        'Data Vault beats dimensional modelling for: 10+ heterogeneous sources with conflicting keys, frequent schema changes, and regulatory auditability requirements. Dimensional modelling beats Data Vault for: single sources, stable schemas, analytics-first teams, and when sub-second query performance is critical.',
-        'AutomateDV (dbtvault) provides dbt macros — hub(), link(), sat(), pit() — that generate correct vault SQL from configuration. The staging model pre-computes all hash keys. All vault models call the macros. Business Vault computed satellites apply source resolution rules.',
+        'Adding a source may require new mappings, keys, links, satellites, transformations, and consumer tests. Design the change so existing contracts remain compatible where possible; verify downstream models rather than assuming they are unaffected.',
+        'Data Vault and dimensional modeling have different complexity and history trade-offs. Choose based on integration, lineage, query, team, and governance requirements; there is no universal source-count threshold.',
+        'AutomateDV provides dbt macros for vault structures and a stage macro for derived and hashed columns. Review generated SQL, package version, and project-level hashing configuration before deployment.',
         'The hybrid enterprise pattern: Data Vault for integration (Raw Vault + Business Vault), dimensional model for delivery (Information Mart). Never choose Data Vault because it sounds more enterprise-grade — the complexity cost is real and must be justified by specific multi-source integration and auditability requirements.',
       ]} />
 

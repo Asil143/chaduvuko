@@ -232,7 +232,8 @@ export default function ETLvsELTModule() {
                 then SQL/dbt transforms it in place inside the warehouse or lake.
               </div>
               <div style={{ fontSize: 12, color: 'var(--muted)', fontStyle: 'italic' }}>
-                The destination holds both raw and transformed data. Raw is always preserved.
+                A destination may retain raw and transformed data, subject to access, retention,
+                cost, and deletion policies.
               </div>
             </div>
           </div>
@@ -306,7 +307,7 @@ Cloud data warehouses (Redshift 2012, BigQuery 2012, Snowflake 2014):
 THEREFORE: transformation can happen AFTER loading (ELT)
   Extract from source and load raw to S3 or warehouse staging
   Transform inside the warehouse with SQL
-  → Raw data preserved in S3 forever
+  → Raw data can be retained for a defined replay or audit window
   → No separate transformation server
   → SQL replaces GUI-based ETL tools
   → dbt (data build tool, launched 2016) codifies this with SQL + Git
@@ -709,6 +710,27 @@ DECISION RULE: ELT or ETL for each source?
     Yes (no PII, no compliance issue, schema is loadable): ELT
     No (PII masking needed, complex Python transform, incompatible schema): ETL`}</CodeBox>
 
+        <SubSubTitle>Push vs pull: who initiates ingestion?</SubSubTitle>
+        <Para>
+          Push and pull describe how data reaches the pipeline, not where
+          transformations happen. In a pull design, the consumer polls a source
+          using a cursor or time window; it controls the schedule but must handle
+          rate limits, missed windows and source-specific delete behavior. In a
+          push design, a producer sends events or webhooks; latency can be lower,
+          but delivery, retry and replay guarantees depend on the provider.
+        </Para>
+        <CodeBox label="Choose a recovery plan as well as a delivery direction">{`PULL
+  Pipeline → requests records after saved cursor
+  Plan for: rate limits, cursor durability, overlapping windows, backfills
+
+PUSH
+  Source → webhook/event endpoint → durable queue or landing table
+  Plan for: signature verification, retries, duplicate event IDs, replay
+
+Either direction can feed ETL or ELT. Do not assume a webhook is delivered
+exactly once or that polling alone detects hard deletes; confirm the source's
+contract and define reconciliation.`}</CodeBox>
+
         <SubTitle>Commercial ELT tools — Fivetran, Airbyte, and the data movement layer</SubTitle>
 
         <Para>
@@ -950,12 +972,11 @@ Summary:
           </Para>
 
           <Para>
-            <strong>The result after migration:</strong> transformation logic is 8 SQL
-            files in git. Any engineer on the team can read, review, and change them.
-            CI runs dbt tests on every PR. When a bug is found six months later, it
-            is fixed in one SQL file and <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>dbt run --full-refresh</code> reprocesses
-            from the preserved raw data in 40 minutes. The 8-hour re-extraction from
-            PostgreSQL is gone forever.
+            <strong>Illustrative outcome:</strong> moving transformations into reviewed SQL
+            models can make logic easier to inspect and test. A full refresh can rebuild outputs
+            only when the necessary source-faithful inputs and metadata are still available and
+            retained. Measure runtime and recovery time in the actual environment; this example
+            makes no timing or cost guarantee.
           </Para>
         </div>
       </section>

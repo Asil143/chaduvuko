@@ -26,15 +26,15 @@ export async function generateMetadata({
   params: { topic: string };
 }): Promise<Metadata> {
   const allModules = DS_CURRICULUM.flatMap(s => s.modules);
-  const module = allModules.find(m => m.slug === params.topic);
+  const lesson = allModules.find(m => m.slug === params.topic);
 
-  if (!module) {
+  if (!lesson) {
     return { title: 'Data Science' };
   }
 
   return {
-    title: `${module.title} | Data Science`,
-    description: module.description,
+    title: `${lesson.title} | Data Science`,
+    description: lesson.description,
   };
 }
 
