@@ -102,6 +102,12 @@
   letter-spacing: -0.055em;
 }
 
+.compactValue {
+  font-size: clamp(20px, 3.2cqi, 28px);
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+
 .detail {
   max-width: 22ch;
   margin: 0;
@@ -111,12 +117,12 @@
   text-wrap: pretty;
 }
 
-.free {
+.schedule {
   grid-column: span 2;
   background: var(--brand-soft);
 }
 
-.free .value {
+.schedule .value {
   color: var(--brand-green);
 }
 
@@ -137,7 +143,7 @@
 }
 
 @container (max-width: 559px) {
-  .free {
+  .schedule {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
@@ -145,17 +151,17 @@
     row-gap: 6px;
   }
 
-  .free .label {
+  .schedule .label {
     min-height: 0;
   }
 
-  .free .value {
+  .schedule .value {
     grid-column: 2;
     grid-row: 1 / span 2;
     margin: 0;
   }
 
-  .free .detail {
+  .schedule .detail {
     grid-column: 1;
   }
 }
@@ -179,7 +185,7 @@
     padding: 20px 16px;
   }
 
-  .free {
+  .schedule {
     grid-column: auto;
   }
 }
