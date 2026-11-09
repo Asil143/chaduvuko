@@ -212,8 +212,8 @@ export default function BertEncoderFamilyPage() {
           The result: BERT representations capture deep bidirectional
           context. Fine-tune BERT on 1,000 labelled examples and it
           outperforms models trained from scratch on 100,000.
-          Amazon's review classifier, DoorDash's complaint tagger,
-          Stripe's intent detector — all fine-tuned BERT variants.
+          Review classifiers, complaint taggers, and support intent detectors
+          are classic fine-tuned BERT-family use cases.
         </p>
 
         <AnalogyBox>

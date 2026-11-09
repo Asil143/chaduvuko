@@ -187,7 +187,7 @@ export default function EvaluationMetricsPage() {
         </h2>
 
         <p style={S.p}>
-          Stripe processes 5 million transactions per day.
+          Picture a payments company processing 5 million transactions per day.
           Only 1.5% are fraudulent — 75,000 transactions.
           A model that predicts "legitimate" for every transaction
           achieves 98.5% accuracy without catching a single fraudulent dollar.

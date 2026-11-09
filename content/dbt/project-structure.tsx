@@ -942,16 +942,16 @@ models:
     columns:
       - name: payment_id
         description: Primary key -- Stripe's payment id, renamed from the raw "id" column.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: order_id
         description: Foreign key to the order this payment is associated with.
-        tests:
+        data_tests:
           - not_null
       - name: payment_status
         description: Lowercased, normalized Stripe payment status.
-        tests:
+        data_tests:
           - accepted_values:
               values: ['succeeded', 'pending', 'failed', 'refunded']`}
         </CodeBox>

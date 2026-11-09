@@ -505,9 +505,9 @@ TYPICAL ETL TOOLS AND WHEN USED:
         - name: silver_orders
           columns:
             - name: order_id
-              tests: [not_null, unique]
+              data_tests: [not_null, unique]
             - name: amount
-              tests: [{dbt_utils.accepted_range: {min_value: 0}}]`}</CodeBox>
+              data_tests: [{dbt_utils.accepted_range: {min_value: 0}}]`}</CodeBox>
 
         <SubSubTitle>What survives a bug, and what each schema in the warehouse holds</SubSubTitle>
         <CodeBox label="What ELT preserves, and what the destination contains">{`WHAT IS PRESERVED:
@@ -600,11 +600,11 @@ dbt TESTS (schema.yml):
     - name: stg_orders
       columns:
         - name: order_id
-          tests: [not_null, unique]
+          data_tests: [not_null, unique]
         - name: order_amount
-          tests: [not_null, {dbt_utils.accepted_range: {min_value: 0}}]
+          data_tests: [not_null, {dbt_utils.accepted_range: {min_value: 0}}]
         - name: status
-          tests:
+          data_tests:
             - accepted_values:
                 values: [placed, confirmed, delivering, delivered, cancelled]
 

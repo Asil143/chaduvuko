@@ -686,7 +686,7 @@ fi = pd.DataFrame({
     'importance': rf.feature_importances_,
 }).sort_values('importance', ascending=False)
 print(fi.head(10))`}
-        example="Stripe's chargeback prediction uses Random Forest for its speed and OOB evaluation — with 2M transactions daily, they cannot afford expensive cross-validation per model update. OOB error gives a reliable accuracy estimate without holding out data, preserving more training examples. The model runs in 3ms per prediction — fast enough for real-time payment authorisation."
+        example="Illustrative scenario: a payments company's chargeback model uses Random Forest for its speed and OOB evaluation — with 2M transactions daily, the team cannot afford expensive cross-validation per model update. OOB error gives a reliable accuracy estimate without holding out data, preserving more training examples. The model runs in 3ms per prediction — fast enough for real-time payment authorisation."
       />
 
       <QBlock
@@ -776,7 +776,7 @@ f2 = f1_score(y_test, y_pred, beta=2)   # wait, use fbeta_score
 from sklearn.metrics import fbeta_score
 f2 = fbeta_score(y_test, y_pred, beta=2)
 print(f"F2 (recall-weighted): {f2:.4f}")`}
-        example="Stripe's fraud team reports PR-AUC internally (not ROC-AUC) because with 0.1% fraud rate, a model that says 'legitimate' for everything gets ROC-AUC=0.5 but PR-AUC=0.001. PR-AUC is honest about how useful the model actually is. They also track capture_rate (recall at a fixed 0.3% false positive rate) — the business metric that matters to the risk team."
+        example="Illustrative scenario: a fraud team reports PR-AUC (not ROC-AUC) because with 0.1% fraud rate, a model that says 'legitimate' for everything gets ROC-AUC=0.5 but PR-AUC=0.001. PR-AUC is honest about how useful the model actually is. They also track capture_rate (recall at a fixed 0.3% false positive rate) — the business metric that matters to the risk team."
       />
 
       <QBlock
@@ -842,7 +842,7 @@ print(f"Variance explained: {pca.explained_variance_ratio_.cumsum()[-1]:.1%}")
 pca_2d = PCA(n_components=2)
 X_2d   = pca_2d.fit_transform(X_scaled)
 # Now plot X_2d[:, 0] vs X_2d[:, 1] with color = cluster label`}
-        example="Amazon's product similarity engine uses 2,048-dimensional image embeddings from ResNet. Storing and searching 50M product embeddings at full dimensionality is expensive. PCA reduces embeddings to 256 dimensions (retaining 94% of variance), cutting storage by 8× and nearest-neighbour search time by 4×, with negligible impact on product recommendation quality."
+        example="Illustrative scenario: a retailer's product similarity engine uses 2,048-dimensional image embeddings from ResNet. Storing and searching 50M product embeddings at full dimensionality is expensive. PCA reduces embeddings to 256 dimensions (retaining 94% of variance), cutting storage by 8× and nearest-neighbour search time by 4×, with negligible impact on product recommendation quality."
       />
 
       <Div />
@@ -1157,7 +1157,7 @@ Think through this step by step:
           </div>
           <p style={{ ...S.ps, marginBottom: 0 }}>Decision: fine-tune when the base model is inconsistent on your task despite optimised prompts, when you have 500+ high-quality labelled examples, when inference cost at scale justifies training cost, when output must follow a strict format the model ignores via prompting. Do not fine-tune when: insufficient data (&lt;500 examples), task changes frequently (fine-tuned model becomes stale), problem is knowledge-based (use RAG instead).</p>
         </>}
-        example="Amazon's product dispute classifier needed to output one of 18 exact category strings that matched their CRM system. Despite detailed prompting, GPT-4 produced valid-sounding but non-matching category names 15% of the time. LoRA fine-tuning LLaMA-3-8B on 3,000 labelled disputes reduced invalid outputs to &lt;0.5% — the model internalised the exact category names. This also cut inference cost by 10× vs GPT-4 API."
+        example="Illustrative scenario: a retailer's dispute classifier needed to output one of 18 exact category strings that matched its CRM system. Despite detailed prompting, a large hosted model produced valid-sounding but non-matching category names 15% of the time. LoRA fine-tuning LLaMA-3-8B on 3,000 labelled disputes reduced invalid outputs to &lt;0.5% — the model internalised the exact category names. This also cut inference cost by 10× vs GPT-4 API."
       />
 
       <QBlock

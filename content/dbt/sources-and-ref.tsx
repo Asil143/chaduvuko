@@ -606,12 +606,12 @@ sources:
         columns:
           - name: order_id
             description: "Primary key of the orders table in the source application."
-            tests:
+            data_tests:
               - unique
               - not_null
           - name: customer_id
             description: "Foreign key to the customers table."
-            tests:
+            data_tests:
               - not_null`}
         </CodeBox>
         <CodeBox label="models/staging/schema.yml — the same pattern applied to a model built by ref()">
@@ -623,7 +623,7 @@ models:
     columns:
       - name: order_id
         description: "Primary key, inherited from the raw source."
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: status

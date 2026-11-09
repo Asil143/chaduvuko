@@ -218,8 +218,9 @@ export default function LLMFineTuningPage() {
             is consistent, high-volume, and the consultant approach is insufficient.
           </p>
           <p style={{ ...S.ps, marginBottom: 0, color: '#00e676' }}>
-            Stripe's payment dispute classifier: prompting GPT-4 worked at 80%
-            accuracy. Fine-tuned LLaMA-3-8B reached 94% at 10× lower cost per query.
+            Illustrative example — a payments company's dispute classifier: prompting
+            a large hosted model reached 80% accuracy, while a fine-tuned 8B open model
+            reached 94% at a fraction of the cost per query.
             The volume justified the training investment. Volume and consistency
             are the two conditions that make fine-tuning worth it.
           </p>
@@ -348,8 +349,8 @@ export default function LLMFineTuningPage() {
 from transformers import AutoTokenizer
 import json
 
-# ── Task: Stripe payment dispute classifier ─────────────────────────
-# 12 dispute categories used in their CRM system
+# ── Task: payment dispute classifier (hypothetical payments company) ─
+# 12 dispute categories used in its CRM system
 DISPUTE_CATEGORIES = [
     'payment_failed_bank_error',
     'payment_failed_insufficient_funds',

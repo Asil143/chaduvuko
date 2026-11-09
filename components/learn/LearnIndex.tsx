@@ -482,6 +482,7 @@ const keywordIcon = (keyword: string) => {
 
 const quickLinks = (stats: SiteStats) => [
   { icon: '🧭', label: 'Find Your Path',      href: '/learn/find-your-path', desc: 'Get a goal-based track order' },
+  { icon: '📚', label: 'All Courses',         href: '/learn/all-courses',    desc: 'Every track, module, and lesson' },
   { icon: '🔄', label: 'Sync Progress',        href: '/dashboard',            desc: 'Sign in to continue across devices' },
   { icon: '🗺️', label: 'Career Roadmaps',    href: '/learn/roadmap',   desc: `${stats.roadmaps} role-specific roadmaps` },
   { icon: '🏗️', label: 'Real Projects',       href: '/learn/projects',  desc: `${stats.projects} Azure end-to-end builds` },
@@ -500,7 +501,9 @@ export default function LearnPage({ tracks, stats }: { tracks: TrackSummaries; s
   const hrefOf = (t: { track?: string }) => (t.track ? tracks[t.track]?.href : undefined)
   const [cat, setCat] = useState<Cat>('all')
 
-  const filtered = (cat === 'all' ? TRACKS : TRACKS.filter(t => t.cat === cat))
+  // Tracks absent from the summaries are hidden in the catalog; leave their cards out.
+  const listed = TRACKS.filter(t => !t.track || Boolean(tracks[t.track]))
+  const filtered = (cat === 'all' ? listed : listed.filter(t => t.cat === cat))
     .map((track, originalIndex) => ({ track, originalIndex }))
     .sort((a, b) =>
       (trackPriorityRank.get(a.track.track ?? '') ?? Number.MAX_SAFE_INTEGER)

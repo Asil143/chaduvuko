@@ -103,7 +103,7 @@ const tools = [
       { name: 'HuggingFace Transformers', use: 'Access every pretrained model (BERT, GPT-2, LLaMA) in 3 lines' },
       { name: 'LangChain', use: 'Build LLM apps — chains, agents, RAG pipelines' },
       { name: 'LlamaIndex', use: 'Connect LLMs to your own data and documents' },
-      { name: 'OpenAI / Anthropic APIs', use: 'Production LLM access — GPT-4, Claude, Gemini' },
+      { name: 'OpenAI / Anthropic APIs', use: 'Production LLM access — GPT, Claude, Gemini model families' },
     ],
   },
   {

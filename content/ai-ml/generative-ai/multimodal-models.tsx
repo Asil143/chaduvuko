@@ -206,11 +206,11 @@ export default function MultimodalModelsPage() {
         </p>
 
         <p style={S.p}>
-          Real production uses: Shopify uses CLIP-based retrieval
-          to match user search queries to product images without pre-defined categories.
-          Amazon uses multimodal models to verify that product photos match
-          product descriptions. DoorDash uses them to check that restaurant dish photos
-          match their menu descriptions. Every e-commerce platform now has
+          Typical production uses: an online store can use CLIP-style retrieval
+          to match search queries to product images without pre-defined categories.
+          A marketplace can use multimodal models to check that product photos match
+          product descriptions, and a delivery app can check that dish photos
+          match menu descriptions. Many e-commerce platforms now offer
           multimodal search — text query → image results, or image query → similar products.
         </p>
 

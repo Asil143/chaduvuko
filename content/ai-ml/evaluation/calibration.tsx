@@ -750,7 +750,7 @@ for low, high in [(0.0,0.1),(0.1,0.3),(0.3,0.5),(0.5,0.7),(0.7,0.9),(0.9,1.0)]:
         <h2 style={S.h2}>Production credit scoring pipeline — calibrated end to end</h2>
 
         <p style={S.p}>
-          At Stripe's credit team, every loan application produces a calibrated
+          At a lending company's credit team, every loan application produces a calibrated
           default probability. The credit officer sees "this applicant has a 23%
           probability of default." They need to trust that number —
           it drives the interest rate, the loan amount, and the approval decision.

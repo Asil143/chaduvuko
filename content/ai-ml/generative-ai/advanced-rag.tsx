@@ -196,7 +196,7 @@ export default function AdvancedRAGPage() {
         </p>
 
         <p style={S.p}>
-          A Stripe knowledge base assistant built with naive RAG will struggle
+          A payments API's knowledge base assistant built with naive RAG will struggle
           with queries like "what is error code 400?" — semantic search finds
           chunks about general payment errors (semantically similar) but misses
           the chunk that contains exactly "400" (keyword match). It will struggle

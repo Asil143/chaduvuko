@@ -243,7 +243,7 @@ export default function WhatIsPythonSetup() {
 
         <Para>
           Python follows a <code>major.minor.patch</code> versioning scheme — for example, Python
-          3.12.4 means major version 3, minor version 12, patch 4. A new minor version ships roughly
+          3.15.0 means major version 3, minor version 15, patch 0. A new minor version ships roughly
           once a year, typically adding new language features (like the <code>match</code>/
           <code>case</code> statement added in 3.10, which you will use in the Control Flow module).
           Patch releases are bug fixes and security updates only. For learning and for new projects,
@@ -253,7 +253,7 @@ export default function WhatIsPythonSetup() {
         <Callout type="info">
           <strong>Managing multiple Python versions:</strong> As you work on more projects, you will
           eventually need different Python versions installed side by side — one legacy project
-          pinned to 3.9, a new one using 3.12&apos;s latest features. Tools like <code>pyenv</code>{' '}
+          pinned to 3.10, a new one using 3.15&apos;s latest features. Tools like <code>pyenv</code>{' '}
           (macOS/Linux) exist specifically for this — they let you install multiple Python versions
           and switch between them per project. You will not need this on day one, but it is worth
           knowing the tool&apos;s name exists before you hit the problem it solves.
@@ -278,10 +278,10 @@ export default function WhatIsPythonSetup() {
         <SubTitle>Verifying your installation</SubTitle>
 
         <CodeBox label="Terminal">{`python3 --version
-# Python 3.12.4
+# Python 3.15.0   (any 3.13+ version is fine for this course)
 
 pip3 --version
-# pip 24.0 from ... (python 3.12)`}</CodeBox>
+# pip 25.x from ... (python 3.15)`}</CodeBox>
 
         <Callout type="warning">
           <strong>python vs python3:</strong> On macOS and most Linux distributions, the command{' '}
@@ -451,7 +451,7 @@ Learning Python on Chaduvuko.`}</CodeBox>
         </Para>
 
         <CodeBox label="Interactive mode (REPL)">{`$ python3
-Python 3.12.4 (main, ...)
+Python 3.15.0 (main, ...)
 >>> print("testing something quickly")
 testing something quickly
 >>> 7 * 6

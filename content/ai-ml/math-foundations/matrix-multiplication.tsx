@@ -235,7 +235,7 @@ export default function MatrixMultiplicationPage() {
         <h2 style={S.h2}>Every neural network is just matrix multiplications stacked on top of each other.</h2>
 
         <p style={S.p}>
-          GPT-4 has 1.8 trillion parameters. Claude has hundreds of billions.
+          Frontier language models have hundreds of billions to trillions of parameters (most labs no longer publish exact counts).
           Stable Diffusion generates photorealistic images. All of them —
           at the fundamental mechanical level — are doing the same thing:
           multiplying matrices, adding bias vectors, applying an activation function,
@@ -854,7 +854,7 @@ print(f"Sample prediction: {predictions[0]:.4f} minutes")
 # The total parameter count in this tiny network:
 total_params = (4*64 + 64) + (64*32 + 32) + (32*1 + 1)
 print(f"Total learnable parameters: {total_params}")  # 2,369
-# GPT-4 has ~1.8 trillion. Same structure, vastly larger.`} />
+# Frontier LLMs have hundreds of billions or more. Same structure, vastly larger.`} />
 
         <h3 style={S.h3}>Matrix shapes define the network architecture</h3>
 

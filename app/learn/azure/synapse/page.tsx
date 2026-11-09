@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
@@ -26,6 +27,10 @@ export default function SynapsePage() {
       </p>
       <p>
         Think of it as a bridge between the data lake and the people who need to use the data.
+      </p>
+      <p>
+        <strong>Where Synapse sits today:</strong> Microsoft Fabric is now Microsoft&apos;s primary analytics platform, and many new projects start there instead. Synapse remains supported and runs in a large number of existing data platforms, so you will still meet it on the job. Learn the concepts here, then see how the same ideas map to{' '}
+        <Link href="/learn/azure/microsoft-fabric">Microsoft Fabric</Link>.
       </p>
 
       <h2>Two query engines — know the difference</h2>

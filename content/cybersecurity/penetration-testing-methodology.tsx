@@ -391,7 +391,7 @@ FINDINGS (bulk of report — one section per finding)
 
   References:
     CWE-89: SQL Injection
-    OWASP Top 10 A03:2021 - Injection
+    OWASP Top 10 A05:2025 - Injection (A03:2021)
 
 REMEDIATION SUMMARY TABLE
   Finding | Severity | Effort | Owner | Due Date

@@ -186,8 +186,8 @@ export default function LightGBMPage() {
         </h2>
 
         <p style={S.p}>
-          Amazon runs 1.5 million transactions per day.
-          Their ML team wants to retrain the product recommendation model
+          Picture a retailer processing 1.5 million transactions per day.
+          Its ML team wants to retrain the product recommendation model
           every night on the last 30 days of data — that is 45 million rows.
           XGBoost takes 6 hours to train on this. The retraining window
           is 4 hours. The math does not work.
@@ -1192,8 +1192,8 @@ print("\nProduction bundle saved.")`} />
         <p style={S.p}>
           Lesson 32 begins unsupervised learning — K-Means Clustering.
           Instead of predicting a label, you find hidden groups in data.
-          Amazon uses it to segment 300 million customers.
-          DoorDash uses it to cluster delivery zones.
+          Retailers use it to segment customers into groups;
+          delivery apps use it to cluster delivery zones.
           The algorithm requires no labels — it discovers structure
           that was always there but never explicitly defined.
         </p>

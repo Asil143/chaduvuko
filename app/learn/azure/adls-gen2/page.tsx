@@ -123,7 +123,7 @@ df.write \
 
       <h2>The difference between Gen1 and Gen2</h2>
       <p>
-        ADLS Gen1 is deprecated. It still exists but Microsoft is shutting it down. If you see Gen1 in a job description or on a project, that is a legacy system. Gen2 is what all new projects use. You do not need to learn Gen1.
+        ADLS Gen1 was retired on February 29, 2024 and no longer exists. If you see Gen1 in an old job description, a blog post, or project documentation, read it as "the system was migrated to Gen2". Gen2 is the only ADLS you need to learn.
       </p>
     </LearnLayout>
     </WithLessonNav>

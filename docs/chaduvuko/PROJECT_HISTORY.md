@@ -143,6 +143,15 @@ Recovered Library content shows a Chaduvuko practice product called **Pipeline P
 - Verified with `npm run lint`, `npm run validate:de`, `npm run validate:catalog`, and `npm run build` including postbuild checks. Lint passes with three warnings in existing components.
 - The measurement/hash snapshot remains the November 8 live-site baseline. The changes are local and have not been deployed; external cloud integrations were not provisioned or tested.
 
+## November 9, 2026 — Whole-site content audit and site map
+
+- Inventoried every page (694 rows) from the catalog and built HTML with `scripts/site-inventory.ts`, which writes `SITE_INVENTORY.csv`, `site-inventory.json`, and the generated `SITE_MAP.md` (Mermaid map, per-track modules, hidden/planned tracks, health checks).
+- Hid the Data Science track (3 of 53 lessons published) with a reversible `hidden` flag in `lib/catalog/tracks.ts`: pages stay reachable but are `noindex` and excluded from navigation, search, sitemap, counts, and progress. All 37 planned tracks are kept and labeled as planned.
+- Fixed outdated content: OWASP Top 10 moved to the 2025 edition; Security+ SY0-801 timeline; cyber job-market figures re-sourced (CyberSeek, BLS); Python 3.15; Amazon Data Firehose / Managed Service for Apache Flink renames and KDA-for-SQL discontinuation; ADLS Gen1 retirement; Synapse→Fabric context; Airflow 3 Assets and metadata SQL; dbt `data_tests:`; model-name and unsupported company claims generalized; fabricated industry "open roles" removed.
+- Added the public `/learn/all-courses` page (linked from Tracks menu, footer, learn hub, and search) and a workspace VS Code canvas at `.github/extensions/chaduvuko-site-map/`.
+- Flagged, not changed: chat API default model `gpt-4o-mini` (retires Jan 14, 2027; set `OPENAI_MODEL`), "dbt Cloud" → "dbt platform" naming, and short cloud/Foundations lessons.
+- Verified with `npm run lint` (3 known warnings) and `npm run build` including all postbuild validators.
+
 ## Ongoing rules
 - Keep StudyX Overseas separate.
 - Chaduvuko remains the primary EdTech project.

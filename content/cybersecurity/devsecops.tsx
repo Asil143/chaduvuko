@@ -158,7 +158,7 @@ rules:
     severity: ERROR
     metadata:
       cwe: "CWE-798: Use of Hard-coded Credentials"
-      owasp: "A07:2021 - Identification and Authentication Failures"
+      owasp: "A07:2025 - Authentication Failures"
 
 semgrep --config rules/hardcoded_aws.yml ./`}
         </Block>

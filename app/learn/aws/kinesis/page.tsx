@@ -19,16 +19,16 @@ export default function KinesisPage() {
     >
       <h2>Four services, one name — know the difference</h2>
       <p>
-        Amazon Kinesis is an umbrella brand for four related but different services. Interviewers sometimes ask about "Kinesis" expecting you to clarify which one.
+        Amazon Kinesis started as an umbrella brand for four related services; two have since been renamed or retired, which is exactly what interviewers probe. Interviewers sometimes ask about "Kinesis" expecting you to clarify which one.
       </p>
       <p>
         <strong>Kinesis Data Streams</strong> — the core streaming service. Producers write events to a stream, consumers read from it in real time or near-real time. You control the shards (parallel lanes), retention period, and consumers. This is the one most data engineers mean when they say "Kinesis."
       </p>
       <p>
-        <strong>Kinesis Data Firehose</strong> — a managed delivery service. It reads from a stream and delivers data to S3, Redshift, OpenSearch, or Splunk automatically. No consumer code to write. Best for the common case of "stream data → land in S3 as Parquet."
+        <strong>Amazon Data Firehose</strong> (renamed from Kinesis Data Firehose in 2024) — a managed delivery service. It reads from a stream and delivers data to S3, Redshift, OpenSearch, or Splunk automatically. No consumer code to write. Best for the common case of "stream data → land in S3 as Parquet."
       </p>
       <p>
-        <strong>Kinesis Data Analytics</strong> — run SQL or Apache Flink code directly on a stream without managing infrastructure. Best for real-time aggregations and anomaly detection on streaming data.
+        <strong>Amazon Managed Service for Apache Flink</strong> (formerly Kinesis Data Analytics) — run Apache Flink applications, including Flink SQL, on a stream without managing infrastructure. Best for real-time aggregations and anomaly detection. The older Kinesis Data Analytics for SQL applications was discontinued: no new applications after October 15, 2025, and remaining applications were deleted on January 27, 2026.
       </p>
       <p>
         <strong>Kinesis Video Streams</strong> — for video. Not relevant to data engineering.
@@ -98,7 +98,7 @@ def read_from_stream(stream_name: str, shard_id: str):
 
 read_from_stream('company-order-events', 'shardId-000000000000')`} />
 
-      <h2>Kinesis Firehose — the easier path for most use cases</h2>
+      <h2>Amazon Data Firehose — the easier path for most use cases</h2>
       <p>
         If your goal is to land streaming data in S3 as Parquet files every few minutes, Firehose is far simpler than writing a consumer. You configure a Firehose delivery stream in the AWS Console, point it at your Kinesis Data Stream, set the destination to S3, and it handles buffering, converting, and writing automatically.
       </p>

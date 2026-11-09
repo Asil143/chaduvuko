@@ -448,7 +448,7 @@ zip_code | city           | state
     columns:
       - name: zip_code
         description: US ZIP code. Forced to varchar(5) to preserve leading zeros lost by automatic type inference.
-        tests:
+        data_tests:
           - unique
           - not_null`}
         </CodeBox>
@@ -801,16 +801,16 @@ seeds:
     columns:
       - name: country_code
         description: ISO 3166-1 alpha-2 country code. Forced to varchar(2) so a code like "US" is never misinterpreted by type inference.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: country_name
         description: Full country name, for display purposes.
-        tests:
+        data_tests:
           - not_null
       - name: region
         description: The region this company's reporting groups this country into. Not a standard geographic classification — this is our own internal grouping.
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               values: ['north_america', 'europe', 'asia_pacific', 'south_america']`}

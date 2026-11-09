@@ -8,6 +8,11 @@ export interface Track {
   area: TrackArea
   indexHref: string
   status?: 'coming-soon'
+  /**
+   * Hidden tracks stay reachable by direct URL but are noindex and left out of
+   * listings, search, sitemap, counts, and progress. Reversible: remove the flag.
+   */
+  hidden?: { reason: string; since: string }
 }
 
 export interface Lesson {

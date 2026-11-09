@@ -178,12 +178,12 @@ THE RULE: every layer a quality issue traverses multiplies its cost by 10×.`}</
   - name: silver_orders
     columns:
       - name: order_id
-        tests:
+        data_tests:
           - not_null           # catches missing PKs
           - unique              # catches duplicates at the grain
 
       - name: customer_id
-        tests:
+        data_tests:
           - not_null
           - relationships:      # referential integrity to parent table
               to: ref('silver_customers')
@@ -191,14 +191,14 @@ THE RULE: every layer a quality issue traverses multiplies its cost by 10×.`}</
               severity: warn    # warn not error: some orders arrive before customers
 
       - name: status
-        tests:
+        data_tests:
           - not_null
           - accepted_values:    # domain validation
               values: ['placed', 'confirmed', 'preparing', 'ready',
                        'picked_up', 'delivering', 'delivered', 'cancelled']
 
       - name: order_amount
-        tests:
+        data_tests:
           - not_null
           - dbt_utils.accepted_range: {min_value: 0, max_value: 500000}`}</CodeBox>
 
@@ -206,7 +206,7 @@ THE RULE: every layer a quality issue traverses multiplies its cost by 10×.`}</
 
         <CodeBox label="Row-count reconciliation and source freshness thresholds">{`models:
   - name: silver_customers
-    tests:
+    data_tests:
       - dbt_utils.equal_rowcount: {compare_model: ref('stg_customers')}
       - dbt_utils.recency: {datepart: hour, field: updated_at, interval: 25}
 
@@ -237,12 +237,12 @@ WHERE order_amount < 0;`}</CodeBox>
 
         <CodeBox label="An inline expression test — one condition, checked per row">{`columns:
   - name: delivered_at
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           expression: "delivered_at >= created_at OR delivered_at IS NULL"
 
   - name: order_amount
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           expression: "order_amount >= discount_amount"`}</CodeBox>
 

@@ -583,7 +583,7 @@ group by order_date
 
 models:
   - name: stg_order_line_items
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - order_id
@@ -784,7 +784,7 @@ models:
   - name: stg_thumbtack_reviews
     columns:
       - name: review_pk
-        tests:
+        data_tests:
           - unique
           - not_null`}
         </CodeBox>

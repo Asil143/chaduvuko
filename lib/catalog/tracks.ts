@@ -18,9 +18,16 @@ const LIVE_TRACKS: Track[] = [
   { slug: 'networking',       title: 'Networking',                   area: 'cs',          indexHref: '/learn/networking' },
   { slug: 'cybersecurity',    title: 'Cybersecurity',                area: 'security',    indexHref: '/learn/cybersecurity' },
   { slug: 'ai-ml',            title: 'AI & Machine Learning',        area: 'ai',          indexHref: '/learn/ai-ml' },
-  { slug: 'data-science',     title: 'Data Science',                 area: 'ai',          indexHref: '/learn/data-science' },
+  {
+    slug: 'data-science', title: 'Data Science', area: 'ai', indexHref: '/learn/data-science',
+    hidden: { reason: 'Only 3 of 53 planned lessons are published; AI & Machine Learning covers the same ground until the track is complete.', since: '2026-11-09' },
+  },
   { slug: 'projects',         title: 'Projects',                     area: 'practice',    indexHref: '/learn/projects' },
 ]
+
+export const HIDDEN_TRACK_SLUGS: ReadonlySet<string> = new Set(
+  LIVE_TRACKS.filter(track => track.hidden).map(track => track.slug),
+)
 
 export const TRACKS: Track[] = [
   ...LIVE_TRACKS,

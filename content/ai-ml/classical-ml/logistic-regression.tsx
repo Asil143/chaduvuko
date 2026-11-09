@@ -214,12 +214,12 @@ export default function LogisticRegressionPage() {
         }}>
           <a href='/learn/ai-ml' style={{ color: 'var(--muted)', textDecoration: 'none' }}>AI &amp; ML</a>
           <span style={{ color: 'var(--border)' }}>›</span>
-          <a href='/learn/ai-ml/classical-ml' style={{ color: 'var(--muted)', textDecoration: 'none' }}>Classical ML</a>
+          <a href='/learn/ai-ml' style={{ color: 'var(--muted)', textDecoration: 'none' }}>Classical ML</a>
           <span style={{ color: 'var(--border)' }}>›</span>
           <span style={{ color: 'var(--text)' }}>Logistic Regression</span>
         </div>
 
-        <a href='/learn/ai-ml/classical-ml' style={{ textDecoration: 'none' }}>
+        <a href='/learn/ai-ml' style={{ textDecoration: 'none' }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 7,
             padding: '4px 12px', borderRadius: 5,

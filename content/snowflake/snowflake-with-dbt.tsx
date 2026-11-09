@@ -367,15 +367,15 @@ models:
   - name: fct_orders
     columns:
       - name: order_id
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: status
-        tests:
+        data_tests:
           - accepted_values:
               values: ['completed', 'cancelled', 'refunded', 'fraud']
       - name: customer_id
-        tests:
+        data_tests:
           - relationships:
               to: ref('dim_customers')
               field: customer_id`}
@@ -628,9 +628,9 @@ models:
   - name: fct_orders
     columns:
       - name: order_id
-        tests: [unique, not_null]
+        data_tests: [unique, not_null]
       - name: status
-        tests:
+        data_tests:
           - accepted_values:
               values: ['completed', 'cancelled', 'refunded', 'fraud']`}
         </CodeBox>

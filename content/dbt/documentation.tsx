@@ -152,13 +152,13 @@ models:
     columns:
       - name: order_id
         description: Primary key. Unique identifier for a single customer order.
-        tests:
+        data_tests:
           - unique
           - not_null
 
       - name: customer_id
         description: Foreign key to dim_customers.customer_id.
-        tests:
+        data_tests:
           - not_null
           - relationships:
               to: ref('dim_customers')
@@ -295,7 +295,7 @@ is refunded gets order_status = refunded, it does not revert to delivered.
     columns:
       - name: customer_id
         description: '{{ doc("customer_id") }}'
-        tests:
+        data_tests:
           - unique
           - not_null`}
         </CodeBox>
@@ -670,13 +670,13 @@ models:
     columns:
       - name: subscription_id
         description: '{{ doc("subscription_id") }}'
-        tests:
+        data_tests:
           - unique
           - not_null
 
       - name: customer_id
         description: '{{ doc("customer_id") }}'
-        tests:
+        data_tests:
           - not_null
           - relationships:
               to: ref('dim_customers')
@@ -690,7 +690,7 @@ models:
           migration date). Both are unified into this single model so
           downstream revenue reporting does not need to know which
           provider any given subscription came from.
-        tests:
+        data_tests:
           - accepted_values:
               values: ['stripe', 'chargebee']
 
@@ -707,7 +707,7 @@ models:
 
       - name: subscription_status
         description: Current lifecycle state — trialing, active, past_due, cancelled.
-        tests:
+        data_tests:
           - accepted_values:
               values: ['trialing', 'active', 'past_due', 'cancelled']`}
         </CodeBox>

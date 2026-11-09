@@ -941,7 +941,10 @@ for query in test_queries:
         <CodeBlock code={`# ── RAG with different LLM backends ──────────────────────────────────
 
 # ── Option 1: OpenAI API ──────────────────────────────────────────────
-def openai_rag(prompt: str, model='gpt-3.5-turbo') -> str:
+import os
+
+# Model names are retired often; read the current one from config.
+def openai_rag(prompt: str, model=os.environ.get('OPENAI_MODEL', 'your-current-model')) -> str:
     """
     pip install openai
     import openai; client = openai.OpenAI(api_key=os.environ['OPENAI_API_KEY'])
@@ -1005,7 +1008,7 @@ def rag_with_streaming(rag_pipeline, query, llm_client=None):
 
     # With OpenAI streaming:
     # stream = client.chat.completions.create(
-    #     model='gpt-3.5-turbo',
+    #     model=os.environ['OPENAI_MODEL'],  # check the provider's current model list
     #     messages=[{'role': 'user', 'content': prompt}],
     #     stream=True,
     # )

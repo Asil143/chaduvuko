@@ -188,7 +188,7 @@ export default function MLPipelinesFeatureStoresPage() {
         </h2>
 
         <p style={S.p}>
-          Every ML model at DoorDash, Stripe, and Amazon runs on a pipeline.
+          Every production ML model at a delivery, payments, or retail company runs on a pipeline.
           The delivery time prediction model retrains every night on the day's
           orders. The fraud detection model retrains weekly as new fraud patterns
           emerge. The product recommendation model retrains daily as inventory
@@ -1016,7 +1016,7 @@ print("""
         <p style={S.p}>
           Feature stores were not invented because they sounded architecturally
           elegant. Uber built Michelangelo Palette, Airbnb built Zipline, and
-          Twitter and Shopify adopted Feast for the same blunt reason: teams
+          the open-source Feast project grew out of the same blunt reason: teams
           kept shipping models that scored well in evaluation and then quietly
           underperformed in production, and the root cause traced back to the
           same place almost every time — the feature computed in the training

@@ -1,4 +1,4 @@
-import { TRACKS } from './tracks'
+import { HIDDEN_TRACK_SLUGS, TRACKS } from './tracks'
 import { staticLessons } from './static-lessons'
 import { curriculumLessons } from './curriculum-lessons'
 import lessonDates from '@/data/lesson-updated.json'
@@ -8,7 +8,7 @@ import type { LessonEntry } from '@/lib/up-next'
 import { CHEAT_SHEET_FOR_PATH } from '@/lib/cheatsheet-links'
 
 export type { Lesson, LessonStatus, NonLessonKind, Track, TrackArea } from './types'
-export { TRACKS }
+export { HIDDEN_TRACK_SLUGS, TRACKS }
 
 // Last-changed dates from git; regenerate with: npx tsx scripts/lesson-dates.ts
 const LESSON_DATES: Record<string, string> = lessonDates
@@ -18,13 +18,27 @@ export const LESSONS: Lesson[] = [...staticLessons, ...curriculumLessons].map(le
   updatedAt: lesson.updatedAt ?? LESSON_DATES[lesson.href],
 }))
 
+/** Every lesson that is served publicly, including lessons in hidden tracks. */
+export const PUBLISHED_LESSONS: Lesson[] = LESSONS.filter(lesson => lesson.status === 'live')
+
 /** The only lessons that may appear in counts, search, sitemap, navigation, and progress. */
-export const LIVE_LESSONS: Lesson[] = LESSONS.filter(lesson => lesson.status === 'live')
+export const LIVE_LESSONS: Lesson[] = PUBLISHED_LESSONS.filter(lesson => !HIDDEN_TRACK_SLUGS.has(lesson.track))
 
 const liveByHref = new Map(LIVE_LESSONS.map(lesson => [lesson.href, lesson]))
+const publishedByHref = new Map(PUBLISHED_LESSONS.map(lesson => [lesson.href, lesson]))
 
 export function getLiveLesson(href: string): Lesson | undefined {
   return liveByHref.get(href)
+}
+
+/** Any publicly served lesson, including lessons in hidden tracks. */
+export function getPublishedLesson(href: string): Lesson | undefined {
+  return publishedByHref.get(href)
+}
+
+/** True for pages that belong to a hidden track; those pages must be noindex. */
+export function isHiddenHref(href: string): boolean {
+  return TRACKS.some(track => HIDDEN_TRACK_SLUGS.has(track.slug) && (href === track.indexHref || href.startsWith(`${track.indexHref}/`)))
 }
 
 export function getTrack(slug: string): Track | undefined {
@@ -40,6 +54,10 @@ export function trackIndexTitle(slug: string): string {
 
 export function liveLessonsForTrack(slug: string): Lesson[] {
   return LIVE_LESSONS.filter(lesson => lesson.track === slug).sort((a, b) => a.order - b.order)
+}
+
+function publishedLessonsForTrack(slug: string): Lesson[] {
+  return PUBLISHED_LESSONS.filter(lesson => lesson.track === slug).sort((a, b) => a.order - b.order)
 }
 
 /** Live lessons grouped by track in curriculum order, as compact client-safe tuples. */
@@ -62,7 +80,7 @@ export function getCatalogStats() {
 /** Compact per-track data that is safe to pass to Client Components. */
 export function getTrackSummaries(): TrackSummaries {
   return Object.fromEntries(
-    TRACKS.map(track => {
+    TRACKS.filter(track => !track.hidden).map(track => {
       const lessons = liveLessonsForTrack(track.slug).length
       const unpublished = LESSONS.filter(lesson => lesson.track === track.slug && lesson.status === 'soon').length
       return [track.slug, {
@@ -96,11 +114,11 @@ export interface LessonNavigation {
  * overview is the current lesson itself.
  */
 export function getLessonNavigation(href: string): LessonNavigation | null {
-  const lesson = getLiveLesson(href)
+  const lesson = publishedByHref.get(href)
   const track = lesson && getTrack(lesson.track)
   if (!lesson || !track) return null
 
-  const lessons = liveLessonsForTrack(track.slug)
+  const lessons = publishedLessonsForTrack(track.slug)
   const index = lessons.findIndex(item => item.href === href)
   const overview: LessonNavTarget | null = track.indexHref === href ? null : { kind: 'track-overview', track }
   const at = (i: number): LessonNavTarget | null => (lessons[i] ? { kind: 'lesson', lesson: lessons[i] } : overview)
@@ -128,7 +146,7 @@ function toNavLink(target: LessonNavTarget, direction: 'prev' | 'next'): LessonN
 export function getLessonNavLinks(href: string): LessonNavLinks | null {
   const nav = getLessonNavigation(href)
   if (!nav) return null
-  const lessons = liveLessonsForTrack(nav.track.slug)
+  const lessons = publishedLessonsForTrack(nav.track.slug)
   return {
     prev: nav.prev && toNavLink(nav.prev, 'prev'),
     next: nav.next && toNavLink(nav.next, 'next'),
@@ -149,11 +167,12 @@ export const NON_LESSON_ROUTES: Record<string, NonLessonKind> = {
   '/learn': 'catalog',
   ...Object.fromEntries(
     TRACKS.map(track => track.indexHref)
-      .filter(href => !liveByHref.has(href))
+      .filter(href => !publishedByHref.has(href))
       .map(href => [href, 'track-index' as const]),
   ),
   '/learn/roadmap': 'roadmap',
   '/learn/find-your-path': 'hub',
+  '/learn/all-courses': 'hub',
   '/learn/interview': 'hub',
   '/learn/industry': 'hub',
   '/learn/find-video': 'tool',

@@ -12,7 +12,7 @@
  */
 import { execFileSync } from 'child_process'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
-import { LIVE_LESSONS } from '@/lib/catalog'
+import { PUBLISHED_LESSONS } from '@/lib/catalog'
 
 const OUT = 'data/lesson-updated.json'
 const IGNORE = 'scripts/lesson-dates-ignore.txt'
@@ -49,7 +49,7 @@ function lastChanged(files: string[], ignore: Set<string>): string | undefined {
 function build(): Record<string, string> {
   const ignore = ignoredCommits()
   const dates: Record<string, string> = {}
-  for (const lesson of [...LIVE_LESSONS].sort((a, b) => a.href.localeCompare(b.href))) {
+  for (const lesson of [...PUBLISHED_LESSONS].sort((a, b) => a.href.localeCompare(b.href))) {
     const files = lessonSources(lesson.href)
     if (!files.length) throw new Error(`No source file for ${lesson.href}`)
     const date = lastChanged(files, ignore)

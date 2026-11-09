@@ -605,11 +605,11 @@ where order_status is not null`}
   - name: stg_orders
     columns:
       - name: order_id
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: customer_id
-        tests:
+        data_tests:
           - not_null
           - relationships:
               to: ref('stg_customers')

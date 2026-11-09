@@ -340,7 +340,7 @@ IF email contains "invoice" AND sender matches company_domain
           did not exist before. The shift from judging to creating is what makes GenAI a genuinely different category.
         </Highlight>
         <p style={p}>
-          Large Language Models like Claude, GPT-4, and Gemini generate text one token at a time. A token is roughly
+          Large Language Models like Claude, GPT, and Gemini generate text one token at a time. A token is roughly
           a word or part of a word. Given everything that came before — your prompt plus its own previous output — the
           model predicts the most likely next token. It does this billions of times, very fast. What emerges reads
           like coherent thought.

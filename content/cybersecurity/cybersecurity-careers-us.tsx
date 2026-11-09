@@ -68,16 +68,16 @@ export default function CybersecurityCareersUS() {
       {/* ── PART 01 ── */}
       <Part n="01" title="The State of the US Cybersecurity Job Market" />
 
-      <P>The US cybersecurity job market has a structural supply problem: there are consistently more open positions than qualified candidates to fill them. CyberSeek (the joint NIST/CompTIA/Lightcast workforce analytics platform) tracks this gap in real time. As of early 2026, the world has approximately 3.5 million open cybersecurity positions, with the US accounting for roughly 700,000 of those unfilled roles.</P>
+      <P>The US cybersecurity job market has a structural supply problem: there are consistently more open positions than qualified candidates to fill them. CyberSeek (the joint NIST NICE, CompTIA, and Lightcast workforce analytics platform) tracks this demand: it counted 514,359 US cybersecurity job postings in the 12 months to March 2026. Treat global "shortage" headlines with care — ISC2 itself stopped publishing its long-quoted workforce-gap estimate, so check the current CyberSeek figures rather than repeating an old number.</P>
 
-      <P>This is not a soft market with a few niche openings. The Bureau of Labor Statistics projects <Hl>35% growth in information security analyst jobs from 2021 to 2031</Hl> — roughly five times the average for all occupations. Every major industry sector has security requirements: finance, healthcare, defense, technology, retail, energy, and government. The demand is not concentrated in one vertical.</P>
+      <P>This is not a soft market with a few niche openings. The Bureau of Labor Statistics projects <Hl>29% growth in information security analyst jobs from 2024 to 2034</Hl> — far faster than the roughly 3% average for all occupations. Every major industry sector has security requirements: finance, healthcare, defense, technology, retail, energy, and government. The demand is not concentrated in one vertical.</P>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, margin: '20px 0 32px' }}>
         {[
-          { stat: '~700K', label: 'Unfilled US security jobs', color: '#ff4757', sub: 'Structural shortage, not cyclical' },
-          { stat: '35%', label: 'BLS projected job growth (10yr)', color: '#00e676', sub: '5× the national average' },
-          { stat: '$120K', label: 'Median US security salary', color: '#4285f4', sub: 'Entry: $65K → Senior: $200K+' },
-          { stat: '0%', label: 'Effective unemployment rate', color: '#7b61ff', sub: 'Qualified candidates find jobs fast' },
+          { stat: '514K', label: 'US security job postings', color: '#ff4757', sub: 'CyberSeek, 12 months to Mar 2026' },
+          { stat: '29%', label: 'BLS projected growth, 2024–34', color: '#00e676', sub: 'Information security analysts' },
+          { stat: '$124,910', label: 'BLS median pay (May 2024)', color: '#4285f4', sub: 'Information security analysts' },
+          { stat: '~16K', label: 'Projected openings per year', color: '#7b61ff', sub: 'BLS, 2024–34 average' },
         ].map((item) => (
           <div key={item.stat} style={{ background: 'var(--surface)', border: `1px solid ${item.color}25`, borderLeft: `3px solid ${item.color}`, borderRadius: 10, padding: '16px 18px' }}>
             <div style={{ fontSize: 28, fontWeight: 900, color: item.color, fontFamily: 'var(--font-display)', letterSpacing: '-1px', marginBottom: 4 }}>{item.stat}</div>
@@ -88,7 +88,7 @@ export default function CybersecurityCareersUS() {
       </div>
 
       <Callout type="info">
-        Security salary data varies significantly by source. The figures in this lesson are drawn from BLS Occupational Outlook, LinkedIn Salary Insights, Levels.fyi (for tech companies), and SANS 2025 Salary Survey. Real ranges depend heavily on: location (San Francisco vs Dallas vs remote), industry (Big Tech vs healthcare vs government), years of experience, specific skills, and clearance status.
+        Security salary data varies significantly by source. The headline figures above come from the BLS Occupational Outlook Handbook and CyberSeek; the per-role ranges below are illustrative estimates for orientation, not survey results — check BLS OEWS, Levels.fyi, and current job postings before negotiating. Real ranges depend heavily on: location (San Francisco vs Dallas vs remote), industry (Big Tech vs healthcare vs government), years of experience, specific skills, and clearance status.
       </Callout>
 
       <HR />
@@ -190,7 +190,7 @@ export default function CybersecurityCareersUS() {
       {/* ── PART 03 ── */}
       <Part n="03" title="Salaries by Role and Experience Level" />
 
-      <P>These salary ranges are US national medians. Cost-of-living-adjusted remote roles from LCOL states often pay 80-90% of these figures. Bay Area and NYC roles can be 30-50% higher. Government and cleared roles often pay below market but offer stability, clearance sponsorship, and benefits that partially offset the difference.</P>
+      <P>These salary ranges are illustrative US base-salary estimates, not medians from a single survey. Cost-of-living-adjusted remote roles from LCOL states often pay 80-90% of these figures. Bay Area and NYC roles can be 30-50% higher. Government and cleared roles often pay below market but offer stability, clearance sponsorship, and benefits that partially offset the difference.</P>
 
       <div style={{ overflowX: 'auto', marginBottom: 32 }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, lineHeight: 1.6 }}>
@@ -568,7 +568,7 @@ export default function CybersecurityCareersUS() {
       <KeyTakeaways items={[
         'The US has approximately 700,000 unfilled cybersecurity positions as of 2026. BLS projects 35% job growth over 10 years — five times the national average. This is a structural shortage, not a cyclical one. Qualified candidates find employment quickly.',
         'Six distinct career tracks exist: Security Operations (most accessible entry), Penetration Testing (most competitive entry), Application Security (highest-paying, developer path), Cloud Security (highest salaries, high demand), GRC (management/compliance path), and Security Engineering (infrastructure builder track).',
-        'Salaries range from $50K (entry L1 SOC) to $500K+ (CISO at major company). AppSec and Cloud Security at Big Tech pay $300–500K total compensation including RSUs. Government and defense pay below commercial but offer clearance sponsorship and stability.',
+        'BLS reports a $124,910 median for information security analysts (May 2024); illustrative ranges run from roughly $50K for entry L1 SOC roles to $500K+ for a CISO at a major company. AppSec and Cloud Security at Big Tech pay $300–500K total compensation including RSUs. Government and defense pay below commercial but offer clearance sponsorship and stability.',
         'Top employers: Big Tech (Google, Microsoft, Amazon, Meta) for highest pay; Financial Services (JPMorgan, Goldman, Visa) for stability and high pay; Defense contractors (Booz Allen, Leidos, Raytheon) for clearance sponsorship; Big 4 consulting for breadth; Healthcare for high growth and HIPAA demand.',
         'Certifications serve two purposes: opening HR filters and providing structured learning. Security+ is the essential entry cert. OSCP is essential for pentesting. AWS Security Specialty for cloud security. CISSP for senior management roles. Never stack certs at the expense of hands-on experience — one cert plus demonstrated work beats five certs with no practical evidence.',
         'Entry-level path: Security+ → hands-on practice (TryHackMe/HTB/CTFs/home lab with documented writeups) → L1 SOC or junior analyst role → specialisation → second cert. The realistic timeline from complete beginner to first security job is 12–18 months for motivated candidates.',

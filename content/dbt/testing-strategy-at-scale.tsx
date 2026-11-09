@@ -221,14 +221,14 @@ export default function TestingStrategyAtScale() {
   - name: fct_orders
     columns:
       - name: order_id
-        tests:
+        data_tests:
           - unique
           - not_null
           # no severity override -- default error is correct here.
           # a duplicate or missing order_id is never acceptable.
 
       - name: customer_id
-        tests:
+        data_tests:
           - relationships:
               to: ref('dim_customers')
               field: customer_id
@@ -238,7 +238,7 @@ export default function TestingStrategyAtScale() {
                 # hard stop -- downstream revenue reporting depends on it
 
       - name: shipping_notes
-        tests:
+        data_tests:
           - not_null:
               config:
                 severity: warn
@@ -286,7 +286,7 @@ export default function TestingStrategyAtScale() {
   - name: fct_orders
     columns:
       - name: customer_id
-        tests:
+        data_tests:
           - relationships:
               to: ref('dim_customers')
               field: customer_id
@@ -327,7 +327,7 @@ export default function TestingStrategyAtScale() {
         </Para>
 
         <CodeBox label="dbt_project.yml — a project-wide default for tests worth persisting">
-{`tests:
+{`data_tests:
   +store_failures: true
   +schema: dbt_test_failures
 
@@ -514,14 +514,14 @@ export default function TestingStrategyAtScale() {
   - name: stg_orders
     columns:
       - name: order_id
-        tests: [unique, not_null]
+        data_tests: [unique, not_null]
       - name: customer_id
-        tests: [not_null]
+        data_tests: [not_null]
 
   - name: stg_customers
     columns:
       - name: customer_id
-        tests: [unique, not_null]
+        data_tests: [unique, not_null]
 
 # Reasoning: these are the two highest-traffic, most-depended-on
 # staging models in the project. A break here propagates to nearly
@@ -534,9 +534,9 @@ export default function TestingStrategyAtScale() {
   - name: stg_payments
     columns:
       - name: payment_id
-        tests: [unique, not_null]
+        data_tests: [unique, not_null]
       - name: order_id
-        tests:
+        data_tests:
           - relationships:
               to: ref('stg_orders')
               field: order_id
@@ -556,12 +556,12 @@ export default function TestingStrategyAtScale() {
   - name: stg_ad_spend
     columns:
       - name: campaign_id
-        tests:
+        data_tests:
           - not_null:
               config:
                 severity: warn
       - name: spend_amount
-        tests:
+        data_tests:
           - dbt_utils.accepted_range:
               min_value: 0
               config:
@@ -579,19 +579,19 @@ export default function TestingStrategyAtScale() {
   - name: fct_orders
     columns:
       - name: order_id
-        tests:
+        data_tests:
           - unique:
               config: { severity: error, store_failures: true }
           - not_null:
               config: { severity: error }
       - name: customer_id
-        tests:
+        data_tests:
           - relationships:
               to: ref('dim_customers')
               field: customer_id
               config: { severity: error, store_failures: true }
       - name: order_status
-        tests:
+        data_tests:
           - accepted_values:
               values: ['placed', 'shipped', 'delivered', 'cancelled', 'refunded']
               config: { severity: error, store_failures: true }
@@ -665,7 +665,7 @@ export default function TestingStrategyAtScale() {
   - name: stg_ad_campaigns
     columns:
       - name: campaign_name
-        tests:
+        data_tests:
           - not_null:
               config:
                 severity: warn
@@ -677,7 +677,7 @@ export default function TestingStrategyAtScale() {
   - name: fct_orders
     columns:
       - name: order_id
-        tests:
+        data_tests:
           - unique
           # TRIAGE 2026-09: fix-now bucket -- this had been silently
           # failing for 3 weeks due to a duplicate-insert bug in an
@@ -821,7 +821,7 @@ Source freshness: see #data-freshness-alerts for any active warnings`}</Output>
         <CodeBox label="a business rule generic tests genuinely cannot express">
 {`models:
   - name: fct_orders
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           expression: "order_total_cents = subtotal_cents + tax_cents + shipping_cents"
           config:
@@ -847,7 +847,7 @@ Source freshness: see #data-freshness-alerts for any active warnings`}</Output>
         <CodeBox label="a second common shape -- a conditional business rule, not just an arithmetic one">
 {`models:
   - name: fct_subscriptions
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           expression: "case when status = 'cancelled' then cancelled_at is not null else true end"
           config:
@@ -909,7 +909,7 @@ Source freshness: see #data-freshness-alerts for any active warnings`}</Output>
         <CodeBox label="a staged rollout -- warn first, confirm the failure count is understood, then tighten to error">
 {`models:
   - name: fct_orders
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           expression: "order_total_cents = subtotal_cents + tax_cents + shipping_cents"
           config:
@@ -934,7 +934,7 @@ Source freshness: see #data-freshness-alerts for any active warnings`}</Output>
         <CodeBox label="scoping the rule explicitly to rows created after the pricing engine changed">
 {`models:
   - name: fct_orders
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           expression: "order_total_cents = subtotal_cents + tax_cents + shipping_cents"
           config:

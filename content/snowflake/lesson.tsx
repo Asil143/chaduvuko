@@ -833,7 +833,7 @@ models:
   - name: stg_orders
     columns:
       - name: order_id
-        tests: [not_null, unique]`,
+        data_tests: [not_null, unique]`,
     tableRows: [
       ['source()', 'Raw input reference.', 'Documents ingestion boundaries and freshness.'],
       ['ref()', 'Model dependency reference.', 'Builds lineage and correct run order.'],

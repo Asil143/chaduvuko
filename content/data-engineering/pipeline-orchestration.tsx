@@ -287,7 +287,7 @@ WORKERS
 
         <Para>
           The <code>logical_date</code> (called <code>execution_date</code> before
-          Airflow 2.2) is <strong>not</strong> when the DAG run executes — it is the
+          Airflow 2.2; the old name was removed entirely in Airflow 3) is <strong>not</strong> when the DAG run executes — it is the
           start of the data interval the run is responsible for. Airflow always runs
           one interval behind, because it waits for the interval to fully close
           before processing it.
@@ -340,6 +340,9 @@ run_date_right → '2026-02-14'  (logical_date for the Feb 15 run is Feb 14) —
         <SubSubTitle>DAG-level configuration</SubSubTitle>
 
         <CodeBox label="dags/freshcart_morning_pipeline.py — default_args and the DAG shell">{`from datetime import datetime, timedelta
+# Airflow 2.x import paths. On Airflow 3 use:
+#   from airflow.sdk import DAG, TaskGroup, Variable
+#   from airflow.providers.standard.operators.python import PythonOperator  (same for bash, empty)
 from airflow import DAG
 from airflow.operators.python   import PythonOperator
 from airflow.operators.bash     import BashOperator
@@ -497,26 +500,30 @@ schedule = None            # manual trigger only
 
 with DAG(catchup=False, max_active_runs=1, ...): ...`}</CodeBox>
 
-        <SubSubTitle>Dataset-driven scheduling — Airflow 2.4+</SubSubTitle>
+        <SubSubTitle>Asset-driven scheduling — Airflow 3 (Datasets in Airflow 2.4+)</SubSubTitle>
 
         <Para>
-          Dataset scheduling replaces complex <code>ExternalTaskSensor</code> polling
+          Airflow 3 (April 2025) renamed Datasets to <strong>Assets</strong> and moved
+          DAG-authoring imports to <code>airflow.sdk</code>. The idea is unchanged, and
+          many production teams still run Airflow 2.x, so you will see both names.
+          Asset scheduling replaces complex <code>ExternalTaskSensor</code> polling
           with a declarative dependency: a consumer DAG waits for the datasets
           its upstream producers declare, with no time-based polling at all.
         </Para>
 
-        <CodeBox label="Declaring producers and consumers of the same logical dataset">{`from airflow import Dataset
+        <CodeBox label="Declaring producers and consumers of the same logical asset (Airflow 3)">{`from airflow.sdk import Asset, DAG
+# Airflow 2.4–2.10: from airflow import Dataset, DAG — and use Dataset(...) below
 
-ORDERS_SILVER    = Dataset('snowflake://freshcart/silver/orders')
-CUSTOMERS_SILVER = Dataset('snowflake://freshcart/silver/customers')
-PAYMENTS_SILVER  = Dataset('snowflake://freshcart/silver/payments')
+ORDERS_SILVER    = Asset('snowflake://freshcart/silver/orders')
+CUSTOMERS_SILVER = Asset('snowflake://freshcart/silver/customers')
+PAYMENTS_SILVER  = Asset('snowflake://freshcart/silver/payments')
 
-# Producer DAG: declares which dataset a task produces
+# Producer DAG: declares which asset a task produces
 with DAG('orders_silver_pipeline', schedule='0 2 * * *') as dag:
     load_orders = PythonOperator(task_id='load_orders', python_callable=run_orders_pipeline,
                                   outlets=[ORDERS_SILVER])
 
-# Consumer DAG: triggers when ALL three listed datasets have been updated
+# Consumer DAG: triggers when ALL three listed assets have been updated
 with DAG(dag_id='gold_daily_revenue', schedule=[ORDERS_SILVER, CUSTOMERS_SILVER, PAYMENTS_SILVER]) as dag:
     build_gold = PythonOperator(task_id='build_gold_revenue', python_callable=run_gold_pipeline)`}</CodeBox>
 
@@ -907,17 +914,21 @@ fix, regardless of which backend enforces which size limit.`}</Output>
           </Para>
 
           <CodeBox label="Step 1-2 — isolating which task is actually slow">{`-- Historical run durations from the Airflow metadata DB:
-SELECT DATE(execution_date) run_date, ROUND(duration / 60.0, 1) total_minutes
+-- (Postgres metadata DB, Airflow 3 column names; Airflow 2.x dag_run uses execution_date)
+SELECT DATE(logical_date) run_date,
+       ROUND(EXTRACT(EPOCH FROM end_date - start_date) / 60.0, 1) total_minutes
 FROM dag_run WHERE dag_id = 'freshcart_morning_pipeline' AND state = 'success'
-  AND execution_date > NOW() - INTERVAL '30 days'
-ORDER BY execution_date DESC;
+  AND logical_date > NOW() - INTERVAL '30 days'
+ORDER BY logical_date DESC;
 -- 2026-03-17: 64 min ← SLA BREACH   2026-03-10: 51 min   2026-02-24: 38 min ← was fine
 -- total duration grew 68% in 3 weeks — something is scaling linearly
 
 -- Break duration down by task:
-SELECT task_id, DATE(execution_date) run_date, ROUND(duration / 60.0, 1) minutes
-FROM task_instance WHERE dag_id = 'freshcart_morning_pipeline' AND state = 'success'
-  AND task_id IN ('extract_orders', 'dbt_silver', 'dbt_gold');
+SELECT ti.task_id, DATE(dr.logical_date) run_date, ROUND(ti.duration / 60.0, 1) minutes
+FROM task_instance ti
+JOIN dag_run dr ON dr.dag_id = ti.dag_id AND dr.run_id = ti.run_id
+WHERE ti.dag_id = 'freshcart_morning_pipeline' AND ti.state = 'success'
+  AND ti.task_id IN ('extract_orders', 'dbt_silver', 'dbt_gold');
 -- extract_orders: 8 → 8 → 8 → 8 min   (stable)
 -- dbt_silver:    12 → 15 → 18 → 22 min ← growing linearly
 -- dbt_gold:       4 → 4 → 4 → 4 min   (stable)`}</CodeBox>
@@ -1011,7 +1022,7 @@ Additional practical considerations: set catchup=False on production DAGs to pre
 
 A Sensor is a task that polls a condition at a fixed interval and does not allow downstream tasks to proceed until the condition is true. ExternalTaskSensor polls the Airflow metadata database to check whether a specific task in another DAG has completed. S3KeySensor polls S3 for a specific file key. FileSensor checks the filesystem. Sensors are flexible and can check any condition you can express in Python, but they require ongoing polling (worker slot usage with mode='poke', or periodic re-scheduling with mode='reschedule'), and they couple DAGs implicitly through runtime polling rather than explicit dependency declaration.
 
-Dataset scheduling (Airflow 2.4+) makes cross-DAG dependencies declarative. Producer DAGs declare which datasets their tasks produce (outlets=[Dataset('s3://bucket/table')]). Consumer DAGs declare which datasets they need (schedule=[Dataset('s3://bucket/table')]). Airflow automatically triggers the consumer DAG when all its required datasets have been updated by producer DAGs. There is no polling — the trigger is event-driven.
+Dataset scheduling (Airflow 2.4+; renamed Asset scheduling in Airflow 3) makes cross-DAG dependencies declarative. Producer DAGs declare which assets their tasks produce (outlets=[Asset('s3://bucket/table')], or Dataset(...) on 2.x). Consumer DAGs declare which assets they need (schedule=[Asset('s3://bucket/table')]). Airflow automatically triggers the consumer DAG when all its required datasets have been updated by producer DAGs. There is no polling — the trigger is event-driven.
 
 Use Dataset scheduling when: you are on Airflow 2.4+, the dependency is simply "run after another DAG produces data," the dependency can be expressed as a logical data asset name, and you want the dependency to be visible in the Airflow UI's dataset graph. This is cleaner and less resource-intensive than sensors for straightforward DAG-to-DAG dependencies.
 
@@ -1166,7 +1177,7 @@ Backfill parameters:
         'Always set catchup=False on production DAGs unless backfill is explicitly needed. catchup=True can create hundreds or thousands of DagRuns when a DAG is unpaused after a pause. Use max_active_runs=1 to prevent concurrent runs of the same DAG.',
         'Pools limit concurrent resource usage per resource type. Create pools for: source database connections (limit 5), Snowflake warehouse queries (limit 8), external API calls (limit 3). Assign tasks to pools with pool="pool_name". Without pools, parallel tasks can exhaust shared resources and all fail together.',
         'Sensors must use mode="reschedule" for any wait longer than a few seconds. mode="poke" holds a worker slot continuously — 100 poke sensors = 100 workers blocked sleeping. mode="reschedule" releases the slot between polls. This is one of the most common Airflow performance mistakes in production.',
-        'Dataset scheduling (Airflow 2.4+) is the modern way to express cross-DAG dependencies declaratively. Producer tasks declare outlets=[Dataset("s3://bucket/table")]. Consumer DAGs declare schedule=[Dataset(...)]. Airflow triggers the consumer when producers update the dataset. Prefer this over ExternalTaskSensor for data-driven dependencies.',
+        'Asset scheduling (Airflow 3; called Dataset scheduling in 2.4–2.10) is the modern way to express cross-DAG dependencies declaratively. Producer tasks declare outlets=[Asset("s3://bucket/table")]. Consumer DAGs declare schedule=[Asset(...)]. Airflow triggers the consumer when producers update the dataset. Prefer this over ExternalTaskSensor for data-driven dependencies.',
         'Dynamic task mapping generates tasks at runtime from a list. @task.process_store.expand(store_id=stores) creates one task instance per store with independent logs, retries, and status. Use for processing N entities in parallel when N is data-driven. Avoid for N > 1,000 (scheduler performance impact).',
         'XCom is for small values only — Airflow\'s guidance is roughly tens of KB as a practical ceiling, well below the actual backend-enforced limit (which varies: ~64 KB on MySQL, ~1 GB on PostgreSQL, ~2 GB on SQLite). Use it for run IDs, row counts, file paths, status flags — never DataFrames, query results, or large JSON. Push an S3 path and have the downstream task load the data from that path. Monitor the xcom table size for high-frequency pipelines.',
         'Airflow is dominant and must be known deeply. Prefect is Pythonic and easier for local development. Dagster is asset-centric and has strong data lineage — aligns well with the dbt+ELT pattern. For interviews: know Airflow thoroughly, know Prefect/Dagster conceptually, have an opinion on trade-offs.',

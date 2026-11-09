@@ -123,6 +123,12 @@ export default function TestingBasics() {
           business rule that doesn't generalize. Part 02 covers generic tests in depth; Part 04 covers
           singular tests.
         </Para>
+
+        <Callout title="data_tests vs tests in YAML" color={K}>
+          Since dbt 1.8 the YAML key is <code>data_tests:</code>, which separates data tests from the newer
+          unit tests. The older <code>tests:</code> key still works as an alias, so you will see both in
+          existing projects and tutorials. This course uses <code>data_tests:</code>.
+        </Callout>
       </section>
 
       <Divider />
@@ -147,7 +153,7 @@ export default function TestingBasics() {
   - name: fct_orders
     columns:
       - name: order_id
-        tests:
+        data_tests:
           - unique`}
         </CodeBox>
 
@@ -165,11 +171,11 @@ export default function TestingBasics() {
   - name: fct_orders
     columns:
       - name: order_id
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: customer_id
-        tests:
+        data_tests:
           - not_null`}
         </CodeBox>
 
@@ -187,7 +193,7 @@ export default function TestingBasics() {
   - name: fct_orders
     columns:
       - name: order_status
-        tests:
+        data_tests:
           - accepted_values:
               values: ['placed', 'shipped', 'delivered', 'cancelled', 'refunded']`}
         </CodeBox>
@@ -207,7 +213,7 @@ export default function TestingBasics() {
   - name: fct_orders
     columns:
       - name: customer_id
-        tests:
+        data_tests:
           - relationships:
               to: ref('dim_customers')
               field: customer_id`}
@@ -254,13 +260,13 @@ export default function TestingBasics() {
   - name: fct_orders
     columns:
       - name: total_amount
-        tests:
+        data_tests:
           - dbt_utils.accepted_range:
               min_value: 0
               max_value: 100000
 
   - name: fct_order_line_items
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - order_id
@@ -299,7 +305,7 @@ export default function TestingBasics() {
         </Para>
 
         <CodeBox label="What not_null compiles to, roughly">
-{`-- tests:
+{`-- data_tests:
 --   - not_null
 -- applied to fct_orders.customer_id compiles to approximately:
 
@@ -313,7 +319,7 @@ where customer_id is null
         </CodeBox>
 
         <CodeBox label="What unique compiles to, roughly">
-{`-- tests:
+{`-- data_tests:
 --   - unique
 -- applied to fct_orders.order_id compiles to approximately:
 
@@ -328,7 +334,7 @@ having count(*) > 1
         </CodeBox>
 
         <CodeBox label="What accepted_values compiles to, roughly">
-{`-- tests:
+{`-- data_tests:
 --   - accepted_values:
 --       values: ['placed', 'shipped', 'delivered', 'cancelled', 'refunded']
 -- applied to fct_orders.order_status compiles to approximately:
@@ -341,7 +347,7 @@ where order_status not in ('placed', 'shipped', 'delivered', 'cancelled', 'refun
         </CodeBox>
 
         <CodeBox label="What relationships compiles to, roughly">
-{`-- tests:
+{`-- data_tests:
 --   - relationships:
 --       to: ref('dim_customers')
 --       field: customer_id
@@ -387,7 +393,7 @@ where fct_orders.customer_id is not null
   - name: fct_orders
     columns:
       - name: shipping_address
-        tests:
+        data_tests:
           - not_null:
               config:
                 severity: warn
@@ -563,12 +569,12 @@ where {{ column_name }} <= 0
   - name: fct_orders
     columns:
       - name: total_amount
-        tests:
+        data_tests:
           - positive_value
   - name: fct_payments
     columns:
       - name: amount_paid
-        tests:
+        data_tests:
           - positive_value`}
         </CodeBox>
 
@@ -597,7 +603,7 @@ where {{ column_name }} < {{ min_value }}
   - name: stg_reviews
     columns:
       - name: star_rating
-        tests:
+        data_tests:
           - value_within_range:
               min_value: 1
               max_value: 5`}
@@ -640,7 +646,7 @@ where {{ column_name }} > stats.avg_value * {{ factor }}
   - name: fct_orders
     columns:
       - name: total_amount
-        tests:
+        data_tests:
           - not_exceeding_daily_average:
               factor: 10`}
         </CodeBox>
@@ -757,7 +763,7 @@ dbt build`}
   - name: fct_orders
     columns:
       - name: customer_id
-        tests:
+        data_tests:
           - relationships:
               to: ref('dim_customers')
               field: customer_id
@@ -810,7 +816,7 @@ dbt build`}
       - name: orders
         columns:
           - name: order_id
-            tests:
+            data_tests:
               - unique
               - not_null
 
@@ -818,7 +824,7 @@ models:
   - name: stg_orders
     columns:
       - name: order_id
-        tests:
+        data_tests:
           - unique
           - not_null`}
         </CodeBox>
@@ -838,17 +844,17 @@ models:
   - name: fct_orders
     columns:
       - name: order_id
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: customer_id
-        tests:
+        data_tests:
           - not_null
           - relationships:
               to: ref('dim_customers')
               field: customer_id
       - name: order_status
-        tests:
+        data_tests:
           - accepted_values:
               values: ['placed', 'shipped', 'delivered', 'cancelled', 'refunded']`}
         </CodeBox>
@@ -894,7 +900,7 @@ models:
   - name: int_orders_joined_to_items
     columns:
       - name: order_id
-        tests:
+        data_tests:
           - unique
           # Only testing uniqueness here, specifically because this is
           # the exact model where an order_items join could fan out an

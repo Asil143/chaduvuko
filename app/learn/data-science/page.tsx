@@ -34,6 +34,22 @@ export default function DataScienceTrackPage() {
       readTime="Self-paced"
       updatedAt="July 2026"
     >
+      <div role="note" style={{
+        border: '1px solid rgba(139,92,246,0.4)',
+        background: 'rgba(139,92,246,0.08)',
+        borderRadius: 10,
+        padding: '14px 16px',
+        marginBottom: 28,
+        fontSize: 14,
+        lineHeight: 1.6,
+        color: 'var(--text)',
+      }}>
+        <strong>This track is paused while it is rebuilt.</strong> Only the three introductory lessons are published.
+        For pandas, statistics, and modeling today, follow{' '}
+        <Link href="/learn/ai-ml" style={{ color: DS, fontWeight: 700 }}>AI &amp; Machine Learning</Link>{' '}
+        or the{' '}
+        <Link href="/learn/roadmap/data-scientist" style={{ color: DS, fontWeight: 700 }}>Data Scientist roadmap</Link>.
+      </div>
 
       {/* ── Who This Is For ─────────────────────────────────────────────── */}
       <div style={{

@@ -29,5 +29,12 @@ _Last consolidated: October 13, 2026_
    - Includes SQL, Pipelines and System Design practice content.
    - Includes Free/Pro positioning and $19 Pro pack concept.
 
+7. **SITE_MAP.md / SITE_INVENTORY.csv / site-inventory.json** (`docs/chaduvuko/`)
+   - Generated organizational map and page inventory. Regenerate after a build with `npx tsx scripts/site-inventory.ts`.
+   - Public version: `/learn/all-courses`. Interactive VS Code canvas: `.github/extensions/chaduvuko-site-map/`.
+
+8. **LEARNING_ARCHITECTURE.md** (`docs/chaduvuko/`)
+   - Proposed master structure: AI-Era Core, six Schools, ten Career Paths, lesson anatomy, engagement system, phased rollout. Awaiting approval.
+
 ## Asset rule
 For all future Chaduvuko posters, presentations, thumbnails and hiring graphics, use the official original logo unless the user explicitly requests a new logo concept.

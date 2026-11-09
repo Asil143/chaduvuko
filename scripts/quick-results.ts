@@ -16,7 +16,7 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs
 import { tmpdir } from 'os'
 import { join } from 'path'
 import { LESSON_QUICK } from '@/data/lesson-quick'
-import { getLiveLesson } from '@/lib/catalog'
+import { getPublishedLesson } from '@/lib/catalog'
 import type { LessonQuick, QuickResult } from '@/lib/lesson-quick'
 import { runFreshCart } from './lib/freshcart'
 
@@ -34,7 +34,7 @@ function version(command: string): string | null {
 
 function checkEntry(href: string, quick: LessonQuick, problems: string[]) {
   const fail = (message: string) => problems.push(`${href}: ${message}`)
-  if (!getLiveLesson(href)) fail('not a live lesson')
+  if (!getPublishedLesson(href)) fail('not a published lesson')
   if (!quick.answer.trim() || quick.answer.length > 400) fail('answer must be 1–400 characters')
   if (quick.points.length !== 3) fail(`needs exactly 3 points, has ${quick.points.length}`)
   const { question, options, answer, explanation } = quick.check

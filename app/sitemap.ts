@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { LIVE_LESSONS, NON_LESSON_ROUTES } from '@/lib/catalog'
+import { LIVE_LESSONS, NON_LESSON_ROUTES, isHiddenHref } from '@/lib/catalog'
 import { BLOG_ARTICLES } from '@/data/blog-articles'
 import { ROLE_ROADMAPS } from '@/data/roadmaps/role-registry'
 import { CAREER_ROLES } from '@/data/careers'
@@ -10,7 +10,7 @@ const SITE_PAGES = ['/', '/blog', '/about', '/careers', '/privacy', '/terms', '/
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const nonLessonPages = Object.entries(NON_LESSON_ROUTES)
-    .filter(([, kind]) => kind !== 'preview')
+    .filter(([href, kind]) => kind !== 'preview' && !isHiddenHref(href))
     .map(([href]) => href)
 
   const lessonEntries = LIVE_LESSONS.map(lesson => ({

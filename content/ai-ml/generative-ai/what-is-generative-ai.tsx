@@ -173,11 +173,11 @@ export default function WhatIsGenerativeAIPage() {
         </p>
 
         <p style={S.p}>
-          Why does this matter in practice? Shopify uses generative models
+          Why does this matter in practice? An online store can use generative models
           to create product variations — same design, different colours —
-          without photographing each one. DoorDash uses them to generate
+          without photographing each one. A food-delivery app can generate
           synthetic training data for rare dish categories with few real photos.
-          Stripe uses LLMs (the largest generative models) to draft
+          A payments company can use LLMs (the largest generative models) to draft
           merchant communications. Every use case involves creating new content
           from a learned distribution.
         </p>
@@ -727,7 +727,7 @@ import torch
         <ConceptBox title="The build-vs-buy framework interviewers expect you to reason through">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[
-              { q: 'Prompt an API (GPT-4, Claude)', when: 'Prototype fast, low request volume, task changes often, no dedicated ML team available', color: '#1D9E75' },
+              { q: 'Prompt an API (GPT, Claude, Gemini)', when: 'Prototype fast, low request volume, task changes often, no dedicated ML team available', color: '#1D9E75' },
               { q: 'Fine-tune an open model', when: 'High request volume where API cost dominates, need a narrow task done consistently, can tolerate weeks not days to ship', color: '#378ADD' },
               { q: 'Pretrain from scratch', when: 'Almost never the right call for a product team — reserved for labs with hundred-million-dollar compute budgets', color: '#7b61ff' },
             ].map((row) => (

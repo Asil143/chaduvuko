@@ -103,7 +103,10 @@ export default function Module37() {
         <P>
           Security+ is the most widely recognised entry-level security certification in the US. The US Department of Defense mandates it (DoD 8570/8140) for all personnel with access to information systems. It is frequently listed as "preferred" or "required" in junior security analyst job postings.
         </P>
-        <Block>{`CompTIA Security+ SY0-701 (current exam, valid until Nov 2026):
+        <Block>{`CompTIA Security+ SY0-701 (English exam retires June 11, 2027)
+Successor: SY0-801 (Security+ V8), launching November 2026 — check
+comptia.org for the V8 objectives before you buy study material.
+Details below are for SY0-701:
 
 Exam format:
   - 90 questions (multiple choice + performance-based)

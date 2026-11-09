@@ -6,91 +6,91 @@ export const metadata = { title: 'Top Companies Hiring Data Engineers' }
 const companies = [
   {
     name: 'Microsoft', logo: '🪟', tier: 'FAANG+', color: '#0078d4', hq: 'Redmond, WA',
-    sponsorsH1B: true, openRoles: '200+',
+    sponsorsH1B: true,
     problem: 'Processes petabytes of telemetry from Azure, Office 365, Xbox, and Bing daily to personalize products and detect security threats across 1 billion+ users.',
     tools: ['Azure Databricks', 'Microsoft Fabric', 'Azure Data Factory', 'Synapse', 'Spark'],
     why: 'Building the cloud platform means Microsoft is a data engineering organization at its core. Every Azure service generates data that needs to be processed.',
   },
   {
     name: 'Amazon / AWS', logo: '📦', tier: 'FAANG+', color: '#ff9900', hq: 'Seattle, WA',
-    sponsorsH1B: true, openRoles: '500+',
+    sponsorsH1B: true,
     problem: 'Tracks every product view, add-to-cart, purchase, and return across 300 million customers to power recommendations, inventory forecasting, and same-day delivery logistics.',
     tools: ['Amazon S3', 'AWS Glue', 'Redshift', 'Kinesis', 'Apache Spark', 'Airflow'],
     why: 'Amazon processes more transactions per second than almost any other company on Earth. Each transaction generates dozens of events that feed downstream ML and analytics systems.',
   },
   {
     name: 'Google', logo: '🔍', tier: 'FAANG+', color: '#4285f4', hq: 'Mountain View, CA',
-    sponsorsH1B: true, openRoles: '300+',
+    sponsorsH1B: true,
     problem: 'Indexes the entire internet, processes 8.5 billion searches daily, and monetizes via ads — all requiring massive real-time data pipelines to serve relevant results in under 100ms.',
     tools: ['BigQuery', 'Cloud Dataflow', 'Pub/Sub', 'Cloud Composer', 'Apache Beam'],
     why: 'Google invented much of modern data engineering (MapReduce, Dremel/BigQuery, Bigtable). Their data engineering teams run the infrastructure that the entire industry learned from.',
   },
   {
     name: 'Meta', logo: '👤', tier: 'FAANG+', color: '#1877F2', hq: 'Menlo Park, CA',
-    sponsorsH1B: true, openRoles: '150+',
+    sponsorsH1B: true,
     problem: 'Processes 100+ petabytes of data daily from Facebook, Instagram, and WhatsApp to power ad targeting, content ranking, and detecting harmful content at global scale.',
     tools: ['Apache Spark', 'Apache Hive', 'Presto', 'Apache Airflow', 'Scuba', 'Hadoop'],
     why: 'Meta open-sourced many data engineering tools (React for the web, but also PyTorch, Prophet). Their scale — billions of users posting simultaneously — demands world-class data infrastructure.',
   },
   {
     name: 'Apple', logo: '🍎', tier: 'FAANG+', color: '#555555', hq: 'Cupertino, CA',
-    sponsorsH1B: true, openRoles: '100+',
+    sponsorsH1B: true,
     problem: 'Collects device telemetry, App Store usage, Apple Music streams, and health data from 2 billion active devices while maintaining strict privacy — a uniquely complex data engineering challenge.',
     tools: ['Apache Spark', 'Presto', 'Internal tools', 'Python', 'SQL'],
     why: 'Apple processes more device telemetry than any other hardware company while complying with the strictest privacy standards globally. On-device ML requires clean, well-structured training data.',
   },
   {
     name: 'Netflix', logo: '🎬', tier: 'Top Tech', color: '#E50914', hq: 'Los Gatos, CA',
-    sponsorsH1B: true, openRoles: '50+',
+    sponsorsH1B: true,
     problem: 'Analyzes viewing patterns across 260 million subscribers to decide what content to produce, how to optimize video streaming quality, and how to surface the right show to the right person.',
     tools: ['Apache Iceberg', 'Apache Spark', 'Flink', 'Druid', 'Metacat', 'Airflow'],
     why: 'Netflix invented Apache Iceberg. Their data engineering team is among the most influential in the industry — what Netflix publishes as best practice becomes industry standard within 2 years.',
   },
   {
     name: 'Uber', logo: '🚗', tier: 'Top Tech', color: '#000000', hq: 'San Francisco, CA',
-    sponsorsH1B: true, openRoles: '80+',
+    sponsorsH1B: true,
     problem: 'Matches 25 million trips per day in real time — requiring millisecond-latency pipelines to calculate dynamic pricing, driver availability, ETAs, and fraud detection simultaneously.',
     tools: ['Apache Kafka', 'Apache Flink', 'Apache Hudi', 'Presto', 'Pinot', 'M3'],
     why: 'Uber created Apache Hudi. Their real-time matching problem at global scale is one of the hardest data engineering challenges in the industry.',
   },
   {
     name: 'Airbnb', logo: '🏠', tier: 'Top Tech', color: '#FF5A5F', hq: 'San Francisco, CA',
-    sponsorsH1B: true, openRoles: '40+',
+    sponsorsH1B: true,
     problem: 'Processes search, booking, host, and pricing data across 5 million listings in 220 countries to personalize search results, detect fraud, and optimize dynamic pricing.',
     tools: ['Apache Airflow', 'Apache Spark', 'Druid', 'Superset', 'Hive', 'Presto'],
     why: 'Airbnb created Apache Airflow (the most widely used orchestration tool in the industry) and Apache Superset (open-source BI). Their data team sets patterns the entire industry follows.',
   },
   {
     name: 'Deloitte', logo: '🏢', tier: 'Consulting (H1B Sponsor)', color: '#86BC25', hq: 'New York, NY',
-    sponsorsH1B: true, openRoles: '400+',
+    sponsorsH1B: true,
     problem: 'Builds data platforms for Fortune 500 clients across banking, healthcare, retail, and government — each project requires standing up complete Azure or AWS data stacks from scratch.',
     tools: ['Azure Databricks', 'Azure Data Factory', 'Snowflake', 'dbt', 'Terraform', 'Power BI'],
     why: 'Deloitte is one of the largest H1B sponsors in the US. They hire hundreds of data engineers annually for client delivery. Azure and Databricks certifications are highly valued here.',
   },
   {
     name: 'Accenture', logo: '🔷', tier: 'Consulting (H1B Sponsor)', color: '#A100FF', hq: 'New York, NY',
-    sponsorsH1B: true, openRoles: '600+',
+    sponsorsH1B: true,
     problem: 'Migrates and modernizes legacy data warehouses for global enterprises, building cloud-native data platforms on Azure, AWS, and GCP for companies across every industry.',
     tools: ['Azure Synapse', 'AWS Glue', 'Google BigQuery', 'Apache Spark', 'dbt', 'Informatica'],
     why: 'Largest technology consulting firm in the world. Massive H1B sponsor. Multi-cloud data engineering roles across all three cloud platforms. Entry point for many engineers targeting the US market.',
   },
   {
     name: 'Cognizant', logo: '🔵', tier: 'Consulting (H1B Sponsor)', color: '#1A6296', hq: 'Teaneck, NJ',
-    sponsorsH1B: true, openRoles: '500+',
+    sponsorsH1B: true,
     problem: 'Modernizes data infrastructure for healthcare, insurance, and banking clients — migrating petabytes from on-premises Oracle and Teradata systems to cloud-native platforms.',
     tools: ['Azure Data Factory', 'Azure Databricks', 'Synapse', 'SQL', 'Python', 'Spark'],
     why: 'One of the top H1B sponsors in the United States consistently. Extensive global campus hiring pipelines. Azure data engineering roles make up a large portion of their data practice.',
   },
   {
     name: 'JPMorgan Chase', logo: '🏦', tier: 'Finance', color: '#003DA5', hq: 'New York, NY',
-    sponsorsH1B: true, openRoles: '200+',
+    sponsorsH1B: true,
     problem: 'Processes 6 billion transactions daily across retail banking, investment banking, and asset management — requiring real-time fraud detection, regulatory reporting, and risk analytics.',
     tools: ['Apache Spark', 'Kafka', 'Hadoop', 'Python', 'SQL', 'Hive', 'AWS'],
     why: 'JPMorgan is transforming into a technology company. Their data engineering team processes more financial transactions per day than almost any entity on Earth. Regulated data environments mean rigorous data quality is mandatory.',
   },
   {
     name: 'Walmart', logo: '🛒', tier: 'Retail', color: '#0071CE', hq: 'Bentonville, AR',
-    sponsorsH1B: true, openRoles: '150+',
+    sponsorsH1B: true,
     problem: 'Analyzes 40 petabytes of transaction data from 10,000 stores and Walmart.com to optimize inventory, supply chain routing, personalized pricing, and checkout fraud prevention.',
     tools: ['Apache Spark', 'Azure', 'Kafka', 'Hadoop', 'Python', 'SQL', 'Hive'],
     why: 'Walmart is the largest private employer in the US and one of the largest data consumers in the world. Their tech arm Walmart Global Tech hires aggressively and sponsors H1B.',
@@ -132,8 +132,8 @@ export default function IndustryPage() {
         <div className="grid grid-cols-3 gap-4 mb-14">
           {[
             { icon: '🏢', stat: `${companies.length}`, label: 'Companies profiled' },
-            { icon: '🇺🇸', stat: `${companies.filter(c => c.sponsorsH1B).length}/${companies.length}`, label: 'Sponsor H1B' },
-            { icon: '💼', stat: '3,000+', label: 'Open roles tracked' },
+            { icon: '🇺🇸', stat: `${companies.filter(c => c.sponsorsH1B).length}/${companies.length}`, label: 'Have sponsored H-1B' },
+            { icon: '🧰', stat: `${new Set(companies.flatMap(c => c.tools)).size}`, label: 'Tools referenced' },
           ].map(s => (
             <div key={s.label} className="rounded-2xl p-5 text-center" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
               <div className="text-2xl mb-1">{s.icon}</div>
@@ -173,12 +173,12 @@ export default function IndustryPage() {
                               {company.sponsorsH1B && (
                                 <span className="text-xs font-mono px-2 py-0.5 rounded"
                                   style={{ background: 'rgba(0,230,118,0.1)', color: 'var(--green)', border: '1px solid rgba(0,230,118,0.2)' }}>
-                                  ✅ H1B Sponsor
+                                  ✅ Has sponsored H-1B
                                 </span>
                               )}
                             </div>
                             <div className="text-xs font-mono mt-0.5" style={{ color: 'var(--muted)' }}>
-                              {company.hq} · {company.openRoles} open data engineering roles
+                              {company.hq}
                             </div>
                           </div>
                         </div>
