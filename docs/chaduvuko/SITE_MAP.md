@@ -9,7 +9,7 @@
 
 | What | Count | Where it comes from |
 |---|---:|---|
-| Published tracks | 16 (+ Projects) | `lib/catalog/tracks.ts` |
+| Published tracks | 13 (+ Projects) | `lib/catalog/tracks.ts` |
 | Published lessons | 490 | `lib/catalog` (`LIVE_LESSONS`) |
 | Hidden tracks / lessons | 1 / 3 | `hidden` flag in `lib/catalog/tracks.ts` |
 | Unpublished (`soon`) lessons | 59 | `data/*-curriculum.ts` |
@@ -29,8 +29,7 @@ flowchart LR
   area_ai --> t_ai_ml["AI and Machine Learning<br/>82 lessons"]
   area_ai -.-> p_ai["2 planned tracks"]:::planned
   root --> area_data["School of Data"]
-  area_data --> t_foundations["Data Engineering Foundations<br/>4 lessons"]
-  area_data --> t_data_engineering["Data Engineering<br/>47 lessons"]
+  area_data --> t_data_engineering["Data Engineering<br/>51 lessons"]
   area_data --> t_sql["SQL<br/>62 lessons"]
   area_data --> t_apache_kafka["Apache Kafka<br/>24 lessons"]
   area_data --> t_dbt["dbt<br/>20 lessons"]
@@ -41,9 +40,7 @@ flowchart LR
   area_programming --> t_html_css["HTML and CSS<br/>42 lessons"]
   area_programming -.-> p_programming["2 planned tracks"]:::planned
   root --> area_cloud["School of Cloud and Platforms"]
-  area_cloud --> t_aws["AWS<br/>9 lessons"]
-  area_cloud --> t_azure["Microsoft Azure<br/>8 lessons"]
-  area_cloud --> t_gcp["Google Cloud<br/>5 lessons"]
+  area_cloud --> t_cloud_data["Cloud Data Platforms<br/>22 lessons"]
   area_cloud -.-> p_cloud["2 planned tracks"]:::planned
   root --> area_security["School of Security"]
   area_security --> t_cybersecurity["Cybersecurity<br/>40 lessons"]
@@ -82,23 +79,20 @@ Ordered routes across schools, at `/learn/paths/[slug]`. Planned steps link to a
 
 | School | Track | Overview | Modules | Lessons | Avg words / lesson |
 |---|---|---|---:|---:|---:|
-| School of AI | AI & Machine Learning | `/learn/ai-ml` | 12 | 82 | 5,673 |
-| School of Data | Data Engineering Foundations | `/learn/what-is-data-engineering` | 1 | 4 | 1,701 |
-| School of Data | Data Engineering | `/learn/data-engineering` | 6 | 47 | 8,330 |
-| School of Data | SQL | `/learn/sql` | 13 | 62 | 5,952 |
-| School of Data | Apache Kafka | `/learn/apache-kafka` | 5 | 24 | 9,768 |
-| School of Data | dbt | `/learn/dbt` | 4 | 20 | 8,626 |
-| School of Data | Snowflake | `/learn/snowflake` | 5 | 20 | 4,767 |
-| School of Software Engineering | Python | `/learn/python` | 6 | 46 | 3,958 |
-| School of Software Engineering | HTML & CSS | `/learn/html-css` | 6 | 42 | 4,326 |
-| School of Cloud & Platforms | AWS | `/learn/aws/introduction` | 1 | 9 | 1,207 |
-| School of Cloud & Platforms | Microsoft Azure | `/learn/azure/introduction` | 1 | 8 | 1,427 |
-| School of Cloud & Platforms | Google Cloud | `/learn/gcp/introduction` | 1 | 5 | 1,047 |
-| School of Security | Cybersecurity | `/learn/cybersecurity` | 6 | 40 | 4,915 |
-| School of Computer Science | Data Structures & Algorithms | `/learn/dsa` | 1 | 20 | 2,982 |
-| School of Computer Science | DBMS | `/learn/dbms` | 5 | 20 | 8,600 |
-| School of Computer Science | Networking | `/learn/networking` | 6 | 35 | 6,513 |
-| Practice | Projects | `/learn/projects` | 1 | 6 | 3,577 |
+| School of AI | AI & Machine Learning | `/learn/ai-ml` | 12 | 82 | 0 |
+| School of Data | Data Engineering | `/learn/data-engineering` | 7 | 51 | 0 |
+| School of Data | SQL | `/learn/sql` | 13 | 62 | 0 |
+| School of Data | Apache Kafka | `/learn/apache-kafka` | 5 | 24 | 0 |
+| School of Data | dbt | `/learn/dbt` | 4 | 20 | 0 |
+| School of Data | Snowflake | `/learn/snowflake` | 5 | 20 | 0 |
+| School of Software Engineering | Python | `/learn/python` | 6 | 46 | 0 |
+| School of Software Engineering | HTML & CSS | `/learn/html-css` | 6 | 42 | 0 |
+| School of Cloud & Platforms | Cloud Data Platforms | `/learn/cloud-data` | 3 | 22 | 0 |
+| School of Security | Cybersecurity | `/learn/cybersecurity` | 6 | 40 | 0 |
+| School of Computer Science | Data Structures & Algorithms | `/learn/dsa` | 1 | 20 | 0 |
+| School of Computer Science | DBMS | `/learn/dbms` | 5 | 20 | 0 |
+| School of Computer Science | Networking | `/learn/networking` | 6 | 35 | 0 |
+| Practice | Projects | `/learn/projects` | 1 | 6 | 0 |
 
 ### Modules in each track
 
@@ -119,14 +113,9 @@ Ordered routes across schools, at `/learn/paths/[slug]`. Planned steps link to a
 
 </details>
 
-<details><summary><strong>Data Engineering Foundations</strong> — 1 modules</summary>
+<details><summary><strong>Data Engineering</strong> — 7 modules</summary>
 
-- Overview — 4 lessons
-
-</details>
-
-<details><summary><strong>Data Engineering</strong> — 6 modules</summary>
-
+- Data Engineering Foundations — 4 lessons
 - What Even Is This? — 6 lessons
 - Data Fundamentals — 7 lessons
 - Core Engineering Skills — 6 lessons
@@ -205,21 +194,11 @@ Ordered routes across schools, at `/learn/paths/[slug]`. Planned steps link to a
 
 </details>
 
-<details><summary><strong>AWS</strong> — 1 modules</summary>
+<details><summary><strong>Cloud Data Platforms</strong> — 3 modules</summary>
 
-- Overview — 9 lessons
-
-</details>
-
-<details><summary><strong>Microsoft Azure</strong> — 1 modules</summary>
-
-- Overview — 8 lessons
-
-</details>
-
-<details><summary><strong>Google Cloud</strong> — 1 modules</summary>
-
-- Overview — 5 lessons
+- AWS — 9 lessons
+- Microsoft Azure — 8 lessons
+- Google Cloud — 5 lessons
 
 </details>
 
@@ -297,10 +276,10 @@ Skills maps only; no lessons are published yet. Each page collects learner inter
 
 | Check | Result |
 |---|---|
-| live lessons not built | 0 — none |
+| live lessons not built | 490 — `/learn/ai-ml/what-is-ai`, `/learn/ai-ml/ai-ml-landscape`, `/learn/ai-ml/math-foundations/vectors-matrices-tensors`, `/learn/ai-ml/math-foundations/matrix-multiplication`, `/learn/ai-ml/math-foundations/dot-product-similarity`, `/learn/ai-ml/math-foundations/eigenvalues-eigenvectors`, `/learn/ai-ml/math-foundations/derivatives-and-gradients`, `/learn/ai-ml/math-foundations/probability-distributions`, and 482 more |
 | thin live lessons | 0 — none |
-| orphan live lessons | 0 — none |
-| unregistered built pages | 2 — `/admin`, `/auth/callback` |
+| orphan live lessons | 490 — `/learn/ai-ml/what-is-ai`, `/learn/ai-ml/ai-ml-landscape`, `/learn/ai-ml/math-foundations/vectors-matrices-tensors`, `/learn/ai-ml/math-foundations/matrix-multiplication`, `/learn/ai-ml/math-foundations/dot-product-similarity`, `/learn/ai-ml/math-foundations/eigenvalues-eigenvectors`, `/learn/ai-ml/math-foundations/derivatives-and-gradients`, `/learn/ai-ml/math-foundations/probability-distributions`, and 482 more |
+| unregistered built pages | 0 — none |
 | dead internal links | 0 — none |
 
 Thin = fewer than 400 words in the main content area. Unregistered built pages such as `/admin` and `/auth/callback` are expected.

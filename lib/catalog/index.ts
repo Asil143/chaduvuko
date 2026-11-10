@@ -91,6 +91,7 @@ export function getTrackSummaries(): TrackSummaries {
         area: track.area,
         lessons,
         ...(track.status ? { status: track.status } : {}),
+        ...(track.urlPrefixes ? { urlPrefixes: track.urlPrefixes } : {}),
         // A handful of live lessons next to a large unpublished set (Data Science).
         // Networking's few remaining drafts do not qualify.
         early: unpublished > 0 && lessons < 15,

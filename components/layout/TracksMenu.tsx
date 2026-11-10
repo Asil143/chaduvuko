@@ -10,7 +10,7 @@ import { SCHOOLS } from '@/lib/catalog/schools'
 
 export const TRACKS_HREF = '/learn'
 const PROGRESS_HREF = '/dashboard'
-const START_HERE = 'foundations'
+const START_HERE = 'python'
 
 type SchoolArea = Exclude<TrackArea, 'practice'>
 const SCHOOL_FOR_AREA = Object.fromEntries(SCHOOLS.map(school => [school.area, school])) as Record<SchoolArea, (typeof SCHOOLS)[number]>
@@ -25,7 +25,8 @@ function liveTracksIn(tracks: HeaderData['tracks'], area: TrackArea): TrackEntry
 }
 
 function isInTrack(pathname: string, slug: string, track: TrackSummary) {
-  return pathname === track.href || pathname.startsWith(`/learn/${slug}/`)
+  return pathname === track.href
+    || [`/learn/${slug}`, ...(track.urlPrefixes ?? [])].some(prefix => pathname === prefix || pathname.startsWith(`${prefix}/`))
 }
 
 function TrackRow({ slug, track, completed, pathname, onNavigate, tall = false }: {

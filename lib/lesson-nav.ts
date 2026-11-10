@@ -7,6 +7,8 @@ export interface TrackSummary {
   area: TrackArea
   lessons: number
   status?: 'coming-soon'
+  /** Extra URL prefixes whose lessons belong to this track. */
+  urlPrefixes?: string[]
   /** True when most of the track is still unpublished. Short finished tracks stay unmarked. */
   early: boolean
   /** One line under the name in the header. Omitted outside the header. */

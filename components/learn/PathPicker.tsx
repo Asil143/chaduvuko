@@ -29,7 +29,7 @@ const PATHS: Record<Goal, { starter: string[]; next: string[] }> = {
   ai: { starter: ['python', 'ai-ml'], next: ['generative-ai', 'agentic-ai', 'ai-security'] },
   data: { starter: ['sql', 'python'], next: ['data-engineering', 'database-engineering', 'analytics-engineering-data-analytics'] },
   web: { starter: ['html-css', 'javascript'], next: ['full-stack-ai', 'java', 'mobile-development'] },
-  cloud: { starter: ['networking', 'python'], next: ['aws', 'azure', 'gcp', 'devops-mlops'] },
+  cloud: { starter: ['networking', 'python'], next: ['cloud-data', 'devops-mlops'] },
   security: { starter: ['networking', 'python'], next: ['cybersecurity', 'application-security-devsecops', 'ai-security'] },
   interviews: { starter: ['python', 'dsa'], next: ['system-design', 'sql'] },
   systems: { starter: ['python', 'dbms'], next: ['networking', 'systems-programming', 'system-design'] },

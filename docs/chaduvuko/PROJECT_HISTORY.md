@@ -173,7 +173,14 @@ Recovered Library content shows a Chaduvuko practice product called **Pipeline P
 - Reviewed all tracks. All 16 live courses stay (14 feed at least one career path; Projects is the practice area; GCP is unused by paths and is a candidate to merge with AWS/Azure into one cloud-for-data course).
 - Shelved 26 of 37 planned ("coming soon") tracks that no career path uses, via `SHELVED_TRACK_SLUGS` in `data/planned-tracks.ts`. Their plans stay in `ALL_PLANNED_TRACKS`; `PLANNED_TRACKS` (used by the catalog, `/learn`, track-plan pages, search, and sitemap) now lists the 11 that career paths depend on. Shelved plan pages return 404 and left the sitemap.
 - To revive a track, remove its slug from `SHELVED_TRACK_SLUGS`.
-- Not done yet (changes lesson URLs, needs approval): fold Foundations into Data Engineering; merge AWS/Azure/GCP.
+- Follow-up (done next, see below): fold Foundations into Data Engineering; merge AWS/Azure/GCP.
+
+## November 9, 2026 — Merged Foundations and cloud courses
+
+- Foundations (4 lessons) is now the first module of the Data Engineering course: section "Data Engineering Foundations", ordered before the 47 core lessons. The DE index page shows a "Start here" block.
+- AWS, Azure, and GCP are now one course, **Cloud Data Platforms** (`cloud-data`, index `/learn/cloud-data`), with modules AWS, Microsoft Azure, and Google Cloud (22 lessons).
+- Lesson URLs did not change (`/learn/foundations/*`, `/learn/what-is-data-engineering`, `/learn/aws|azure|gcp/*`), so saved progress, links, and SEO are kept and no redirects are needed. Tracks own extra URL prefixes via `Track.urlPrefixes` so the header highlights the right course.
+- Career path milestones now select these lessons by `sections`. Live courses: 16 → 14.
 
 ## Ongoing rules
 - Keep StudyX Overseas separate.

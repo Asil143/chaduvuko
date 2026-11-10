@@ -28,6 +28,7 @@ export interface CareerPath {
 }
 
 const PYTHON_CORE = ['Python Foundations', 'Core Data Structures & Logic', 'Object-Oriented Python', 'Intermediate & Functional Python']
+const DE_CORE = ['What Even Is This?', 'Data Fundamentals', 'Core Engineering Skills', 'How Data Moves', 'Storage & Architecture', 'Quality, Governance & Production']
 const SQL_CORE = ['Databases & Setup', 'Reading Data — SELECT', 'Filtering & Logic', 'Aggregation', 'Joins']
 
 export const CAREER_PATHS: CareerPath[] = [
@@ -98,14 +99,14 @@ export const CAREER_PATHS: CareerPath[] = [
     audience: 'For beginners and analysts moving into data platform work.',
     roadmap: 'data-engineer',
     milestones: [
-      { title: 'Data engineering foundations', outcome: 'Know what data engineers do and the core tools.', track: 'foundations' },
+      { title: 'Data engineering foundations', outcome: 'Know what data engineers do and the core tools.', track: 'data-engineering', sections: ['Data Engineering Foundations'] },
       { title: 'SQL', outcome: 'From SELECT to window functions and query performance.', track: 'sql' },
       { title: 'Python for data', outcome: 'Write, structure, and debug Python programs.', track: 'python', sections: PYTHON_CORE },
-      { title: 'Data engineering core', outcome: 'Ingestion, modelling, orchestration, storage, quality, and governance.', track: 'data-engineering' },
+      { title: 'Data engineering core', outcome: 'Ingestion, modelling, orchestration, storage, quality, and governance.', track: 'data-engineering', sections: DE_CORE },
       { title: 'Streaming with Kafka', outcome: 'Produce, consume, and operate event streams.', track: 'apache-kafka' },
       { title: 'Transformation with dbt', outcome: 'Model, test, and document warehouse transformations.', track: 'dbt' },
       { title: 'Cloud warehouse: Snowflake', outcome: 'Load, transform, secure, and tune a cloud warehouse.', track: 'snowflake' },
-      { title: 'Cloud data services: AWS', outcome: 'S3, Glue, Redshift, Kinesis, and Athena.', track: 'aws' },
+      { title: 'Cloud data services: AWS', outcome: 'S3, Glue, Redshift, Kinesis, and Athena.', track: 'cloud-data', sections: ['AWS'] },
     ],
     capstone: { title: 'Azure end-to-end pipeline builds', description: 'Six guided projects from batch ingestion to a production-style lakehouse.', href: '/learn/projects' },
     interview: [
@@ -162,8 +163,8 @@ export const CAREER_PATHS: CareerPath[] = [
     milestones: [
       { title: 'Networking', outcome: 'IP addressing, routing, TCP/UDP, DNS, and HTTP.', track: 'networking' },
       { title: 'Python for automation', outcome: 'Script repetitive infrastructure tasks.', track: 'python', sections: ['Python Foundations', 'Core Data Structures & Logic'] },
-      { title: 'AWS', outcome: 'Core AWS storage, compute, and data services.', track: 'aws' },
-      { title: 'Microsoft Azure', outcome: 'Core Azure storage, compute, and data services.', track: 'azure' },
+      { title: 'AWS', outcome: 'Core AWS storage, compute, and data services.', track: 'cloud-data', sections: ['AWS'] },
+      { title: 'Microsoft Azure', outcome: 'Core Azure storage, compute, and data services.', track: 'cloud-data', sections: ['Microsoft Azure'] },
       { title: 'DevOps, Kubernetes and MLOps', outcome: 'Containers, CI/CD, infrastructure as code, and Kubernetes.', track: 'devops-mlops' },
       { title: 'Site reliability engineering', outcome: 'SLOs, incident response, and capacity planning.', track: 'sre-platform-engineering' },
     ],

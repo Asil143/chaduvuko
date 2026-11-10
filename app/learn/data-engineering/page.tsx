@@ -6,6 +6,13 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import { TrackStats } from '@/components/content/TrackStats'
 import { DE_CURRICULUM } from '@/data/de-curriculum'
 
+const FOUNDATION_LESSONS = [
+  { href: '/learn/what-is-data-engineering', title: 'What is Data Engineering?' },
+  { href: '/learn/foundations/sql', title: 'SQL for Data Engineers' },
+  { href: '/learn/foundations/postgresql', title: 'PostgreSQL' },
+  { href: '/learn/foundations/python', title: 'Python for Data Engineers' },
+]
+
 type PhaseFilter = 'all' | '1' | '2' | '3' | '4' | '5' | '6'
 
 interface Module {
@@ -54,7 +61,7 @@ export default function DataEngineeringTrack() {
   return (
     <LearnLayout
       title="Data Engineering"
-      description="A structured, 47-lesson Data Engineering path from core concepts to production patterns. Some modules assume Python and SQL foundations."
+      description="A structured Data Engineering course: four foundation lessons, then 47 core lessons from first pipelines to production patterns."
       section="Data Engineering"
       readTime="Self-paced"
       updatedAt="November 2026"
@@ -117,6 +124,39 @@ export default function DataEngineeringTrack() {
         <Link href="/learn/sql" style={{ color: 'var(--accent)' }}>SQL foundations</Link> first.
       </p>
 
+      {/* ── Start here: foundation lessons ─────────────────────────────── */}
+      <section aria-labelledby="de-foundations" style={{ marginBottom: 8 }}>
+        <div style={{
+          fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
+          textTransform: 'uppercase', color: 'var(--muted)',
+          fontFamily: 'var(--font-mono)', marginBottom: 10,
+        }}>
+          {'// Start here'}
+        </div>
+        <h2 id="de-foundations" style={{
+          fontSize: 'clamp(18px, 2.2vw, 24px)', fontWeight: 900, letterSpacing: '-0.5px',
+          color: 'var(--text)', fontFamily: 'var(--font-display)', margin: '0 0 6px',
+        }}>
+          Data Engineering Foundations
+        </h2>
+        <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 560, margin: '0 0 16px' }}>
+          Four short lessons on what the job is and the SQL, PostgreSQL, and Python you use every day. Then start the core curriculum below.
+        </p>
+        <ol style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 10, gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
+          {FOUNDATION_LESSONS.map((lesson, i) => (
+            <li key={lesson.href}>
+              <Link href={lesson.href} style={{
+                display: 'block', height: '100%', background: 'var(--surface)',
+                border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px', textDecoration: 'none',
+              }}>
+                <span style={{ display: 'block', fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>F{i + 1}</span>
+                <span style={{ display: 'block', marginTop: 4, fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{lesson.title}</span>
+              </Link>
+            </li>
+          ))}
+        </ol>
+      </section>
+
       {/* ── Curriculum heading + phase filter ─────────────────────────── */}
       <div style={{ marginTop: 48, marginBottom: 8 }}>
         <div style={{
@@ -137,7 +177,7 @@ export default function DataEngineeringTrack() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              47 Lessons. Zero to Advanced.
+              Core curriculum: 47 lessons.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
               Follow in order. Each module builds on the last. Every concept is

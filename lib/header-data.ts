@@ -6,15 +6,12 @@ import type { HeaderData, TrackSummaries } from '@/lib/lesson-nav'
 
 // One line under each track name in the header. Counts stay separate, so these do not repeat them.
 const TRACK_BLURBS: Record<string, string> = {
-  foundations: 'What a pipeline is, before the full Data Engineering track',
-  'data-engineering': 'Pipelines, warehouses, and production patterns',
+  'data-engineering': 'From what a pipeline is to production patterns',
   sql: 'Queries on a real database, from SELECT to window functions',
   'apache-kafka': 'Topics, partitions, consumers, and stream processing',
   dbt: 'Models, tests, and the analytics transformation layer',
   snowflake: 'Warehouses, loading, Time Travel, and cost',
-  aws: 'S3, Glue, Redshift, EMR, and Kinesis',
-  azure: 'Data Factory, Databricks, Synapse, and Fabric',
-  gcp: 'BigQuery, Dataflow, Pub/Sub, and Composer',
+  'cloud-data': 'AWS, Azure, and Google Cloud data services',
   python: 'From a first script to production Python',
   'html-css': 'Semantic HTML, Flexbox, Grid, and responsive pages',
   dsa: 'Arrays through dynamic programming for interviews',

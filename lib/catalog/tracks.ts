@@ -2,15 +2,12 @@ import type { Track } from './types'
 import { PLANNED_TRACKS } from '@/data/planned-tracks'
 
 const LIVE_TRACKS: Track[] = [
-  { slug: 'foundations',      title: 'Data Engineering Foundations', area: 'data',        indexHref: '/learn/what-is-data-engineering' },
-  { slug: 'data-engineering', title: 'Data Engineering',             area: 'data',        indexHref: '/learn/data-engineering' },
+  { slug: 'data-engineering', title: 'Data Engineering',             area: 'data',        indexHref: '/learn/data-engineering', urlPrefixes: ['/learn/what-is-data-engineering', '/learn/foundations'] },
   { slug: 'sql',              title: 'SQL',                          area: 'data',        indexHref: '/learn/sql' },
   { slug: 'apache-kafka',     title: 'Apache Kafka',                 area: 'data',        indexHref: '/learn/apache-kafka' },
   { slug: 'dbt',              title: 'dbt',                          area: 'data',        indexHref: '/learn/dbt' },
   { slug: 'snowflake',        title: 'Snowflake',                    area: 'data',        indexHref: '/learn/snowflake' },
-  { slug: 'aws',              title: 'AWS',                          area: 'cloud',       indexHref: '/learn/aws/introduction' },
-  { slug: 'azure',            title: 'Microsoft Azure',              area: 'cloud',       indexHref: '/learn/azure/introduction' },
-  { slug: 'gcp',              title: 'Google Cloud',                 area: 'cloud',       indexHref: '/learn/gcp/introduction' },
+  { slug: 'cloud-data',       title: 'Cloud Data Platforms',         area: 'cloud',       indexHref: '/learn/cloud-data', urlPrefixes: ['/learn/aws', '/learn/azure', '/learn/gcp'] },
   { slug: 'python',           title: 'Python',                       area: 'programming', indexHref: '/learn/python' },
   { slug: 'html-css',         title: 'HTML & CSS',                   area: 'programming', indexHref: '/learn/html-css' },
   { slug: 'dsa',              title: 'Data Structures & Algorithms', area: 'cs',          indexHref: '/learn/dsa' },

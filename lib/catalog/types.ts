@@ -7,6 +7,8 @@ export interface Track {
   title: string
   area: TrackArea
   indexHref: string
+  /** Extra URL prefixes whose lessons belong to this track (merged tracks keep their old URLs). */
+  urlPrefixes?: string[]
   status?: 'coming-soon'
   /**
    * Hidden tracks stay reachable by direct URL but are noindex and left out of
