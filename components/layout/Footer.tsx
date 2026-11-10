@@ -29,7 +29,7 @@ const footerSections: { title: string; links: FooterLink[] }[] = [
       { label: 'Cloud Data Projects', href: '/learn/projects' },
       { label: 'Code playground', href: '/playground' },
       { label: 'SQL playground', href: '/learn/sql/playground' },
-      { label: 'Interview preparation', href: '/learn/interview' },
+      { label: 'Career prep', href: '/learn/interview' },
       { label: 'Your progress', href: '/dashboard' },
     ],
   },

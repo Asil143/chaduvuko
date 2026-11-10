@@ -181,6 +181,11 @@ export const NON_LESSON_ROUTES: Record<string, NonLessonKind> = {
   '/learn/schools': 'hub',
   ...Object.fromEntries(SCHOOLS.map(school => [`/learn/schools/${school.slug}`, 'hub' as const])),
   '/learn/interview': 'hub',
+  '/learn/interview/data-engineering-questions': 'hub',
+  '/learn/interview/resume': 'hub',
+  '/learn/interview/portfolio': 'hub',
+  '/learn/interview/mock-interviews': 'hub',
+  '/learn/interview/job-search': 'hub',
   '/learn/industry': 'hub',
   '/learn/find-video': 'tool',
   ...Object.fromEntries(

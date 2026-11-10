@@ -59,7 +59,7 @@ const RELATED_MAP: Record<string, string[]> = {
   '/learn/gcp/dataflow':                  ['dataflow-vs-spark-streaming',         'batch-vs-streaming',                 'apache-spark-architecture-explained'],
   '/learn/gcp/pubsub':                    ['pubsub-vs-kafka-vs-kinesis',          'what-is-apache-kafka',               'data-quality-in-pipelines'],
   '/learn/gcp/composer':                  ['cloud-composer-vs-managed-airflow',   'adf-vs-airflow-vs-step-functions',   'gcp-iam-for-data-engineers'],
-  '/learn/interview':                     ['spark-interview-questions',           'data-engineer-resume-without-experience', 'how-to-get-h1b-data-engineering'],
+  '/learn/interview/data-engineering-questions': ['spark-interview-questions',     'data-engineer-resume-without-experience', 'data-engineering-career-path'],
   '/learn/industry':                      ['data-engineering-career-path',        'azure-vs-aws-data-engineering',      'data-engineer-resume-without-experience'],
   '/learn/projects/azure-batch-pipeline': ['medallion-architecture-explained',    'incremental-loading-explained',      'data-quality-in-pipelines'],
 }

@@ -39,9 +39,9 @@ export default function manifest(): MetadataRoute.Manifest {
         description: 'Data Engineering Roadmap 2026',
       },
       {
-        name: 'Interview Prep',
+        name: 'Career Prep',
         url: '/learn/interview',
-        description: '27 real interview questions',
+        description: 'Interviews, projects and job search',
       },
       {
         name: 'Dashboard',

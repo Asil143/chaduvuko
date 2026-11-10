@@ -213,6 +213,14 @@ Recovered Library content shows a Chaduvuko practice product called **Pipeline P
 - The header Career paths menu lists only the in-demand paths, with a "Compare all N paths" link. The Find-your-path quiz maps to the new paths and shows beginner-level paths first to new learners.
 - Not added yet, because their courses are still planned: Java Developer, Mobile App Developer, QA / Test Automation Engineer, Cloud Architect.
 
+## November 10, 2026 — Career Prep hub
+
+- `/learn/interview` is now the Career Prep hub ("Career Prep — Interviews, Projects & Job Search") instead of a data-engineering-only Q&A page.
+- Prep by role: a prep kit for each of the 22 career paths (path, roadmap, capstone, interview lessons, guides), built from `CAREER_PATHS`.
+- Prep by topic: every live course interview lesson, grouped by school and generated from the catalog.
+- Career toolkit: new guides at `/learn/interview/resume`, `/portfolio`, `/mock-interviews` and `/job-search`, plus related blog posts.
+- The 50 data engineering questions moved to `/learn/interview/data-engineering-questions`. The hub links all six question banks.
+
 ## Ongoing rules
 - Keep StudyX Overseas separate.
 - Chaduvuko remains the primary EdTech project.

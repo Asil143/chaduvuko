@@ -454,7 +454,7 @@ const quickLinks = (stats: SiteStats) => [
   { icon: '🔄', label: 'Sync Progress',        href: '/dashboard',            desc: 'Sign in to continue across devices' },
   { icon: '🗺️', label: 'Career Roadmaps',    href: '/learn/roadmap',   desc: `${stats.roadmaps} role-specific roadmaps` },
   { icon: '🏗️', label: 'Real Projects',       href: '/learn/projects',  desc: `${stats.projects} Azure end-to-end builds` },
-  { icon: '🎯', label: 'Interview Prep',       href: '/learn/interview', desc: 'DE, ML, SQL, System Design' },
+  { icon: '🎯', label: 'Career Prep',          href: '/learn/interview', desc: 'Interviews, resume, projects, job search' },
   { icon: '✍️', label: 'Blog',                 href: '/blog',            desc: `${stats.articles} in-depth articles` },
 ]
 

@@ -23,7 +23,7 @@ const PRACTICE_LINKS = [
   { href: '/learn/projects', title: 'Projects', detail: 'End-to-end builds' },
   { href: '/learn/sql/playground', title: 'SQL playground', detail: 'Run SQL in the browser' },
   { href: '/playground', title: 'Code playground', detail: 'Run code in the browser' },
-  { href: '/learn/interview', title: 'Interview prep', detail: 'Questions and answers by topic' },
+  { href: '/learn/interview', title: 'Career prep', detail: 'Interviews, projects, resume and job search' },
   { href: '/blog', title: 'Blog', detail: `${Object.keys(BLOG_ARTICLES).length} articles` },
   { href: '/dashboard', title: 'Learning dashboard', detail: 'Progress saved in this browser' },
 ]
