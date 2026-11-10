@@ -1259,7 +1259,7 @@ for q in test_questions:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 68 · Generative AI
+              Next — Lesson 67 · LLM Apps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

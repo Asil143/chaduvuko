@@ -320,4 +320,25 @@ export const CYBER_MODULES: CyberModule[] = [
     description: '60 complete interview answers across networking, cryptography, web security, pentesting, incident response, compliance, and behavioural — written at senior depth.',
     topics: ['Networking questions', 'Crypto questions', 'Web security', 'Pentesting Q&A', 'IR questions', 'Compliance', 'Behavioural'],
   },
+  {
+    num: '41', phase: 5, color: CYBER_PHASE_COLORS[5], status: 'live', readTime: '40 min',
+    title: 'SOC Alert Triage and Incident Response',
+    slug: 'soc-alert-triage',
+    description: 'Work an alert from first signal to disposition. Learn SOC responsibilities, a repeatable triage checklist, MITRE ATT&CK mapping, incident escalation, and reporting considerations for organisations in India.',
+    topics: ['SOC tiers and roles', 'SIEM alert lifecycle', 'Triage checklist', 'True and false positives', 'MITRE ATT&CK mapping', 'NIST incident response', 'CERT-In reporting'],
+  },
+  {
+    num: '42', phase: 5, color: CYBER_PHASE_COLORS[5], status: 'live', readTime: '40 min',
+    title: 'Packet Analysis with Wireshark',
+    slug: 'wireshark-packet-analysis',
+    description: 'Investigate authorised packet captures with Wireshark and tshark. Build capture and display filters, follow TCP streams, and recognise network behaviours that merit defensive investigation.',
+    topics: ['Capture and display filters', 'Following TCP streams', 'DNS tunnelling indicators', 'Port-scan patterns', 'Cleartext credential risks', 'tshark basics'],
+  },
+  {
+    num: '43', phase: 5, color: CYBER_PHASE_COLORS[5], status: 'live', readTime: '45 min',
+    title: 'Digital Forensics Basics',
+    slug: 'digital-forensics-basics',
+    description: 'Preserve and examine digital evidence methodically: order of volatility, chain of custody, forensic disk imaging and hashes, memory analysis, timelines, and Windows and Linux artefacts.',
+    topics: ['Order of volatility', 'Chain of custody', 'Disk imaging and hashing', 'Memory forensics with Volatility', 'Timeline analysis', 'Windows artefacts', 'Linux artefacts'],
+  },
 ]

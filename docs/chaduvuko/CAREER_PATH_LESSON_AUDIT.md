@@ -186,3 +186,22 @@ Most of these belong in the planned **Generative AI & LLM Engineering** track (M
 13. DevOps track: Docker → CI/CD → Terraform → Kubernetes → monitoring (unblocks Cloud & DevOps).
 14. Operating systems + DSA interview patterns (Software Engineer).
 15. SOC workflow and Wireshark lessons (Cybersecurity Analyst).
+
+## Resolution — November 9, 2026
+
+All 10 findings were fixed in one change set.
+
+| # | Finding | Fix |
+|---|---------|-----|
+| 1 | AI paths skip Advanced Python; no LLM API, vector DB, tool calling, evals, guardrails, LangGraph, MCP lessons | AI paths include Advanced Python; new live courses Generative AI & LLM Engineering (12) and Agentic AI & Automation (10) |
+| 2 | AI/ML ordering (RAG/agents before LLM fundamentals; prompting after RAG; duplicate agents lesson) | New sections Large Language Models → LLM Applications (prompting → RAG → advanced RAG → agents) → Fine-Tuning & Multimodal → Generative Models for Images; duplicate removed and redirected |
+| 3 | DE: no Spark/Airflow; duplicate intros | New DE module "Spark, Airflow & Lakehouse Tables"; DE path no longer repeats Foundations SQL/Python or "What is DE?" |
+| 4 | Cloud & DevOps path built on data services | Path now Linux/Bash/Git → Networking → Python → Docker → Cloud IAM/VPC/Terraform → CI/CD, Kubernetes, monitoring → AWS → SRE |
+| 5 | Full-Stack: no JS, React, back end | Live JavaScript & TypeScript (6) and Full-Stack Development with AI (8) courses |
+| 6 | ML: no PyTorch, statistics, A/B testing, time series, recommenders | Two PyTorch lessons, time series, recommenders; Statistics and Metrics & Experiments modules |
+| 7 | Software Engineer: no OS or DSA patterns; DBMS before SQL | New Operating Systems course; DSA unit 20 Interview Patterns; SQL now precedes DBMS |
+| 8 | Git only in DE; no Docker basics | DevOps "Developer Essentials" + "Containers" milestone shared by AI, DE, full-stack, SWE, and DevOps paths |
+| 9 | Analytics misses pandas, data modelling, stats, visualisation | Path adds Programming Ecosystem (pandas, Matplotlib), DE Storage & Architecture (data modelling), statistics, and BI & Storytelling |
+| 10 | Cybersecurity: no SOC triage, Wireshark, forensics; duplicates Networking | Three new Defensive Security lessons; security paths use only the non-overlapping Networking modules |
+
+Remaining planned (coming soon) milestones: AI Security, Application Security & DevSecOps, SRE & Platform Engineering, System Design.

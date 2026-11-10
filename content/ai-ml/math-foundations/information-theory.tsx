@@ -1826,7 +1826,7 @@ feature_drift_report(train_order_value, prod_order_value_drifted, "order_value (
               textTransform: 'uppercase' as const, color: '#888888',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 08 · Programming Ecosystem
+              Next — Lesson 10 · Python
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

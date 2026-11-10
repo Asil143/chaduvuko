@@ -1110,7 +1110,7 @@ print(X_train_v2.shape)   # (48000, 5)  <- now the model actually sees it`} />
               textTransform: 'uppercase' as const, color: '#7F77DD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 04
+              Next — Lesson 04 · Math
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

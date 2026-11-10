@@ -1135,7 +1135,7 @@ print("number could move on a different sample of the same population.")`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 37 · Model Evaluation
+              Next — Lesson 39 · Evaluation
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

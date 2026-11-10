@@ -1867,7 +1867,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
               textTransform: 'uppercase' as const, color: '#888888',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 09 · Programming Ecosystem
+              Next — Lesson 11 · Python
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

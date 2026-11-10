@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import type { SiteStats, TrackSummaries } from '@/lib/lesson-nav'
 import { PLANNED_TRACKS } from '@/data/planned-tracks'
+import { REGISTRY_TRACKS, registryLessons } from '@/data/tracks/registry'
 import { ContinueLearning } from '@/components/learn/ContinueLearning'
 
 type Cat = 'all' | 'data' | 'ai' | 'prog' | 'web' | 'cs' | 'itops' | 'security' | 'hardware' | 'enterprise' | 'product' | 'games'
@@ -220,33 +221,18 @@ const TRACKS = [
     jobs: 'Frontend Dev · Web Developer',
     track: 'html-css',
   },
-  {
-    cat: 'web' as Cat,
-    icon: '⚛️', color: '#38bdf8',
-    name: 'React.js',
-    desc: 'Build React interfaces from components and hooks, manage shared state, and practice testing, performance, and common application patterns.',
-    pills: ['Components', 'Hooks', 'Context', 'Redux', 'Testing', 'Performance'],
-    jobs: 'Frontend Dev · React Developer',
-    track: 'full-stack-ai',
-  },
-  {
-    cat: 'web' as Cat,
-    icon: '🚀', color: '#ffffff',
-    name: 'Next.js',
-    desc: 'Create routed React applications with Next.js App Router, server and static rendering, route handlers, caching, and deployment workflows.',
-    pills: ['App Router', 'SSR', 'SSG', 'API Routes', 'Caching', 'Deployment'],
-    jobs: 'Full Stack Dev · Frontend Dev',
-    track: 'full-stack-ai',
-  },
-  {
-    cat: 'web' as Cat,
-    icon: '🟢', color: '#6cc24a',
-    name: 'Node.js',
-    desc: 'Build server-side JavaScript services with Node.js and Express, covering middleware, REST endpoints, authentication, WebSockets, and testing.',
-    pills: ['Express', 'REST APIs', 'JWT', 'WebSockets', 'Middleware', 'Testing'],
-    jobs: 'Backend Dev · Full Stack Dev',
-    track: 'full-stack-ai',
-  },
+  ...REGISTRY_TRACKS
+    .filter(track => !['generative-ai', 'javascript'].includes(track.slug))
+    .map(track => ({
+      cat: track.cat as Cat,
+      icon: track.icon,
+      color: track.color,
+      name: track.title,
+      desc: track.description,
+      pills: registryLessons(track.slug).flatMap(lesson => lesson.tags).filter((tag, i, all) => all.indexOf(tag) === i).slice(0, 6),
+      jobs: track.roles,
+      track: track.slug,
+    })),
   ...PLANNED_TRACKS
     .filter(track => !['generative-ai', 'java', 'javascript'].includes(track.slug))
     .map(track => ({
@@ -280,11 +266,11 @@ const SKILLS = [
   { badge: 'Kotlin', title: 'Kotlin', track: 'systems-programming', desc: 'Use Kotlin language features, null safety, and coroutines across Android UI and JVM backend examples.', pills: ['Coroutines', 'Jetpack', 'Spring Boot', 'Null Safety', 'Android', 'JVM', 'Testing'] },
   { badge: 'Bash', title: 'Bash / Shell Scripting', track: 'devops-mlops', desc: 'Write maintainable shell scripts for files, processes, environment configuration, scheduled jobs, and repeatable operational tasks.', pills: ['Scripts', 'Cron Jobs', 'File Ops', 'Pipelines', 'Automation', 'Environment Variables', 'Exit Codes'] },
   // Web Dev
-  { badge: 'Web Dev', title: 'Angular', track: 'full-stack-ai', desc: 'Structure Angular applications with components, dependency injection, routing, forms, RxJS streams, and managed state.', pills: ['Components', 'Services', 'RxJS', 'NgRx', 'DI', 'Routing', 'Forms'] },
-  { badge: 'Web Dev', title: 'Django', track: 'full-stack-ai', desc: 'Build Python web applications with Django models, migrations, authentication, admin tools, REST endpoints, and background tasks.', pills: ['ORM', 'REST APIs', 'Auth', 'Celery', 'Deployment', 'Migrations', 'Admin'] },
+  { badge: 'Web Dev', title: 'Angular', desc: 'Structure Angular applications with components, dependency injection, routing, forms, RxJS streams, and managed state.', pills: ['Components', 'Services', 'RxJS', 'NgRx', 'DI', 'Routing', 'Forms'] },
+  { badge: 'Web Dev', title: 'Django', desc: 'Build Python web applications with Django models, migrations, authentication, admin tools, REST endpoints, and background tasks.', pills: ['ORM', 'REST APIs', 'Auth', 'Celery', 'Deployment', 'Migrations', 'Admin'] },
   { badge: 'Web Dev', title: 'Spring Boot', track: 'java', desc: 'Create Java services with Spring Boot controllers, dependency injection, JPA persistence, authorization, testing, and messaging integrations.', pills: ['REST', 'JPA', 'Security', 'Kafka', 'Microservices', 'Dependency Injection', 'Testing'] },
-  { badge: 'Web Dev', title: 'GraphQL', track: 'full-stack-ai', desc: 'Design typed GraphQL schemas and resolvers, then connect clients to queries, mutations, subscriptions, and federated services.', pills: ['Schema', 'Resolvers', 'Apollo Client', 'Subscriptions', 'Federation', 'Queries', 'Mutations'] },
-  { badge: 'Web Dev', title: 'PHP & Laravel', track: 'full-stack-ai', desc: 'Build PHP web applications with Laravel routes, Blade views, Eloquent models, API authentication, migrations, and queues.', pills: ['Laravel', 'Eloquent ORM', 'Blade', 'REST APIs', 'Auth', 'Migrations', 'Queues'] },
+  { badge: 'Web Dev', title: 'GraphQL', desc: 'Design typed GraphQL schemas and resolvers, then connect clients to queries, mutations, subscriptions, and federated services.', pills: ['Schema', 'Resolvers', 'Apollo Client', 'Subscriptions', 'Federation', 'Queries', 'Mutations'] },
+  { badge: 'Web Dev', title: 'PHP & Laravel', desc: 'Build PHP web applications with Laravel routes, Blade views, Eloquent models, API authentication, migrations, and queues.', pills: ['Laravel', 'Eloquent ORM', 'Blade', 'REST APIs', 'Auth', 'Migrations', 'Queues'] },
   // DevOps
   { badge: 'DevOps', title: 'Docker', track: 'devops-mlops', desc: 'Build and run container images, define multi-service environments with Compose, manage volumes and networks, and publish images to registries.', pills: ['Images', 'Containers', 'Compose', 'Registry', 'Multi-stage', 'Volumes', 'Networking'] },
   { badge: 'DevOps', title: 'Kubernetes', track: 'devops-mlops', desc: 'Deploy containerized workloads with Pods, Deployments, Services, configuration, ingress, Helm, and managed cloud clusters.', pills: ['Pods', 'Deployments', 'Helm', 'EKS/AKS/GKE', 'Ingress', 'ConfigMaps', 'Autoscaling'] },
@@ -313,7 +299,7 @@ const SKILLS = [
   { badge: 'Interview', title: 'FAANG Prep', desc: 'Practice algorithmic coding, system-design explanations, and behavioral interviews commonly used by large product-focused engineering teams.', pills: ['DSA Patterns', 'System Design', 'Behavioural', 'Coding Patterns', 'Mock Rounds', 'Algorithms', 'Communication'] },
   // Data & BI
   { badge: 'BI', title: 'Power BI & Tableau', track: 'business-intelligence', desc: 'Prepare analytical data, define measures, design interactive Power BI or Tableau reports, and communicate patterns with clear visual choices.', pills: ['Power BI', 'Tableau', 'DAX', 'Reports', 'Data Storytelling', 'Semantic Models', 'Data Refresh'] },
-  { badge: 'AI & ML', title: 'MLOps', track: 'devops-mlops', desc: 'Track experiments and model versions, package serving workflows, automate validation and release, and monitor model behavior after deployment.', pills: ['MLflow', 'Docker', 'Kubeflow', 'CI/CD', 'Model Registry', 'Model Serving', 'Drift Monitoring'] },
+  { badge: 'AI & ML', title: 'MLOps', track: 'ai-ml', desc: 'Track experiments and model versions, package serving workflows, automate validation and release, and monitor model behavior after deployment.', pills: ['MLflow', 'Docker', 'Kubeflow', 'CI/CD', 'Model Registry', 'Model Serving', 'Drift Monitoring'] },
   { badge: 'AI & ML', title: 'Mathematics for AI', track: 'mathematics', desc: 'Connect vectors, matrices, derivatives, probability, statistics, and optimization to model training and evaluation concepts.', pills: ['Linear Algebra', 'Calculus', 'Probability', 'Statistics', 'Optimization', 'Gradients', 'Information Theory'] },
   { badge: 'Engineering', title: 'Physics', track: 'physics', desc: 'Apply mechanics, waves, circuit principles, sensor measurements, and dimensional analysis to engineering and computing examples.', pills: ['Mechanics', 'Waves', 'Circuits', 'Sensors', 'Simulation', 'Measurement', 'Dimensional Analysis'] },
   { badge: 'AI & ML', title: 'AI Security', track: 'ai-security', desc: 'Identify AI-specific threats and design controls for prompts, retrieval permissions, tool execution, sensitive data, and model outputs.', pills: ['Threat Modeling', 'Prompt Injection', 'RAG Security', 'Tool Safety', 'Privacy', 'Data Poisoning', 'Red Teaming'] },

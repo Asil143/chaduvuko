@@ -25,7 +25,7 @@ import { setLessonChrome } from '@/lib/lesson-chrome'
 import { CHEAT_SHEET_FOR_PATH } from '@/lib/cheatsheet-links'
 import { SuggestFix } from '@/components/content/SuggestFix'
 import { recordLessonVisit, recordQuizPass, setLessonComplete, useProgress } from '@/lib/progress'
-import { AIML_SECTIONS } from '@/data/aiml-curriculum'
+import { AIML_SECTIONS, aimlSectionForHref } from '@/data/aiml-curriculum'
 import { SQL_CURRICULUM } from '@/data/sql-freshcart'
 import { DS_CURRICULUM } from '@/data/datascience-streampulse'
 
@@ -204,8 +204,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
   // Derive difficulty from curriculum data for SQL and AI/ML pages
   const sqlSection = sqlSlug ? SQL_CURRICULUM.find(s => s.modules.some(m => m.slug === sqlSlug)) : null
   const dsSection = dsSlug ? DS_CURRICULUM.find(s => s.modules.some(m => m.slug === dsSlug)) : null
-  const aimlSectionSlug = isAIML ? pathname.split('/')[3] : null
-  const aimlSection = aimlSectionSlug ? AIML_SECTIONS.find(s => s.slug === aimlSectionSlug) : null
+  const aimlSection = isAIML ? aimlSectionForHref(pathname) : null
   const curriculumDiff = (sqlSection?.difficulty ?? dsSection?.difficulty ?? aimlSection?.difficulty) as 'Beginner' | 'Intermediate' | 'Advanced' | undefined
   const diff = meta?.difficulty ?? curriculumDiff
   const diffStyle = diff ? difficultyColors[diff] : null

@@ -43,6 +43,9 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'bug-bounty-hunting':             () => import('@/content/cybersecurity/bug-bounty-hunting'),
   'home-lab-setup':                 () => import('@/content/cybersecurity/home-lab-setup'),
   'interview-prep-security':        () => import('@/content/cybersecurity/interview-prep-security'),
+  'soc-alert-triage':               () => import('@/content/cybersecurity/soc-alert-triage'),
+  'wireshark-packet-analysis':      () => import('@/content/cybersecurity/wireshark-packet-analysis'),
+  'digital-forensics-basics':       () => import('@/content/cybersecurity/digital-forensics-basics'),
 };
 
 const moduleMeta: Record<string, { title: string; description: string }> = {
@@ -86,6 +89,9 @@ const moduleMeta: Record<string, { title: string; description: string }> = {
   'bug-bounty-hunting':             { title: 'Bug Bounty Hunting — From Beginner to First Valid Report',    description: 'Platform selection, methodology, the reports that get paid, and getting your first payout.' },
   'home-lab-setup':                 { title: 'Building a Home Lab for Cybersecurity Practice',              description: 'Free practice environment — virtualisation, vulnerable machines, network setup, and practice path.' },
   'interview-prep-security':        { title: 'Interview Prep — 60 Complete Answers for Security Roles',     description: '60 complete answers across networking, crypto, web security, IR, compliance, and behavioural.' },
+  'soc-alert-triage':               { title: 'SOC Alert Triage and Incident Response',                      description: 'Triage SIEM alerts, map evidence to MITRE ATT&CK, and understand incident response and CERT-In reporting considerations.' },
+  'wireshark-packet-analysis':      { title: 'Packet Analysis with Wireshark',                              description: 'Use Wireshark and tshark to inspect authorised captures, apply filters, and recognise suspicious network patterns.' },
+  'digital-forensics-basics':       { title: 'Digital Forensics Basics',                                   description: 'Preserve and analyse digital evidence using sound acquisition, hashing, memory, timeline, Windows, and Linux practices.' },
 };
 
 export function generateStaticParams() {

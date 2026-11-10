@@ -1225,16 +1225,17 @@ for m, sz, vram, qual, use in quant_methods:
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
-          You understand how LLMs are built and aligned. Next: fine-tune
-          one yourself for a specific task.
+          You understand how LLMs are built and aligned. Next: the limits you
+          design around.
         </h2>
 
         <p style={S.p}>
-          Lesson 64 covered the architecture and training pipeline of LLMs
-          at a conceptual and code level. Lesson 65 makes it practical:
-          full LoRA fine-tuning walkthrough on a real dataset using HuggingFace
-          Transformers and PEFT, including when to fine-tune vs use RAG vs
-          prompt engineer, and how to evaluate the result.
+          Before you build on an LLM, you need to know what it can hold and
+          what it costs. The next lesson explains context windows, token
+          budgets, the lost-in-the-middle effect, and how model limits shape
+          the design of chat apps, RAG systems, and agents. Fine-tuning comes
+          later, once you have seen how far prompting and retrieval go without
+          it.
         </p>
 
         <div style={{
@@ -1249,20 +1250,19 @@ for m, sz, vram, qual, use in quant_methods:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 65 · Generative AI
+              Next — Lesson 62 · LLMs
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              LLM Fine-Tuning in Practice
+              Context Windows and Model Limits
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
-              When to fine-tune vs RAG vs prompt. Full LoRA fine-tuning walkthrough
-              on a real dataset using HuggingFace Transformers and PEFT.
+              Budget prompts, history, retrieved evidence, and output within a model context window.
             </p>
           </div>
-          <Link href="/learn/ai-ml/generative-ai/llm-fine-tuning" style={{
+          <Link href="/learn/ai-ml/generative-ai/context-windows-model-limits" style={{
             fontSize: 12, color: '#7b61ff', fontWeight: 700,
             border: '1px solid #7b61ff',
             padding: '7px 14px', borderRadius: 6,

@@ -1388,18 +1388,15 @@ print("customer-visible wrong answers.")`} />
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
-          You can build a RAG system. Next: get better answers
-          by engineering better prompts.
+          You can build a RAG system. Next: make it production-grade.
         </h2>
 
         <p style={S.p}>
-          RAG handles the retrieval problem — getting relevant context
-          into the LLM's window. But the quality of the generated answer
-          also depends heavily on how the prompt is structured.
-          Zero-shot, few-shot, chain-of-thought, ReAct —
-          each prompting pattern consistently improves LLM outputs
-          for different task types. Lesson 53 covers the patterns
-          that actually work in production with real before/after examples.
+          A basic RAG pipeline works in demos and fails quietly on real
+          questions: the wrong chunks are retrieved, keyword-heavy queries
+          miss, and nobody measures quality. The next lesson covers reranking,
+          hybrid dense-sparse search, query rewriting, and evaluation
+          frameworks that measure retrieval and answer quality systematically.
         </p>
 
         <div style={{
@@ -1414,21 +1411,19 @@ print("customer-visible wrong answers.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 53 · NLP
+              Next — Lesson 66 · LLM Apps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              Prompt Engineering
+              Advanced RAG — HyDE, Re-Ranking, GraphRAG
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
-              Zero-shot, few-shot, chain-of-thought, ReAct —
-              the patterns that consistently improve LLM outputs,
-              with real before/after examples for every technique.
+              Beyond naive RAG — techniques that actually work in production.
             </p>
           </div>
-          <Link href="/learn/ai-ml/nlp/prompt-engineering" style={{
+          <Link href="/learn/ai-ml/generative-ai/advanced-rag" style={{
             fontSize: 12, color: '#7b61ff', fontWeight: 700,
             border: '1px solid #7b61ff',
             padding: '7px 14px', borderRadius: 6,

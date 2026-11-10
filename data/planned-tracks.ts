@@ -1,4 +1,5 @@
 import type { TrackArea } from '@/lib/catalog/types'
+import { REGISTRY_TRACK_SLUGS } from '@/data/tracks/registry'
 
 export type PlannedTrackCategory =
   | 'itops'
@@ -745,4 +746,5 @@ export const SHELVED_TRACK_SLUGS: ReadonlySet<string> = new Set([
 ])
 
 /** Planned tracks shown on the site as "coming soon". */
-export const PLANNED_TRACKS: PlannedTrack[] = ALL_PLANNED_TRACKS.filter(track => !SHELVED_TRACK_SLUGS.has(track.slug))
+/** Plans not yet shelved and not already published as a live registry track. */
+export const PLANNED_TRACKS: PlannedTrack[] = ALL_PLANNED_TRACKS.filter(track => !SHELVED_TRACK_SLUGS.has(track.slug) && !REGISTRY_TRACK_SLUGS.has(track.slug))

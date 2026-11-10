@@ -101,4 +101,13 @@ export const DE_CURRICULUM: DESection[] = [
       { id: 47, slug: 'de-interview-questions', title: 'Interview Prep — 60 Complete Answers', description: '60 complete answers across Python, SQL, pipelines, modelling, architecture, and behavioural questions — written at senior engineer depth.', tags: ['Python for DE', 'SQL advanced', 'Pipeline design', 'Data modelling', 'Architecture', 'System design', 'Behavioural'], status: 'live', readTime: '90 min' },
     ],
   },
+  {
+    id: 7, title: 'Spark, Airflow & Lakehouse Tables', color: '#14b8a6',
+    modules: [
+      { id: 48, slug: 'spark-fundamentals-pyspark', title: 'Spark Fundamentals with PySpark', description: 'Build a mental model of distributed DataFrame processing, lazy evaluation, transformations, actions, and the Spark UI.', tags: ['PySpark DataFrames', 'Lazy evaluation', 'Transformations and actions', 'Spark UI'], status: 'live', readTime: '40 min' },
+      { id: 49, slug: 'spark-performance-tuning', title: 'Spark Performance — Partitions, Shuffles and Joins', description: 'Diagnose Spark bottlenecks by reasoning about partitions, shuffles, join strategies, skew, AQE, and caching.', tags: ['Partitions', 'Shuffles', 'Broadcast joins', 'Skew', 'AQE', 'Caching'], status: 'live', readTime: '40 min' },
+      { id: 50, slug: 'airflow-orchestration', title: 'Apache Airflow — DAGs, Scheduling and Retries', description: 'Design reliable Airflow workflows with explicit dependencies, schedules, retries, sensors, and safe task interfaces.', tags: ['DAGs', 'Operators', 'Scheduling and catchup', 'Retries', 'Idempotency', 'XCom and sensors'], status: 'live', readTime: '40 min' },
+      { id: 51, slug: 'delta-iceberg-table-formats', title: 'Delta Lake and Apache Iceberg Table Formats', description: 'Compare transactional table concepts and apply time travel, schema evolution, MERGE, and compaction safely.', tags: ['ACID tables', 'Delta Lake', 'Apache Iceberg', 'Time travel', 'Schema evolution', 'MERGE and compaction'], status: 'live', readTime: '40 min' },
+    ],
+  },
 ]

@@ -1282,7 +1282,7 @@ print("Best config across the distributed sweep:", best_config)`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 39 · Model Evaluation
+              Next — Lesson 41 · Evaluation
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

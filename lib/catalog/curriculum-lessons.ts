@@ -7,10 +7,11 @@ import { DBT_CURRICULUM } from '@/data/dbt-curriculum'
 import { SNOWFLAKE_CURRICULUM } from '@/data/snowflake-curriculum'
 import { SQL_CURRICULUM } from '@/data/sql-freshcart'
 import { DS_CURRICULUM } from '@/data/datascience-streampulse'
-import { AIML_SECTIONS } from '@/data/aiml-curriculum'
+import { AIML_SECTIONS, aimlTopicHref } from '@/data/aiml-curriculum'
 import { CYBER_MODULES, CYBER_PHASES } from '@/data/cybersecurity-curriculum'
 import { DSA_UNITS } from '@/data/dsa-curriculum'
 import { DBMS_MODULES, DBMS_SECTIONS } from '@/data/dbms-curriculum'
+import { REGISTRY_TRACKS } from '@/data/tracks/registry'
 import type { Lesson, LessonStatus } from './types'
 
 // Some curricula spell the unpublished state 'coming-soon'.
@@ -39,10 +40,7 @@ function aimlLessons(): Lesson[] {
   let order = 0
   return AIML_SECTIONS.flatMap(section =>
     section.topics.map(topic => ({
-      // Introduction topics and ml-interview-prep are served without a section prefix.
-      href: section.slug === 'introduction' || topic.slug === 'ml-interview-prep'
-        ? `/learn/ai-ml/${topic.slug}`
-        : `/learn/ai-ml/${section.slug}/${topic.slug}`,
+      href: aimlTopicHref(section, topic),
       title: topic.title,
       track: 'ai-ml',
       order: ++order,
@@ -95,4 +93,5 @@ export const curriculumLessons: Lesson[] = [
   ...cyberLessons(),
   ...dsaLessons(),
   ...dbmsLessons(),
+  ...REGISTRY_TRACKS.flatMap(track => fromSections(track.slug, track.sections)),
 ]

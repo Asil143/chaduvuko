@@ -1169,7 +1169,7 @@ print("  5. Monitor ECE weekly — recalibrate monthly or on drift alert")`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 36 · Model Evaluation
+              Next — Lesson 38 · Evaluation
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

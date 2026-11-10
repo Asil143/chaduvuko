@@ -1625,7 +1625,7 @@ for step in range(200):
               textTransform: 'uppercase' as const, color: '#7F77DD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 06
+              Next — Lesson 08 · Math
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

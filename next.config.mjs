@@ -29,6 +29,14 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    // Planned course pages that are now live tracks, and lessons merged into another lesson.
+    const promoted = ['agentic-ai', 'devops-mlops', 'javascript', 'full-stack-ai', 'analytics-engineering-data-analytics', 'operating-systems', 'generative-ai'];
+    return [
+      ...promoted.map(slug => ({ source: `/learn/track-plan/${slug}`, destination: `/learn/${slug}`, permanent: true })),
+      { source: '/learn/ai-ml/nlp/llm-agents-and-tool-use', destination: '/learn/ai-ml/generative-ai/agents-tool-use', permanent: true },
+    ];
+  },
   webpack: (config, { isServer }) => {
     config.resolve.alias = {
       ...config.resolve.alias,

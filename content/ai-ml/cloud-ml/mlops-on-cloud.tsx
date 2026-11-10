@@ -1368,7 +1368,7 @@ if __name__ == '__main__':
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 80 · Interview Prep
+              Next — Lesson 85 · Cloud ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

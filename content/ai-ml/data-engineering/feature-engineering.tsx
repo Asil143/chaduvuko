@@ -1907,7 +1907,7 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 18 · Classical ML
+              Next — Lesson 20 · Data Eng
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

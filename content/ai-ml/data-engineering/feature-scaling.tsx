@@ -1538,7 +1538,7 @@ print(f"Prediction for live request: {prediction[0]:.1f} min")
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 18 · Classical ML
+              Next — Lesson 18 · Data Eng
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -1216,7 +1216,7 @@ print(f"  English truncated: '{truncate_to_token_budget(samples['english'], 15)}
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 50 · NLP
+              Next — Lesson 59 · NLP
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

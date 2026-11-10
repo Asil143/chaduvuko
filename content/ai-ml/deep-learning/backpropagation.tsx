@@ -1165,7 +1165,7 @@ print("autograd would faithfully, and unhelpfully, report exactly that.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 43 · Deep Learning
+              Next — Lesson 45 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

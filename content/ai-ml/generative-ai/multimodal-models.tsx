@@ -1250,19 +1250,16 @@ def stage_two_verify(candidates, user_query, vlm_model):
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
-          You can build with multimodal models. Next: production RAG systems
-          that go beyond the basics.
+          You can build with multimodal models. Next: how models generate
+          images.
         </h2>
 
         <p style={S.p}>
-          You now understand the full generative AI landscape — GANs, VAEs,
-          diffusion models, LLMs, fine-tuning, and multimodal models.
-          Lesson 67 returns to RAG with production techniques:
-          reranking retrieved chunks for better precision, hybrid dense-sparse
-          search that combines semantic and keyword retrieval, and evaluation
-          frameworks that measure RAG quality systematically.
-          These are the techniques that separate toy RAG demos from
-          production systems that customers actually trust.
+          Multimodal models understand images; the next module covers models
+          that create them. You will start with GANs — a generator and a
+          discriminator trained against each other — then variational
+          autoencoders, and finally diffusion models, the technique behind
+          Stable Diffusion and most modern image generators.
         </p>
 
         <div style={{
@@ -1277,20 +1274,19 @@ def stage_two_verify(candidates, user_query, vlm_model):
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 67 · Generative AI
+              Next — Lesson 71 · Image Gen
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              Advanced RAG — Reranking, Hybrid Search and Evaluation
+              GANs — Generator vs Discriminator
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
-              Reranking retrieved chunks, hybrid dense-sparse search,
-              and the patterns that separate production RAG from toy RAG.
+              Minimax game, mode collapse, training instability, StyleGAN.
             </p>
           </div>
-          <Link href="/learn/ai-ml/generative-ai/advanced-rag" style={{
+          <Link href="/learn/ai-ml/generative-ai/gans-generator-discriminator" style={{
             fontSize: 12, color: '#7b61ff', fontWeight: 700,
             border: '1px solid #7b61ff',
             padding: '7px 14px', borderRadius: 6,

@@ -1729,7 +1729,7 @@ print(f"\nKept box indices after NMS: {kept}")   # overlapping duplicate boxes r
               textTransform: 'uppercase' as const, color: '#888888',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 10 · Programming Ecosystem
+              Next — Lesson 12 · Python
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -50,6 +50,10 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'infrastructure-as-code':       () => import('@/content/data-engineering/infrastructure-as-code'),
   'system-design-de':             () => import('@/content/data-engineering/system-design-de'),
   'de-interview-questions':       () => import('@/content/data-engineering/de-interview-questions'),
+  'spark-fundamentals-pyspark':   () => import('@/content/data-engineering/spark-fundamentals-pyspark'),
+  'spark-performance-tuning':     () => import('@/content/data-engineering/spark-performance-tuning'),
+  'airflow-orchestration':        () => import('@/content/data-engineering/airflow-orchestration'),
+  'delta-iceberg-table-formats':  () => import('@/content/data-engineering/delta-iceberg-table-formats'),
 };
 
 const moduleMeta: Record<string, { title: string; description: string }> = {
@@ -100,6 +104,10 @@ const moduleMeta: Record<string, { title: string; description: string }> = {
   'infrastructure-as-code':       { title: 'Infrastructure as Code for Data Engineers',           description: 'Provision cloud data infrastructure with Terraform.'                                           },
   'system-design-de':             { title: 'Data Engineering System Design',                      description: 'Design any data system from scratch — framework, trade-offs, capacity estimation.'            },
   'de-interview-questions':       { title: 'Interview Prep — 60 Complete Answers',                description: '60 complete answers across Python, SQL, pipelines, modelling, architecture, behavioural.'     },
+  'spark-fundamentals-pyspark':   { title: 'Spark Fundamentals with PySpark',                    description: 'Build a mental model of distributed DataFrame processing, lazy evaluation, transformations, actions, and the Spark UI.' },
+  'spark-performance-tuning':     { title: 'Spark Performance — Partitions, Shuffles and Joins', description: 'Diagnose Spark bottlenecks by reasoning about partitions, shuffles, join strategies, skew, AQE, and caching.' },
+  'airflow-orchestration':        { title: 'Apache Airflow — DAGs, Scheduling and Retries',       description: 'Design reliable Airflow workflows with explicit dependencies, schedules, retries, sensors, and safe task interfaces.' },
+  'delta-iceberg-table-formats':  { title: 'Delta Lake and Apache Iceberg Table Formats',         description: 'Compare transactional table concepts and apply time travel, schema evolution, MERGE, and compaction safely.' },
 };
 
 export function generateStaticParams() {

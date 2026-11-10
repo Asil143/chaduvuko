@@ -1476,7 +1476,7 @@ print(f"Parameter increase: {proposed_params / current_params:.1f}x")
               textTransform: 'uppercase' as const, color: '#7F77DD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 05
+              Next — Lesson 05 · Math
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

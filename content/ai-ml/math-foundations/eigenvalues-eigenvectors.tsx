@@ -1305,7 +1305,7 @@ check_recurrent_stability(W_orthogonal)
               textTransform: 'uppercase' as const, color: '#7F77DD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 07 · Math Foundations
+              Next — Lesson 07 · Math
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -1208,7 +1208,7 @@ print("already honest before it got there.")`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 38 · Model Evaluation
+              Next — Lesson 40 · Evaluation
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

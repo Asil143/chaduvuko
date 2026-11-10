@@ -1241,7 +1241,7 @@ az role assignment create --role "AzureML Data Scientist" --assignee alice@fresh
               textTransform: 'uppercase' as const, color: '#ff9900',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 77 · Cloud ML Platforms
+              Next — Lesson 82 · Cloud ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

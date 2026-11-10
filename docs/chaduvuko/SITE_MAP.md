@@ -9,11 +9,11 @@
 
 | What | Count | Where it comes from |
 |---|---:|---|
-| Published tracks | 13 (+ Projects) | `lib/catalog/tracks.ts` |
-| Published lessons | 490 | `lib/catalog` (`LIVE_LESSONS`) |
+| Published tracks | 20 (+ Projects) | `lib/catalog/tracks.ts` |
+| Published lessons | 561 | `lib/catalog` (`LIVE_LESSONS`) |
 | Hidden tracks / lessons | 1 / 3 | `hidden` flag in `lib/catalog/tracks.ts` |
 | Unpublished (`soon`) lessons | 59 | `data/*-curriculum.ts` |
-| Planned tracks (skills maps) | 11 | `data/planned-tracks.ts` |
+| Planned tracks (skills maps) | 5 | `data/planned-tracks.ts` |
 | Schools | 6 | `lib/catalog/schools.ts` |
 | Career paths | 10 | `data/career-paths.ts` |
 | Career roadmaps | 20 | `data/roadmaps/role-registry.ts` |
@@ -26,29 +26,34 @@
 flowchart LR
   root(["Chaduvuko"])
   root --> area_ai["School of AI"]
-  area_ai --> t_ai_ml["AI and Machine Learning<br/>82 lessons"]
-  area_ai -.-> p_ai["2 planned tracks"]:::planned
+  area_ai --> t_ai_ml["AI and Machine Learning<br/>85 lessons"]
+  area_ai --> t_generative_ai["Generative AI and LLM Engineering<br/>12 lessons"]
+  area_ai --> t_agentic_ai["Agentic AI and Automation<br/>10 lessons"]
   root --> area_data["School of Data"]
-  area_data --> t_data_engineering["Data Engineering<br/>51 lessons"]
+  area_data --> t_data_engineering["Data Engineering<br/>55 lessons"]
   area_data --> t_sql["SQL<br/>62 lessons"]
   area_data --> t_apache_kafka["Apache Kafka<br/>24 lessons"]
   area_data --> t_dbt["dbt<br/>20 lessons"]
   area_data --> t_snowflake["Snowflake<br/>20 lessons"]
-  area_data -.-> p_data["2 planned tracks"]:::planned
+  area_data --> t_analytics_engineering_data_analytics["Data Analytics and Statistics<br/>7 lessons"]
+  area_data -.-> p_data["1 planned tracks"]:::planned
   root --> area_programming["School of Software Engineering"]
   area_programming --> t_python["Python<br/>46 lessons"]
   area_programming --> t_html_css["HTML and CSS<br/>42 lessons"]
-  area_programming -.-> p_programming["2 planned tracks"]:::planned
+  area_programming --> t_javascript["JavaScript and TypeScript<br/>6 lessons"]
+  area_programming --> t_full_stack_ai["Full-Stack Development with AI<br/>8 lessons"]
   root --> area_cloud["School of Cloud and Platforms"]
   area_cloud --> t_cloud_data["Cloud Data Platforms<br/>22 lessons"]
-  area_cloud -.-> p_cloud["2 planned tracks"]:::planned
+  area_cloud --> t_devops_mlops["DevOps and Cloud Infrastructure<br/>10 lessons"]
+  area_cloud -.-> p_cloud["1 planned tracks"]:::planned
   root --> area_security["School of Security"]
-  area_security --> t_cybersecurity["Cybersecurity<br/>40 lessons"]
+  area_security --> t_cybersecurity["Cybersecurity<br/>43 lessons"]
   area_security -.-> p_security["2 planned tracks"]:::planned
   root --> area_cs["School of Computer Science"]
-  area_cs --> t_dsa["Data Structures and Algorithms<br/>20 lessons"]
+  area_cs --> t_dsa["Data Structures and Algorithms<br/>21 lessons"]
   area_cs --> t_dbms["DBMS<br/>20 lessons"]
   area_cs --> t_networking["Networking<br/>35 lessons"]
+  area_cs --> t_operating_systems["Operating Systems<br/>7 lessons"]
   area_cs -.-> p_cs["1 planned tracks"]:::planned
   root --> area_practice["Practice"]
   area_practice --> t_projects["Projects<br/>6 lessons"]
@@ -64,56 +69,83 @@ Ordered routes across schools, at `/learn/paths/[slug]`. Planned steps link to a
 
 | Path | School | Steps | Planned steps | Live lessons |
 |---|---|---:|---:|---:|
-| [AI Engineer](https://chaduvuko.com/learn/paths/ai-engineer) | School of AI | 7 | 1 | 128 |
-| [Agentic AI Engineer](https://chaduvuko.com/learn/paths/agentic-ai-engineer) | School of AI | 6 | 3 | 50 |
-| [Machine Learning Engineer](https://chaduvuko.com/learn/paths/ml-engineer) | School of AI | 7 | 1 | 128 |
-| [Data Engineer](https://chaduvuko.com/learn/paths/data-engineer) | School of Data | 8 | 0 | 217 |
-| [Analytics Engineer & Data Analyst](https://chaduvuko.com/learn/paths/analytics-engineer) | School of Data | 6 | 2 | 120 |
-| [Full-Stack Developer (AI-enabled)](https://chaduvuko.com/learn/paths/full-stack-ai-developer) | School of Software Engineering | 6 | 2 | 94 |
-| [Cloud & DevOps Engineer](https://chaduvuko.com/learn/paths/cloud-devops-engineer) | School of Cloud & Platforms | 6 | 2 | 70 |
-| [Cybersecurity Analyst](https://chaduvuko.com/learn/paths/cybersecurity-analyst) | School of Security | 6 | 1 | 93 |
-| [AI Security Engineer](https://chaduvuko.com/learn/paths/ai-security-engineer) | School of Security | 5 | 2 | 68 |
-| [Software Engineer (interview-ready)](https://chaduvuko.com/learn/paths/software-engineer) | School of Computer Science | 6 | 1 | 147 |
+| [AI Engineer](https://chaduvuko.com/learn/paths/ai-engineer) | School of AI | 8 | 0 | 152 |
+| [Agentic AI Engineer](https://chaduvuko.com/learn/paths/agentic-ai-engineer) | School of AI | 7 | 1 | 77 |
+| [Machine Learning Engineer](https://chaduvuko.com/learn/paths/ml-engineer) | School of AI | 8 | 0 | 154 |
+| [Data Engineer](https://chaduvuko.com/learn/paths/data-engineer) | School of Data | 10 | 0 | 219 |
+| [Analytics Engineer & Data Analyst](https://chaduvuko.com/learn/paths/analytics-engineer) | School of Data | 8 | 0 | 139 |
+| [Full-Stack Developer (AI-enabled)](https://chaduvuko.com/learn/paths/full-stack-ai-developer) | School of Software Engineering | 7 | 0 | 97 |
+| [Cloud & DevOps Engineer](https://chaduvuko.com/learn/paths/cloud-devops-engineer) | School of Cloud & Platforms | 8 | 1 | 72 |
+| [Cybersecurity Analyst](https://chaduvuko.com/learn/paths/cybersecurity-analyst) | School of Security | 6 | 1 | 87 |
+| [AI Security Engineer](https://chaduvuko.com/learn/paths/ai-security-engineer) | School of Security | 7 | 2 | 63 |
+| [Software Engineer (interview-ready)](https://chaduvuko.com/learn/paths/software-engineer) | School of Computer Science | 8 | 1 | 158 |
 
 ## Published tracks
 
 | School | Track | Overview | Modules | Lessons | Avg words / lesson |
 |---|---|---|---:|---:|---:|
-| School of AI | AI & Machine Learning | `/learn/ai-ml` | 12 | 82 | 0 |
-| School of Data | Data Engineering | `/learn/data-engineering` | 7 | 51 | 0 |
-| School of Data | SQL | `/learn/sql` | 13 | 62 | 0 |
-| School of Data | Apache Kafka | `/learn/apache-kafka` | 5 | 24 | 0 |
-| School of Data | dbt | `/learn/dbt` | 4 | 20 | 0 |
-| School of Data | Snowflake | `/learn/snowflake` | 5 | 20 | 0 |
-| School of Software Engineering | Python | `/learn/python` | 6 | 46 | 0 |
-| School of Software Engineering | HTML & CSS | `/learn/html-css` | 6 | 42 | 0 |
-| School of Cloud & Platforms | Cloud Data Platforms | `/learn/cloud-data` | 3 | 22 | 0 |
-| School of Security | Cybersecurity | `/learn/cybersecurity` | 6 | 40 | 0 |
-| School of Computer Science | Data Structures & Algorithms | `/learn/dsa` | 1 | 20 | 0 |
-| School of Computer Science | DBMS | `/learn/dbms` | 5 | 20 | 0 |
-| School of Computer Science | Networking | `/learn/networking` | 6 | 35 | 0 |
-| Practice | Projects | `/learn/projects` | 1 | 6 | 0 |
+| School of AI | AI & Machine Learning | `/learn/ai-ml` | 15 | 85 | 5,514 |
+| School of AI | Generative AI & LLM Engineering | `/learn/generative-ai` | 4 | 12 | 2,071 |
+| School of AI | Agentic AI & Automation | `/learn/agentic-ai` | 3 | 10 | 1,956 |
+| School of Data | Data Engineering | `/learn/data-engineering` | 8 | 55 | 7,443 |
+| School of Data | SQL | `/learn/sql` | 13 | 62 | 5,952 |
+| School of Data | Apache Kafka | `/learn/apache-kafka` | 5 | 24 | 9,768 |
+| School of Data | dbt | `/learn/dbt` | 4 | 20 | 8,626 |
+| School of Data | Snowflake | `/learn/snowflake` | 5 | 20 | 4,767 |
+| School of Data | Data Analytics & Statistics | `/learn/analytics-engineering-data-analytics` | 3 | 7 | 2,116 |
+| School of Software Engineering | Python | `/learn/python` | 6 | 46 | 3,958 |
+| School of Software Engineering | HTML & CSS | `/learn/html-css` | 6 | 42 | 4,326 |
+| School of Software Engineering | JavaScript & TypeScript | `/learn/javascript` | 2 | 6 | 2,189 |
+| School of Software Engineering | Full-Stack Development with AI | `/learn/full-stack-ai` | 3 | 8 | 1,778 |
+| School of Cloud & Platforms | Cloud Data Platforms | `/learn/cloud-data` | 3 | 22 | 1,257 |
+| School of Cloud & Platforms | DevOps & Cloud Infrastructure | `/learn/devops-mlops` | 4 | 10 | 2,206 |
+| School of Security | Cybersecurity | `/learn/cybersecurity` | 7 | 43 | 4,654 |
+| School of Computer Science | Data Structures & Algorithms | `/learn/dsa` | 1 | 21 | 2,996 |
+| School of Computer Science | DBMS | `/learn/dbms` | 5 | 20 | 8,600 |
+| School of Computer Science | Networking | `/learn/networking` | 6 | 35 | 6,513 |
+| School of Computer Science | Operating Systems | `/learn/operating-systems` | 2 | 7 | 1,830 |
+| Practice | Projects | `/learn/projects` | 1 | 6 | 3,577 |
 
 ### Modules in each track
 
-<details><summary><strong>AI & Machine Learning</strong> — 12 modules</summary>
+<details><summary><strong>AI & Machine Learning</strong> — 15 modules</summary>
 
 - Introduction — 2 lessons
 - Math Foundations — 7 lessons
 - Programming Ecosystem — 5 lessons
 - Data Engineering for ML — 6 lessons
-- Classical Machine Learning — 13 lessons
+- Classical Machine Learning — 15 lessons
 - Evaluation and Optimisation — 7 lessons
-- Deep Learning — 8 lessons
-- Natural Language Processing — 6 lessons
+- Deep Learning — 10 lessons
 - Computer Vision — 5 lessons
-- Generative AI — 11 lessons
+- Natural Language Processing — 2 lessons
+- Large Language Models — 4 lessons
+- LLM Applications — Prompting, RAG and Agents — 4 lessons
+- Fine-Tuning and Multimodal Models — 3 lessons
+- Generative Models for Images — 3 lessons
 - MLOps and Production — 7 lessons
 - Cloud ML Platforms — 5 lessons
 
 </details>
 
-<details><summary><strong>Data Engineering</strong> — 7 modules</summary>
+<details><summary><strong>Generative AI & LLM Engineering</strong> — 4 modules</summary>
+
+- Building with LLM APIs — 4 lessons
+- Retrieval & Vector Databases — 2 lessons
+- Quality, Safety & Operations — 4 lessons
+- Shipping LLM Features — 2 lessons
+
+</details>
+
+<details><summary><strong>Agentic AI & Automation</strong> — 3 modules</summary>
+
+- Agent Foundations — 3 lessons
+- Orchestration — 4 lessons
+- Production Agents — 3 lessons
+
+</details>
+
+<details><summary><strong>Data Engineering</strong> — 8 modules</summary>
 
 - Data Engineering Foundations — 4 lessons
 - What Even Is This? — 6 lessons
@@ -122,6 +154,7 @@ Ordered routes across schools, at `/learn/paths/[slug]`. Planned steps link to a
 - How Data Moves — 9 lessons
 - Storage & Architecture — 7 lessons
 - Quality, Governance & Production — 12 lessons
+- Spark, Airflow & Lakehouse Tables — 4 lessons
 
 </details>
 
@@ -172,6 +205,14 @@ Ordered routes across schools, at `/learn/paths/[slug]`. Planned steps link to a
 
 </details>
 
+<details><summary><strong>Data Analytics & Statistics</strong> — 3 modules</summary>
+
+- Statistics for Data — 3 lessons
+- Metrics & Experiments — 2 lessons
+- BI & Storytelling — 2 lessons
+
+</details>
+
 <details><summary><strong>Python</strong> — 6 modules</summary>
 
 - Python Foundations — 10 lessons
@@ -194,6 +235,21 @@ Ordered routes across schools, at `/learn/paths/[slug]`. Planned steps link to a
 
 </details>
 
+<details><summary><strong>JavaScript & TypeScript</strong> — 2 modules</summary>
+
+- JavaScript Foundations — 3 lessons
+- Modern JavaScript — 3 lessons
+
+</details>
+
+<details><summary><strong>Full-Stack Development with AI</strong> — 3 modules</summary>
+
+- Front End with React — 3 lessons
+- Back End & Data — 3 lessons
+- AI Features & Deployment — 2 lessons
+
+</details>
+
 <details><summary><strong>Cloud Data Platforms</strong> — 3 modules</summary>
 
 - AWS — 9 lessons
@@ -202,7 +258,16 @@ Ordered routes across schools, at `/learn/paths/[slug]`. Planned steps link to a
 
 </details>
 
-<details><summary><strong>Cybersecurity</strong> — 6 modules</summary>
+<details><summary><strong>DevOps & Cloud Infrastructure</strong> — 4 modules</summary>
+
+- Developer Essentials — 3 lessons
+- Containers — 2 lessons
+- Cloud Infrastructure — 2 lessons
+- Delivery & Operations — 3 lessons
+
+</details>
+
+<details><summary><strong>Cybersecurity</strong> — 7 modules</summary>
 
 - What Even Is This? — 6 lessons
 - How Attacks Work — 7 lessons
@@ -210,12 +275,13 @@ Ordered routes across schools, at `/learn/paths/[slug]`. Planned steps link to a
 - Offensive Security — 7 lessons
 - Defensive Security — 7 lessons
 - Career & Production — 6 lessons
+- Defensive Security — 3 lessons
 
 </details>
 
 <details><summary><strong>Data Structures & Algorithms</strong> — 1 modules</summary>
 
-- Overview — 20 lessons
+- Overview — 21 lessons
 
 </details>
 
@@ -240,6 +306,13 @@ Ordered routes across schools, at `/learn/paths/[slug]`. Planned steps link to a
 
 </details>
 
+<details><summary><strong>Operating Systems</strong> — 2 modules</summary>
+
+- Processes & Concurrency — 4 lessons
+- Memory & Storage — 3 lessons
+
+</details>
+
 <details><summary><strong>Projects</strong> — 1 modules</summary>
 
 - Overview — 6 lessons
@@ -260,13 +333,7 @@ Skills maps only; no lessons are published yet. Each page collects learner inter
 
 | School | Track | Page | Skills mapped |
 |---|---|---|---:|
-| School of AI | Generative AI & LLM Engineering | `/learn/generative-ai` | 33 |
-| School of AI | Agentic AI & Automation | `/learn/track-plan/agentic-ai` | 26 |
 | School of Data | Business Intelligence & Analytics | `/learn/track-plan/business-intelligence` | 20 |
-| School of Data | Data Analytics & Analytics Engineering | `/learn/track-plan/analytics-engineering-data-analytics` | 23 |
-| School of Software Engineering | Full-Stack Development with AI | `/learn/track-plan/full-stack-ai` | 29 |
-| School of Software Engineering | JavaScript & TypeScript | `/learn/track-plan/javascript` | 24 |
-| School of Cloud & Platforms | DevOps, Kubernetes & MLOps | `/learn/track-plan/devops-mlops` | 26 |
 | School of Cloud & Platforms | Site Reliability & Platform Engineering | `/learn/track-plan/sre-platform-engineering` | 24 |
 | School of Security | AI Security & LLM Security | `/learn/track-plan/ai-security` | 26 |
 | School of Security | Application Security & DevSecOps | `/learn/track-plan/application-security-devsecops` | 23 |
@@ -276,10 +343,10 @@ Skills maps only; no lessons are published yet. Each page collects learner inter
 
 | Check | Result |
 |---|---|
-| live lessons not built | 490 — `/learn/ai-ml/what-is-ai`, `/learn/ai-ml/ai-ml-landscape`, `/learn/ai-ml/math-foundations/vectors-matrices-tensors`, `/learn/ai-ml/math-foundations/matrix-multiplication`, `/learn/ai-ml/math-foundations/dot-product-similarity`, `/learn/ai-ml/math-foundations/eigenvalues-eigenvectors`, `/learn/ai-ml/math-foundations/derivatives-and-gradients`, `/learn/ai-ml/math-foundations/probability-distributions`, and 482 more |
+| live lessons not built | 0 — none |
 | thin live lessons | 0 — none |
-| orphan live lessons | 490 — `/learn/ai-ml/what-is-ai`, `/learn/ai-ml/ai-ml-landscape`, `/learn/ai-ml/math-foundations/vectors-matrices-tensors`, `/learn/ai-ml/math-foundations/matrix-multiplication`, `/learn/ai-ml/math-foundations/dot-product-similarity`, `/learn/ai-ml/math-foundations/eigenvalues-eigenvectors`, `/learn/ai-ml/math-foundations/derivatives-and-gradients`, `/learn/ai-ml/math-foundations/probability-distributions`, and 482 more |
-| unregistered built pages | 0 — none |
+| orphan live lessons | 0 — none |
+| unregistered built pages | 2 — `/admin`, `/auth/callback` |
 | dead internal links | 0 — none |
 
 Thin = fewer than 400 words in the main content area. Unregistered built pages such as `/admin` and `/auth/callback` are expected.

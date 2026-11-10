@@ -1147,7 +1147,7 @@ cat dvc.lock         # shows exact hash of raw.csv used to build train.parquet
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 75 · MLOps
+              Next — Lesson 80 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

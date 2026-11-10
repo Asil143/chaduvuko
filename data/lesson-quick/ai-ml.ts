@@ -1416,33 +1416,6 @@ Review: "Exactly as described"      ->`,
     },
   },
 
-  [`${A}/nlp/llm-agents-and-tool-use`]: {
-    answer: 'An agent is an LLM that can take actions, not just produce text, by calling tools (functions, APIs, code). Function calling is the reliable pattern: you define tools as JSON schemas, the model returns a structured call, your code runs it, and the result goes back for the next step.',
-    points: [
-      'The loop is: user → model picks a tool → run it → feed the result back.',
-      'JSON-schema tool definitions avoid brittle text parsing.',
-      'Production agents need loop detection and guardrails.',
-    ],
-    example: {
-      label: 'The function-calling message loop',
-      lang: 'python',
-      code: `def get_weather(city):
-    return {"seattle": "12C rain", "austin": "27C sunny"}[city.lower()]
-
-# the model returns a structured call instead of free text
-tool_call = {"name": "get_weather", "arguments": {"city": "Austin"}}
-result = get_weather(**tool_call["arguments"])
-print("tool result fed back to the model:", result)`,
-    },
-    check: {
-      question: 'Why define tools with JSON schemas for an agent?',
-      options: ['To save tokens', 'So the model returns structured calls instead of text that must be parsed', 'To encrypt them', 'They run faster'],
-      answer: 1,
-      explanation: 'Structured calls remove the fragility of parsing free-form text for arguments.',
-    },
-  },
-
-  // ── Computer vision ──────────────────────────────────────────────────────
   [`${A}/computer-vision/image-fundamentals`]: {
     answer: 'A digital image is a 3D array of pixel values: height × width × channels (RGB has 3). Before a model, images are loaded, converted to tensors (scaling 0–255 to 0–1), and normalised per channel. PyTorch expects channels-first (C, H, W).',
     points: [

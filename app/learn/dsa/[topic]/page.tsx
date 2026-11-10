@@ -30,6 +30,7 @@ const moduleMeta: Record<string, { title: string; description: string }> = {
   'greedy':              { title: 'Greedy Algorithms',            description: 'Activity selection, fractional knapsack, Huffman coding, greedy vs DP.' },
   'backtracking':        { title: 'Backtracking',                 description: 'N-Queens, rat in a maze, Sudoku solver, subset sum.' },
   'advanced':            { title: 'Advanced Topics',              description: 'Segment tree, trie, union-find, sliding window, two pointers, bit manipulation.' },
+  'interview-patterns':  { title: 'Interview Problem-Solving Patterns', description: 'Recognise common interview patterns, explain trade-offs, and practise classic placement problems in C.' },
 };
 
 export function generateStaticParams() {

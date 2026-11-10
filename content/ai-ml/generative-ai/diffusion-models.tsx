@@ -1201,18 +1201,16 @@ Weakest but fastest — good for simple style transfer.
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
-          You understand how images are generated. Next: how the largest
-          language models are built and aligned.
+          You understand how images are generated. Next: take models to
+          production.
         </h2>
 
         <p style={S.p}>
-          Diffusion models generate images by learning to reverse a noising
-          process. LLMs generate text by learning to predict the next token —
-          but at a scale and with emergent capabilities that make them
-          qualitatively different from anything before. Lesson 64 covers
-          how GPT, Claude, and Gemini are built: next-token pretraining at scale,
-          RLHF alignment, DPO, instruction tuning, and the scaling laws
-          that predict capability from compute.
+          You have now covered the main families of modern AI models. The rest
+          of the course is about running them reliably: reproducible training
+          pipelines, feature stores, experiment tracking, deployment, drift
+          monitoring, and retraining. The next lesson starts with ML pipelines
+          and feature stores.
         </p>
 
         <div style={{
@@ -1227,20 +1225,19 @@ Weakest but fastest — good for simple style transfer.
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 64 · Generative AI
+              Next — Lesson 74 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              LLMs — Pretraining, RLHF, and Scaling Laws
+              ML Pipelines and Feature Stores
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
-              How GPT, Claude, and Gemini are built. Next-token prediction
-              at scale, RLHF alignment, DPO, and the laws that predict capability.
+              Reproducible training pipelines, online/offline feature serving.
             </p>
           </div>
-          <Link href="/learn/ai-ml/generative-ai/llms-pretraining-rlhf" style={{
+          <Link href="/learn/ai-ml/mlops/ml-pipelines-feature-stores" style={{
             fontSize: 12, color: '#7b61ff', fontWeight: 700,
             border: '1px solid #7b61ff',
             padding: '7px 14px', borderRadius: 6,

@@ -1221,18 +1221,17 @@ def moderate_message(text, encoder_model, llm_client):
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
-          You can fine-tune BERT for any classification or NER task.
-          Next: fine-tune with less than 1% of the parameters.
+          You can fine-tune BERT for classification and NER. Next: models that
+          generate.
         </h2>
 
         <p style={S.p}>
-          Full fine-tuning updates all 110 million parameters of BERT.
-          For large models (7B, 13B, 70B parameters) this requires enormous
-          GPU memory and storage. PEFT (Parameter-Efficient Fine-Tuning)
-          methods like LoRA and adapters fine-tune less than 1% of parameters
-          while achieving 95% of full fine-tuning performance.
-          Lesson 51 covers LoRA, adapters, and prefix tuning —
-          how to fine-tune a 7B parameter model on a single GPU.
+          BERT is an encoder: it reads text and produces representations. The
+          models behind ChatGPT, Claude, and Gemini are decoders that generate
+          text one token at a time. The next module starts with a map of
+          generative AI, then explains how large language models are
+          pretrained and aligned, what context windows limit, and how
+          inference parameters change outputs.
         </p>
 
         <div style={{
@@ -1247,21 +1246,19 @@ def moderate_message(text, encoder_model, llm_client):
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 51 · NLP
+              Next — Lesson 60 · LLMs
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              Fine-Tuning with PEFT — LoRA and Adapters
+              What is Generative AI?
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
-              Tune less than 1% of a model's parameters and get 95% of
-              the performance. LoRA, adapters, and prefix tuning —
-              when and how to use each.
+              The taxonomy — VAEs, GANs, diffusion, LLMs — and what each generates.
             </p>
           </div>
-          <Link href="/learn/ai-ml/nlp/peft-lora-adapters" style={{
+          <Link href="/learn/ai-ml/generative-ai/what-is-generative-ai" style={{
             fontSize: 12, color: '#7b61ff', fontWeight: 700,
             border: '1px solid #7b61ff',
             padding: '7px 14px', borderRadius: 6,

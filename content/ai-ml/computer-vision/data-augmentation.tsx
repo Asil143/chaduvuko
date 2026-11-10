@@ -1063,7 +1063,7 @@ print("entire reason to use bbox_params instead of a plain torchvision Compose."
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 57 · Computer Vision
+              Next — Lesson 55 · Vision
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

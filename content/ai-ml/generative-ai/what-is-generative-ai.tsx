@@ -891,17 +891,17 @@ import torch
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
-          You understand the generative landscape. Next: the adversarial game
-          that started it all.
+          You understand the generative landscape. Next: how large language
+          models are built.
         </h2>
 
         <p style={S.p}>
-          This lesson introduced all four families at a high level.
-          The next four modules go deep on each one in turn.
-          Lesson 61 builds a GAN from scratch — generator, discriminator,
-          the adversarial training loop, and why training is so unstable.
-          Understanding GANs first builds the intuition that makes
-          VAEs, diffusion, and LLMs click into place.
+          This lesson introduced the four families at a high level. Language
+          models come first because every later module — prompting, RAG,
+          agents, and fine-tuning — builds on them. The next lesson covers
+          next-token pretraining at scale, instruction tuning, RLHF and DPO
+          alignment, and the scaling laws that predict capability. GANs, VAEs,
+          and diffusion models get their own module later in the course.
         </p>
 
         <div style={{
@@ -916,21 +916,19 @@ import torch
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 61 · Generative AI
+              Next — Lesson 61 · LLMs
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              GANs — Generator vs Discriminator
+              LLMs — Pretraining, SFT and RLHF
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
-              Two networks in adversarial competition. Mode collapse,
-              training instability, Wasserstein distance — the honest
-              account of what makes GANs hard to train.
+              How GPT-4, Llama and Gemini are actually trained.
             </p>
           </div>
-          <Link href="/learn/ai-ml/generative-ai/gans-generator-discriminator" style={{
+          <Link href="/learn/ai-ml/generative-ai/llms-pretraining-rlhf" style={{
             fontSize: 12, color: '#7b61ff', fontWeight: 700,
             border: '1px solid #7b61ff',
             padding: '7px 14px', borderRadius: 6,

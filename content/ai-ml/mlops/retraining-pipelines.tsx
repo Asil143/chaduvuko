@@ -1250,7 +1250,7 @@ print(f"Traffic: {promo.split.challenger_pct:.0%} challenger / "
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 74 · MLOps
+              Next — Lesson 79 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

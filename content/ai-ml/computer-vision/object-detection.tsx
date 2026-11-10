@@ -1140,7 +1140,7 @@ for m in pick_model(latency_budget_ms=100, min_map=50.0):
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 58 · Computer Vision
+              Next — Lesson 56 · Vision
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

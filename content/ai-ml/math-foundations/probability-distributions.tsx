@@ -1594,7 +1594,7 @@ print(f"Expected lift: {lift.mean()*100:.2f}%  "
               textTransform: 'uppercase' as const, color: '#7F77DD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 07
+              Next — Lesson 09 · Math
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -1202,16 +1202,18 @@ print(f"\nCurrently serving prod: {registry.channels['complaint_classifier:prod'
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
-          You can prompt any LLM effectively. Next: build LLMs
-          that use tools autonomously to complete multi-step tasks.
+          You can prompt any LLM effectively. Next: ground answers in your own
+          documents.
         </h2>
 
         <p style={S.p}>
-          Lesson 53 showed ReAct as a prompting pattern — manually implemented
-          in Python. Lesson 54 covers LLM Agents properly:
-          function calling (structured tool use), memory across turns,
-          multi-agent coordination, and the frameworks (LangChain, LlamaIndex)
-          that make building agents practical in production.
+          Good prompts cannot give a model knowledge it does not have — your
+          company policies, last week&apos;s data, or a private product
+          catalogue. Retrieval-Augmented Generation (RAG) fixes that by
+          retrieving relevant passages from a vector database and placing them
+          in the prompt. The next lesson builds a complete RAG pipeline and
+          uses the prompting patterns from this lesson to structure the final
+          answer.
         </p>
 
         <div style={{
@@ -1226,20 +1228,19 @@ print(f"\nCurrently serving prod: {registry.channels['complaint_classifier:prod'
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 54 · NLP
+              Next — Lesson 65 · LLM Apps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              LLM Agents and Tool Use
+              RAG — Retrieval-Augmented Generation
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
-              Function calling, memory, multi-agent coordination,
-              and the architecture behind every production AI agent.
+              Vector stores, chunking, retrieval, re-ranking — build a production RAG system.
             </p>
           </div>
-          <Link href="/learn/ai-ml/nlp/llm-agents-and-tool-use" style={{
+          <Link href="/learn/ai-ml/nlp/rag-retrieval-augmented-generation" style={{
             fontSize: 12, color: '#7b61ff', fontWeight: 700,
             border: '1px solid #7b61ff',
             padding: '7px 14px', borderRadius: 6,

@@ -13,7 +13,7 @@ const FOUNDATION_LESSONS = [
   { href: '/learn/foundations/python', title: 'Python for Data Engineers' },
 ]
 
-type PhaseFilter = 'all' | '1' | '2' | '3' | '4' | '5' | '6'
+type PhaseFilter = 'all' | '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
 interface Module {
   num: string
@@ -61,7 +61,7 @@ export default function DataEngineeringTrack() {
   return (
     <LearnLayout
       title="Data Engineering"
-      description="A structured Data Engineering course: four foundation lessons, then 47 core lessons from first pipelines to production patterns."
+      description="A structured Data Engineering course: four foundation lessons, then 51 core lessons from first pipelines to production patterns."
       section="Data Engineering"
       readTime="Self-paced"
       updatedAt="November 2026"
@@ -177,7 +177,7 @@ export default function DataEngineeringTrack() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              Core curriculum: 47 lessons.
+              Core curriculum: 51 lessons.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
               Follow in order. Each module builds on the last. Every concept is
@@ -187,7 +187,7 @@ export default function DataEngineeringTrack() {
 
           {/* Phase filter tabs */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {(['all', '1', '2', '3', '4', '5', '6'] as PhaseFilter[]).map((f) => {
+            {(['all', '1', '2', '3', '4', '5', '6', '7'] as PhaseFilter[]).map((f) => {
               const col = f === 'all' ? 'var(--accent)' : phaseColors[parseInt(f)]
               const isActive = activePhase === f
               return (

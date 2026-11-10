@@ -1,5 +1,6 @@
 import type { Track } from './types'
 import { PLANNED_TRACKS } from '@/data/planned-tracks'
+import { REGISTRY_TRACKS } from '@/data/tracks/registry'
 
 const LIVE_TRACKS: Track[] = [
   { slug: 'data-engineering', title: 'Data Engineering',             area: 'data',        indexHref: '/learn/data-engineering', urlPrefixes: ['/learn/what-is-data-engineering', '/learn/foundations'] },
@@ -19,6 +20,7 @@ const LIVE_TRACKS: Track[] = [
     slug: 'data-science', title: 'Data Science', area: 'ai', indexHref: '/learn/data-science',
     hidden: { reason: 'Only 3 of 53 planned lessons are published; AI & Machine Learning covers the same ground until the track is complete.', since: '2026-11-09' },
   },
+  ...REGISTRY_TRACKS.map((track): Track => ({ slug: track.slug, title: track.title, area: track.area, indexHref: `/learn/${track.slug}` })),
   { slug: 'projects',         title: 'Projects',                     area: 'practice',    indexHref: '/learn/projects' },
 ]
 

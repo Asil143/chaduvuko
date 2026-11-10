@@ -199,10 +199,6 @@
   "kind": "text",
   "text": "challenger MAE 7.4 R2 0.83\npromote to shadow: True"
  },
- "/learn/ai-ml/nlp/llm-agents-and-tool-use": {
-  "kind": "text",
-  "text": "tool result fed back to the model: 27C sunny"
- },
  "/learn/ai-ml/nlp/peft-lora-adapters": {
   "kind": "text",
   "text": "full fine-tune: 16,777,216 params\nLoRA:           65,536 params (0.39%)"

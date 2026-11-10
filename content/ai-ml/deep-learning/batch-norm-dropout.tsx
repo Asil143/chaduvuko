@@ -1263,18 +1263,17 @@ print("incident that paged the on-call engineer in the first place.")`} />
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
-          You can train deep MLPs reliably. Next: convolutional networks for images.
+          You can train deep MLPs reliably. Next: rebuild them in PyTorch.
         </h2>
 
         <p style={S.p}>
-          The MLP you have built is a general-purpose network — it works on
-          tabular data, but it is not the right architecture for images.
-          Images have spatial structure: nearby pixels are related, patterns
-          appear at different positions in the image. A fully connected layer
-          treats every pixel independently and ignores this structure.
-          Convolutional Neural Networks (CNNs) are designed specifically
-          to exploit spatial structure — they are the backbone of every
-          image classification, object detection, and medical imaging system.
+          You built every piece by hand in NumPy, which is the best way to
+          understand it and the worst way to ship it. Real projects use a
+          framework that computes gradients for you, runs on GPUs, and loads
+          data efficiently. The next lesson introduces PyTorch — tensors,
+          autograd, nn.Module, and DataLoader. After that you will write a
+          complete training loop, then move on to convolutional networks for
+          images.
         </p>
 
         <div style={{
@@ -1289,20 +1288,19 @@ print("incident that paged the on-call engineer in the first place.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 43 · Deep Learning
+              Next — Lesson 48 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              Convolutional Neural Networks — Image Classification
+              PyTorch Fundamentals — Tensors, Autograd and Modules
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
-              Filters, feature maps, pooling, and how CNNs learn to recognise
-              objects at any position in an image.
+              Tensors, devices, autograd, nn.Module and DataLoader — the building blocks of every PyTorch model.
             </p>
           </div>
-          <Link href="/learn/ai-ml/deep-learning/cnns-image-classification" style={{
+          <Link href="/learn/ai-ml/deep-learning/pytorch-fundamentals" style={{
             fontSize: 12, color: '#7b61ff', fontWeight: 700,
             border: '1px solid #7b61ff',
             padding: '7px 14px', borderRadius: 6,

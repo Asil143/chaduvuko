@@ -219,4 +219,15 @@ export const DSA_UNITS = [
     status: 'live' as const,
     color: '#8b5cf6',
   },
+  {
+    number: '20',
+    title: 'Interview Problem-Solving Patterns',
+    description:
+      'Recognise recurring interview problem shapes, choose an efficient approach, explain your reasoning, and practise classic solutions in C for placement rounds and online assessments.',
+    topics: ['Pattern Recognition', 'Problem-Solving Framework', 'Classic Interview Problems', 'Dry Runs', '4-Week Practice Plan'],
+    time: '180 min',
+    slug: 'interview-patterns',
+    status: 'live' as const,
+    color: '#8b5cf6',
+  },
 ]

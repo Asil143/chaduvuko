@@ -1148,7 +1148,7 @@ print("standard, near-universal steps between model output and production use.")
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 59 · Computer Vision
+              Next — Lesson 57 · Vision
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

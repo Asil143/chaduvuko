@@ -1200,7 +1200,7 @@ jobs:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 71 · MLOps
+              Next — Lesson 76 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

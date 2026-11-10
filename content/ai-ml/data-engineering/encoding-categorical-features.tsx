@@ -1528,7 +1528,7 @@ new_restaurant_order = [[3.2, 7.0, 15.0, 210.0, 'Cloud Kitchen 47', 'Austin', 'l
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 19 · Data Engineering for ML
+              Next — Lesson 19 · Data Eng
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

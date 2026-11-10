@@ -1365,7 +1365,7 @@ prediction = loaded_pipeline.predict(new_order_df)`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 15 · Data Engineering for ML
+              Next — Lesson 15 · Data Eng
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

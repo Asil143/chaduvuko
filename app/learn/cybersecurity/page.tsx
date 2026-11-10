@@ -23,7 +23,7 @@ export default function CybersecurityTrack() {
   return (
     <LearnLayout
       title="Cybersecurity"
-      description="From zero to job-ready security engineer — 40 lessons, no prerequisites"
+      description="From zero to job-ready security engineer — 43 lessons, no prerequisites"
       section="Cybersecurity"
       readTime="Self-paced"
       updatedAt="May 2026"

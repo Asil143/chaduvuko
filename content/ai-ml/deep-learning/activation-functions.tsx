@@ -1094,7 +1094,7 @@ print("network capacity is much smaller than the parameter count suggests.")`} /
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 44 · Deep Learning
+              Next — Lesson 46 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

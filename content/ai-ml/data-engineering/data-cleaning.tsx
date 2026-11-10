@@ -2020,7 +2020,7 @@ print("Saved to /tmp/doordash_clean.parquet")`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 17 · Data Engineering
+              Next — Lesson 17 · Data Eng
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

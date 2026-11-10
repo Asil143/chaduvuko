@@ -4,6 +4,8 @@ export type Topic = {
   slug: string
   title: string
   status: TopicStatus
+  /** URL segment when the topic is taught in a different section than the one it was published under. */
+  urlSection?: string
 }
 
 export type Section = {
@@ -98,6 +100,8 @@ export const AIML_SECTIONS: Section[] = [
       { slug: 'lightgbm',            title: 'LightGBM — Fast Gradient Boosting',        status: 'live' },
       { slug: 'kmeans-clustering',   title: 'K-Means Clustering',                       status: 'live' },
       { slug: 'pca',                 title: 'Principal Component Analysis',             status: 'live' },
+      { slug: 'time-series-forecasting', title: 'Time Series Forecasting', status: 'live' },
+      { slug: 'recommender-systems', title: 'Recommender Systems', status: 'live' },
     ],
   },
   {
@@ -130,30 +134,16 @@ export const AIML_SECTIONS: Section[] = [
       { slug: 'activation-functions', title: 'Activation Functions and Loss Functions',     status: 'live' },
       { slug: 'optimisers',           title: 'Optimisers — SGD, Adam, AdamW',              status: 'live' },
       { slug: 'batch-norm-dropout',   title: 'Batch Normalisation and Dropout',             status: 'live' },
+      { slug: 'pytorch-fundamentals', title: 'PyTorch Fundamentals — Tensors, Autograd and Modules', status: 'live' },
+      { slug: 'pytorch-training-loop', title: 'Training Neural Networks in PyTorch — The Training Loop', status: 'live' },
       { slug: 'cnns-image-classification', title: 'CNNs — Shopify Product Image Classification',  status: 'live' },
       { slug: 'rnns-and-lstms',       title: 'RNNs and LSTMs — Sequence Modelling',        status: 'live' },
       { slug: 'transformers-and-attention',         title: 'Transformers and Self-Attention',             status: 'live' },
     ],
   },
   {
-    slug: 'nlp',
-    num: '08',
-    title: 'Natural Language Processing',
-    shortTitle: 'NLP',
-    color: '#D4537E',
-    difficulty: 'Advanced',
-    topics: [
-      { slug: 'tokenisation-and-embeddings',       title: 'Tokenisation and Word Embeddings',      status: 'live' },
-      { slug: 'bert-encoder-family',    title: 'BERT and the Encoder-Only Family',       status: 'live' },
-      { slug: 'peft-lora-adapters',        title: 'Fine-Tuning with PEFT — LoRA and Adapters', status: 'live' },
-      { slug: 'rag-retrieval-augmented-generation',                title: 'RAG — Retrieval-Augmented Generation',   status: 'live' },
-      { slug: 'prompt-engineering', title: 'Prompt Engineering',                     status: 'live' },
-      { slug: 'llm-agents-and-tool-use',         title: 'LLM Agents and Tool Use',                status: 'live' },
-    ],
-  },
-  {
     slug: 'computer-vision',
-    num: '09',
+    num: '08',
     title: 'Computer Vision',
     shortTitle: 'Vision',
     color: '#0F6E56',
@@ -167,29 +157,74 @@ export const AIML_SECTIONS: Section[] = [
     ],
   },
   {
-    slug: 'generative-ai',
+    slug: 'nlp',
+    num: '09',
+    title: 'Natural Language Processing',
+    shortTitle: 'NLP',
+    color: '#D4537E',
+    difficulty: 'Advanced',
+    topics: [
+      { slug: 'tokenisation-and-embeddings',       title: 'Tokenisation and Word Embeddings',      status: 'live' },
+      { slug: 'bert-encoder-family',    title: 'BERT and the Encoder-Only Family',       status: 'live' },
+    ],
+  },
+  {
+    slug: 'large-language-models',
     num: '10',
-    title: 'Generative AI',
-    shortTitle: 'GenAI',
+    title: 'Large Language Models',
+    shortTitle: 'LLMs',
     color: '#9C27B0',
     difficulty: 'Advanced',
     topics: [
-      { slug: 'what-is-generative-ai', title: 'What is Generative AI?',                  status: 'live' },
-      { slug: 'gans-generator-discriminator',                  title: 'GANs — Generator vs Discriminator',        status: 'live' },
-      { slug: 'variational-autoencoders',                  title: 'Variational Autoencoders',                 status: 'live' },
-      { slug: 'diffusion-models',      title: 'Diffusion Models and Stable Diffusion',    status: 'live' },
-      { slug: 'llms-pretraining-rlhf',                  title: 'LLMs — Pretraining, RLHF and Scaling Laws', status: 'live' },
-      { slug: 'context-windows-model-limits', title: 'Context Windows and Model Limits', status: 'live' },
-      { slug: 'inference-parameters-model-selection', title: 'Inference Parameters and Model Selection', status: 'live' },
-      { slug: 'llm-fine-tuning',       title: 'LLM Fine-Tuning in Practice',              status: 'live' },
-      { slug: 'multimodal-models',            title: 'Multimodal Models — CLIP and LLaVA',       status: 'live' },
-      { slug: 'advanced-rag',          title: 'Advanced RAG',                              status: 'live' },
-      { slug: 'agents-tool-use',                title: 'Agents and Tool Use',                       status: 'live' },
+      { slug: 'what-is-generative-ai', title: 'What is Generative AI?',                  status: 'live', urlSection: 'generative-ai' },
+      { slug: 'llms-pretraining-rlhf',                  title: 'LLMs — Pretraining, RLHF and Scaling Laws', status: 'live', urlSection: 'generative-ai' },
+      { slug: 'context-windows-model-limits', title: 'Context Windows and Model Limits', status: 'live', urlSection: 'generative-ai' },
+      { slug: 'inference-parameters-model-selection', title: 'Inference Parameters and Model Selection', status: 'live', urlSection: 'generative-ai' },
+    ],
+  },
+  {
+    slug: 'llm-applications',
+    num: '11',
+    title: 'LLM Applications — Prompting, RAG and Agents',
+    shortTitle: 'LLM Apps',
+    color: '#7B61FF',
+    difficulty: 'Advanced',
+    topics: [
+      { slug: 'prompt-engineering', title: 'Prompt Engineering',                     status: 'live', urlSection: 'nlp' },
+      { slug: 'rag-retrieval-augmented-generation',                title: 'RAG — Retrieval-Augmented Generation',   status: 'live', urlSection: 'nlp' },
+      { slug: 'advanced-rag',          title: 'Advanced RAG',                              status: 'live', urlSection: 'generative-ai' },
+      { slug: 'agents-tool-use',                title: 'Agents and Tool Use',                       status: 'live', urlSection: 'generative-ai' },
+    ],
+  },
+  {
+    slug: 'fine-tuning-multimodal',
+    num: '12',
+    title: 'Fine-Tuning and Multimodal Models',
+    shortTitle: 'Fine-Tuning',
+    color: '#C2185B',
+    difficulty: 'Advanced',
+    topics: [
+      { slug: 'peft-lora-adapters',        title: 'Fine-Tuning with PEFT — LoRA and Adapters', status: 'live', urlSection: 'nlp' },
+      { slug: 'llm-fine-tuning',       title: 'LLM Fine-Tuning in Practice',              status: 'live', urlSection: 'generative-ai' },
+      { slug: 'multimodal-models',            title: 'Multimodal Models — CLIP and LLaVA',       status: 'live', urlSection: 'generative-ai' },
+    ],
+  },
+  {
+    slug: 'image-generation',
+    num: '13',
+    title: 'Generative Models for Images',
+    shortTitle: 'Image Gen',
+    color: '#AB47BC',
+    difficulty: 'Advanced',
+    topics: [
+      { slug: 'gans-generator-discriminator',                  title: 'GANs — Generator vs Discriminator',        status: 'live', urlSection: 'generative-ai' },
+      { slug: 'variational-autoencoders',                  title: 'Variational Autoencoders',                 status: 'live', urlSection: 'generative-ai' },
+      { slug: 'diffusion-models',      title: 'Diffusion Models and Stable Diffusion',    status: 'live', urlSection: 'generative-ai' },
     ],
   },
   {
     slug: 'mlops',
-    num: '11',
+    num: '14',
     title: 'MLOps and Production',
     shortTitle: 'MLOps',
     color: '#639922',
@@ -206,7 +241,7 @@ export const AIML_SECTIONS: Section[] = [
   },
   {
     slug: 'cloud-ml',
-    num: '12',
+    num: '15',
     title: 'Cloud ML Platforms',
     shortTitle: 'Cloud ML',
     color: '#4285f4',
@@ -220,6 +255,17 @@ export const AIML_SECTIONS: Section[] = [
     ],
   },
 ]
+
+/** Public URL of a topic; introduction topics and the interview guide have no section prefix. */
+export function aimlTopicHref(section: Section, topic: Topic): string {
+  if (section.slug === 'introduction' || topic.slug === 'ml-interview-prep') return `/learn/ai-ml/${topic.slug}`
+  return `/learn/ai-ml/${topic.urlSection ?? section.slug}/${topic.slug}`
+}
+
+/** Section that teaches the topic served at href, regardless of the URL segment it was published under. */
+export function aimlSectionForHref(href: string): Section | undefined {
+  return AIML_SECTIONS.find(section => section.topics.some(topic => aimlTopicHref(section, topic) === href))
+}
 
 export function getSectionBySlug(slug: string): Section | undefined {
   return AIML_SECTIONS.find((s) => s.slug === slug)

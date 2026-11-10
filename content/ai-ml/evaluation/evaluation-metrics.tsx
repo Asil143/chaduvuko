@@ -1357,7 +1357,7 @@ for k, v in screening_week.items():
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 35 · Model Evaluation
+              Next — Lesson 37 · Evaluation
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

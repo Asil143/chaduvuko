@@ -78,7 +78,7 @@ export const TOPIC_LESSONS: Record<string, string[]> = {
   prompt: [`${L}/ai-ml/nlp/prompt-engineering`],
   rag: [`${L}/ai-ml/nlp/rag-retrieval-augmented-generation`, `${L}/ai-ml/generative-ai/advanced-rag`],
   finetuning: [`${L}/ai-ml/nlp/peft-lora-adapters`, `${L}/ai-ml/generative-ai/llm-fine-tuning`, `${L}/ai-ml/generative-ai/llms-pretraining-rlhf`],
-  agents: [`${L}/ai-ml/nlp/llm-agents-and-tool-use`, `${L}/ai-ml/generative-ai/agents-tool-use`],
+  agents: [`${L}/ai-ml/generative-ai/agents-tool-use`, `${L}/agentic-ai/what-is-an-ai-agent`],
   multimodal: [`${L}/ai-ml/generative-ai/multimodal-models`],
   mlops: [`${L}/ai-ml/mlops/experiment-tracking`, `${L}/ai-ml/mlops/model-deployment`, `${L}/ai-ml/mlops/model-monitoring`, `${L}/ai-ml/mlops/retraining-pipelines`],
   mlops_ai: [`${L}/ai-ml/mlops/model-deployment`, `${L}/ai-ml/mlops/model-monitoring`],

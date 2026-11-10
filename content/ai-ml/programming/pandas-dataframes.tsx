@@ -1684,7 +1684,7 @@ y = df['delivery_time'].to_numpy()
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 11 · Data Engineering
+              Next — Lesson 13 · Python
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

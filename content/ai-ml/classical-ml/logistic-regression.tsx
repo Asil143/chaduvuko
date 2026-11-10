@@ -1692,7 +1692,7 @@ print(f"\nNew order prediction: {pred} (P(late)={p_late:.3f})")`} />
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 21 · Classical ML
+              Next — Lesson 24 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -1190,20 +1190,15 @@ print("""
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
-          You can fine-tune any model efficiently. Next: give any LLM
-          access to your own documents.
+          You understand LoRA and adapters. Next: fine-tune an LLM end to end.
         </h2>
 
         <p style={S.p}>
-          Fine-tuning teaches a model new behaviour patterns from labelled data.
-          But what if you want the model to answer questions about documents
-          it has never seen — your company's internal knowledge base,
-          a legal corpus, a product catalogue? Fine-tuning cannot help here —
-          the model still cannot access documents not in its weights.
-          Retrieval-Augmented Generation (RAG) solves this by combining
-          a retriever (find relevant documents from a vector database)
-          with a generator (produce an answer grounded in those documents).
-          Lesson 52 builds a complete RAG pipeline for a Stripe knowledge base.
+          This lesson explained how parameter-efficient methods work. The next
+          lesson makes it practical: a complete LoRA fine-tuning walkthrough
+          on a real dataset with Hugging Face Transformers and PEFT, including
+          when to fine-tune instead of using RAG or prompting, and how to
+          evaluate the result.
         </p>
 
         <div style={{
@@ -1218,20 +1213,19 @@ print("""
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 52 · NLP
+              Next — Lesson 69 · Fine-Tuning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              RAG — Retrieval-Augmented Generation
+              Fine-Tuning LLMs — Full, LoRA, QLoRA
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
-              Vector databases, semantic search, chunking strategies,
-              and the full RAG pipeline from document to answer.
+              When to fine-tune, how to prepare data, how to evaluate.
             </p>
           </div>
-          <Link href="/learn/ai-ml/nlp/rag-retrieval-augmented-generation" style={{
+          <Link href="/learn/ai-ml/generative-ai/llm-fine-tuning" style={{
             fontSize: 12, color: '#7b61ff', fontWeight: 700,
             border: '1px solid #7b61ff',
             padding: '7px 14px', borderRadius: 6,

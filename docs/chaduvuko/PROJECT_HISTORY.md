@@ -182,6 +182,21 @@ Recovered Library content shows a Chaduvuko practice product called **Pipeline P
 - Lesson URLs did not change (`/learn/foundations/*`, `/learn/what-is-data-engineering`, `/learn/aws|azure|gcp/*`), so saved progress, links, and SEO are kept and no redirects are needed. Tracks own extra URL prefixes via `Track.urlPrefixes` so the header highlights the right course.
 - Career path milestones now select these lessons by `sections`. Live courses: 16 → 14.
 
+## November 9, 2026 — Fixed the career path lesson audit (all 10 findings)
+
+- New registry-driven courses (`data/tracks/registry.ts`, one generic index + lesson route per course, lessons in `content/<course>/` built from `components/content/LessonKit.tsx`):
+  - Generative AI & LLM Engineering (12): LLM APIs, tokens/pricing, structured outputs, tool calling, embeddings, vector databases, evaluation, guardrails, tracing, cost/latency, frameworks, shipping with FastAPI.
+  - Agentic AI & Automation (10): agent loop, state/memory, planning, LangGraph, human-in-the-loop, MCP, multi-agent, evaluation, security, capstone.
+  - DevOps & Cloud Infrastructure (10): Linux, Bash, Git/GitHub, Docker, Compose, cloud IAM/VPC, Terraform, GitHub Actions, Kubernetes, monitoring.
+  - JavaScript & TypeScript (6); Full-Stack Development with AI (8): React, Next.js, Express, Postgres/Prisma, auth, AI features, deployment.
+  - Data Analytics & Statistics (7): statistics, hypothesis tests, metrics, A/B testing, BI, storytelling.
+  - Operating Systems (7, new course).
+- These planned tracks are removed from `PLANNED_TRACKS` automatically (`REGISTRY_TRACK_SLUGS`); `/learn/track-plan/<slug>` redirects to `/learn/<slug>`.
+- Existing courses: DE adds "Spark, Airflow & Lakehouse Tables" (4 lessons); DSA adds unit 20 "Interview Problem-Solving Patterns"; Cybersecurity adds SOC triage, Wireshark packet analysis, and digital forensics; AI/ML adds PyTorch fundamentals, PyTorch training loop, time series forecasting, and recommender systems.
+- AI/ML reordered without changing URLs (`Topic.urlSection`): Deep Learning → Computer Vision → NLP → Large Language Models → LLM Applications (prompting → RAG → advanced RAG → agents) → Fine-Tuning & Multimodal → Generative Models for Images → MLOps → Cloud ML. The AI/ML index now derives numbering and sections from `data/aiml-curriculum.ts`. Duplicate lesson `nlp/llm-agents-and-tool-use` removed and redirected to `generative-ai/agents-tool-use`.
+- Career paths rewired: Advanced Python for AI paths, a shared Developer essentials milestone (Linux, Git, Docker), Spark/Airflow for DE, stats/A-B testing for ML and analytics, DevOps-first Cloud & DevOps path, OS + DSA patterns for Software Engineer, and networking limited to non-overlapping modules for security paths.
+- Details: `docs/chaduvuko/CAREER_PATH_LESSON_AUDIT.md` (section "Resolution").
+
 ## Ongoing rules
 - Keep StudyX Overseas separate.
 - Chaduvuko remains the primary EdTech project.

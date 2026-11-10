@@ -24,6 +24,7 @@ const LESSONS: Record<string, React.ComponentType> = {
   'greedy':              dynamic(() => import('@/content/dsa/greedy')),
   'backtracking':        dynamic(() => import('@/content/dsa/backtracking')),
   'advanced':            dynamic(() => import('@/content/dsa/advanced')),
+  'interview-patterns':  dynamic(() => import('@/content/dsa/interview-patterns')),
 }
 
 export function DsaLesson({ slug }: { slug: string }) {

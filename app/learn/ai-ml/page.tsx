@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import { AIML_SECTIONS, aimlTopicHref } from '@/data/aiml-curriculum'
 
-type SectionFilter = 'all' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12'
+type SectionFilter = string
 
 interface Module {
   num: string
@@ -18,37 +19,14 @@ interface Module {
   color: string
 }
 
-const sectionColors: Record<number, string> = {
-  1:  '#00e676',
-  2:  '#7F77DD',
-  3:  '#a0a0b0',
-  4:  '#1D9E75',
-  5:  '#378ADD',
-  6:  '#BA7517',
-  7:  '#D85A30',
-  8:  '#D4537E',
-  9:  '#0F6E56',
-  10: '#9C27B0',
-  11: '#639922',
-  12: '#4285f4',
-}
+const sectionColors: Record<number, string> = Object.fromEntries(AIML_SECTIONS.map((section, i) => [i + 1, section.color]))
 
-const sectionInfo = [
-  { id: 1,  title: 'Introduction',               difficulty: 'Beginner'     },
-  { id: 2,  title: 'Math Foundations',            difficulty: 'Intermediate' },
-  { id: 3,  title: 'Programming Ecosystem',       difficulty: 'Beginner'     },
-  { id: 4,  title: 'Data Engineering for ML',     difficulty: 'Intermediate' },
-  { id: 5,  title: 'Classical Machine Learning',  difficulty: 'Intermediate' },
-  { id: 6,  title: 'Evaluation and Optimisation', difficulty: 'Intermediate' },
-  { id: 7,  title: 'Deep Learning',               difficulty: 'Advanced'     },
-  { id: 8,  title: 'Natural Language Processing', difficulty: 'Advanced'     },
-  { id: 9,  title: 'Computer Vision',             difficulty: 'Advanced'     },
-  { id: 10, title: 'Generative AI',               difficulty: 'Advanced'     },
-  { id: 11, title: 'MLOps and Production',        difficulty: 'Advanced'     },
-  { id: 12, title: 'Cloud ML Platforms',          difficulty: 'Intermediate' },
-]
+const sectionInfo = AIML_SECTIONS.map((section, i) => ({ id: i + 1, title: section.title, difficulty: section.difficulty }))
 
-const modules: Module[] = [
+/** Hand-written card copy; numbering, section and colour come from AIML_SECTIONS so the order has one source of truth. */
+type ModuleDetail = Pick<Module, 'title' | 'readTime' | 'description' | 'topics'> & { href: string; num?: string; section?: number; color?: string; status?: Module['status'] }
+
+const moduleDetails: ModuleDetail[] = [
   // ── Section 1 — Introduction ──────────────────────────────────────────────
   {
     num: '01', section: 1, color: sectionColors[1], status: 'live',
@@ -488,14 +466,6 @@ const modules: Module[] = [
     description: 'Zero-shot, few-shot, chain-of-thought, ReAct — the patterns that consistently improve LLM outputs. With real before/after examples for every technique.',
     topics: ['Zero-shot', 'Few-shot', 'CoT', 'ReAct'],
   },
-  {
-    num: '54', section: 8, color: sectionColors[8], status: 'live',
-    readTime: '36–46 min',
-    href: '/learn/ai-ml/nlp/llm-agents-and-tool-use',
-    title: 'LLM Agents and Tool Use',
-    description: 'When LLMs call functions, search the web, write and run code, and plan multi-step tasks. The architecture behind every AI agent.',
-    topics: ['Agents', 'Tool use', 'Function calling', 'Planning'],
-  },
 
   // ── Section 9 — Computer Vision ──────────────────────────────────────────
   {
@@ -712,7 +682,54 @@ const modules: Module[] = [
     description: '50 complete answers covering classical ML, deep learning, system design, coding rounds, and behavioural questions — written at senior engineer depth.',
     topics: ['Interview', 'Classical ML', 'DL', 'System design', 'Behavioural'],
   },
+  {
+    readTime: '35–45 min',
+    href: '/learn/ai-ml/deep-learning/pytorch-fundamentals',
+    title: 'PyTorch Fundamentals — Tensors, Autograd and Modules',
+    description: 'Tensors, devices, autograd, nn.Module and DataLoader — the building blocks you will use in every PyTorch model.',
+    topics: ['Tensors', 'Autograd', 'nn.Module', 'DataLoader'],
+  },
+  {
+    readTime: '40–50 min',
+    href: '/learn/ai-ml/deep-learning/pytorch-training-loop',
+    title: 'Training Neural Networks in PyTorch — The Training Loop',
+    description: 'Write a complete training loop with validation, early stopping and checkpointing, and learn what each line does.',
+    topics: ['Training loop', 'Validation', 'Early stopping', 'Checkpoints'],
+  },
+  {
+    readTime: '40–50 min',
+    href: '/learn/ai-ml/classical-ml/time-series-forecasting',
+    title: 'Time Series Forecasting',
+    description: 'Trend, seasonality, lag features, time-based splits, ARIMA and gradient boosting, with honest backtesting.',
+    topics: ['Seasonality', 'Lag features', 'ARIMA', 'Backtesting'],
+  },
+  {
+    readTime: '40–50 min',
+    href: '/learn/ai-ml/classical-ml/recommender-systems',
+    title: 'Recommender Systems',
+    description: 'Content-based and collaborative filtering, matrix factorisation, implicit feedback, cold start and ranking metrics.',
+    topics: ['Collaborative filtering', 'Matrix factorisation', 'Cold start', 'NDCG'],
+  },
 ]
+
+const modules: Module[] = AIML_SECTIONS.flatMap((section, sectionIndex) => section.topics.map(topic => {
+  const href = aimlTopicHref(section, topic)
+  const detail = moduleDetails.find(item => item.href === href)
+  return {
+    title: detail?.title ?? topic.title,
+    readTime: detail?.readTime ?? '30–40 min',
+    description: detail?.description ?? '',
+    topics: detail?.topics ?? [],
+    href,
+    status: topic.status,
+    section: sectionIndex + 1,
+    color: section.color,
+    num: '',
+  }
+})).map((module, i) => ({ ...module, num: String(i + 1).padStart(2, '0') }))
+
+const TOTAL_LESSONS = modules.length
+const TOTAL_SECTIONS = AIML_SECTIONS.length
 
 export default function AIMLTrack() {
   const [activeSection, setActiveSection] = useState<SectionFilter>('all')
@@ -725,7 +742,7 @@ export default function AIMLTrack() {
   return (
     <LearnLayout
       title="AI & Machine Learning"
-      description="From zero to production-grade AI/ML — 80 lessons, no prerequisites"
+      description={`From zero to production-grade AI/ML — ${TOTAL_LESSONS} lessons, no prerequisites`}
       section="AI & ML"
       readTime="Self-paced"
       updatedAt="March 2026"
@@ -771,8 +788,8 @@ export default function AIMLTrack() {
         marginBottom: 36,
       }}>
         {[
-          { value: '80',    label: 'Lessons'         },
-          { value: '12',    label: 'Sections'         },
+          { value: String(TOTAL_LESSONS), label: 'Lessons' },
+          { value: String(TOTAL_SECTIONS), label: 'Sections' },
           { value: '200+',  label: 'Topics covered'   },
           { value: '~60h',  label: 'Total content'    },
           { value: '100%',  label: 'Free forever'     },
@@ -816,7 +833,7 @@ export default function AIMLTrack() {
             { icon: '🏭', title: 'Real company use cases',    desc: 'Every algorithm lesson is built around a real problem — DoorDash delivery time, Stripe fraud, Airbnb pricing, Shopify image classification. Not toy datasets.',  color: 'var(--green)' },
             { icon: '🔩', title: 'From-scratch first',        desc: 'You build neural networks from NumPy before touching PyTorch. Understand the mechanics before the framework hides them.',                                              color: '#7F77DD'      },
             { icon: '🩺', title: 'Error Library',             desc: 'Every project includes the exact errors you will hit, why they happen, and the precise fix. 80% of real ML engineering is debugging.',                               color: '#D85A30'      },
-            { icon: '🎯', title: '50 complete interview Qs',  desc: 'Lesson 80 covers 50 ML interview questions at senior engineer depth — classical ML, deep learning, system design, and behavioral rounds.',                          color: '#4285f4'      },
+            { icon: '🎯', title: '50 complete interview Qs',  desc: 'The final lesson covers 50 ML interview questions at senior engineer depth — classical ML, deep learning, system design, and behavioral rounds.',                          color: '#4285f4'      },
           ].map(f => (
             <div key={f.title} style={{
               background: 'var(--surface)',
@@ -849,7 +866,7 @@ export default function AIMLTrack() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              80 Lessons. Zero to Advanced.
+              {TOTAL_LESSONS} Lessons. Zero to Advanced.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
               Follow in order. Each module builds on the last. Every concept is
@@ -859,7 +876,7 @@ export default function AIMLTrack() {
 
           {/* Section filter tabs */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'flex-end' }}>
-            {(['all', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] as SectionFilter[]).map((f) => {
+            {['all', ...AIML_SECTIONS.map((_, i) => String(i + 1))].map((f) => {
               const col = f === 'all' ? 'var(--accent)' : sectionColors[parseInt(f)]
               const isActive = activeSection === f
               return (
@@ -1077,13 +1094,13 @@ export default function AIMLTrack() {
           color: 'var(--text)', fontFamily: 'var(--font-display)',
           letterSpacing: '-1px', marginBottom: 12,
         }}>
-          80 lessons. Start anywhere, finish stronger.
+          {TOTAL_LESSONS} lessons. Start anywhere, finish stronger.
         </h3>
         <p style={{
           fontSize: 14, color: 'var(--muted)', lineHeight: 1.7,
           maxWidth: 480, margin: '0 auto 24px',
         }}>
-          All 80 lessons are live. Start with Lesson 01 and follow the order —
+          All {TOTAL_LESSONS} lessons are live. Start with Lesson 01 and follow the order —
           each module is self-contained enough to read on its own, but every concept earns the next one.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>

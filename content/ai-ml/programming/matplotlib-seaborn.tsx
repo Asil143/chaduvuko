@@ -1672,7 +1672,7 @@ plt.savefig('/tmp/stakeholder_chart.png', dpi=150, bbox_inches='tight')
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 12 · Data Engineering
+              Next — Lesson 14 · Python
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
