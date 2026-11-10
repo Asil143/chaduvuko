@@ -4,30 +4,49 @@ import { useState } from 'react'
 import { parseCurriculumSections } from '@/lib/parseCurriculumSections'
 import { renderSimpleMarkdown } from '@/lib/simpleMarkdown'
 
+/** Sections most readers want first, so they start expanded. */
+const OPEN_BY_DEFAULT = new Set(['Study Plan', 'Project Roadmap'])
+
 export function CurriculumGuide({ markdown }: { markdown: string }) {
   const sections = parseCurriculumSections(markdown)
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
-  const [allOpen, setAllOpen] = useState(false)
+  const [open, setOpen] = useState<Set<number>>(
+    () => new Set(sections.flatMap((section, i) => (OPEN_BY_DEFAULT.has(section.title.trim()) ? [i] : []))),
+  )
 
   if (sections.length === 0) return null
 
+  const allOpen = open.size === sections.length
+  const toggle = (i: number) => setOpen(prev => {
+    const next = new Set(prev)
+    if (next.has(i)) next.delete(i)
+    else next.add(i)
+    return next
+  })
+  const jumpTo = (i: number) => {
+    setOpen(prev => new Set(prev).add(i))
+    requestAnimationFrame(() => {
+      const target = document.getElementById(`curriculum-heading-${i}`)
+      target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      target?.focus({ preventScroll: true })
+    })
+  }
+
   return (
     <div>
+      <nav aria-label="Curriculum sections" className="rm-toc">
+        {sections.map((section, i) => (
+          <button key={section.title} type="button" onClick={() => jumpTo(i)} className="rm-toc-chip">
+            <span aria-hidden="true">{section.icon}</span> {section.title}
+          </button>
+        ))}
+      </nav>
+
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
         <button
           type="button"
-          onClick={() => { setAllOpen(v => !v); setOpenIndex(null) }}
-          aria-expanded={allOpen}
+          onClick={() => setOpen(allOpen ? new Set() : new Set(sections.map((_, i) => i)))}
           aria-controls="curriculum-guide-sections"
-          style={{
-            fontSize: 11,
-            fontWeight: 600,
-            color: 'var(--green)',
-            background: 'transparent',
-            border: 'none',
-            cursor: 'pointer',
-            padding: 0,
-          }}
+          className="rm-toc-toggle"
         >
           {allOpen ? 'Collapse all' : 'Expand all'}
         </button>
@@ -35,7 +54,7 @@ export function CurriculumGuide({ markdown }: { markdown: string }) {
 
       <div id="curriculum-guide-sections" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {sections.map((section, i) => {
-          const isOpen = allOpen || openIndex === i
+          const isOpen = open.has(i)
           return (
             <div
               key={section.title}
@@ -44,11 +63,14 @@ export function CurriculumGuide({ markdown }: { markdown: string }) {
                 border: '1px solid var(--border)',
                 borderRadius: 10,
                 overflow: 'hidden',
+                scrollMarginTop: 80,
               }}
+              id={`curriculum-heading-${i}`}
+              tabIndex={-1}
             >
               <button
                 type="button"
-                onClick={() => { setAllOpen(false); setOpenIndex(isOpen ? null : i) }}
+                onClick={() => toggle(i)}
                 aria-expanded={isOpen}
                 aria-controls={`curriculum-section-${i}`}
                 style={{
@@ -63,9 +85,10 @@ export function CurriculumGuide({ markdown }: { markdown: string }) {
                   textAlign: 'left',
                 }}
               >
-                <span style={{ fontSize: 18, flexShrink: 0 }}>{section.icon}</span>
+                <span aria-hidden="true" style={{ fontSize: 18, flexShrink: 0 }}>{section.icon}</span>
                 <span style={{ flex: 1, fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{section.title}</span>
                 <span
+                  aria-hidden="true"
                   style={{
                     flexShrink: 0,
                     color: 'var(--muted)',

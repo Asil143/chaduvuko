@@ -4,7 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { LESSONS, LIVE_LESSONS, NON_LESSON_PREFIXES, NON_LESSON_ROUTES, TRACKS } from '@/lib/catalog'
 import { ROLE_ROADMAPS } from '@/data/roadmaps/role-registry'
-import { TOPIC_LESSONS } from '@/data/roadmaps/topic-lessons'
+import { TOPIC_LESSONS, PLANNED_TOPICS, lessonsForTopic } from '@/data/roadmaps/topic-lessons'
 import { CAREER_PATHS } from '@/data/career-paths'
 import { PLANNED_TRACKS } from '@/data/planned-tracks'
 
@@ -97,6 +97,17 @@ function checkTopicLessons() {
   for (const [key, hrefs] of Object.entries(TOPIC_LESSONS)) {
     if (key.includes(':') ? !roadmapNodes.has(key) : !nodeIds.has(key)) fail(`topic-lessons: "${key}" is not a roadmap node`)
     for (const href of hrefs) if (!live.has(href)) fail(`topic-lessons: "${key}" links to ${href}, which is not a live lesson`)
+  }
+  for (const key of Array.from(PLANNED_TOPICS)) if (!roadmapNodes.has(key)) fail(`topic-lessons: planned topic "${key}" is not a roadmap node`)
+  for (const roadmap of Object.values(ROLE_ROADMAPS)) {
+    const rows = new Set((roadmap.sections ?? []).map(section => section.row))
+    for (const node of roadmap.nodes) {
+      const key = `${roadmap.slug}:${node.id}`
+      const count = lessonsForTopic(roadmap.slug, node.id).length
+      if (!PLANNED_TOPICS.has(key) && count === 0) fail(`roadmap "${roadmap.slug}": topic "${node.id}" has no lessons; map it in topic-lessons.ts or add it to PLANNED_TOPICS`)
+      if (!rows.has(node.row ?? node.y ?? -1)) fail(`roadmap "${roadmap.slug}": topic "${node.id}" sits on a row with no named section`)
+      for (const prereq of node.prerequisites ?? []) if (!roadmap.nodes.some(n => n.id === prereq)) fail(`roadmap "${roadmap.slug}": topic "${node.id}" needs unknown prerequisite "${prereq}"`)
+    }
   }
 }
 

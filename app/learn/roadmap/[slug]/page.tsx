@@ -1,5 +1,8 @@
 
+import type { CSSProperties } from 'react'
 import type { Metadata } from 'next'
+import Link from 'next/link'
+import { ArrowRight, BriefcaseBusiness } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import SkillTree from '@/components/roadmap/SkillTree'
 import { ROLE_ROADMAPS as ROADMAPS } from '@/data/roadmaps/role-registry'
@@ -25,7 +28,9 @@ import { pythonDeveloperCurriculum } from '@/data/roadmaps/curriculum/python-dev
 import { softwareArchitectCurriculum } from '@/data/roadmaps/curriculum/software-architect'
 import { CurriculumGuide } from '@/components/roadmap/CurriculumGuide'
 import type { TopicLesson } from '@/components/roadmap/TopicDrawer'
-import { lessonsForTopic } from '@/data/roadmaps/topic-lessons'
+import { isPlannedTopic, lessonsForTopic } from '@/data/roadmaps/topic-lessons'
+import { CAREER_PATHS } from '@/data/career-paths'
+import { SCHOOL_BY_AREA } from '@/lib/catalog/schools'
 import { getLiveLesson, getTrack } from '@/lib/catalog'
 import type { Roadmap } from '@/data/roadmaps/types'
 
@@ -76,6 +81,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${roadmap.title} Roadmap`,
     description: roadmap.description,
+    alternates: { canonical: `/learn/roadmap/${roadmap.slug}` },
   }
 }
 
@@ -87,46 +93,57 @@ export default function RoadmapPage({ params }: Props) {
   const roadmap = ROADMAPS[params.slug]
   if (!roadmap) notFound()
 
+  const path = CAREER_PATHS.find(item => item.roadmap === roadmap.slug)
+  const school = path ? SCHOOL_BY_AREA[path.school] : undefined
+  const accent = school?.accent ?? 'var(--brand-green)'
+  const lessons = topicLessons(roadmap)
+  const lessonCount = new Set(Object.values(lessons).flat().map(lesson => lesson.href)).size
+  const stageCount = new Set(roadmap.nodes.map(node => node.row ?? node.y)).size
+  const level = roadmap.level ? roadmap.level.charAt(0).toUpperCase() + roadmap.level.slice(1) : null
+  const plannedTopics = roadmap.nodes.filter(node => isPlannedTopic(roadmap.slug, node.id)).map(node => node.id)
+
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', padding: '48px 20px 80px' }}>
       <div style={{ maxWidth: 820, margin: '0 auto' }}>
 
         {/* Breadcrumb */}
-        <div className="no-print" style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 24 }}>
-          <a href="/learn/roadmap" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Roadmaps</a>
-          <span style={{ margin: '0 8px' }}>›</span>
-          <span style={{ color: 'var(--text)' }}>{roadmap.title}</span>
-        </div>
+        <nav aria-label="Breadcrumb" className="no-print" style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 20 }}>
+          <Link href="/learn/roadmap" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Roadmaps</Link>
+          <span aria-hidden="true" style={{ margin: '0 8px' }}>›</span>
+          <span aria-current="page" style={{ color: 'var(--text)' }}>{roadmap.title}</span>
+        </nav>
 
         {/* Header */}
-        <div style={{ marginBottom: 32 }}>
-          <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 10 }}>
-            {roadmap.category === 'role' ? 'Role Roadmap' : 'Skill Roadmap'}
+        <header className="pp-hero rm-hero" style={{ '--pp-accent': accent } as CSSProperties}>
+          <div className="rm-hero-top">
+            <span className="pp-icon" aria-hidden="true">{path?.icon ?? '🧭'}</span>
+            <div>
+              <p className="pp-eyebrow">{roadmap.category === 'role' ? 'Role roadmap' : 'Skill roadmap'}{school ? ` · ${school.title}` : ''}</p>
+              {level && <span className="pp-badge">{level}</span>}
+            </div>
           </div>
-          <h1 style={{ fontSize: 'clamp(26px,3.5vw,42px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', marginBottom: 10 }}>
-            {roadmap.title}
-          </h1>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 16, maxWidth: 560 }}>
-            {roadmap.description}
-          </p>
-          <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: 12, color: 'var(--muted)' }}>
-              <b style={{ color: 'var(--text)', fontWeight: 700, marginRight: 6 }}>Level</b>
-              {roadmap.level}
-            </span>
-            <span style={{ fontSize: 12, color: 'var(--muted)' }}>
-              <b style={{ color: 'var(--text)', fontWeight: 700, marginRight: 6 }}>Time</b>
-              {roadmap.estimatedTime}
-            </span>
-            <span style={{ fontSize: 12, color: 'var(--muted)' }}>
-              <b style={{ color: 'var(--text)', fontWeight: 700, marginRight: 6 }}>Topics</b>
-              {roadmap.nodes.length}
-            </span>
+          <h1>{roadmap.title} Roadmap</h1>
+          <p className="pp-lead">{roadmap.description}</p>
+          <ul className="pp-stats-strip" aria-label="Roadmap at a glance">
+            <li><strong>{roadmap.nodes.length}</strong> topics</li>
+            <li><strong>{stageCount}</strong> stages</li>
+            <li><strong>{lessonCount}</strong> Chaduvuko lessons</li>
+            <li><strong>{roadmap.estimatedTime}</strong></li>
+          </ul>
+          <div className="pp-actions no-print">
+            {path && (
+              <Link href={`/learn/paths/${path.slug}`} className="pp-btn pp-btn-primary">
+                Follow the {path.title} career path <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+            )}
+            <Link href="/learn/interview#by-role" className="pp-btn">
+              <BriefcaseBusiness size={16} aria-hidden="true" /> Career prep kit
+            </Link>
           </div>
-        </div>
+        </header>
 
         {/* Skill tree */}
-        <SkillTree roadmap={roadmap} topicLessons={topicLessons(roadmap)} />
+        <SkillTree roadmap={roadmap} topicLessons={lessons} plannedTopics={plannedTopics} />
 
         {/* Complete curriculum guide */}
         {CURRICULUM[params.slug] && (

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeftRight, Check, Circle, Download, LocateFixed, LockKeyhole, Map, Maximize2, Route, ZoomIn, ZoomOut } from 'lucide-react'
+import { ArrowLeftRight, Check, Circle, Clock3, Download, LocateFixed, Map, Maximize2, Route, ZoomIn, ZoomOut } from 'lucide-react'
 import type { Roadmap, RoadmapNode } from '@/data/roadmaps/types'
 import { useProgress } from '@/lib/progress'
 import { TopicDrawer, type TopicLesson, type TopicStatus } from '@/components/roadmap/TopicDrawer'
@@ -11,6 +11,8 @@ interface Props {
   roadmap: Roadmap
   /** Chaduvuko lessons for each node id, resolved on the server. */
   topicLessons: Record<string, TopicLesson[]>
+  /** Node ids whose Chaduvuko course is still being written. */
+  plannedTopics?: string[]
 }
 
 const P = {
@@ -44,7 +46,8 @@ function readSaved(key: string): Record<string, TopicStatus> {
   }
 }
 
-export default function SkillTree({ roadmap, topicLessons }: Props) {
+export default function SkillTree({ roadmap, topicLessons, plannedTopics = [] }: Props) {
+  const planned = useMemo(() => new Set(plannedTopics), [plannedTopics])
   const KEY = `chaduvuko_rm_${roadmap.id}`
   const progress = useProgress()
   const completed = progress?.completed ?? null
@@ -82,7 +85,8 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
   }, [manual, stateUpdatedAt, loaded, KEY])
 
   // A topic is done when the reader says so or every one of its lessons is complete; it is
-  // being learned when the reader says so or some of its lessons are complete.
+  // being learned when the reader says so or some of its lessons are complete. Prerequisites
+  // only recommend an order: they never reset or block a topic.
   const status = useMemo(() => {
     const result: Record<string, { status: TopicStatus; fromLessons: boolean }> = {}
     for (const node of roadmap.nodes) {
@@ -95,26 +99,17 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
       else result[node.id] = { status: done > 0 ? 'in-progress' : 'not-started', fromLessons: false }
     }
 
-    const recordedStatus = { ...result }
-    for (let pass = 0; pass < roadmap.nodes.length; pass++) {
-      const nextStatus: typeof result = {}
-      for (const node of roadmap.nodes) {
-        const prerequisitesComplete = (node.prerequisites ?? []).every(id => result[id]?.status === 'done')
-        nextStatus[node.id] = prerequisitesComplete
-          ? recordedStatus[node.id]
-          : { status: 'not-started', fromLessons: false }
-      }
-      const stable = roadmap.nodes.every(node =>
-        nextStatus[node.id].status === result[node.id].status &&
-        nextStatus[node.id].fromLessons === result[node.id].fromLessons,
-      )
-      Object.assign(result, nextStatus)
-      if (stable) break
-    }
-
     return result
   }, [roadmap.nodes, topicLessons, completed, manual])
 
+  const pendingPrerequisites = (node: RoadmapNode) =>
+    (node.prerequisites ?? []).filter(id => status[id]?.status !== 'done')
+      .map(id => roadmap.nodes.find(item => item.id === id)?.title).filter(Boolean).join(', ')
+  const lessonSummary = (node: RoadmapNode) => {
+    if (planned.has(node.id)) return 'Course coming soon'
+    const count = (topicLessons[node.id] ?? []).length
+    return `${count} lesson${count === 1 ? '' : 's'}`
+  }
   const prerequisitesDone = (node: RoadmapNode) => (node.prerequisites ?? []).every(id => status[id]?.status === 'done')
 
   const toggleFilter = (ty: string) => {
@@ -132,7 +127,6 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
   const stages = useMemo(() => {
     const getStageKey = (node: RoadmapNode) => node.row ?? node.y ?? 0
     const keys = Array.from(new Set(roadmap.nodes.map(getStageKey))).sort((a, b) => a - b)
-    const labels = ['Foundations', 'Core skills', 'Build practical skills', 'Production skills', 'Career-ready']
 
     return keys.map((key, index) => {
       const nodes = roadmap.nodes.filter(node => getStageKey(node) === key)
@@ -144,7 +138,7 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
 
       return {
         key,
-        label: section?.label ?? labels[index] ?? `Stage ${index + 1}`,
+        label: section?.label ?? `Stage ${index + 1}`,
         description: section?.description,
         nodes,
         done,
@@ -178,7 +172,10 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
 
   const canvasW = Math.max(...roadmap.nodes.map(n => (n.x ?? 0) + (n.width ?? 0))) + 40
   const canvasH = Math.max(...roadmap.nodes.map(n => (n.y ?? 0) + (n.height ?? 0))) + 40
-  const startNode = roadmap.nodes.find(node => node.id === 'root') ?? roadmap.nodes[0]
+  const startNode = useMemo(
+    () => [...roadmap.nodes].sort((a, b) => (a.y ?? 0) - (b.y ?? 0) || (a.x ?? 0) - (b.x ?? 0))[0],
+    [roadmap.nodes],
+  )
 
   useEffect(() => {
     if (viewMode !== 'map') return
@@ -365,8 +362,8 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
                   {doneCount === roadmap.nodes.length
                     ? 'You have completed every topic in this roadmap.'
                     : firstActionableNode
-                      ? `Complete this topic to unlock the next steps. ${firstActionableNode.time ? `Estimated time: ${firstActionableNode.time}.` : ''}`
-                      : 'Mark a topic complete to reveal the next steps in your path.'}
+                      ? `Recommended next, based on what you have finished. Every topic stays open, so jump ahead whenever you like. ${firstActionableNode.time ? `Estimated time: ${firstActionableNode.time}.` : ''}`
+                      : 'Pick any topic below to begin.'}
                 </p>
                 {firstActionableNode && (
                   <button type="button" onClick={() => setSelected(firstActionableNode.id)} className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl px-4 text-sm font-bold" style={{ background: 'var(--brand-green)', color: 'var(--brand-green-text)' }}>
@@ -401,7 +398,7 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
                         {stage.nodes.map(node => {
                           const nodeStatus = status[node.id].status
                           const ready = prerequisitesDone(node)
-                          const stateLabel = nodeStatus === 'done' ? 'Done' : nodeStatus === 'in-progress' ? 'In progress' : ready ? (node.id === firstActionableNode?.id ? 'Up next' : 'Ready') : 'Locked'
+                          const stateLabel = nodeStatus === 'done' ? 'Done' : nodeStatus === 'in-progress' ? 'In progress' : ready ? (node.id === firstActionableNode?.id ? 'Up next' : 'Ready') : 'Not started'
                           const stateColor = nodeStatus === 'done' ? 'var(--brand-green)' : ready ? 'var(--text2)' : 'var(--muted)'
                           const lesson = (topicLessons[node.id] ?? []).find(item => !completed?.[item.href])
                           return (
@@ -410,26 +407,26 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
                                 <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
                                   <span className="font-semibold" style={{ color: 'var(--text)' }}>{node.title}</span>
                                   <span className="inline-flex items-center gap-1 text-xs font-semibold" style={{ color: stateColor }}>
-                                    {nodeStatus === 'done' ? <Check size={13} aria-hidden="true" /> : !ready ? <LockKeyhole size={12} aria-hidden="true" /> : <Circle size={10} aria-hidden="true" />}
+                                    {nodeStatus === 'done' ? <Check size={13} aria-hidden="true" /> : <Circle size={10} aria-hidden="true" />}
                                     {stateLabel}
                                   </span>
                                 </span>
                                 <span className="mt-1 block text-xs" style={{ color: 'var(--muted)' }}>
-                                  {[node.time, node.difficulty, `${(topicLessons[node.id] ?? []).length} lesson${(topicLessons[node.id] ?? []).length === 1 ? '' : 's'}`].filter(Boolean).join(' · ')}
+                                  {[node.time, node.difficulty, lessonSummary(node)].filter(Boolean).join(' · ')}
                                 </span>
                                 {!ready && nodeStatus !== 'done' && (
                                   <span className="mt-1 block text-xs" style={{ color: 'var(--muted)' }}>
-                                    Learn first: {(node.prerequisites ?? []).filter(id => status[id]?.status !== 'done').map(id => roadmap.nodes.find(item => item.id === id)?.title).filter(Boolean).join(', ')}
+                                    Recommended after: {pendingPrerequisites(node)}
                                   </span>
                                 )}
                               </button>
-                              {lesson && ready ? (
+                              {lesson ? (
                                 <Link href={lesson.href} className="inline-flex min-h-10 flex-shrink-0 items-center justify-center rounded-lg px-3 text-sm font-semibold" style={{ background: node.id === firstActionableNode?.id ? 'var(--brand-green)' : 'var(--bg2)', color: node.id === firstActionableNode?.id ? 'var(--brand-green-text)' : 'var(--text2)' }}>
                                   {nodeStatus === 'in-progress' ? 'Continue lesson' : 'Start lesson'}
                                 </Link>
                               ) : (
-                                <button type="button" onClick={() => setSelected(node.id)} className="min-h-10 flex-shrink-0 rounded-lg px-3 text-sm font-semibold" style={{ background: 'var(--bg2)', color: 'var(--text2)' }}>
-                                  {ready ? 'Explore topic' : 'View prerequisites'}
+                                <button type="button" onClick={() => setSelected(node.id)} className="inline-flex min-h-10 flex-shrink-0 items-center justify-center rounded-lg px-3 text-sm font-semibold" style={{ background: 'var(--bg2)', color: 'var(--text2)' }}>
+                                  {planned.has(node.id) ? <><Clock3 size={14} aria-hidden="true" className="mr-1.5" />Coming soon</> : 'Explore topic'}
                                 </button>
                               )}
                             </li>
@@ -533,7 +530,7 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
                   type="button"
                   data-roadmap-node={node.id}
                   aria-haspopup="dialog"
-                  aria-label={`${node.title}, ${p.label.replace('✦ ', '')}${muted ? ', prerequisites incomplete' : ''}${s === 'done' ? ', done' : s === 'in-progress' ? ', learning' : ''}${lessonCount ? `, ${lessonCount} Chaduvuko lesson${lessonCount > 1 ? 's' : ''}` : ''}. Highlights prerequisite and dependent topics.`}
+                  aria-label={`${node.title}, ${p.label.replace('✦ ', '')}${muted ? `, recommended after ${pendingPrerequisites(node)}` : ''}${s === 'done' ? ', done' : s === 'in-progress' ? ', learning' : ''}${planned.has(node.id) ? ', course coming soon' : lessonCount ? `, ${lessonCount} Chaduvuko lesson${lessonCount > 1 ? 's' : ''}` : ''}. Highlights prerequisite and dependent topics.`}
                   onClick={() => setSelected(node.id)}
                   onMouseEnter={() => setHoveredMapNode(node.id)}
                   onMouseLeave={() => setHoveredMapNode(null)}
@@ -564,6 +561,8 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
                       <span aria-hidden="true" style={{ width: 17, height: 17, borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: p.solid, color: '#fff', flexShrink: 0 }}>
                         <Check size={11} />
                       </span>
+                    ) : planned.has(node.id) ? (
+                      <span aria-hidden="true" style={{ fontSize: 10, fontWeight: 600, lineHeight: '17px', color: 'var(--muted)', flexShrink: 0 }}>Soon</span>
                     ) : lessonCount > 0 && node.type !== 'chaduvuko' && (
                       <span aria-hidden="true" style={{ fontSize: 10, fontWeight: 500, lineHeight: '17px', color: muted ? 'var(--muted)' : p.text, opacity: 0.85, flexShrink: 0 }}>
                         {lessonCount} lesson{lessonCount > 1 ? 's' : ''}
@@ -615,13 +614,13 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
           completed={completed}
           status={status[selectedNode.id].status}
           statusFromLessons={status[selectedNode.id].fromLessons}
-          locked={!prerequisitesDone(selectedNode)}
+          prerequisitesPending={!prerequisitesDone(selectedNode)}
+          planned={planned.has(selectedNode.id)}
           prerequisites={(selectedNode.prerequisites ?? []).flatMap(id => {
             const pre = roadmap.nodes.find(n => n.id === id)
             return pre ? [{ node: pre, done: status[id]?.status === 'done' }] : []
           })}
           onStatus={next => {
-            if (!prerequisitesDone(selectedNode)) return
             setManual(prev => ({ ...prev, [selectedNode.id]: next }))
             setStateUpdatedAt(prev => ({ ...prev, [selectedNode.id]: new Date().toISOString() }))
           }}
@@ -632,7 +631,7 @@ export default function SkillTree({ roadmap, topicLessons }: Props) {
       {/* What "Save as PDF" prints: every topic in order, with its status and lessons. */}
       <section className="print-only" aria-hidden="true">
         <ol className="roadmap-print-list">
-          {roadmap.nodes.filter(node => node.id !== 'root').map(node => {
+          {roadmap.nodes.map(node => {
             const s = status[node.id].status
             const lessons = topicLessons[node.id] ?? []
             return (

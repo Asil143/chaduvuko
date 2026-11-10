@@ -221,6 +221,15 @@ Recovered Library content shows a Chaduvuko practice product called **Pipeline P
 - Career toolkit: new guides at `/learn/interview/resume`, `/portfolio`, `/mock-interviews` and `/job-search`, plus related blog posts.
 - The 50 data engineering questions moved to `/learn/interview/data-engineering-questions`. The hub links all six question banks.
 
+## November 10, 2026 — Role roadmap pages overhaul
+
+- **Every topic links real lessons.** `data/roadmaps/topic-lessons.ts` now maps every node on all 20 role roadmaps to live lessons. Topics with no course yet are listed in `PLANNED_TOPICS` and show "Course coming soon". `validate-catalog` fails if a topic has no lessons and is not planned, if a stage row has no name, or if a prerequisite is unknown.
+- **Named stages.** Every roadmap declares `sections`, so stages read "SQL and data handling" or "Shipping to production" instead of "Stage 6". The empty "Start Here" root node is gone from all roadmaps.
+- **Data Engineer roadmap rebuilt.** 26 topics in six stages. It now covers Spark, Airflow, dbt, Kafka, data quality, lakehouses and governance, and treats ADF as one of several cloud ETL services. Company-name claims are removed. Node ids are kept where possible so saved progress survives.
+- **Prerequisites recommend, never lock.** Every topic and lesson stays open; unmet prerequisites show "Recommended after: …". Saved status is no longer reset.
+- **New header.** Role icon, school accent, level badge, stats (topics, stages, lessons, time), links to the matching career path and career prep, and a canonical URL.
+- **Curriculum guide.** A chip bar jumps to any section; Study Plan and Project Roadmap open by default.
+
 ## Ongoing rules
 - Keep StudyX Overseas separate.
 - Chaduvuko remains the primary EdTech project.

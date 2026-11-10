@@ -40,7 +40,8 @@ export function TopicDrawer({
   completed,
   status,
   statusFromLessons,
-  locked,
+  prerequisitesPending,
+  planned = false,
   prerequisites,
   onStatus,
   onClose,
@@ -51,8 +52,10 @@ export function TopicDrawer({
   status: TopicStatus
   /** True when every lesson for the topic is complete, which makes it done. */
   statusFromLessons: boolean
-  /** True when at least one required prerequisite has not been completed. */
-  locked: boolean
+  /** True when a recommended prerequisite is not done yet. Advisory only: nothing is blocked. */
+  prerequisitesPending: boolean
+  /** True when the Chaduvuko course for this topic is still being written. */
+  planned?: boolean
   prerequisites: { node: RoadmapNode; done: boolean }[]
   onStatus: (status: TopicStatus) => void
   onClose: () => void
@@ -138,9 +141,9 @@ export function TopicDrawer({
         <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-5">
           <p className="text-[15px] leading-relaxed" style={{ color: 'var(--text2)' }}>{node.description}</p>
 
-          {locked && (
-            <div role="status" className="mt-4 rounded-xl px-3.5 py-3 text-sm leading-relaxed" style={{ color: 'var(--text2)', background: 'var(--bg2)', border: '1px solid var(--border)' }}>
-              Complete the required topics below before starting this topic. Its lessons and progress controls stay locked until then.
+          {prerequisitesPending && (
+            <div role="note" className="mt-4 rounded-xl px-3.5 py-3 text-sm leading-relaxed" style={{ color: 'var(--text2)', background: 'var(--bg2)', border: '1px solid var(--border)' }}>
+              We recommend finishing the topics under “Learn first” before this one. You can still start it now.
             </div>
           )}
 
@@ -154,15 +157,7 @@ export function TopicDrawer({
                   const done = Boolean(completed?.[lesson.href])
                   return (
                     <li key={lesson.href}>
-                      {locked ? (
-                        <div aria-disabled="true" className="flex items-center gap-3 min-h-[52px] px-3.5 py-2.5 rounded-xl" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', opacity: 0.7 }}>
-                          <span className="min-w-0 flex-1">
-                            <span className="block text-sm font-semibold leading-snug" style={{ color: 'var(--text)' }}>{lesson.title}</span>
-                            <span className="block text-xs mt-0.5" style={{ color: 'var(--muted)' }}>{lesson.track}</span>
-                          </span>
-                          <span className="flex-shrink-0 text-xs font-semibold" style={{ color: 'var(--muted)' }}>Locked</span>
-                        </div>
-                      ) : <Link
+                      <Link
                         href={lesson.href}
                         className="flex items-center gap-3 min-h-[52px] px-3.5 py-2.5 rounded-xl hover:border-[var(--accent)]"
                         style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
@@ -176,25 +171,22 @@ export function TopicDrawer({
                             <Check size={13} aria-hidden="true" /> Completed
                           </span>
                         )}
-                      </Link>}
+                      </Link>
                     </li>
                   )
                 })}
               </ul>
-              {completed && !locked && (
+              {completed && (
                 <p className="mt-2.5 text-[13px]" style={{ color: 'var(--muted)' }}>
                   {doneCount} of {lessons.length} completed. Finishing all of them marks this topic done.
-                </p>
-              )}
-              {completed && locked && doneCount > 0 && (
-                <p className="mt-2.5 text-[13px]" style={{ color: 'var(--muted)' }}>
-                  {doneCount} lesson{doneCount === 1 ? '' : 's'} already completed. This topic stays locked until its prerequisites are complete.
                 </p>
               )}
             </>
           ) : (
             <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-              Chaduvuko has no lesson on this topic yet. Track it here as you learn it elsewhere.
+              {planned
+                ? 'A Chaduvuko course on this topic is coming soon. Until then, learn it elsewhere and track your progress here.'
+                : 'Chaduvuko has no lesson on this topic yet. Track it here as you learn it elsewhere.'}
             </p>
           )}
 
@@ -224,7 +216,7 @@ export function TopicDrawer({
           <div role="group" aria-label="Your status" className="grid grid-cols-3 gap-1.5 p-1 rounded-xl" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
             {STATUS_LABELS.map(([value, label]) => {
               const checked = status === value
-              const disabled = locked || (statusFromLessons && value !== 'done')
+              const disabled = statusFromLessons && value !== 'done'
               return (
                 <button
                   key={value}
@@ -246,9 +238,6 @@ export function TopicDrawer({
           </div>
           {statusFromLessons && (
             <p className="mt-2 text-[13px]" style={{ color: 'var(--muted)' }}>Done because you completed every lesson for this topic.</p>
-          )}
-          {locked && (
-            <p className="mt-2 text-[13px]" style={{ color: 'var(--muted)' }}>Complete the required prerequisites before you can change this topic’s status.</p>
           )}
         </div>
       </div>
