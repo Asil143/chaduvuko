@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import { ArrowRight, ArrowUpRight, BookOpen, BriefcaseBusiness, Code2, Map, Wrench } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, BookOpen, BriefcaseBusiness, Code2, Compass, Library, Wrench } from 'lucide-react'
 import type { HeaderData } from '@/lib/lesson-nav'
-import type { TrackArea } from '@/lib/catalog/types'
+import { areaLabel } from '@/lib/catalog/schools'
 import { HomeHero } from '@/components/home/HomeHero'
 import { ContinueLearning } from '@/components/learn/ContinueLearning'
 
@@ -15,20 +15,20 @@ export interface HomePreview {
   total: number
 }
 
-export interface HomeData {
-  header: HeaderData
-  projects: number
-  preview: HomePreview
+export interface HomePathCard {
+  href: string
+  title: string
+  summary: string
+  steps: number
+  lessons: number
 }
 
-const AREA_LABELS: Record<TrackArea, string> = {
-  data: 'Data',
-  cloud: 'Cloud',
-  ai: 'AI & ML',
-  programming: 'Programming',
-  cs: 'CS Core',
-  security: 'Security',
-  practice: 'Practice',
+export interface HomeData {
+  header: HeaderData
+  paths: HomePathCard[]
+  pathCount: number
+  projects: number
+  preview: HomePreview
 }
 
 const TRACK_CARDS = 8
@@ -38,7 +38,7 @@ const sectionTitle = 'mt-2.5 text-[28px] sm:text-[36px] font-extrabold tracking-
 const card = 'home-content-card group block rounded-2xl px-5 py-5 transition-all'
 
 export default function HomePage({ data }: { data: HomeData }) {
-  const { header, projects, preview } = data
+  const { header, projects, preview, paths, pathCount } = data
   // Largest live learning tracks first; the full list is one click away.
   const topTracks = Object.values(header.tracks)
     .filter(track => track.area !== 'practice' && track.lessons > 0 && !track.early)
@@ -56,32 +56,32 @@ export default function HomePage({ data }: { data: HomeData }) {
       <section aria-labelledby="home-journey" className="border-b" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
         <div className="mx-auto max-w-[1320px] px-5 py-12 sm:px-8 sm:py-14">
           <div className="max-w-[660px]">
-            <p className={eyebrow} style={{ color: 'var(--brand-green)' }}>A clear path forward</p>
-            <h2 id="home-journey" className={sectionTitle}>From first concept to real work.</h2>
+            <p className={eyebrow} style={{ color: 'var(--brand-green)' }}>Three ways in</p>
+            <h2 id="home-journey" className={sectionTitle}>Start where you are.</h2>
             <p className="mt-3 text-sm leading-6 sm:text-base" style={{ color: 'var(--muted)' }}>
-              Build understanding in the right order, then put it to work.
+              Every route uses the same lessons, in the order that builds each skill on the one before it.
             </p>
-            <Link href="/learn/find-your-path" className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl px-4 text-sm font-semibold" style={{ background: 'var(--header-cta)', color: 'var(--header-cta-text)' }}>
-              Not sure where to start? Find your path <ArrowRight size={14} aria-hidden="true" />
-            </Link>
           </div>
-          <ol className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mt-7 grid gap-3 md:grid-cols-3">
             {[
-              { title: 'Choose a direction', desc: 'Start from a technology track or a role-based roadmap.', Icon: Map },
-              { title: 'Learn the foundations', desc: 'Follow structured lessons that build one skill at a time.', Icon: BookOpen },
-              { title: 'Practice as you go', desc: 'Try concepts in browser-based coding and SQL tools.', Icon: Code2 },
-              { title: 'Build job-ready proof', desc: 'Apply your skills through projects and career preparation.', Icon: BriefcaseBusiness },
-            ].map(({ title, desc, Icon }, index) => (
-              <li key={title} className="home-step-card relative rounded-2xl border p-5" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: 'var(--brand-soft)', color: 'var(--brand-green)' }}>
-                  <Icon size={18} aria-hidden="true" />
-                </span>
-                <span className="mt-5 block font-mono text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--muted)' }}>0{index + 1}</span>
-                <h3 className="mt-1.5 text-base font-bold tracking-tight">{title}</h3>
-                <p className="mt-2 text-[13px] leading-5" style={{ color: 'var(--muted)' }}>{desc}</p>
+              { href: '/learn/find-your-path', title: 'Start from zero', desc: 'Answer two questions and get a suggested starting point and route.', cta: 'Find your path', Icon: Compass },
+              { href: '/learn/paths', title: 'Choose a career path', desc: `${pathCount} step-by-step routes to a job, from first lesson to capstone and interview preparation.`, cta: 'See career paths', Icon: BriefcaseBusiness },
+              { href: '/learn/schools', title: 'Browse by school', desc: 'Six schools: AI, Data, Software Engineering, Cloud, Security, and Computer Science.', cta: 'Browse schools', Icon: Library },
+            ].map(({ href, title, desc, cta, Icon }) => (
+              <li key={href}>
+                <Link href={href} className="home-step-card group flex h-full flex-col rounded-2xl border p-5" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: 'var(--brand-soft)', color: 'var(--brand-green)' }}>
+                    <Icon size={18} aria-hidden="true" />
+                  </span>
+                  <span className="mt-4 block text-base font-bold tracking-tight" style={{ color: 'var(--text)' }}>{title}</span>
+                  <span className="mt-2 block flex-1 text-[13px] leading-5" style={{ color: 'var(--muted)' }}>{desc}</span>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold" style={{ color: 'var(--brand-green)' }}>
+                    {cta} <ArrowRight size={14} aria-hidden="true" />
+                  </span>
+                </Link>
               </li>
             ))}
-          </ol>
+          </ul>
         </div>
       </section>
 
@@ -89,25 +89,31 @@ export default function HomePage({ data }: { data: HomeData }) {
         <div className="mx-auto max-w-[1320px] px-5 py-14 sm:px-8 sm:py-16">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
-              <p className={eyebrow} style={{ color: 'var(--brand-green)' }}>Choose your destination</p>
-              <h2 id="home-goals" className={sectionTitle}>Know the role. Find the route.</h2>
+              <p className={eyebrow} style={{ color: 'var(--brand-green)' }}>Career paths</p>
+              <h2 id="home-goals" className={sectionTitle}>Pick the role. Follow the route.</h2>
               <p className="mt-3 max-w-[620px] text-sm leading-6 sm:text-base" style={{ color: 'var(--muted)' }}>
-                Explore {header.roadmapCount} career roadmaps and see the skills that connect where you are to where you want to go.
+                Each path puts the right lessons in order, tracks your progress, and ends with a capstone and interview preparation.
               </p>
             </div>
-            <Link href="/learn/roadmap" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold" style={{ color: 'var(--brand-green)' }}>
-              Explore all roadmaps <ArrowRight size={15} aria-hidden="true" />
-            </Link>
+            <div className="flex flex-wrap gap-x-5">
+              <Link href="/learn/paths" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold" style={{ color: 'var(--brand-green)' }}>
+                All {pathCount} career paths <ArrowRight size={15} aria-hidden="true" />
+              </Link>
+              <Link href="/learn/roadmap" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold" style={{ color: 'var(--muted)' }}>
+                {header.roadmapCount} skill roadmaps <ArrowRight size={15} aria-hidden="true" />
+              </Link>
+            </div>
           </div>
           <ul className="mt-6 grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            {header.featuredRoadmaps.map(roadmap => (
-              <li key={roadmap.href}>
-                <Link href={roadmap.href} className={`${card} h-full`} style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+            {paths.map(path => (
+              <li key={path.href}>
+                <Link href={path.href} className={`${card} h-full`} style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
                   <span className="flex items-center justify-between gap-2">
-                    <span className="text-base font-bold">{roadmap.title}</span>
+                    <span className="text-base font-bold">{path.title}</span>
                     <ArrowUpRight className="flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100" size={16} aria-hidden="true" style={{ color: 'var(--brand-green)' }} />
                   </span>
-                  <span className="block mt-1.5 text-[13px] leading-relaxed" style={{ color: 'var(--muted)' }}>{roadmap.blurb}</span>
+                  <span className="block mt-1.5 text-[13px] leading-relaxed" style={{ color: 'var(--muted)' }}>{path.summary}</span>
+                  <span className="block mt-3 font-mono text-[11px] uppercase tracking-wider" style={{ color: 'var(--text2)' }}>{path.steps} steps · {path.lessons} lessons live</span>
                 </Link>
               </li>
             ))}
@@ -132,7 +138,7 @@ export default function HomePage({ data }: { data: HomeData }) {
               <li key={track.href}>
                 <Link href={track.href} className={`${card} h-full`} style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
                   <span className="flex items-center justify-between gap-2">
-                    <span className={`block ${eyebrow}`} style={{ color: 'var(--muted)' }}>{AREA_LABELS[track.area]}</span>
+                    <span className={`block ${eyebrow}`} style={{ color: 'var(--muted)' }}>{areaLabel(track.area)}</span>
                     <ArrowUpRight className="flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100" size={16} aria-hidden="true" style={{ color: 'var(--brand-green)' }} />
                   </span>
                   <span className="block mt-3 text-base font-bold leading-snug">{track.title}</span>

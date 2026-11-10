@@ -7,6 +7,8 @@ import { LESSONS, NON_LESSON_PREFIXES, NON_LESSON_ROUTES, TRACKS } from '@/lib/c
 import { PLANNED_TRACKS } from '@/data/planned-tracks'
 import { BLOG_ARTICLES } from '@/data/blog-articles'
 import { ROLE_ROADMAPS } from '@/data/roadmaps/role-registry'
+import { SCHOOLS } from '@/lib/catalog/schools'
+import { getResolvedPaths } from '@/lib/catalog/paths'
 import { CAREER_ROLES } from '@/data/careers'
 import sitemap from '@/app/sitemap'
 
@@ -107,6 +109,7 @@ function sourceFor(url: string): string {
     segments.length ? path.join('content', ...segments) + '.tsx' : '',
     segments.length ? path.join('content', ...segments) + '.mdx' : '',
     segments.length > 1 ? path.join('content', segments[0], ...segments.slice(1)) + '/index.tsx' : '',
+    path.join('app', ...url.split('/').filter(Boolean).slice(0, -1), '[slug]', 'page.tsx'),
   ].filter(Boolean)
   return candidates.find(candidate => fs.existsSync(path.join(ROOT, candidate))) ?? ''
 }
@@ -242,9 +245,10 @@ for (const [name, list] of Object.entries(summary.issues)) console.log(`${name}:
 
 // ── SITE_MAP.md ──────────────────────────────────────────────────────────────
 const AREA_LABELS: Record<string, string> = {
-  data: 'Data', cloud: 'Cloud', ai: 'AI & ML', programming: 'Programming', cs: 'CS Core', security: 'Security', practice: 'Practice',
+  ...Object.fromEntries(SCHOOLS.map(school => [school.area, school.title])),
+  practice: 'Practice',
 }
-const AREA_ORDER = ['data', 'cloud', 'ai', 'programming', 'cs', 'security', 'practice']
+const AREA_ORDER = [...SCHOOLS.map(school => school.area), 'practice']
 const liveRows = rows.filter(row => row.kind === 'lesson' && row.status === 'live')
 const publishedTracks = TRACKS.filter(track => !track.status && !track.hidden)
 const nodeId = (text: string) => text.replace(/[^a-zA-Z0-9]/g, '_')
@@ -269,7 +273,7 @@ md.push('> The public version of this map is [/learn/all-courses](https://chaduv
 md.push('')
 md.push('## How the site is organised')
 md.push('')
-md.push('**Area → Track → Module → Lesson.** An *area* groups related tracks (Data, Cloud, AI & ML, ...). A *track* is a guided course with its own overview page. A *module* is a section inside a track, and a *lesson* is one page with one learning objective.')
+md.push('**School → Track → Module → Lesson.** A *school* groups related tracks (School of AI, School of Data, ...) at `/learn/schools/[slug]`. *Career paths* cut across schools in job order. A *track* is a guided course with its own overview page. A *module* is a section inside a track, and a *lesson* is one page with one learning objective.')
 md.push('')
 md.push('| What | Count | Where it comes from |')
 md.push('|---|---:|---|')
@@ -278,6 +282,8 @@ md.push(`| Published lessons | ${summary.totals.liveLessons} | \`lib/catalog\` (
 md.push(`| Hidden tracks / lessons | ${summary.totals.hiddenTracks} / ${summary.totals.hiddenLessons} | \`hidden\` flag in \`lib/catalog/tracks.ts\` |`)
 md.push(`| Unpublished (\`soon\`) lessons | ${summary.totals.unpublishedLessons} | \`data/*-curriculum.ts\` |`)
 md.push(`| Planned tracks (skills maps) | ${summary.totals.plannedTracks} | \`data/planned-tracks.ts\` |`)
+md.push(`| Schools | ${SCHOOLS.length} | \`lib/catalog/schools.ts\` |`)
+md.push(`| Career paths | ${getResolvedPaths().length} | \`data/career-paths.ts\` |`)
 md.push(`| Career roadmaps | ${summary.totals.roadmaps} | \`data/roadmaps/role-registry.ts\` |`)
 md.push(`| Blog articles | ${summary.totals.blogArticles} | \`data/blog-articles.ts\` |`)
 md.push(`| Open careers roles | ${summary.totals.careerRoles} | \`data/careers.ts\` |`)
@@ -307,9 +313,19 @@ md.push('  classDef planned fill:#f3e8ff,stroke:#a855f7,color:#3b0764')
 md.push('  classDef hidden fill:#f1f5f9,stroke:#94a3b8,color:#475569,stroke-dasharray: 4 3')
 md.push('```')
 md.push('')
+md.push('## Career paths')
+md.push('')
+md.push('Ordered routes across schools, at `/learn/paths/[slug]`. Planned steps link to a skills map until their lessons are published.')
+md.push('')
+md.push('| Path | School | Steps | Planned steps | Live lessons |')
+md.push('|---|---|---:|---:|---:|')
+for (const careerPath of getResolvedPaths()) {
+  md.push(`| [${careerPath.title}](https://chaduvuko.com/learn/paths/${careerPath.slug}) | ${AREA_LABELS[careerPath.school]} | ${careerPath.milestones.length} | ${careerPath.plannedMilestones} | ${careerPath.liveLessons} |`)
+}
+md.push('')
 md.push('## Published tracks')
 md.push('')
-md.push('| Area | Track | Overview | Modules | Lessons | Avg words / lesson |')
+md.push('| School | Track | Overview | Modules | Lessons | Avg words / lesson |')
 md.push('|---|---|---|---:|---:|---:|')
 for (const area of AREA_ORDER) {
   for (const track of publishedTracks.filter(item => item.area === area)) {
@@ -348,7 +364,7 @@ md.push('## Planned tracks')
 md.push('')
 md.push('Skills maps only; no lessons are published yet. Each page collects learner interest.')
 md.push('')
-md.push('| Area | Track | Page | Skills mapped |')
+md.push('| School | Track | Page | Skills mapped |')
 md.push('|---|---|---|---:|')
 for (const area of AREA_ORDER) {
   for (const track of PLANNED_TRACKS.filter(item => item.area === area)) {

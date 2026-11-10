@@ -5,6 +5,8 @@ import path from 'node:path'
 import { LESSONS, LIVE_LESSONS, NON_LESSON_PREFIXES, NON_LESSON_ROUTES, TRACKS } from '@/lib/catalog'
 import { ROLE_ROADMAPS } from '@/data/roadmaps/role-registry'
 import { TOPIC_LESSONS } from '@/data/roadmaps/topic-lessons'
+import { CAREER_PATHS } from '@/data/career-paths'
+import { PLANNED_TRACKS } from '@/data/planned-tracks'
 
 const errors: string[] = []
 const fail = (message: string) => errors.push(message)
@@ -98,8 +100,33 @@ function checkTopicLessons() {
   }
 }
 
+function checkCareerPaths() {
+  const planned = new Set(PLANNED_TRACKS.map(track => track.slug))
+  const seen = new Set<string>()
+  for (const path of CAREER_PATHS) {
+    if (seen.has(path.slug)) fail(`career path: duplicate slug "${path.slug}"`)
+    seen.add(path.slug)
+    if (path.roadmap && !ROLE_ROADMAPS[path.roadmap]) fail(`career path "${path.slug}": unknown roadmap "${path.roadmap}"`)
+    for (const milestone of path.milestones) {
+      const track = TRACKS.find(item => item.slug === milestone.track)
+      // Mirrors resolveMilestone in lib/catalog/paths.ts: anything not live is shown as planned.
+      if (!track || track.status || track.hidden) {
+        if (!track && !planned.has(milestone.track)) fail(`career path "${path.slug}": unknown track "${milestone.track}"`)
+        if (milestone.sections?.length && !track) fail(`career path "${path.slug}": planned track "${milestone.track}" cannot list modules`)
+        continue
+      }
+      const lessons = LIVE_LESSONS.filter(lesson => lesson.track === milestone.track)
+      if (!lessons.length) fail(`career path "${path.slug}": track "${milestone.track}" has no live lessons`)
+      for (const section of milestone.sections ?? []) {
+        if (!lessons.some(lesson => lesson.section === section)) fail(`career path "${path.slug}": no live lessons in "${milestone.track}" module "${section}"`)
+      }
+    }
+  }
+}
+
 checkCatalog()
 checkTopicLessons()
+checkCareerPaths()
 const staticOnly = process.argv.includes('--static-only')
 const nextDir = path.join(process.cwd(), '.next')
 let builtCount = 0

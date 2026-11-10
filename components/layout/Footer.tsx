@@ -12,6 +12,8 @@ const footerSections: { title: string; links: FooterLink[] }[] = [
     title: 'Learning paths',
     links: [
       { label: 'Explore all learning', href: '/learn' },
+      { label: 'Career paths', href: '/learn/paths' },
+      { label: 'Schools', href: '/learn/schools' },
       { label: 'All courses (site map)', href: '/learn/all-courses' },
       { label: 'Data Engineering', href: '/learn/data-engineering' },
       { label: 'Python', href: '/learn/python' },

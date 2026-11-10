@@ -6,22 +6,17 @@ import { ChevronDown, X } from 'lucide-react'
 import type { TrackArea } from '@/lib/catalog/types'
 import type { HeaderData, TrackSummary } from '@/lib/lesson-nav'
 import { useMenuDisclosure } from '@/components/layout/useMenuDisclosure'
+import { SCHOOLS } from '@/lib/catalog/schools'
 
 export const TRACKS_HREF = '/learn'
 const PROGRESS_HREF = '/dashboard'
 const START_HERE = 'foundations'
 
-const AREA_LABELS: Record<Exclude<TrackArea, 'practice'>, string> = {
-  data: 'Data',
-  programming: 'Programming',
-  cs: 'CS Core',
-  ai: 'AI & ML',
-  cloud: 'Cloud',
-  security: 'Security',
-}
+type SchoolArea = Exclude<TrackArea, 'practice'>
+const SCHOOL_FOR_AREA = Object.fromEntries(SCHOOLS.map(school => [school.area, school])) as Record<SchoolArea, (typeof SCHOOLS)[number]>
 
 // Desktop columns. Projects ('practice') is listed under Practice, not here.
-const COLUMNS: (keyof typeof AREA_LABELS)[][] = [['data'], ['programming', 'cs'], ['ai', 'cloud', 'security']]
+const COLUMNS: SchoolArea[][] = [['data'], ['programming', 'cs'], ['ai', 'cloud', 'security']]
 
 type TrackEntry = [slug: string, track: TrackSummary]
 
@@ -81,7 +76,7 @@ function TrackRow({ slug, track, completed, pathname, onNavigate, tall = false }
 
 function AreaGroup({ idPrefix, area, header, completedByTrack, pathname, onNavigate, tall }: {
   idPrefix: string
-  area: keyof typeof AREA_LABELS
+  area: SchoolArea
   header: HeaderData
   completedByTrack: Record<string, number>
   pathname: string
@@ -94,7 +89,9 @@ function AreaGroup({ idPrefix, area, header, completedByTrack, pathname, onNavig
   return (
     <div>
       <div id={headingId} className="pb-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--muted)' }}>
-        {AREA_LABELS[area]}
+        <Link href={`/learn/schools/${SCHOOL_FOR_AREA[area].slug}`} onClick={onNavigate} className="hover:underline" style={{ color: 'inherit' }}>
+          {SCHOOL_FOR_AREA[area].short}
+        </Link>
       </div>
       <ul aria-labelledby={headingId}>
         {tracks.map(([slug, track]) => (
@@ -178,6 +175,10 @@ export function TracksMenuDesktop({ header, completedByTrack, active, onOpenChan
               {header.lessonCount} lessons across {header.trackCount} learning paths ·{' '}
               <Link href={TRACKS_HREF} onClick={navigate} style={{ color: 'var(--brand-green)' }}>Browse all paths</Link>
               {' · '}
+              <Link href="/learn/paths" onClick={navigate} style={{ color: 'var(--brand-green)' }}>Career paths</Link>
+              {' · '}
+              <Link href="/learn/schools" onClick={navigate} style={{ color: 'var(--brand-green)' }}>Schools</Link>
+              {' · '}
               <Link href="/learn/find-your-path" onClick={navigate} style={{ color: 'var(--brand-green)' }}>Find your path</Link>
               {' · '}
               <Link href="/learn/all-courses" onClick={navigate} style={{ color: 'var(--brand-green)' }}>All courses</Link>
@@ -243,6 +244,12 @@ export function TracksListMobile({ header, completedByTrack, resumeTrack, active
           ))}
           <Link href={TRACKS_HREF} onClick={onNavigate} className="flex items-center min-h-11 text-sm font-semibold" style={{ color: 'var(--brand-green)' }}>
             All {header.trackCount} learning paths →
+          </Link>
+          <Link href="/learn/paths" onClick={onNavigate} className="flex items-center min-h-11 text-sm font-semibold" style={{ color: 'var(--brand-green)' }}>
+            Career paths →
+          </Link>
+          <Link href="/learn/schools" onClick={onNavigate} className="flex items-center min-h-11 text-sm font-semibold" style={{ color: 'var(--brand-green)' }}>
+            Schools →
           </Link>
           <Link href="/learn/find-your-path" onClick={onNavigate} className="flex items-center min-h-11 text-sm font-semibold" style={{ color: 'var(--brand-green)' }}>
             Not sure? Find your path →

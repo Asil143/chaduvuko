@@ -4,12 +4,16 @@ import { ROLE_ROADMAPS } from '@/data/roadmaps/role-registry'
 import { BLOG_ARTICLES } from '@/data/blog-articles'
 import type { SearchEntry, SearchIndex } from '@/lib/search'
 import { CHEAT_SHEET_FOR_PATH } from '@/lib/cheatsheet-links'
+import { CAREER_PATHS } from '@/data/career-paths'
+import { SCHOOLS } from '@/lib/catalog/schools'
 
 export const dynamic = 'force-static'
 
 const SITE_PAGES: SearchEntry[] = [
   { href: '/learn',                 title: 'All tracks',          context: 'Browse every learning track', kind: 'page' },
   { href: '/learn/all-courses',     title: 'All courses',         context: 'Site map of every track and lesson', kind: 'page' },
+  { href: '/learn/paths',           title: 'Career paths',        context: 'Step-by-step routes to a job', kind: 'page' },
+  { href: '/learn/schools',         title: 'Schools',             context: 'Six subject areas',           kind: 'page' },
   { href: '/learn/roadmap',         title: 'Career roadmaps',     context: 'Role-by-role learning paths', kind: 'roadmap' },
   { href: '/learn/interview',       title: 'Interview prep',      context: 'Questions and answers',       kind: 'interview' },
   { href: '/learn/industry',        title: 'Industry guide',      context: 'Companies and roles',         kind: 'page' },
@@ -49,6 +53,18 @@ export function GET() {
     kind: 'roadmap',
   }))
 
+  const paths: SearchEntry[] = CAREER_PATHS.map(path => ({
+    href: `/learn/paths/${path.slug}`,
+    title: `${path.title} career path`,
+    context: path.summary,
+    kind: 'page',
+  }))
+  const schools: SearchEntry[] = SCHOOLS.map(school => ({
+    href: `/learn/schools/${school.slug}`,
+    title: school.title,
+    context: school.description,
+    kind: 'page',
+  }))
   const articles: SearchEntry[] = Object.entries(BLOG_ARTICLES).map(([slug, article]) => ({
     href: `/blog/${slug}`,
     title: article.title,
@@ -67,7 +83,7 @@ export function GET() {
   const index: SearchIndex = {
     lessonCount: stats.lessons - stats.projects,
     trackCount: stats.liveTracks,
-    entries: [...tracks, ...lessons, ...roadmaps, ...articles, ...cheatSheets, ...SITE_PAGES],
+    entries: [...paths, ...schools, ...tracks, ...lessons, ...roadmaps, ...articles, ...cheatSheets, ...SITE_PAGES],
   }
   return NextResponse.json(index)
 }

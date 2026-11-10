@@ -6,6 +6,8 @@ import type { Lesson, NonLessonKind, Track } from './types'
 import type { LessonNavLink, LessonNavLinks, TrackSummaries } from '@/lib/lesson-nav'
 import type { LessonEntry } from '@/lib/up-next'
 import { CHEAT_SHEET_FOR_PATH } from '@/lib/cheatsheet-links'
+import { CAREER_PATHS } from '@/data/career-paths'
+import { SCHOOLS } from './schools'
 
 export type { Lesson, LessonStatus, NonLessonKind, Track, TrackArea } from './types'
 export { HIDDEN_TRACK_SLUGS, TRACKS }
@@ -173,6 +175,10 @@ export const NON_LESSON_ROUTES: Record<string, NonLessonKind> = {
   '/learn/roadmap': 'roadmap',
   '/learn/find-your-path': 'hub',
   '/learn/all-courses': 'hub',
+  '/learn/paths': 'hub',
+  ...Object.fromEntries(CAREER_PATHS.map(path => [`/learn/paths/${path.slug}`, 'hub' as const])),
+  '/learn/schools': 'hub',
+  ...Object.fromEntries(SCHOOLS.map(school => [`/learn/schools/${school.slug}`, 'hub' as const])),
   '/learn/interview': 'hub',
   '/learn/industry': 'hub',
   '/learn/find-video': 'tool',

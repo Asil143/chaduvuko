@@ -1,6 +1,6 @@
 # Chaduvuko — Learning Architecture (AI-era master structure)
 
-Status: **proposed, awaiting approval** (November 9, 2026). Nothing below changes the live site until a phase is approved.
+Status: **approved** (November 9, 2026). **Phase 1 implemented** on branch `phase-1-restructure` (not yet deployed); restore point is tag `v-before-phase1`. Later phases still need approval before they start.
 Related: [PROJECT_MASTER_CONTEXT.md](./PROJECT_MASTER_CONTEXT.md) · [SITE_MAP.md](./SITE_MAP.md) (what exists today)
 
 ---
@@ -161,6 +161,12 @@ Measure success by completion and return rate, not page views: Core completion %
 | **5. Next priority tracks** | Full-Stack with AI, DevOps/MLOps, AI Security, JavaScript/TypeScript, System Design | Per priority list |
 | **6. Specialisations** | Remaining planned tracks as demand shows | As demand dictates |
 
+Phase 1 as built:
+- Schools: `lib/catalog/schools.ts` maps the six existing track areas to schools, so no track changed area. Pages: `/learn/schools` and `/learn/schools/[slug]`.
+- Career paths: `data/career-paths.ts` (10 paths), resolved against live lessons by `lib/catalog/paths.ts`. Pages: `/learn/paths` and `/learn/paths/[slug]`, with browser-saved progress and Start/Resume. Steps whose track has no live lessons show as "coming soon" and link to the skills map.
+- `validate-catalog` fails the build if a path references an unknown track or a module with no live lessons.
+- Home "three doors" (Find your path, Career paths, Schools) and featured career paths; Courses menu, footer, learn hub, all-courses, and search link to paths and schools; menu headings use school names and link to school pages; Find your path recommends a career path.
+
 Rules carried over: keep existing URLs working (redirect if anything moves); never count planned skills as lessons; approve a track's full curriculum before writing or recording; hide rather than delete thin tracks.
 
 ---
@@ -171,4 +177,4 @@ Rules carried over: keep existing URLs working (redirect if anything moves); nev
 2. Approve the 10 flagship career paths (add/remove any).
 3. Confirm Core is recommended but skippable (placement check), not mandatory.
 4. Certificates: free completion certificates, or reserve for a paid tier (see Pipeline Prep Free/Pro model)?
-5. Phase 1 start: re-organise navigation now, before new content is written?
+5. ~~Phase 1 start~~ — approved and implemented November 9, 2026.

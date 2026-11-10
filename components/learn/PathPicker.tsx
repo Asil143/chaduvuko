@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import type { TrackSummaries } from '@/lib/lesson-nav'
+import { getCareerPath } from '@/data/career-paths'
 
 type Goal = 'ai' | 'data' | 'web' | 'cloud' | 'security' | 'interviews' | 'systems'
 type Level = 'new' | 'some' | 'working'
@@ -34,6 +35,17 @@ const PATHS: Record<Goal, { starter: string[]; next: string[] }> = {
   systems: { starter: ['python', 'dbms'], next: ['networking', 'systems-programming', 'system-design'] },
 }
 
+// Career paths matching each goal; the first is the main recommendation.
+const CAREER_PATHS_FOR_GOAL: Record<Goal, string[]> = {
+  ai: ['ai-engineer', 'agentic-ai-engineer', 'ml-engineer'],
+  data: ['data-engineer', 'analytics-engineer'],
+  web: ['full-stack-ai-developer', 'software-engineer'],
+  cloud: ['cloud-devops-engineer'],
+  security: ['cybersecurity-analyst', 'ai-security-engineer'],
+  interviews: ['software-engineer'],
+  systems: ['software-engineer'],
+}
+
 export function PathPicker({ tracks }: { tracks: TrackSummaries }) {
   const [goal, setGoal] = useState<Goal | null>(null)
   const [level, setLevel] = useState<Level | null>(null)
@@ -47,6 +59,8 @@ export function PathPicker({ tracks }: { tracks: TrackSummaries }) {
         : result.next
     : []
   const recommendations = Array.from(new Set(ordered)).filter(slug => tracks[slug])
+  const careerPaths = result && goal ? CAREER_PATHS_FOR_GOAL[goal].flatMap(slug => getCareerPath(slug) ?? []) : []
+  const [mainPath, ...otherPaths] = careerPaths
 
   const choice = (selected: boolean): React.CSSProperties => ({
     textAlign: 'left', padding: '14px 16px', borderRadius: 10, cursor: 'pointer',
@@ -80,9 +94,33 @@ export function PathPicker({ tracks }: { tracks: TrackSummaries }) {
         </div>
       </fieldset>
 
+      {mainPath && (
+        <section aria-label="Recommended career path" style={{ marginBottom: 28 }}>
+          <h2 style={{ color: 'var(--text)', fontSize: 20, margin: '0 0 12px' }}>Recommended career path</h2>
+          <Link href={`/learn/paths/${mainPath.slug}`} style={{ display: 'block', padding: '18px 20px', borderRadius: 12, background: 'var(--surface)', border: '1px solid var(--green)', color: 'var(--text)', textDecoration: 'none' }}>
+            <strong style={{ fontSize: 17 }}>{mainPath.title}</strong>
+            <span style={{ display: 'block', color: 'var(--muted)', fontSize: 13, marginTop: 6, lineHeight: 1.6 }}>{mainPath.summary}</span>
+            <span style={{ display: 'block', color: 'var(--green)', fontSize: 13, fontWeight: 650, marginTop: 10 }}>
+              {mainPath.milestones.length} steps with progress tracking · Open the path →
+            </span>
+          </Link>
+          {otherPaths.length > 0 && (
+            <p style={{ color: 'var(--muted)', fontSize: 13, margin: '10px 0 0' }}>
+              Also consider:{' '}
+              {otherPaths.map((path, index) => (
+                <span key={path.slug}>
+                  {index > 0 && ' · '}
+                  <Link href={`/learn/paths/${path.slug}`} style={{ color: 'var(--green)' }}>{path.title}</Link>
+                </span>
+              ))}
+            </p>
+          )}
+        </section>
+      )}
+
       {recommendations.length > 0 && (
         <section aria-live="polite" aria-label="Recommended tracks">
-          <h2 style={{ color: 'var(--text)', fontSize: 20, margin: '0 0 12px' }}>Your suggested order</h2>
+          <h2 style={{ color: 'var(--text)', fontSize: 20, margin: '0 0 12px' }}>Or follow the tracks directly</h2>
           <ol style={{ display: 'grid', gap: 10, padding: 0, margin: 0, listStyle: 'none' }}>
             {recommendations.map((slug, index) => {
               const track = tracks[slug]

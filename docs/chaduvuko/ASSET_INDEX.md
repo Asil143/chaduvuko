@@ -34,7 +34,9 @@ _Last consolidated: October 13, 2026_
    - Public version: `/learn/all-courses`. Interactive VS Code canvas: `.github/extensions/chaduvuko-site-map/`.
 
 8. **LEARNING_ARCHITECTURE.md** (`docs/chaduvuko/`)
-   - Proposed master structure: AI-Era Core, six Schools, ten Career Paths, lesson anatomy, engagement system, phased rollout. Awaiting approval.
+   - Approved master structure: AI-Era Core, six Schools, ten Career Paths, lesson anatomy, engagement system, phased rollout. Phase 1 (schools and career paths) implemented.
+9. **Schools and career paths** (`lib/catalog/schools.ts`, `data/career-paths.ts`, `lib/catalog/paths.ts`)
+   - Source data for `/learn/schools` and `/learn/paths`. Career-path module names must match catalog sections; `validate-catalog` checks them.
 
 ## Asset rule
 For all future Chaduvuko posters, presentations, thumbnails and hiring graphics, use the official original logo unless the user explicitly requests a new logo concept.

@@ -1,8 +1,8 @@
 {
   "summary": {
-    "generatedAt": "2026-11-09",
+    "generatedAt": "2026-11-10",
     "totals": {
-      "rows": 694,
+      "rows": 712,
       "liveLessons": 490,
       "hiddenLessons": 3,
       "unpublishedLessons": 59,
@@ -37,7 +37,7 @@
       "updatedAt": "",
       "inSitemap": true,
       "built": true,
-      "words": 416,
+      "words": 478,
       "inboundLinks": 38,
       "sourceFile": "app/page.tsx"
     },
@@ -197,7 +197,7 @@
       "updatedAt": "",
       "inSitemap": true,
       "built": true,
-      "words": 4306,
+      "words": 4321,
       "inboundLinks": 43,
       "sourceFile": "app/learn/page.tsx"
     },
@@ -213,8 +213,8 @@
       "updatedAt": "",
       "inSitemap": true,
       "built": true,
-      "words": 3321,
-      "inboundLinks": 1,
+      "words": 3385,
+      "inboundLinks": 2,
       "sourceFile": "app/learn/all-courses/page.tsx"
     },
     {
@@ -246,7 +246,7 @@
       "inSitemap": true,
       "built": true,
       "words": 132,
-      "inboundLinks": 3,
+      "inboundLinks": 4,
       "sourceFile": "app/learn/find-your-path/page.tsx"
     },
     {
@@ -278,8 +278,184 @@
       "inSitemap": true,
       "built": true,
       "words": 957,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "app/learn/interview/page.tsx"
+    },
+    {
+      "url": "/learn/paths",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 387,
+      "inboundLinks": 14,
+      "sourceFile": "app/learn/paths/page.tsx"
+    },
+    {
+      "url": "/learn/paths/agentic-ai-engineer",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 499,
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/paths/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/paths/ai-engineer",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 865,
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/paths/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/paths/ai-security-engineer",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 625,
+      "inboundLinks": 2,
+      "sourceFile": "app/learn/paths/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/paths/analytics-engineer",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 733,
+      "inboundLinks": 2,
+      "sourceFile": "app/learn/paths/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/paths/cloud-devops-engineer",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 573,
+      "inboundLinks": 2,
+      "sourceFile": "app/learn/paths/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/paths/cybersecurity-analyst",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 808,
+      "inboundLinks": 2,
+      "sourceFile": "app/learn/paths/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/paths/data-engineer",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 1305,
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/paths/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/paths/full-stack-ai-developer",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 642,
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/paths/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/paths/ml-engineer",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 839,
+      "inboundLinks": 2,
+      "sourceFile": "app/learn/paths/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/paths/software-engineer",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 876,
+      "inboundLinks": 2,
+      "sourceFile": "app/learn/paths/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap",
@@ -294,7 +470,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1017,
-      "inboundLinks": 32,
+      "inboundLinks": 33,
       "sourceFile": "app/learn/roadmap/page.tsx"
     },
     {
@@ -311,7 +487,7 @@
       "built": true,
       "words": 924,
       "inboundLinks": 2,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/analytics-engineer",
@@ -326,8 +502,8 @@
       "inSitemap": true,
       "built": true,
       "words": 914,
-      "inboundLinks": 1,
-      "sourceFile": ""
+      "inboundLinks": 2,
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/backend-dev",
@@ -342,8 +518,8 @@
       "inSitemap": true,
       "built": true,
       "words": 834,
-      "inboundLinks": 1,
-      "sourceFile": ""
+      "inboundLinks": 2,
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/cloud-architect",
@@ -359,7 +535,7 @@
       "built": true,
       "words": 913,
       "inboundLinks": 1,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/cloud-security-engineer",
@@ -375,7 +551,7 @@
       "built": true,
       "words": 1005,
       "inboundLinks": 1,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/cybersecurity-analyst",
@@ -391,7 +567,7 @@
       "built": true,
       "words": 1035,
       "inboundLinks": 2,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/data-engineer",
@@ -407,7 +583,7 @@
       "built": true,
       "words": 1349,
       "inboundLinks": 2,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/data-scientist",
@@ -423,7 +599,7 @@
       "built": true,
       "words": 899,
       "inboundLinks": 2,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/database-administrator",
@@ -439,7 +615,7 @@
       "built": true,
       "words": 902,
       "inboundLinks": 1,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/devops",
@@ -454,8 +630,8 @@
       "inSitemap": true,
       "built": true,
       "words": 850,
-      "inboundLinks": 1,
-      "sourceFile": ""
+      "inboundLinks": 2,
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/frontend",
@@ -471,7 +647,7 @@
       "built": true,
       "words": 837,
       "inboundLinks": 1,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/fullstack",
@@ -486,8 +662,8 @@
       "inSitemap": true,
       "built": true,
       "words": 806,
-      "inboundLinks": 1,
-      "sourceFile": ""
+      "inboundLinks": 2,
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/genai-developer",
@@ -502,8 +678,8 @@
       "inSitemap": true,
       "built": true,
       "words": 885,
-      "inboundLinks": 1,
-      "sourceFile": ""
+      "inboundLinks": 2,
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/java-developer",
@@ -519,7 +695,7 @@
       "built": true,
       "words": 761,
       "inboundLinks": 1,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/ml-engineer",
@@ -535,7 +711,7 @@
       "built": true,
       "words": 1013,
       "inboundLinks": 2,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/mobile-app-developer",
@@ -551,7 +727,7 @@
       "built": true,
       "words": 754,
       "inboundLinks": 1,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/platform-engineer",
@@ -567,7 +743,7 @@
       "built": true,
       "words": 828,
       "inboundLinks": 1,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/python-developer",
@@ -583,7 +759,7 @@
       "built": true,
       "words": 812,
       "inboundLinks": 1,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/site-reliability-engineer",
@@ -599,7 +775,7 @@
       "built": true,
       "words": 857,
       "inboundLinks": 1,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
     },
     {
       "url": "/learn/roadmap/software-architect",
@@ -615,7 +791,119 @@
       "built": true,
       "words": 870,
       "inboundLinks": 1,
-      "sourceFile": ""
+      "sourceFile": "app/learn/roadmap/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/schools",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 195,
+      "inboundLinks": 10,
+      "sourceFile": "app/learn/schools/page.tsx"
+    },
+    {
+      "url": "/learn/schools/ai",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 148,
+      "inboundLinks": 4,
+      "sourceFile": "app/learn/schools/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/schools/cloud",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 91,
+      "inboundLinks": 2,
+      "sourceFile": "app/learn/schools/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/schools/computer-science",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 118,
+      "inboundLinks": 2,
+      "sourceFile": "app/learn/schools/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/schools/data",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 139,
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/schools/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/schools/security",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 104,
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/schools/[slug]/page.tsx"
+    },
+    {
+      "url": "/learn/schools/software-engineering",
+      "kind": "hub",
+      "track": "",
+      "trackTitle": "",
+      "area": "",
+      "section": "",
+      "order": "",
+      "status": "live",
+      "updatedAt": "",
+      "inSitemap": true,
+      "built": true,
+      "words": 136,
+      "inboundLinks": 2,
+      "sourceFile": "app/learn/schools/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/accessibility-engineering",
@@ -630,8 +918,8 @@
       "inSitemap": true,
       "built": true,
       "words": 716,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/additional-language-pathways",
@@ -646,8 +934,8 @@
       "inSitemap": true,
       "built": true,
       "words": 831,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/agentic-ai",
@@ -662,8 +950,8 @@
       "inSitemap": true,
       "built": true,
       "words": 785,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 4,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/ai-ml",
@@ -678,7 +966,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3428,
-      "inboundLinks": 88,
+      "inboundLinks": 93,
       "sourceFile": "app/learn/ai-ml/page.tsx"
     },
     {
@@ -710,7 +998,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4518,
-      "inboundLinks": 3,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/what-is-ai.tsx"
     },
     {
@@ -726,7 +1014,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3462,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/ai-ml/ai-ml-landscape.tsx"
     },
     {
@@ -742,7 +1030,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3872,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/math-foundations/vectors-matrices-tensors.tsx"
     },
     {
@@ -758,7 +1046,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5766,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/math-foundations/matrix-multiplication.tsx"
     },
     {
@@ -774,7 +1062,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5424,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/math-foundations/dot-product-similarity.tsx"
     },
     {
@@ -790,7 +1078,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5364,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/math-foundations/eigenvalues-eigenvectors.tsx"
     },
     {
@@ -806,7 +1094,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6095,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/math-foundations/derivatives-and-gradients.tsx"
     },
     {
@@ -822,7 +1110,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6570,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/math-foundations/probability-distributions.tsx"
     },
     {
@@ -838,7 +1126,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7629,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/math-foundations/information-theory.tsx"
     },
     {
@@ -854,7 +1142,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7696,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/programming/python-for-ml.tsx"
     },
     {
@@ -870,7 +1158,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7386,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/programming/numpy-arrays.tsx"
     },
     {
@@ -886,7 +1174,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6728,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/programming/pandas-dataframes.tsx"
     },
     {
@@ -902,7 +1190,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6650,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/programming/matplotlib-seaborn.tsx"
     },
     {
@@ -918,7 +1206,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5520,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/programming/sklearn-interface.tsx"
     },
     {
@@ -934,7 +1222,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7354,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/ai-ml/data-engineering/data-collection.tsx"
     },
     {
@@ -950,7 +1238,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7942,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/ai-ml/data-engineering/data-cleaning.tsx"
     },
     {
@@ -966,7 +1254,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6335,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/ai-ml/data-engineering/feature-scaling.tsx"
     },
     {
@@ -982,7 +1270,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6648,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/ai-ml/data-engineering/encoding-categorical-features.tsx"
     },
     {
@@ -998,7 +1286,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7735,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/ai-ml/data-engineering/feature-engineering.tsx"
     },
     {
@@ -1014,7 +1302,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5907,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/ai-ml/data-engineering/train-val-test-split.tsx"
     },
     {
@@ -1030,7 +1318,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4311,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/classical-ml/what-is-ml.tsx"
     },
     {
@@ -1046,7 +1334,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5843,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/classical-ml/linear-regression.tsx"
     },
     {
@@ -1062,7 +1350,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6332,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/classical-ml/logistic-regression.tsx"
     },
     {
@@ -1078,7 +1366,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5355,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/classical-ml/decision-trees.tsx"
     },
     {
@@ -1094,7 +1382,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4597,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/classical-ml/svm.tsx"
     },
     {
@@ -1110,7 +1398,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6038,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/classical-ml/knn.tsx"
     },
     {
@@ -1126,7 +1414,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5435,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/classical-ml/naive-bayes.tsx"
     },
     {
@@ -1142,7 +1430,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5180,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/classical-ml/random-forest.tsx"
     },
     {
@@ -1158,7 +1446,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4970,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/classical-ml/gradient-boosting.tsx"
     },
     {
@@ -1174,7 +1462,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4930,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/classical-ml/xgboost.tsx"
     },
     {
@@ -1190,7 +1478,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4874,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/classical-ml/lightgbm.tsx"
     },
     {
@@ -1206,7 +1494,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5187,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/classical-ml/kmeans-clustering.tsx"
     },
     {
@@ -1222,7 +1510,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5795,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/classical-ml/pca.tsx"
     },
     {
@@ -1238,7 +1526,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5975,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/evaluation/evaluation-metrics.tsx"
     },
     {
@@ -1254,7 +1542,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5313,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/evaluation/calibration.tsx"
     },
     {
@@ -1270,7 +1558,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5515,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/evaluation/roc-and-auc.tsx"
     },
     {
@@ -1286,7 +1574,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5606,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/evaluation/cross-validation.tsx"
     },
     {
@@ -1302,7 +1590,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5558,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/evaluation/hyperparameter-tuning.tsx"
     },
     {
@@ -1318,7 +1606,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5175,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/evaluation/model-interpretability.tsx"
     },
     {
@@ -1334,7 +1622,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5379,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/evaluation/regression-metrics.tsx"
     },
     {
@@ -1350,7 +1638,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5742,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/deep-learning/neural-networks-from-scratch.tsx"
     },
     {
@@ -1366,7 +1654,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5228,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/deep-learning/backpropagation.tsx"
     },
     {
@@ -1382,7 +1670,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4790,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/deep-learning/activation-functions.tsx"
     },
     {
@@ -1398,7 +1686,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5301,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/deep-learning/optimisers.tsx"
     },
     {
@@ -1414,7 +1702,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5741,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/deep-learning/batch-norm-dropout.tsx"
     },
     {
@@ -1430,7 +1718,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5286,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/deep-learning/cnns-image-classification.tsx"
     },
     {
@@ -1446,7 +1734,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5443,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/deep-learning/rnns-and-lstms.tsx"
     },
     {
@@ -1462,7 +1750,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5814,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/deep-learning/transformers-and-attention.tsx"
     },
     {
@@ -1478,7 +1766,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5818,
-      "inboundLinks": 6,
+      "inboundLinks": 9,
       "sourceFile": "content/ai-ml/nlp/tokenisation-and-embeddings.tsx"
     },
     {
@@ -1494,7 +1782,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5425,
-      "inboundLinks": 4,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/nlp/bert-encoder-family.tsx"
     },
     {
@@ -1510,7 +1798,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5577,
-      "inboundLinks": 4,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/nlp/peft-lora-adapters.tsx"
     },
     {
@@ -1526,7 +1814,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6204,
-      "inboundLinks": 5,
+      "inboundLinks": 8,
       "sourceFile": "content/ai-ml/nlp/rag-retrieval-augmented-generation.tsx"
     },
     {
@@ -1542,7 +1830,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5958,
-      "inboundLinks": 6,
+      "inboundLinks": 9,
       "sourceFile": "content/ai-ml/nlp/prompt-engineering.tsx"
     },
     {
@@ -1558,7 +1846,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5819,
-      "inboundLinks": 5,
+      "inboundLinks": 8,
       "sourceFile": "content/ai-ml/nlp/llm-agents-and-tool-use.tsx"
     },
     {
@@ -1574,7 +1862,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5154,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/ai-ml/computer-vision/image-fundamentals.tsx"
     },
     {
@@ -1590,7 +1878,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4763,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/ai-ml/computer-vision/data-augmentation.tsx"
     },
     {
@@ -1606,7 +1894,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5071,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/ai-ml/computer-vision/object-detection.tsx"
     },
     {
@@ -1622,7 +1910,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5238,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/ai-ml/computer-vision/semantic-segmentation.tsx"
     },
     {
@@ -1638,7 +1926,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4954,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/ai-ml/computer-vision/transfer-learning.tsx"
     },
     {
@@ -1654,7 +1942,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4260,
-      "inboundLinks": 6,
+      "inboundLinks": 9,
       "sourceFile": "content/ai-ml/generative-ai/what-is-generative-ai.tsx"
     },
     {
@@ -1670,7 +1958,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4871,
-      "inboundLinks": 4,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/generative-ai/gans-generator-discriminator.tsx"
     },
     {
@@ -1686,7 +1974,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4918,
-      "inboundLinks": 4,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/generative-ai/variational-autoencoders.tsx"
     },
     {
@@ -1702,7 +1990,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5873,
-      "inboundLinks": 4,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/generative-ai/diffusion-models.tsx"
     },
     {
@@ -1718,7 +2006,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5988,
-      "inboundLinks": 5,
+      "inboundLinks": 8,
       "sourceFile": "content/ai-ml/generative-ai/llms-pretraining-rlhf.tsx"
     },
     {
@@ -1734,7 +2022,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1222,
-      "inboundLinks": 4,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/generative-ai/context-windows-model-limits.tsx"
     },
     {
@@ -1750,7 +2038,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1109,
-      "inboundLinks": 4,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/generative-ai/inference-parameters-model-selection.tsx"
     },
     {
@@ -1766,7 +2054,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5444,
-      "inboundLinks": 6,
+      "inboundLinks": 9,
       "sourceFile": "content/ai-ml/generative-ai/llm-fine-tuning.tsx"
     },
     {
@@ -1782,7 +2070,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5671,
-      "inboundLinks": 5,
+      "inboundLinks": 8,
       "sourceFile": "content/ai-ml/generative-ai/multimodal-models.tsx"
     },
     {
@@ -1798,7 +2086,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6460,
-      "inboundLinks": 5,
+      "inboundLinks": 8,
       "sourceFile": "content/ai-ml/generative-ai/advanced-rag.tsx"
     },
     {
@@ -1814,7 +2102,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6133,
-      "inboundLinks": 4,
+      "inboundLinks": 7,
       "sourceFile": "content/ai-ml/generative-ai/agents-tool-use.tsx"
     },
     {
@@ -1830,7 +2118,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5815,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/mlops/ml-pipelines-feature-stores.tsx"
     },
     {
@@ -1846,7 +2134,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5246,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/mlops/experiment-tracking.tsx"
     },
     {
@@ -1862,7 +2150,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5979,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/mlops/model-deployment.tsx"
     },
     {
@@ -1878,7 +2166,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5795,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/mlops/model-monitoring.tsx"
     },
     {
@@ -1894,7 +2182,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5705,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/mlops/retraining-pipelines.tsx"
     },
     {
@@ -1910,7 +2198,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5559,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/mlops/dvc-data-version-control.tsx"
     },
     {
@@ -1926,7 +2214,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5199,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/mlops/ml-system-design.tsx"
     },
     {
@@ -1942,7 +2230,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5276,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/cloud-ml/azure-ml.tsx"
     },
     {
@@ -1958,7 +2246,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3780,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/cloud-ml/aws-sagemaker.tsx"
     },
     {
@@ -1974,7 +2262,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5612,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/cloud-ml/gcp-vertex-ai.tsx"
     },
     {
@@ -1990,7 +2278,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5868,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/ai-ml/cloud-ml/mlops-on-cloud.tsx"
     },
     {
@@ -2006,7 +2294,7 @@
       "inSitemap": true,
       "built": true,
       "words": 18082,
-      "inboundLinks": 3,
+      "inboundLinks": 6,
       "sourceFile": "app/learn/ai-ml/ml-interview-prep/page.tsx"
     },
     {
@@ -2022,8 +2310,8 @@
       "inSitemap": true,
       "built": true,
       "words": 819,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 5,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/analytics-engineering-data-analytics",
@@ -2038,8 +2326,8 @@
       "inSitemap": true,
       "built": true,
       "words": 817,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 4,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/apache-kafka",
@@ -2054,7 +2342,7 @@
       "inSitemap": true,
       "built": true,
       "words": 975,
-      "inboundLinks": 31,
+      "inboundLinks": 33,
       "sourceFile": "app/learn/apache-kafka/page.tsx"
     },
     {
@@ -2086,7 +2374,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9512,
-      "inboundLinks": 3,
+      "inboundLinks": 4,
       "sourceFile": "content/apache-kafka/what-is-apache-kafka.tsx"
     },
     {
@@ -2102,7 +2390,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8896,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/apache-kafka/events-topics-partitions.tsx"
     },
     {
@@ -2118,7 +2406,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9354,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/producers-consumers-brokers.tsx"
     },
     {
@@ -2134,7 +2422,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7362,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/local-setup-cli.tsx"
     },
     {
@@ -2150,7 +2438,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8683,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/apache-kafka/consumer-groups-offsets.tsx"
     },
     {
@@ -2166,7 +2454,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8152,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/replication-leaders-isr.tsx"
     },
     {
@@ -2182,7 +2470,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10318,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/keys-ordering-partitioning.tsx"
     },
     {
@@ -2198,7 +2486,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10171,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/retention-compaction.tsx"
     },
     {
@@ -2214,7 +2502,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10706,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/apache-kafka/delivery-semantics.tsx"
     },
     {
@@ -2230,7 +2518,7 @@
       "inSitemap": true,
       "built": true,
       "words": 11678,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/schemas-serialization.tsx"
     },
     {
@@ -2246,7 +2534,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7852,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/producer-design.tsx"
     },
     {
@@ -2262,7 +2550,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8033,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/consumer-design.tsx"
     },
     {
@@ -2278,7 +2566,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9741,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/kafka-connect.tsx"
     },
     {
@@ -2294,7 +2582,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10334,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/stream-processing-kafka-streams.tsx"
     },
     {
@@ -2310,7 +2598,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10393,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/security-acls-sasl-tls.tsx"
     },
     {
@@ -2326,7 +2614,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10490,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/monitoring-observability.tsx"
     },
     {
@@ -2342,7 +2630,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10584,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/performance-tuning.tsx"
     },
     {
@@ -2358,7 +2646,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10338,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/scaling-capacity-planning.tsx"
     },
     {
@@ -2374,7 +2662,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10802,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/disaster-recovery-multi-region.tsx"
     },
     {
@@ -2390,7 +2678,7 @@
       "inSitemap": true,
       "built": true,
       "words": 11052,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/event-driven-architecture.tsx"
     },
     {
@@ -2406,7 +2694,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10261,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/cdc-debezium.tsx"
     },
     {
@@ -2422,7 +2710,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9904,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/managed-kafka-cloud.tsx"
     },
     {
@@ -2438,7 +2726,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9796,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/apache-kafka/testing-debugging.tsx"
     },
     {
@@ -2454,7 +2742,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10013,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/apache-kafka/kafka-interview-system-design.tsx"
     },
     {
@@ -2470,8 +2758,8 @@
       "inSitemap": true,
       "built": true,
       "words": 802,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 5,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/applied-ai-specializations",
@@ -2486,8 +2774,8 @@
       "inSitemap": true,
       "built": true,
       "words": 802,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/aws/cheatsheet",
@@ -2518,7 +2806,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1196,
-      "inboundLinks": 13,
+      "inboundLinks": 16,
       "sourceFile": "app/learn/aws/introduction/page.tsx"
     },
     {
@@ -2534,7 +2822,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1047,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "app/learn/aws/s3/page.tsx"
     },
     {
@@ -2550,7 +2838,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1164,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "app/learn/aws/glue/page.tsx"
     },
     {
@@ -2566,7 +2854,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1193,
-      "inboundLinks": 6,
+      "inboundLinks": 8,
       "sourceFile": "app/learn/aws/redshift/page.tsx"
     },
     {
@@ -2582,7 +2870,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1177,
-      "inboundLinks": 7,
+      "inboundLinks": 9,
       "sourceFile": "app/learn/aws/kinesis/page.tsx"
     },
     {
@@ -2598,7 +2886,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1430,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "app/learn/aws/athena/page.tsx"
     },
     {
@@ -2614,7 +2902,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1091,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "app/learn/aws/emr/page.tsx"
     },
     {
@@ -2630,7 +2918,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1194,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "app/learn/aws/step-functions/page.tsx"
     },
     {
@@ -2646,7 +2934,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1373,
-      "inboundLinks": 3,
+      "inboundLinks": 5,
       "sourceFile": "app/learn/aws/lake-formation/page.tsx"
     },
     {
@@ -2678,7 +2966,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1997,
-      "inboundLinks": 14,
+      "inboundLinks": 16,
       "sourceFile": "app/learn/azure/introduction/page.tsx"
     },
     {
@@ -2694,7 +2982,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1146,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "app/learn/azure/adls-gen2/page.tsx"
     },
     {
@@ -2710,7 +2998,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1351,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "app/learn/azure/adf/page.tsx"
     },
     {
@@ -2726,7 +3014,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1549,
-      "inboundLinks": 8,
+      "inboundLinks": 9,
       "sourceFile": "app/learn/azure/databricks/page.tsx"
     },
     {
@@ -2742,7 +3030,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1217,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "app/learn/azure/synapse/page.tsx"
     },
     {
@@ -2758,7 +3046,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1339,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "app/learn/azure/event-hubs/page.tsx"
     },
     {
@@ -2774,7 +3062,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1306,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "app/learn/azure/key-vault/page.tsx"
     },
     {
@@ -2790,7 +3078,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1512,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "app/learn/azure/microsoft-fabric/page.tsx"
     },
     {
@@ -2806,8 +3094,8 @@
       "inSitemap": true,
       "built": true,
       "words": 771,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/business-intelligence",
@@ -2822,8 +3110,8 @@
       "inSitemap": true,
       "built": true,
       "words": 665,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 4,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/cloud-architecture-finops",
@@ -2838,8 +3126,8 @@
       "inSitemap": true,
       "built": true,
       "words": 806,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/cybersecurity",
@@ -2854,7 +3142,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2279,
-      "inboundLinks": 45,
+      "inboundLinks": 48,
       "sourceFile": "app/learn/cybersecurity/page.tsx"
     },
     {
@@ -2886,7 +3174,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4935,
-      "inboundLinks": 3,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/what-is-cybersecurity.tsx"
     },
     {
@@ -2902,7 +3190,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6636,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/how-the-internet-works.tsx"
     },
     {
@@ -2918,7 +3206,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6298,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/linux-for-security.tsx"
     },
     {
@@ -2934,7 +3222,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6402,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/cryptography-fundamentals.tsx"
     },
     {
@@ -2950,7 +3238,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6041,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/cia-triad-security-models.tsx"
     },
     {
@@ -2966,7 +3254,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5578,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/cybersecurity-careers-us.tsx"
     },
     {
@@ -2982,7 +3270,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4941,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/attacker-mindset-kill-chain.tsx"
     },
     {
@@ -2998,7 +3286,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6543,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/social-engineering-phishing.tsx"
     },
     {
@@ -3014,7 +3302,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6645,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/web-attacks-owasp.tsx"
     },
     {
@@ -3030,7 +3318,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5534,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/network-attacks.tsx"
     },
     {
@@ -3046,7 +3334,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5446,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/malware-types-behavior.tsx"
     },
     {
@@ -3062,7 +3350,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5542,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/authentication-attacks.tsx"
     },
     {
@@ -3078,7 +3366,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5192,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/vulnerabilities-and-exploits.tsx"
     },
     {
@@ -3094,7 +3382,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5275,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/python-for-security.tsx"
     },
     {
@@ -3110,7 +3398,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5243,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/networking-deep-dive.tsx"
     },
     {
@@ -3126,7 +3414,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5321,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/linux-hardening.tsx"
     },
     {
@@ -3142,7 +3430,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4934,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/windows-active-directory.tsx"
     },
     {
@@ -3158,7 +3446,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5156,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/cloud-security.tsx"
     },
     {
@@ -3174,7 +3462,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5222,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/api-container-security.tsx"
     },
     {
@@ -3190,7 +3478,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5960,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/cybersecurity/secure-coding.tsx"
     },
     {
@@ -3206,7 +3494,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4111,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/penetration-testing-methodology.tsx"
     },
     {
@@ -3222,7 +3510,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3908,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/reconnaissance-osint.tsx"
     },
     {
@@ -3238,7 +3526,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3685,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/scanning-enumeration.tsx"
     },
     {
@@ -3254,7 +3542,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4011,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/exploitation-techniques.tsx"
     },
     {
@@ -3270,7 +3558,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4296,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/web-app-pentesting.tsx"
     },
     {
@@ -3286,7 +3574,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3810,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/post-exploitation.tsx"
     },
     {
@@ -3302,7 +3590,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4078,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/ctf-skills.tsx"
     },
     {
@@ -3318,7 +3606,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3850,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/security-architecture.tsx"
     },
     {
@@ -3334,7 +3622,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3560,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/identity-access-management.tsx"
     },
     {
@@ -3350,7 +3638,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2959,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/firewalls-ids-ips.tsx"
     },
     {
@@ -3366,7 +3654,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3380,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/siem-log-analysis.tsx"
     },
     {
@@ -3382,7 +3670,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4811,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/vulnerability-management.tsx"
     },
     {
@@ -3398,7 +3686,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5334,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/incident-response.tsx"
     },
     {
@@ -3414,7 +3702,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4415,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/threat-intelligence-hunting.tsx"
     },
     {
@@ -3430,7 +3718,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4398,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/devsecops.tsx"
     },
     {
@@ -3446,7 +3734,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5253,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/compliance-frameworks.tsx"
     },
     {
@@ -3462,7 +3750,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4132,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/security-certifications.tsx"
     },
     {
@@ -3478,7 +3766,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4454,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/bug-bounty-hunting.tsx"
     },
     {
@@ -3494,7 +3782,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4030,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/home-lab-setup.tsx"
     },
     {
@@ -3510,7 +3798,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5299,
-      "inboundLinks": 3,
+      "inboundLinks": 5,
       "sourceFile": "content/cybersecurity/interview-prep-security.tsx"
     },
     {
@@ -3526,7 +3814,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2523,
-      "inboundLinks": 52,
+      "inboundLinks": 54,
       "sourceFile": "app/learn/data-engineering/page.tsx"
     },
     {
@@ -3558,7 +3846,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8276,
-      "inboundLinks": 3,
+      "inboundLinks": 4,
       "sourceFile": "content/data-engineering/what-is-data.tsx"
     },
     {
@@ -3574,7 +3862,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7662,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/data-engineering/what-is-data-engineering.tsx"
     },
     {
@@ -3590,7 +3878,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7882,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/data-engineering/how-data-moves.tsx"
     },
     {
@@ -3606,7 +3894,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8272,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/data-engineering/de-ecosystem.tsx"
     },
     {
@@ -3622,7 +3910,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7946,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/de-vs-other-roles.tsx"
     },
     {
@@ -3638,7 +3926,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3059,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/de-usa-job-market.tsx"
     },
     {
@@ -3654,7 +3942,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8226,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/data-engineering/data-types-structured.tsx"
     },
     {
@@ -3670,7 +3958,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8265,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/data-formats.tsx"
     },
     {
@@ -3686,7 +3974,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9278,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/databases-internals.tsx"
     },
     {
@@ -3702,7 +3990,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8148,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/sql-vs-nosql.tsx"
     },
     {
@@ -3718,7 +4006,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8275,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/warehouse-lake-lakehouse.tsx"
     },
     {
@@ -3734,7 +4022,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9627,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/schemas-tables-keys.tsx"
     },
     {
@@ -3750,7 +4038,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8742,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/acid-transactions.tsx"
     },
     {
@@ -3766,7 +4054,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7854,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/data-engineering/python-for-de.tsx"
     },
     {
@@ -3782,7 +4070,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9368,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/sql-for-de.tsx"
     },
     {
@@ -3798,7 +4086,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8996,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/data-engineering/linux-shell.tsx"
     },
     {
@@ -3814,7 +4102,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8709,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/git-for-data.tsx"
     },
     {
@@ -3830,7 +4118,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7669,
-      "inboundLinks": 7,
+      "inboundLinks": 8,
       "sourceFile": "content/data-engineering/working-with-apis.tsx"
     },
     {
@@ -3846,7 +4134,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8189,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/files-at-scale.tsx"
     },
     {
@@ -3862,7 +4150,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7830,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/what-is-a-pipeline.tsx"
     },
     {
@@ -3878,7 +4166,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7868,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/data-engineering/batch-vs-streaming.tsx"
     },
     {
@@ -3894,7 +4182,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8026,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/data-engineering/etl-vs-elt.tsx"
     },
     {
@@ -3910,7 +4198,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6621,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/data-engineering/ingestion-patterns.tsx"
     },
     {
@@ -3926,7 +4214,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9615,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/data-engineering/change-data-capture.tsx"
     },
     {
@@ -3942,7 +4230,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9057,
-      "inboundLinks": 8,
+      "inboundLinks": 9,
       "sourceFile": "content/data-engineering/batch-pipeline-from-scratch.tsx"
     },
     {
@@ -3958,7 +4246,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7286,
-      "inboundLinks": 9,
+      "inboundLinks": 10,
       "sourceFile": "content/data-engineering/idempotency-atomicity.tsx"
     },
     {
@@ -3974,7 +4262,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8062,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/error-handling-retries.tsx"
     },
     {
@@ -3990,7 +4278,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7589,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/data-engineering/pipeline-orchestration.tsx"
     },
     {
@@ -4006,7 +4294,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8961,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/data-engineering/data-lake-architecture.tsx"
     },
     {
@@ -4022,7 +4310,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8352,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/medallion-architecture.tsx"
     },
     {
@@ -4038,7 +4326,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9110,
-      "inboundLinks": 7,
+      "inboundLinks": 8,
       "sourceFile": "content/data-engineering/warehouse-concepts.tsx"
     },
     {
@@ -4054,7 +4342,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8809,
-      "inboundLinks": 8,
+      "inboundLinks": 9,
       "sourceFile": "content/data-engineering/lakehouse-architecture.tsx"
     },
     {
@@ -4070,7 +4358,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7119,
-      "inboundLinks": 7,
+      "inboundLinks": 8,
       "sourceFile": "content/data-engineering/data-modelling.tsx"
     },
     {
@@ -4086,7 +4374,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9570,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/data-engineering/slowly-changing-dimensions.tsx"
     },
     {
@@ -4102,7 +4390,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7204,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/data-vault.tsx"
     },
     {
@@ -4118,7 +4406,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7175,
-      "inboundLinks": 7,
+      "inboundLinks": 8,
       "sourceFile": "content/data-engineering/data-quality.tsx"
     },
     {
@@ -4134,7 +4422,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7170,
-      "inboundLinks": 7,
+      "inboundLinks": 8,
       "sourceFile": "content/data-engineering/monitoring-observability.tsx"
     },
     {
@@ -4150,7 +4438,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8320,
-      "inboundLinks": 7,
+      "inboundLinks": 8,
       "sourceFile": "content/data-engineering/data-governance.tsx"
     },
     {
@@ -4166,7 +4454,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6403,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/security-compliance.tsx"
     },
     {
@@ -4182,7 +4470,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9235,
-      "inboundLinks": 7,
+      "inboundLinks": 8,
       "sourceFile": "content/data-engineering/streaming-data.tsx"
     },
     {
@@ -4198,7 +4486,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8656,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/message-brokers-queues.tsx"
     },
     {
@@ -4214,7 +4502,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9858,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/distributed-systems.tsx"
     },
     {
@@ -4230,7 +4518,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8830,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/data-engineering/performance-tuning.tsx"
     },
     {
@@ -4246,7 +4534,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7447,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/data-engineering/cicd-pipelines.tsx"
     },
     {
@@ -4262,7 +4550,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6807,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/infrastructure-as-code.tsx"
     },
     {
@@ -4278,7 +4566,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9895,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/data-engineering/system-design-de.tsx"
     },
     {
@@ -4294,7 +4582,7 @@
       "inSitemap": true,
       "built": true,
       "words": 16181,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/data-engineering/de-interview-questions.tsx"
     },
     {
@@ -4310,8 +4598,8 @@
       "inSitemap": true,
       "built": true,
       "words": 808,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/data-science",
@@ -5206,8 +5494,8 @@
       "inSitemap": true,
       "built": true,
       "words": 717,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/dbms",
@@ -5222,7 +5510,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1283,
-      "inboundLinks": 23,
+      "inboundLinks": 26,
       "sourceFile": "app/learn/dbms/page.tsx"
     },
     {
@@ -5254,7 +5542,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8058,
-      "inboundLinks": 3,
+      "inboundLinks": 5,
       "sourceFile": "app/learn/dbms/introduction/page.tsx"
     },
     {
@@ -5270,7 +5558,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10074,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "app/learn/dbms/data-models/page.tsx"
     },
     {
@@ -5286,7 +5574,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10849,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "app/learn/dbms/er-model/page.tsx"
     },
     {
@@ -5302,7 +5590,7 @@
       "inSitemap": true,
       "built": true,
       "words": 11856,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "app/learn/dbms/relational-model/page.tsx"
     },
     {
@@ -5318,7 +5606,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10186,
-      "inboundLinks": 6,
+      "inboundLinks": 8,
       "sourceFile": "app/learn/dbms/normalization/page.tsx"
     },
     {
@@ -5334,7 +5622,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9500,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "app/learn/dbms/functional-dependencies/page.tsx"
     },
     {
@@ -5350,7 +5638,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10849,
-      "inboundLinks": 6,
+      "inboundLinks": 8,
       "sourceFile": "app/learn/dbms/sql-complete/page.tsx"
     },
     {
@@ -5366,7 +5654,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7956,
-      "inboundLinks": 6,
+      "inboundLinks": 8,
       "sourceFile": "app/learn/dbms/indexes/page.tsx"
     },
     {
@@ -5382,7 +5670,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7752,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "app/learn/dbms/transactions/page.tsx"
     },
     {
@@ -5398,7 +5686,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8272,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "app/learn/dbms/concurrency-control/page.tsx"
     },
     {
@@ -5414,7 +5702,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7101,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "app/learn/dbms/query-processing/page.tsx"
     },
     {
@@ -5430,7 +5718,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6970,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "app/learn/dbms/storage-file-organization/page.tsx"
     },
     {
@@ -5446,7 +5734,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7552,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "app/learn/dbms/hashing-btrees/page.tsx"
     },
     {
@@ -5462,7 +5750,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7327,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "app/learn/dbms/relational-algebra/page.tsx"
     },
     {
@@ -5478,7 +5766,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6678,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "app/learn/dbms/views-procedures-triggers/page.tsx"
     },
     {
@@ -5494,7 +5782,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6740,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "app/learn/dbms/crash-recovery/page.tsx"
     },
     {
@@ -5510,7 +5798,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7745,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "app/learn/dbms/distributed-databases/page.tsx"
     },
     {
@@ -5526,7 +5814,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6981,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "app/learn/dbms/nosql-databases/page.tsx"
     },
     {
@@ -5542,7 +5830,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6668,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "app/learn/dbms/database-security/page.tsx"
     },
     {
@@ -5558,7 +5846,7 @@
       "inSitemap": true,
       "built": true,
       "words": 12893,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "app/learn/dbms/interview-questions/page.tsx"
     },
     {
@@ -5574,7 +5862,7 @@
       "inSitemap": true,
       "built": true,
       "words": 952,
-      "inboundLinks": 27,
+      "inboundLinks": 30,
       "sourceFile": "app/learn/dbt/page.tsx"
     },
     {
@@ -5606,7 +5894,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8777,
-      "inboundLinks": 3,
+      "inboundLinks": 5,
       "sourceFile": "content/dbt/what-is-dbt.tsx"
     },
     {
@@ -5622,7 +5910,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7786,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/how-dbt-works.tsx"
     },
     {
@@ -5638,7 +5926,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7317,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/project-setup.tsx"
     },
     {
@@ -5654,7 +5942,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7174,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/models-basics.tsx"
     },
     {
@@ -5670,7 +5958,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8754,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/sources-and-ref.tsx"
     },
     {
@@ -5686,7 +5974,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8922,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/materializations.tsx"
     },
     {
@@ -5702,7 +5990,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8039,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/incremental-models.tsx"
     },
     {
@@ -5718,7 +6006,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7164,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/testing-basics.tsx"
     },
     {
@@ -5734,7 +6022,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8389,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/documentation.tsx"
     },
     {
@@ -5750,7 +6038,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7939,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/jinja-and-macros.tsx"
     },
     {
@@ -5766,7 +6054,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6822,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/packages.tsx"
     },
     {
@@ -5782,7 +6070,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9309,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/seeds.tsx"
     },
     {
@@ -5798,7 +6086,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8640,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/snapshots.tsx"
     },
     {
@@ -5814,7 +6102,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8725,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/variables-and-environments.tsx"
     },
     {
@@ -5830,7 +6118,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8998,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/hooks-and-operations.tsx"
     },
     {
@@ -5846,7 +6134,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8223,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/project-structure.tsx"
     },
     {
@@ -5862,7 +6150,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8916,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/performance-tuning-dbt.tsx"
     },
     {
@@ -5878,7 +6166,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10234,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/cicd-for-dbt.tsx"
     },
     {
@@ -5894,7 +6182,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9251,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/dbt/testing-strategy-at-scale.tsx"
     },
     {
@@ -5910,7 +6198,7 @@
       "inSitemap": true,
       "built": true,
       "words": 13144,
-      "inboundLinks": 3,
+      "inboundLinks": 5,
       "sourceFile": "content/dbt/dbt-interview-system-design.tsx"
     },
     {
@@ -5926,8 +6214,8 @@
       "inSitemap": true,
       "built": true,
       "words": 784,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 5,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/dsa",
@@ -5942,7 +6230,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1102,
-      "inboundLinks": 23,
+      "inboundLinks": 25,
       "sourceFile": "app/learn/dsa/page.tsx"
     },
     {
@@ -5974,7 +6262,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2315,
-      "inboundLinks": 3,
+      "inboundLinks": 4,
       "sourceFile": "content/dsa/introduction.tsx"
     },
     {
@@ -5990,7 +6278,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2286,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/dsa/complexity.tsx"
     },
     {
@@ -6006,7 +6294,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2936,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/dsa/arrays.tsx"
     },
     {
@@ -6022,7 +6310,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2558,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/dsa/strings.tsx"
     },
     {
@@ -6038,7 +6326,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2894,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/dsa/pointers.tsx"
     },
     {
@@ -6054,7 +6342,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3132,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/dsa/linked-lists.tsx"
     },
     {
@@ -6070,7 +6358,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2594,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/dsa/stacks.tsx"
     },
     {
@@ -6086,7 +6374,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2799,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/dsa/queues.tsx"
     },
     {
@@ -6102,7 +6390,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3087,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/dsa/recursion.tsx"
     },
     {
@@ -6118,7 +6406,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3338,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/dsa/sorting.tsx"
     },
     {
@@ -6134,7 +6422,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3018,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/dsa/searching.tsx"
     },
     {
@@ -6150,7 +6438,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2922,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/dsa/trees.tsx"
     },
     {
@@ -6166,7 +6454,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2990,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/dsa/binary-search-tree.tsx"
     },
     {
@@ -6182,7 +6470,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3031,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/dsa/heaps.tsx"
     },
     {
@@ -6198,7 +6486,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3220,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/dsa/hashing.tsx"
     },
     {
@@ -6214,7 +6502,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3422,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/dsa/graphs.tsx"
     },
     {
@@ -6230,7 +6518,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3392,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/dsa/dynamic-programming.tsx"
     },
     {
@@ -6246,7 +6534,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3015,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/dsa/greedy.tsx"
     },
     {
@@ -6262,7 +6550,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3102,
-      "inboundLinks": 6,
+      "inboundLinks": 7,
       "sourceFile": "content/dsa/backtracking.tsx"
     },
     {
@@ -6278,7 +6566,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3582,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/dsa/advanced.tsx"
     },
     {
@@ -6294,8 +6582,8 @@
       "inSitemap": true,
       "built": true,
       "words": 816,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/enterprise-platforms",
@@ -6310,8 +6598,8 @@
       "inSitemap": true,
       "built": true,
       "words": 804,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/what-is-data-engineering/cheatsheet",
@@ -6342,7 +6630,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1475,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "app/learn/what-is-data-engineering/page.tsx"
     },
     {
@@ -6358,7 +6646,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1549,
-      "inboundLinks": 3,
+      "inboundLinks": 4,
       "sourceFile": "app/learn/foundations/sql/page.tsx"
     },
     {
@@ -6374,7 +6662,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2623,
-      "inboundLinks": 3,
+      "inboundLinks": 4,
       "sourceFile": "app/learn/foundations/postgresql/page.tsx"
     },
     {
@@ -6390,7 +6678,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1157,
-      "inboundLinks": 3,
+      "inboundLinks": 4,
       "sourceFile": "app/learn/foundations/python/page.tsx"
     },
     {
@@ -6406,8 +6694,8 @@
       "inSitemap": true,
       "built": true,
       "words": 890,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 4,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/game-development-graphics",
@@ -6422,8 +6710,8 @@
       "inSitemap": true,
       "built": true,
       "words": 812,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/gcp/cheatsheet",
@@ -6454,7 +6742,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1008,
-      "inboundLinks": 9,
+      "inboundLinks": 10,
       "sourceFile": "app/learn/gcp/introduction/page.tsx"
     },
     {
@@ -6534,7 +6822,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1220,
-      "inboundLinks": 2,
+      "inboundLinks": 5,
       "sourceFile": "app/learn/generative-ai/page.tsx"
     },
     {
@@ -6550,8 +6838,8 @@
       "inSitemap": true,
       "built": true,
       "words": 748,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/html-css",
@@ -6566,7 +6854,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1833,
-      "inboundLinks": 46,
+      "inboundLinks": 48,
       "sourceFile": "app/learn/html-css/page.tsx"
     },
     {
@@ -6598,7 +6886,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4971,
-      "inboundLinks": 3,
+      "inboundLinks": 4,
       "sourceFile": "content/html-css/what-is-html-how-the-web-works.tsx"
     },
     {
@@ -6614,7 +6902,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4080,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/html-css/document-structure.tsx"
     },
     {
@@ -6630,7 +6918,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4339,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/text-semantic-structure.tsx"
     },
     {
@@ -6646,7 +6934,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4216,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/links-navigation.tsx"
     },
     {
@@ -6662,7 +6950,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5025,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/images-media.tsx"
     },
     {
@@ -6678,7 +6966,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4142,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/lists.tsx"
     },
     {
@@ -6694,7 +6982,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4455,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/tables.tsx"
     },
     {
@@ -6710,7 +6998,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2673,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/forms-inputs-validation.tsx"
     },
     {
@@ -6726,7 +7014,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5918,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/forms-advanced.tsx"
     },
     {
@@ -6742,7 +7030,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5452,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/semantic-html-accessibility-basics.tsx"
     },
     {
@@ -6758,7 +7046,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4366,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/html5-apis-overview.tsx"
     },
     {
@@ -6774,7 +7062,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2413,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/embedding-content.tsx"
     },
     {
@@ -6790,7 +7078,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4609,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/metadata-seo-fundamentals.tsx"
     },
     {
@@ -6806,7 +7094,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4110,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/html-entities-special-characters.tsx"
     },
     {
@@ -6822,7 +7110,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4460,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/html-best-practices-validation.tsx"
     },
     {
@@ -6838,7 +7126,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2800,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/building-a-complete-static-page.tsx"
     },
     {
@@ -6854,7 +7142,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4486,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/what-is-css-syntax-selectors-cascade.tsx"
     },
     {
@@ -6870,7 +7158,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3856,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/the-box-model.tsx"
     },
     {
@@ -6886,7 +7174,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4738,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/colors-units-typography.tsx"
     },
     {
@@ -6902,7 +7190,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4395,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/css-selectors-deep-dive.tsx"
     },
     {
@@ -6918,7 +7206,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5315,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/display-positioning.tsx"
     },
     {
@@ -6934,7 +7222,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4485,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/backgrounds-borders.tsx"
     },
     {
@@ -6950,7 +7238,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4829,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/flexbox-complete-guide.tsx"
     },
     {
@@ -6966,7 +7254,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4319,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/flexbox-in-practice.tsx"
     },
     {
@@ -6982,7 +7270,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5101,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/css-grid-complete-guide.tsx"
     },
     {
@@ -6998,7 +7286,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4456,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/css-grid-in-practice.tsx"
     },
     {
@@ -7014,7 +7302,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4771,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/flexbox-vs-grid.tsx"
     },
     {
@@ -7030,7 +7318,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2585,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/responsive-design-media-queries.tsx"
     },
     {
@@ -7046,7 +7334,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5203,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/mobile-first-design.tsx"
     },
     {
@@ -7062,7 +7350,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4780,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/css-custom-properties.tsx"
     },
     {
@@ -7078,7 +7366,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4724,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/css-transitions.tsx"
     },
     {
@@ -7094,7 +7382,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2347,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/css-animations-keyframes.tsx"
     },
     {
@@ -7110,7 +7398,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4490,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/css-transforms.tsx"
     },
     {
@@ -7126,7 +7414,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4292,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/modern-css-selectors.tsx"
     },
     {
@@ -7142,7 +7430,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4265,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/css-architecture-naming.tsx"
     },
     {
@@ -7158,7 +7446,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2494,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/intro-to-sass.tsx"
     },
     {
@@ -7174,7 +7462,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5266,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/responsive-images-performance.tsx"
     },
     {
@@ -7190,7 +7478,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5082,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/css-accessibility-best-practices.tsx"
     },
     {
@@ -7206,7 +7494,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4990,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/cross-browser-compatibility-debugging.tsx"
     },
     {
@@ -7222,7 +7510,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2634,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/building-a-responsive-website.tsx"
     },
     {
@@ -7238,7 +7526,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5222,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/html-css/css-best-practices-common-mistakes.tsx"
     },
     {
@@ -7254,7 +7542,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4550,
-      "inboundLinks": 4,
+      "inboundLinks": 5,
       "sourceFile": "content/html-css/html-css-interview-prep.tsx"
     },
     {
@@ -7270,8 +7558,8 @@
       "inSitemap": true,
       "built": true,
       "words": 785,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/java",
@@ -7286,8 +7574,8 @@
       "inSitemap": true,
       "built": true,
       "words": 766,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/javascript",
@@ -7302,8 +7590,8 @@
       "inSitemap": true,
       "built": true,
       "words": 719,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 4,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/mathematics",
@@ -7318,8 +7606,8 @@
       "inSitemap": true,
       "built": true,
       "words": 694,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/mobile-development",
@@ -7334,8 +7622,8 @@
       "inSitemap": true,
       "built": true,
       "words": 690,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/networking",
@@ -7350,7 +7638,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2127,
-      "inboundLinks": 39,
+      "inboundLinks": 44,
       "sourceFile": "app/learn/networking/page.tsx"
     },
     {
@@ -7398,7 +7686,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8557,
-      "inboundLinks": 3,
+      "inboundLinks": 7,
       "sourceFile": "content/networking/what-is-a-network.tsx"
     },
     {
@@ -7414,7 +7702,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6673,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/network-types-topologies.tsx"
     },
     {
@@ -7430,7 +7718,7 @@
       "inSitemap": true,
       "built": true,
       "words": 14384,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/osi-model.tsx"
     },
     {
@@ -7446,7 +7734,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9726,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/tcp-ip-model.tsx"
     },
     {
@@ -7462,7 +7750,7 @@
       "inSitemap": true,
       "built": true,
       "words": 10239,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/data-transmission.tsx"
     },
     {
@@ -7478,7 +7766,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5775,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/binary-and-hex.tsx"
     },
     {
@@ -7494,7 +7782,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7397,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/cables-and-connectors.tsx"
     },
     {
@@ -7510,7 +7798,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7093,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/ethernet-and-switching.tsx"
     },
     {
@@ -7526,7 +7814,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5609,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/arp.tsx"
     },
     {
@@ -7542,7 +7830,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7052,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/vlans.tsx"
     },
     {
@@ -7558,7 +7846,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5992,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/spanning-tree.tsx"
     },
     {
@@ -7574,7 +7862,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6562,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/wireless-networking.tsx"
     },
     {
@@ -7590,7 +7878,7 @@
       "inSitemap": true,
       "built": true,
       "words": 9182,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/ip-addressing.tsx"
     },
     {
@@ -7606,7 +7894,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7452,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/subnetting.tsx"
     },
     {
@@ -7622,7 +7910,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5675,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/ipv6.tsx"
     },
     {
@@ -7638,7 +7926,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5861,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/routing-fundamentals.tsx"
     },
     {
@@ -7654,7 +7942,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7306,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/dynamic-routing.tsx"
     },
     {
@@ -7670,7 +7958,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5995,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/nat-and-dhcp.tsx"
     },
     {
@@ -7686,7 +7974,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6014,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/icmp.tsx"
     },
     {
@@ -7702,7 +7990,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6151,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/tcp-deep-dive.tsx"
     },
     {
@@ -7718,7 +8006,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5293,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/udp.tsx"
     },
     {
@@ -7734,7 +8022,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7227,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/ports-and-sockets.tsx"
     },
     {
@@ -7750,7 +8038,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6137,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/tls-ssl.tsx"
     },
     {
@@ -7766,7 +8054,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4862,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/quic-http3.tsx"
     },
     {
@@ -7782,7 +8070,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4953,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/dns.tsx"
     },
     {
@@ -7798,7 +8086,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4477,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/http-and-https.tsx"
     },
     {
@@ -7814,7 +8102,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4717,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/email-protocols.tsx"
     },
     {
@@ -7830,7 +8118,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5140,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/ssh.tsx"
     },
     {
@@ -7846,7 +8134,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5308,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/ftp-and-sftp.tsx"
     },
     {
@@ -7862,7 +8150,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5000,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/dhcp-deep-dive.tsx"
     },
     {
@@ -7878,7 +8166,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5028,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/snmp-and-syslog.tsx"
     },
     {
@@ -7894,7 +8182,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5159,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/ntp.tsx"
     },
     {
@@ -7910,7 +8198,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5521,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/network-attacks.tsx"
     },
     {
@@ -7926,7 +8214,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5308,
-      "inboundLinks": 4,
+      "inboundLinks": 8,
       "sourceFile": "content/networking/firewalls-and-acls.tsx"
     },
     {
@@ -7942,7 +8230,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5124,
-      "inboundLinks": 3,
+      "inboundLinks": 7,
       "sourceFile": "content/networking/ids-and-ips.tsx"
     },
     {
@@ -8102,8 +8390,8 @@
       "inSitemap": true,
       "built": true,
       "words": 793,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/physics",
@@ -8118,8 +8406,8 @@
       "inSitemap": true,
       "built": true,
       "words": 671,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/programming-languages-compilers",
@@ -8134,8 +8422,8 @@
       "inSitemap": true,
       "built": true,
       "words": 750,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/projects",
@@ -8150,7 +8438,7 @@
       "inSitemap": true,
       "built": true,
       "words": 421,
-      "inboundLinks": 14,
+      "inboundLinks": 15,
       "sourceFile": "app/learn/projects/page.tsx"
     },
     {
@@ -8262,7 +8550,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1958,
-      "inboundLinks": 51,
+      "inboundLinks": 61,
       "sourceFile": "app/learn/python/page.tsx"
     },
     {
@@ -8294,7 +8582,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5273,
-      "inboundLinks": 3,
+      "inboundLinks": 12,
       "sourceFile": "content/python/what-is-python-setup.tsx"
     },
     {
@@ -8310,7 +8598,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3761,
-      "inboundLinks": 4,
+      "inboundLinks": 13,
       "sourceFile": "content/python/variables-data-types.tsx"
     },
     {
@@ -8326,7 +8614,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3810,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/operators.tsx"
     },
     {
@@ -8342,7 +8630,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3958,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/strings.tsx"
     },
     {
@@ -8358,7 +8646,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3711,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/control-flow.tsx"
     },
     {
@@ -8374,7 +8662,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5470,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/loops.tsx"
     },
     {
@@ -8390,7 +8678,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4633,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/functions.tsx"
     },
     {
@@ -8406,7 +8694,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4142,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/lists.tsx"
     },
     {
@@ -8422,7 +8710,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4352,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/tuples-sets.tsx"
     },
     {
@@ -8438,7 +8726,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4204,
-      "inboundLinks": 6,
+      "inboundLinks": 15,
       "sourceFile": "content/python/io-formatting.tsx"
     },
     {
@@ -8454,7 +8742,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4835,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/dictionaries.tsx"
     },
     {
@@ -8470,7 +8758,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4433,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/comprehensions.tsx"
     },
     {
@@ -8486,7 +8774,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4348,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/nested-data-structures.tsx"
     },
     {
@@ -8502,7 +8790,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4372,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/string-manipulation-deep-dive.tsx"
     },
     {
@@ -8518,7 +8806,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5019,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/reading-writing-files.tsx"
     },
     {
@@ -8534,7 +8822,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4363,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/csv-json.tsx"
     },
     {
@@ -8550,7 +8838,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4671,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/exception-handling.tsx"
     },
     {
@@ -8566,7 +8854,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3528,
-      "inboundLinks": 5,
+      "inboundLinks": 14,
       "sourceFile": "content/python/modules-packages-venv.tsx"
     },
     {
@@ -8582,7 +8870,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4479,
-      "inboundLinks": 5,
+      "inboundLinks": 10,
       "sourceFile": "content/python/classes-objects.tsx"
     },
     {
@@ -8598,7 +8886,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3858,
-      "inboundLinks": 5,
+      "inboundLinks": 10,
       "sourceFile": "content/python/constructors-attributes.tsx"
     },
     {
@@ -8614,7 +8902,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3921,
-      "inboundLinks": 5,
+      "inboundLinks": 10,
       "sourceFile": "content/python/inheritance-polymorphism.tsx"
     },
     {
@@ -8630,7 +8918,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2964,
-      "inboundLinks": 5,
+      "inboundLinks": 10,
       "sourceFile": "content/python/encapsulation-dunder-methods.tsx"
     },
     {
@@ -8646,7 +8934,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2548,
-      "inboundLinks": 5,
+      "inboundLinks": 10,
       "sourceFile": "content/python/class-static-methods-properties.tsx"
     },
     {
@@ -8662,7 +8950,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2661,
-      "inboundLinks": 5,
+      "inboundLinks": 10,
       "sourceFile": "content/python/abstract-base-classes.tsx"
     },
     {
@@ -8678,7 +8966,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4439,
-      "inboundLinks": 5,
+      "inboundLinks": 10,
       "sourceFile": "content/python/args-kwargs.tsx"
     },
     {
@@ -8694,7 +8982,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4452,
-      "inboundLinks": 5,
+      "inboundLinks": 10,
       "sourceFile": "content/python/lambda-map-filter-reduce.tsx"
     },
     {
@@ -8710,7 +8998,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4035,
-      "inboundLinks": 5,
+      "inboundLinks": 10,
       "sourceFile": "content/python/iterators-iterables.tsx"
     },
     {
@@ -8726,7 +9014,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4191,
-      "inboundLinks": 5,
+      "inboundLinks": 10,
       "sourceFile": "content/python/generators-yield.tsx"
     },
     {
@@ -8742,7 +9030,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2646,
-      "inboundLinks": 5,
+      "inboundLinks": 10,
       "sourceFile": "content/python/decorators.tsx"
     },
     {
@@ -8758,7 +9046,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2613,
-      "inboundLinks": 5,
+      "inboundLinks": 10,
       "sourceFile": "content/python/context-managers.tsx"
     },
     {
@@ -8774,7 +9062,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2803,
-      "inboundLinks": 5,
+      "inboundLinks": 10,
       "sourceFile": "content/python/closures-scope.tsx"
     },
     {
@@ -8790,7 +9078,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4920,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/python/regular-expressions.tsx"
     },
     {
@@ -8806,7 +9094,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4378,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/python/dates-times.tsx"
     },
     {
@@ -8822,7 +9110,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4438,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/python/multithreading-multiprocessing.tsx"
     },
     {
@@ -8838,7 +9126,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4478,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/python/async-python.tsx"
     },
     {
@@ -8854,7 +9142,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2798,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/python/type-hints-mypy.tsx"
     },
     {
@@ -8870,7 +9158,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4068,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/python/working-with-apis-python.tsx"
     },
     {
@@ -8886,7 +9174,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2959,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/python/unit-testing-pytest.tsx"
     },
     {
@@ -8902,7 +9190,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5511,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/python/debugging-techniques.tsx"
     },
     {
@@ -8918,7 +9206,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4590,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/python/logging-best-practices.tsx"
     },
     {
@@ -8934,7 +9222,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4146,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/python/packaging-distribution.tsx"
     },
     {
@@ -8950,7 +9238,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3028,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/python/performance-profiling.tsx"
     },
     {
@@ -8966,7 +9254,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2817,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/python/numpy-pandas-intro.tsx"
     },
     {
@@ -8982,7 +9270,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2802,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/python/building-a-cli-tool.tsx"
     },
     {
@@ -8998,7 +9286,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2744,
-      "inboundLinks": 5,
+      "inboundLinks": 6,
       "sourceFile": "content/python/python-best-practices.tsx"
     },
     {
@@ -9014,7 +9302,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3892,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/python/python-interview-prep.tsx"
     },
     {
@@ -9030,8 +9318,8 @@
       "inSitemap": true,
       "built": true,
       "words": 691,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/robotics-autonomous-systems",
@@ -9046,8 +9334,8 @@
       "inSitemap": true,
       "built": true,
       "words": 757,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/security-governance-risk-privacy",
@@ -9062,8 +9350,8 @@
       "inSitemap": true,
       "built": true,
       "words": 822,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/semiconductor-digital-hardware",
@@ -9078,8 +9366,8 @@
       "inSitemap": true,
       "built": true,
       "words": 775,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/snowflake",
@@ -9094,7 +9382,7 @@
       "inSitemap": true,
       "built": true,
       "words": 814,
-      "inboundLinks": 26,
+      "inboundLinks": 29,
       "sourceFile": "app/learn/snowflake/page.tsx"
     },
     {
@@ -9126,7 +9414,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5184,
-      "inboundLinks": 3,
+      "inboundLinks": 5,
       "sourceFile": "content/snowflake/what-is-snowflake.tsx"
     },
     {
@@ -9142,7 +9430,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5814,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/architecture.tsx"
     },
     {
@@ -9158,7 +9446,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4151,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/setup-and-sql-basics.tsx"
     },
     {
@@ -9174,7 +9462,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4646,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/roles-security-basics.tsx"
     },
     {
@@ -9190,7 +9478,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4061,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/loading-data.tsx"
     },
     {
@@ -9206,7 +9494,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3960,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/semi-structured-data.tsx"
     },
     {
@@ -9222,7 +9510,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3431,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/elt-medallion.tsx"
     },
     {
@@ -9238,7 +9526,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3937,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/merge-idempotency.tsx"
     },
     {
@@ -9254,7 +9542,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3533,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/time-travel-cloning.tsx"
     },
     {
@@ -9270,7 +9558,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3304,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/snowpipe.tsx"
     },
     {
@@ -9286,7 +9574,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3405,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/streams-and-tasks.tsx"
     },
     {
@@ -9302,7 +9590,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4738,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/dynamic-tables.tsx"
     },
     {
@@ -9318,7 +9606,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5712,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "content/snowflake/performance-tuning.tsx"
     },
     {
@@ -9334,7 +9622,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5444,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/cost-optimization.tsx"
     },
     {
@@ -9350,7 +9638,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4755,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/advanced-security-governance.tsx"
     },
     {
@@ -9366,7 +9654,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5464,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/data-sharing-marketplace.tsx"
     },
     {
@@ -9382,7 +9670,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4184,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/snowflake-with-dbt.tsx"
     },
     {
@@ -9398,7 +9686,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4753,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/production-operations.tsx"
     },
     {
@@ -9414,7 +9702,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6273,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/snowflake/snowflake-project.tsx"
     },
     {
@@ -9430,7 +9718,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8585,
-      "inboundLinks": 3,
+      "inboundLinks": 5,
       "sourceFile": "content/snowflake/interview-system-design.tsx"
     },
     {
@@ -9446,7 +9734,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2163,
-      "inboundLinks": 67,
+      "inboundLinks": 74,
       "sourceFile": "app/learn/sql/page.tsx"
     },
     {
@@ -9510,7 +9798,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5836,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/what-is-a-database.tsx"
     },
     {
@@ -9526,7 +9814,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6243,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/how-databases-work.tsx"
     },
     {
@@ -9542,7 +9830,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6729,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/types-of-databases.tsx"
     },
     {
@@ -9558,7 +9846,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5536,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/setting-up.tsx"
     },
     {
@@ -9574,7 +9862,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5718,
-      "inboundLinks": 5,
+      "inboundLinks": 11,
       "sourceFile": "content/sql/select-from.tsx"
     },
     {
@@ -9590,7 +9878,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6367,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/where-clause.tsx"
     },
     {
@@ -9606,7 +9894,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5472,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/and-or-not.tsx"
     },
     {
@@ -9622,7 +9910,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5384,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/order-by.tsx"
     },
     {
@@ -9638,7 +9926,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5585,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/limit-fetch.tsx"
     },
     {
@@ -9654,7 +9942,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5727,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/distinct.tsx"
     },
     {
@@ -9670,7 +9958,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6176,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/null-values.tsx"
     },
     {
@@ -9686,7 +9974,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5617,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/arithmetic-expressions.tsx"
     },
     {
@@ -9702,7 +9990,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5190,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/aliases.tsx"
     },
     {
@@ -9718,7 +10006,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5828,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/like-wildcards.tsx"
     },
     {
@@ -9734,7 +10022,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5844,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/in-between.tsx"
     },
     {
@@ -9750,7 +10038,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5937,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/case-when.tsx"
     },
     {
@@ -9766,7 +10054,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6682,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/complex-where.tsx"
     },
     {
@@ -9782,7 +10070,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6634,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "content/sql/data-types.tsx"
     },
     {
@@ -9798,7 +10086,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6593,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/create-table.tsx"
     },
     {
@@ -9814,7 +10102,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5908,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/insert-into.tsx"
     },
     {
@@ -9830,7 +10118,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5498,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/update.tsx"
     },
     {
@@ -9846,7 +10134,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5634,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/delete.tsx"
     },
     {
@@ -9862,7 +10150,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5899,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/constraints.tsx"
     },
     {
@@ -9878,7 +10166,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5892,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/alter-table.tsx"
     },
     {
@@ -9894,7 +10182,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5361,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/drop-truncate.tsx"
     },
     {
@@ -9910,7 +10198,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6612,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/normalization.tsx"
     },
     {
@@ -9926,7 +10214,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5157,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/aggregate-functions.tsx"
     },
     {
@@ -9942,7 +10230,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6239,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/group-by.tsx"
     },
     {
@@ -9958,7 +10246,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5280,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/having.tsx"
     },
     {
@@ -9974,7 +10262,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6304,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/joins-intro.tsx"
     },
     {
@@ -9990,7 +10278,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6034,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/inner-join.tsx"
     },
     {
@@ -10006,7 +10294,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6388,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/left-right-join.tsx"
     },
     {
@@ -10022,7 +10310,7 @@
       "inSitemap": true,
       "built": true,
       "words": 4964,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/full-outer-join.tsx"
     },
     {
@@ -10038,7 +10326,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5152,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/self-join.tsx"
     },
     {
@@ -10054,7 +10342,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5109,
-      "inboundLinks": 4,
+      "inboundLinks": 10,
       "sourceFile": "content/sql/cross-join.tsx"
     },
     {
@@ -10070,7 +10358,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6282,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/subqueries.tsx"
     },
     {
@@ -10086,7 +10374,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6157,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/correlated-subqueries.tsx"
     },
     {
@@ -10102,7 +10390,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6138,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/exists-not-exists.tsx"
     },
     {
@@ -10118,7 +10406,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5948,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/union-intersect-except.tsx"
     },
     {
@@ -10134,7 +10422,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5618,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/derived-tables.tsx"
     },
     {
@@ -10150,7 +10438,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5854,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/string-functions.tsx"
     },
     {
@@ -10166,7 +10454,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6110,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/date-time-functions.tsx"
     },
     {
@@ -10182,7 +10470,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5842,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/math-functions.tsx"
     },
     {
@@ -10198,7 +10486,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5424,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/cast-convert.tsx"
     },
     {
@@ -10214,7 +10502,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6074,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/views.tsx"
     },
     {
@@ -10230,7 +10518,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6713,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/indexes.tsx"
     },
     {
@@ -10246,7 +10534,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6796,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/transactions.tsx"
     },
     {
@@ -10262,7 +10550,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5290,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/acid-properties.tsx"
     },
     {
@@ -10278,7 +10566,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6011,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/stored-procedures.tsx"
     },
     {
@@ -10294,7 +10582,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6795,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/user-defined-functions.tsx"
     },
     {
@@ -10310,7 +10598,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7097,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/triggers.tsx"
     },
     {
@@ -10326,7 +10614,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6239,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/window-functions-intro.tsx"
     },
     {
@@ -10342,7 +10630,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6470,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/ranking-functions.tsx"
     },
     {
@@ -10358,7 +10646,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6232,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/analytics-lag-lead.tsx"
     },
     {
@@ -10374,7 +10662,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5387,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/cte-with-clause.tsx"
     },
     {
@@ -10390,7 +10678,7 @@
       "inSitemap": true,
       "built": true,
       "words": 6843,
-      "inboundLinks": 5,
+      "inboundLinks": 7,
       "sourceFile": "content/sql/recursive-cte.tsx"
     },
     {
@@ -10406,7 +10694,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7496,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/explain-analyze.tsx"
     },
     {
@@ -10422,7 +10710,7 @@
       "inSitemap": true,
       "built": true,
       "words": 7397,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/index-strategies.tsx"
     },
     {
@@ -10438,7 +10726,7 @@
       "inSitemap": true,
       "built": true,
       "words": 3762,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/query-best-practices.tsx"
     },
     {
@@ -10454,7 +10742,7 @@
       "inSitemap": true,
       "built": true,
       "words": 2876,
-      "inboundLinks": 4,
+      "inboundLinks": 6,
       "sourceFile": "content/sql/sql-for-data-analysis.tsx"
     },
     {
@@ -10470,7 +10758,7 @@
       "inSitemap": true,
       "built": true,
       "words": 5630,
-      "inboundLinks": 4,
+      "inboundLinks": 7,
       "sourceFile": "content/sql/interview-questions.tsx"
     },
     {
@@ -10486,7 +10774,7 @@
       "inSitemap": true,
       "built": true,
       "words": 8037,
-      "inboundLinks": 3,
+      "inboundLinks": 5,
       "sourceFile": "content/sql/sql-projects.tsx"
     },
     {
@@ -10502,8 +10790,8 @@
       "inSitemap": true,
       "built": true,
       "words": 827,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 4,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/system-design",
@@ -10518,8 +10806,8 @@
       "inSitemap": true,
       "built": true,
       "words": 762,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 4,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/systems-programming",
@@ -10534,8 +10822,8 @@
       "inSitemap": true,
       "built": true,
       "words": 730,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/technical-communication-developer-relations",
@@ -10550,8 +10838,8 @@
       "inSitemap": true,
       "built": true,
       "words": 759,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/technical-product-business-analysis",
@@ -10566,8 +10854,8 @@
       "inSitemap": true,
       "built": true,
       "words": 803,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/xr-ar-vr-development",
@@ -10582,8 +10870,8 @@
       "inSitemap": true,
       "built": true,
       "words": 769,
-      "inboundLinks": 2,
-      "sourceFile": ""
+      "inboundLinks": 3,
+      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/admin",

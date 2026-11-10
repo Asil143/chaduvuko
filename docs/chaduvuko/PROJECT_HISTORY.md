@@ -152,6 +152,14 @@ Recovered Library content shows a Chaduvuko practice product called **Pipeline P
 - Flagged, not changed: chat API default model `gpt-4o-mini` (retires Jan 14, 2027; set `OPENAI_MODEL`), "dbt Cloud" → "dbt platform" naming, and short cloud/Foundations lessons.
 - Verified with `npm run lint` (3 known warnings) and `npm run build` including all postbuild validators.
 
+## November 9, 2026 — Learning architecture approved; Phase 1 (schools and career paths)
+
+- Approved `LEARNING_ARCHITECTURE.md`. Saved a restore point first: tag `v-before-phase1` (pushed to GitHub). Phase 1 work is on branch `phase-1-restructure`.
+- Added six schools (`/learn/schools`, one page per school) mapped from existing track areas, and ten career paths (`/learn/paths`, one page per path) built only from existing lessons, with progress tracking and coming-soon steps for planned tracks.
+- Home page now offers three ways in (Find your path, Career paths, Schools) and featured career paths; menus, footer, learn hub, all-courses, search, and sitemap include the new pages; Find your path recommends a career path.
+- `validate-catalog` now checks career paths; `site-inventory.ts` lists schools and paths in `SITE_MAP.md`.
+- Verified with `npm run lint` (3 known warnings) and `npm run build` including all postbuild validators.
+
 ## Ongoing rules
 - Keep StudyX Overseas separate.
 - Chaduvuko remains the primary EdTech project.

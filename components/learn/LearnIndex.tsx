@@ -481,7 +481,9 @@ const keywordIcon = (keyword: string) => {
 }
 
 const quickLinks = (stats: SiteStats) => [
-  { icon: '🧭', label: 'Find Your Path',      href: '/learn/find-your-path', desc: 'Get a goal-based track order' },
+  { icon: '🧭', label: 'Career Paths',        href: '/learn/paths',          desc: 'Step-by-step routes to a job' },
+  { icon: '🏫', label: 'Schools',             href: '/learn/schools',        desc: 'AI, Data, Software, Cloud, Security, CS' },
+  { icon: '🔎', label: 'Find Your Path',      href: '/learn/find-your-path', desc: 'Two questions, then a suggested route' },
   { icon: '📚', label: 'All Courses',         href: '/learn/all-courses',    desc: 'Every track, module, and lesson' },
   { icon: '🔄', label: 'Sync Progress',        href: '/dashboard',            desc: 'Sign in to continue across devices' },
   { icon: '🗺️', label: 'Career Roadmaps',    href: '/learn/roadmap',   desc: `${stats.roadmaps} role-specific roadmaps` },

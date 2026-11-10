@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { LIVE_LESSONS, TRACKS, getCatalogStats } from '@/lib/catalog'
-import type { Lesson, TrackArea } from '@/lib/catalog/types'
+import type { Lesson } from '@/lib/catalog/types'
+import { SCHOOLS } from '@/lib/catalog/schools'
 import { PLANNED_TRACKS } from '@/data/planned-tracks'
 import { ROLE_ROADMAPS } from '@/data/roadmaps/role-registry'
 import { BLOG_ARTICLES } from '@/data/blog-articles'
@@ -12,17 +13,12 @@ export const metadata: Metadata = {
   alternates: { canonical: '/learn/all-courses' },
 }
 
-const AREAS: { area: Exclude<TrackArea, 'practice'>; label: string; blurb: string }[] = [
-  { area: 'data', label: 'Data', blurb: 'Pipelines, SQL, warehouses, and streaming' },
-  { area: 'cloud', label: 'Cloud', blurb: 'AWS, Azure, and Google Cloud data services' },
-  { area: 'ai', label: 'AI & ML', blurb: 'Machine learning, deep learning, and generative AI' },
-  { area: 'programming', label: 'Programming', blurb: 'Languages and building for the web' },
-  { area: 'cs', label: 'CS Core', blurb: 'Algorithms, databases, and networks' },
-  { area: 'security', label: 'Security', blurb: 'Attacks, defenses, and security careers' },
-]
+const AREAS = SCHOOLS.map(school => ({ area: school.area, label: school.title, blurb: school.description }))
 
 const PRACTICE_LINKS = [
-  { href: '/learn/find-your-path', title: 'Find your path', detail: 'Two questions, then a suggested track order' },
+  { href: '/learn/paths', title: 'Career paths', detail: 'Ten step-by-step routes to a job' },
+  { href: '/learn/schools', title: 'Schools', detail: 'Six subject areas' },
+  { href: '/learn/find-your-path', title: 'Find your path', detail: 'Two questions, then a suggested path' },
   { href: '/learn/roadmap', title: 'Career roadmaps', detail: `${Object.keys(ROLE_ROADMAPS).length} role-by-role learning paths` },
   { href: '/learn/projects', title: 'Projects', detail: 'End-to-end builds' },
   { href: '/learn/sql/playground', title: 'SQL playground', detail: 'Run SQL in the browser' },
@@ -66,7 +62,7 @@ export default function AllCoursesPage() {
       <p style={{ color: 'var(--green)', fontSize: 11, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', margin: 0 }}>All courses</p>
       <h1 style={{ color: 'var(--text)', fontSize: 'clamp(28px, 4vw, 40px)', margin: '8px 0 10px' }}>Everything on Chaduvuko, in one map</h1>
       <p style={{ color: 'var(--muted)', lineHeight: 1.75, maxWidth: 720, margin: '0 0 24px' }}>
-        Learning is organised as <strong style={{ color: 'var(--text)' }}>Area → Track → Module → Lesson</strong>.
+        Learning is organised as <strong style={{ color: 'var(--text)' }}>School → Track → Module → Lesson</strong>.
         Published tracks come first, with every module and lesson. Planned tracks have a skills map but no lessons yet.
       </p>
 
