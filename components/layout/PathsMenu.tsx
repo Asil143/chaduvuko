@@ -46,10 +46,10 @@ export function PathsMenuDesktop({ header, active }: { header: HeaderData; activ
           style={{ background: 'var(--surface)', border: '1px solid var(--border2)', boxShadow: 'var(--shadow-lg)' }}
         >
           <p className="px-5 pt-4 pb-1 text-[13px]" style={{ color: 'var(--muted)' }}>
-            Step-by-step routes to a job, built from our courses. Progress is tracked as you go.
+            Most in-demand roles. Step-by-step routes to a job, built from our courses.
           </p>
           <ul className="grid grid-cols-2 gap-x-2 px-2 pb-2">
-            {header.careerPaths.map(path => {
+            {header.careerPaths.filter(path => path.trending).map(path => {
               const current = pathname === path.href
               return (
                 <li key={path.href}>
@@ -57,18 +57,21 @@ export function PathsMenuDesktop({ header, active }: { header: HeaderData; activ
                     href={path.href}
                     aria-current={current ? 'page' : undefined}
                     onClick={close}
-                    className="block px-3 py-2 rounded-lg hover:bg-[var(--bg2)]"
+                    className="flex items-start gap-2.5 px-3 py-2 rounded-lg hover:bg-[var(--bg2)]"
                     style={{ background: current ? 'var(--bg2)' : undefined }}
                   >
-                    <span className="block text-sm leading-snug" style={{ color: 'var(--text)', fontWeight: 600 }}>{path.title}</span>
-                    <span className="block text-xs mt-0.5" style={{ color: 'var(--muted)' }}>{path.school} · {path.lessons} lessons</span>
+                    <span aria-hidden="true" className="text-lg leading-5">{path.icon}</span>
+                    <span>
+                      <span className="block text-sm leading-snug" style={{ color: 'var(--text)', fontWeight: 600 }}>{path.title}</span>
+                      <span className="block text-xs mt-0.5" style={{ color: 'var(--muted)' }}>{path.school} · {path.lessons} lessons</span>
+                    </span>
                   </Link>
                 </li>
               )
             })}
           </ul>
           <div className="flex flex-wrap gap-x-5 gap-y-1 px-5 py-3 text-[13px] font-semibold" style={{ borderTop: '1px solid var(--border)', background: 'var(--bg2)' }}>
-            <Link href={PATHS_HREF} onClick={close} style={linkColor}>Compare all paths →</Link>
+            <Link href={PATHS_HREF} onClick={close} style={linkColor}>Compare all {header.careerPaths.length} paths →</Link>
             <Link href={FIND_PATH_HREF} onClick={close} style={linkColor}>Not sure? Find your path</Link>
             <Link href={ROADMAPS_HREF} onClick={close} style={{ color: 'var(--text2)' }}>{header.roadmapCount} skill roadmaps</Link>
           </div>
@@ -86,7 +89,7 @@ export function PathsListMobile({ header, active, onNavigate }: { header: Header
         Career paths
       </div>
       <ul>
-        {header.careerPaths.map(path => {
+        {header.careerPaths.filter(path => path.trending).map(path => {
           const current = pathname === path.href
           return (
             <li key={path.href}>
@@ -97,12 +100,15 @@ export function PathsListMobile({ header, active, onNavigate }: { header: Header
                 className="flex items-center min-h-11 px-3 rounded-lg text-[15px]"
                 style={{ color: 'var(--text)', fontWeight: current ? 600 : 500, background: current ? 'var(--bg2)' : 'transparent' }}
               >
-                {path.title}
+                <span aria-hidden="true" className="mr-2">{path.icon}</span>{path.title}
               </Link>
             </li>
           )
         })}
       </ul>
+      <Link href={PATHS_HREF} onClick={onNavigate} className="flex items-center min-h-11 px-3 text-sm font-semibold" style={{ color: 'var(--accent)' }}>
+        All {header.careerPaths.length} career paths →
+      </Link>
       <Link href={FIND_PATH_HREF} onClick={onNavigate} className="flex items-center min-h-11 px-3 text-sm font-semibold" style={{ color: 'var(--accent)' }}>
         Not sure? Find your path →
       </Link>

@@ -10,24 +10,36 @@ export const leadStyle: React.CSSProperties = { color: 'var(--muted)', lineHeigh
 export const h2Style: React.CSSProperties = { color: 'var(--text)', fontSize: 22, margin: '0 0 14px' }
 export const cardStyle: React.CSSProperties = { display: 'block', height: '100%', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, padding: '18px 20px', textDecoration: 'none' }
 
+const MAX_TRACK_CHIPS = 4
+
 export function PathCard({ path }: { path: ResolvedPath }) {
+  const school = SCHOOL_BY_AREA[path.school]
+  const tracks = Array.from(new Set(path.milestones.map(milestone => milestone.trackTitle)))
+  const extra = tracks.length - MAX_TRACK_CHIPS
   return (
-    <Link href={`/learn/paths/${path.slug}`} className="group" style={cardStyle}>
-      <span style={{ ...eyebrowStyle, color: 'var(--muted)' }}>{SCHOOL_BY_AREA[path.school].short}</span>
-      <span style={{ display: 'block', marginTop: 8, fontSize: 17, fontWeight: 700, color: 'var(--text)' }}>{path.title}</span>
-      <span style={{ display: 'block', marginTop: 6, fontSize: 13, lineHeight: 1.6, color: 'var(--muted)' }}>{path.summary}</span>
-      <span style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 12, fontSize: 12, color: 'var(--text2)' }}>
-        <span>{path.milestones.length} milestones</span>
-        <span>·</span>
-        <span>{path.liveLessons} live lessons</span>
-        <span>·</span>
-        <span>{formatHours(path.minutes)}</span>
+    <Link href={`/learn/paths/${path.slug}`} className="pp-card" style={{ '--pp-accent': school.accent } as React.CSSProperties}>
+      <span className="pp-card-top">
+        <span className="pp-icon" aria-hidden="true">{path.icon}</span>
+        <span className="pp-badges">
+          {path.trending && <span className="pp-badge pp-badge-hot"><span aria-hidden="true">🔥 </span>In demand</span>}
+          <span className="pp-badge">{path.level}</span>
+        </span>
+      </span>
+      <span className="pp-title">{path.title}</span>
+      <span className="pp-summary">{path.summary}</span>
+      <span className="pp-tracks" aria-label={`Courses: ${tracks.join(', ')}`}>
+        {tracks.slice(0, MAX_TRACK_CHIPS).map(track => <span key={track} className="pp-chip" aria-hidden="true">{track}</span>)}
+        {extra > 0 && <span className="pp-chip pp-chip-more" aria-hidden="true">+{extra} more</span>}
+      </span>
+      <span className="pp-stats">
+        <span><span aria-hidden="true">🧭</span> {path.milestones.length} milestones</span>
+        <span><span aria-hidden="true">📚</span> {path.liveLessons} lessons</span>
+        <span><span aria-hidden="true">⏱️</span> {path.minutes ? `~${Math.max(1, Math.round(path.minutes / 60))}h` : formatHours(path.minutes)}</span>
       </span>
       {path.plannedMilestones > 0 && (
-        <span style={{ display: 'block', marginTop: 6, fontSize: 12, color: '#a855f7' }}>
-          {path.plannedMilestones} milestone{path.plannedMilestones === 1 ? '' : 's'} coming soon
-        </span>
+        <span className="pp-soon">{path.plannedMilestones} milestone{path.plannedMilestones === 1 ? '' : 's'} coming soon</span>
       )}
+      <span className="pp-cta">View path <span aria-hidden="true">→</span></span>
     </Link>
   )
 }

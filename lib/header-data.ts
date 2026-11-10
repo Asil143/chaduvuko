@@ -41,6 +41,8 @@ export function getHeaderData(): HeaderData {
       title: path.title,
       school: areaLabel(path.school),
       lessons: path.liveLessons,
+      icon: path.icon,
+      trending: Boolean(path.trending),
     })),
   }
 }

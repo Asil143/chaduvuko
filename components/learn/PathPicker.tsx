@@ -37,13 +37,13 @@ const PATHS: Record<Goal, { starter: string[]; next: string[] }> = {
 
 // Career paths matching each goal; the first is the main recommendation.
 const CAREER_PATHS_FOR_GOAL: Record<Goal, string[]> = {
-  ai: ['ai-engineer', 'agentic-ai-engineer', 'ml-engineer'],
-  data: ['data-engineer', 'analytics-engineer'],
-  web: ['full-stack-ai-developer', 'software-engineer'],
-  cloud: ['cloud-devops-engineer'],
-  security: ['cybersecurity-analyst', 'ai-security-engineer'],
-  interviews: ['software-engineer'],
-  systems: ['software-engineer'],
+  ai: ['ai-engineer', 'generative-ai-developer', 'agentic-ai-engineer', 'data-scientist', 'ml-engineer', 'mlops-engineer'],
+  data: ['data-engineer', 'data-analyst', 'analytics-engineer', 'cloud-data-engineer', 'database-engineer'],
+  web: ['full-stack-ai-developer', 'frontend-developer', 'backend-developer', 'python-developer'],
+  cloud: ['cloud-devops-engineer', 'site-reliability-engineer', 'cloud-data-engineer', 'mlops-engineer'],
+  security: ['cybersecurity-analyst', 'cloud-security-engineer', 'ai-security-engineer'],
+  interviews: ['software-engineer', 'backend-developer'],
+  systems: ['software-engineer', 'network-engineer', 'site-reliability-engineer'],
 }
 
 export function PathPicker({ tracks }: { tracks: TrackSummaries }) {
@@ -59,7 +59,9 @@ export function PathPicker({ tracks }: { tracks: TrackSummaries }) {
         : result.next
     : []
   const recommendations = Array.from(new Set(ordered)).filter(slug => tracks[slug])
-  const careerPaths = result && goal ? CAREER_PATHS_FOR_GOAL[goal].flatMap(slug => getCareerPath(slug) ?? []) : []
+  const goalPaths = result && goal ? CAREER_PATHS_FOR_GOAL[goal].flatMap(slug => getCareerPath(slug) ?? []) : []
+  // Beginners see beginner-level paths first; the sort is stable, so goal order is kept otherwise.
+  const careerPaths = level === 'new' ? [...goalPaths].sort((a, b) => Number(a.level !== 'Beginner') - Number(b.level !== 'Beginner')) : goalPaths
   const [mainPath, ...otherPaths] = careerPaths
 
   const choice = (selected: boolean): React.CSSProperties => ({

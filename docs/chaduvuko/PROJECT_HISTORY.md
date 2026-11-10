@@ -205,6 +205,14 @@ Recovered Library content shows a Chaduvuko practice product called **Pipeline P
 - DE static Foundations section removed; three duplicate URLs redirect to the curriculum lessons. The Projects course is renamed Cloud Data Projects.
 - Registry lesson numbers and next-lesson CTAs were regenerated from registry order.
 
+## November 10, 2026 — Career paths: 10 → 22 and a visual redesign
+
+- Added 12 career paths built only from live courses: Generative AI Developer, Data Scientist, MLOps Engineer, Data Analyst, Cloud Data Engineer, Database Engineer, Python Developer, Frontend Developer, Backend Developer, Site Reliability / Platform Engineer, Cloud Security Engineer, Network Engineer.
+- Every path now has an `icon`, a starting `level`, and an optional `trending` flag ("In demand"). Each school has an `icon` and an `accent` colour (`lib/catalog/schools.ts`).
+- `/learn/paths` redesigned: hero with CTAs and stats, sticky school jump-nav, school headers, and accent cards with level, course chips, and stats. Path pages show the icon, level, and demand in the hero.
+- The header Career paths menu lists only the in-demand paths, with a "Compare all N paths" link. The Find-your-path quiz maps to the new paths and shows beginner-level paths first to new learners.
+- Not added yet, because their courses are still planned: Java Developer, Mobile App Developer, QA / Test Automation Engineer, Cloud Architect.
+
 ## Ongoing rules
 - Keep StudyX Overseas separate.
 - Chaduvuko remains the primary EdTech project.

@@ -33,6 +33,9 @@ export interface CareerPathSummary {
   /** Short school label, e.g. "AI" or "Data". */
   school: string
   lessons: number
+  icon: string
+  /** Shown in the header menu; the full list lives on /learn/paths. */
+  trending: boolean
 }
 
 /** Everything the site header renders from the catalog, built on the server. */

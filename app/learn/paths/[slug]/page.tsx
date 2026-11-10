@@ -63,7 +63,7 @@ export default function CareerPathPage({ params }: Props) {
             <span aria-hidden="true">/</span>
             <Link href={`/learn/schools/${school.slug}`}>{school.title}</Link>
           </nav>
-          <p className="cp-eyebrow">Career path</p>
+          <p className="cp-eyebrow"><span aria-hidden="true" style={{ fontSize: 16, marginRight: 6 }}>{path.icon}</span>Career path · {path.level} level{path.trending ? ' · In demand' : ''}</p>
           <h1 id="path-title">{path.title}</h1>
           <p className="cp-summary">{path.summary}</p>
           <p className="cp-audience"><span aria-hidden="true">👤</span> {path.audience}</p>
