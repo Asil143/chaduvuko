@@ -6,7 +6,7 @@ export default function MonitoringLoggingAlerting() {
     <LearnLayout
       title="Monitoring, Logging and Alerting"
       description="Understand metrics, logs, and traces; create useful Prometheus and Grafana views; set service-level objectives; and respond to alerts with a sustainable on-call practice."
-      section="DevOps & Cloud Infrastructure — Lesson 10"
+      section="DevOps & Cloud Infrastructure — Lesson 13"
       readTime="35 min"
     >
       <Part n={1} label="Why observe a service?" title="Answer the User Question Before the Infrastructure Question">
@@ -256,9 +256,9 @@ groups:
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/cloud-data"
-        label="Next course · Cloud Data Engineering"
-        text="You have completed the DevOps and cloud infrastructure foundations. Continue with Cloud Data Engineering to build data workloads on AWS, Azure, and Google Cloud."
+        href="/learn/devops-mlops/sre-basics-slos"
+        label="Lesson 14 · SRE Basics — SLIs, SLOs, Error Budgets and Incidents"
+        text="Define service level indicators and objectives, use error budgets to balance speed and reliability, and run incidents and blameless postmortems."
       />
     </LearnLayout>
   )

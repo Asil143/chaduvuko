@@ -264,6 +264,30 @@ print("conflict-serializable:", not cycle)`,
     },
   },
 
+  [`${B}/mvcc-postgresql`]: {
+    answer: 'PostgreSQL MVCC preserves row versions so each statement reads a consistent snapshot while concurrent transactions write newer versions. READ COMMITTED takes a new snapshot per statement; REPEATABLE READ keeps one for the transaction.',
+    points: [
+      'xmin identifies a tuple version’s inserting transaction; xmax records a deleting or superseding transaction.',
+      'Readers usually do not block writers, but concurrent writers and explicit locks still coordinate.',
+      'VACUUM reclaims obsolete versions after no active snapshot can need them.',
+    ],
+    example: {
+      label: 'Visibility across two sessions',
+      lang: 'text',
+      code: `Session A: BEGIN ISOLATION LEVEL REPEATABLE READ; SELECT note FROM demo;
+Session B: UPDATE demo SET note = 'new'; COMMIT;
+Session A: SELECT note FROM demo; -- still sees its original snapshot
+Session A: COMMIT; SELECT note FROM demo; -- new transaction sees the update`,
+      static: true,
+    },
+    check: {
+      question: 'At PostgreSQL READ COMMITTED, when is a new snapshot normally taken?',
+      options: ['Once when the connection opens', 'For each statement', 'Only after VACUUM', 'Only after a write'],
+      answer: 1,
+      explanation: 'A later statement in the same transaction can see commits that happened since the previous statement.',
+    },
+  },
+
   [`${B}/query-processing`]: {
     answer: 'A query passes through a pipeline: the parser checks syntax, semantic analysis checks names and permissions, the rewriter applies rules, the optimiser picks the cheapest plan using statistics, and the executor runs it. Plans are trees of relational algebra operators such as selection, projection and join.',
     points: [
@@ -438,6 +462,28 @@ ORDER BY shard;`,
       options: ['Partitions never happen', 'Even without partitions, there is a latency vs consistency trade-off', 'Availability is free', 'Only consistency matters'],
       answer: 1,
       explanation: 'Keeping replicas strongly consistent costs latency all the time, not only during partitions.',
+    },
+  },
+
+  [`${B}/replication-partitioning-sharding`]: {
+    answer: 'Replication copies data to another server, partitioning divides a logical table into pieces, and sharding distributes row subsets across independent database nodes. They address different capacity, availability, and maintenance needs.',
+    points: [
+      'Asynchronous replicas can lag, so read-after-write requests may need the primary.',
+      'Partition pruning depends on query predicates that include the partition key.',
+      'Sharding makes routing, global uniqueness, cross-shard queries, and rebalancing explicit design concerns.',
+    ],
+    example: {
+      label: 'Monthly range partition and exclusive upper bound',
+      lang: 'sql',
+      code: `CREATE TABLE orders_2026_01 PARTITION OF orders
+  FOR VALUES FROM ('2026-01-01') TO ('2026-02-01');`,
+      static: true,
+    },
+    check: {
+      question: 'Which technique copies the same data to another server?',
+      options: ['Partitioning', 'Replication', 'Sharding', 'Vertical decomposition'],
+      answer: 1,
+      explanation: 'Replication maintains another copy; partitioning and sharding divide data into different subsets.',
     },
   },
 

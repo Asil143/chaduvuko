@@ -6,7 +6,7 @@ export default function AgentCapstoneSupportAgent() {
     <LearnLayout
       title="Capstone — A Tool-Using Support Agent"
       description="Plan and build a support agent that searches a knowledge base, calls tools, asks for approval on refunds, and is traced and evaluated."
-      section="Agentic AI & Automation — Lesson 10"
+      section="Agentic AI & Automation — Lesson 13"
       readTime="50 min"
     >
       <Part n={1} label="The project brief" title="A Safer Support Agent for an Indian E-Commerce Store">
@@ -284,9 +284,9 @@ def evaluate(case: dict, run: dict) -> dict:
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/paths"
-        label="Next · Explore career paths"
-        text="You have completed the Agentic AI & Automation course. Explore career paths to connect these engineering skills with your next learning goal."
+        href="/learn/agentic-ai/agentic-ai-interview-prep"
+        label="Lesson 14 · Agentic AI Interview Prep"
+        text="Agent architecture, tool design, memory, evaluation and security questions from agentic AI interviews, with model answers and design exercises."
       />
     </LearnLayout>
   )

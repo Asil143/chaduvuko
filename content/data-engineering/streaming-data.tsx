@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     'Event-driven architecture, producers, consumers, offsets, partitions, consumer groups, delivery semantics, time, and ordering — the complete conceptual foundation before you touch Kafka or Flink.',
 }
 
-/* ── Local components (Lesson 37 style) ─────────────────────────────────── */
+/* ── Local components (Lesson 42 style) ─────────────────────────────────── */
 
 const SectionTag = ({ text }: { text: string }) => (
   <div style={{
@@ -173,7 +173,7 @@ export default function StreamingDataModule() {
     <LearnLayout
       title="Streaming Data — What It Is and How It Works"
       description="Event-driven architecture, producers, consumers, offsets, partitions, consumer groups, delivery semantics, time, and ordering — the complete conceptual foundation before you touch Kafka or Flink."
-      section="Data Engineering — Lesson 40"
+      section="Data Engineering — Lesson 22"
       readTime="55 min"
     >
 
@@ -1531,10 +1531,10 @@ Sink: upsert window key + output version, not blind append of every update`}</Wo
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 41 covers message brokers and queues — how messages flow from producer to consumer, durability guarantees, ordering, replayability, and the difference between at-least-once and exactly-once delivery.
+          Lesson 23 covers message brokers and queues — how messages flow from producer to consumer, durability guarantees, ordering, replayability, and the difference between at-least-once and exactly-once delivery.
         </p>
         <Link href="/learn/data-engineering/message-brokers-queues" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 41 → Message Brokers and Queues — Internal Mechanics
+          Lesson 23 → Message Brokers and Queues — Internal Mechanics
         </Link>
       </div>
     </LearnLayout>

@@ -76,7 +76,10 @@ export default function ReactStateEffects() {
       ]} />
       <Bullets items={[<span key="reference">Use React's official documentation for state, effects, and forms. Next.js server rendering can simplify data loading for many page requests.</span>]} />
       <H3>Next</H3>
-      <NextLesson href="/learn/full-stack-ai/nextjs-app-router" label="Lesson 03 · Next.js — Routing, Server Components and Forms" text="Move from a client-only interaction to the Next.js App Router, and decide which work belongs on the server." />
+      <NextLesson
+        href="/learn/full-stack-ai/styling-react-tailwind"
+        label="Lesson 03 · Styling React Apps — Tailwind and Component Libraries"
+        text="Style components with Tailwind CSS, build responsive layouts, use an accessible component library, and keep styles consistent." />
     </LearnLayout>
   )
 }

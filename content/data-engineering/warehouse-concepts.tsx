@@ -173,7 +173,7 @@ export default function WarehouseConceptsModule() {
     <LearnLayout
       title="Data Warehouse Concepts"
       description="Columnar storage, query execution, result caching, virtual warehouses, cluster keys, and why Snowflake queries are fast."
-      section="Data Engineering — Lesson 31"
+      section="Data Engineering — Lesson 34"
       readTime="60 min"
     >
 
@@ -1295,10 +1295,10 @@ print(f"projected_and_pruned_GB={pruned / 10**9:.1f}")`}</WorkshopCode>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 32 covers Lakehouse Architecture — why it emerged, how table formats like Delta Lake and Iceberg bring ACID guarantees to object storage, and how it combines the best of warehouses and data lakes.
+          Lesson 35 covers Lakehouse Architecture — why it emerged, how table formats like Delta Lake and Iceberg bring ACID guarantees to object storage, and how it combines the best of warehouses and data lakes.
         </p>
         <Link href="/learn/data-engineering/lakehouse-architecture" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 32 → Lakehouse Architecture — Why It Exists and How It Works
+          Lesson 35 → Lakehouse Architecture — Why It Exists and How It Works
         </Link>
       </div>
     </LearnLayout>

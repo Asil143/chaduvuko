@@ -77,7 +77,7 @@ export default function BuildingAResponsiveWebsite() {
     <LearnLayout
       title="Building a Complete Responsive Website"
       description="The capstone project — a full, real, responsive website built end-to-end using everything from this entire track."
-      section="HTML & CSS — Lesson 40 (Capstone Project)"
+      section="HTML & CSS — Lesson 44 (Capstone Project)"
       readTime="60 min"
     >
 
@@ -89,7 +89,7 @@ export default function BuildingAResponsiveWebsite() {
           This lesson builds a complete, real, responsive marketing site for a fictional studio
           (Ridgeline Design Co.) end to end — a hero section, a navigation bar that collapses on mobile,
           a responsive content grid, and a footer. Every technique used is one already covered somewhere
-          earlier in this 42-module track; this lesson's job is showing how they compose into one
+          earlier in this 45-module track; this lesson's job is showing how they compose into one
           genuinely working page, not teaching anything new.
         </Para>
       </section>
@@ -603,16 +603,13 @@ button:focus-visible {
             fontSize: 'clamp(22px, 3vw, 30px)', fontWeight: 900, letterSpacing: '-1px',
             color: 'var(--text)', marginBottom: 16, fontFamily: 'var(--font-display)', lineHeight: 1.2,
           }}>
-            Two modules remain — best practices, then the full interview prep synthesis.
+            One module remains — the full interview prep synthesis.
           </h2>
           <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 24 }}>
-            This build pulled together structure, layout, responsiveness, and accessibility from across
-            the entire track into one real, working site. Lesson 41 closes out with the conventions and
-            common mistakes that separate maintainable CSS from a stylesheet nobody wants to touch, and
-            Lesson 42 — the capstone — synthesizes everything into interview-ready form.
+            This build pulls together structure, layout, responsiveness, and accessibility into one real, working site. Lesson 45 now synthesizes the complete track into interview-ready form.
           </p>
-          <Link href="/learn/html-css/css-best-practices-common-mistakes" style={{ background: C, color: '#fff', padding: '12px 26px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none', display: 'inline-block' }}>
-            Lesson 41 → CSS Best Practices &amp; Common Mistakes
+          <Link href="/learn/html-css/html-css-interview-prep" style={{ background: C, color: '#fff', padding: '12px 26px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none', display: 'inline-block' }}>
+            Lesson 45 → HTML &amp; CSS Interview Prep — Common Questions and Patterns
           </Link>
         </div>
       </section>

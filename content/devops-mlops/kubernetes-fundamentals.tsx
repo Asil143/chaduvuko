@@ -6,7 +6,7 @@ export default function KubernetesFundamentals() {
     <LearnLayout
       title="Kubernetes Fundamentals — Pods, Deployments and Services"
       description="Run and operate container workloads with Kubernetes pods, deployments, services, configuration, secrets, probes, kubectl, and scaling."
-      section="DevOps & Cloud Infrastructure — Lesson 09"
+      section="DevOps & Cloud Infrastructure — Lesson 11"
       readTime="45 min"
     >
       <Part n={1} label="The orchestration problem" title="Kubernetes Keeps the Desired Workload Running">
@@ -305,9 +305,9 @@ kubectl rollout status deployment/orders-api
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/devops-mlops/monitoring-logging-alerting"
-        label="Lesson 10 · Monitoring, Logging and Alerting"
-        text="You can now run and update a workload. Next, build the signals and response habits that tell you whether it is healthy for the people who use it."
+        href="/learn/devops-mlops/helm-and-gitops-argocd"
+        label="Lesson 12 · Helm and GitOps with Argo CD"
+        text="Package Kubernetes apps with Helm charts and deploy them declaratively from Git with Argo CD, including rollbacks and environment promotion."
       />
     </LearnLayout>
   )

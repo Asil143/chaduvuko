@@ -40,10 +40,10 @@ const ALL_ARTICLES: Article[] = [
 ]
 
 const RELATED_MAP: Record<string, string[]> = {
-  '/learn/what-is-data-engineering':       ['what-is-a-data-lakehouse',            'etl-vs-elt-explained',               'data-engineering-career-path'],
+  '/learn/data-engineering/what-is-data-engineering':       ['what-is-a-data-lakehouse',            'etl-vs-elt-explained',               'data-engineering-career-path'],
   '/learn/roadmap':                        ['how-to-get-h1b-data-engineering',      'what-is-dbt',                        'incremental-loading-explained'],
-  '/learn/foundations/sql':                ['slowly-changing-dimensions-explained', 'medallion-architecture-explained',   'data-quality-in-pipelines'],
-  '/learn/foundations/python':             ['apache-spark-architecture-explained',  'why-data-engineers-use-parquet',     'batch-vs-streaming'],
+  '/learn/data-engineering/sql-for-de':                ['slowly-changing-dimensions-explained', 'medallion-architecture-explained',   'data-quality-in-pipelines'],
+  '/learn/data-engineering/python-for-de':             ['apache-spark-architecture-explained',  'why-data-engineers-use-parquet',     'batch-vs-streaming'],
   '/learn/azure/introduction':             ['azure-vs-aws-data-engineering',        'how-to-get-h1b-data-engineering',    'data-engineer-resume-without-experience'],
   '/learn/azure/adls-gen2':               ['adls-gen2-best-practices',             'why-data-engineers-use-parquet',     'incremental-loading-explained'],
   '/learn/azure/adf':                     ['adf-vs-airflow-vs-step-functions',     'azure-key-vault-for-data-engineers', 'etl-vs-elt-explained'],

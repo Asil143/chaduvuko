@@ -49,7 +49,7 @@ export default function SqlForDataAnalysis() {
     <LearnLayout
       title="SQL for Data Analysis"
       description="Real analytical patterns — revenue trends, customer segmentation, cohort analysis, and RFM scoring — applied to the FreshCart dataset"
-      section="SQL — Lesson 60"
+      section="SQL — Lesson 65"
       readTime="28–36 min"
     >
 
@@ -640,10 +640,10 @@ ORDER BY avg_revenue_per_customer DESC NULLS LAST;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Lesson 61</strong>, you tackle the Top 50 SQL interview questions — every question that appears in data analyst and data engineer interviews, with complete answers and the traps interviewers set.
+          In <strong>Lesson 66</strong>, you tackle the Top 50 SQL interview questions — every question that appears in data analyst and data engineer interviews, with complete answers and the traps interviewers set.
         </p>
         <Link href="/learn/sql/interview-questions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 61 → Top 50 SQL Interview Questions
+          Lesson 66 → Top 50 SQL Interview Questions
         </Link>
       </div>
 

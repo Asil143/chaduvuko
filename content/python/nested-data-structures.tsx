@@ -356,7 +356,7 @@ print(dict(orders_by_state))
           <code>int</code> for a count, <code>list</code> for a group of items), loop once over the
           nested structure, and update the accumulator. This single pattern covers the vast majority of
           real reporting and analytics code you will write with Python before ever reaching pandas
-          (Lesson 43), which exists largely to make exactly this kind of aggregation more concise at
+          (Lesson 46), which exists largely to make exactly this kind of aggregation more concise at
           much larger scale.
         </Para>
       </section>

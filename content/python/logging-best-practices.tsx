@@ -77,7 +77,7 @@ export default function LoggingBestPractices() {
     <LearnLayout
       title="Logging Best Practices"
       description="Why print() is not logging, the logging module in depth, log levels, handlers and formatters, and what you should never log."
-      section="Python — Lesson 40"
+      section="Python — Lesson 43"
       readTime="50 min"
     >
 
@@ -114,7 +114,7 @@ export default function LoggingBestPractices() {
           print() output — assuming it was even captured anywhere — you have an undifferentiated wall of
           text with no way to filter to yesterday afternoon, no way to isolate just the errors, and no way
           to tell which messages mattered without reading every line. This is precisely the gap the{' '}
-          <code>logging</code> module exists to close, and precisely why Lesson 39&apos;s debugging
+          <code>logging</code> module exists to close, and precisely why Lesson 42&apos;s debugging
           techniques and this lesson are taught back to back — one is for catching a bug while you can see
           it happen; the other is for understanding what happened after the fact, on a system you were not
           watching live.
@@ -762,11 +762,11 @@ if __name__ == "__main__":
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 41 turns a working script into a real, installable Python package — project structure,
+          Lesson 44 turns a working script into a real, installable Python package — project structure,
           pyproject.toml, building wheels, and publishing to PyPI.
         </p>
         <Link href="/learn/python/packaging-distribution" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 41 → Packaging and Distributing Python Projects
+          Lesson 44 → Packaging and Distributing Python Projects
         </Link>
       </div>
     </LearnLayout>

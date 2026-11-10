@@ -6,7 +6,7 @@ export default function AgentEvaluationObservability() {
     <LearnLayout
       title="Testing, Evaluating and Tracing Agents"
       description="Trajectory and outcome evaluation, scenario test suites, tracing every step, and the production metrics that matter for agents."
-      section="Agentic AI & Automation — Lesson 08"
+      section="Agentic AI & Automation — Lesson 10"
       readTime="35 min"
     >
       <Part n={1} label="Why ordinary checks are not enough" title="An Agent Can Reach the Right Answer the Wrong Way">
@@ -216,7 +216,7 @@ with span("tool.lookup_order") as current:
       <H3>Next</H3>
       <NextLesson
         href="/learn/agentic-ai/securing-agents"
-        label="Lesson 09 · Securing Agents — Tool Permissions and Abuse Cases"
+        label="Lesson 11 · Securing Agents — Tool Permissions and Abuse Cases"
         text="Once you can observe the trajectory, examine what an attacker can influence and what each tool is allowed to do."
       />
     </LearnLayout>

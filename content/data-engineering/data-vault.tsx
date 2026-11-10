@@ -79,7 +79,7 @@ export default function DataVaultModule() {
     <LearnLayout
       title="Data Vault 2.0"
       description="Hubs, links, and satellites from first principles — hash keys, loading patterns, Business Vault, PIT tables, and when to choose Data Vault over dimensional modelling."
-      section="Data Engineering — Lesson 35"
+      section="Data Engineering — Lesson 39"
       readTime="60 min"
     >
 
@@ -1032,10 +1032,10 @@ print(f"null_differs_from_empty={hub_key('crm', None) != hub_key('crm', '')}")`}
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 36 covers data quality — the six dimensions (completeness, accuracy, consistency, uniqueness, timeliness, validity), how to test for each in dbt, and what breaks downstream when quality is skipped.
+          Lesson 40 covers data quality — the six dimensions (completeness, accuracy, consistency, uniqueness, timeliness, validity), how to test for each in dbt, and what breaks downstream when quality is skipped.
         </p>
         <Link href="/learn/data-engineering/data-quality" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 36 → Data Quality — Dimensions, Testing and Validation
+          Lesson 40 → Data Quality — Dimensions, Testing and Validation
         </Link>
       </div>
     </LearnLayout>

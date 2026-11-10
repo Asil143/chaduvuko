@@ -1037,20 +1037,19 @@ for mistake, why in mistakes:
 
       {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
-        <span style={S.tag}>Section 11 complete</span>
+        <span style={S.tag}>MLOps module complete</span>
         <h2 style={S.h2}>
-          The MLOps section is complete. Section 12 — Cloud ML Platforms —
-          connects everything to Azure ML, SageMaker, and Vertex AI.
+          Before moving to managed cloud platforms, connect production ML
+          with fairness, bias assessment and responsible documentation.
         </h2>
 
         <p style={S.p}>
-          You have completed the full MLOps section across seven modules:
-          ML pipelines and feature stores, experiment tracking, model deployment,
-          monitoring, retraining pipelines, DVC, and ML system design.
-          Section 12 shows how all of this maps onto the managed cloud platforms —
-          Azure ML, AWS SageMaker, and GCP Vertex AI — that most enterprise
-          ML teams use. The concepts are identical; the platforms automate the
-          infrastructure so you can focus on the ML.
+          A production architecture is incomplete without a clear account of
+          who may be affected, which errors matter, what evidence is missing,
+          and how teams can challenge or stop an automated workflow. Lesson 85
+          develops that responsible-AI review, including fairness slices,
+          model-card boundaries and post-launch ownership. The following
+          section then maps ML workflows onto managed cloud platforms.
         </p>
 
         <div style={{
@@ -1065,20 +1064,20 @@ for mistake, why in mistakes:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Section 12 · Cloud ML Platforms
+              Next — Lesson 85 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              Azure ML — Studio, Pipelines and AutoML
+              Responsible AI — Fairness, Bias and Model Cards
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
-              Azure Machine Learning Studio, compute clusters, AML Pipelines,
-              AutoML, model registry, and online endpoints.
+              Assess model impacts, document intended use and limitations,
+              and define accountable production monitoring.
             </p>
           </div>
-          <Link href="/learn/ai-ml/cloud-ml/azure-ml" style={{
+          <Link href="/learn/ai-ml/mlops/responsible-ai" style={{
             fontSize: 12, color: '#7b61ff', fontWeight: 700,
             border: '1px solid #7b61ff',
             padding: '7px 14px', borderRadius: 6,

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     '60 complete data engineering interview answers across Python, SQL, pipelines, Spark, Kafka, data modelling, warehousing, cloud, distributed systems, system design, and behavioural — written at senior engineer depth.',
 }
 
-/* ── Local components (Lesson 37 style) ─────────────────────────────────── */
+/* ── Local components (Lesson 42 style) ─────────────────────────────────── */
 
 const SectionTag = ({ text }: { text: string }) => (
   <div style={{
@@ -132,7 +132,7 @@ export default function DEInterviewQuestionsModule() {
     <LearnLayout
       title="Interview Prep — 60 Complete Answers"
       description="60 complete data engineering interview answers across Python, SQL, pipelines, Spark, Kafka, data modelling, warehousing, cloud, distributed systems, system design, and behavioural — written at senior engineer depth."
-      section="Data Engineering — Lesson 47"
+      section="Data Engineering — Lesson 56"
       readTime="90 min"
     >
 

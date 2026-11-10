@@ -74,7 +74,7 @@ export default function PerformanceTuning() {
     <LearnLayout
       title="Performance Tuning"
       description="Tuning Kafka for real throughput and latency targets: producer batching and compression trade-offs, broker page-cache and thread sizing, consumer fetch tuning, disk and filesystem choices, network settings, JVM heap sizing, and a real benchmarking methodology."
-      section="Apache Kafka — Lesson 17"
+      section="Apache Kafka — Lesson 18"
       readTime="60 min"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },

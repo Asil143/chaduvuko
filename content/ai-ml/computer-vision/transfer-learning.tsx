@@ -188,7 +188,7 @@ export default function TransferLearningPage() {
         </h2>
 
         <p style={S.p}>
-          Lesson 46 introduced the concept — take a pretrained backbone,
+          Lesson 50 introduced the concept — take a pretrained backbone,
           replace the classifier head, fine-tune. This lesson goes deep
           on everything that matters in practice: which layers to freeze,
           which learning rates to use per layer group, how to choose

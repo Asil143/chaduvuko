@@ -77,7 +77,7 @@ export default function TypeHintsMypy() {
     <LearnLayout
       title="Type Hints and Static Typing with mypy"
       description="Adding types to Python without losing what makes it Python — annotations, generics, and catching bugs before runtime."
-      section="Python — Lesson 36"
+      section="Python — Lesson 38"
       readTime="35 min"
     >
 
@@ -564,11 +564,11 @@ def record_fee(txn_id: str) -> None:
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 37 covers working with real-world APIs in Python — the requests library, authentication,
+          Lesson 39 covers working with real-world APIs in Python — the requests library, authentication,
           and the timeout mistake that causes production incidents.
         </p>
         <Link href="/learn/python/working-with-apis-python" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 37 → Working with APIs in Python
+          Lesson 39 → Working with APIs in Python
         </Link>
       </div>
     </LearnLayout>

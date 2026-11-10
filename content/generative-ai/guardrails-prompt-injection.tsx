@@ -6,7 +6,7 @@ export default function GuardrailsPromptInjection() {
     <LearnLayout
       title="Guardrails, Prompt Injection and PII Handling"
       description="Defend LLM features against direct and indirect prompt injection, filter unsafe input and output, and keep personal data out of prompts and logs."
-      section="Generative AI & LLM Engineering — Lesson 08"
+      section="Generative AI & LLM Engineering — Lesson 09"
       readTime="35 min"
     >
       <Part n={1} label="Threat model" title="Treat Model Input as Untrusted Data">
@@ -277,7 +277,7 @@ def dispatch(name: str, arguments: dict[str, str], user_id: str) -> str:
       <H3>Next</H3>
       <NextLesson
         href="/learn/generative-ai/llm-observability-tracing"
-        label="Lesson 09 · Observability and Tracing for LLM Apps"
+        label="Lesson 10 · Observability and Tracing for LLM Apps"
         text="Safety controls need evidence too. Next, trace model, retrieval, and tool operations so you can explain what happened in production."
       />
     </LearnLayout>

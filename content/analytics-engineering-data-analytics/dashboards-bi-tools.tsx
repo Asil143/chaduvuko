@@ -6,7 +6,7 @@ export default function DashboardsBiTools() {
     <LearnLayout
       title="Dashboards with Power BI, Tableau and Looker Studio"
       description="Design a dashboard for a decision, model data for BI, choose charts, add filters, and manage refresh and access."
-      section="Data Analytics & Statistics — Lesson 06"
+      section="Data Analytics & Statistics — Lesson 12"
       readTime="40 min"
     >
       <Part n={1} label="Why dashboards?" title="A Dashboard Is an Interface for a Decision">
@@ -242,9 +242,9 @@ GROUP BY event_date, city;
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/analytics-engineering-data-analytics/data-storytelling"
-        label="Lesson 07 · Data Storytelling — From Analysis to Decision"
-        text="A dashboard helps users explore. In the final lesson, turn the evidence into a concise story with a clear chart, useful annotation, executive summary, and decision request."
+        href="/learn/analytics-engineering-data-analytics/bi-data-models-dax"
+        label="Lesson 13 · BI Data Models and Measures — Star Schemas and DAX"
+        text="Model data for BI tools with star schemas and relationships, write measures in DAX, and keep a semantic model fast and trustworthy."
       />
     </LearnLayout>
   )

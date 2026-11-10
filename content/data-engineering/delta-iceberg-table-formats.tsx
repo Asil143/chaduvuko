@@ -31,7 +31,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function DeltaIcebergTableFormatsModule() {
   return (
-    <LearnLayout title="Delta Lake and Apache Iceberg Table Formats" description="Compare transactional table concepts and apply time travel, schema evolution, MERGE, and compaction safely." section="Data Engineering — Lesson 51" readTime="40 min">
+    <LearnLayout title="Delta Lake and Apache Iceberg Table Formats" description="Compare transactional table concepts and apply time travel, schema evolution, MERGE, and compaction safely." section="Data Engineering — Lesson 53" readTime="40 min">
       <section style={{ marginBottom: 56 }}>
         <SectionTag text="// Part 01 — Files Are Not a Table Contract" />
         <SectionTitle>Why a Lake Needs Metadata Above Its Data Files</SectionTitle>
@@ -183,7 +183,7 @@ print(f"replay_is_idempotent={replayed == snapshots[2]['rows']}")`}</WorkshopCod
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 24, marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>Continue your Data Engineering path</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>You have completed the Spark, Airflow, and lakehouse table-format section. Consolidate the full track with the Data Engineering interview questions and system-design review.</p>
-        <Link href="/learn/data-engineering/de-interview-questions" style={{ background: '#14b8a6', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>Continue → Data Engineering Interview Prep</Link>
+        <Link href="/learn/data-engineering/data-engineering-capstone" style={{ background: '#14b8a6', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>Lesson 54 → Data Engineering Capstone — End-to-End Batch + Streaming Pipeline</Link>
       </div>
     </LearnLayout>
   )

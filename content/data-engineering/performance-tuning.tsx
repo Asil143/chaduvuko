@@ -63,7 +63,7 @@ export default function PerformanceTuningModule() {
     <LearnLayout
       title="Performance Tuning — Spark, SQL, and Pipeline Optimisation"
       description="Spark execution model, partitioning, shuffles, broadcast joins, predicate pushdown, SQL query planning, incremental strategies, and diagnosing slow pipelines."
-      section="Data Engineering — Lesson 43"
+      section="Data Engineering — Lesson 46"
       readTime="70 min"
     >
 
@@ -1163,10 +1163,10 @@ print(f"speedup={before / after:.2f}x")`}</WorkshopCode>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 44 covers DataOps and CI/CD for data pipelines — how to test pipeline changes before they hit production, staging environment design, rollback strategies, and automated deployment patterns.
+          Lesson 47 covers DataOps and CI/CD for data pipelines — how to test pipeline changes before they hit production, staging environment design, rollback strategies, and automated deployment patterns.
         </p>
         <Link href="/learn/data-engineering/cicd-pipelines" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 44 → DataOps and CI/CD for Data Pipelines
+          Lesson 47 → DataOps and CI/CD for Data Pipelines
         </Link>
       </div>
     </LearnLayout>

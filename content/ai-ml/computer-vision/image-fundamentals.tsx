@@ -1061,7 +1061,7 @@ def preprocessing_parity_check(path: str, tolerance: float = 1e-3) -> bool:
           of labelled images but collecting and labelling them is expensive.
           Data augmentation synthetically multiplies your dataset
           by applying random transformations that preserve the label.
-          Lesson 56 covers every augmentation technique used in production
+          Lesson 60 covers every augmentation technique used in production
           and explains exactly what each one teaches the model.
         </p>
 
@@ -1077,7 +1077,7 @@ def preprocessing_parity_check(path: str, tolerance: float = 1e-3) -> bool:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 54 · Vision
+              Next — Lesson 58 · Vision
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

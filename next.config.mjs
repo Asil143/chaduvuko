@@ -31,9 +31,13 @@ const nextConfig = {
   },
   async redirects() {
     // Planned course pages that are now live tracks, and lessons merged into another lesson.
-    const promoted = ['agentic-ai', 'devops-mlops', 'javascript', 'full-stack-ai', 'analytics-engineering-data-analytics', 'operating-systems', 'generative-ai'];
+    const promoted = ['agentic-ai', 'devops-mlops', 'javascript', 'full-stack-ai', 'analytics-engineering-data-analytics', 'operating-systems', 'generative-ai', 'system-design', 'ai-security'];
     return [
       ...promoted.map(slug => ({ source: `/learn/track-plan/${slug}`, destination: `/learn/${slug}`, permanent: true })),
+      { source: '/learn/what-is-data-engineering', destination: '/learn/data-engineering/what-is-data-engineering', permanent: true },
+      { source: '/learn/foundations/sql', destination: '/learn/data-engineering/sql-for-de', permanent: true },
+      { source: '/learn/foundations/python', destination: '/learn/data-engineering/python-for-de', permanent: true },
+      { source: '/learn/track-plan/business-intelligence', destination: '/learn/analytics-engineering-data-analytics', permanent: true },
       { source: '/learn/ai-ml/nlp/llm-agents-and-tool-use', destination: '/learn/ai-ml/generative-ai/agents-tool-use', permanent: true },
     ];
   },

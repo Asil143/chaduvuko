@@ -685,16 +685,16 @@ int main() {
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 20 }}>
         Now that you understand pointers, let us connect this to what is coming.
-        Every data structure from Lesson 6 onwards uses pointers to link pieces of
+        Every data structure from Lesson 9 onwards uses pointers to link pieces of
         data together. Here is a quick preview:
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
         {[
-          { unit: 'Lesson 6', name: 'Linked Lists', how: 'Each node has a pointer to the next node. The last node points to NULL. Without pointers, you cannot build a linked list at all.' },
-          { unit: 'Lesson 12', name: 'Trees', how: 'Each node has a left pointer and a right pointer. The tree grows by creating new nodes and linking them with pointers.' },
+          { unit: 'Lesson 9', name: 'Linked Lists', how: 'Each node has a pointer to the next node. The last node points to NULL. Without pointers, you cannot build a linked list at all.' },
+          { unit: 'Lesson 13', name: 'Trees', how: 'Each node has a left pointer and a right pointer. The tree grows by creating new nodes and linking them with pointers.' },
           { unit: 'Lesson 16', name: 'Graphs', how: 'Each node has a list of pointers to its neighbours. Traversal means following pointers from node to node.' },
-          { unit: 'Lesson 17', name: 'Dynamic Programming', how: 'DP tables are arrays — which are pointers to contiguous memory. Memoization uses pointer-based structures internally.' },
+          { unit: 'Lesson 20', name: 'Dynamic Programming', how: 'DP tables are arrays — which are pointers to contiguous memory. Memoization uses pointer-based structures internally.' },
         ].map((item) => (
           <div key={item.unit} style={{ display: 'flex', gap: 16, alignItems: 'flex-start', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '16px 20px' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700, color: 'var(--green)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.3)', borderRadius: 4, padding: '3px 8px', whiteSpace: 'nowrap', marginTop: 2 }}>{item.unit}</span>
@@ -727,7 +727,7 @@ int main() {
         two operators: & to get an address, * to follow one.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Lesson 6 we build our first truly dynamic data structure —
+        In Lesson 6 we continue with recursion —
         <strong style={{ color: 'var(--text)' }}> Linked Lists</strong>.
         Everything you just learned about pointers will be used immediately.
         A linked list is nothing more than nodes connected by pointers.
@@ -739,8 +739,8 @@ int main() {
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Linked Lists — Nodes Connected by Pointers</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Singly, doubly, circular — insert, delete, reverse, detect loops.</div>
         </div>
-        <Link href="/learn/dsa/linked-lists" style={{ background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-          Coming Soon →
+        <Link href="/learn/dsa/recursion" style={{ background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+          Continue →
         </Link>
       </div>
 

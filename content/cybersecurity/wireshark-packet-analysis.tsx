@@ -26,7 +26,7 @@ export default function Module42() {
     <LearnLayout
       title="Packet Analysis with Wireshark"
       description="Use Wireshark and tshark to inspect authorised captures, follow TCP streams, and recognise network behaviours that merit defensive investigation."
-      section="Cybersecurity — Lesson 42"
+      section="Cybersecurity — Lesson 36"
       readTime="40 min"
     >
       <Part title="A Packet Capture Is Evidence, Not a Verdict">
@@ -92,9 +92,9 @@ Display-filter examples (apply to an opened capture):
       ]} />
 
       <Callout type="info">
-        <strong>Up Next — Lesson 43: Digital Forensics Basics</strong><br />
+        <strong>Up Next — Lesson 37: Digital Forensics Basics</strong><br />
         Learn to preserve evidence, acquire images safely, verify hashes, and build timelines from memory, disk, and system artefacts.{' '}
-        <Link href="/learn/cybersecurity/digital-forensics-basics" style={{ color: C, fontWeight: 700 }}>Continue to Lesson 43 →</Link>
+        <Link href="/learn/cybersecurity/digital-forensics-basics" style={{ color: C, fontWeight: 700 }}>Continue to Lesson 37 →</Link>
       </Callout>
     </LearnLayout>
   )

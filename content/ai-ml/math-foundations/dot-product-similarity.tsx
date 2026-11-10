@@ -746,7 +746,7 @@ for i, row_label in enumerate(labels):
               <strong style={{ color: '#7F77DD' }}> Query · Key</strong> — a dot product
               between what a word is "looking for" (Query) and what other words "offer" (Key).
               The result tells the model how much each word should pay attention to
-              every other word in the sentence. Lesson 47 covers this in full.
+              every other word in the sentence. Lesson 51 covers this in full.
             </p>
           </StepBox>
 
@@ -757,7 +757,7 @@ for i, row_label in enumerate(labels):
               Finding the most similar products is finding the vectors with the
               highest cosine similarity to your query vector.
               This is called approximate nearest neighbour search and it runs
-              billions of dot products per second. Lesson 51 (RAG) is built entirely on this.
+              billions of dot products per second. Lesson 55 (RAG) is built entirely on this.
             </p>
           </StepBox>
         </div>

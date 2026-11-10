@@ -222,3 +222,29 @@ Seven lessons cover statistics and BI but no day-to-day analyst tooling.
 3. Product decisions (Data Science, planned tracks).
 4. P2 lessons, course by course.
 5. P3 lessons.
+
+---
+
+## 6. Resolution (November 9, 2026)
+
+All findings in sections 3–5 are fixed. Validation: `tsc`, `next lint`, `next build` and all post-build validators (catalog, SEO, lesson dates, quick results, DE) pass, and the site inventory reports 0 dead links and 0 orphan lessons.
+
+**Structure**
+- DE S1: the static "Data Engineering Foundations" section is removed. `/learn/what-is-data-engineering`, `/learn/foundations/sql` and `/learn/foundations/python` redirect (308) to the curriculum lessons. PostgreSQL now sits in Core Engineering Skills after SQL for Data Engineers.
+- DE S2 and S3: the streaming lessons have moved to How Data Moves. The course now ends Capstone → System Design → Interview Prep.
+- Cybersecurity: SOC triage, Wireshark and forensics are merged into the first Defensive Security section.
+- DSA: lessons are grouped into Foundations / Linear / Non-Linear / Algorithm Paradigms / Interview, on the index and in the catalog.
+- Projects: retitled **Cloud Data Projects**. The page says ADF builds are live and AWS/GCP builds are next.
+- Networking: all 9 "soon" lessons are published.
+
+**New lessons by course**
+- DE +5; SQL +5; Kafka +2; Snowflake +2; dbt +3; Cloud Data +5; Python +4; HTML & CSS +3; DSA +7; DBMS +2; Networking +14 (9 backlog + 5 new); Cybersecurity +3; AI-ML +5.
+- Generative AI +4; Agentic AI +4; DevOps +6; JavaScript +8; Full-Stack +7; Data Analytics +9; OS +4.
+- Every course now ends with interview prep, and the courses listed in finding 2 have a capstone.
+
+**Product decisions**
+- Data Science stays hidden. Its unique topics (EDA, churn case study, funnels and cohorts) now live in Data Analytics.
+- **System Design** (15 lessons) and **AI Security** (10 lessons) are new live courses. Their `/learn/track-plan/*` URLs redirect to the new courses.
+- Business Intelligence is shelved and merged into Data Analytics (new Analyst Toolkit section and BI data modelling/DAX lesson). Its track-plan URL redirects there.
+- SRE and Application Security / DevSecOps remain planned. Their basics are covered by DevOps "SRE Basics" and "Secrets Management", and by the Cybersecurity additions.
+- Career paths now link to the new capstones and interview-prep lessons.

@@ -233,7 +233,7 @@ export default function GANsPage() {
           but remain important for fast inference (no iterative denoising),
           video generation components, and as the conceptual foundation for
           understanding adversarial training. Understanding GANs deeply makes
-          RLHF (Lesson 64) and adversarial robustness click immediately.
+          RLHF (Lesson 68) and adversarial robustness click immediately.
         </Callout>
       </div>
 
@@ -1093,7 +1093,7 @@ with torch.no_grad():
           is a constant risk. Variational Autoencoders take a different path —
           instead of adversarial competition, they use a principled probabilistic
           framework that guarantees a smooth, structured latent space.
-          Lesson 62 builds a VAE from scratch, derives the ELBO loss,
+          Lesson 66 builds a VAE from scratch, derives the ELBO loss,
           and shows the reparameterisation trick that makes it trainable.
         </p>
 
@@ -1109,7 +1109,7 @@ with torch.no_grad():
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 72 · Image Gen
+              Next — Lesson 76 · Image Gen
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

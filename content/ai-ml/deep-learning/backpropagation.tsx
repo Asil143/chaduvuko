@@ -187,7 +187,7 @@ export default function BackpropagationPage() {
         </h2>
 
         <p style={S.p}>
-          Lesson 41 showed the forward pass — data flows left to right through
+          Lesson 45 showed the forward pass — data flows left to right through
           the network, layer by layer, until a prediction emerges.
           The prediction is compared to the true label. The difference is the loss.
           Now what? The network has thousands of weights. Which ones made the
@@ -1148,7 +1148,7 @@ print("autograd would faithfully, and unhelpfully, report exactly that.")`} />
           ability to learn depends critically on two other choices:
           the activation function (what non-linearity to apply at each neuron)
           and the loss function (what the network is trying to minimise).
-          Lesson 43 covers every major activation and loss function —
+          Lesson 47 covers every major activation and loss function —
           what each one does, when to use it, and the numerical stability
           pitfalls that trip up every practitioner at least once.
         </p>
@@ -1165,7 +1165,7 @@ print("autograd would faithfully, and unhelpfully, report exactly that.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 45 · Deep Learning
+              Next — Lesson 49 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

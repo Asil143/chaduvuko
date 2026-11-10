@@ -5,7 +5,7 @@ import type { LessonQuick } from '@/lib/lesson-quick'
 // Python; service configuration (ADF, IAM, cluster setup) is shown as code.
 export const CLOUD_QUICK: Record<string, LessonQuick> = {
   // ── Foundations ──────────────────────────────────────────────────────────
-  '/learn/what-is-data-engineering': {
+  '/learn/data-engineering/what-is-data-engineering': {
     answer: 'Data engineering builds the systems that move and prepare data so analysts and data scientists can use it. A data engineer collects data from source systems, stores it, cleans and reshapes it, and serves it to dashboards and models, reliably and on a schedule.',
     points: [
       'The core skills are SQL, Python and one cloud platform.',
@@ -31,7 +31,7 @@ print(clean)`,
     },
   },
 
-  '/learn/foundations/sql': {
+  '/learn/data-engineering/sql-for-de': {
     answer: 'SQL for data engineers goes beyond SELECT: window functions, CTEs, deduplication, NULL handling and set operations are the tools you use to build and debug pipelines and answer analysts\' questions against large tables.',
     points: [
       'Window functions compute per-group values without collapsing rows.',
@@ -79,7 +79,7 @@ SELECT * FROM signups ORDER BY joined;`,
     },
   },
 
-  '/learn/foundations/python': {
+  '/learn/data-engineering/python-for-de': {
     answer: 'Python for data engineers is about writing clear code that reads data, transforms it, handles errors and talks to cloud services. You do not need to be a software engineer; you need readable functions, good error handling and the standard data libraries.',
     points: [
       'Read files in chunks so memory does not grow with file size.',

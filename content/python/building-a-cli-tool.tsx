@@ -77,7 +77,7 @@ export default function BuildingACliTool() {
     <LearnLayout
       title="Building a CLI Tool"
       description="A complete, real command-line tool built from scratch using argparse — start to finish, project-style."
-      section="Python — Lesson 44"
+      section="Python — Lesson 47"
       readTime="50 min"
     >
 
@@ -610,11 +610,11 @@ deploytool rollback --env prod --to v1.4.2`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 45 covers Python best practices — PEP 8, naming conventions, and the conventions that
+          Lesson 48 covers Python best practices — PEP 8, naming conventions, and the conventions that
           separate readable, maintainable code from code that merely works.
         </p>
         <Link href="/learn/python/python-best-practices" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 45 → Python Best Practices — PEP 8, Clean Code
+          Lesson 48 → Python Best Practices — PEP 8, Clean Code
         </Link>
       </div>
     </LearnLayout>

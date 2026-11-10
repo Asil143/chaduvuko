@@ -939,7 +939,7 @@ for k, v in s3.best_params.items():
         <ErrorBlock
           error="Optuna best CV AUC = 0.94 but test AUC = 0.81 — hyperparameter overfitting"
           cause="You ran too many trials on a small dataset. With 500 trials and 1,000 samples, Optuna effectively searched through enough combinations that some got lucky on the CV folds by chance — the same overfitting problem as testing many models on the same test set. The chosen hyperparameters are optimised for those specific CV folds, not for generalisation."
-          fix="Use nested cross-validation from Lesson 37. Limit n_trials relative to dataset size — for 1,000 samples, 30–50 trials is plenty. Use RepeatedStratifiedKFold inside the objective so each trial is evaluated on more than 5 folds, making it harder to get lucky. Hold out a final test set that is never seen during Optuna optimisation."
+          fix="Use nested cross-validation from Lesson 40. Limit n_trials relative to dataset size — for 1,000 samples, 30–50 trials is plenty. Use RepeatedStratifiedKFold inside the objective so each trial is evaluated on more than 5 folds, making it harder to get lucky. Hold out a final test set that is never seen during Optuna optimisation."
         />
 
         <ErrorBlock
@@ -1263,10 +1263,10 @@ print("Best config across the distributed sweep:", best_config)`} />
           The final module in the Evaluation section answers the question
           stakeholders always ask after seeing the model performance:
           why did the model make this specific prediction?
-          Lesson 39 covers SHAP and LIME — the two most widely used
+          Lesson 43 covers SHAP and LIME — the two most widely used
           techniques for explaining individual predictions from any model.
           SHAP was introduced briefly in Lesson 30 for XGBoost.
-          Lesson 39 covers it comprehensively across all model types
+          Lesson 43 covers it comprehensively across all model types
           including black-box models with no direct feature importance.
         </p>
 
@@ -1282,7 +1282,7 @@ print("Best config across the distributed sweep:", best_config)`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 41 · Evaluation
+              Next — Lesson 45 · Evaluation
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

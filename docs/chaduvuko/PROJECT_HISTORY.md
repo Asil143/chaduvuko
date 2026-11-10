@@ -197,6 +197,14 @@ Recovered Library content shows a Chaduvuko practice product called **Pipeline P
 - Career paths rewired: Advanced Python for AI paths, a shared Developer essentials milestone (Linux, Git, Docker), Spark/Airflow for DE, stats/A-B testing for ML and analytics, DevOps-first Cloud & DevOps path, OS + DSA patterns for Software Engineer, and networking limited to non-overlapping modules for security paths.
 - Details: `docs/chaduvuko/CAREER_PATH_LESSON_AUDIT.md` (section "Resolution").
 
+## November 9, 2026 — Fixed the site-wide course audit
+
+- Implemented every finding in `docs/chaduvuko/SITE_WIDE_COURSE_AUDIT.md`. That is about 130 new lessons; the catalog now has 26 tracks and 685 live lessons.
+- New registry courses: **System Design** (15 lessons) and **AI Security** (10 lessons). Business Intelligence is merged into Data Analytics (`SHELVED_TRACK_SLUGS`). Data Science stays hidden.
+- Every course ends with interview prep, and major courses have a capstone. Career paths link to them.
+- DE static Foundations section removed; three duplicate URLs redirect to the curriculum lessons. The Projects course is renamed Cloud Data Projects.
+- Registry lesson numbers and next-lesson CTAs were regenerated from registry order.
+
 ## Ongoing rules
 - Keep StudyX Overseas separate.
 - Chaduvuko remains the primary EdTech project.

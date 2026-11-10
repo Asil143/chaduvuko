@@ -4,12 +4,16 @@ import { liveLessonsForTrack } from '@/lib/catalog'
 import { cardStyle, eyebrowStyle, h1Style, h2Style, leadStyle, pageShell } from '@/components/learn/PathCard'
 import { BreadcrumbJsonLd } from '@/components/JsonLd'
 
-const DESCRIPTION = 'Learn the data services of AWS, Microsoft Azure, and Google Cloud: storage, ingestion, processing, warehousing, streaming, and governance, one module per provider.'
+const DESCRIPTION = 'Learn to choose and operate data services across AWS, Microsoft Azure, and Google Cloud, then apply cross-cloud security and career skills.'
 
-const MODULES = [
+const MODULES: { section: string; blurb: string; cheatsheet?: string }[] = [
+  { section: 'Course Introduction', blurb: 'Compare the major data services and choose a cloud based on workload, skills, governance, and operating constraints.' },
   { section: 'AWS', blurb: 'S3, Glue, Redshift, Kinesis, Athena, EMR, Step Functions, and Lake Formation.', cheatsheet: '/learn/aws/cheatsheet' },
   { section: 'Microsoft Azure', blurb: 'ADLS Gen2, Data Factory, Databricks, Synapse, Event Hubs, Key Vault, and Fabric.', cheatsheet: '/learn/azure/cheatsheet' },
-  { section: 'Google Cloud', blurb: 'BigQuery, Dataflow, Pub/Sub, and Composer.', cheatsheet: '/learn/gcp/cheatsheet' },
+  { section: 'Google Cloud', blurb: 'BigQuery, Dataflow, Pub/Sub, Composer, Cloud Storage, and Dataproc.', cheatsheet: '/learn/gcp/cheatsheet' },
+  { section: 'Platform-neutral Tools', blurb: 'Explore a managed lakehouse platform and its governance model across cloud deployments.' },
+  { section: 'Cross-cloud Foundations', blurb: 'Apply identity, least privilege, private networking, and secure connectivity patterns across providers.' },
+  { section: 'Career Preparation', blurb: 'Practice explaining architecture, trade-offs, reliability, governance, and cost in cloud data interviews.' },
 ]
 
 export const metadata: Metadata = {
@@ -38,14 +42,14 @@ export default function CloudDataPage() {
       </p>
 
       {MODULES.map((module, index) => {
-        const items = lessons.filter(lesson => lesson.section === module.section)
+        const items = lessons.filter(lesson => lesson.section === module.section).sort((a, b) => a.order - b.order)
         if (!items.length) return null
         const id = `module-${index + 1}`
         return (
           <section key={module.section} aria-labelledby={id} style={{ marginBottom: 36 }}>
             <h2 id={id} style={h2Style}>Module {index + 1} · {module.section}</h2>
             <p style={{ color: 'var(--muted)', fontSize: 14, margin: '0 0 14px' }}>
-              {module.blurb} <Link href={module.cheatsheet} style={{ color: 'var(--green)' }}>Cheat sheet</Link>
+              {module.blurb} {module.cheatsheet && <><Link href={module.cheatsheet} style={{ color: 'var(--green)' }}>Cheat sheet</Link></>}
             </p>
             <ol style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
               {items.map((lesson, i) => (

@@ -74,7 +74,7 @@ export default function DisasterRecoveryMultiRegion() {
     <LearnLayout
       title="Disaster Recovery and Multi-Region Kafka"
       description="Why a single-cluster, single-region Kafka deployment has a blast radius, how rack awareness and MirrorMaker 2 mitigate it, active-passive vs active-active DR patterns, RPO/RTO framing, and a worked regional failover runbook."
-      section="Apache Kafka — Lesson 19"
+      section="Apache Kafka — Lesson 20"
       readTime="60 min"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },

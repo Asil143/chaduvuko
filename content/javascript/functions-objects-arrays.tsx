@@ -313,9 +313,9 @@ console.log(course.summary())`} />
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/javascript/dom-and-events"
-        label="Lesson 03 · The DOM and Events"
-        text="You can now shape data and write reusable logic. Next, connect that logic to page elements, events, and forms to build an interactive expense tracker."
+        href="/learn/javascript/scope-closures-this"
+        label="Lesson 03 · Scope, Closures and this"
+        text="Block and function scope, hoisting, closures in practice, and how this is decided in methods, callbacks, arrow functions and classes."
       />
     </LearnLayout>
   )

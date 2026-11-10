@@ -143,7 +143,7 @@ print(parts)   # ['Denver', 'CO', '80202']`}</CodeBox>
           than a literal string.
         </Para>
 
-        <CodeBox label="re.split() — a brief preview; full regex depth is Lesson 32">{`import re
+        <CodeBox label="re.split() — a brief preview; full regex depth is Lesson 34">{`import re
 
 line = "Denver, CO; 80202   99205"
 
@@ -157,7 +157,7 @@ print(parts)   # ['Denver', 'CO', '80202', '99205']`}</CodeBox>
           <code>re.split()</code> as an option when plain <code>.split()</code>/<code>.replace()</code>{' '}
           genuinely cannot express what you need. Full regular expression syntax — character classes,
           groups, quantifiers, and the rest of the <code>re</code> module — gets its own complete
-          treatment in Lesson 32, later in this track.
+          treatment in Lesson 34, later in this track.
         </Callout>
       </section>
 
@@ -725,7 +725,7 @@ def build_reminder(template_text, patient_name, appointment_date):
           {
             error: `AttributeError: 'NoneType' object has no attribute 'group' (from a regex match)`,
             cause: 'Calling .group() directly on the result of re.search() or re.match() when the pattern did not actually match anything, since both return None on no match rather than raising.',
-            fix: 'Always check the match object before calling methods on it: match = re.search(pattern, text); if match: match.group(). This becomes second nature once Lesson 32 covers regex in full.',
+            fix: 'Always check the match object before calling methods on it: match = re.search(pattern, text); if match: match.group(). This becomes second nature once Lesson 34 covers regex in full.',
           },
           {
             error: `IndexError: list index out of range (after re.split or str.split)`,
@@ -768,7 +768,7 @@ def build_reminder(template_text, patient_name, appointment_date):
 
       {/* ── Key Takeaways ── */}
       <KeyTakeaways items={[
-        'For delimiters beyond a single fixed string, re.split() splits on a pattern — a light preview of the regex module covered fully in Lesson 32.',
+        'For delimiters beyond a single fixed string, re.split() splits on a pattern — a light preview of the regex module covered fully in Lesson 34.',
         '.strip() removes all leading/trailing whitespace (spaces, tabs, newlines) by default, or an explicit set of characters when given an argument.',
         'Always normalise case (.lower() or the more thorough .casefold()) and strip whitespace before comparing human-entered text — invisible formatting differences are a constant source of "why doesn\'t this match" bugs.',
         '.ljust(), .rjust(), .center(), and .zfill() produce fixed-width, aligned output for reports and IDs; f-string format specifiers handle more advanced formatting like thousands separators.',

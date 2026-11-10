@@ -290,8 +290,8 @@ export default function WhatIsADatabase() {
       {/* ── PART 06 ── */}
       <Part n="06" title="The FreshCart Database — Your SQL Dataset for All 62 Modules" />
 
-      <P>Every single module in this course — from Lesson 01 to Lesson 62 — uses the same database: <Hl>FreshCart</Hl>. A fictional US grocery chain. 10 stores across New York, Chicago, Los Angeles, Seattle, Austin, and Portland. Real-world brands — King Arthur, Tillamook, Vital Farms, Starbucks, Head &amp; Shoulders. Realistic prices, realistic data.</P>
-      <P>You will know this database so well by Lesson 62 that you could rebuild it from memory. That depth of familiarity with one dataset is intentional — every query you write will feel meaningful, not academic.</P>
+      <P>Every single module in this course — from Lesson 01 to Lesson 67 — uses the same database: <Hl>FreshCart</Hl>. A fictional US grocery chain. 10 stores across New York, Chicago, Los Angeles, Seattle, Austin, and Portland. Real-world brands — King Arthur, Tillamook, Vital Farms, Starbucks, Head &amp; Shoulders. Realistic prices, realistic data.</P>
+      <P>You will know this database so well by Lesson 67 that you could rebuild it from memory. That depth of familiarity with one dataset is intentional — every query you write will feel meaningful, not academic.</P>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 12, margin: '24px 0 32px' }}>
         {[

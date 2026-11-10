@@ -64,6 +64,7 @@ const dsaLessons = (): Lesson[] => DSA_UNITS.map(unit => ({
   href: `/learn/dsa/${unit.slug}`,
   title: unit.title,
   track: 'dsa',
+  section: unit.section,
   order: parseInt(unit.number, 10),
   readTime: unit.time,
   status: normalizeStatus(unit.status),

@@ -6,7 +6,7 @@ export default function AsyncJavascriptFetch() {
     <LearnLayout
       title="Async JavaScript — Promises, async/await and fetch"
       description="The event loop, callbacks, promises, async/await, calling APIs with fetch, and handling errors and loading states."
-      section="JavaScript & TypeScript — Lesson 04"
+      section="JavaScript & TypeScript — Lesson 09"
       readTime="40 min"
     >
       <Part n={1} label="Why async" title="Waiting for a Network Response Is Not Instant">
@@ -329,7 +329,7 @@ async function searchCourses(query) {
       <H3>Next</H3>
       <NextLesson
         href="/learn/javascript/modules-npm-tooling"
-        label="Lesson 05 · Modules, npm and Build Tooling"
+        label="Lesson 10 · Modules, npm and Build Tooling"
         text="You can fetch and handle remote data. Next, split code into modules and use npm and Vite to organize an application."
       />
     </LearnLayout>

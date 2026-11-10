@@ -6,7 +6,7 @@ export default function ModulesNpmTooling() {
     <LearnLayout
       title="Modules, npm and Build Tooling"
       description="ES modules, package.json and npm scripts, dependencies and lockfiles, Vite, and linting and formatting with ESLint and Prettier."
-      section="JavaScript & TypeScript — Lesson 05"
+      section="JavaScript & TypeScript — Lesson 10"
       readTime="30 min"
     >
       <Part n={1} label="Why structure matters" title="A Project Grows Beyond One Script">
@@ -262,9 +262,9 @@ npm run preview`} />
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/javascript/typescript-essentials"
-        label="Lesson 06 · TypeScript Essentials"
-        text="Your code is organized and buildable. In the final lesson, add static types that document data shapes and catch mistakes before runtime."
+        href="/learn/javascript/nodejs-fundamentals"
+        label="Lesson 11 · Node.js Fundamentals — Runtime, File System and Modules"
+        text="Run JavaScript outside the browser: the Node.js runtime, CommonJS and ES modules, the fs and path modules, environment variables and a small CLI."
       />
     </LearnLayout>
   )

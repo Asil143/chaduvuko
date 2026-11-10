@@ -6,7 +6,7 @@ export default function TypescriptEssentials() {
     <LearnLayout
       title="TypeScript Essentials"
       description="Add types to JavaScript: primitives, objects, unions, generics, narrowing, and typing API responses, plus a strict tsconfig."
-      section="JavaScript & TypeScript — Lesson 06"
+      section="JavaScript & TypeScript — Lesson 12"
       readTime="45 min"
     >
       <Part n={1} label="Types and objects" title="Describe Values and Structured Data">
@@ -380,9 +380,9 @@ if (course) {
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/full-stack-ai/react-fundamentals"
-        label="Next course · Full-Stack Development with AI"
-        text="You have completed the JavaScript & TypeScript track. Continue by applying these skills to components, props, and JSX in React."
+        href="/learn/javascript/testing-with-vitest"
+        label="Lesson 13 · Testing JavaScript with Vitest"
+        text="Write unit tests with Vitest, structure test cases, mock modules and network calls, measure coverage and run tests in CI."
       />
     </LearnLayout>
   )

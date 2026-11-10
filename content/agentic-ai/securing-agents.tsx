@@ -6,7 +6,7 @@ export default function SecuringAgents() {
     <LearnLayout
       title="Securing Agents — Tool Permissions and Abuse Cases"
       description="Least-privilege tools, sandboxing, indirect prompt injection through tool results, spending limits, and abuse-case testing."
-      section="Agentic AI & Automation — Lesson 09"
+      section="Agentic AI & Automation — Lesson 11"
       readTime="35 min"
     >
       <Part n={1} label="Threat model" title="An Agent Is an Untrusted Decision-Maker with Real Capabilities">
@@ -203,9 +203,9 @@ def can_fetch_policy(host: str) -> bool:
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/agentic-ai/agent-capstone-support-agent"
-        label="Lesson 10 · Capstone — A Tool-Using Support Agent"
-        text="Apply the architecture, evaluation and security controls in one end-to-end customer support project."
+        href="/learn/agentic-ai/deploying-long-running-agents"
+        label="Lesson 12 · Deploying Long-Running Agents — Queues, Checkpoints and Cost Limits"
+        text="Run agents as background jobs with queues, durable checkpoints, timeouts, budgets and resumable runs, and monitor them in production."
       />
     </LearnLayout>
   )

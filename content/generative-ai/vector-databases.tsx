@@ -6,7 +6,7 @@ export default function VectorDatabases() {
     <LearnLayout
       title="Vector Databases — pgvector, Chroma, Pinecone and FAISS"
       description="Store and query embeddings at scale: indexes (HNSW, IVF), metadata filters, hybrid search, and how to choose a vector store."
-      section="Generative AI & LLM Engineering — Lesson 06"
+      section="Generative AI & LLM Engineering — Lesson 07"
       readTime="35 min"
     >
       <Part n={1} label="Purpose" title="Store Vectors Beside the Data Needed to Use Them">
@@ -274,7 +274,7 @@ class VectorStore(Protocol):
       <H3>Next</H3>
       <NextLesson
         href="/learn/generative-ai/llm-evaluation"
-        label="Lesson 07 · Evaluating LLM Apps — Eval Sets, LLM-as-Judge and RAG Metrics"
+        label="Lesson 08 · Evaluating LLM Apps — Eval Sets, LLM-as-Judge and RAG Metrics"
         text="Your retrieval pipeline can now return filtered candidates. Next, build evaluation sets and measure whether the whole LLM feature works reliably."
       />
     </LearnLayout>

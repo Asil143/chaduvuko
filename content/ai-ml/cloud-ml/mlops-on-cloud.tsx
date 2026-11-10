@@ -1343,7 +1343,7 @@ if __name__ == '__main__':
         <span style={S.tag}>Section 12 and the full track — complete</span>
         <h2 style={S.h2}>
           The Cloud ML Platforms section and the entire AI/ML track are complete.
-          Lesson 80 is your interview preparation — 50 complete ML answers.
+          Lesson 84 is your interview preparation — 50 complete ML answers.
         </h2>
 
         <p style={S.p}>
@@ -1351,7 +1351,7 @@ if __name__ == '__main__':
           Python for ML, Classical ML, Deep Learning, NLP, Computer Vision,
           Generative AI, MLOps, and Cloud ML Platforms. Every concept connects
           to the next. Every module includes working code and real company
-          examples. Lesson 80 is the capstone — 50 complete answers to the most
+          examples. Lesson 84 is the capstone — 50 complete answers to the most
           common ML engineering interview questions asked at DoorDash, Stripe,
           Amazon, Brex, and every other major tech company.
         </p>
@@ -1368,7 +1368,7 @@ if __name__ == '__main__':
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 85 · Cloud ML
+              Next — Lesson 90 · Cloud ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

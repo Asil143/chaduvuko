@@ -173,7 +173,7 @@ export default function ETLvsELTModule() {
     <LearnLayout
       title="ETL vs ELT — History, Difference, When to Use Each"
       description="Why ETL dominated for 30 years, why ELT replaced it, and when each still belongs in a modern stack."
-      section="Data Engineering — Lesson 22"
+      section="Data Engineering — Lesson 25"
       readTime="50 min"
     >
 
@@ -1200,10 +1200,10 @@ Publish consumer mart            Serving layer; apply least-privilege access`}</
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 23 covers the three ingestion patterns — full load, incremental load, and CDC — including the watermark patterns that make incremental loads reliable and the common ways each one silently fails.
+          Lesson 26 covers the three ingestion patterns — full load, incremental load, and CDC — including the watermark patterns that make incremental loads reliable and the common ways each one silently fails.
         </p>
         <Link href="/learn/data-engineering/ingestion-patterns" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 23 → Data Ingestion Patterns — Full Load, Incremental, CDC
+          Lesson 26 → Data Ingestion Patterns — Full Load, Incremental, CDC
         </Link>
       </div>
     </LearnLayout>

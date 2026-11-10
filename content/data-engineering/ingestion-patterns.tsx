@@ -173,7 +173,7 @@ export default function IngestionPatternsModule() {
     <LearnLayout
       title="Data Ingestion Patterns — Full Load, Incremental, CDC"
       description="The three patterns that cover every source — when each is correct, how each fails, and how to choose."
-      section="Data Engineering — Lesson 23"
+      section="Data Engineering — Lesson 26"
       readTime="65 min"
     >
 
@@ -1049,10 +1049,10 @@ print(f"composite_cursor={correct}")`}</WorkshopCode>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 24 goes deep on Change Data Capture — log-based, trigger-based, and query-based CDC from the inside, including production gotchas around replication lag, schema changes, and log retention.
+          Lesson 27 goes deep on Change Data Capture — log-based, trigger-based, and query-based CDC from the inside, including production gotchas around replication lag, schema changes, and log retention.
         </p>
         <Link href="/learn/data-engineering/change-data-capture" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 24 → Change Data Capture (CDC) — How It Works Under the Hood
+          Lesson 27 → Change Data Capture (CDC) — How It Works Under the Hood
         </Link>
       </div>
     </LearnLayout>

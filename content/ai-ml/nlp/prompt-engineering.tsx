@@ -1228,7 +1228,7 @@ print(f"\nCurrently serving prod: {registry.channels['complaint_classifier:prod'
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 65 · LLM Apps
+              Next — Lesson 69 · LLM Apps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

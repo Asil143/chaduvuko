@@ -6,7 +6,7 @@ export default function LlmObservabilityTracing() {
     <LearnLayout
       title="Observability and Tracing for LLM Apps"
       description="Trace every model call, retrieval, and tool call with OpenTelemetry-style spans; track cost, latency, and quality in production."
-      section="Generative AI & LLM Engineering — Lesson 09"
+      section="Generative AI & LLM Engineering — Lesson 10"
       readTime="30 min"
     >
       <Part n={1} label="Why observability" title="Answer the Question: What Happened to This Request?">
@@ -292,7 +292,7 @@ print(summary)
       <H3>Next</H3>
       <NextLesson
         href="/learn/generative-ai/llm-cost-latency"
-        label="Lesson 10 · Cost and Latency Optimisation — Caching, Batching and Routing"
+        label="Lesson 11 · Cost and Latency Optimisation — Caching, Batching and Routing"
         text="You can now see where time and tokens go. Next, use that evidence to reduce cost and improve response speed without sacrificing quality."
       />
     </LearnLayout>

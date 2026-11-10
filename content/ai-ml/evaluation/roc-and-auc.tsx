@@ -186,7 +186,7 @@ export default function ROCAndAUCPage() {
         </h2>
 
         <p style={S.p}>
-          Lesson 34 showed the fundamental problem: precision and recall depend
+          Lesson 37 showed the fundamental problem: precision and recall depend
           on the threshold you choose. Lower the threshold from 0.5 to 0.3 —
           you catch more fraud (higher recall) but generate more false alarms
           (lower precision). Every threshold gives a different precision/recall pair.
@@ -1109,18 +1109,16 @@ print("number could move on a different sample of the same population.")`} />
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
-          You can evaluate any model at any threshold. Next: does your evaluation
-          generalise — or did you get lucky on this particular test set?
+          ROC-AUC tells you about ranking. Next: what changes when the positive
+          class is rare and the default decision misses too many events?
         </h2>
 
         <p style={S.p}>
-          ROC-AUC on a single test split gives one number. But how stable is it?
-          A different random seed for the split might give AUC = 0.91 instead of 0.94.
-          Cross-validation gives you a distribution of AUC scores across multiple
-          non-overlapping test sets — mean and standard deviation — so you can
-          report confidence intervals, not just point estimates.
-          Lesson 37 covers cross-validation, the bias-variance tradeoff,
-          and how to use them together to make model comparisons statistically rigorous.
+          With rare positives, a high accuracy can hide a model that catches none.
+          The next lesson compares class weights, random resampling and SMOTE,
+          while preserving natural prevalence in validation and test data. It also
+          explains why resampling must happen inside each training fold to avoid
+          leaking synthetic or duplicated examples into evaluation.
         </p>
 
         <div style={{
@@ -1135,21 +1133,20 @@ print("number could move on a different sample of the same population.")`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 39 · Evaluation
+              Next — Lesson 42 · Evaluation
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              Cross-Validation and the Bias-Variance Tradeoff
+              Imbalanced Data — Class Weights, Resampling and SMOTE
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
-              From point estimates to confidence intervals. K-fold, stratified,
-              and repeated CV — and when the bias-variance tradeoff determines
-              which model to choose.
+              Compare weighting and resampling for rare classes without
+              contaminating validation folds or the final test set.
             </p>
           </div>
-          <Link href="/learn/ai-ml/evaluation/cross-validation" style={{
+          <Link href="/learn/ai-ml/evaluation/imbalanced-data" style={{
             fontSize: 12, color: '#1D9E75', fontWeight: 700,
             border: '1px solid #1D9E75',
             padding: '7px 14px', borderRadius: 6,

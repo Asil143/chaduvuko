@@ -3,7 +3,7 @@ import { Bullets, Callout, Code, H3, KeyTakeaways, Mistakes, NextLesson, P, Part
 
 export default function DeployingFullStackApps() {
   return (
-    <LearnLayout title="Deploying a Full-Stack App" description="Environment variables, managed databases, builds, preview deployments, domains, and post-deploy checks on common platforms." section="Full-Stack Development with AI — Lesson 08" readTime="35 min">
+    <LearnLayout title="Deploying a Full-Stack App" description="Environment variables, managed databases, builds, preview deployments, domains, and post-deploy checks on common platforms." section="Full-Stack Development with AI — Lesson 13" readTime="35 min">
       <Part n={1} label="Deployment model" title="Know Which Pieces Run Where">
         <P>A full-stack app can run its Next.js interface and server routes on a platform such as Vercel, while a Node and Express API may run on a long-lived application platform such as Render. PostgreSQL can run as a managed database on a provider that handles backups and operations. These are examples, not endorsements or requirements: compare regional availability, operational needs, pricing, support, and data-handling obligations before choosing.</P>
         <P>Draw the request path before deploying: a student's browser requests the web app, the web server reads or writes the database, and a server-only AI route calls the model provider. Each service needs a network path, a secure configuration, observability, and an owner. Avoid exposing a database directly to a public browser.</P>
@@ -82,7 +82,10 @@ export default function DeployingFullStackApps() {
       ]} />
       <Bullets items={[<span key="reference">Use the current official Vercel, Render, PostgreSQL, and managed database documentation for provider-specific deployment and networking steps.</span>]} />
       <H3>Next</H3>
-      <NextLesson href="/learn/generative-ai" label="Next course · Generative AI & LLM Engineering" text="You have built and shipped a full-stack product with an AI feature. Continue into model APIs, retrieval, evaluation, and production LLM engineering." />
+      <NextLesson
+        href="/learn/full-stack-ai/full-stack-capstone"
+        label="Lesson 14 · Full-Stack Capstone — AI-Powered SaaS App"
+        text="Plan and build a small SaaS app with authentication, a database, an AI feature, tests and deployment, and present it as a portfolio project." />
     </LearnLayout>
   )
 }

@@ -120,7 +120,7 @@ export default function BatchPipelineFromScratchModule() {
     <LearnLayout
       title="Building a Batch Pipeline From Scratch"
       description="From requirements to production deployment — schema validation, chunked extraction, transformation, upserts, observability, testing, and scheduling."
-      section="Data Engineering — Lesson 25"
+      section="Data Engineering — Lesson 28"
       readTime="85 min"
     >
 
@@ -1758,10 +1758,10 @@ with TemporaryDirectory() as directory:
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 26 covers idempotency and atomicity — the two properties that separate toy pipelines from production ones — and exactly how to make pipelines safe to restart after any failure at any stage.
+          Lesson 29 covers idempotency and atomicity — the two properties that separate toy pipelines from production ones — and exactly how to make pipelines safe to restart after any failure at any stage.
         </p>
         <Link href="/learn/data-engineering/idempotency-atomicity" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 26 → Idempotency, Atomicity and Pipeline Restartability
+          Lesson 29 → Idempotency, Atomicity and Pipeline Restartability
         </Link>
       </div>
     </LearnLayout>

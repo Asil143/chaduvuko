@@ -78,7 +78,7 @@ export default function RecursiveCte() {
     <LearnLayout
       title="Recursive CTEs"
       description="Query hierarchical and graph data without fixed-depth self-joins — org charts, category trees, bill-of-materials, path finding, and number generation using WITH RECURSIVE"
-      section="SQL — Lesson 56"
+      section="SQL — Lesson 57"
       readTime="16–24 min"
     >
 

@@ -77,7 +77,7 @@ export default function MultithreadingMultiprocessing() {
     <LearnLayout
       title="Multithreading and Multiprocessing Basics"
       description="Concurrency vs parallelism, the GIL explained honestly, threading for I/O-bound work, multiprocessing for CPU-bound work, and a clear decision framework."
-      section="Python — Lesson 34"
+      section="Python — Lesson 36"
       readTime="50 min"
     >
 
@@ -414,7 +414,7 @@ if __name__ == "__main__":
         </Para>
 
         <CodeBox label="The decision framework">{`Is the work I/O-bound (mostly WAITING on something external)?
-    → threading, OR asyncio (Lesson 35 — often the better modern choice
+    → threading, OR asyncio (Lesson 37 — often the better modern choice
       for large numbers of concurrent I/O operations)
 
 Is the work CPU-bound (mostly COMPUTING)?
@@ -428,7 +428,7 @@ Is the work a mix, or genuinely small-scale?
 
         <Para>
           This lesson deliberately mentions <code>asyncio</code> without covering it in depth — that is
-          the entire subject of Lesson 35, immediately next in this track. The short version worth
+          the entire subject of Lesson 37, immediately next in this track. The short version worth
           knowing now: for a very large number of concurrent I/O-bound operations (hundreds or thousands
           of simultaneous network requests, for example), <code>asyncio</code> generally scales better
           than one OS thread per operation, because threads have real memory and scheduling overhead that
@@ -725,7 +725,7 @@ Is the work a mix, or genuinely small-scale?
         'A race condition happens when threads read/modify shared data at overlapping times without synchronization — use threading.Lock (via a "with" block) to make a read-modify-write sequence atomic.',
         'multiprocessing achieves real parallelism by running separate OS processes, each with its own interpreter and GIL — the right tool for CPU-bound work, at the cost of serialization overhead for passing data between processes.',
         'Always wrap multiprocessing.Pool/Process creation in if __name__ == "__main__": to avoid runaway process spawning on platforms using the spawn start method.',
-        'Decision framework: I/O-bound → threading or asyncio (Lesson 35). CPU-bound → multiprocessing. Measure before reaching for either — concurrency adds real complexity.',
+        'Decision framework: I/O-bound → threading or asyncio (Lesson 37). CPU-bound → multiprocessing. Measure before reaching for either — concurrency adds real complexity.',
       ]} />
 
       {/* ── Next Module CTA ── */}
@@ -734,12 +734,12 @@ Is the work a mix, or genuinely small-scale?
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 35 covers async Python — coroutines, the event loop, and asyncio — the modern approach
+          Lesson 37 covers async Python — coroutines, the event loop, and asyncio — the modern approach
           to handling large numbers of concurrent I/O-bound operations that this lesson referenced but
           did not fully cover.
         </p>
         <Link href="/learn/python/async-python" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 35 → Async Python — asyncio, async/await
+          Lesson 37 → Async Python — asyncio, async/await
         </Link>
       </div>
     </LearnLayout>

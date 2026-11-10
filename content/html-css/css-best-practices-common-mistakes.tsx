@@ -77,7 +77,7 @@ export default function CssBestPracticesCommonMistakes() {
     <LearnLayout
       title="CSS Best Practices & Common Mistakes"
       description="The conventions that separate maintainable CSS from a stylesheet nobody wants to touch — and the mistakes every beginner makes at least once."
-      section="HTML & CSS — Lesson 41"
+      section="HTML & CSS — Lesson 42"
       readTime="30 min"
     >
 
@@ -787,13 +787,10 @@ h1 { font-size: 2rem; }      /* 2 * the root font-size — scales if the user ch
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          The final module in this track pulls everything together into interview-ready form —
-          semantic HTML, the box model, specificity, Flexbox vs Grid, responsive design, and
-          accessibility, plus fully worked hands-on layout challenges like centering a div three
-          different ways and fixing a broken sticky footer.
+          Before the capstone, publish the finished static files and learn how to verify deployments on GitHub Pages, Netlify, or Vercel.
         </p>
-        <Link href="/learn/html-css/html-css-interview-prep" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 42 → HTML &amp; CSS Interview Prep — Common Questions and Patterns
+        <Link href="/learn/html-css/deploying-a-static-site-github-pages-netlify-vercel" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Lesson 43 → Deploying a Static Site — GitHub Pages, Netlify, Vercel
         </Link>
       </div>
     </LearnLayout>

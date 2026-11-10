@@ -883,12 +883,10 @@ applyCustomerBranding()
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          With variables in place, the next lesson covers CSS transitions — how to make state changes
-          feel smooth, which properties animate cheaply versus expensively, and the timing functions that
-          control how motion feels.
+          With reusable tokens in place, the next lesson applies them to a complete light/dark theme, including system preference and a user-controlled toggle.
         </p>
-        <Link href="/learn/html-css/css-transitions" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Next → CSS Transitions
+        <Link href="/learn/html-css/dark-mode-theming-custom-properties" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Lesson 31 → Dark Mode and Theming with Custom Properties
         </Link>
       </div>
     </LearnLayout>

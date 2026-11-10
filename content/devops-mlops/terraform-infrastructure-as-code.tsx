@@ -6,7 +6,7 @@ export default function TerraformInfrastructureAsCode() {
     <LearnLayout
       title="Infrastructure as Code with Terraform"
       description="Model cloud infrastructure with Terraform providers, resources, variables, state, remote backends, plans, and reusable modules."
-      section="DevOps & Cloud Infrastructure — Lesson 07"
+      section="DevOps & Cloud Infrastructure — Lesson 08"
       readTime="40 min"
     >
       <Part n={1} label="Why code infrastructure?" title="Make Infrastructure Changes Reviewable">
@@ -323,9 +323,9 @@ output "network_id" {
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/devops-mlops/ci-cd-github-actions"
-        label="Lesson 08 · CI/CD with GitHub Actions"
-        text="Your infrastructure is described and reviewable. Next, automate the path from a tested code change to a built container image and a controlled deployment."
+        href="/learn/devops-mlops/secrets-management"
+        label="Lesson 09 · Secrets Management — Vault and Cloud Secret Stores"
+        text="Keep credentials out of code and images: environment variables, cloud secret managers, HashiCorp Vault, rotation and access policies."
       />
     </LearnLayout>
   )

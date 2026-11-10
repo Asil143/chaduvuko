@@ -6,7 +6,7 @@ export default function ShippingAiFeatureFastapi() {
     <LearnLayout
       title="Shipping an AI Feature — FastAPI Backend and Chat UI"
       description="Wrap a RAG assistant in a FastAPI service with streaming responses, a minimal chat UI, configuration, and deployment checks."
-      section="Generative AI & LLM Engineering — Lesson 12"
+      section="Generative AI & LLM Engineering — Lesson 14"
       readTime="40 min"
     >
       <Part n={1} label="From prototype to service" title="A Shippable Feature Has More Than a Model Call">
@@ -349,9 +349,9 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/agentic-ai/what-is-an-ai-agent"
-        label="Next course · Agentic AI & Automation"
-        text="You have shipped an LLM feature behind an API. Continue into Agentic AI & Automation to build systems that use tools, state, and bounded multi-step workflows."
+        href="/learn/generative-ai/genai-capstone-rag-assistant"
+        label="Lesson 15 · Capstone — Production RAG Assistant"
+        text="Plan, build, evaluate and deploy a RAG assistant over a real document set with structured outputs, guardrails, tracing and a cost budget."
       />
     </LearnLayout>
   )

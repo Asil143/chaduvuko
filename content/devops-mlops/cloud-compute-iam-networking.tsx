@@ -265,9 +265,9 @@ aws ec2 describe-availability-zones \\
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/devops-mlops/terraform-infrastructure-as-code"
-        label="Lesson 07 · Infrastructure as Code with Terraform"
-        text="You can now describe the pieces of a cloud design. Next, encode those resources and changes in Terraform so your infrastructure is reviewable and repeatable."
+        href="/learn/devops-mlops/networking-for-devops-nginx"
+        label="Lesson 07 · Networking for DevOps — DNS, Load Balancers and Nginx"
+        text="How requests reach your app: DNS records, TLS certificates, load balancers, and configuring Nginx as a reverse proxy."
       />
     </LearnLayout>
   )

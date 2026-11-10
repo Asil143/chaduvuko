@@ -77,7 +77,7 @@ export default function PackagingDistribution() {
     <LearnLayout
       title="Packaging and Distributing Python Projects"
       description="Project structure, pyproject.toml as the modern standard, building wheels and sdists, semantic versioning, and publishing a real package to PyPI."
-      section="Python — Lesson 41"
+      section="Python — Lesson 44"
       readTime="50 min"
     >
 
@@ -109,7 +109,7 @@ export default function PackagingDistribution() {
         <Para>
           The reason this matters here: everything from Part 02 onward — <code>pyproject.toml</code>,
           building wheels, publishing to PyPI — exists specifically to support the library case, or an
-          application specifically meant to be installed as a reusable command (which Lesson 44,
+          application specifically meant to be installed as a reusable command (which Lesson 47,
           immediately after this one, builds end to end). If you are only ever going to run{' '}
           <code>python app.py</code> yourself, you genuinely do not need most of this lesson. The moment
           someone else needs to <code>pip install</code> your code, or you need to reuse it across
@@ -408,13 +408,13 @@ orderkit = "orderkit.cli:main"
 
         <CodeBox label="The function it points at — orderkit/cli.py">{`def main():
     print("orderkit CLI running")
-    # real argument parsing goes here — covered in full in Lesson 44`}</CodeBox>
+    # real argument parsing goes here — covered in full in Lesson 47`}</CodeBox>
 
         <Para>
           After installing this package (<code>pip install .</code> during development, or{' '}
           <code>pip install orderkit</code> once published), a genuine new command called{' '}
           <code>orderkit</code> becomes available directly in the shell — no <code>python</code> prefix,
-          no remembering which file to run. This is exactly the mechanism Lesson 44, immediately after
+          no remembering which file to run. This is exactly the mechanism Lesson 47, immediately after
           this one, relies on to turn a complete CLI tool built with <code>argparse</code> into something
           installed and runnable as a real, first-class command rather than a script someone has to locate
           and invoke manually.
@@ -712,11 +712,11 @@ orderkit = "orderkit.cli:main"
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 42 covers performance — measuring before optimizing, profiling with cProfile, and the
+          Lesson 45 covers performance — measuring before optimizing, profiling with cProfile, and the
           practical Big O traps that show up constantly in real Python code.
         </p>
         <Link href="/learn/python/performance-profiling" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 42 → Python Performance — Profiling and Optimisation
+          Lesson 45 → Python Performance — Profiling and Optimisation
         </Link>
       </div>
     </LearnLayout>

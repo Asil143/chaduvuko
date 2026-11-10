@@ -710,6 +710,41 @@ const moduleDetails: ModuleDetail[] = [
     description: 'Content-based and collaborative filtering, matrix factorisation, implicit feedback, cold start and ranking metrics.',
     topics: ['Collaborative filtering', 'Matrix factorisation', 'Cold start', 'NDCG'],
   },
+  {
+    readTime: '18–24 min',
+    href: '/learn/ai-ml/classical-ml/ensembles-stacking-blending',
+    title: 'Ensembles — Stacking and Blending',
+    description: 'Combine diverse predictors with leakage-aware out-of-fold stacking and a separate blending split.',
+    topics: ['Stacking', 'Blending', 'Out-of-fold predictions', 'Leakage'],
+  },
+  {
+    readTime: '18–24 min',
+    href: '/learn/ai-ml/classical-ml/more-clustering',
+    title: 'More Clustering — Hierarchical and DBSCAN',
+    description: 'Build nested groups with hierarchical clustering and find dense regions and noise with DBSCAN.',
+    topics: ['Hierarchical clustering', 'DBSCAN', 'Linkage', 'Density'],
+  },
+  {
+    readTime: '18–24 min',
+    href: '/learn/ai-ml/classical-ml/anomaly-detection',
+    title: 'Anomaly Detection — Isolation Forest and Autoencoders',
+    description: 'Rank unusual observations, calibrate alert thresholds and understand the limits of anomaly scores.',
+    topics: ['Isolation Forest', 'Autoencoders', 'Thresholds', 'Rare events'],
+  },
+  {
+    readTime: '18–24 min',
+    href: '/learn/ai-ml/evaluation/imbalanced-data',
+    title: 'Imbalanced Data — Class Weights, Resampling and SMOTE',
+    description: 'Compare weighting and resampling for rare classes while keeping cross-validation and test evaluation leakage-free.',
+    topics: ['Class weights', 'Resampling', 'SMOTE', 'PR-AUC'],
+  },
+  {
+    readTime: '18–24 min',
+    href: '/learn/ai-ml/mlops/responsible-ai',
+    title: 'Responsible AI — Fairness, Bias and Model Cards',
+    description: 'Assess impact across the ML lifecycle, document limits and intended use, and monitor outcomes responsibly.',
+    topics: ['Fairness', 'Bias', 'Model cards', 'Monitoring'],
+  },
 ]
 
 const modules: Module[] = AIML_SECTIONS.flatMap((section, sectionIndex) => section.topics.map(topic => {
@@ -820,7 +855,9 @@ export default function AIMLTrack() {
         <strong style={{ color: 'var(--accent)' }}>This track covers AI and ML from first principles.</strong>{' '}
         Math, classical algorithms, deep learning, and generative AI. Cloud ML platforms (Azure ML,
         SageMaker, Vertex AI) each have their own dedicated tracks. This track makes you understand
-        what every tool is actually doing before you touch it.
+        what every tool is actually doing before you touch it. LLM application engineering is explored in more depth in the{' '}
+        <Link href="/learn/generative-ai" style={{ color: 'var(--accent)', fontWeight: 700 }}>Generative AI</Link>{' '}
+        and <Link href="/learn/agentic-ai" style={{ color: 'var(--accent)', fontWeight: 700 }}>Agentic AI</Link> tracks.
       </div>
 
       {/* ── What makes this different ──────────────────────────────────── */}

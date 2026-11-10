@@ -21,7 +21,7 @@ const LIVE_TRACKS: Track[] = [
     hidden: { reason: 'Only 3 of 53 planned lessons are published; AI & Machine Learning covers the same ground until the track is complete.', since: '2026-11-09' },
   },
   ...REGISTRY_TRACKS.map((track): Track => ({ slug: track.slug, title: track.title, area: track.area, indexHref: `/learn/${track.slug}` })),
-  { slug: 'projects',         title: 'Projects',                     area: 'practice',    indexHref: '/learn/projects' },
+  { slug: 'projects',         title: 'Cloud Data Projects',          area: 'practice',    indexHref: '/learn/projects' },
 ]
 
 export const HIDDEN_TRACK_SLUGS: ReadonlySet<string> = new Set(

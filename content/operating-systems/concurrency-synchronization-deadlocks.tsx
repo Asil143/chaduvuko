@@ -3,7 +3,7 @@ import { Callout, Code, H3, KeyTakeaways, Mistakes, NextLesson, P, Part, Practic
 
 export default function OperatingSystemsLesson4() {
   return (
-    <LearnLayout title="Concurrency, Synchronisation and Deadlocks" description="Race conditions, critical sections, mutexes and semaphores, producer–consumer, and deadlock conditions, prevention, and detection." section="Operating Systems — Lesson 04" readTime="45 min">
+    <LearnLayout title="Concurrency, Synchronisation and Deadlocks" description="Race conditions, critical sections, mutexes and semaphores, producer–consumer, and deadlock conditions, prevention, and detection." section="Operating Systems — Lesson 05" readTime="45 min">
       <Part n={1} label="Interleaving" title="Concurrency Makes Operation Order Observable">
         <P>Concurrent tasks can interleave instructions. The source expression <code>counter += 1</code> is conceptually a read, add, and write; two threads can both read 7, both calculate 8, and both store 8. One increment is lost. A <strong>race condition</strong> occurs when the result depends on timing or interleaving in a way the program has not safely controlled. A data race is a particular unsynchronized conflict over shared memory; language memory models can make its consequences more serious than just a lost update.</P>
         <P>A <strong>critical section</strong> accesses shared state. Correct synchronization aims for mutual exclusion where necessary, progress, and bounded waiting under stated assumptions. Protect the invariant, not merely one line that looks suspicious: all reads and writes that depend on the invariant need a consistent protocol.</P>
@@ -113,7 +113,10 @@ top -H
       <KeyTakeaways items={["Concurrent execution permits interleavings; shared-state invariants need explicit synchronization.", "A mutex expresses ownership and mutual exclusion; semaphores model counted permits or queued work.", "Producer–consumer requires coordinated full/empty state and safe access to the buffer.", "Deadlock requires mutual exclusion, hold-and-wait, no preemption, and circular wait together.", "Prevention breaks a necessary condition; avoidance grants only allocations that preserve a safe state.", "Starvation and livelock are distinct progress failures, and a timeout is detection rather than automatic repair."]} />
 
       <H3>Next</H3>
-      <NextLesson href="/learn/operating-systems/memory-management-virtual-memory" label="Lesson 05 · Memory Management and Virtual Memory" text="Once threads coordinate safely, see how the OS gives them isolated, efficient memory." />
+      <NextLesson
+        href="/learn/operating-systems/memory-management-virtual-memory"
+        label="Lesson 06 · Memory Management and Virtual Memory"
+        text="Once threads coordinate safely, see how the OS gives them isolated, efficient memory." />
     </LearnLayout>
   )
 }

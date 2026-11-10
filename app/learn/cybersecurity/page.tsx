@@ -23,7 +23,7 @@ export default function CybersecurityTrack() {
   return (
     <LearnLayout
       title="Cybersecurity"
-      description="From zero to job-ready security engineer — 43 lessons, no prerequisites"
+      description="From zero to job-ready security engineer — 46 lessons, no prerequisites"
       section="Cybersecurity"
       readTime="Self-paced"
       updatedAt="May 2026"
@@ -124,7 +124,7 @@ export default function CybersecurityTrack() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              40 Lessons. Zero to Job-Ready.
+              46 Lessons. Zero to Job-Ready.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
               Follow in order. Each module builds on the last. Attack patterns before

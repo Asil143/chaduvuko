@@ -94,7 +94,7 @@ export default function HtmlCssInterviewPrep() {
     <LearnLayout
       title="HTML & CSS Interview Prep — Common Questions and Patterns"
       description="The HTML and CSS questions that come up in real front-end interviews, answered at senior-engineer depth."
-      section="HTML & CSS — Lesson 42 (Capstone)"
+      section="HTML & CSS — Lesson 45 (Interview Prep)"
       readTime="55 min"
     >
 
@@ -103,7 +103,7 @@ export default function HtmlCssInterviewPrep() {
         <SectionTag text="// The Final Module" />
         <SectionTitle>Everything From This Track, Interview-Ready</SectionTitle>
         <Para>
-          This lesson is different from the other 41 — instead of teaching one new topic in depth, it
+          This lesson is different from the other 44 — instead of teaching one new topic in depth, it
           pulls together the questions, patterns, and hands-on challenges from across the entire
           curriculum into the format an actual front-end interview uses: real questions, answered
           completely, organized by theme, plus the "build this" coding challenges that come up
@@ -520,7 +520,7 @@ export default function HtmlCssInterviewPrep() {
             fontSize: 10, color: C, letterSpacing: '.14em', textTransform: 'uppercase',
             fontFamily: 'var(--font-mono)', fontWeight: 800, margin: '0 0 12px',
           }}>
-            🎉 Track Complete — All 42 Modules
+            🎉 Track Complete — All 45 Modules
           </p>
           <h2 style={{
             fontSize: 'clamp(22px, 3vw, 30px)', fontWeight: 900, letterSpacing: '-1px',

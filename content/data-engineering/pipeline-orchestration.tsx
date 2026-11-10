@@ -173,7 +173,7 @@ export default function PipelineOrchestrationModule() {
     <LearnLayout
       title="Pipeline Orchestration — Airflow, DAGs, Scheduling, and Dependency Management"
       description="What orchestration actually does, Airflow architecture, DAG design, scheduling, backfills, Sensors, and when to use alternatives."
-      section="Data Engineering — Lesson 28"
+      section="Data Engineering — Lesson 31"
       readTime="70 min"
     >
 
@@ -1190,10 +1190,10 @@ Backfill parameters:
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 29 covers data lake architecture — how to design zones that stay useful for years, the raw and processed zone patterns, and the five anti-patterns that turn a data lake into an unmaintainable swamp.
+          Lesson 32 covers data lake architecture — how to design zones that stay useful for years, the raw and processed zone patterns, and the five anti-patterns that turn a data lake into an unmaintainable swamp.
         </p>
         <Link href="/learn/data-engineering/data-lake-architecture" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 29 → Data Lake Architecture — Design, Zones and Anti-Patterns
+          Lesson 32 → Data Lake Architecture — Design, Zones and Anti-Patterns
         </Link>
       </div>
     </LearnLayout>

@@ -112,7 +112,7 @@ export default function RecursionPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'Prerequisite: Lesson 7 — Stacks', green: false },
+          { label: 'Prerequisite: basic functions and loops', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -203,7 +203,7 @@ export default function RecursionPage() {
       <SectionTitle>How Recursion Works Inside — The Call Stack</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 20 }}>
-        Remember the call stack from Lesson 7? When a function calls another function,
+        When a function calls another function, the program records its return point and local state on a call stack,
         the current function is paused and pushed onto the call stack. When the called
         function returns, the paused function resumes from where it stopped.
         Recursion uses this exact mechanism — but the function calls <em>itself</em>.
@@ -396,7 +396,7 @@ int main() {
 
       <Callout type="info">
         <strong>The fix is Dynamic Programming</strong> — store answers you have already computed
-        so you never recompute them. We cover this completely in Lesson 17.
+        so you never recompute them. We cover this completely in Lesson 20.
         For now, understand the pattern and the problem. Naive recursive Fibonacci
         is a perfect example of why O(2ⁿ) is catastrophic at scale.
       </Callout>
@@ -838,7 +838,7 @@ Move disk 1 from rod A to rod C
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Lesson 10</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 7</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now understand recursion completely — the base case, recursive case,
@@ -847,7 +847,7 @@ Move disk 1 from rod A to rod C
         power, GCD, and the legendary Tower of Hanoi.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Lesson 10 we cover <strong style={{ color: 'var(--text)' }}>Sorting Algorithms</strong> —
+        In Lesson 7 we cover <strong style={{ color: 'var(--text)' }}>Sorting Algorithms</strong> —
         six different ways to arrange data in order, from the simplest to the fastest.
         Bubble sort, selection sort, insertion sort, merge sort, quick sort, counting sort.
         Each explained with step-by-step visuals and full C code.
@@ -855,12 +855,12 @@ Move disk 1 from rod A to rod C
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 10</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 7</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Sorting Algorithms — Six Ways to Sort</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Bubble, selection, insertion, merge, quick, counting — with Big O comparison.</div>
         </div>
         <Link href="/learn/dsa/sorting" style={{ background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-          Coming Soon →
+          Continue →
         </Link>
       </div>
 
@@ -870,7 +870,7 @@ Move disk 1 from rod A to rod C
         'The call stack manages recursion automatically — each call gets its own frame, frozen until it returns',
         'Recursion has two phases: going down (building up calls) and coming back up (returning answers)',
         'Factorial: n! = n × (n-1)! — base case n=0 returns 1',
-        'Fibonacci naive is O(2ⁿ) because it recomputes the same values — fixed by Dynamic Programming in Lesson 17',
+        'Fibonacci naive is O(2ⁿ) because it recomputes the same values — fixed by Dynamic Programming in Lesson 20',
         'Fast power uses divide-and-conquer to compute x^n in O(log n) instead of O(n)',
         'GCD(a, b) = GCD(b, a%b) — keep taking remainder until b=0, then a is the answer',
         'Tower of Hanoi: move n-1 to helper, move largest to target, move n-1 to target — O(2ⁿ) moves',

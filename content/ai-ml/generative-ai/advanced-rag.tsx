@@ -181,7 +181,7 @@ export default function AdvancedRAGPage() {
       <div style={S.sec}>
         <span style={S.tag}>Before any code — where naive RAG breaks</span>
         <h2 style={S.h2}>
-          Lesson 52 built a working RAG pipeline.
+          Lesson 56 built a working RAG pipeline.
           This lesson explains why it fails in production and how
           to fix every failure mode systematically.
         </h2>
@@ -1239,7 +1239,7 @@ for q in test_questions:
 
         <p style={S.p}>
           Advanced RAG gives your agent access to a knowledge base.
-          Lesson 68 — the final module of the Generative AI section —
+          Lesson 72 — the final module of the Generative AI section —
           covers the complete production agent: planning across multiple steps,
           calling real APIs, maintaining memory across turns, handling failures
           gracefully, and the architectural patterns used at companies like
@@ -1259,7 +1259,7 @@ for q in test_questions:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 67 · LLM Apps
+              Next — Lesson 71 · LLM Apps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

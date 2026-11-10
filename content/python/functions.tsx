@@ -280,7 +280,7 @@ log_event("user_login", "192.168.1.1", "mobile", level="WARNING", user_id=42, re
         <Callout type="info">
           You will use <code>*args</code>/<code>**kwargs</code> more as a reader than a writer at first
           — they show up constantly in library and framework code that needs to accept flexible,
-          forward-compatible arguments (wrapper functions, decorators — covered in full in Lesson 29 —
+          forward-compatible arguments (wrapper functions, decorators — covered in full in Lesson 31 —
           and many popular libraries you will use later in this track). Recognising the syntax now means
           you will not be confused the first time you see it in someone else&apos;s code.
         </Callout>
@@ -493,7 +493,7 @@ print(counter)         # 2 — the global itself was actually modified`}</CodeBo
           above happens — but in most real code, passing values in as parameters and getting results back
           via <code>return</code> is the better default. Full scope rules — including how nested functions
           resolve names through enclosing scopes — get their own dedicated treatment in the Closures and
-          Scope module (Lesson 31) later in this track; this is deliberately just the foundation.
+          Scope module (Lesson 33) later in this track; this is deliberately just the foundation.
         </Callout>
       </section>
 

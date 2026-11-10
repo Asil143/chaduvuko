@@ -77,7 +77,7 @@ export default function CssAccessibilityBestPractices() {
     <LearnLayout
       title="CSS Accessibility Best Practices"
       description="Focus states, color contrast, prefers-reduced-motion, and the CSS-level decisions that make or break real accessibility."
-      section="HTML & CSS — Lesson 38"
+      section="HTML & CSS — Lesson 40"
       readTime="35 min"
     >
 
@@ -844,12 +844,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 39 moves from accessibility to reliability — vendor prefixes, feature detection with{' '}
+          Lesson 41 moves from accessibility to reliability — vendor prefixes, feature detection with{' '}
           <code>@supports</code>, real DevTools debugging workflows, and a full worked investigation of a
           bug that only shows up in Safari.
         </p>
         <Link href="/learn/html-css/cross-browser-compatibility-debugging" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 39 → Cross-Browser Compatibility & Debugging
+          Lesson 41 → Cross-Browser Compatibility & Debugging
         </Link>
       </div>
     </LearnLayout>

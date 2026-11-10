@@ -988,7 +988,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Lesson 7</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 10</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now know how to build, traverse, insert into, delete from, reverse,
@@ -996,7 +996,7 @@ int main() {
         the pointer knowledge from Lesson 5 directly.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Lesson 7 we build <strong style={{ color: 'var(--text)' }}>Stacks</strong> —
+        In Lesson 10 we build <strong style={{ color: 'var(--text)' }}>Stacks</strong> —
         a data structure built on top of arrays or linked lists that enforces one rule:
         Last In, First Out. Stacks power undo/redo, function calls, expression evaluation,
         and much more.
@@ -1004,12 +1004,12 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 7</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 10</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Stacks — Last In, First Out</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Push, pop, peek — with arrays and linked lists. Balanced brackets and the call stack.</div>
         </div>
         <Link href="/learn/dsa/stacks" style={{ background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-          Coming Soon →
+          Continue →
         </Link>
       </div>
 

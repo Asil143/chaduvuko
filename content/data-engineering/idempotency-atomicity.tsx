@@ -173,7 +173,7 @@ export default function IdempotencyAtomicityModule() {
     <LearnLayout
       title="Idempotency, Atomicity, and Pipeline Restartability"
       description="The three properties that separate reliable pipelines from fragile ones — precise definitions, implementation at every layer, and automatic failure recovery."
-      section="Data Engineering — Lesson 26"
+      section="Data Engineering — Lesson 29"
       readTime="70 min"
     >
 
@@ -1146,10 +1146,10 @@ print(f"guarded={state[1]} version={state[0]}")`}</WorkshopCode>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 27 covers error handling and retries — the categories of pipeline failures, exponential backoff patterns, dead letter queues, and how to build alerting that pages the right person at the right time.
+          Lesson 30 covers error handling and retries — the categories of pipeline failures, exponential backoff patterns, dead letter queues, and how to build alerting that pages the right person at the right time.
         </p>
         <Link href="/learn/data-engineering/error-handling-retries" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 27 → Error Handling, Retries and Dead Letter Queues
+          Lesson 30 → Error Handling, Retries and Dead Letter Queues
         </Link>
       </div>
     </LearnLayout>

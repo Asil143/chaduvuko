@@ -3,7 +3,7 @@ import { Bullets, Callout, Code, H3, KeyTakeaways, Mistakes, NextLesson, P, Part
 
 export default function NextjsAppRouter() {
   return (
-    <LearnLayout title="Next.js — Routing, Server Components and Forms" description="File-based routing, layouts, server and client components, server actions, and when to render on the server." section="Full-Stack Development with AI — Lesson 03" readTime="40 min">
+    <LearnLayout title="Next.js — Routing, Server Components and Forms" description="File-based routing, layouts, server and client components, server actions, and when to render on the server." section="Full-Stack Development with AI — Lesson 05" readTime="40 min">
       <Part n={1} label="Why a framework" title="From a React UI to a Complete Web Application">
         <P>React components describe a user interface, but a production application also needs routes, data access, server-side code, metadata, and a deployment model. Next.js combines React with a framework for these application concerns. Its App Router uses folders and files to define a route tree and encourages a server-first design: render data on the server when interactivity is not required, and add client code only where it provides value.</P>
         <P>Our study planner will have a dashboard at <code>/planner</code>, a detail page for one study plan, and a route handler for a JSON endpoint. A shared layout can provide navigation and consistent page structure. The folder hierarchy makes the URL structure visible to the team.</P>
@@ -76,7 +76,10 @@ export default function NextjsAppRouter() {
       ]} />
       <Bullets items={[<span key="reference">Read the official Next.js App Router guides for layouts, server and client components, data fetching, and route handlers; framework capabilities can evolve.</span>]} />
       <H3>Next</H3>
-      <NextLesson href="/learn/full-stack-ai/node-express-rest-api" label="Lesson 04 · Building a REST API with Node.js and Express" text="Build a dedicated JSON API with routes, schemas, middleware, and predictable error responses." />
+      <NextLesson
+        href="/learn/full-stack-ai/node-express-rest-api"
+        label="Lesson 06 · Building a REST API with Node.js and Express"
+        text="Build a dedicated JSON API with routes, schemas, middleware, and predictable error responses." />
     </LearnLayout>
   )
 }

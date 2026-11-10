@@ -620,7 +620,7 @@ print("\nStage 2: train (simulated with direct call)")
           creating a new Git commit — DVC saves the experiment as a stash.
           After running several experiments, compare them in a table,
           pick the best one, and promote it to a full Git commit.
-          This integrates with MLflow and W&B (Lesson 70) for richer
+          This integrates with MLflow and W&B (Lesson 74) for richer
           visualisations while keeping the experiment lineage in Git.
         </p>
 
@@ -1125,7 +1125,7 @@ cat dvc.lock         # shows exact hash of raw.csv used to build train.parquet
         </h2>
 
         <p style={S.p}>
-          Lesson 75 is the final module of the MLOps section and one of the
+          Lesson 79 is the final module of the MLOps section and one of the
           most practically valuable in the entire track — ML System Design.
           Given a real-world ML problem (build DoorDash's delivery time prediction
           system from scratch, or Stripe's fraud detection system), how do you
@@ -1147,7 +1147,7 @@ cat dvc.lock         # shows exact hash of raw.csv used to build train.parquet
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 80 · MLOps
+              Next — Lesson 84 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -41,6 +41,20 @@ const moduleMeta: Record<string, { title: string; description: string }> = {
   'network-attacks':          { title: 'Network Attacks — ARP Poisoning, MITM, Sniffing',        description: 'Every Layer 2/3 attack — how they work in Wireshark, how to defend.' },
   'firewalls-and-acls':       { title: 'Firewalls, ACLs, and Stateful Inspection',               description: 'Stateless vs stateful vs NGFW, ACL rule order, DMZ design, bypass techniques.' },
   'ids-and-ips':              { title: 'IDS and IPS — Detecting Attacks on the Wire',            description: 'Signature vs anomaly, Snort/Suricata rules, inline vs passive, evasion.' },
+  'vpns-and-tunneling':       { title: 'VPNs and Tunneling — IPSec, SSL, WireGuard', description: 'How VPNs protect traffic with encryption, authentication, and tunnel encapsulation.' },
+  'wireless-security':        { title: 'Wireless Security — WPA2/WPA3 Attacks', description: 'Secure wireless deployments, threat models, monitoring, and incident response.' },
+  'zero-trust-networking':    { title: 'Zero Trust Networking — Never Trust, Always Verify', description: 'Identity-aware access, device posture, segmentation, and continuous verification.' },
+  'ddos':                     { title: 'DDoS — How It Works and How to Defend Against It', description: 'Recognize denial-of-service patterns and design layered, tested mitigation.' },
+  'network-troubleshooting':  { title: 'Network Troubleshooting Methodology', description: 'A repeatable, evidence-led approach to isolating network faults by layer.' },
+  'wireshark':                { title: 'Wireshark — Packet Analysis Complete Guide', description: 'Capture safely, filter effectively, and reason from packet evidence.' },
+  'tcpdump':                  { title: 'tcpdump — Command-Line Packet Capture', description: 'Capture scoped network evidence with tcpdump and read packet summaries.' },
+  'nmap':                     { title: 'Nmap — Network Scanning and Host Discovery', description: 'Use Nmap only on authorized lab assets to inventory hosts and exposed services.' },
+  'network-monitoring':       { title: 'Network Monitoring — NetFlow, SNMP Polling, Dashboards', description: 'Build useful network telemetry, baselines, dashboards, and actionable alerts.' },
+  'load-balancers-and-reverse-proxies': { title: 'Load Balancers and Reverse Proxies', description: 'Understand request distribution, proxying, health checks, and resilience.' },
+  'cdns-and-edge-networks': { title: 'CDNs and Edge Networks', description: 'Understand content delivery, edge caching, and origin protection.' },
+  'cloud-networking-vpcs-subnets-security-groups-peering': { title: 'Cloud Networking — VPCs, Subnets, Security Groups and Peering', description: 'Model cloud networks, routes, security boundaries, and private connectivity.' },
+  'network-automation-and-sdn': { title: 'Network Automation and Software-Defined Networking', description: 'Design safe, reviewable automation for network configuration and operations.' },
+  'networking-interview-prep': { title: 'Networking Interview Prep', description: 'Practice core networking concepts, troubleshooting, and design reasoning.' },
 }
 
 const LIVE_SLUGS = new Set(

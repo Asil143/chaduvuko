@@ -120,7 +120,10 @@ print("return code:", result.returncode)`} />
       <KeyTakeaways items={["A process is an executing instance with an address space and OS-managed resources; a program is passive code.", "The PCB abstraction captures state and metadata needed to manage and resume execution.", "fork creates a child and exec replaces its program image; waiting collects child status.", "Threads share selected process resources but retain separate stacks and execution contexts.", "Context switches enable multiplexing but add overhead; IPC choice changes isolation and coordination costs."]} />
 
       <H3>Next</H3>
-      <NextLesson href="/learn/operating-systems/cpu-scheduling" label="Lesson 03 · CPU Scheduling" text="With processes and runnable threads in view, next compare the policies that choose who gets CPU time." />
+      <NextLesson
+        href="/learn/operating-systems/inter-process-communication"
+        label="Lesson 03 · Inter-Process Communication — Pipes, Signals and Shared Memory"
+        text="How processes talk: pipes, signals, message queues, shared memory and sockets, with working examples and their trade-offs." />
     </LearnLayout>
   )
 }

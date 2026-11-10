@@ -1117,7 +1117,7 @@ print(f"mobilenet_v3_small — int8-quantised (Linear layers): "
           is a sequence of daily values, a user session is a sequence of actions.
           Sequences have temporal structure: what came earlier affects what
           comes later. CNNs treat every position independently and cannot
-          model this dependency. Lesson 47 covers RNNs and LSTMs —
+          model this dependency. Lesson 51 covers RNNs and LSTMs —
           architectures designed specifically to process sequences
           by maintaining a hidden state that carries information
           forward across time steps.
@@ -1135,7 +1135,7 @@ print(f"mobilenet_v3_small — int8-quantised (Linear layers): "
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 51 · Deep Learning
+              Next — Lesson 55 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

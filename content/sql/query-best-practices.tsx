@@ -73,7 +73,7 @@ export default function QueryBestPractices() {
     <LearnLayout
       title="Query Best Practices"
       description="Write clean, fast, readable SQL your team will thank you for — SARGability, avoiding SELECT *, NULL handling, and formatting conventions"
-      section="SQL — Lesson 59"
+      section="SQL — Lesson 64"
       readTime="14–18 min"
     >
 

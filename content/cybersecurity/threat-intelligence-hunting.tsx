@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 import { Callout } from '@/components/content/Callout'
@@ -847,8 +848,9 @@ SOURCE: attack.mitre.org/groups/G0016, CISA AA21-116A`}
       ]} />
 
       <Callout type="info">
-        <strong>Up Next — Lesson 35: DevSecOps</strong><br />
-        Lesson 35 brings security into the software development pipeline end-to-end. You will learn how to embed security gates at every SDLC phase, build secure CI/CD pipelines with SAST/DAST/SCA, implement infrastructure-as-code security scanning, manage secrets in pipelines, and foster a security culture where developers own security outcomes.
+        <strong>Up Next — Lesson 35: SOC Alert Triage and Incident Response</strong><br />
+        Apply threat intelligence to a real alert investigation: validate evidence, record uncertainty, map behaviour, and escalate through an incident-response process.{' '}
+        <Link href="/learn/cybersecurity/soc-alert-triage" style={{ color: C, fontWeight: 700 }}>Continue to Lesson 35 →</Link>
       </Callout>
 
     </LearnLayout>

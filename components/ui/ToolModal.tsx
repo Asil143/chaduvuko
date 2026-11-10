@@ -31,7 +31,7 @@ export const TOOLS: Tool[] = [
     example: 'A retail company processes 500 million daily transaction records. A single machine would take 8 hours. A Spark cluster of 20 workers finishes in 25 minutes by splitting the data into partitions and processing each partition on a different machine simultaneously.',
     openSource: true,
     similar: ['Dask', 'Ray', 'Flink', 'Hadoop MapReduce'],
-    learnHref: '/learn/foundations/python',
+    learnHref: '/learn/data-engineering/python-for-de',
   },
   {
     name: 'Apache Iceberg', icon: '🧊', color: '#00c2ff', category: 'Table Format',

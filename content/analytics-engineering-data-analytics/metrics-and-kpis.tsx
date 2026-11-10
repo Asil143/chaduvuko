@@ -6,7 +6,7 @@ export default function MetricsAndKpis() {
     <LearnLayout
       title="Defining Metrics and KPIs"
       description="North-star and guardrail metrics, funnels, cohorts, retention, writing a metric definition, and building a metrics layer."
-      section="Data Analytics & Statistics — Lesson 04"
+      section="Data Analytics & Statistics — Lesson 09"
       readTime="35 min"
     >
       <Part n={1} label="From data to decisions" title="A Metric Needs a Decision Behind It">
@@ -258,7 +258,7 @@ WHERE status = 'completed'
       <H3>Next</H3>
       <NextLesson
         href="/learn/analytics-engineering-data-analytics/ab-testing"
-        label="Lesson 05 · A/B Testing — Design, Analysis and Pitfalls"
+        label="Lesson 10 · A/B Testing — Design, Analysis and Pitfalls"
         text="With trustworthy measures in place, test product changes systematically. Next, plan randomisation, sample size, and analysis while avoiding peeking, sample-ratio mismatch, and novelty effects."
       />
     </LearnLayout>

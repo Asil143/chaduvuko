@@ -54,7 +54,7 @@ export default function InterviewQuestions() {
     <LearnLayout
       title="Top 50 SQL Interview Questions"
       description="Every question that appears in data analyst and data engineer interviews — with complete answers, example queries, and the traps interviewers set"
-      section="SQL — Lesson 61"
+      section="SQL — Lesson 66"
       readTime="55–70 min"
     >
 
@@ -761,10 +761,10 @@ LIMIT 10;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Lesson 62</strong>, you build 3 complete real-world SQL projects end-to-end — schema design, data loading, analytical queries, and presenting results.
+          In <strong>Lesson 67</strong>, you build 3 complete real-world SQL projects end-to-end — schema design, data loading, analytical queries, and presenting results.
         </p>
         <Link href="/learn/sql/sql-projects" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 62 → 3 Real SQL Projects
+          Lesson 67 → 3 Real SQL Projects
         </Link>
       </div>
 

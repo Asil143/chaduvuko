@@ -46,6 +46,9 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'soc-alert-triage':               () => import('@/content/cybersecurity/soc-alert-triage'),
   'wireshark-packet-analysis':      () => import('@/content/cybersecurity/wireshark-packet-analysis'),
   'digital-forensics-basics':       () => import('@/content/cybersecurity/digital-forensics-basics'),
+  'ai-llm-security-basics':         () => import('@/content/cybersecurity/ai-llm-security-basics'),
+  'mobile-application-security':    () => import('@/content/cybersecurity/mobile-application-security'),
+  'malware-analysis-fundamentals':  () => import('@/content/cybersecurity/malware-analysis-fundamentals'),
 };
 
 const moduleMeta: Record<string, { title: string; description: string }> = {
@@ -92,6 +95,9 @@ const moduleMeta: Record<string, { title: string; description: string }> = {
   'soc-alert-triage':               { title: 'SOC Alert Triage and Incident Response',                      description: 'Triage SIEM alerts, map evidence to MITRE ATT&CK, and understand incident response and CERT-In reporting considerations.' },
   'wireshark-packet-analysis':      { title: 'Packet Analysis with Wireshark',                              description: 'Use Wireshark and tshark to inspect authorised captures, apply filters, and recognise suspicious network patterns.' },
   'digital-forensics-basics':       { title: 'Digital Forensics Basics',                                   description: 'Preserve and analyse digital evidence using sound acquisition, hashing, memory, timeline, Windows, and Linux practices.' },
+  'ai-llm-security-basics':         { title: 'AI and LLM Security Basics — Prompt Injection, Data Leakage, Model Abuse', description: 'A short defensive introduction to prompt injection, data exposure, and model abuse, with a path to the full AI Security course.' },
+  'mobile-application-security':    { title: 'Mobile Application Security', description: 'Assess Android and iOS applications with OWASP MASVS, the Mobile Top 10, and safe testing practices.' },
+  'malware-analysis-fundamentals':  { title: 'Malware Analysis Fundamentals — Static and Dynamic', description: 'Defensive, safe-lab malware triage with static evidence, controlled telemetry, and careful reporting.' },
 };
 
 export function generateStaticParams() {

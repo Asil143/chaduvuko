@@ -31,7 +31,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function AirflowOrchestrationModule() {
   return (
-    <LearnLayout title="Apache Airflow — DAGs, Scheduling and Retries" description="Design reliable Airflow workflows with explicit dependencies, schedules, retries, sensors, and safe task interfaces." section="Data Engineering — Lesson 50" readTime="40 min">
+    <LearnLayout title="Apache Airflow — DAGs, Scheduling and Retries" description="Design reliable Airflow workflows with explicit dependencies, schedules, retries, sensors, and safe task interfaces." section="Data Engineering — Lesson 52" readTime="40 min">
       <section style={{ marginBottom: 56 }}>
         <SectionTag text="// Part 01 — Orchestration and DAGs" />
         <SectionTitle>Airflow Coordinates Work; It Is Not the Data Engine</SectionTitle>
@@ -188,8 +188,8 @@ print("interval=[2026-11-08T00:00+05:30,2026-11-09T00:00+05:30)")`}</WorkshopCod
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 24, marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
-        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>Lesson 51 explores Delta Lake and Apache Iceberg: how table metadata supports transactional writes, history, schema change, merges, and maintenance.</p>
-        <Link href="/learn/data-engineering/delta-iceberg-table-formats" style={{ background: '#14b8a6', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>Lesson 51 → Delta Lake and Apache Iceberg Table Formats</Link>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>Lesson 53 explores Delta Lake and Apache Iceberg: how table metadata supports transactional writes, history, schema change, merges, and maintenance.</p>
+        <Link href="/learn/data-engineering/delta-iceberg-table-formats" style={{ background: '#14b8a6', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>Lesson 53 → Delta Lake and Apache Iceberg Table Formats</Link>
       </div>
     </LearnLayout>
   )

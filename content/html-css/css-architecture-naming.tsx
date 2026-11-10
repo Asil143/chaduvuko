@@ -77,7 +77,7 @@ export default function CssArchitectureNaming() {
     <LearnLayout
       title="CSS Architecture & Naming Conventions"
       description="BEM and other naming systems, organizing large stylesheets, and the patterns that keep CSS maintainable as a project grows."
-      section="HTML & CSS — Lesson 35"
+      section="HTML & CSS — Lesson 36"
       readTime="35 min"
     >
 
@@ -770,11 +770,11 @@ div.product-card .body .button.primary { background: blue; }
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 36 covers Sass — the preprocessor that came before native CSS variables, with real
+          Lesson 37 covers Sass — the preprocessor that came before native CSS variables, with real
           $variables, nesting, mixins, and why many production codebases still reach for it today.
         </p>
         <Link href="/learn/html-css/intro-to-sass" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 36 → Intro to Sass — Variables, Nesting, Mixins
+          Lesson 37 → Intro to Sass — Variables, Nesting, Mixins
         </Link>
       </div>
     </LearnLayout>

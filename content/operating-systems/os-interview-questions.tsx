@@ -3,7 +3,7 @@ import { Callout, Code, H3, KeyTakeaways, Mistakes, NextLesson, P, Part, Practic
 
 export default function OperatingSystemsLesson7() {
   return (
-    <LearnLayout title="Operating Systems Interview Questions" description="The OS questions software engineering interviews ask most, with model answers and the follow-ups to expect." section="Operating Systems — Lesson 07" readTime="40 min">
+    <LearnLayout title="Operating Systems Interview Questions" description="The OS questions software engineering interviews ask most, with model answers and the follow-ups to expect." section="Operating Systems — Lesson 11" readTime="40 min">
       <Part n={1} label="How to answer" title="Define, Contrast, Then Give an Example">
         <P>Strong OS interview answers make assumptions explicit and distinguish similar concepts. Start with a short definition, contrast the nearest alternative, and illustrate with a state transition or workload. For numerical questions, show the formula and intermediate values rather than stating only a final number. The questions below are representative fundamentals for GATE and placement preparation, not a prediction of any specific interview.</P>
         <Callout type="tip">When asked a broad question, check whether the interviewer means theory, a particular OS interface, or practical Linux behavior. State which model you are using.</Callout>

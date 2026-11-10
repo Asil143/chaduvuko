@@ -833,7 +833,7 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
           brand-specific visual language, you need to fine-tune.
           Two efficient methods: DreamBooth fine-tunes the entire U-Net
           on 3–30 images of a specific concept and teaches the model a
-          new token that refers to it. LoRA (Lesson 51) fine-tunes only
+          new token that refers to it. LoRA (Lesson 55) fine-tunes only
           0.5% of the U-Net parameters — achieves similar results
           with 10× less memory and training time.
         </p>
@@ -876,7 +876,7 @@ CLASS_PROMPT    = 'a photo of a denim jacket'
 
 # ── LoRA fine-tuning for Stable Diffusion ─────────────────────────────
 print("""
-LoRA for SD: same concept as Lesson 51 but applied to the U-Net.
+LoRA for SD: same concept as Lesson 55 but applied to the U-Net.
 Trains only the low-rank delta matrices in attention layers.
 Result: 50-100MB .safetensors file vs 4GB full fine-tuned model.
 
@@ -1225,7 +1225,7 @@ Weakest but fastest — good for simple style transfer.
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 74 · MLOps
+              Next — Lesson 78 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

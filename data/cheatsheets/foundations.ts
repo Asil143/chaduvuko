@@ -3,7 +3,7 @@ import type { TrackCheatSheet } from '@/lib/cheatsheet'
 export const foundationsCheatSheet: TrackCheatSheet = {
   track: 'foundations',
   title: 'Data Engineering Foundations',
-  trackHref: '/learn/what-is-data-engineering',
+  trackHref: '/learn/data-engineering',
   accent: '#10b981',
   blurb: 'The four opening lessons on one page: what the job is, the SQL a pipeline needs, PostgreSQL, and Python for moving data.',
   sections: [

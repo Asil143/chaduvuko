@@ -173,7 +173,7 @@ export default function ErrorHandlingRetriesModule() {
     <LearnLayout
       title="Error Handling, Retries, and Dead Letter Queues"
       description="Classifying errors, exponential backoff with jitter, circuit breakers, DLQ design, and building pipelines that recover automatically."
-      section="Data Engineering — Lesson 27"
+      section="Data Engineering — Lesson 30"
       readTime="70 min"
     >
 
@@ -1329,10 +1329,10 @@ print(f"accepted={accepted} rejected={rejected} "
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 28 covers pipeline orchestration — what a scheduler actually does, how DAGs model dependencies, what backfill means and why it is hard, and the design decisions that determine how maintainable an orchestration layer is.
+          Lesson 31 covers pipeline orchestration — what a scheduler actually does, how DAGs model dependencies, what backfill means and why it is hard, and the design decisions that determine how maintainable an orchestration layer is.
         </p>
         <Link href="/learn/data-engineering/pipeline-orchestration" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 28 → Pipeline Orchestration — What a Scheduler Does
+          Lesson 31 → Pipeline Orchestration — What a Scheduler Does
         </Link>
       </div>
     </LearnLayout>

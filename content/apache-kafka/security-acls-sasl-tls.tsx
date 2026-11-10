@@ -74,7 +74,7 @@ export default function KafkaSecurityACLsSASLTLS() {
     <LearnLayout
       title="Kafka Security: TLS, SASL, and ACLs"
       description="Why an unsecured Kafka cluster is a real risk, and how to close it: encryption in transit with TLS, authenticating clients with SASL/PLAIN, SCRAM, GSSAPI and mTLS, authorizing access with ACLs, and locking a topic down to specific service accounts."
-      section="Apache Kafka — Lesson 15"
+      section="Apache Kafka — Lesson 16"
       readTime="60 min"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },

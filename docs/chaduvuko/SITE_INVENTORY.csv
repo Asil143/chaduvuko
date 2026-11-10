@@ -1,42 +1,42 @@
 url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboundLinks,sourceFile,updatedAt
-/,site,,,,,,live,true,true,527,6,app/page.tsx,
+/,site,,,,,,live,true,true,527,3,app/page.tsx,
 /about,site,,,,,,live,true,true,823,0,app/about/page.tsx,
 /blog,site,,,,,,live,true,true,1181,33,app/blog/page.tsx,
 /careers,site,,,,,,live,true,true,69,1,app/careers/page.tsx,
 /dashboard,site,,,,,,live,false,true,39,2,app/dashboard/page.tsx,
 /newsletter,site,,,,,,live,true,true,123,1,app/newsletter/page.tsx,
 /playground,site,,,,,,live,true,true,31,19,app/playground/page.tsx,
-/privacy,site,,,,,,live,true,true,403,6,app/privacy/page.tsx,
+/privacy,site,,,,,,live,true,true,403,3,app/privacy/page.tsx,
 /search,site,,,,,,live,false,true,1,0,app/search/page.tsx,
 /terms,site,,,,,,live,true,true,69,0,app/terms/page.tsx,
-/learn,catalog,,,,,,live,true,true,2089,19,app/learn/page.tsx,
-/learn/all-courses,hub,,,,,,live,true,true,3445,2,app/learn/all-courses/page.tsx,
+/learn,catalog,,,,,,live,true,true,2041,18,app/learn/page.tsx,
+/learn/all-courses,hub,,,,,,live,true,true,4236,2,app/learn/all-courses/page.tsx,
 /learn/aws/cheatsheet,tool,,,,,,live,true,true,990,2,app/learn/aws/cheatsheet/page.tsx,
 /learn/azure/cheatsheet,tool,,,,,,live,true,true,1028,2,app/learn/azure/cheatsheet/page.tsx,
 /learn/find-video,tool,,,,,,live,true,true,52,1,app/learn/find-video/page.tsx,
 /learn/find-your-path,hub,,,,,,live,true,true,132,4,app/learn/find-your-path/page.tsx,
 /learn/gcp/cheatsheet,tool,,,,,,live,true,true,856,2,app/learn/gcp/cheatsheet/page.tsx,
 /learn/industry,hub,,,,,,live,true,true,1174,2,app/learn/industry/page.tsx,
-/learn/interview,hub,,,,,,live,true,true,957,7,app/learn/interview/page.tsx,
-/learn/paths,hub,,,,,,live,true,true,367,15,app/learn/paths/page.tsx,
-/learn/paths/agentic-ai-engineer,hub,,,,,,live,true,true,1335,6,app/learn/paths/[slug]/page.tsx,
-/learn/paths/ai-engineer,hub,,,,,,live,true,true,2136,5,app/learn/paths/[slug]/page.tsx,
-/learn/paths/ai-security-engineer,hub,,,,,,live,true,true,1164,4,app/learn/paths/[slug]/page.tsx,
-/learn/paths/analytics-engineer,hub,,,,,,live,true,true,1895,3,app/learn/paths/[slug]/page.tsx,
-/learn/paths/cloud-devops-engineer,hub,,,,,,live,true,true,1235,3,app/learn/paths/[slug]/page.tsx,
-/learn/paths/cybersecurity-analyst,hub,,,,,,live,true,true,1361,2,app/learn/paths/[slug]/page.tsx,
-/learn/paths/data-engineer,hub,,,,,,live,true,true,2862,4,app/learn/paths/[slug]/page.tsx,
-/learn/paths/full-stack-ai-developer,hub,,,,,,live,true,true,1447,7,app/learn/paths/[slug]/page.tsx,
-/learn/paths/ml-engineer,hub,,,,,,live,true,true,2070,4,app/learn/paths/[slug]/page.tsx,
-/learn/paths/software-engineer,hub,,,,,,live,true,true,2033,4,app/learn/paths/[slug]/page.tsx,
-/learn/roadmap,roadmap,,,,,,live,true,true,1017,33,app/learn/roadmap/page.tsx,
+/learn/interview,hub,,,,,,live,true,true,957,6,app/learn/interview/page.tsx,
+/learn/paths,hub,,,,,,live,true,true,358,14,app/learn/paths/page.tsx,
+/learn/paths/agentic-ai-engineer,hub,,,,,,live,true,true,1581,7,app/learn/paths/[slug]/page.tsx,
+/learn/paths/ai-engineer,hub,,,,,,live,true,true,2274,5,app/learn/paths/[slug]/page.tsx,
+/learn/paths/ai-security-engineer,hub,,,,,,live,true,true,1342,5,app/learn/paths/[slug]/page.tsx,
+/learn/paths/analytics-engineer,hub,,,,,,live,true,true,2146,3,app/learn/paths/[slug]/page.tsx,
+/learn/paths/cloud-devops-engineer,hub,,,,,,live,true,true,1464,3,app/learn/paths/[slug]/page.tsx,
+/learn/paths/cybersecurity-analyst,hub,,,,,,live,true,true,1409,2,app/learn/paths/[slug]/page.tsx,
+/learn/paths/data-engineer,hub,,,,,,live,true,true,3085,4,app/learn/paths/[slug]/page.tsx,
+/learn/paths/full-stack-ai-developer,hub,,,,,,live,true,true,1675,7,app/learn/paths/[slug]/page.tsx,
+/learn/paths/ml-engineer,hub,,,,,,live,true,true,2254,4,app/learn/paths/[slug]/page.tsx,
+/learn/paths/software-engineer,hub,,,,,,live,true,true,2611,5,app/learn/paths/[slug]/page.tsx,
+/learn/roadmap,roadmap,,,,,,live,true,true,1017,32,app/learn/roadmap/page.tsx,
 /learn/roadmap/ai-engineer,roadmap,,,,,,live,true,true,927,2,app/learn/roadmap/[slug]/page.tsx,
 /learn/roadmap/analytics-engineer,roadmap,,,,,,live,true,true,918,2,app/learn/roadmap/[slug]/page.tsx,
 /learn/roadmap/backend-dev,roadmap,,,,,,live,true,true,834,2,app/learn/roadmap/[slug]/page.tsx,
 /learn/roadmap/cloud-architect,roadmap,,,,,,live,true,true,917,1,app/learn/roadmap/[slug]/page.tsx,
 /learn/roadmap/cloud-security-engineer,roadmap,,,,,,live,true,true,1010,1,app/learn/roadmap/[slug]/page.tsx,
 /learn/roadmap/cybersecurity-analyst,roadmap,,,,,,live,true,true,1035,2,app/learn/roadmap/[slug]/page.tsx,
-/learn/roadmap/data-engineer,roadmap,,,,,,live,true,true,1355,2,app/learn/roadmap/[slug]/page.tsx,
+/learn/roadmap/data-engineer,roadmap,,,,,,live,true,true,1361,2,app/learn/roadmap/[slug]/page.tsx,
 /learn/roadmap/data-scientist,roadmap,,,,,,live,true,true,899,2,app/learn/roadmap/[slug]/page.tsx,
 /learn/roadmap/database-administrator,roadmap,,,,,,live,true,true,902,1,app/learn/roadmap/[slug]/page.tsx,
 /learn/roadmap/devops,roadmap,,,,,,live,true,true,853,2,app/learn/roadmap/[slug]/page.tsx,
@@ -50,26 +50,30 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/roadmap/python-developer,roadmap,,,,,,live,true,true,812,1,app/learn/roadmap/[slug]/page.tsx,
 /learn/roadmap/site-reliability-engineer,roadmap,,,,,,live,true,true,857,1,app/learn/roadmap/[slug]/page.tsx,
 /learn/roadmap/software-architect,roadmap,,,,,,live,true,true,870,1,app/learn/roadmap/[slug]/page.tsx,
-/learn/schools,hub,,,,,,live,true,true,184,9,app/learn/schools/page.tsx,
-/learn/schools/ai,hub,,,,,,live,true,true,128,5,app/learn/schools/[slug]/page.tsx,
+/learn/schools,hub,,,,,,live,true,true,179,9,app/learn/schools/page.tsx,
+/learn/schools/ai,hub,,,,,,live,true,true,124,5,app/learn/schools/[slug]/page.tsx,
 /learn/schools/cloud,hub,,,,,,live,true,true,87,3,app/learn/schools/[slug]/page.tsx,
-/learn/schools/computer-science,hub,,,,,,live,true,true,94,3,app/learn/schools/[slug]/page.tsx,
-/learn/schools/data,hub,,,,,,live,true,true,126,4,app/learn/schools/[slug]/page.tsx,
-/learn/schools/security,hub,,,,,,live,true,true,100,4,app/learn/schools/[slug]/page.tsx,
+/learn/schools/computer-science,hub,,,,,,live,true,true,78,3,app/learn/schools/[slug]/page.tsx,
+/learn/schools/data,hub,,,,,,live,true,true,107,4,app/learn/schools/[slug]/page.tsx,
+/learn/schools/security,hub,,,,,,live,true,true,103,4,app/learn/schools/[slug]/page.tsx,
 /learn/schools/software-engineering,hub,,,,,,live,true,true,77,3,app/learn/schools/[slug]/page.tsx,
 /learn/what-is-data-engineering/cheatsheet,tool,,,,,,live,true,true,433,1,app/learn/what-is-data-engineering/cheatsheet/page.tsx,
-/learn/agentic-ai,track-index,agentic-ai,Agentic AI & Automation,ai,,,live,true,true,396,16,app/learn/agentic-ai/page.tsx,
-/learn/agentic-ai/what-is-an-ai-agent,lesson,agentic-ai,Agentic AI & Automation,ai,Agent Foundations,1,live,true,true,2151,5,content/agentic-ai/what-is-an-ai-agent.tsx,2026-11-09
+/learn/agentic-ai,track-index,agentic-ai,Agentic AI & Automation,ai,,,live,true,true,516,22,app/learn/agentic-ai/page.tsx,
+/learn/agentic-ai/what-is-an-ai-agent,lesson,agentic-ai,Agentic AI & Automation,ai,Agent Foundations,1,live,true,true,2151,4,content/agentic-ai/what-is-an-ai-agent.tsx,2026-11-09
 /learn/agentic-ai/agent-state-memory,lesson,agentic-ai,Agentic AI & Automation,ai,Agent Foundations,2,live,true,true,2200,5,content/agentic-ai/agent-state-memory.tsx,2026-11-09
 /learn/agentic-ai/planning-and-reflection,lesson,agentic-ai,Agentic AI & Automation,ai,Agent Foundations,3,live,true,true,2135,5,content/agentic-ai/planning-and-reflection.tsx,2026-11-09
 /learn/agentic-ai/langgraph-workflows,lesson,agentic-ai,Agentic AI & Automation,ai,Orchestration,4,live,true,true,2111,5,content/agentic-ai/langgraph-workflows.tsx,2026-11-09
 /learn/agentic-ai/human-in-the-loop,lesson,agentic-ai,Agentic AI & Automation,ai,Orchestration,5,live,true,true,2106,5,content/agentic-ai/human-in-the-loop.tsx,2026-11-09
 /learn/agentic-ai/model-context-protocol,lesson,agentic-ai,Agentic AI & Automation,ai,Orchestration,6,live,true,true,1783,5,content/agentic-ai/model-context-protocol.tsx,2026-11-09
-/learn/agentic-ai/multi-agent-systems,lesson,agentic-ai,Agentic AI & Automation,ai,Orchestration,7,live,true,true,1644,5,content/agentic-ai/multi-agent-systems.tsx,2026-11-09
-/learn/agentic-ai/agent-evaluation-observability,lesson,agentic-ai,Agentic AI & Automation,ai,Production Agents,8,live,true,true,1625,6,content/agentic-ai/agent-evaluation-observability.tsx,2026-11-09
-/learn/agentic-ai/securing-agents,lesson,agentic-ai,Agentic AI & Automation,ai,Production Agents,9,live,true,true,1699,6,content/agentic-ai/securing-agents.tsx,2026-11-09
-/learn/agentic-ai/agent-capstone-support-agent,lesson,agentic-ai,Agentic AI & Automation,ai,Production Agents,10,live,true,true,2102,5,content/agentic-ai/agent-capstone-support-agent.tsx,2026-11-09
-/learn/ai-ml,track-index,ai-ml,AI & Machine Learning,ai,,,live,true,true,3569,98,app/learn/ai-ml/page.tsx,
+/learn/agentic-ai/multi-agent-systems,lesson,agentic-ai,Agentic AI & Automation,ai,Orchestration,7,live,true,true,1651,5,content/agentic-ai/multi-agent-systems.tsx,2026-11-09
+/learn/agentic-ai/agent-frameworks-compared,lesson,agentic-ai,Agentic AI & Automation,ai,Orchestration,8,live,true,true,2414,5,content/agentic-ai/agent-frameworks-compared.tsx,2026-11-09
+/learn/agentic-ai/browser-computer-use-agents,lesson,agentic-ai,Agentic AI & Automation,ai,Orchestration,9,live,true,true,2211,5,content/agentic-ai/browser-computer-use-agents.tsx,2026-11-09
+/learn/agentic-ai/agent-evaluation-observability,lesson,agentic-ai,Agentic AI & Automation,ai,Production Agents,10,live,true,true,1624,6,content/agentic-ai/agent-evaluation-observability.tsx,2026-11-09
+/learn/agentic-ai/securing-agents,lesson,agentic-ai,Agentic AI & Automation,ai,Production Agents,11,live,true,true,1714,6,content/agentic-ai/securing-agents.tsx,2026-11-09
+/learn/agentic-ai/deploying-long-running-agents,lesson,agentic-ai,Agentic AI & Automation,ai,Production Agents,12,live,true,true,2449,6,content/agentic-ai/deploying-long-running-agents.tsx,2026-11-09
+/learn/agentic-ai/agent-capstone-support-agent,lesson,agentic-ai,Agentic AI & Automation,ai,Production Agents,13,live,true,true,2096,6,content/agentic-ai/agent-capstone-support-agent.tsx,2026-11-09
+/learn/agentic-ai/agentic-ai-interview-prep,lesson,agentic-ai,Agentic AI & Automation,ai,Production Agents,14,live,true,true,2538,5,content/agentic-ai/agentic-ai-interview-prep.tsx,2026-11-09
+/learn/ai-ml,track-index,ai-ml,AI & Machine Learning,ai,,,live,true,true,3743,102,app/learn/ai-ml/page.tsx,
 /learn/ai-ml/cheatsheet,tool,ai-ml,AI & Machine Learning,ai,,,live,true,true,1397,1,app/learn/ai-ml/cheatsheet/page.tsx,
 /learn/ai-ml/what-is-ai,lesson,ai-ml,AI & Machine Learning,ai,Introduction,1,live,true,true,4519,7,content/ai-ml/what-is-ai.tsx,2026-11-09
 /learn/ai-ml/ai-ml-landscape,lesson,ai-ml,AI & Machine Learning,ai,Introduction,2,live,true,true,3463,8,content/ai-ml/ai-ml-landscape.tsx,2026-11-09
@@ -80,11 +84,11 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/ai-ml/math-foundations/derivatives-and-gradients,lesson,ai-ml,AI & Machine Learning,ai,Math Foundations,7,live,true,true,6096,6,content/ai-ml/math-foundations/derivatives-and-gradients.tsx,2026-11-09
 /learn/ai-ml/math-foundations/probability-distributions,lesson,ai-ml,AI & Machine Learning,ai,Math Foundations,8,live,true,true,6571,6,content/ai-ml/math-foundations/probability-distributions.tsx,2026-11-09
 /learn/ai-ml/math-foundations/information-theory,lesson,ai-ml,AI & Machine Learning,ai,Math Foundations,9,live,true,true,7628,6,content/ai-ml/math-foundations/information-theory.tsx,2026-11-09
-/learn/ai-ml/programming/python-for-ml,lesson,ai-ml,AI & Machine Learning,ai,Programming Ecosystem,10,live,true,true,7695,7,content/ai-ml/programming/python-for-ml.tsx,2026-11-09
-/learn/ai-ml/programming/numpy-arrays,lesson,ai-ml,AI & Machine Learning,ai,Programming Ecosystem,11,live,true,true,7385,7,content/ai-ml/programming/numpy-arrays.tsx,2026-11-09
-/learn/ai-ml/programming/pandas-dataframes,lesson,ai-ml,AI & Machine Learning,ai,Programming Ecosystem,12,live,true,true,6727,8,content/ai-ml/programming/pandas-dataframes.tsx,2026-11-09
-/learn/ai-ml/programming/matplotlib-seaborn,lesson,ai-ml,AI & Machine Learning,ai,Programming Ecosystem,13,live,true,true,6649,7,content/ai-ml/programming/matplotlib-seaborn.tsx,2026-11-09
-/learn/ai-ml/programming/sklearn-interface,lesson,ai-ml,AI & Machine Learning,ai,Programming Ecosystem,14,live,true,true,5518,7,content/ai-ml/programming/sklearn-interface.tsx,2026-11-09
+/learn/ai-ml/programming/python-for-ml,lesson,ai-ml,AI & Machine Learning,ai,Programming Ecosystem,10,live,true,true,7695,6,content/ai-ml/programming/python-for-ml.tsx,2026-11-09
+/learn/ai-ml/programming/numpy-arrays,lesson,ai-ml,AI & Machine Learning,ai,Programming Ecosystem,11,live,true,true,7385,6,content/ai-ml/programming/numpy-arrays.tsx,2026-11-09
+/learn/ai-ml/programming/pandas-dataframes,lesson,ai-ml,AI & Machine Learning,ai,Programming Ecosystem,12,live,true,true,6727,7,content/ai-ml/programming/pandas-dataframes.tsx,2026-11-09
+/learn/ai-ml/programming/matplotlib-seaborn,lesson,ai-ml,AI & Machine Learning,ai,Programming Ecosystem,13,live,true,true,6649,6,content/ai-ml/programming/matplotlib-seaborn.tsx,2026-11-09
+/learn/ai-ml/programming/sklearn-interface,lesson,ai-ml,AI & Machine Learning,ai,Programming Ecosystem,14,live,true,true,5518,6,content/ai-ml/programming/sklearn-interface.tsx,2026-11-09
 /learn/ai-ml/data-engineering/data-collection,lesson,ai-ml,AI & Machine Learning,ai,Data Engineering for ML,15,live,true,true,7354,5,content/ai-ml/data-engineering/data-collection.tsx,2026-11-09
 /learn/ai-ml/data-engineering/data-cleaning,lesson,ai-ml,AI & Machine Learning,ai,Data Engineering for ML,16,live,true,true,7942,5,content/ai-ml/data-engineering/data-cleaning.tsx,2026-11-09
 /learn/ai-ml/data-engineering/feature-scaling,lesson,ai-ml,AI & Machine Learning,ai,Data Engineering for ML,17,live,true,true,6335,5,content/ai-ml/data-engineering/feature-scaling.tsx,2026-11-09
@@ -101,71 +105,95 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/ai-ml/classical-ml/random-forest,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,28,live,true,true,5180,7,content/ai-ml/classical-ml/random-forest.tsx,2026-08-26
 /learn/ai-ml/classical-ml/gradient-boosting,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,29,live,true,true,4970,7,content/ai-ml/classical-ml/gradient-boosting.tsx,2026-08-26
 /learn/ai-ml/classical-ml/xgboost,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,30,live,true,true,4930,7,content/ai-ml/classical-ml/xgboost.tsx,2026-08-26
-/learn/ai-ml/classical-ml/lightgbm,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,31,live,true,true,4874,7,content/ai-ml/classical-ml/lightgbm.tsx,2026-11-09
-/learn/ai-ml/classical-ml/kmeans-clustering,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,32,live,true,true,5187,7,content/ai-ml/classical-ml/kmeans-clustering.tsx,2026-08-26
-/learn/ai-ml/classical-ml/pca,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,33,live,true,true,5793,7,content/ai-ml/classical-ml/pca.tsx,2026-08-26
-/learn/ai-ml/classical-ml/time-series-forecasting,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,34,live,true,true,2495,6,content/ai-ml/classical-ml/time-series-forecasting.tsx,2026-11-09
-/learn/ai-ml/classical-ml/recommender-systems,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,35,live,true,true,2404,6,content/ai-ml/classical-ml/recommender-systems.tsx,2026-11-09
-/learn/ai-ml/evaluation/evaluation-metrics,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,36,live,true,true,5973,7,content/ai-ml/evaluation/evaluation-metrics.tsx,2026-11-09
-/learn/ai-ml/evaluation/calibration,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,37,live,true,true,5312,6,content/ai-ml/evaluation/calibration.tsx,2026-11-09
-/learn/ai-ml/evaluation/roc-and-auc,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,38,live,true,true,5514,6,content/ai-ml/evaluation/roc-and-auc.tsx,2026-11-09
-/learn/ai-ml/evaluation/cross-validation,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,39,live,true,true,5605,6,content/ai-ml/evaluation/cross-validation.tsx,2026-11-09
-/learn/ai-ml/evaluation/hyperparameter-tuning,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,40,live,true,true,5557,6,content/ai-ml/evaluation/hyperparameter-tuning.tsx,2026-11-09
-/learn/ai-ml/evaluation/model-interpretability,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,41,live,true,true,5175,6,content/ai-ml/evaluation/model-interpretability.tsx,2026-08-26
-/learn/ai-ml/evaluation/regression-metrics,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,42,live,true,true,5379,6,content/ai-ml/evaluation/regression-metrics.tsx,2026-11-09
-/learn/ai-ml/deep-learning/neural-networks-from-scratch,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,43,live,true,true,5742,6,content/ai-ml/deep-learning/neural-networks-from-scratch.tsx,2026-11-09
-/learn/ai-ml/deep-learning/backpropagation,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,44,live,true,true,5228,6,content/ai-ml/deep-learning/backpropagation.tsx,2026-11-09
-/learn/ai-ml/deep-learning/activation-functions,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,45,live,true,true,4790,6,content/ai-ml/deep-learning/activation-functions.tsx,2026-11-09
-/learn/ai-ml/deep-learning/optimisers,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,46,live,true,true,5301,6,content/ai-ml/deep-learning/optimisers.tsx,2026-11-09
-/learn/ai-ml/deep-learning/batch-norm-dropout,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,47,live,true,true,5731,6,content/ai-ml/deep-learning/batch-norm-dropout.tsx,2026-11-09
-/learn/ai-ml/deep-learning/pytorch-fundamentals,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,48,live,true,true,2278,6,content/ai-ml/deep-learning/pytorch-fundamentals.tsx,2026-11-09
-/learn/ai-ml/deep-learning/pytorch-training-loop,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,49,live,true,true,2266,6,content/ai-ml/deep-learning/pytorch-training-loop.tsx,2026-11-09
-/learn/ai-ml/deep-learning/cnns-image-classification,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,50,live,true,true,5290,6,content/ai-ml/deep-learning/cnns-image-classification.tsx,2026-11-09
-/learn/ai-ml/deep-learning/rnns-and-lstms,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,51,live,true,true,5443,6,content/ai-ml/deep-learning/rnns-and-lstms.tsx,2026-11-09
-/learn/ai-ml/deep-learning/transformers-and-attention,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,52,live,true,true,5809,6,content/ai-ml/deep-learning/transformers-and-attention.tsx,2026-08-26
-/learn/ai-ml/computer-vision/image-fundamentals,lesson,ai-ml,AI & Machine Learning,ai,Computer Vision,53,live,true,true,5150,5,content/ai-ml/computer-vision/image-fundamentals.tsx,2026-11-09
-/learn/ai-ml/computer-vision/data-augmentation,lesson,ai-ml,AI & Machine Learning,ai,Computer Vision,54,live,true,true,4762,5,content/ai-ml/computer-vision/data-augmentation.tsx,2026-11-09
-/learn/ai-ml/computer-vision/object-detection,lesson,ai-ml,AI & Machine Learning,ai,Computer Vision,55,live,true,true,5070,5,content/ai-ml/computer-vision/object-detection.tsx,2026-11-09
-/learn/ai-ml/computer-vision/semantic-segmentation,lesson,ai-ml,AI & Machine Learning,ai,Computer Vision,56,live,true,true,5237,5,content/ai-ml/computer-vision/semantic-segmentation.tsx,2026-11-09
-/learn/ai-ml/computer-vision/transfer-learning,lesson,ai-ml,AI & Machine Learning,ai,Computer Vision,57,live,true,true,4955,5,content/ai-ml/computer-vision/transfer-learning.tsx,2026-08-26
-/learn/ai-ml/nlp/tokenisation-and-embeddings,lesson,ai-ml,AI & Machine Learning,ai,Natural Language Processing,58,live,true,true,5817,9,content/ai-ml/nlp/tokenisation-and-embeddings.tsx,2026-11-09
-/learn/ai-ml/nlp/bert-encoder-family,lesson,ai-ml,AI & Machine Learning,ai,Natural Language Processing,59,live,true,true,5390,7,content/ai-ml/nlp/bert-encoder-family.tsx,2026-11-09
-/learn/ai-ml/generative-ai/what-is-generative-ai,lesson,ai-ml,AI & Machine Learning,ai,Large Language Models,60,live,true,true,4261,10,content/ai-ml/generative-ai/what-is-generative-ai.tsx,2026-11-09
-/learn/ai-ml/generative-ai/llms-pretraining-rlhf,lesson,ai-ml,AI & Machine Learning,ai,Large Language Models,61,live,true,true,5988,8,content/ai-ml/generative-ai/llms-pretraining-rlhf.tsx,2026-11-09
-/learn/ai-ml/generative-ai/context-windows-model-limits,lesson,ai-ml,AI & Machine Learning,ai,Large Language Models,62,live,true,true,1225,8,content/ai-ml/generative-ai/context-windows-model-limits.tsx,2026-10-15
-/learn/ai-ml/generative-ai/inference-parameters-model-selection,lesson,ai-ml,AI & Machine Learning,ai,Large Language Models,63,live,true,true,1111,8,content/ai-ml/generative-ai/inference-parameters-model-selection.tsx,2026-10-15
-/learn/ai-ml/nlp/prompt-engineering,lesson,ai-ml,AI & Machine Learning,ai,"LLM Applications — Prompting, RAG and Agents",64,live,true,true,5977,8,content/ai-ml/nlp/prompt-engineering.tsx,2026-11-09
-/learn/ai-ml/nlp/rag-retrieval-augmented-generation,lesson,ai-ml,AI & Machine Learning,ai,"LLM Applications — Prompting, RAG and Agents",65,live,true,true,6187,7,content/ai-ml/nlp/rag-retrieval-augmented-generation.tsx,2026-11-09
-/learn/ai-ml/generative-ai/advanced-rag,lesson,ai-ml,AI & Machine Learning,ai,"LLM Applications — Prompting, RAG and Agents",66,live,true,true,6470,7,content/ai-ml/generative-ai/advanced-rag.tsx,2026-11-09
-/learn/ai-ml/generative-ai/agents-tool-use,lesson,ai-ml,AI & Machine Learning,ai,"LLM Applications — Prompting, RAG and Agents",67,live,true,true,6144,7,content/ai-ml/generative-ai/agents-tool-use.tsx,2026-08-26
-/learn/ai-ml/nlp/peft-lora-adapters,lesson,ai-ml,AI & Machine Learning,ai,Fine-Tuning and Multimodal Models,68,live,true,true,5531,5,content/ai-ml/nlp/peft-lora-adapters.tsx,2026-11-09
-/learn/ai-ml/generative-ai/llm-fine-tuning,lesson,ai-ml,AI & Machine Learning,ai,Fine-Tuning and Multimodal Models,69,live,true,true,5450,5,content/ai-ml/generative-ai/llm-fine-tuning.tsx,2026-11-09
-/learn/ai-ml/generative-ai/multimodal-models,lesson,ai-ml,AI & Machine Learning,ai,Fine-Tuning and Multimodal Models,70,live,true,true,5644,5,content/ai-ml/generative-ai/multimodal-models.tsx,2026-11-09
-/learn/ai-ml/generative-ai/gans-generator-discriminator,lesson,ai-ml,AI & Machine Learning,ai,Generative Models for Images,71,live,true,true,4878,4,content/ai-ml/generative-ai/gans-generator-discriminator.tsx,2026-11-09
-/learn/ai-ml/generative-ai/variational-autoencoders,lesson,ai-ml,AI & Machine Learning,ai,Generative Models for Images,72,live,true,true,4924,4,content/ai-ml/generative-ai/variational-autoencoders.tsx,2026-11-09
-/learn/ai-ml/generative-ai/diffusion-models,lesson,ai-ml,AI & Machine Learning,ai,Generative Models for Images,73,live,true,true,5833,4,content/ai-ml/generative-ai/diffusion-models.tsx,2026-11-09
-/learn/ai-ml/mlops/ml-pipelines-feature-stores,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,74,live,true,true,5818,7,content/ai-ml/mlops/ml-pipelines-feature-stores.tsx,2026-11-09
-/learn/ai-ml/mlops/experiment-tracking,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,75,live,true,true,5246,6,content/ai-ml/mlops/experiment-tracking.tsx,2026-11-09
-/learn/ai-ml/mlops/model-deployment,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,76,live,true,true,5979,6,content/ai-ml/mlops/model-deployment.tsx,2026-11-09
-/learn/ai-ml/mlops/model-monitoring,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,77,live,true,true,5795,6,content/ai-ml/mlops/model-monitoring.tsx,2026-11-09
-/learn/ai-ml/mlops/retraining-pipelines,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,78,live,true,true,5705,6,content/ai-ml/mlops/retraining-pipelines.tsx,2026-11-09
-/learn/ai-ml/mlops/dvc-data-version-control,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,79,live,true,true,5559,6,content/ai-ml/mlops/dvc-data-version-control.tsx,2026-11-09
-/learn/ai-ml/mlops/ml-system-design,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,80,live,true,true,5199,6,content/ai-ml/mlops/ml-system-design.tsx,2026-08-26
-/learn/ai-ml/cloud-ml/azure-ml,lesson,ai-ml,AI & Machine Learning,ai,Cloud ML Platforms,81,live,true,true,5275,6,content/ai-ml/cloud-ml/azure-ml.tsx,2026-11-09
-/learn/ai-ml/cloud-ml/aws-sagemaker,lesson,ai-ml,AI & Machine Learning,ai,Cloud ML Platforms,82,live,true,true,3780,6,content/ai-ml/cloud-ml/aws-sagemaker.tsx,2026-08-26
-/learn/ai-ml/cloud-ml/gcp-vertex-ai,lesson,ai-ml,AI & Machine Learning,ai,Cloud ML Platforms,83,live,true,true,5611,6,content/ai-ml/cloud-ml/gcp-vertex-ai.tsx,2026-11-09
-/learn/ai-ml/cloud-ml/mlops-on-cloud,lesson,ai-ml,AI & Machine Learning,ai,Cloud ML Platforms,84,live,true,true,5868,6,content/ai-ml/cloud-ml/mlops-on-cloud.tsx,2026-11-09
-/learn/ai-ml/ml-interview-prep,lesson,ai-ml,AI & Machine Learning,ai,Cloud ML Platforms,85,live,true,true,18082,6,app/learn/ai-ml/ml-interview-prep/page.tsx,2026-11-09
-/learn/track-plan/ai-security,planned-track,ai-security,AI Security & LLM Security,security,,,planned,true,true,819,5,app/learn/track-plan/[slug]/page.tsx,
-/learn/analytics-engineering-data-analytics,track-index,analytics-engineering-data-analytics,Data Analytics & Statistics,data,,,live,true,true,283,12,app/learn/analytics-engineering-data-analytics/page.tsx,
-/learn/analytics-engineering-data-analytics/descriptive-statistics,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Statistics for Data,1,live,true,true,2100,5,content/analytics-engineering-data-analytics/descriptive-statistics.tsx,2026-11-09
-/learn/analytics-engineering-data-analytics/sampling-confidence-intervals,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Statistics for Data,2,live,true,true,2048,6,content/analytics-engineering-data-analytics/sampling-confidence-intervals.tsx,2026-11-09
-/learn/analytics-engineering-data-analytics/hypothesis-testing,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Statistics for Data,3,live,true,true,2169,6,content/analytics-engineering-data-analytics/hypothesis-testing.tsx,2026-11-09
-/learn/analytics-engineering-data-analytics/metrics-and-kpis,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Metrics & Experiments,4,live,true,true,2098,6,content/analytics-engineering-data-analytics/metrics-and-kpis.tsx,2026-11-09
-/learn/analytics-engineering-data-analytics/ab-testing,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Metrics & Experiments,5,live,true,true,2093,6,content/analytics-engineering-data-analytics/ab-testing.tsx,2026-11-09
-/learn/analytics-engineering-data-analytics/dashboards-bi-tools,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,BI & Storytelling,6,live,true,true,2238,5,content/analytics-engineering-data-analytics/dashboards-bi-tools.tsx,2026-11-09
-/learn/analytics-engineering-data-analytics/data-storytelling,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,BI & Storytelling,7,live,true,true,2069,4,content/analytics-engineering-data-analytics/data-storytelling.tsx,2026-11-09
-/learn/apache-kafka,track-index,apache-kafka,Apache Kafka,data,,,live,true,true,975,33,app/learn/apache-kafka/page.tsx,
+/learn/ai-ml/classical-ml/lightgbm,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,31,live,true,true,4864,7,content/ai-ml/classical-ml/lightgbm.tsx,2026-11-09
+/learn/ai-ml/classical-ml/ensembles-stacking-blending,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,32,live,true,true,1711,6,content/ai-ml/classical-ml/ensembles-stacking-blending.tsx,2026-11-09
+/learn/ai-ml/classical-ml/kmeans-clustering,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,33,live,true,true,5147,7,content/ai-ml/classical-ml/kmeans-clustering.tsx,2026-11-09
+/learn/ai-ml/classical-ml/more-clustering,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,34,live,true,true,1825,6,content/ai-ml/classical-ml/more-clustering.tsx,2026-11-09
+/learn/ai-ml/classical-ml/anomaly-detection,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,35,live,true,true,1834,6,content/ai-ml/classical-ml/anomaly-detection.tsx,2026-11-09
+/learn/ai-ml/classical-ml/pca,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,36,live,true,true,5797,7,content/ai-ml/classical-ml/pca.tsx,2026-08-26
+/learn/ai-ml/classical-ml/time-series-forecasting,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,37,live,true,true,2495,6,content/ai-ml/classical-ml/time-series-forecasting.tsx,2026-11-09
+/learn/ai-ml/classical-ml/recommender-systems,lesson,ai-ml,AI & Machine Learning,ai,Classical Machine Learning,38,live,true,true,2404,6,content/ai-ml/classical-ml/recommender-systems.tsx,2026-11-09
+/learn/ai-ml/evaluation/evaluation-metrics,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,39,live,true,true,5973,7,content/ai-ml/evaluation/evaluation-metrics.tsx,2026-11-09
+/learn/ai-ml/evaluation/calibration,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,40,live,true,true,5312,6,content/ai-ml/evaluation/calibration.tsx,2026-11-09
+/learn/ai-ml/evaluation/roc-and-auc,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,41,live,true,true,5492,6,content/ai-ml/evaluation/roc-and-auc.tsx,2026-11-09
+/learn/ai-ml/evaluation/imbalanced-data,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,42,live,true,true,1720,6,content/ai-ml/evaluation/imbalanced-data.tsx,2026-11-09
+/learn/ai-ml/evaluation/cross-validation,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,43,live,true,true,5608,6,content/ai-ml/evaluation/cross-validation.tsx,2026-11-09
+/learn/ai-ml/evaluation/hyperparameter-tuning,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,44,live,true,true,5557,6,content/ai-ml/evaluation/hyperparameter-tuning.tsx,2026-11-09
+/learn/ai-ml/evaluation/model-interpretability,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,45,live,true,true,5175,6,content/ai-ml/evaluation/model-interpretability.tsx,2026-11-09
+/learn/ai-ml/evaluation/regression-metrics,lesson,ai-ml,AI & Machine Learning,ai,Evaluation and Optimisation,46,live,true,true,5379,6,content/ai-ml/evaluation/regression-metrics.tsx,2026-11-09
+/learn/ai-ml/deep-learning/neural-networks-from-scratch,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,47,live,true,true,5742,6,content/ai-ml/deep-learning/neural-networks-from-scratch.tsx,2026-11-09
+/learn/ai-ml/deep-learning/backpropagation,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,48,live,true,true,5228,6,content/ai-ml/deep-learning/backpropagation.tsx,2026-11-09
+/learn/ai-ml/deep-learning/activation-functions,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,49,live,true,true,4790,6,content/ai-ml/deep-learning/activation-functions.tsx,2026-11-09
+/learn/ai-ml/deep-learning/optimisers,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,50,live,true,true,5301,6,content/ai-ml/deep-learning/optimisers.tsx,2026-11-09
+/learn/ai-ml/deep-learning/batch-norm-dropout,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,51,live,true,true,5731,6,content/ai-ml/deep-learning/batch-norm-dropout.tsx,2026-11-09
+/learn/ai-ml/deep-learning/pytorch-fundamentals,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,52,live,true,true,2278,6,content/ai-ml/deep-learning/pytorch-fundamentals.tsx,2026-11-09
+/learn/ai-ml/deep-learning/pytorch-training-loop,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,53,live,true,true,2266,6,content/ai-ml/deep-learning/pytorch-training-loop.tsx,2026-11-09
+/learn/ai-ml/deep-learning/cnns-image-classification,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,54,live,true,true,5290,6,content/ai-ml/deep-learning/cnns-image-classification.tsx,2026-11-09
+/learn/ai-ml/deep-learning/rnns-and-lstms,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,55,live,true,true,5443,6,content/ai-ml/deep-learning/rnns-and-lstms.tsx,2026-11-09
+/learn/ai-ml/deep-learning/transformers-and-attention,lesson,ai-ml,AI & Machine Learning,ai,Deep Learning,56,live,true,true,5809,6,content/ai-ml/deep-learning/transformers-and-attention.tsx,2026-11-09
+/learn/ai-ml/computer-vision/image-fundamentals,lesson,ai-ml,AI & Machine Learning,ai,Computer Vision,57,live,true,true,5150,5,content/ai-ml/computer-vision/image-fundamentals.tsx,2026-11-09
+/learn/ai-ml/computer-vision/data-augmentation,lesson,ai-ml,AI & Machine Learning,ai,Computer Vision,58,live,true,true,4762,5,content/ai-ml/computer-vision/data-augmentation.tsx,2026-11-09
+/learn/ai-ml/computer-vision/object-detection,lesson,ai-ml,AI & Machine Learning,ai,Computer Vision,59,live,true,true,5070,5,content/ai-ml/computer-vision/object-detection.tsx,2026-11-09
+/learn/ai-ml/computer-vision/semantic-segmentation,lesson,ai-ml,AI & Machine Learning,ai,Computer Vision,60,live,true,true,5237,5,content/ai-ml/computer-vision/semantic-segmentation.tsx,2026-11-09
+/learn/ai-ml/computer-vision/transfer-learning,lesson,ai-ml,AI & Machine Learning,ai,Computer Vision,61,live,true,true,4955,5,content/ai-ml/computer-vision/transfer-learning.tsx,2026-11-09
+/learn/ai-ml/nlp/tokenisation-and-embeddings,lesson,ai-ml,AI & Machine Learning,ai,Natural Language Processing,62,live,true,true,5817,9,content/ai-ml/nlp/tokenisation-and-embeddings.tsx,2026-11-09
+/learn/ai-ml/nlp/bert-encoder-family,lesson,ai-ml,AI & Machine Learning,ai,Natural Language Processing,63,live,true,true,5390,7,content/ai-ml/nlp/bert-encoder-family.tsx,2026-11-09
+/learn/ai-ml/generative-ai/what-is-generative-ai,lesson,ai-ml,AI & Machine Learning,ai,Large Language Models,64,live,true,true,4261,10,content/ai-ml/generative-ai/what-is-generative-ai.tsx,2026-11-09
+/learn/ai-ml/generative-ai/llms-pretraining-rlhf,lesson,ai-ml,AI & Machine Learning,ai,Large Language Models,65,live,true,true,5988,8,content/ai-ml/generative-ai/llms-pretraining-rlhf.tsx,2026-11-09
+/learn/ai-ml/generative-ai/context-windows-model-limits,lesson,ai-ml,AI & Machine Learning,ai,Large Language Models,66,live,true,true,1225,8,content/ai-ml/generative-ai/context-windows-model-limits.tsx,2026-10-15
+/learn/ai-ml/generative-ai/inference-parameters-model-selection,lesson,ai-ml,AI & Machine Learning,ai,Large Language Models,67,live,true,true,1111,8,content/ai-ml/generative-ai/inference-parameters-model-selection.tsx,2026-10-15
+/learn/ai-ml/nlp/prompt-engineering,lesson,ai-ml,AI & Machine Learning,ai,"LLM Applications — Prompting, RAG and Agents",68,live,true,true,5977,8,content/ai-ml/nlp/prompt-engineering.tsx,2026-11-09
+/learn/ai-ml/nlp/rag-retrieval-augmented-generation,lesson,ai-ml,AI & Machine Learning,ai,"LLM Applications — Prompting, RAG and Agents",69,live,true,true,6187,7,content/ai-ml/nlp/rag-retrieval-augmented-generation.tsx,2026-11-09
+/learn/ai-ml/generative-ai/advanced-rag,lesson,ai-ml,AI & Machine Learning,ai,"LLM Applications — Prompting, RAG and Agents",70,live,true,true,6470,7,content/ai-ml/generative-ai/advanced-rag.tsx,2026-11-09
+/learn/ai-ml/generative-ai/agents-tool-use,lesson,ai-ml,AI & Machine Learning,ai,"LLM Applications — Prompting, RAG and Agents",71,live,true,true,6144,7,content/ai-ml/generative-ai/agents-tool-use.tsx,2026-11-09
+/learn/ai-ml/nlp/peft-lora-adapters,lesson,ai-ml,AI & Machine Learning,ai,Fine-Tuning and Multimodal Models,72,live,true,true,5531,5,content/ai-ml/nlp/peft-lora-adapters.tsx,2026-11-09
+/learn/ai-ml/generative-ai/llm-fine-tuning,lesson,ai-ml,AI & Machine Learning,ai,Fine-Tuning and Multimodal Models,73,live,true,true,5450,5,content/ai-ml/generative-ai/llm-fine-tuning.tsx,2026-11-09
+/learn/ai-ml/generative-ai/multimodal-models,lesson,ai-ml,AI & Machine Learning,ai,Fine-Tuning and Multimodal Models,74,live,true,true,5644,5,content/ai-ml/generative-ai/multimodal-models.tsx,2026-11-09
+/learn/ai-ml/generative-ai/gans-generator-discriminator,lesson,ai-ml,AI & Machine Learning,ai,Generative Models for Images,75,live,true,true,4878,4,content/ai-ml/generative-ai/gans-generator-discriminator.tsx,2026-11-09
+/learn/ai-ml/generative-ai/variational-autoencoders,lesson,ai-ml,AI & Machine Learning,ai,Generative Models for Images,76,live,true,true,4924,4,content/ai-ml/generative-ai/variational-autoencoders.tsx,2026-11-09
+/learn/ai-ml/generative-ai/diffusion-models,lesson,ai-ml,AI & Machine Learning,ai,Generative Models for Images,77,live,true,true,5833,4,content/ai-ml/generative-ai/diffusion-models.tsx,2026-11-09
+/learn/ai-ml/mlops/ml-pipelines-feature-stores,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,78,live,true,true,5818,7,content/ai-ml/mlops/ml-pipelines-feature-stores.tsx,2026-11-09
+/learn/ai-ml/mlops/experiment-tracking,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,79,live,true,true,5246,6,content/ai-ml/mlops/experiment-tracking.tsx,2026-11-09
+/learn/ai-ml/mlops/model-deployment,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,80,live,true,true,5979,6,content/ai-ml/mlops/model-deployment.tsx,2026-11-09
+/learn/ai-ml/mlops/model-monitoring,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,81,live,true,true,5795,6,content/ai-ml/mlops/model-monitoring.tsx,2026-11-09
+/learn/ai-ml/mlops/retraining-pipelines,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,82,live,true,true,5705,6,content/ai-ml/mlops/retraining-pipelines.tsx,2026-11-09
+/learn/ai-ml/mlops/dvc-data-version-control,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,83,live,true,true,5559,6,content/ai-ml/mlops/dvc-data-version-control.tsx,2026-11-09
+/learn/ai-ml/mlops/ml-system-design,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,84,live,true,true,5182,6,content/ai-ml/mlops/ml-system-design.tsx,2026-11-09
+/learn/ai-ml/mlops/responsible-ai,lesson,ai-ml,AI & Machine Learning,ai,MLOps and Production,85,live,true,true,2028,6,content/ai-ml/mlops/responsible-ai.tsx,2026-11-09
+/learn/ai-ml/cloud-ml/azure-ml,lesson,ai-ml,AI & Machine Learning,ai,Cloud ML Platforms,86,live,true,true,5276,6,content/ai-ml/cloud-ml/azure-ml.tsx,2026-11-09
+/learn/ai-ml/cloud-ml/aws-sagemaker,lesson,ai-ml,AI & Machine Learning,ai,Cloud ML Platforms,87,live,true,true,3780,6,content/ai-ml/cloud-ml/aws-sagemaker.tsx,2026-11-09
+/learn/ai-ml/cloud-ml/gcp-vertex-ai,lesson,ai-ml,AI & Machine Learning,ai,Cloud ML Platforms,88,live,true,true,5611,6,content/ai-ml/cloud-ml/gcp-vertex-ai.tsx,2026-11-09
+/learn/ai-ml/cloud-ml/mlops-on-cloud,lesson,ai-ml,AI & Machine Learning,ai,Cloud ML Platforms,89,live,true,true,5868,6,content/ai-ml/cloud-ml/mlops-on-cloud.tsx,2026-11-09
+/learn/ai-ml/ml-interview-prep,lesson,ai-ml,AI & Machine Learning,ai,Cloud ML Platforms,90,live,true,true,18082,6,app/learn/ai-ml/ml-interview-prep/page.tsx,2026-11-09
+/learn/ai-security,track-index,ai-security,AI Security & LLM Security,security,,,live,true,true,417,17,app/learn/ai-security/page.tsx,
+/learn/ai-security/ai-security-landscape,lesson,ai-security,AI Security & LLM Security,security,Threats to AI Systems,1,live,true,true,2012,5,content/ai-security/ai-security-landscape.tsx,2026-11-09
+/learn/ai-security/threat-modelling-ai-systems,lesson,ai-security,AI Security & LLM Security,security,Threats to AI Systems,2,live,true,true,1923,6,content/ai-security/threat-modelling-ai-systems.tsx,2026-11-09
+/learn/ai-security/prompt-injection-jailbreaks,lesson,ai-security,AI Security & LLM Security,security,Threats to AI Systems,3,live,true,true,1937,6,content/ai-security/prompt-injection-jailbreaks.tsx,2026-11-09
+/learn/ai-security/securing-rag-data-access,lesson,ai-security,AI Security & LLM Security,security,Securing AI Applications,4,live,true,true,1903,6,content/ai-security/securing-rag-data-access.tsx,2026-11-09
+/learn/ai-security/securing-tools-and-agents,lesson,ai-security,AI Security & LLM Security,security,Securing AI Applications,5,live,true,true,1846,6,content/ai-security/securing-tools-and-agents.tsx,2026-11-09
+/learn/ai-security/ai-privacy-output-handling,lesson,ai-security,AI Security & LLM Security,security,Securing AI Applications,6,live,true,true,1997,6,content/ai-security/ai-privacy-output-handling.tsx,2026-11-09
+/learn/ai-security/model-supply-chain-poisoning,lesson,ai-security,AI Security & LLM Security,security,Securing AI Applications,7,live,true,true,2228,6,content/ai-security/model-supply-chain-poisoning.tsx,2026-11-09
+/learn/ai-security/ai-red-teaming,lesson,ai-security,AI Security & LLM Security,security,"Testing, Monitoring & Governance",8,live,true,true,2236,5,content/ai-security/ai-red-teaming.tsx,2026-11-09
+/learn/ai-security/ai-security-monitoring-governance,lesson,ai-security,AI Security & LLM Security,security,"Testing, Monitoring & Governance",9,live,true,true,2107,5,content/ai-security/ai-security-monitoring-governance.tsx,2026-11-09
+/learn/ai-security/ai-security-interview-prep,lesson,ai-security,AI Security & LLM Security,security,"Testing, Monitoring & Governance",10,live,true,true,1939,4,content/ai-security/ai-security-interview-prep.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics,track-index,analytics-engineering-data-analytics,Data Analytics & Statistics,data,,,live,true,true,585,21,app/learn/analytics-engineering-data-analytics/page.tsx,
+/learn/analytics-engineering-data-analytics/spreadsheets-for-analysis,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Analyst Toolkit,1,live,true,true,2262,4,content/analytics-engineering-data-analytics/spreadsheets-for-analysis.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/sql-for-analytics,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Analyst Toolkit,2,live,true,true,2199,5,content/analytics-engineering-data-analytics/sql-for-analytics.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/python-for-analysts-pandas,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Analyst Toolkit,3,live,true,true,2135,5,content/analytics-engineering-data-analytics/python-for-analysts-pandas.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/exploratory-data-analysis,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Analyst Toolkit,4,live,true,true,2082,5,content/analytics-engineering-data-analytics/exploratory-data-analysis.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/descriptive-statistics,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Statistics for Data,5,live,true,true,2100,6,content/analytics-engineering-data-analytics/descriptive-statistics.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/sampling-confidence-intervals,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Statistics for Data,6,live,true,true,2048,6,content/analytics-engineering-data-analytics/sampling-confidence-intervals.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/hypothesis-testing,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Statistics for Data,7,live,true,true,2162,6,content/analytics-engineering-data-analytics/hypothesis-testing.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/correlation-and-regression,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Statistics for Data,8,live,true,true,2334,6,content/analytics-engineering-data-analytics/correlation-and-regression.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/metrics-and-kpis,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Metrics & Experiments,9,live,true,true,2099,6,content/analytics-engineering-data-analytics/metrics-and-kpis.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/ab-testing,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Metrics & Experiments,10,live,true,true,2079,6,content/analytics-engineering-data-analytics/ab-testing.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/funnel-cohort-retention,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Metrics & Experiments,11,live,true,true,2150,6,content/analytics-engineering-data-analytics/funnel-cohort-retention.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/dashboards-bi-tools,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,BI & Storytelling,12,live,true,true,2241,5,content/analytics-engineering-data-analytics/dashboards-bi-tools.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/bi-data-models-dax,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,BI & Storytelling,13,live,true,true,1933,5,content/analytics-engineering-data-analytics/bi-data-models-dax.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/data-storytelling,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,BI & Storytelling,14,live,true,true,2067,5,content/analytics-engineering-data-analytics/data-storytelling.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/analytics-case-study-churn,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Case Studies & Career,15,live,true,true,2187,5,content/analytics-engineering-data-analytics/analytics-case-study-churn.tsx,2026-11-09
+/learn/analytics-engineering-data-analytics/data-analyst-interview-prep,lesson,analytics-engineering-data-analytics,Data Analytics & Statistics,data,Case Studies & Career,16,live,true,true,2844,4,content/analytics-engineering-data-analytics/data-analyst-interview-prep.tsx,2026-11-09
+/learn/apache-kafka,track-index,apache-kafka,Apache Kafka,data,,,live,true,true,1048,35,app/learn/apache-kafka/page.tsx,
 /learn/apache-kafka/cheatsheet,tool,apache-kafka,Apache Kafka,data,,,live,true,true,1281,1,app/learn/apache-kafka/cheatsheet/page.tsx,
 /learn/apache-kafka/what-is-apache-kafka,lesson,apache-kafka,Apache Kafka,data,Kafka From Zero,1,live,true,true,9512,4,content/apache-kafka/what-is-apache-kafka.tsx,2026-09-11
 /learn/apache-kafka/events-topics-partitions,lesson,apache-kafka,Apache Kafka,data,Kafka From Zero,2,live,true,true,8896,5,content/apache-kafka/events-topics-partitions.tsx,2026-09-11
@@ -180,21 +208,23 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/apache-kafka/producer-design,lesson,apache-kafka,Apache Kafka,data,Building Kafka Applications,11,live,true,true,7852,6,content/apache-kafka/producer-design.tsx,2026-09-11
 /learn/apache-kafka/consumer-design,lesson,apache-kafka,Apache Kafka,data,Building Kafka Applications,12,live,true,true,8033,6,content/apache-kafka/consumer-design.tsx,2026-09-11
 /learn/apache-kafka/kafka-connect,lesson,apache-kafka,Apache Kafka,data,Building Kafka Applications,13,live,true,true,9741,6,content/apache-kafka/kafka-connect.tsx,2026-09-11
-/learn/apache-kafka/stream-processing-kafka-streams,lesson,apache-kafka,Apache Kafka,data,Building Kafka Applications,14,live,true,true,10334,6,content/apache-kafka/stream-processing-kafka-streams.tsx,2026-09-11
-/learn/apache-kafka/security-acls-sasl-tls,lesson,apache-kafka,Apache Kafka,data,"Operations, Security, and Scale",15,live,true,true,10393,6,content/apache-kafka/security-acls-sasl-tls.tsx,2026-09-11
-/learn/apache-kafka/monitoring-observability,lesson,apache-kafka,Apache Kafka,data,"Operations, Security, and Scale",16,live,true,true,10490,6,content/apache-kafka/monitoring-observability.tsx,2026-09-11
-/learn/apache-kafka/performance-tuning,lesson,apache-kafka,Apache Kafka,data,"Operations, Security, and Scale",17,live,true,true,10584,6,content/apache-kafka/performance-tuning.tsx,2026-09-11
-/learn/apache-kafka/scaling-capacity-planning,lesson,apache-kafka,Apache Kafka,data,"Operations, Security, and Scale",18,live,true,true,10338,6,content/apache-kafka/scaling-capacity-planning.tsx,2026-09-11
-/learn/apache-kafka/disaster-recovery-multi-region,lesson,apache-kafka,Apache Kafka,data,"Operations, Security, and Scale",19,live,true,true,10802,6,content/apache-kafka/disaster-recovery-multi-region.tsx,2026-09-11
-/learn/apache-kafka/event-driven-architecture,lesson,apache-kafka,Apache Kafka,data,Architecture and Real-World Practice,20,live,true,true,11052,6,content/apache-kafka/event-driven-architecture.tsx,2026-09-11
-/learn/apache-kafka/cdc-debezium,lesson,apache-kafka,Apache Kafka,data,Architecture and Real-World Practice,21,live,true,true,10261,6,content/apache-kafka/cdc-debezium.tsx,2026-09-11
-/learn/apache-kafka/managed-kafka-cloud,lesson,apache-kafka,Apache Kafka,data,Architecture and Real-World Practice,22,live,true,true,9904,6,content/apache-kafka/managed-kafka-cloud.tsx,2026-09-11
-/learn/apache-kafka/testing-debugging,lesson,apache-kafka,Apache Kafka,data,Architecture and Real-World Practice,23,live,true,true,9796,6,content/apache-kafka/testing-debugging.tsx,2026-09-11
-/learn/apache-kafka/kafka-interview-system-design,lesson,apache-kafka,Apache Kafka,data,Architecture and Real-World Practice,24,live,true,true,10013,5,content/apache-kafka/kafka-interview-system-design.tsx,2026-09-11
+/learn/apache-kafka/stream-processing-kafka-streams,lesson,apache-kafka,Apache Kafka,data,Building Kafka Applications,14,live,true,true,10331,6,content/apache-kafka/stream-processing-kafka-streams.tsx,2026-09-11
+/learn/apache-kafka/stream-processing-apache-flink,lesson,apache-kafka,Apache Kafka,data,Building Kafka Applications,15,live,true,true,1889,5,content/apache-kafka/stream-processing-apache-flink.tsx,2026-11-09
+/learn/apache-kafka/security-acls-sasl-tls,lesson,apache-kafka,Apache Kafka,data,"Operations, Security, and Scale",16,live,true,true,10393,7,content/apache-kafka/security-acls-sasl-tls.tsx,2026-11-09
+/learn/apache-kafka/monitoring-observability,lesson,apache-kafka,Apache Kafka,data,"Operations, Security, and Scale",17,live,true,true,10490,6,content/apache-kafka/monitoring-observability.tsx,2026-11-09
+/learn/apache-kafka/performance-tuning,lesson,apache-kafka,Apache Kafka,data,"Operations, Security, and Scale",18,live,true,true,10584,6,content/apache-kafka/performance-tuning.tsx,2026-11-09
+/learn/apache-kafka/scaling-capacity-planning,lesson,apache-kafka,Apache Kafka,data,"Operations, Security, and Scale",19,live,true,true,10338,6,content/apache-kafka/scaling-capacity-planning.tsx,2026-11-09
+/learn/apache-kafka/disaster-recovery-multi-region,lesson,apache-kafka,Apache Kafka,data,"Operations, Security, and Scale",20,live,true,true,10808,6,content/apache-kafka/disaster-recovery-multi-region.tsx,2026-11-09
+/learn/apache-kafka/kafka-without-zookeeper-kraft-mode,lesson,apache-kafka,Apache Kafka,data,"Operations, Security, and Scale",21,live,true,true,1710,5,content/apache-kafka/kafka-without-zookeeper-kraft-mode.tsx,2026-11-09
+/learn/apache-kafka/event-driven-architecture,lesson,apache-kafka,Apache Kafka,data,Architecture and Real-World Practice,22,live,true,true,11052,7,content/apache-kafka/event-driven-architecture.tsx,2026-11-09
+/learn/apache-kafka/cdc-debezium,lesson,apache-kafka,Apache Kafka,data,Architecture and Real-World Practice,23,live,true,true,10261,6,content/apache-kafka/cdc-debezium.tsx,2026-11-09
+/learn/apache-kafka/managed-kafka-cloud,lesson,apache-kafka,Apache Kafka,data,Architecture and Real-World Practice,24,live,true,true,9904,6,content/apache-kafka/managed-kafka-cloud.tsx,2026-11-09
+/learn/apache-kafka/testing-debugging,lesson,apache-kafka,Apache Kafka,data,Architecture and Real-World Practice,25,live,true,true,9796,6,content/apache-kafka/testing-debugging.tsx,2026-11-09
+/learn/apache-kafka/kafka-interview-system-design,lesson,apache-kafka,Apache Kafka,data,Architecture and Real-World Practice,26,live,true,true,10011,5,content/apache-kafka/kafka-interview-system-design.tsx,2026-11-09
 /learn/track-plan/application-security-devsecops,planned-track,application-security-devsecops,Application Security & DevSecOps,security,,,planned,true,true,802,5,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/business-intelligence,planned-track,business-intelligence,Business Intelligence & Analytics,data,,,planned,true,true,665,3,app/learn/track-plan/[slug]/page.tsx,
-/learn/cloud-data,track-index,cloud-data,Cloud Data Platforms,cloud,,,live,true,true,192,29,app/learn/cloud-data/page.tsx,
-/learn/aws/introduction,lesson,cloud-data,Cloud Data Platforms,cloud,AWS,101,live,true,true,1209,8,app/learn/aws/introduction/page.tsx,2026-03-11
+/learn/cloud-data,track-index,cloud-data,Cloud Data Platforms,cloud,,,live,true,true,302,33,app/learn/cloud-data/page.tsx,
+/learn/cloud-data/choosing-a-cloud,lesson,cloud-data,Cloud Data Platforms,cloud,Course Introduction,0,live,true,true,1053,3,app/learn/cloud-data/choosing-a-cloud/page.tsx,2026-11-09
+/learn/aws/introduction,lesson,cloud-data,Cloud Data Platforms,cloud,AWS,101,live,true,true,1213,8,app/learn/aws/introduction/page.tsx,2026-03-11
 /learn/aws/s3,lesson,cloud-data,Cloud Data Platforms,cloud,AWS,102,live,true,true,1052,7,app/learn/aws/s3/page.tsx,2026-03-11
 /learn/aws/glue,lesson,cloud-data,Cloud Data Platforms,cloud,AWS,103,live,true,true,1169,8,app/learn/aws/glue/page.tsx,2026-03-11
 /learn/aws/redshift,lesson,cloud-data,Cloud Data Platforms,cloud,AWS,104,live,true,true,1198,9,app/learn/aws/redshift/page.tsx,2026-03-11
@@ -203,7 +233,7 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/aws/emr,lesson,cloud-data,Cloud Data Platforms,cloud,AWS,107,live,true,true,1096,7,app/learn/aws/emr/page.tsx,2026-03-11
 /learn/aws/step-functions,lesson,cloud-data,Cloud Data Platforms,cloud,AWS,108,live,true,true,1199,7,app/learn/aws/step-functions/page.tsx,2026-03-11
 /learn/aws/lake-formation,lesson,cloud-data,Cloud Data Platforms,cloud,AWS,109,live,true,true,1370,7,app/learn/aws/lake-formation/page.tsx,2026-03-11
-/learn/azure/introduction,lesson,cloud-data,Cloud Data Platforms,cloud,Microsoft Azure,201,live,true,true,2007,9,app/learn/azure/introduction/page.tsx,2026-04-27
+/learn/azure/introduction,lesson,cloud-data,Cloud Data Platforms,cloud,Microsoft Azure,201,live,true,true,2007,8,app/learn/azure/introduction/page.tsx,2026-04-27
 /learn/azure/adls-gen2,lesson,cloud-data,Cloud Data Platforms,cloud,Microsoft Azure,202,live,true,true,1153,5,app/learn/azure/adls-gen2/page.tsx,2026-11-09
 /learn/azure/adf,lesson,cloud-data,Cloud Data Platforms,cloud,Microsoft Azure,203,live,true,true,1358,6,app/learn/azure/adf/page.tsx,2026-03-11
 /learn/azure/databricks,lesson,cloud-data,Cloud Data Platforms,cloud,Microsoft Azure,204,live,true,true,1556,9,app/learn/azure/databricks/page.tsx,2026-03-11
@@ -215,8 +245,12 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/gcp/bigquery,lesson,cloud-data,Cloud Data Platforms,cloud,Google Cloud,302,live,true,true,1194,6,app/learn/gcp/bigquery/page.tsx,2026-03-11
 /learn/gcp/dataflow,lesson,cloud-data,Cloud Data Platforms,cloud,Google Cloud,303,live,true,true,975,6,app/learn/gcp/dataflow/page.tsx,2026-03-11
 /learn/gcp/pubsub,lesson,cloud-data,Cloud Data Platforms,cloud,Google Cloud,304,live,true,true,943,7,app/learn/gcp/pubsub/page.tsx,2026-03-11
-/learn/gcp/composer,lesson,cloud-data,Cloud Data Platforms,cloud,Google Cloud,305,live,true,true,1142,6,app/learn/gcp/composer/page.tsx,2026-03-11
-/learn/cybersecurity,track-index,cybersecurity,Cybersecurity,security,,,live,true,true,2457,51,app/learn/cybersecurity/page.tsx,
+/learn/gcp/composer,lesson,cloud-data,Cloud Data Platforms,cloud,Google Cloud,305,live,true,true,1137,7,app/learn/gcp/composer/page.tsx,2026-03-11
+/learn/gcp/gcs-dataproc,lesson,cloud-data,Cloud Data Platforms,cloud,Google Cloud,306,live,true,true,974,4,app/learn/gcp/gcs-dataproc/page.tsx,2026-11-09
+/learn/cloud-data/databricks-unity-catalog,lesson,cloud-data,Cloud Data Platforms,cloud,Platform-neutral Tools,400,live,true,true,1077,4,app/learn/cloud-data/databricks-unity-catalog/page.tsx,2026-11-09
+/learn/cloud-data/iam-networking,lesson,cloud-data,Cloud Data Platforms,cloud,Cross-cloud Foundations,401,live,true,true,1056,4,app/learn/cloud-data/iam-networking/page.tsx,2026-11-09
+/learn/cloud-data/interview-prep,lesson,cloud-data,Cloud Data Platforms,cloud,Career Preparation,402,live,true,true,1793,3,app/learn/cloud-data/interview-prep/page.tsx,2026-11-09
+/learn/cybersecurity,track-index,cybersecurity,Cybersecurity,security,,,live,true,true,2621,56,app/learn/cybersecurity/page.tsx,
 /learn/cybersecurity/cheatsheet,tool,cybersecurity,Cybersecurity,security,,,live,true,true,1315,1,app/learn/cybersecurity/cheatsheet/page.tsx,
 /learn/cybersecurity/what-is-cybersecurity,lesson,cybersecurity,Cybersecurity,security,What Even Is This?,1,live,true,true,4935,5,content/cybersecurity/what-is-cybersecurity.tsx,2026-05-11
 /learn/cybersecurity/how-the-internet-works,lesson,cybersecurity,Cybersecurity,security,What Even Is This?,2,live,true,true,6636,6,content/cybersecurity/how-the-internet-works.tsx,2026-05-11
@@ -251,24 +285,23 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/cybersecurity/siem-log-analysis,lesson,cybersecurity,Cybersecurity,security,Defensive Security,31,live,true,true,3380,5,content/cybersecurity/siem-log-analysis.tsx,2026-05-11
 /learn/cybersecurity/vulnerability-management,lesson,cybersecurity,Cybersecurity,security,Defensive Security,32,live,true,true,4811,5,content/cybersecurity/vulnerability-management.tsx,2026-05-11
 /learn/cybersecurity/incident-response,lesson,cybersecurity,Cybersecurity,security,Defensive Security,33,live,true,true,5334,5,content/cybersecurity/incident-response.tsx,2026-09-10
-/learn/cybersecurity/threat-intelligence-hunting,lesson,cybersecurity,Cybersecurity,security,Defensive Security,34,live,true,true,4415,5,content/cybersecurity/threat-intelligence-hunting.tsx,2026-05-11
-/learn/cybersecurity/devsecops,lesson,cybersecurity,Cybersecurity,security,Career & Production,35,live,true,true,4398,5,content/cybersecurity/devsecops.tsx,2026-11-09
-/learn/cybersecurity/compliance-frameworks,lesson,cybersecurity,Cybersecurity,security,Career & Production,36,live,true,true,5253,5,content/cybersecurity/compliance-frameworks.tsx,2026-09-10
-/learn/cybersecurity/security-certifications,lesson,cybersecurity,Cybersecurity,security,Career & Production,37,live,true,true,4132,5,content/cybersecurity/security-certifications.tsx,2026-11-09
-/learn/cybersecurity/bug-bounty-hunting,lesson,cybersecurity,Cybersecurity,security,Career & Production,38,live,true,true,4454,5,content/cybersecurity/bug-bounty-hunting.tsx,2026-05-11
-/learn/cybersecurity/home-lab-setup,lesson,cybersecurity,Cybersecurity,security,Career & Production,39,live,true,true,4030,5,content/cybersecurity/home-lab-setup.tsx,2026-05-11
-/learn/cybersecurity/interview-prep-security,lesson,cybersecurity,Cybersecurity,security,Career & Production,40,live,true,true,5300,6,content/cybersecurity/interview-prep-security.tsx,2026-09-10
-/learn/cybersecurity/soc-alert-triage,lesson,cybersecurity,Cybersecurity,security,Defensive Security,41,live,true,true,1235,5,content/cybersecurity/soc-alert-triage.tsx,2026-11-09
-/learn/cybersecurity/wireshark-packet-analysis,lesson,cybersecurity,Cybersecurity,security,Defensive Security,42,live,true,true,1058,5,content/cybersecurity/wireshark-packet-analysis.tsx,2026-11-09
-/learn/cybersecurity/digital-forensics-basics,lesson,cybersecurity,Cybersecurity,security,Defensive Security,43,live,true,true,1207,4,content/cybersecurity/digital-forensics-basics.tsx,2026-11-09
-/learn/what-is-data-engineering,lesson,data-engineering,Data Engineering,data,Data Engineering Foundations,-4,live,true,true,1488,4,app/learn/what-is-data-engineering/page.tsx,2026-08-14
-/learn/foundations/sql,lesson,data-engineering,Data Engineering,data,Data Engineering Foundations,-3,live,true,true,1557,4,app/learn/foundations/sql/page.tsx,2026-03-11
-/learn/foundations/postgresql,lesson,data-engineering,Data Engineering,data,Data Engineering Foundations,-2,live,true,true,2631,4,app/learn/foundations/postgresql/page.tsx,2026-08-14
-/learn/data-engineering,track-index,data-engineering,Data Engineering,data,,,live,true,true,2731,64,app/learn/data-engineering/page.tsx,
+/learn/cybersecurity/threat-intelligence-hunting,lesson,cybersecurity,Cybersecurity,security,Defensive Security,34,live,true,true,4398,5,content/cybersecurity/threat-intelligence-hunting.tsx,2026-11-09
+/learn/cybersecurity/soc-alert-triage,lesson,cybersecurity,Cybersecurity,security,Defensive Security,35,live,true,true,1232,5,content/cybersecurity/soc-alert-triage.tsx,2026-11-09
+/learn/cybersecurity/wireshark-packet-analysis,lesson,cybersecurity,Cybersecurity,security,Defensive Security,36,live,true,true,1058,5,content/cybersecurity/wireshark-packet-analysis.tsx,2026-11-09
+/learn/cybersecurity/digital-forensics-basics,lesson,cybersecurity,Cybersecurity,security,Defensive Security,37,live,true,true,1239,5,content/cybersecurity/digital-forensics-basics.tsx,2026-11-09
+/learn/cybersecurity/ai-llm-security-basics,lesson,cybersecurity,Cybersecurity,security,Defensive Security,38,live,true,true,1930,5,content/cybersecurity/ai-llm-security-basics.tsx,2026-11-09
+/learn/cybersecurity/mobile-application-security,lesson,cybersecurity,Cybersecurity,security,Defensive Security,39,live,true,true,2094,5,content/cybersecurity/mobile-application-security.tsx,2026-11-09
+/learn/cybersecurity/malware-analysis-fundamentals,lesson,cybersecurity,Cybersecurity,security,Defensive Security,40,live,true,true,2047,5,content/cybersecurity/malware-analysis-fundamentals.tsx,2026-11-09
+/learn/cybersecurity/devsecops,lesson,cybersecurity,Cybersecurity,security,Career & Production,41,live,true,true,4399,5,content/cybersecurity/devsecops.tsx,2026-11-09
+/learn/cybersecurity/compliance-frameworks,lesson,cybersecurity,Cybersecurity,security,Career & Production,42,live,true,true,5253,5,content/cybersecurity/compliance-frameworks.tsx,2026-11-09
+/learn/cybersecurity/security-certifications,lesson,cybersecurity,Cybersecurity,security,Career & Production,43,live,true,true,4132,5,content/cybersecurity/security-certifications.tsx,2026-11-09
+/learn/cybersecurity/bug-bounty-hunting,lesson,cybersecurity,Cybersecurity,security,Career & Production,44,live,true,true,4454,5,content/cybersecurity/bug-bounty-hunting.tsx,2026-11-09
+/learn/cybersecurity/home-lab-setup,lesson,cybersecurity,Cybersecurity,security,Career & Production,45,live,true,true,4030,5,content/cybersecurity/home-lab-setup.tsx,2026-11-09
+/learn/cybersecurity/interview-prep-security,lesson,cybersecurity,Cybersecurity,security,Career & Production,46,live,true,true,5299,5,content/cybersecurity/interview-prep-security.tsx,2026-11-09
+/learn/data-engineering,track-index,data-engineering,Data Engineering,data,,,live,true,true,2924,67,app/learn/data-engineering/page.tsx,
 /learn/data-engineering/cheatsheet,tool,data-engineering,Data Engineering,data,,,live,true,true,624,1,app/learn/data-engineering/cheatsheet/page.tsx,
-/learn/foundations/python,lesson,data-engineering,Data Engineering,data,Data Engineering Foundations,-1,live,true,true,1163,5,app/learn/foundations/python/page.tsx,2026-03-11
-/learn/data-engineering/what-is-data,lesson,data-engineering,Data Engineering,data,What Even Is This?,1,live,true,true,8276,5,content/data-engineering/what-is-data.tsx,2026-11-08
-/learn/data-engineering/what-is-data-engineering,lesson,data-engineering,Data Engineering,data,What Even Is This?,2,live,true,true,7662,5,content/data-engineering/what-is-data-engineering.tsx,2026-11-09
+/learn/data-engineering/what-is-data,lesson,data-engineering,Data Engineering,data,What Even Is This?,1,live,true,true,8276,4,content/data-engineering/what-is-data.tsx,2026-11-08
+/learn/data-engineering/what-is-data-engineering,lesson,data-engineering,Data Engineering,data,What Even Is This?,2,live,true,true,7856,5,content/data-engineering/what-is-data-engineering.tsx,2026-11-09
 /learn/data-engineering/how-data-moves,lesson,data-engineering,Data Engineering,data,What Even Is This?,3,live,true,true,7882,6,content/data-engineering/how-data-moves.tsx,2026-11-09
 /learn/data-engineering/de-ecosystem,lesson,data-engineering,Data Engineering,data,What Even Is This?,4,live,true,true,8272,6,content/data-engineering/de-ecosystem.tsx,2026-11-09
 /learn/data-engineering/de-vs-other-roles,lesson,data-engineering,Data Engineering,data,What Even Is This?,5,live,true,true,7946,7,content/data-engineering/de-vs-other-roles.tsx,2026-11-08
@@ -280,44 +313,50 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/data-engineering/warehouse-lake-lakehouse,lesson,data-engineering,Data Engineering,data,Data Fundamentals,11,live,true,true,8275,7,content/data-engineering/warehouse-lake-lakehouse.tsx,2026-11-08
 /learn/data-engineering/schemas-tables-keys,lesson,data-engineering,Data Engineering,data,Data Fundamentals,12,live,true,true,9627,7,content/data-engineering/schemas-tables-keys.tsx,2026-11-08
 /learn/data-engineering/acid-transactions,lesson,data-engineering,Data Engineering,data,Data Fundamentals,13,live,true,true,8742,7,content/data-engineering/acid-transactions.tsx,2026-11-09
-/learn/data-engineering/python-for-de,lesson,data-engineering,Data Engineering,data,Core Engineering Skills,14,live,true,true,7854,6,content/data-engineering/python-for-de.tsx,2026-11-08
-/learn/data-engineering/sql-for-de,lesson,data-engineering,Data Engineering,data,Core Engineering Skills,15,live,true,true,9368,7,content/data-engineering/sql-for-de.tsx,2026-11-08
-/learn/data-engineering/linux-shell,lesson,data-engineering,Data Engineering,data,Core Engineering Skills,16,live,true,true,8996,6,content/data-engineering/linux-shell.tsx,2026-11-09
+/learn/data-engineering/python-for-de,lesson,data-engineering,Data Engineering,data,Core Engineering Skills,14,live,true,true,7967,6,content/data-engineering/python-for-de.tsx,2026-11-08
+/learn/data-engineering/sql-for-de,lesson,data-engineering,Data Engineering,data,Core Engineering Skills,15,live,true,true,9536,7,content/data-engineering/sql-for-de.tsx,2026-11-08
+/learn/foundations/postgresql,lesson,data-engineering,Data Engineering,data,Core Engineering Skills,15.5,live,true,true,2628,5,app/learn/foundations/postgresql/page.tsx,2026-08-14
+/learn/data-engineering/linux-shell,lesson,data-engineering,Data Engineering,data,Core Engineering Skills,16,live,true,true,8993,7,content/data-engineering/linux-shell.tsx,2026-11-09
 /learn/data-engineering/git-for-data,lesson,data-engineering,Data Engineering,data,Core Engineering Skills,17,live,true,true,8709,7,content/data-engineering/git-for-data.tsx,2026-11-09
 /learn/data-engineering/working-with-apis,lesson,data-engineering,Data Engineering,data,Core Engineering Skills,18,live,true,true,7669,8,content/data-engineering/working-with-apis.tsx,2026-11-09
 /learn/data-engineering/files-at-scale,lesson,data-engineering,Data Engineering,data,Core Engineering Skills,19,live,true,true,8189,7,content/data-engineering/files-at-scale.tsx,2026-11-09
-/learn/data-engineering/what-is-a-pipeline,lesson,data-engineering,Data Engineering,data,How Data Moves,20,live,true,true,7830,7,content/data-engineering/what-is-a-pipeline.tsx,2026-11-08
-/learn/data-engineering/batch-vs-streaming,lesson,data-engineering,Data Engineering,data,How Data Moves,21,live,true,true,7868,6,content/data-engineering/batch-vs-streaming.tsx,2026-11-08
-/learn/data-engineering/etl-vs-elt,lesson,data-engineering,Data Engineering,data,How Data Moves,22,live,true,true,8026,6,content/data-engineering/etl-vs-elt.tsx,2026-11-09
-/learn/data-engineering/ingestion-patterns,lesson,data-engineering,Data Engineering,data,How Data Moves,23,live,true,true,6621,6,content/data-engineering/ingestion-patterns.tsx,2026-11-08
-/learn/data-engineering/change-data-capture,lesson,data-engineering,Data Engineering,data,How Data Moves,24,live,true,true,9615,6,content/data-engineering/change-data-capture.tsx,2026-11-09
-/learn/data-engineering/batch-pipeline-from-scratch,lesson,data-engineering,Data Engineering,data,How Data Moves,25,live,true,true,9057,9,content/data-engineering/batch-pipeline-from-scratch.tsx,2026-11-09
-/learn/data-engineering/idempotency-atomicity,lesson,data-engineering,Data Engineering,data,How Data Moves,26,live,true,true,7286,10,content/data-engineering/idempotency-atomicity.tsx,2026-11-08
-/learn/data-engineering/error-handling-retries,lesson,data-engineering,Data Engineering,data,How Data Moves,27,live,true,true,8062,7,content/data-engineering/error-handling-retries.tsx,2026-11-08
-/learn/data-engineering/pipeline-orchestration,lesson,data-engineering,Data Engineering,data,How Data Moves,28,live,true,true,7589,6,content/data-engineering/pipeline-orchestration.tsx,2026-11-09
-/learn/data-engineering/data-lake-architecture,lesson,data-engineering,Data Engineering,data,Storage & Architecture,29,live,true,true,8961,7,content/data-engineering/data-lake-architecture.tsx,2026-11-09
-/learn/data-engineering/medallion-architecture,lesson,data-engineering,Data Engineering,data,Storage & Architecture,30,live,true,true,8352,8,content/data-engineering/medallion-architecture.tsx,2026-11-09
-/learn/data-engineering/warehouse-concepts,lesson,data-engineering,Data Engineering,data,Storage & Architecture,31,live,true,true,9110,9,content/data-engineering/warehouse-concepts.tsx,2026-11-08
-/learn/data-engineering/lakehouse-architecture,lesson,data-engineering,Data Engineering,data,Storage & Architecture,32,live,true,true,8809,10,content/data-engineering/lakehouse-architecture.tsx,2026-11-09
-/learn/data-engineering/data-modelling,lesson,data-engineering,Data Engineering,data,Storage & Architecture,33,live,true,true,7119,9,content/data-engineering/data-modelling.tsx,2026-11-08
-/learn/data-engineering/slowly-changing-dimensions,lesson,data-engineering,Data Engineering,data,Storage & Architecture,34,live,true,true,9570,7,content/data-engineering/slowly-changing-dimensions.tsx,2026-11-08
-/learn/data-engineering/data-vault,lesson,data-engineering,Data Engineering,data,Storage & Architecture,35,live,true,true,7204,8,content/data-engineering/data-vault.tsx,2026-11-09
-/learn/data-engineering/data-quality,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",36,live,true,true,7175,8,content/data-engineering/data-quality.tsx,2026-11-09
-/learn/data-engineering/monitoring-observability,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",37,live,true,true,7170,8,content/data-engineering/monitoring-observability.tsx,2026-11-09
-/learn/data-engineering/data-governance,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",38,live,true,true,8320,8,content/data-engineering/data-governance.tsx,2026-11-08
-/learn/data-engineering/security-compliance,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",39,live,true,true,6403,7,content/data-engineering/security-compliance.tsx,2026-11-08
-/learn/data-engineering/streaming-data,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",40,live,true,true,9235,8,content/data-engineering/streaming-data.tsx,2026-11-09
-/learn/data-engineering/message-brokers-queues,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",41,live,true,true,8656,7,content/data-engineering/message-brokers-queues.tsx,2026-11-09
-/learn/data-engineering/distributed-systems,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",42,live,true,true,9858,7,content/data-engineering/distributed-systems.tsx,2026-11-09
-/learn/data-engineering/performance-tuning,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",43,live,true,true,8830,6,content/data-engineering/performance-tuning.tsx,2026-11-08
-/learn/data-engineering/cicd-pipelines,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",44,live,true,true,7447,6,content/data-engineering/cicd-pipelines.tsx,2026-11-09
-/learn/data-engineering/infrastructure-as-code,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",45,live,true,true,6807,7,content/data-engineering/infrastructure-as-code.tsx,2026-11-08
-/learn/data-engineering/system-design-de,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",46,live,true,true,9895,7,content/data-engineering/system-design-de.tsx,2026-11-09
-/learn/data-engineering/de-interview-questions,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",47,live,true,true,16177,7,content/data-engineering/de-interview-questions.tsx,2026-11-09
-/learn/data-engineering/spark-fundamentals-pyspark,lesson,data-engineering,Data Engineering,data,"Spark, Airflow & Lakehouse Tables",48,live,true,true,2691,5,content/data-engineering/spark-fundamentals-pyspark.tsx,2026-11-09
-/learn/data-engineering/spark-performance-tuning,lesson,data-engineering,Data Engineering,data,"Spark, Airflow & Lakehouse Tables",49,live,true,true,2743,5,content/data-engineering/spark-performance-tuning.tsx,2026-11-09
-/learn/data-engineering/airflow-orchestration,lesson,data-engineering,Data Engineering,data,"Spark, Airflow & Lakehouse Tables",50,live,true,true,2643,5,content/data-engineering/airflow-orchestration.tsx,2026-11-09
-/learn/data-engineering/delta-iceberg-table-formats,lesson,data-engineering,Data Engineering,data,"Spark, Airflow & Lakehouse Tables",51,live,true,true,2950,4,content/data-engineering/delta-iceberg-table-formats.tsx,2026-11-09
+/learn/data-engineering/what-is-a-pipeline,lesson,data-engineering,Data Engineering,data,How Data Moves,20,live,true,true,7830,7,content/data-engineering/what-is-a-pipeline.tsx,2026-11-09
+/learn/data-engineering/batch-vs-streaming,lesson,data-engineering,Data Engineering,data,How Data Moves,21,live,true,true,7868,6,content/data-engineering/batch-vs-streaming.tsx,2026-11-09
+/learn/data-engineering/streaming-data,lesson,data-engineering,Data Engineering,data,How Data Moves,22,live,true,true,9234,7,content/data-engineering/streaming-data.tsx,2026-11-09
+/learn/data-engineering/message-brokers-queues,lesson,data-engineering,Data Engineering,data,How Data Moves,23,live,true,true,8660,7,content/data-engineering/message-brokers-queues.tsx,2026-11-09
+/learn/data-engineering/stream-processing-spark-flink,lesson,data-engineering,Data Engineering,data,How Data Moves,24,live,true,true,2000,5,content/data-engineering/stream-processing-spark-flink.tsx,2026-11-09
+/learn/data-engineering/etl-vs-elt,lesson,data-engineering,Data Engineering,data,How Data Moves,25,live,true,true,8028,7,content/data-engineering/etl-vs-elt.tsx,2026-11-09
+/learn/data-engineering/ingestion-patterns,lesson,data-engineering,Data Engineering,data,How Data Moves,26,live,true,true,6621,6,content/data-engineering/ingestion-patterns.tsx,2026-11-09
+/learn/data-engineering/change-data-capture,lesson,data-engineering,Data Engineering,data,How Data Moves,27,live,true,true,9615,6,content/data-engineering/change-data-capture.tsx,2026-11-09
+/learn/data-engineering/batch-pipeline-from-scratch,lesson,data-engineering,Data Engineering,data,How Data Moves,28,live,true,true,9057,9,content/data-engineering/batch-pipeline-from-scratch.tsx,2026-11-09
+/learn/data-engineering/idempotency-atomicity,lesson,data-engineering,Data Engineering,data,How Data Moves,29,live,true,true,7286,10,content/data-engineering/idempotency-atomicity.tsx,2026-11-09
+/learn/data-engineering/error-handling-retries,lesson,data-engineering,Data Engineering,data,How Data Moves,30,live,true,true,8062,7,content/data-engineering/error-handling-retries.tsx,2026-11-09
+/learn/data-engineering/pipeline-orchestration,lesson,data-engineering,Data Engineering,data,How Data Moves,31,live,true,true,7589,6,content/data-engineering/pipeline-orchestration.tsx,2026-11-09
+/learn/data-engineering/data-lake-architecture,lesson,data-engineering,Data Engineering,data,Storage & Architecture,32,live,true,true,8961,7,content/data-engineering/data-lake-architecture.tsx,2026-11-09
+/learn/data-engineering/medallion-architecture,lesson,data-engineering,Data Engineering,data,Storage & Architecture,33,live,true,true,8352,8,content/data-engineering/medallion-architecture.tsx,2026-11-09
+/learn/data-engineering/warehouse-concepts,lesson,data-engineering,Data Engineering,data,Storage & Architecture,34,live,true,true,9110,9,content/data-engineering/warehouse-concepts.tsx,2026-11-09
+/learn/data-engineering/lakehouse-architecture,lesson,data-engineering,Data Engineering,data,Storage & Architecture,35,live,true,true,8811,10,content/data-engineering/lakehouse-architecture.tsx,2026-11-09
+/learn/data-engineering/nosql-stores-data-engineers,lesson,data-engineering,Data Engineering,data,Storage & Architecture,36,live,true,true,1747,6,content/data-engineering/nosql-stores-data-engineers.tsx,2026-11-09
+/learn/data-engineering/data-modelling,lesson,data-engineering,Data Engineering,data,Storage & Architecture,37,live,true,true,7118,9,content/data-engineering/data-modelling.tsx,2026-11-09
+/learn/data-engineering/slowly-changing-dimensions,lesson,data-engineering,Data Engineering,data,Storage & Architecture,38,live,true,true,9570,7,content/data-engineering/slowly-changing-dimensions.tsx,2026-11-09
+/learn/data-engineering/data-vault,lesson,data-engineering,Data Engineering,data,Storage & Architecture,39,live,true,true,7204,8,content/data-engineering/data-vault.tsx,2026-11-09
+/learn/data-engineering/data-quality,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",40,live,true,true,7163,8,content/data-engineering/data-quality.tsx,2026-11-09
+/learn/data-engineering/data-contracts-schema-evolution,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",41,live,true,true,1690,5,content/data-engineering/data-contracts-schema-evolution.tsx,2026-11-09
+/learn/data-engineering/monitoring-observability,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",42,live,true,true,7169,8,content/data-engineering/monitoring-observability.tsx,2026-11-09
+/learn/data-engineering/data-governance,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",43,live,true,true,8320,8,content/data-engineering/data-governance.tsx,2026-11-09
+/learn/data-engineering/security-compliance,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",44,live,true,true,6395,7,content/data-engineering/security-compliance.tsx,2026-11-09
+/learn/data-engineering/distributed-systems,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",45,live,true,true,9858,8,content/data-engineering/distributed-systems.tsx,2026-11-09
+/learn/data-engineering/performance-tuning,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",46,live,true,true,8830,6,content/data-engineering/performance-tuning.tsx,2026-11-09
+/learn/data-engineering/cicd-pipelines,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",47,live,true,true,7447,6,content/data-engineering/cicd-pipelines.tsx,2026-11-09
+/learn/data-engineering/infrastructure-as-code,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",48,live,true,true,6809,7,content/data-engineering/infrastructure-as-code.tsx,2026-11-09
+/learn/data-engineering/reverse-etl-operational-analytics,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",49,live,true,true,1716,5,content/data-engineering/reverse-etl-operational-analytics.tsx,2026-11-09
+/learn/data-engineering/spark-fundamentals-pyspark,lesson,data-engineering,Data Engineering,data,"Spark, Airflow & Lakehouse Tables",50,live,true,true,2691,5,content/data-engineering/spark-fundamentals-pyspark.tsx,2026-11-09
+/learn/data-engineering/spark-performance-tuning,lesson,data-engineering,Data Engineering,data,"Spark, Airflow & Lakehouse Tables",51,live,true,true,2743,5,content/data-engineering/spark-performance-tuning.tsx,2026-11-09
+/learn/data-engineering/airflow-orchestration,lesson,data-engineering,Data Engineering,data,"Spark, Airflow & Lakehouse Tables",52,live,true,true,2643,5,content/data-engineering/airflow-orchestration.tsx,2026-11-09
+/learn/data-engineering/delta-iceberg-table-formats,lesson,data-engineering,Data Engineering,data,"Spark, Airflow & Lakehouse Tables",53,live,true,true,2953,5,content/data-engineering/delta-iceberg-table-formats.tsx,2026-11-09
+/learn/data-engineering/data-engineering-capstone,lesson,data-engineering,Data Engineering,data,"Spark, Airflow & Lakehouse Tables",54,live,true,true,2038,5,content/data-engineering/data-engineering-capstone.tsx,2026-11-09
+/learn/data-engineering/system-design-de,lesson,data-engineering,Data Engineering,data,"Spark, Airflow & Lakehouse Tables",55,live,true,true,9899,7,content/data-engineering/system-design-de.tsx,2026-11-09
+/learn/data-engineering/de-interview-questions,lesson,data-engineering,Data Engineering,data,"Spark, Airflow & Lakehouse Tables",56,live,true,true,16183,5,content/data-engineering/de-interview-questions.tsx,2026-11-09
 /learn/data-science,track-index,data-science,Data Science,ai,,,hidden,false,true,2302,4,app/learn/data-science/page.tsx,
 /learn/data-science/cheatsheet,tool,data-science,Data Science,ai,,,hidden,false,true,1225,1,app/learn/data-science/cheatsheet/page.tsx,
 /learn/data-science/what-is-data-science,lesson,data-science,Data Science,ai,Data Science Foundations,1,hidden,false,true,4493,2,content/data-science/what-is-data-science.tsx,2026-07-11
@@ -373,7 +412,7 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/data-science/cohort-and-retention-analysis,lesson,data-science,Data Science,ai,Real-World Case Studies and Career,51,soon,false,false,0,0,,
 /learn/data-science/data-science-interview-questions,lesson,data-science,Data Science,ai,Real-World Case Studies and Career,52,soon,false,false,0,0,,
 /learn/data-science/building-your-portfolio-project,lesson,data-science,Data Science,ai,Real-World Case Studies and Career,53,soon,false,false,0,0,,
-/learn/dbms,track-index,dbms,DBMS,cs,,,live,true,true,1283,27,app/learn/dbms/page.tsx,
+/learn/dbms,track-index,dbms,DBMS,cs,,,live,true,true,1395,30,app/learn/dbms/page.tsx,
 /learn/dbms/cheatsheet,tool,dbms,DBMS,cs,,,live,true,true,951,1,app/learn/dbms/cheatsheet/page.tsx,
 /learn/dbms/introduction,lesson,dbms,DBMS,cs,Foundations,1,live,true,true,8058,5,app/learn/dbms/introduction/page.tsx,2026-08-14
 /learn/dbms/data-models,lesson,dbms,DBMS,cs,Foundations,2,live,true,true,10074,6,app/learn/dbms/data-models/page.tsx,2026-08-14
@@ -384,18 +423,20 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/dbms/sql-complete,lesson,dbms,DBMS,cs,Design & SQL,7,live,true,true,10849,8,app/learn/dbms/sql-complete/page.tsx,2026-08-14
 /learn/dbms/indexes,lesson,dbms,DBMS,cs,Design & SQL,8,live,true,true,7956,8,app/learn/dbms/indexes/page.tsx,2026-08-14
 /learn/dbms/transactions,lesson,dbms,DBMS,cs,Internals,9,live,true,true,7752,7,app/learn/dbms/transactions/page.tsx,2026-08-14
-/learn/dbms/concurrency-control,lesson,dbms,DBMS,cs,Internals,10,live,true,true,8272,6,app/learn/dbms/concurrency-control/page.tsx,2026-08-14
-/learn/dbms/query-processing,lesson,dbms,DBMS,cs,Internals,11,live,true,true,7101,6,app/learn/dbms/query-processing/page.tsx,2026-04-27
-/learn/dbms/storage-file-organization,lesson,dbms,DBMS,cs,Internals,12,live,true,true,6970,6,app/learn/dbms/storage-file-organization/page.tsx,2026-08-14
-/learn/dbms/hashing-btrees,lesson,dbms,DBMS,cs,Advanced Theory,13,live,true,true,7552,7,app/learn/dbms/hashing-btrees/page.tsx,2026-10-08
-/learn/dbms/relational-algebra,lesson,dbms,DBMS,cs,Advanced Theory,14,live,true,true,7327,7,app/learn/dbms/relational-algebra/page.tsx,2026-08-14
-/learn/dbms/views-procedures-triggers,lesson,dbms,DBMS,cs,Advanced Theory,15,live,true,true,6678,7,app/learn/dbms/views-procedures-triggers/page.tsx,2026-08-14
-/learn/dbms/crash-recovery,lesson,dbms,DBMS,cs,Advanced Theory,16,live,true,true,6740,7,app/learn/dbms/crash-recovery/page.tsx,2026-03-17
-/learn/dbms/distributed-databases,lesson,dbms,DBMS,cs,Distributed & Interview,17,live,true,true,7745,6,app/learn/dbms/distributed-databases/page.tsx,2026-08-14
-/learn/dbms/nosql-databases,lesson,dbms,DBMS,cs,Distributed & Interview,18,live,true,true,6981,7,app/learn/dbms/nosql-databases/page.tsx,2026-08-14
-/learn/dbms/database-security,lesson,dbms,DBMS,cs,Distributed & Interview,19,live,true,true,6668,6,app/learn/dbms/database-security/page.tsx,2026-08-14
-/learn/dbms/interview-questions,lesson,dbms,DBMS,cs,Distributed & Interview,20,live,true,true,12893,5,app/learn/dbms/interview-questions/page.tsx,2026-08-14
-/learn/dbt,track-index,dbt,dbt,data,,,live,true,true,952,31,app/learn/dbt/page.tsx,
+/learn/dbms/concurrency-control,lesson,dbms,DBMS,cs,Internals,10,live,true,true,8282,6,app/learn/dbms/concurrency-control/page.tsx,2026-08-14
+/learn/dbms/mvcc-postgresql,lesson,dbms,DBMS,cs,Internals,11,live,true,true,2935,5,app/learn/dbms/mvcc-postgresql/page.tsx,2026-11-09
+/learn/dbms/query-processing,lesson,dbms,DBMS,cs,Internals,12,live,true,true,7107,6,app/learn/dbms/query-processing/page.tsx,2026-04-27
+/learn/dbms/storage-file-organization,lesson,dbms,DBMS,cs,Internals,13,live,true,true,6970,6,app/learn/dbms/storage-file-organization/page.tsx,2026-08-14
+/learn/dbms/hashing-btrees,lesson,dbms,DBMS,cs,Advanced Theory,14,live,true,true,7552,7,app/learn/dbms/hashing-btrees/page.tsx,2026-10-08
+/learn/dbms/relational-algebra,lesson,dbms,DBMS,cs,Advanced Theory,15,live,true,true,7327,7,app/learn/dbms/relational-algebra/page.tsx,2026-08-14
+/learn/dbms/views-procedures-triggers,lesson,dbms,DBMS,cs,Advanced Theory,16,live,true,true,6678,7,app/learn/dbms/views-procedures-triggers/page.tsx,2026-08-14
+/learn/dbms/crash-recovery,lesson,dbms,DBMS,cs,Advanced Theory,17,live,true,true,6740,7,app/learn/dbms/crash-recovery/page.tsx,2026-03-17
+/learn/dbms/distributed-databases,lesson,dbms,DBMS,cs,Distributed & Interview,18,live,true,true,7749,7,app/learn/dbms/distributed-databases/page.tsx,2026-08-14
+/learn/dbms/replication-partitioning-sharding,lesson,dbms,DBMS,cs,Distributed & Interview,19,live,true,true,2681,5,app/learn/dbms/replication-partitioning-sharding/page.tsx,2026-11-09
+/learn/dbms/nosql-databases,lesson,dbms,DBMS,cs,Distributed & Interview,20,live,true,true,6981,7,app/learn/dbms/nosql-databases/page.tsx,2026-08-14
+/learn/dbms/database-security,lesson,dbms,DBMS,cs,Distributed & Interview,21,live,true,true,6668,6,app/learn/dbms/database-security/page.tsx,2026-08-14
+/learn/dbms/interview-questions,lesson,dbms,DBMS,cs,Distributed & Interview,22,live,true,true,12893,5,app/learn/dbms/interview-questions/page.tsx,2026-08-14
+/learn/dbt,track-index,dbt,dbt,data,,,live,true,true,1064,34,app/learn/dbt/page.tsx,
 /learn/dbt/cheatsheet,tool,dbt,dbt,data,,,live,true,true,1045,1,app/learn/dbt/cheatsheet/page.tsx,
 /learn/dbt/what-is-dbt,lesson,dbt,dbt,data,dbt Foundations,1,live,true,true,8777,5,content/dbt/what-is-dbt.tsx,2026-11-09
 /learn/dbt/how-dbt-works,lesson,dbt,dbt,data,dbt Foundations,2,live,true,true,7786,6,content/dbt/how-dbt-works.tsx,2026-09-12
@@ -415,65 +456,92 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/dbt/project-structure,lesson,dbt,dbt,data,Production and Advanced dbt,16,live,true,true,8223,6,content/dbt/project-structure.tsx,2026-11-09
 /learn/dbt/performance-tuning-dbt,lesson,dbt,dbt,data,Production and Advanced dbt,17,live,true,true,8916,6,content/dbt/performance-tuning-dbt.tsx,2026-09-12
 /learn/dbt/cicd-for-dbt,lesson,dbt,dbt,data,Production and Advanced dbt,18,live,true,true,10234,6,content/dbt/cicd-for-dbt.tsx,2026-09-12
-/learn/dbt/testing-strategy-at-scale,lesson,dbt,dbt,data,Production and Advanced dbt,19,live,true,true,9251,6,content/dbt/testing-strategy-at-scale.tsx,2026-11-09
-/learn/dbt/dbt-interview-system-design,lesson,dbt,dbt,data,Production and Advanced dbt,20,live,true,true,13144,5,content/dbt/dbt-interview-system-design.tsx,2026-09-12
-/learn/devops-mlops,track-index,devops-mlops,DevOps & Cloud Infrastructure,cloud,,,live,true,true,396,21,app/learn/devops-mlops/page.tsx,
+/learn/dbt/testing-strategy-at-scale,lesson,dbt,dbt,data,Production and Advanced dbt,19,live,true,true,9247,6,content/dbt/testing-strategy-at-scale.tsx,2026-11-09
+/learn/dbt/unit-tests-in-dbt,lesson,dbt,dbt,data,Production and Advanced dbt,20,live,true,true,2068,6,content/dbt/unit-tests-in-dbt.tsx,2026-11-09
+/learn/dbt/contracts-versions-access-mesh,lesson,dbt,dbt,data,Production and Advanced dbt,21,live,true,true,2001,6,content/dbt/contracts-versions-access-mesh.tsx,2026-11-09
+/learn/dbt/semantic-layer-metrics-metricflow,lesson,dbt,dbt,data,Production and Advanced dbt,22,live,true,true,2058,6,content/dbt/semantic-layer-metrics-metricflow.tsx,2026-11-09
+/learn/dbt/dbt-interview-system-design,lesson,dbt,dbt,data,Production and Advanced dbt,23,live,true,true,13144,5,content/dbt/dbt-interview-system-design.tsx,2026-11-09
+/learn/devops-mlops,track-index,devops-mlops,DevOps & Cloud Infrastructure,cloud,,,live,true,true,607,27,app/learn/devops-mlops/page.tsx,
 /learn/devops-mlops/linux-command-line,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Developer Essentials,1,live,true,true,1833,9,content/devops-mlops/linux-command-line.tsx,2026-11-09
 /learn/devops-mlops/bash-scripting,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Developer Essentials,2,live,true,true,2129,10,content/devops-mlops/bash-scripting.tsx,2026-11-09
 /learn/devops-mlops/git-github-essentials,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Developer Essentials,3,live,true,true,2155,10,content/devops-mlops/git-github-essentials.tsx,2026-11-09
 /learn/devops-mlops/docker-fundamentals,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Containers,4,live,true,true,2236,9,content/devops-mlops/docker-fundamentals.tsx,2026-11-09
 /learn/devops-mlops/docker-compose,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Containers,5,live,true,true,2221,9,content/devops-mlops/docker-compose.tsx,2026-11-09
-/learn/devops-mlops/cloud-compute-iam-networking,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Cloud Infrastructure,6,live,true,true,2472,6,content/devops-mlops/cloud-compute-iam-networking.tsx,2026-11-09
-/learn/devops-mlops/terraform-infrastructure-as-code,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Cloud Infrastructure,7,live,true,true,2303,6,content/devops-mlops/terraform-infrastructure-as-code.tsx,2026-11-09
-/learn/devops-mlops/ci-cd-github-actions,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Delivery & Operations,8,live,true,true,2182,6,content/devops-mlops/ci-cd-github-actions.tsx,2026-11-09
-/learn/devops-mlops/kubernetes-fundamentals,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Delivery & Operations,9,live,true,true,2217,6,content/devops-mlops/kubernetes-fundamentals.tsx,2026-11-09
-/learn/devops-mlops/monitoring-logging-alerting,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Delivery & Operations,10,live,true,true,2310,5,content/devops-mlops/monitoring-logging-alerting.tsx,2026-11-09
-/learn/dsa,track-index,dsa,Data Structures & Algorithms,cs,,,live,true,true,1149,29,app/learn/dsa/page.tsx,
+/learn/devops-mlops/cloud-compute-iam-networking,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Cloud Infrastructure,6,live,true,true,2474,6,content/devops-mlops/cloud-compute-iam-networking.tsx,2026-11-09
+/learn/devops-mlops/networking-for-devops-nginx,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Cloud Infrastructure,7,live,true,true,2168,6,content/devops-mlops/networking-for-devops-nginx.tsx,2026-11-09
+/learn/devops-mlops/terraform-infrastructure-as-code,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Cloud Infrastructure,8,live,true,true,2307,6,content/devops-mlops/terraform-infrastructure-as-code.tsx,2026-11-09
+/learn/devops-mlops/secrets-management,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Cloud Infrastructure,9,live,true,true,2245,6,content/devops-mlops/secrets-management.tsx,2026-11-09
+/learn/devops-mlops/ci-cd-github-actions,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Delivery & Operations,10,live,true,true,2184,6,content/devops-mlops/ci-cd-github-actions.tsx,2026-11-09
+/learn/devops-mlops/kubernetes-fundamentals,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Delivery & Operations,11,live,true,true,2215,6,content/devops-mlops/kubernetes-fundamentals.tsx,2026-11-09
+/learn/devops-mlops/helm-and-gitops-argocd,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Delivery & Operations,12,live,true,true,2164,6,content/devops-mlops/helm-and-gitops-argocd.tsx,2026-11-09
+/learn/devops-mlops/monitoring-logging-alerting,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Delivery & Operations,13,live,true,true,2312,6,content/devops-mlops/monitoring-logging-alerting.tsx,2026-11-09
+/learn/devops-mlops/sre-basics-slos,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Delivery & Operations,14,live,true,true,2193,6,content/devops-mlops/sre-basics-slos.tsx,2026-11-09
+/learn/devops-mlops/devops-capstone,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Capstone & Career,15,live,true,true,2445,6,content/devops-mlops/devops-capstone.tsx,2026-11-09
+/learn/devops-mlops/devops-interview-prep,lesson,devops-mlops,DevOps & Cloud Infrastructure,cloud,Capstone & Career,16,live,true,true,2529,5,content/devops-mlops/devops-interview-prep.tsx,2026-11-09
+/learn/dsa,track-index,dsa,Data Structures & Algorithms,cs,,,live,true,true,1417,36,app/learn/dsa/page.tsx,
 /learn/dsa/cheatsheet,tool,dsa,Data Structures & Algorithms,cs,,,live,true,true,982,1,app/learn/dsa/cheatsheet/page.tsx,
-/learn/dsa/introduction,lesson,dsa,Data Structures & Algorithms,cs,,0,live,true,true,2315,4,content/dsa/introduction.tsx,2026-08-14
-/learn/dsa/complexity,lesson,dsa,Data Structures & Algorithms,cs,,1,live,true,true,2286,5,content/dsa/complexity.tsx,2026-04-05
-/learn/dsa/arrays,lesson,dsa,Data Structures & Algorithms,cs,,2,live,true,true,2936,6,content/dsa/arrays.tsx,2026-04-05
-/learn/dsa/strings,lesson,dsa,Data Structures & Algorithms,cs,,3,live,true,true,2558,6,content/dsa/strings.tsx,2026-09-10
-/learn/dsa/pointers,lesson,dsa,Data Structures & Algorithms,cs,,4,live,true,true,2894,6,content/dsa/pointers.tsx,2026-09-10
-/learn/dsa/linked-lists,lesson,dsa,Data Structures & Algorithms,cs,,5,live,true,true,3132,6,content/dsa/linked-lists.tsx,2026-09-10
-/learn/dsa/stacks,lesson,dsa,Data Structures & Algorithms,cs,,6,live,true,true,2594,6,content/dsa/stacks.tsx,2026-09-10
-/learn/dsa/queues,lesson,dsa,Data Structures & Algorithms,cs,,7,live,true,true,2799,6,content/dsa/queues.tsx,2026-09-10
-/learn/dsa/recursion,lesson,dsa,Data Structures & Algorithms,cs,,8,live,true,true,3087,6,content/dsa/recursion.tsx,2026-09-10
-/learn/dsa/sorting,lesson,dsa,Data Structures & Algorithms,cs,,9,live,true,true,3338,6,content/dsa/sorting.tsx,2026-09-10
-/learn/dsa/searching,lesson,dsa,Data Structures & Algorithms,cs,,10,live,true,true,3018,7,content/dsa/searching.tsx,2026-04-05
-/learn/dsa/trees,lesson,dsa,Data Structures & Algorithms,cs,,11,live,true,true,2922,7,content/dsa/trees.tsx,2026-09-10
-/learn/dsa/binary-search-tree,lesson,dsa,Data Structures & Algorithms,cs,,12,live,true,true,2990,6,content/dsa/binary-search-tree.tsx,2026-09-10
-/learn/dsa/heaps,lesson,dsa,Data Structures & Algorithms,cs,,13,live,true,true,3031,6,content/dsa/heaps.tsx,2026-09-10
-/learn/dsa/hashing,lesson,dsa,Data Structures & Algorithms,cs,,14,live,true,true,3220,7,content/dsa/hashing.tsx,2026-09-10
-/learn/dsa/graphs,lesson,dsa,Data Structures & Algorithms,cs,,15,live,true,true,3422,7,content/dsa/graphs.tsx,2026-09-10
-/learn/dsa/dynamic-programming,lesson,dsa,Data Structures & Algorithms,cs,,16,live,true,true,3392,7,content/dsa/dynamic-programming.tsx,2026-09-10
-/learn/dsa/greedy,lesson,dsa,Data Structures & Algorithms,cs,,17,live,true,true,3015,5,content/dsa/greedy.tsx,2026-09-10
-/learn/dsa/backtracking,lesson,dsa,Data Structures & Algorithms,cs,,18,live,true,true,3102,7,content/dsa/backtracking.tsx,2026-09-10
-/learn/dsa/advanced,lesson,dsa,Data Structures & Algorithms,cs,,19,live,true,true,3571,7,content/dsa/advanced.tsx,2026-04-27
-/learn/dsa/interview-patterns,lesson,dsa,Data Structures & Algorithms,cs,,20,live,true,true,3291,4,content/dsa/interview-patterns.tsx,2026-11-09
-/learn/full-stack-ai,track-index,full-stack-ai,Full-Stack Development with AI,programming,,,live,true,true,312,13,app/learn/full-stack-ai/page.tsx,
+/learn/dsa/introduction,lesson,dsa,Data Structures & Algorithms,cs,Foundations,0,live,true,true,2316,4,content/dsa/introduction.tsx,2026-11-09
+/learn/dsa/complexity,lesson,dsa,Data Structures & Algorithms,cs,Foundations,1,live,true,true,2288,5,content/dsa/complexity.tsx,2026-11-09
+/learn/dsa/arrays,lesson,dsa,Data Structures & Algorithms,cs,Foundations,2,live,true,true,2938,6,content/dsa/arrays.tsx,2026-11-09
+/learn/dsa/strings,lesson,dsa,Data Structures & Algorithms,cs,Foundations,3,live,true,true,2560,6,content/dsa/strings.tsx,2026-11-09
+/learn/dsa/pointers,lesson,dsa,Data Structures & Algorithms,cs,Foundations,4,live,true,true,2890,6,content/dsa/pointers.tsx,2026-11-09
+/learn/dsa/recursion,lesson,dsa,Data Structures & Algorithms,cs,Foundations,5,live,true,true,3096,6,content/dsa/recursion.tsx,2026-11-09
+/learn/dsa/sorting,lesson,dsa,Data Structures & Algorithms,cs,Foundations,6,live,true,true,3341,6,content/dsa/sorting.tsx,2026-11-09
+/learn/dsa/searching,lesson,dsa,Data Structures & Algorithms,cs,Foundations,7,live,true,true,3021,7,content/dsa/searching.tsx,2026-11-09
+/learn/dsa/linked-lists,lesson,dsa,Data Structures & Algorithms,cs,Linear Structures,8,live,true,true,3137,7,content/dsa/linked-lists.tsx,2026-11-09
+/learn/dsa/stacks,lesson,dsa,Data Structures & Algorithms,cs,Linear Structures,9,live,true,true,2599,6,content/dsa/stacks.tsx,2026-11-09
+/learn/dsa/queues,lesson,dsa,Data Structures & Algorithms,cs,Linear Structures,10,live,true,true,2804,6,content/dsa/queues.tsx,2026-11-09
+/learn/dsa/hashing,lesson,dsa,Data Structures & Algorithms,cs,Linear Structures,11,live,true,true,3225,6,content/dsa/hashing.tsx,2026-11-09
+/learn/dsa/trees,lesson,dsa,Data Structures & Algorithms,cs,Non-Linear Structures,12,live,true,true,2927,6,content/dsa/trees.tsx,2026-11-09
+/learn/dsa/binary-search-tree,lesson,dsa,Data Structures & Algorithms,cs,Non-Linear Structures,13,live,true,true,2996,6,content/dsa/binary-search-tree.tsx,2026-11-09
+/learn/dsa/heaps,lesson,dsa,Data Structures & Algorithms,cs,Non-Linear Structures,14,live,true,true,3037,6,content/dsa/heaps.tsx,2026-11-09
+/learn/dsa/graphs,lesson,dsa,Data Structures & Algorithms,cs,Non-Linear Structures,15,live,true,true,3406,6,content/dsa/graphs.tsx,2026-11-09
+/learn/dsa/tries,lesson,dsa,Data Structures & Algorithms,cs,Non-Linear Structures,16,live,true,true,1641,7,content/dsa/tries.tsx,2026-11-09
+/learn/dsa/union-find,lesson,dsa,Data Structures & Algorithms,cs,Non-Linear Structures,17,live,true,true,1549,7,content/dsa/union-find.tsx,2026-11-09
+/learn/dsa/minimum-spanning-trees,lesson,dsa,Data Structures & Algorithms,cs,Non-Linear Structures,18,live,true,true,1656,6,content/dsa/minimum-spanning-trees.tsx,2026-11-09
+/learn/dsa/dynamic-programming,lesson,dsa,Data Structures & Algorithms,cs,Algorithm Paradigms,19,live,true,true,3402,7,content/dsa/dynamic-programming.tsx,2026-11-09
+/learn/dsa/greedy,lesson,dsa,Data Structures & Algorithms,cs,Algorithm Paradigms,20,live,true,true,3020,5,content/dsa/greedy.tsx,2026-11-09
+/learn/dsa/backtracking,lesson,dsa,Data Structures & Algorithms,cs,Algorithm Paradigms,21,live,true,true,3105,7,content/dsa/backtracking.tsx,2026-11-09
+/learn/dsa/graph-algorithms,lesson,dsa,Data Structures & Algorithms,cs,Algorithm Paradigms,22,live,true,true,1615,7,content/dsa/graph-algorithms.tsx,2026-11-09
+/learn/dsa/dynamic-programming-patterns,lesson,dsa,Data Structures & Algorithms,cs,Algorithm Paradigms,23,live,true,true,1701,6,content/dsa/dynamic-programming-patterns.tsx,2026-11-09
+/learn/dsa/two-pointers-sliding-window,lesson,dsa,Data Structures & Algorithms,cs,Algorithm Paradigms,24,live,true,true,1569,7,content/dsa/two-pointers-sliding-window.tsx,2026-11-09
+/learn/dsa/bit-manipulation,lesson,dsa,Data Structures & Algorithms,cs,Algorithm Paradigms,25,live,true,true,1586,6,content/dsa/bit-manipulation.tsx,2026-11-09
+/learn/dsa/advanced,lesson,dsa,Data Structures & Algorithms,cs,Algorithm Paradigms,26,live,true,true,3595,7,content/dsa/advanced.tsx,2026-11-09
+/learn/dsa/interview-patterns,lesson,dsa,Data Structures & Algorithms,cs,Interview,27,live,true,true,3299,11,content/dsa/interview-patterns.tsx,2026-11-09
+/learn/full-stack-ai,track-index,full-stack-ai,Full-Stack Development with AI,programming,,,live,true,true,531,21,app/learn/full-stack-ai/page.tsx,
 /learn/full-stack-ai/react-fundamentals,lesson,full-stack-ai,Full-Stack Development with AI,programming,Front End with React,1,live,true,true,1751,5,content/full-stack-ai/react-fundamentals.tsx,2026-11-09
-/learn/full-stack-ai/react-state-effects,lesson,full-stack-ai,Full-Stack Development with AI,programming,Front End with React,2,live,true,true,1788,5,content/full-stack-ai/react-state-effects.tsx,2026-11-09
-/learn/full-stack-ai/nextjs-app-router,lesson,full-stack-ai,Full-Stack Development with AI,programming,Front End with React,3,live,true,true,1823,5,content/full-stack-ai/nextjs-app-router.tsx,2026-11-09
-/learn/full-stack-ai/node-express-rest-api,lesson,full-stack-ai,Full-Stack Development with AI,programming,Back End & Data,4,live,true,true,1704,5,content/full-stack-ai/node-express-rest-api.tsx,2026-11-09
-/learn/full-stack-ai/postgres-with-an-orm,lesson,full-stack-ai,Full-Stack Development with AI,programming,Back End & Data,5,live,true,true,1677,5,content/full-stack-ai/postgres-with-an-orm.tsx,2026-11-09
-/learn/full-stack-ai/authentication-sessions-jwt,lesson,full-stack-ai,Full-Stack Development with AI,programming,Back End & Data,6,live,true,true,1751,5,content/full-stack-ai/authentication-sessions-jwt.tsx,2026-11-09
-/learn/full-stack-ai/adding-ai-features,lesson,full-stack-ai,Full-Stack Development with AI,programming,AI Features & Deployment,7,live,true,true,1992,5,content/full-stack-ai/adding-ai-features.tsx,2026-11-09
-/learn/full-stack-ai/deploying-full-stack-apps,lesson,full-stack-ai,Full-Stack Development with AI,programming,AI Features & Deployment,8,live,true,true,1741,4,content/full-stack-ai/deploying-full-stack-apps.tsx,2026-11-09
-/learn/generative-ai,track-index,generative-ai,Generative AI & LLM Engineering,ai,,,live,true,true,508,22,app/learn/generative-ai/page.tsx,
+/learn/full-stack-ai/react-state-effects,lesson,full-stack-ai,Full-Stack Development with AI,programming,Front End with React,2,live,true,true,1790,5,content/full-stack-ai/react-state-effects.tsx,2026-11-09
+/learn/full-stack-ai/styling-react-tailwind,lesson,full-stack-ai,Full-Stack Development with AI,programming,Front End with React,3,live,true,true,2004,5,content/full-stack-ai/styling-react-tailwind.tsx,2026-11-09
+/learn/full-stack-ai/forms-validation-zod,lesson,full-stack-ai,Full-Stack Development with AI,programming,Front End with React,4,live,true,true,1999,5,content/full-stack-ai/forms-validation-zod.tsx,2026-11-09
+/learn/full-stack-ai/nextjs-app-router,lesson,full-stack-ai,Full-Stack Development with AI,programming,Front End with React,5,live,true,true,1825,5,content/full-stack-ai/nextjs-app-router.tsx,2026-11-09
+/learn/full-stack-ai/node-express-rest-api,lesson,full-stack-ai,Full-Stack Development with AI,programming,Back End & Data,6,live,true,true,1704,5,content/full-stack-ai/node-express-rest-api.tsx,2026-11-09
+/learn/full-stack-ai/postgres-with-an-orm,lesson,full-stack-ai,Full-Stack Development with AI,programming,Back End & Data,7,live,true,true,1677,5,content/full-stack-ai/postgres-with-an-orm.tsx,2026-11-09
+/learn/full-stack-ai/authentication-sessions-jwt,lesson,full-stack-ai,Full-Stack Development with AI,programming,Back End & Data,8,live,true,true,1747,5,content/full-stack-ai/authentication-sessions-jwt.tsx,2026-11-09
+/learn/full-stack-ai/web-security-full-stack,lesson,full-stack-ai,Full-Stack Development with AI,programming,Back End & Data,9,live,true,true,2162,5,content/full-stack-ai/web-security-full-stack.tsx,2026-11-09
+/learn/full-stack-ai/testing-full-stack,lesson,full-stack-ai,Full-Stack Development with AI,programming,Back End & Data,10,live,true,true,2176,5,content/full-stack-ai/testing-full-stack.tsx,2026-11-09
+/learn/full-stack-ai/adding-ai-features,lesson,full-stack-ai,Full-Stack Development with AI,programming,AI Features & Deployment,11,live,true,true,2002,5,content/full-stack-ai/adding-ai-features.tsx,2026-11-09
+/learn/full-stack-ai/real-time-websockets-sse,lesson,full-stack-ai,Full-Stack Development with AI,programming,AI Features & Deployment,12,live,true,true,2135,5,content/full-stack-ai/real-time-websockets-sse.tsx,2026-11-09
+/learn/full-stack-ai/deploying-full-stack-apps,lesson,full-stack-ai,Full-Stack Development with AI,programming,AI Features & Deployment,13,live,true,true,1733,5,content/full-stack-ai/deploying-full-stack-apps.tsx,2026-11-09
+/learn/full-stack-ai/full-stack-capstone,lesson,full-stack-ai,Full-Stack Development with AI,programming,Capstone & Career,14,live,true,true,2464,5,content/full-stack-ai/full-stack-capstone.tsx,2026-11-09
+/learn/full-stack-ai/full-stack-interview-prep,lesson,full-stack-ai,Full-Stack Development with AI,programming,Capstone & Career,15,live,true,true,2627,4,content/full-stack-ai/full-stack-interview-prep.tsx,2026-11-09
+/learn/generative-ai,track-index,generative-ai,Generative AI & LLM Engineering,ai,,,live,true,true,646,29,app/learn/generative-ai/page.tsx,
 /learn/generative-ai/calling-llm-apis,lesson,generative-ai,Generative AI & LLM Engineering,ai,Building with LLM APIs,1,live,true,true,1949,6,content/generative-ai/calling-llm-apis.tsx,2026-11-09
 /learn/generative-ai/tokens-pricing-rate-limits,lesson,generative-ai,Generative AI & LLM Engineering,ai,Building with LLM APIs,2,live,true,true,2035,7,content/generative-ai/tokens-pricing-rate-limits.tsx,2026-11-09
 /learn/generative-ai/structured-outputs-pydantic,lesson,generative-ai,Generative AI & LLM Engineering,ai,Building with LLM APIs,3,live,true,true,1812,7,content/generative-ai/structured-outputs-pydantic.tsx,2026-11-09
-/learn/generative-ai/function-tool-calling,lesson,generative-ai,Generative AI & LLM Engineering,ai,Building with LLM APIs,4,live,true,true,1945,9,content/generative-ai/function-tool-calling.tsx,2026-11-09
-/learn/generative-ai/embeddings-in-practice,lesson,generative-ai,Generative AI & LLM Engineering,ai,Retrieval & Vector Databases,5,live,true,true,2005,6,content/generative-ai/embeddings-in-practice.tsx,2026-11-09
-/learn/generative-ai/vector-databases,lesson,generative-ai,Generative AI & LLM Engineering,ai,Retrieval & Vector Databases,6,live,true,true,2211,6,content/generative-ai/vector-databases.tsx,2026-11-09
-/learn/generative-ai/llm-evaluation,lesson,generative-ai,Generative AI & LLM Engineering,ai,"Quality, Safety & Operations",7,live,true,true,2191,7,content/generative-ai/llm-evaluation.tsx,2026-11-09
-/learn/generative-ai/guardrails-prompt-injection,lesson,generative-ai,Generative AI & LLM Engineering,ai,"Quality, Safety & Operations",8,live,true,true,2103,7,content/generative-ai/guardrails-prompt-injection.tsx,2026-11-09
-/learn/generative-ai/llm-observability-tracing,lesson,generative-ai,Generative AI & LLM Engineering,ai,"Quality, Safety & Operations",9,live,true,true,2125,7,content/generative-ai/llm-observability-tracing.tsx,2026-11-09
-/learn/generative-ai/llm-cost-latency,lesson,generative-ai,Generative AI & LLM Engineering,ai,"Quality, Safety & Operations",10,live,true,true,2053,7,content/generative-ai/llm-cost-latency.tsx,2026-11-09
-/learn/generative-ai/llm-frameworks,lesson,generative-ai,Generative AI & LLM Engineering,ai,Shipping LLM Features,11,live,true,true,2017,6,content/generative-ai/llm-frameworks.tsx,2026-11-09
-/learn/generative-ai/shipping-ai-feature-fastapi,lesson,generative-ai,Generative AI & LLM Engineering,ai,Shipping LLM Features,12,live,true,true,2407,5,content/generative-ai/shipping-ai-feature-fastapi.tsx,2026-11-09
-/learn/html-css,track-index,html-css,HTML & CSS,programming,,,live,true,true,1833,50,app/learn/html-css/page.tsx,
+/learn/generative-ai/function-tool-calling,lesson,generative-ai,Generative AI & LLM Engineering,ai,Building with LLM APIs,4,live,true,true,1943,9,content/generative-ai/function-tool-calling.tsx,2026-11-09
+/learn/generative-ai/multimodal-apis,lesson,generative-ai,Generative AI & LLM Engineering,ai,Building with LLM APIs,5,live,true,true,2163,7,content/generative-ai/multimodal-apis.tsx,2026-11-09
+/learn/generative-ai/embeddings-in-practice,lesson,generative-ai,Generative AI & LLM Engineering,ai,Retrieval & Vector Databases,6,live,true,true,2007,6,content/generative-ai/embeddings-in-practice.tsx,2026-11-09
+/learn/generative-ai/vector-databases,lesson,generative-ai,Generative AI & LLM Engineering,ai,Retrieval & Vector Databases,7,live,true,true,2211,6,content/generative-ai/vector-databases.tsx,2026-11-09
+/learn/generative-ai/llm-evaluation,lesson,generative-ai,Generative AI & LLM Engineering,ai,"Quality, Safety & Operations",8,live,true,true,2191,7,content/generative-ai/llm-evaluation.tsx,2026-11-09
+/learn/generative-ai/guardrails-prompt-injection,lesson,generative-ai,Generative AI & LLM Engineering,ai,"Quality, Safety & Operations",9,live,true,true,2103,7,content/generative-ai/guardrails-prompt-injection.tsx,2026-11-09
+/learn/generative-ai/llm-observability-tracing,lesson,generative-ai,Generative AI & LLM Engineering,ai,"Quality, Safety & Operations",10,live,true,true,2125,7,content/generative-ai/llm-observability-tracing.tsx,2026-11-09
+/learn/generative-ai/llm-cost-latency,lesson,generative-ai,Generative AI & LLM Engineering,ai,"Quality, Safety & Operations",11,live,true,true,2053,7,content/generative-ai/llm-cost-latency.tsx,2026-11-09
+/learn/generative-ai/llm-frameworks,lesson,generative-ai,Generative AI & LLM Engineering,ai,Shipping LLM Features,12,live,true,true,2018,6,content/generative-ai/llm-frameworks.tsx,2026-11-09
+/learn/generative-ai/running-open-models,lesson,generative-ai,Generative AI & LLM Engineering,ai,Shipping LLM Features,13,live,true,true,2065,6,content/generative-ai/running-open-models.tsx,2026-11-09
+/learn/generative-ai/shipping-ai-feature-fastapi,lesson,generative-ai,Generative AI & LLM Engineering,ai,Shipping LLM Features,14,live,true,true,2395,6,content/generative-ai/shipping-ai-feature-fastapi.tsx,2026-11-09
+/learn/generative-ai/genai-capstone-rag-assistant,lesson,generative-ai,Generative AI & LLM Engineering,ai,Capstone & Career,15,live,true,true,2228,6,content/generative-ai/genai-capstone-rag-assistant.tsx,2026-11-09
+/learn/generative-ai/genai-interview-prep,lesson,generative-ai,Generative AI & LLM Engineering,ai,Capstone & Career,16,live,true,true,2484,5,content/generative-ai/genai-interview-prep.tsx,2026-11-09
+/learn/html-css,track-index,html-css,HTML & CSS,programming,,,live,true,true,1944,53,app/learn/html-css/page.tsx,
 /learn/html-css/cheatsheet,tool,html-css,HTML & CSS,programming,,,live,true,true,569,1,app/learn/html-css/cheatsheet/page.tsx,
 /learn/html-css/what-is-html-how-the-web-works,lesson,html-css,HTML & CSS,programming,HTML Foundations,1,live,true,true,4971,4,content/html-css/what-is-html-how-the-web-works.tsx,2026-08-17
 /learn/html-css/document-structure,lesson,html-css,HTML & CSS,programming,HTML Foundations,2,live,true,true,4080,5,content/html-css/document-structure.tsx,2026-08-17
@@ -504,27 +572,38 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/html-css/flexbox-vs-grid,lesson,html-css,HTML & CSS,programming,CSS Layout,27,live,true,true,4771,6,content/html-css/flexbox-vs-grid.tsx,2026-08-17
 /learn/html-css/responsive-design-media-queries,lesson,html-css,HTML & CSS,programming,CSS Layout,28,live,true,true,2585,6,content/html-css/responsive-design-media-queries.tsx,2026-08-17
 /learn/html-css/mobile-first-design,lesson,html-css,HTML & CSS,programming,CSS Layout,29,live,true,true,5203,6,content/html-css/mobile-first-design.tsx,2026-08-17
-/learn/html-css/css-custom-properties,lesson,html-css,HTML & CSS,programming,Advanced CSS,30,live,true,true,4780,6,content/html-css/css-custom-properties.tsx,2026-08-17
-/learn/html-css/css-transitions,lesson,html-css,HTML & CSS,programming,Advanced CSS,31,live,true,true,4724,6,content/html-css/css-transitions.tsx,2026-08-17
-/learn/html-css/css-animations-keyframes,lesson,html-css,HTML & CSS,programming,Advanced CSS,32,live,true,true,2347,6,content/html-css/css-animations-keyframes.tsx,2026-08-17
-/learn/html-css/css-transforms,lesson,html-css,HTML & CSS,programming,Advanced CSS,33,live,true,true,4490,6,content/html-css/css-transforms.tsx,2026-08-17
-/learn/html-css/modern-css-selectors,lesson,html-css,HTML & CSS,programming,Advanced CSS,34,live,true,true,4292,6,content/html-css/modern-css-selectors.tsx,2026-08-17
-/learn/html-css/css-architecture-naming,lesson,html-css,HTML & CSS,programming,Advanced CSS,35,live,true,true,4265,6,content/html-css/css-architecture-naming.tsx,2026-08-17
-/learn/html-css/intro-to-sass,lesson,html-css,HTML & CSS,programming,Advanced CSS,36,live,true,true,2494,6,content/html-css/intro-to-sass.tsx,2026-08-17
-/learn/html-css/responsive-images-performance,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,37,live,true,true,5266,6,content/html-css/responsive-images-performance.tsx,2026-08-17
-/learn/html-css/css-accessibility-best-practices,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,38,live,true,true,5082,6,content/html-css/css-accessibility-best-practices.tsx,2026-08-17
-/learn/html-css/cross-browser-compatibility-debugging,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,39,live,true,true,4990,6,content/html-css/cross-browser-compatibility-debugging.tsx,2026-08-17
-/learn/html-css/building-a-responsive-website,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,40,live,true,true,2634,6,content/html-css/building-a-responsive-website.tsx,2026-08-17
-/learn/html-css/css-best-practices-common-mistakes,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,41,live,true,true,5222,6,content/html-css/css-best-practices-common-mistakes.tsx,2026-08-17
-/learn/html-css/html-css-interview-prep,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,42,live,true,true,4550,5,content/html-css/html-css-interview-prep.tsx,2026-08-17
-/learn/javascript,track-index,javascript,JavaScript & TypeScript,programming,,,live,true,true,244,13,app/learn/javascript/page.tsx,
+/learn/html-css/css-custom-properties,lesson,html-css,HTML & CSS,programming,Advanced CSS,30,live,true,true,4786,6,content/html-css/css-custom-properties.tsx,2026-11-09
+/learn/html-css/dark-mode-theming-custom-properties,lesson,html-css,HTML & CSS,programming,Advanced CSS,31,live,true,true,1707,5,content/html-css/dark-mode-theming-custom-properties.tsx,2026-11-09
+/learn/html-css/css-transitions,lesson,html-css,HTML & CSS,programming,Advanced CSS,32,live,true,true,4727,7,content/html-css/css-transitions.tsx,2026-11-09
+/learn/html-css/css-animations-keyframes,lesson,html-css,HTML & CSS,programming,Advanced CSS,33,live,true,true,2347,6,content/html-css/css-animations-keyframes.tsx,2026-11-09
+/learn/html-css/css-transforms,lesson,html-css,HTML & CSS,programming,Advanced CSS,34,live,true,true,4490,6,content/html-css/css-transforms.tsx,2026-11-09
+/learn/html-css/modern-css-selectors,lesson,html-css,HTML & CSS,programming,Advanced CSS,35,live,true,true,4292,6,content/html-css/modern-css-selectors.tsx,2026-11-09
+/learn/html-css/css-architecture-naming,lesson,html-css,HTML & CSS,programming,Advanced CSS,36,live,true,true,4265,6,content/html-css/css-architecture-naming.tsx,2026-11-09
+/learn/html-css/intro-to-sass,lesson,html-css,HTML & CSS,programming,Advanced CSS,37,live,true,true,2497,6,content/html-css/intro-to-sass.tsx,2026-11-09
+/learn/html-css/tailwind-css-utility-first-styling,lesson,html-css,HTML & CSS,programming,Advanced CSS,38,live,true,true,1862,5,content/html-css/tailwind-css-utility-first-styling.tsx,2026-11-09
+/learn/html-css/responsive-images-performance,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,39,live,true,true,5264,7,content/html-css/responsive-images-performance.tsx,2026-11-09
+/learn/html-css/css-accessibility-best-practices,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,40,live,true,true,5082,6,content/html-css/css-accessibility-best-practices.tsx,2026-11-09
+/learn/html-css/cross-browser-compatibility-debugging,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,41,live,true,true,4972,6,content/html-css/cross-browser-compatibility-debugging.tsx,2026-11-09
+/learn/html-css/css-best-practices-common-mistakes,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,42,live,true,true,5196,6,content/html-css/css-best-practices-common-mistakes.tsx,2026-11-09
+/learn/html-css/deploying-a-static-site-github-pages-netlify-vercel,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,43,live,true,true,1923,5,content/html-css/deploying-a-static-site-github-pages-netlify-vercel.tsx,2026-11-09
+/learn/html-css/building-a-responsive-website,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,44,live,true,true,2619,7,content/html-css/building-a-responsive-website.tsx,2026-11-09
+/learn/html-css/html-css-interview-prep,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,45,live,true,true,4551,5,content/html-css/html-css-interview-prep.tsx,2026-11-09
+/learn/javascript,track-index,javascript,JavaScript & TypeScript,programming,,,live,true,true,489,21,app/learn/javascript/page.tsx,
 /learn/javascript/javascript-fundamentals,lesson,javascript,JavaScript & TypeScript,programming,JavaScript Foundations,1,live,true,true,2120,4,content/javascript/javascript-fundamentals.tsx,2026-11-09
-/learn/javascript/functions-objects-arrays,lesson,javascript,JavaScript & TypeScript,programming,JavaScript Foundations,2,live,true,true,2064,5,content/javascript/functions-objects-arrays.tsx,2026-11-09
-/learn/javascript/dom-and-events,lesson,javascript,JavaScript & TypeScript,programming,JavaScript Foundations,3,live,true,true,2225,5,content/javascript/dom-and-events.tsx,2026-11-09
-/learn/javascript/async-javascript-fetch,lesson,javascript,JavaScript & TypeScript,programming,Modern JavaScript,4,live,true,true,2119,5,content/javascript/async-javascript-fetch.tsx,2026-11-09
-/learn/javascript/modules-npm-tooling,lesson,javascript,JavaScript & TypeScript,programming,Modern JavaScript,5,live,true,true,2154,5,content/javascript/modules-npm-tooling.tsx,2026-11-09
-/learn/javascript/typescript-essentials,lesson,javascript,JavaScript & TypeScript,programming,Modern JavaScript,6,live,true,true,2453,4,content/javascript/typescript-essentials.tsx,2026-11-09
-/learn/networking,track-index,networking,Networking,cs,,,live,true,true,2127,45,app/learn/networking/page.tsx,
+/learn/javascript/functions-objects-arrays,lesson,javascript,JavaScript & TypeScript,programming,JavaScript Foundations,2,live,true,true,2059,5,content/javascript/functions-objects-arrays.tsx,2026-11-09
+/learn/javascript/scope-closures-this,lesson,javascript,JavaScript & TypeScript,programming,JavaScript Foundations,3,live,true,true,1791,5,content/javascript/scope-closures-this.tsx,2026-11-09
+/learn/javascript/array-methods-in-depth,lesson,javascript,JavaScript & TypeScript,programming,JavaScript Foundations,4,live,true,true,1782,5,content/javascript/array-methods-in-depth.tsx,2026-11-09
+/learn/javascript/classes-prototypes,lesson,javascript,JavaScript & TypeScript,programming,JavaScript Foundations,5,live,true,true,1580,5,content/javascript/classes-prototypes.tsx,2026-11-09
+/learn/javascript/dom-and-events,lesson,javascript,JavaScript & TypeScript,programming,JavaScript Foundations,6,live,true,true,2220,5,content/javascript/dom-and-events.tsx,2026-11-09
+/learn/javascript/browser-storage-json,lesson,javascript,JavaScript & TypeScript,programming,JavaScript Foundations,7,live,true,true,1823,5,content/javascript/browser-storage-json.tsx,2026-11-09
+/learn/javascript/error-handling-debugging,lesson,javascript,JavaScript & TypeScript,programming,JavaScript Foundations,8,live,true,true,1947,5,content/javascript/error-handling-debugging.tsx,2026-11-09
+/learn/javascript/async-javascript-fetch,lesson,javascript,JavaScript & TypeScript,programming,Modern JavaScript,9,live,true,true,2122,5,content/javascript/async-javascript-fetch.tsx,2026-11-09
+/learn/javascript/modules-npm-tooling,lesson,javascript,JavaScript & TypeScript,programming,Modern JavaScript,10,live,true,true,2170,5,content/javascript/modules-npm-tooling.tsx,2026-11-09
+/learn/javascript/nodejs-fundamentals,lesson,javascript,JavaScript & TypeScript,programming,Modern JavaScript,11,live,true,true,1757,5,content/javascript/nodejs-fundamentals.tsx,2026-11-09
+/learn/javascript/typescript-essentials,lesson,javascript,JavaScript & TypeScript,programming,Modern JavaScript,12,live,true,true,2451,5,content/javascript/typescript-essentials.tsx,2026-11-09
+/learn/javascript/testing-with-vitest,lesson,javascript,JavaScript & TypeScript,programming,Modern JavaScript,13,live,true,true,1887,5,content/javascript/testing-with-vitest.tsx,2026-11-09
+/learn/javascript/javascript-project-interview-prep,lesson,javascript,JavaScript & TypeScript,programming,Projects & Interview,14,live,true,true,2224,4,content/javascript/javascript-project-interview-prep.tsx,2026-11-09
+/learn/networking,track-index,networking,Networking,cs,,,live,true,true,2309,60,app/learn/networking/page.tsx,
 /learn/networking/cheatsheet,tool,networking,Networking,cs,,,live,true,true,1013,1,app/learn/networking/cheatsheet/page.tsx,
 /learn/networking/topology-preview,preview,networking,Networking,cs,,,preview,false,true,73,0,app/learn/networking/topology-preview/page.tsx,
 /learn/networking/what-is-a-network,lesson,networking,Networking,cs,How Networks Work,1,live,true,true,8557,7,content/networking/what-is-a-network.tsx,2026-09-10
@@ -561,32 +640,41 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/networking/ntp,lesson,networking,Networking,cs,Application Layer Protocols,32,live,true,true,5159,8,content/networking/ntp.tsx,2026-09-10
 /learn/networking/network-attacks,lesson,networking,Networking,cs,Network Security,33,live,true,true,5521,6,content/networking/network-attacks.tsx,2026-05-24
 /learn/networking/firewalls-and-acls,lesson,networking,Networking,cs,Network Security,34,live,true,true,5308,6,content/networking/firewalls-and-acls.tsx,2026-05-24
-/learn/networking/ids-and-ips,lesson,networking,Networking,cs,Network Security,35,live,true,true,5124,5,content/networking/ids-and-ips.tsx,2026-05-24
-/learn/networking/vpns-and-tunneling,lesson,networking,Networking,cs,Network Security,36,soon,false,false,0,0,,
-/learn/networking/wireless-security,lesson,networking,Networking,cs,Network Security,37,soon,false,false,0,0,,
-/learn/networking/zero-trust-networking,lesson,networking,Networking,cs,Network Security,38,soon,false,false,0,0,,
-/learn/networking/ddos,lesson,networking,Networking,cs,Network Security,39,soon,false,false,0,0,,
-/learn/networking/network-troubleshooting,lesson,networking,Networking,cs,Tools and Troubleshooting,40,soon,false,false,0,0,,
-/learn/networking/wireshark,lesson,networking,Networking,cs,Tools and Troubleshooting,41,soon,false,false,0,0,,
-/learn/networking/tcpdump,lesson,networking,Networking,cs,Tools and Troubleshooting,42,soon,false,false,0,0,,
-/learn/networking/nmap,lesson,networking,Networking,cs,Tools and Troubleshooting,43,soon,false,false,0,0,,
-/learn/networking/network-monitoring,lesson,networking,Networking,cs,Tools and Troubleshooting,44,soon,false,false,0,0,,
-/learn/operating-systems,track-index,operating-systems,Operating Systems,cs,,,live,true,true,248,12,app/learn/operating-systems/page.tsx,
+/learn/networking/ids-and-ips,lesson,networking,Networking,cs,Network Security,35,live,true,true,5125,6,content/networking/ids-and-ips.tsx,2026-05-24
+/learn/networking/vpns-and-tunneling,lesson,networking,Networking,cs,Network Security,36,live,true,true,1358,6,content/networking/vpns-and-tunneling.tsx,2026-11-09
+/learn/networking/wireless-security,lesson,networking,Networking,cs,Network Security,37,live,true,true,1252,6,content/networking/wireless-security.tsx,2026-11-09
+/learn/networking/zero-trust-networking,lesson,networking,Networking,cs,Network Security,38,live,true,true,1205,6,content/networking/zero-trust-networking.tsx,2026-11-09
+/learn/networking/ddos,lesson,networking,Networking,cs,Network Security,39,live,true,true,1199,6,content/networking/ddos.tsx,2026-11-09
+/learn/networking/network-troubleshooting,lesson,networking,Networking,cs,Tools and Troubleshooting,40,live,true,true,1191,6,content/networking/network-troubleshooting.tsx,2026-11-09
+/learn/networking/wireshark,lesson,networking,Networking,cs,Tools and Troubleshooting,41,live,true,true,1158,6,content/networking/wireshark.tsx,2026-11-09
+/learn/networking/tcpdump,lesson,networking,Networking,cs,Tools and Troubleshooting,42,live,true,true,1195,6,content/networking/tcpdump.tsx,2026-11-09
+/learn/networking/nmap,lesson,networking,Networking,cs,Tools and Troubleshooting,43,live,true,true,1207,6,content/networking/nmap.tsx,2026-11-09
+/learn/networking/network-monitoring,lesson,networking,Networking,cs,Tools and Troubleshooting,44,live,true,true,1133,6,content/networking/network-monitoring.tsx,2026-11-09
+/learn/networking/load-balancers-and-reverse-proxies,lesson,networking,Networking,cs,Modern Network Architecture,45,live,true,true,1880,6,content/networking/load-balancers-and-reverse-proxies.tsx,2026-11-09
+/learn/networking/cdns-and-edge-networks,lesson,networking,Networking,cs,Modern Network Architecture,46,live,true,true,2006,6,content/networking/cdns-and-edge-networks.tsx,2026-11-09
+/learn/networking/cloud-networking-vpcs-subnets-security-groups-peering,lesson,networking,Networking,cs,Modern Network Architecture,47,live,true,true,2014,6,content/networking/cloud-networking-vpcs-subnets-security-groups-peering.tsx,2026-11-09
+/learn/networking/network-automation-and-sdn,lesson,networking,Networking,cs,Modern Network Architecture,48,live,true,true,1902,6,content/networking/network-automation-and-sdn.tsx,2026-11-09
+/learn/networking/networking-interview-prep,lesson,networking,Networking,cs,Career and Interview Preparation,49,live,true,true,2952,5,content/networking/networking-interview-prep.tsx,2026-11-09
+/learn/operating-systems,track-index,operating-systems,Operating Systems,cs,,,live,true,true,376,17,app/learn/operating-systems/page.tsx,
 /learn/operating-systems/what-an-os-does,lesson,operating-systems,Operating Systems,cs,Processes & Concurrency,1,live,true,true,1766,4,content/operating-systems/what-an-os-does.tsx,2026-11-09
-/learn/operating-systems/processes-and-threads,lesson,operating-systems,Operating Systems,cs,Processes & Concurrency,2,live,true,true,1751,5,content/operating-systems/processes-and-threads.tsx,2026-11-09
-/learn/operating-systems/cpu-scheduling,lesson,operating-systems,Operating Systems,cs,Processes & Concurrency,3,live,true,true,1861,5,content/operating-systems/cpu-scheduling.tsx,2026-11-09
-/learn/operating-systems/concurrency-synchronization-deadlocks,lesson,operating-systems,Operating Systems,cs,Processes & Concurrency,4,live,true,true,1775,5,content/operating-systems/concurrency-synchronization-deadlocks.tsx,2026-11-09
-/learn/operating-systems/memory-management-virtual-memory,lesson,operating-systems,Operating Systems,cs,Memory & Storage,5,live,true,true,1960,5,content/operating-systems/memory-management-virtual-memory.tsx,2026-11-09
-/learn/operating-systems/file-systems-and-io,lesson,operating-systems,Operating Systems,cs,Memory & Storage,6,live,true,true,1888,5,content/operating-systems/file-systems-and-io.tsx,2026-11-09
-/learn/operating-systems/os-interview-questions,lesson,operating-systems,Operating Systems,cs,Memory & Storage,7,live,true,true,1809,4,content/operating-systems/os-interview-questions.tsx,2026-11-09
-/learn/projects,track-index,projects,Projects,practice,,,live,true,true,421,15,app/learn/projects/page.tsx,
-/learn/projects/azure-batch-pipeline,lesson,projects,Projects,practice,,1,live,true,true,4042,16,app/learn/projects/azure-batch-pipeline/page.tsx,2026-08-14
-/learn/projects/azure-projects-02,lesson,projects,Projects,practice,,2,live,true,true,3003,4,app/learn/projects/azure-projects-02/page.tsx,2026-08-14
-/learn/projects/azure-project-03,lesson,projects,Projects,practice,,3,live,true,true,3869,4,app/learn/projects/azure-project-03/page.tsx,2026-08-14
-/learn/projects/azure-project-04,lesson,projects,Projects,practice,,4,live,true,true,3137,4,app/learn/projects/azure-project-04/page.tsx,2026-08-14
-/learn/projects/azure-project-05,lesson,projects,Projects,practice,,5,live,true,true,3766,4,app/learn/projects/azure-project-05/page.tsx,2026-08-14
-/learn/projects/azure-project-06,lesson,projects,Projects,practice,,6,live,true,true,3642,2,app/learn/projects/azure-project-06/page.tsx,2026-08-14
-/learn/python,track-index,python,Python,programming,,,live,true,true,1958,62,app/learn/python/page.tsx,
+/learn/operating-systems/processes-and-threads,lesson,operating-systems,Operating Systems,cs,Processes & Concurrency,2,live,true,true,1766,5,content/operating-systems/processes-and-threads.tsx,2026-11-09
+/learn/operating-systems/inter-process-communication,lesson,operating-systems,Operating Systems,cs,Processes & Concurrency,3,live,true,true,2114,5,content/operating-systems/inter-process-communication.tsx,2026-11-09
+/learn/operating-systems/cpu-scheduling,lesson,operating-systems,Operating Systems,cs,Processes & Concurrency,4,live,true,true,1865,5,content/operating-systems/cpu-scheduling.tsx,2026-11-09
+/learn/operating-systems/concurrency-synchronization-deadlocks,lesson,operating-systems,Operating Systems,cs,Processes & Concurrency,5,live,true,true,1775,5,content/operating-systems/concurrency-synchronization-deadlocks.tsx,2026-11-09
+/learn/operating-systems/memory-management-virtual-memory,lesson,operating-systems,Operating Systems,cs,Memory & Storage,6,live,true,true,1960,5,content/operating-systems/memory-management-virtual-memory.tsx,2026-11-09
+/learn/operating-systems/file-systems-and-io,lesson,operating-systems,Operating Systems,cs,Memory & Storage,7,live,true,true,1895,5,content/operating-systems/file-systems-and-io.tsx,2026-11-09
+/learn/operating-systems/disk-scheduling-raid-storage,lesson,operating-systems,Operating Systems,cs,Memory & Storage,8,live,true,true,2096,5,content/operating-systems/disk-scheduling-raid-storage.tsx,2026-11-09
+/learn/operating-systems/virtualisation-containers,lesson,operating-systems,Operating Systems,cs,"Virtualisation, Security & Interviews",9,live,true,true,1946,5,content/operating-systems/virtualisation-containers.tsx,2026-11-09
+/learn/operating-systems/os-protection-security,lesson,operating-systems,Operating Systems,cs,"Virtualisation, Security & Interviews",10,live,true,true,2059,5,content/operating-systems/os-protection-security.tsx,2026-11-09
+/learn/operating-systems/os-interview-questions,lesson,operating-systems,Operating Systems,cs,"Virtualisation, Security & Interviews",11,live,true,true,1813,4,content/operating-systems/os-interview-questions.tsx,2026-11-09
+/learn/projects,track-index,projects,Cloud Data Projects,practice,,,live,true,true,432,15,app/learn/projects/page.tsx,
+/learn/projects/azure-batch-pipeline,lesson,projects,Cloud Data Projects,practice,,1,live,true,true,4046,16,app/learn/projects/azure-batch-pipeline/page.tsx,2026-08-14
+/learn/projects/azure-projects-02,lesson,projects,Cloud Data Projects,practice,,2,live,true,true,3005,4,app/learn/projects/azure-projects-02/page.tsx,2026-08-14
+/learn/projects/azure-project-03,lesson,projects,Cloud Data Projects,practice,,3,live,true,true,3871,4,app/learn/projects/azure-project-03/page.tsx,2026-08-14
+/learn/projects/azure-project-04,lesson,projects,Cloud Data Projects,practice,,4,live,true,true,3139,4,app/learn/projects/azure-project-04/page.tsx,2026-08-14
+/learn/projects/azure-project-05,lesson,projects,Cloud Data Projects,practice,,5,live,true,true,3768,4,app/learn/projects/azure-project-05/page.tsx,2026-08-14
+/learn/projects/azure-project-06,lesson,projects,Cloud Data Projects,practice,,6,live,true,true,3648,2,app/learn/projects/azure-project-06/page.tsx,2026-08-14
+/learn/python,track-index,python,Python,programming,,,live,true,true,2119,65,app/learn/python/page.tsx,
 /learn/python/cheatsheet,tool,python,Python,programming,,,live,true,true,683,1,app/learn/python/cheatsheet/page.tsx,
 /learn/python/what-is-python-setup,lesson,python,Python,programming,Python Foundations,1,live,true,true,5273,11,content/python/what-is-python-setup.tsx,2026-11-09
 /learn/python/variables-data-types,lesson,python,Python,programming,Python Foundations,2,live,true,true,3761,12,content/python/variables-data-types.tsx,2026-08-14
@@ -594,47 +682,51 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/python/strings,lesson,python,Python,programming,Python Foundations,4,live,true,true,3958,13,content/python/strings.tsx,2026-08-14
 /learn/python/control-flow,lesson,python,Python,programming,Python Foundations,5,live,true,true,3711,13,content/python/control-flow.tsx,2026-08-14
 /learn/python/loops,lesson,python,Python,programming,Python Foundations,6,live,true,true,5470,13,content/python/loops.tsx,2026-08-16
-/learn/python/functions,lesson,python,Python,programming,Python Foundations,7,live,true,true,4633,13,content/python/functions.tsx,2026-08-16
+/learn/python/functions,lesson,python,Python,programming,Python Foundations,7,live,true,true,4633,13,content/python/functions.tsx,2026-11-09
 /learn/python/lists,lesson,python,Python,programming,Python Foundations,8,live,true,true,4142,13,content/python/lists.tsx,2026-08-16
 /learn/python/tuples-sets,lesson,python,Python,programming,Python Foundations,9,live,true,true,4352,13,content/python/tuples-sets.tsx,2026-08-16
 /learn/python/io-formatting,lesson,python,Python,programming,Python Foundations,10,live,true,true,4204,14,content/python/io-formatting.tsx,2026-08-16
 /learn/python/dictionaries,lesson,python,Python,programming,Core Data Structures & Logic,11,live,true,true,4835,13,content/python/dictionaries.tsx,2026-08-16
-/learn/python/comprehensions,lesson,python,Python,programming,Core Data Structures & Logic,12,live,true,true,4433,13,content/python/comprehensions.tsx,2026-08-16
-/learn/python/nested-data-structures,lesson,python,Python,programming,Core Data Structures & Logic,13,live,true,true,4348,13,content/python/nested-data-structures.tsx,2026-08-16
-/learn/python/string-manipulation-deep-dive,lesson,python,Python,programming,Core Data Structures & Logic,14,live,true,true,4372,13,content/python/string-manipulation-deep-dive.tsx,2026-08-16
+/learn/python/comprehensions,lesson,python,Python,programming,Core Data Structures & Logic,12,live,true,true,4433,13,content/python/comprehensions.tsx,2026-11-09
+/learn/python/nested-data-structures,lesson,python,Python,programming,Core Data Structures & Logic,13,live,true,true,4348,13,content/python/nested-data-structures.tsx,2026-11-09
+/learn/python/string-manipulation-deep-dive,lesson,python,Python,programming,Core Data Structures & Logic,14,live,true,true,4372,13,content/python/string-manipulation-deep-dive.tsx,2026-11-09
 /learn/python/reading-writing-files,lesson,python,Python,programming,Core Data Structures & Logic,15,live,true,true,5019,13,content/python/reading-writing-files.tsx,2026-08-16
 /learn/python/csv-json,lesson,python,Python,programming,Core Data Structures & Logic,16,live,true,true,4363,13,content/python/csv-json.tsx,2026-08-16
 /learn/python/exception-handling,lesson,python,Python,programming,Core Data Structures & Logic,17,live,true,true,4671,13,content/python/exception-handling.tsx,2026-08-16
-/learn/python/modules-packages-venv,lesson,python,Python,programming,Core Data Structures & Logic,18,live,true,true,3528,13,content/python/modules-packages-venv.tsx,2026-08-16
-/learn/python/classes-objects,lesson,python,Python,programming,Object-Oriented Python,19,live,true,true,4479,10,content/python/classes-objects.tsx,2026-08-16
-/learn/python/constructors-attributes,lesson,python,Python,programming,Object-Oriented Python,20,live,true,true,3858,10,content/python/constructors-attributes.tsx,2026-08-16
-/learn/python/inheritance-polymorphism,lesson,python,Python,programming,Object-Oriented Python,21,live,true,true,3921,10,content/python/inheritance-polymorphism.tsx,2026-08-16
-/learn/python/encapsulation-dunder-methods,lesson,python,Python,programming,Object-Oriented Python,22,live,true,true,2964,10,content/python/encapsulation-dunder-methods.tsx,2026-08-16
-/learn/python/class-static-methods-properties,lesson,python,Python,programming,Object-Oriented Python,23,live,true,true,2548,10,content/python/class-static-methods-properties.tsx,2026-08-16
-/learn/python/abstract-base-classes,lesson,python,Python,programming,Object-Oriented Python,24,live,true,true,2661,10,content/python/abstract-base-classes.tsx,2026-08-16
-/learn/python/args-kwargs,lesson,python,Python,programming,Intermediate & Functional Python,25,live,true,true,4439,10,content/python/args-kwargs.tsx,2026-08-16
-/learn/python/lambda-map-filter-reduce,lesson,python,Python,programming,Intermediate & Functional Python,26,live,true,true,4452,10,content/python/lambda-map-filter-reduce.tsx,2026-08-16
-/learn/python/iterators-iterables,lesson,python,Python,programming,Intermediate & Functional Python,27,live,true,true,4035,10,content/python/iterators-iterables.tsx,2026-08-16
-/learn/python/generators-yield,lesson,python,Python,programming,Intermediate & Functional Python,28,live,true,true,4191,10,content/python/generators-yield.tsx,2026-08-16
-/learn/python/decorators,lesson,python,Python,programming,Intermediate & Functional Python,29,live,true,true,2646,10,content/python/decorators.tsx,2026-08-16
-/learn/python/context-managers,lesson,python,Python,programming,Intermediate & Functional Python,30,live,true,true,2613,10,content/python/context-managers.tsx,2026-08-16
-/learn/python/closures-scope,lesson,python,Python,programming,Intermediate & Functional Python,31,live,true,true,2803,10,content/python/closures-scope.tsx,2026-08-16
-/learn/python/regular-expressions,lesson,python,Python,programming,Advanced Python,32,live,true,true,4920,9,content/python/regular-expressions.tsx,2026-08-16
-/learn/python/dates-times,lesson,python,Python,programming,Advanced Python,33,live,true,true,4378,9,content/python/dates-times.tsx,2026-08-16
-/learn/python/multithreading-multiprocessing,lesson,python,Python,programming,Advanced Python,34,live,true,true,4438,9,content/python/multithreading-multiprocessing.tsx,2026-08-16
-/learn/python/async-python,lesson,python,Python,programming,Advanced Python,35,live,true,true,4478,9,content/python/async-python.tsx,2026-08-16
-/learn/python/type-hints-mypy,lesson,python,Python,programming,Advanced Python,36,live,true,true,2798,9,content/python/type-hints-mypy.tsx,2026-08-16
-/learn/python/working-with-apis-python,lesson,python,Python,programming,Advanced Python,37,live,true,true,4068,9,content/python/working-with-apis-python.tsx,2026-08-16
-/learn/python/unit-testing-pytest,lesson,python,Python,programming,Advanced Python,38,live,true,true,2959,9,content/python/unit-testing-pytest.tsx,2026-08-16
-/learn/python/debugging-techniques,lesson,python,Python,programming,Production & Career Readiness,39,live,true,true,5511,6,content/python/debugging-techniques.tsx,2026-08-16
-/learn/python/logging-best-practices,lesson,python,Python,programming,Production & Career Readiness,40,live,true,true,4590,6,content/python/logging-best-practices.tsx,2026-08-16
-/learn/python/packaging-distribution,lesson,python,Python,programming,Production & Career Readiness,41,live,true,true,4146,6,content/python/packaging-distribution.tsx,2026-08-16
-/learn/python/performance-profiling,lesson,python,Python,programming,Production & Career Readiness,42,live,true,true,3028,6,content/python/performance-profiling.tsx,2026-08-16
-/learn/python/numpy-pandas-intro,lesson,python,Python,programming,Production & Career Readiness,43,live,true,true,2817,6,content/python/numpy-pandas-intro.tsx,2026-08-16
-/learn/python/building-a-cli-tool,lesson,python,Python,programming,Production & Career Readiness,44,live,true,true,2802,6,content/python/building-a-cli-tool.tsx,2026-08-16
-/learn/python/python-best-practices,lesson,python,Python,programming,Production & Career Readiness,45,live,true,true,2744,6,content/python/python-best-practices.tsx,2026-08-16
-/learn/python/python-interview-prep,lesson,python,Python,programming,Production & Career Readiness,46,live,true,true,3892,6,content/python/python-interview-prep.tsx,2026-08-16
-/learn/snowflake,track-index,snowflake,Snowflake,data,,,live,true,true,814,29,app/learn/snowflake/page.tsx,
+/learn/python/modules-packages-venv,lesson,python,Python,programming,Core Data Structures & Logic,18,live,true,true,3541,13,content/python/modules-packages-venv.tsx,2026-11-09
+/learn/python/standard-library-toolkit,lesson,python,Python,programming,Core Data Structures & Logic,19,live,true,true,1539,12,content/python/standard-library-toolkit.tsx,2026-11-09
+/learn/python/classes-objects,lesson,python,Python,programming,Object-Oriented Python,20,live,true,true,4483,11,content/python/classes-objects.tsx,2026-11-09
+/learn/python/constructors-attributes,lesson,python,Python,programming,Object-Oriented Python,21,live,true,true,3858,10,content/python/constructors-attributes.tsx,2026-11-09
+/learn/python/inheritance-polymorphism,lesson,python,Python,programming,Object-Oriented Python,22,live,true,true,3921,10,content/python/inheritance-polymorphism.tsx,2026-11-09
+/learn/python/encapsulation-dunder-methods,lesson,python,Python,programming,Object-Oriented Python,23,live,true,true,2964,10,content/python/encapsulation-dunder-methods.tsx,2026-11-09
+/learn/python/class-static-methods-properties,lesson,python,Python,programming,Object-Oriented Python,24,live,true,true,2548,10,content/python/class-static-methods-properties.tsx,2026-11-09
+/learn/python/abstract-base-classes,lesson,python,Python,programming,Object-Oriented Python,25,live,true,true,2643,10,content/python/abstract-base-classes.tsx,2026-11-09
+/learn/python/dataclasses-enums-pydantic,lesson,python,Python,programming,Object-Oriented Python,26,live,true,true,1573,9,content/python/dataclasses-enums-pydantic.tsx,2026-11-09
+/learn/python/args-kwargs,lesson,python,Python,programming,Intermediate & Functional Python,27,live,true,true,4439,11,content/python/args-kwargs.tsx,2026-11-09
+/learn/python/lambda-map-filter-reduce,lesson,python,Python,programming,Intermediate & Functional Python,28,live,true,true,4452,10,content/python/lambda-map-filter-reduce.tsx,2026-11-09
+/learn/python/iterators-iterables,lesson,python,Python,programming,Intermediate & Functional Python,29,live,true,true,4035,10,content/python/iterators-iterables.tsx,2026-11-09
+/learn/python/generators-yield,lesson,python,Python,programming,Intermediate & Functional Python,30,live,true,true,4191,10,content/python/generators-yield.tsx,2026-11-09
+/learn/python/decorators,lesson,python,Python,programming,Intermediate & Functional Python,31,live,true,true,2646,10,content/python/decorators.tsx,2026-11-09
+/learn/python/context-managers,lesson,python,Python,programming,Intermediate & Functional Python,32,live,true,true,2613,10,content/python/context-managers.tsx,2026-11-09
+/learn/python/closures-scope,lesson,python,Python,programming,Intermediate & Functional Python,33,live,true,true,2803,10,content/python/closures-scope.tsx,2026-11-09
+/learn/python/regular-expressions,lesson,python,Python,programming,Advanced Python,34,live,true,true,4920,9,content/python/regular-expressions.tsx,2026-11-09
+/learn/python/dates-times,lesson,python,Python,programming,Advanced Python,35,live,true,true,4378,9,content/python/dates-times.tsx,2026-11-09
+/learn/python/multithreading-multiprocessing,lesson,python,Python,programming,Advanced Python,36,live,true,true,4438,9,content/python/multithreading-multiprocessing.tsx,2026-11-09
+/learn/python/async-python,lesson,python,Python,programming,Advanced Python,37,live,true,true,4478,9,content/python/async-python.tsx,2026-11-09
+/learn/python/type-hints-mypy,lesson,python,Python,programming,Advanced Python,38,live,true,true,2798,9,content/python/type-hints-mypy.tsx,2026-11-09
+/learn/python/working-with-apis-python,lesson,python,Python,programming,Advanced Python,39,live,true,true,4066,9,content/python/working-with-apis-python.tsx,2026-11-09
+/learn/python/python-databases-sqlite-sqlalchemy,lesson,python,Python,programming,Advanced Python,40,live,true,true,1609,8,content/python/python-databases-sqlite-sqlalchemy.tsx,2026-11-09
+/learn/python/unit-testing-pytest,lesson,python,Python,programming,Advanced Python,41,live,true,true,2960,10,content/python/unit-testing-pytest.tsx,2026-11-09
+/learn/python/debugging-techniques,lesson,python,Python,programming,Production & Career Readiness,42,live,true,true,5511,6,content/python/debugging-techniques.tsx,2026-11-09
+/learn/python/logging-best-practices,lesson,python,Python,programming,Production & Career Readiness,43,live,true,true,4590,6,content/python/logging-best-practices.tsx,2026-11-09
+/learn/python/packaging-distribution,lesson,python,Python,programming,Production & Career Readiness,44,live,true,true,4146,6,content/python/packaging-distribution.tsx,2026-11-09
+/learn/python/performance-profiling,lesson,python,Python,programming,Production & Career Readiness,45,live,true,true,3028,6,content/python/performance-profiling.tsx,2026-11-09
+/learn/python/numpy-pandas-intro,lesson,python,Python,programming,Production & Career Readiness,46,live,true,true,2817,6,content/python/numpy-pandas-intro.tsx,2026-11-09
+/learn/python/building-a-cli-tool,lesson,python,Python,programming,Production & Career Readiness,47,live,true,true,2802,6,content/python/building-a-cli-tool.tsx,2026-11-09
+/learn/python/python-best-practices,lesson,python,Python,programming,Production & Career Readiness,48,live,true,true,2734,6,content/python/python-best-practices.tsx,2026-11-09
+/learn/python/python-capstone-project,lesson,python,Python,programming,Production & Career Readiness,49,live,true,true,2083,5,content/python/python-capstone-project.tsx,2026-11-09
+/learn/python/python-interview-prep,lesson,python,Python,programming,Production & Career Readiness,50,live,true,true,3887,7,content/python/python-interview-prep.tsx,2026-11-09
+/learn/snowflake,track-index,snowflake,Snowflake,data,,,live,true,true,891,31,app/learn/snowflake/page.tsx,
 /learn/snowflake/cheatsheet,tool,snowflake,Snowflake,data,,,live,true,true,1608,1,app/learn/snowflake/cheatsheet/page.tsx,
 /learn/snowflake/what-is-snowflake,lesson,snowflake,Snowflake,data,Snowflake Foundations,1,live,true,true,5184,5,content/snowflake/what-is-snowflake.tsx,2026-09-11
 /learn/snowflake/architecture,lesson,snowflake,Snowflake,data,Snowflake Foundations,2,live,true,true,5814,6,content/snowflake/architecture.tsx,2026-09-11
@@ -652,15 +744,17 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/snowflake/cost-optimization,lesson,snowflake,Snowflake,data,"Performance, Cost, and Governance",14,live,true,true,5444,6,content/snowflake/cost-optimization.tsx,2026-09-11
 /learn/snowflake/advanced-security-governance,lesson,snowflake,Snowflake,data,"Performance, Cost, and Governance",15,live,true,true,4755,6,content/snowflake/advanced-security-governance.tsx,2026-09-11
 /learn/snowflake/data-sharing-marketplace,lesson,snowflake,Snowflake,data,"Performance, Cost, and Governance",16,live,true,true,5464,6,content/snowflake/data-sharing-marketplace.tsx,2026-09-11
-/learn/snowflake/snowflake-with-dbt,lesson,snowflake,Snowflake,data,Production and Career Readiness,17,live,true,true,4184,6,content/snowflake/snowflake-with-dbt.tsx,2026-11-09
-/learn/snowflake/production-operations,lesson,snowflake,Snowflake,data,Production and Career Readiness,18,live,true,true,4753,6,content/snowflake/production-operations.tsx,2026-09-11
-/learn/snowflake/snowflake-project,lesson,snowflake,Snowflake,data,Production and Career Readiness,19,live,true,true,6273,6,content/snowflake/snowflake-project.tsx,2026-09-11
-/learn/snowflake/interview-system-design,lesson,snowflake,Snowflake,data,Production and Career Readiness,20,live,true,true,8585,5,content/snowflake/interview-system-design.tsx,2026-09-11
-/learn/sql,track-index,sql,SQL,data,,,live,true,true,2163,76,app/learn/sql/page.tsx,
+/learn/snowflake/snowflake-with-dbt,lesson,snowflake,Snowflake,data,Production and Career Readiness,17,live,true,true,4182,6,content/snowflake/snowflake-with-dbt.tsx,2026-11-09
+/learn/snowflake/snowpark-for-python,lesson,snowflake,Snowflake,data,Production and Career Readiness,18,live,true,true,1848,6,content/snowflake/snowpark-for-python.tsx,2026-11-09
+/learn/snowflake/snowflake-cortex-ai-functions,lesson,snowflake,Snowflake,data,Production and Career Readiness,19,live,true,true,1886,6,content/snowflake/snowflake-cortex-ai-functions.tsx,2026-11-09
+/learn/snowflake/production-operations,lesson,snowflake,Snowflake,data,Production and Career Readiness,20,live,true,true,4754,6,content/snowflake/production-operations.tsx,2026-11-09
+/learn/snowflake/snowflake-project,lesson,snowflake,Snowflake,data,Production and Career Readiness,21,live,true,true,6273,6,content/snowflake/snowflake-project.tsx,2026-11-09
+/learn/snowflake/interview-system-design,lesson,snowflake,Snowflake,data,Production and Career Readiness,22,live,true,true,8584,5,content/snowflake/interview-system-design.tsx,2026-11-09
+/learn/sql,track-index,sql,SQL,data,,,live,true,true,2328,81,app/learn/sql/page.tsx,
 /learn/sql/cheatsheet,tool,sql,SQL,data,,,live,true,true,927,1,app/learn/sql/cheatsheet/page.tsx,
 /learn/sql/joins,tool,sql,SQL,data,,,live,true,true,330,1,app/learn/sql/joins/page.tsx,
 /learn/sql/playground,tool,sql,SQL,data,,,live,true,true,286,9,app/learn/sql/playground/page.tsx,
-/learn/sql/what-is-a-database,lesson,sql,SQL,data,Databases & Setup,1,live,true,true,5836,10,content/sql/what-is-a-database.tsx,2026-09-04
+/learn/sql/what-is-a-database,lesson,sql,SQL,data,Databases & Setup,1,live,true,true,5836,10,content/sql/what-is-a-database.tsx,2026-11-09
 /learn/sql/how-databases-work,lesson,sql,SQL,data,Databases & Setup,2,live,true,true,6243,10,content/sql/how-databases-work.tsx,2026-09-04
 /learn/sql/types-of-databases,lesson,sql,SQL,data,Databases & Setup,3,live,true,true,6729,10,content/sql/types-of-databases.tsx,2026-08-14
 /learn/sql/setting-up,lesson,sql,SQL,data,Databases & Setup,4,live,true,true,5536,10,content/sql/setting-up.tsx,2026-09-04
@@ -711,19 +805,39 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/sql/stored-procedures,lesson,sql,SQL,data,Advanced SQL Objects,49,live,true,true,6011,6,content/sql/stored-procedures.tsx,2026-09-01
 /learn/sql/user-defined-functions,lesson,sql,SQL,data,Advanced SQL Objects,50,live,true,true,6795,6,content/sql/user-defined-functions.tsx,2026-09-01
 /learn/sql/triggers,lesson,sql,SQL,data,Advanced SQL Objects,51,live,true,true,7097,6,content/sql/triggers.tsx,2026-09-01
-/learn/sql/window-functions-intro,lesson,sql,SQL,data,Window Functions & CTEs,52,live,true,true,6239,6,content/sql/window-functions-intro.tsx,2026-09-04
-/learn/sql/ranking-functions,lesson,sql,SQL,data,Window Functions & CTEs,53,live,true,true,6470,6,content/sql/ranking-functions.tsx,2026-09-04
-/learn/sql/analytics-lag-lead,lesson,sql,SQL,data,Window Functions & CTEs,54,live,true,true,6232,6,content/sql/analytics-lag-lead.tsx,2026-09-04
-/learn/sql/cte-with-clause,lesson,sql,SQL,data,Window Functions & CTEs,55,live,true,true,5387,6,content/sql/cte-with-clause.tsx,2026-09-04
-/learn/sql/recursive-cte,lesson,sql,SQL,data,Window Functions & CTEs,56,live,true,true,6843,7,content/sql/recursive-cte.tsx,2026-09-04
-/learn/sql/explain-analyze,lesson,sql,SQL,data,Performance & Optimization,57,live,true,true,7496,6,content/sql/explain-analyze.tsx,2026-09-01
-/learn/sql/index-strategies,lesson,sql,SQL,data,Performance & Optimization,58,live,true,true,7397,6,content/sql/index-strategies.tsx,2026-09-05
-/learn/sql/query-best-practices,lesson,sql,SQL,data,Performance & Optimization,59,live,true,true,3762,6,content/sql/query-best-practices.tsx,2026-09-05
-/learn/sql/sql-for-data-analysis,lesson,sql,SQL,data,Real-World & Interview,60,live,true,true,2876,6,content/sql/sql-for-data-analysis.tsx,2026-08-14
-/learn/sql/interview-questions,lesson,sql,SQL,data,Real-World & Interview,61,live,true,true,5630,7,content/sql/interview-questions.tsx,2026-09-04
-/learn/sql/sql-projects,lesson,sql,SQL,data,Real-World & Interview,62,live,true,true,8037,5,content/sql/sql-projects.tsx,2026-09-01
+/learn/sql/window-functions-intro,lesson,sql,SQL,data,Window Functions & CTEs,52,live,true,true,6251,6,content/sql/window-functions-intro.tsx,2026-09-04
+/learn/sql/window-frames-running-totals,lesson,sql,SQL,data,Window Functions & CTEs,53,live,true,true,1632,6,content/sql/window-frames-running-totals.tsx,2026-11-09
+/learn/sql/ranking-functions,lesson,sql,SQL,data,Window Functions & CTEs,54,live,true,true,6475,7,content/sql/ranking-functions.tsx,2026-11-09
+/learn/sql/analytics-lag-lead,lesson,sql,SQL,data,Window Functions & CTEs,55,live,true,true,6232,6,content/sql/analytics-lag-lead.tsx,2026-11-09
+/learn/sql/cte-with-clause,lesson,sql,SQL,data,Window Functions & CTEs,56,live,true,true,5387,6,content/sql/cte-with-clause.tsx,2026-11-09
+/learn/sql/recursive-cte,lesson,sql,SQL,data,Window Functions & CTEs,57,live,true,true,6844,7,content/sql/recursive-cte.tsx,2026-11-09
+/learn/sql/upsert-merge,lesson,sql,SQL,data,Advanced SQL Patterns,58,live,true,true,1651,6,content/sql/upsert-merge.tsx,2026-11-09
+/learn/sql/rollup-cube-grouping-sets,lesson,sql,SQL,data,Advanced SQL Patterns,59,live,true,true,1485,6,content/sql/rollup-cube-grouping-sets.tsx,2026-11-09
+/learn/sql/json-in-sql,lesson,sql,SQL,data,Advanced SQL Patterns,60,live,true,true,1668,6,content/sql/json-in-sql.tsx,2026-11-09
+/learn/sql/gaps-and-islands,lesson,sql,SQL,data,Advanced SQL Patterns,61,live,true,true,1699,6,content/sql/gaps-and-islands.tsx,2026-11-09
+/learn/sql/explain-analyze,lesson,sql,SQL,data,Performance & Optimization,62,live,true,true,7499,7,content/sql/explain-analyze.tsx,2026-11-09
+/learn/sql/index-strategies,lesson,sql,SQL,data,Performance & Optimization,63,live,true,true,7397,6,content/sql/index-strategies.tsx,2026-11-09
+/learn/sql/query-best-practices,lesson,sql,SQL,data,Performance & Optimization,64,live,true,true,3762,6,content/sql/query-best-practices.tsx,2026-11-09
+/learn/sql/sql-for-data-analysis,lesson,sql,SQL,data,Real-World & Interview,65,live,true,true,2876,6,content/sql/sql-for-data-analysis.tsx,2026-11-09
+/learn/sql/interview-questions,lesson,sql,SQL,data,Real-World & Interview,66,live,true,true,5630,7,content/sql/interview-questions.tsx,2026-11-09
+/learn/sql/sql-projects,lesson,sql,SQL,data,Real-World & Interview,67,live,true,true,8037,5,content/sql/sql-projects.tsx,2026-11-09
 /learn/track-plan/sre-platform-engineering,planned-track,sre-platform-engineering,Site Reliability & Platform Engineering,cloud,,,planned,true,true,827,4,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/system-design,planned-track,system-design,System Design & Software Engineering,cs,,,planned,true,true,762,4,app/learn/track-plan/[slug]/page.tsx,
+/learn/system-design,track-index,system-design,System Design,cs,,,live,true,true,504,20,app/learn/system-design/page.tsx,
+/learn/system-design/what-is-system-design,lesson,system-design,System Design,cs,Foundations,1,live,true,true,1840,4,content/system-design/what-is-system-design.tsx,2026-11-09
+/learn/system-design/back-of-envelope-estimation,lesson,system-design,System Design,cs,Foundations,2,live,true,true,1838,5,content/system-design/back-of-envelope-estimation.tsx,2026-11-09
+/learn/system-design/apis-and-service-communication,lesson,system-design,System Design,cs,Foundations,3,live,true,true,1875,5,content/system-design/apis-and-service-communication.tsx,2026-11-09
+/learn/system-design/load-balancing-cdn,lesson,system-design,System Design,cs,Building Blocks,4,live,true,true,1841,5,content/system-design/load-balancing-cdn.tsx,2026-11-09
+/learn/system-design/caching-strategies,lesson,system-design,System Design,cs,Building Blocks,5,live,true,true,2041,5,content/system-design/caching-strategies.tsx,2026-11-09
+/learn/system-design/databases-at-scale,lesson,system-design,System Design,cs,Building Blocks,6,live,true,true,1946,5,content/system-design/databases-at-scale.tsx,2026-11-09
+/learn/system-design/message-queues-async,lesson,system-design,System Design,cs,Building Blocks,7,live,true,true,1725,5,content/system-design/message-queues-async.tsx,2026-11-09
+/learn/system-design/consistency-cap-consensus,lesson,system-design,System Design,cs,Building Blocks,8,live,true,true,1890,5,content/system-design/consistency-cap-consensus.tsx,2026-11-09
+/learn/system-design/reliability-patterns-rate-limiting,lesson,system-design,System Design,cs,Reliability & Design,9,live,true,true,1904,5,content/system-design/reliability-patterns-rate-limiting.tsx,2026-11-09
+/learn/system-design/monoliths-microservices,lesson,system-design,System Design,cs,Reliability & Design,10,live,true,true,1811,5,content/system-design/monoliths-microservices.tsx,2026-11-09
+/learn/system-design/low-level-design,lesson,system-design,System Design,cs,Reliability & Design,11,live,true,true,2280,5,content/system-design/low-level-design.tsx,2026-11-09
+/learn/system-design/design-url-shortener,lesson,system-design,System Design,cs,Case Studies & Interview,12,live,true,true,2407,5,content/system-design/design-url-shortener.tsx,2026-11-09
+/learn/system-design/design-chat-notifications,lesson,system-design,System Design,cs,Case Studies & Interview,13,live,true,true,2412,5,content/system-design/design-chat-notifications.tsx,2026-11-09
+/learn/system-design/design-food-delivery,lesson,system-design,System Design,cs,Case Studies & Interview,14,live,true,true,2335,5,content/system-design/design-food-delivery.tsx,2026-11-09
+/learn/system-design/system-design-interview,lesson,system-design,System Design,cs,Case Studies & Interview,15,live,true,true,2522,5,content/system-design/system-design-interview.tsx,2026-11-09
 /admin,unregistered,,,,,,unregistered,false,true,3,0,app/admin/page.tsx,
 /auth/callback,unregistered,,,,,,unregistered,false,true,8,0,app/auth/callback/page.tsx,
 /blog/adf-vs-airflow-vs-step-functions,blog,,,,,,live,true,true,470,4,data/blog-articles.ts,

@@ -80,7 +80,7 @@ export default function InfrastructureAsCodeModule() {
     <LearnLayout
       title="Infrastructure as Code for Data Engineering"
       description="Terraform fundamentals, provisioning Snowflake warehouses, S3 buckets, Airflow environments, IAM roles, and managing data infrastructure with state, modules, and CI/CD."
-      section="Data Engineering — Lesson 45"
+      section="Data Engineering — Lesson 48"
       readTime="70 min"
     >
 
@@ -1099,11 +1099,9 @@ After applying
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 46 covers data engineering system design — the complete framework for designing any data system from scratch, with five fully worked designs for scenarios you will encounter in senior interviews and real jobs.
+          Lesson 55 covers data engineering system design — the complete framework for designing any data system from scratch, with five fully worked designs for scenarios you will encounter in senior interviews and real jobs.
         </p>
-        <Link href="/learn/data-engineering/system-design-de" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 46 → Data Engineering System Design
-        </Link>
+        <Link href="/learn/data-engineering/reverse-etl-operational-analytics" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>Lesson 49 → Reverse ETL and Operational Analytics</Link>
       </div>
     </LearnLayout>
   )

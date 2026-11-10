@@ -1096,10 +1096,10 @@ print("between cheap, high-volume items and rare, high-value ones.")`} />
         </p>
 
         <p style={S.p}>
-          Section 7 — Deep Learning — begins with Lesson 41.
+          Section 7 — Deep Learning — begins with Lesson 45.
           Everything changes: instead of hand-crafted features,
           the model learns its own representations from raw data.
-          Lesson 41 builds a neural network from scratch in NumPy —
+          Lesson 45 builds a neural network from scratch in NumPy —
           forward pass, backpropagation, gradient descent —
           before introducing PyTorch.
         </p>
@@ -1116,7 +1116,7 @@ print("between cheap, high-volume items and rare, high-value ones.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 43 · Deep Learning
+              Next — Lesson 47 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

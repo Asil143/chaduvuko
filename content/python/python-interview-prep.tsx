@@ -94,7 +94,7 @@ export default function PythonInterviewPrep() {
     <LearnLayout
       title="Python Interview Prep — Common Questions and Patterns"
       description="The Python questions that come up in real technical interviews, answered at senior-engineer depth."
-      section="Python — Lesson 46 (Capstone)"
+      section="Python — Lesson 50"
       readTime="60 min"
     >
 
@@ -103,7 +103,7 @@ export default function PythonInterviewPrep() {
         <SectionTag text="// The Final Module" />
         <SectionTitle>Everything From This Track, Interview-Ready</SectionTitle>
         <Para>
-          This lesson is different from the other 45 — instead of teaching one new topic in depth, it
+          This lesson is different from the other 49 — instead of teaching one new topic in depth, it
           pulls together the gotchas, patterns, and trade-offs from across the entire curriculum into
           the format an actual technical interview uses: real questions, answered completely, organised
           by theme. If a question below references something unfamiliar, the module it was originally

@@ -173,7 +173,7 @@ export default function LakehouseArchitectureModule() {
     <LearnLayout
       title="Lakehouse Architecture"
       description="How the lakehouse converges lake and warehouse, open table format mechanics, ACID on object storage, Unity Catalog, Iceberg in practice, and when to choose it."
-      section="Data Engineering — Lesson 32"
+      section="Data Engineering — Lesson 35"
       readTime="60 min"
     >
 
@@ -583,7 +583,7 @@ TIME TRAVEL RETENTION (Delta Lake):
         <SectionTitle>Apache Iceberg — The Most Portable Open Table Format</SectionTitle>
 
         <Para>
-          Lesson 29 introduced the three open table formats. This lesson goes
+          Lesson 32 introduced the three open table formats. This lesson goes
           deeper on Apache Iceberg specifically, because its engine-agnostic design
           is the most relevant for teams building multi-engine platforms in 2026.
           Iceberg is natively supported by Spark, Flink, Trino, Athena, Snowflake,
@@ -1296,11 +1296,9 @@ print(f"writer_B={b} snapshot={snapshot}")`}</WorkshopCode>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 33 covers dimensional modelling — grain declaration, the four fact table types, star schema design, surrogate keys, and the modern wide-table pattern used in lakehouse architectures.
+          Lesson 37 covers dimensional modelling — grain declaration, the four fact table types, star schema design, surrogate keys, and the modern wide-table pattern used in lakehouse architectures.
         </p>
-        <Link href="/learn/data-engineering/data-modelling" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 33 → Data Modelling — Dimensional, Star and Snowflake Schema
-        </Link>
+        <Link href="/learn/data-engineering/nosql-stores-data-engineers" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>Lesson 36 → NoSQL Stores for Data Engineers — Document, Key-Value, Wide-Column</Link>
       </div>
     </LearnLayout>
   )

@@ -112,7 +112,7 @@ export default function HashingPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'Prerequisite: Lesson 6 — Linked Lists', green: false },
+          { label: 'Prerequisite: Lesson 9 — Linked Lists', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -967,7 +967,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Lesson 16</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 13</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now understand hashing completely — hash functions, collision handling
@@ -976,7 +976,7 @@ int main() {
         O(1) average lookup is one of the most powerful tools in all of computing.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Lesson 16 we cover <strong style={{ color: 'var(--text)' }}>Graphs</strong> —
+        In Lesson 13 we cover <strong style={{ color: 'var(--text)' }}>Trees</strong> —
         the most general and most powerful data structure in DSA. Nodes connected by edges
         in any direction. Maps, social networks, flight routes, dependency graphs —
         every complex relationship is a graph. We build BFS, DFS, Dijkstra's shortest path,
@@ -985,12 +985,12 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 16</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 13</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Graphs — The Most Powerful Data Structure</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>BFS, DFS, Dijkstra's, topological sort — adjacency list in C.</div>
         </div>
-        <Link href="/learn/dsa/graphs" style={{ background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-          Coming Soon →
+        <Link href="/learn/dsa/trees" style={{ background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+          Continue →
         </Link>
       </div>
 

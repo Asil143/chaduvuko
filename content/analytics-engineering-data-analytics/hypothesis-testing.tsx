@@ -6,7 +6,7 @@ export default function HypothesisTesting() {
     <LearnLayout
       title="Hypothesis Testing and p-values"
       description="Null and alternative hypotheses, t-tests and chi-square tests, p-values, errors, power, and what significance does not mean."
-      section="Data Analytics & Statistics — Lesson 03"
+      section="Data Analytics & Statistics — Lesson 07"
       readTime="40 min"
     >
       <Part n={1} label="Why test?" title="A Difference in a Sample May Be Random">
@@ -250,9 +250,9 @@ print({
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/analytics-engineering-data-analytics/metrics-and-kpis"
-        label="Lesson 04 · Defining Metrics and KPIs"
-        text="Testing can help assess a change, but teams first need trustworthy definitions of success. Next, define north-star and guardrail metrics, funnels, and retention cohorts in SQL."
+        href="/learn/analytics-engineering-data-analytics/correlation-and-regression"
+        label="Lesson 08 · Correlation and Regression for Analysts"
+        text="Measure relationships with correlation, fit and interpret linear regression, and avoid confusing correlation with causation."
       />
     </LearnLayout>
   )

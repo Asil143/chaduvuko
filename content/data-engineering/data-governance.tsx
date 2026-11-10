@@ -80,7 +80,7 @@ export default function DataGovernanceModule() {
     <LearnLayout
       title="Data Governance — Lineage, Cataloging, Access Control, and Data Mesh"
       description="What governance actually means in practice — lineage, cataloging, access control, GDPR, PII handling, and the data mesh organizational pattern."
-      section="Data Engineering — Lesson 38"
+      section="Data Engineering — Lesson 43"
       readTime="65 min"
     >
 
@@ -1179,10 +1179,10 @@ Lineage: source fields -> transformations -> reports/exports/activation jobs`}</
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 39 covers security and compliance — encryption at rest and in transit, PII handling, GDPR, and the CCPA — with practical patterns for building pipelines that are compliant by design.
+          Lesson 44 covers security and compliance — encryption at rest and in transit, PII handling, GDPR, and the CCPA — with practical patterns for building pipelines that are compliant by design.
         </p>
         <Link href="/learn/data-engineering/security-compliance" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 39 → Security and Compliance for Data Engineers
+          Lesson 44 → Security and Compliance for Data Engineers
         </Link>
       </div>
     </LearnLayout>

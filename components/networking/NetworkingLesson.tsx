@@ -39,6 +39,20 @@ const LESSONS: Record<string, React.ComponentType> = {
   'network-attacks':          dynamic(() => import('@/content/networking/network-attacks')),
   'firewalls-and-acls':       dynamic(() => import('@/content/networking/firewalls-and-acls')),
   'ids-and-ips':              dynamic(() => import('@/content/networking/ids-and-ips')),
+  'vpns-and-tunneling':       dynamic(() => import('@/content/networking/vpns-and-tunneling')),
+  'wireless-security':        dynamic(() => import('@/content/networking/wireless-security')),
+  'zero-trust-networking':    dynamic(() => import('@/content/networking/zero-trust-networking')),
+  'ddos':                     dynamic(() => import('@/content/networking/ddos')),
+  'network-troubleshooting':  dynamic(() => import('@/content/networking/network-troubleshooting')),
+  'wireshark':                dynamic(() => import('@/content/networking/wireshark')),
+  'tcpdump':                  dynamic(() => import('@/content/networking/tcpdump')),
+  'nmap':                     dynamic(() => import('@/content/networking/nmap')),
+  'network-monitoring':       dynamic(() => import('@/content/networking/network-monitoring')),
+  'load-balancers-and-reverse-proxies': dynamic(() => import('@/content/networking/load-balancers-and-reverse-proxies')),
+  'cdns-and-edge-networks': dynamic(() => import('@/content/networking/cdns-and-edge-networks')),
+  'cloud-networking-vpcs-subnets-security-groups-peering': dynamic(() => import('@/content/networking/cloud-networking-vpcs-subnets-security-groups-peering')),
+  'network-automation-and-sdn': dynamic(() => import('@/content/networking/network-automation-and-sdn')),
+  'networking-interview-prep': dynamic(() => import('@/content/networking/networking-interview-prep')),
 }
 
 export function NetworkingLesson({ slug }: { slug: string }) {

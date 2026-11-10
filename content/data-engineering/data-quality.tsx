@@ -80,7 +80,7 @@ export default function DataQualityModule() {
     <LearnLayout
       title="Data Quality — Dimensions, Testing, Monitoring, and Contracts"
       description="The six dimensions of quality, dbt tests at every layer, anomaly detection, data contracts, and building quality into pipelines rather than checking at the end."
-      section="Data Engineering — Lesson 36"
+      section="Data Engineering — Lesson 40"
       readTime="75 min"
     >
 
@@ -1006,7 +1006,7 @@ print(f"publish={unique and not invalid}")`}</WorkshopCode>
           <p>Check accepted-value semantics, downstream CASE expressions, metric inclusion/exclusion and business-owner approval. Version the contract and test old/new producer-consumer combinations. A new enum can be structurally compatible but semantically breaking. Emit rejection counts by source and reason, and reconcile quarantined records after the agreed repair.</p>
           <p>Assessment: include freshness, missing-source detection, relationship completeness and independent financial reconciliation. Passing tests establishes only the properties those tests actually cover.</p>
         </WorkshopAnswer>
-        <p>Continue with <a href="/learn/data-engineering/monitoring-observability">observing the contract in production</a>.</p>
+        <p>Continue with <a href="/learn/data-engineering/data-contracts-schema-evolution">observing the contract in production</a>.</p>
       </DEWorkshop>
 
       <KeyTakeaways items={[
@@ -1029,11 +1029,9 @@ print(f"publish={unique and not invalid}")`}</WorkshopCode>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 37 covers data observability — pipeline metrics, structured logging, anomaly detection, and the alerting design that ensures you know about data problems before your stakeholders do.
+          Lesson 41 covers data contracts and schema evolution — making producer-consumer expectations explicit and rolling out compatible changes safely.
         </p>
-        <Link href="/learn/data-engineering/monitoring-observability" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 37 → Data Observability — Metrics, Logging and Anomaly Detection
-        </Link>
+        <Link href="/learn/data-engineering/data-contracts-schema-evolution" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>Lesson 41 → Data Contracts and Schema Evolution</Link>
       </div>
     </LearnLayout>
   )

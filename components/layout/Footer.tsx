@@ -26,7 +26,7 @@ const footerSections: { title: string; links: FooterLink[] }[] = [
   {
     title: 'Practice',
     links: [
-      { label: 'Projects', href: '/learn/projects' },
+      { label: 'Cloud Data Projects', href: '/learn/projects' },
       { label: 'Code playground', href: '/playground' },
       { label: 'SQL playground', href: '/learn/sql/playground' },
       { label: 'Interview preparation', href: '/learn/interview' },

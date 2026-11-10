@@ -78,7 +78,7 @@ export default function AnalyticsLagLead() {
     <LearnLayout
       title="Analytics with LAG and LEAD"
       description="Period-over-period comparison, retention analysis, funnel drop-off, session gap detection, first and last event patterns — every time-series analytics pattern built on offset window functions"
-      section="SQL — Lesson 54"
+      section="SQL — Lesson 55"
       readTime="14–20 min"
     >
 

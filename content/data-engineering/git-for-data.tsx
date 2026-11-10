@@ -702,7 +702,7 @@ git lfs status             # LFS status of working directory
 │   ├── staging/                  # stg_ models: raw → typed
 │   ├── intermediate/             # int_ models: business logic
 │   ├── marts/                     # fct_/dim_ prefixes follow dimensional modeling
-│   │                              # conventions (covered fully in Lesson 33)
+│   │                              # conventions (covered fully in Lesson 37)
 │   │   ├── core/dim_customers.sql       # dim_ = dimension/lookup table
 │   │   └── finance/fct_orders.sql       # fct_ = fact/transaction table
 │   └── _schema.yml               # model documentation + tests (committed)

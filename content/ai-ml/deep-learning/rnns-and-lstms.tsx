@@ -227,7 +227,7 @@ export default function RNNsAndLSTMsPage() {
 
         <Callout type="tip">
           RNNs and LSTMs are less common in new NLP projects — Transformers
-          (Lesson 48) have largely replaced them for language tasks.
+          (Lesson 52) have largely replaced them for language tasks.
           But LSTMs remain the standard for time-series forecasting,
           anomaly detection in sensor data, and any sequence where
           the input length is very long or variable.
@@ -1187,7 +1187,7 @@ print("longer — an LSTM's state size here never changes.")`} />
           Training is fully parallelisable, long-range dependencies are
           captured in a single layer, and the results are dramatically better.
           Every modern LLM — GPT, Gemini, Claude — is a Transformer.
-          Lesson 48 builds self-attention from scratch.
+          Lesson 52 builds self-attention from scratch.
         </p>
 
         <div style={{
@@ -1202,7 +1202,7 @@ print("longer — an LSTM's state size here never changes.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 52 · Deep Learning
+              Next — Lesson 56 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
@@ -1234,7 +1234,7 @@ print("longer — an LSTM's state size here never changes.")`} />
           'LSTMs add a cell state Cₜ alongside the hidden state hₜ. The cell state is updated additively: C = f × C_prev + i × g. Additive updates allow gradients to flow backward without shrinking — this is why LSTMs can learn dependencies 100+ steps apart.',
           'Three gates control the cell state: forget gate f (what to erase from memory), input gate i + candidate g (what new information to write), output gate o (what part of memory to expose as hidden state). All gates use sigmoid — values between 0 and 1 act as soft on/off switches.',
           'PyTorch LSTM shapes: input is (batch, seq_len, input_size) with batch_first=True. output is (batch, seq_len, hidden_size) — hidden at every step. h_n is (num_layers, batch, hidden_size) — final hidden. Always use pack_padded_sequence for variable-length sequences. Always clip gradients: nn.utils.clip_grad_norm_(model.parameters(), 1.0).',
-          'Use LSTMs for: time series forecasting (demand, sensor readings), sequence classification (session prediction, sentiment), anomaly detection in sequential data. For new NLP projects use Transformers (Lesson 48) — LSTMs are the standard choice only for time series and very long sequences where attention would be prohibitively expensive.',
+          'Use LSTMs for: time series forecasting (demand, sensor readings), sequence classification (session prediction, sentiment), anomaly detection in sequential data. For new NLP projects use Transformers (Lesson 52) — LSTMs are the standard choice only for time series and very long sequences where attention would be prohibitively expensive.',
         ]}
       />
     </LearnLayout>

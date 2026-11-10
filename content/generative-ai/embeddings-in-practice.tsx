@@ -6,7 +6,7 @@ export default function EmbeddingsInPractice() {
     <LearnLayout
       title="Embeddings in Practice — Chunking and Similarity Search"
       description="Generate embeddings, choose a chunking strategy, and run cosine-similarity search over your own documents."
-      section="Generative AI & LLM Engineering — Lesson 05"
+      section="Generative AI & LLM Engineering — Lesson 06"
       readTime="30 min"
     >
       <Part n={1} label="Concept" title="An Embedding Maps Meaning to a Vector">
@@ -272,7 +272,7 @@ def inspect_query(question, results):
       <H3>Next</H3>
       <NextLesson
         href="/learn/generative-ai/vector-databases"
-        label="Lesson 06 · Vector Databases — pgvector, Chroma, Pinecone and FAISS"
+        label="Lesson 07 · Vector Databases — pgvector, Chroma, Pinecone and FAISS"
         text="You can embed and rank a small collection. Next, move storage and nearest-neighbour search into vector database systems."
       />
     </LearnLayout>

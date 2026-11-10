@@ -77,7 +77,7 @@ export default function IntroToSass() {
     <LearnLayout
       title="Intro to Sass — Variables, Nesting, Mixins"
       description="The CSS preprocessor that came before CSS variables — nesting, mixins, and why many real codebases still use it today."
-      section="HTML & CSS — Lesson 36"
+      section="HTML & CSS — Lesson 37"
       readTime="35 min"
     >
 
@@ -560,11 +560,10 @@ $directions: (t: top, r: right, b: bottom, l: left);
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Phase 6 begins here — Production &amp; Career Readiness, starting with responsive images and the
-          performance techniques every real production page needs.
+          Next, use the CSS foundations and build-time tools you have learned to compose a real interface with Tailwind CSS utility classes.
         </p>
-        <Link href="/learn/html-css/responsive-images-performance" style={{ background: '#ff4757', color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 37 → Responsive Images &amp; Performance
+        <Link href="/learn/html-css/tailwind-css-utility-first-styling" style={{ background: '#ff4757', color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Lesson 38 → Tailwind CSS — Utility-First Styling
         </Link>
       </div>
     </LearnLayout>

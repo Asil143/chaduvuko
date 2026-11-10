@@ -1144,7 +1144,7 @@ print("costs nothing to check before reaching for a bigger model.")`} />
 
         <p style={S.p}>
           You now have the complete training loop: forward pass, loss,
-          backprop, optimiser step. Lesson 45 adds the two techniques
+          backprop, optimiser step. Lesson 49 adds the two techniques
           that make deep networks stable and generalisable at scale —
           Batch Normalisation (stabilise activations between layers)
           and Dropout (prevent co-adaptation and overfitting).
@@ -1164,7 +1164,7 @@ print("costs nothing to check before reaching for a bigger model.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 47 · Deep Learning
+              Next — Lesson 51 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

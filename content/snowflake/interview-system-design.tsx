@@ -6,7 +6,7 @@ export default function InterviewSystemDesign() {
     <LearnLayout
       title="Snowflake Interview and System Design"
       description="The capstone module for the Snowflake track: full worked system-design interview questions synthesizing architecture, performance tuning, cost optimization, security, and streams/tasks, plus a complete vocabulary cheat sheet, common interview traps, and rapid-fire conceptual Q&A."
-      section="Snowflake — Lesson 20"
+      section="Snowflake — Lesson 22"
       readTime="90 min"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
@@ -16,14 +16,14 @@ export default function InterviewSystemDesign() {
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// The Capstone Module" />
-        <SectionTitle>You've Completed All 19 Prior Modules. Here's How It Comes Together.</SectionTitle>
+        <SectionTitle>You've Completed All 21 Prior Modules. Here's How It Comes Together.</SectionTitle>
         <HighlightBox>
           <Para>
             <strong>This lesson does not introduce new Snowflake mechanics.</strong> It is a synthesis — the
             place where warehouse sizing, micro-partition pruning, clustering, RBAC, masking policies, streams
             and tasks, and cost governance all show up together in the same conversation, the way they
             actually do in a real interview or a real architecture review, instead of one topic at a time
-            across nineteen separate modules.
+            across twenty-one separate modules.
           </Para>
           <Para>
             A Snowflake system-design interview almost never asks "what does <code>AUTO_SUSPEND</code> do."
@@ -58,7 +58,7 @@ export default function InterviewSystemDesign() {
           rows={[
             ['1. Requirements gathering', 'Ask about data volume, freshness needs, number and type of users, compliance obligations, and budget before proposing an architecture.', 'A design built on assumed requirements is a design for the wrong problem. Interviewers are testing whether you ask, not whether you guess correctly.'],
             ['2. Data flow sketch', 'Draw sources, ingestion method, Raw/Silver/Gold layering, and consumers before naming a single Snowflake feature.', 'The shape of the pipeline should drive feature choices, not the other way around.'],
-            ['3. Feature mapping', 'Attach specific Snowflake objects — warehouses, streams, tasks, dynamic tables, masking policies — to specific stages of that sketch, and justify each one.', 'This is where breadth across all 19 prior lessons actually shows. A senior answer names the object and the reason together.'],
+            ['3. Feature mapping', 'Attach specific Snowflake objects — warehouses, streams, tasks, dynamic tables, masking policies — to specific stages of that sketch, and justify each one.', 'This is where breadth across all 21 prior lessons actually shows. A senior answer names the object and the reason together.'],
             ['4. Trade-offs stated out loud', 'Name what the design gives up — staleness window, cost ceiling, operational burden — before the interviewer has to ask.', 'An answer with no acknowledged weakness reads as inexperienced or evasive. Naming trade-offs unprompted is a strong signal.'],
             ['5. Failure and recovery', 'Describe what breaks first under load or bad input, and how you would detect and recover from it.', 'Production systems fail. Interviewers want to know you have thought past the happy path.'],
           ]}
@@ -682,7 +682,7 @@ ALTER WAREHOUSE WH_<NAME>_ANALYST SET TAG COST_CENTER.TEAM = '<NAME>';`}
         <SectionTag text="// Vocabulary cheat sheet" />
         <SectionTitle>Snowflake Vocabulary Cheat Sheet — Every Major Term From the Track</SectionTitle>
         <Para>
-          A dense reference covering terminology from all 19 prior lessons. Use it to cram the night before an
+          A dense reference covering terminology from all 21 prior lessons. Use it to cram the night before an
           interview, or to check yourself: if you cannot state a one-line precise definition for every row
           below without looking, that is the term to go back and review.
         </Para>
@@ -911,18 +911,18 @@ ALTER WAREHOUSE WH_<NAME>_ANALYST SET TAG COST_CENTER.TEAM = '<NAME>';`}
       <KeyTakeaways
         items={[
           'A Snowflake system-design interview rewards a repeatable process — requirements, data flow, feature mapping, trade-offs, failure modes — more than any single memorized right answer.',
-          'Across all 20 modules, the recurring senior signal is naming a trade-off unprompted, not just proposing an architecture that works.',
+          'Across all 21 modules, the recurring senior signal is naming a trade-off unprompted, not just proposing an architecture that works.',
           'Performance problems are diagnosed with Query Profile before reaching for warehouse size — spilling, pruning loss, and data-volume growth each have a different fix.',
           'Time Travel, Fail-safe, and cross-region replication protect against three different failure classes and are not substitutes for one another.',
           'RBAC controls object-level access; masking policies control column-level values; row access policies control row-level visibility — three distinct governance tools, not one.',
           'Streams and tasks, dynamic tables, Snowpipe, clustering, and cost governance are the building blocks referenced constantly in these worked answers — knowing when each one is the right tool matters more than knowing all of them exist.',
-          'This lesson closes the Snowflake track: 19 modules of individual mechanics and one capstone module of synthesis, the same way real interviews and real architecture reviews actually test the material.',
+          'This lesson closes the Snowflake track: 20 foundation, engineering, and production modules plus one capstone project, the same way real interviews and real architecture reviews actually test the material.',
         ]}
       />
 
       <HighlightBox>
         <SectionTag text="// Track complete" />
-        <SubTitle>You've Finished All 20 Snowflake Modules</SubTitle>
+        <SubTitle>You've Finished All 22 Snowflake Lessons</SubTitle>
         <Para>
           That's the full track — from warehouse fundamentals through performance tuning, security and
           governance, streams and tasks, and now this capstone synthesis. The worked examples above are worth

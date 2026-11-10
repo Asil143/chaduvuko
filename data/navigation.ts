@@ -9,11 +9,8 @@ export interface PageMeta {
 
 export const PAGE_ORDER: PageMeta[] = [
   // Foundations
-  { href: '/learn/what-is-data-engineering', title: 'What is Data Engineering?',    section: 'Foundations', difficulty: 'Beginner',     color: '#00c2ff', readTime: '10 min' },
   { href: '/learn/roadmap',                  title: 'Roadmap 2026',                  section: 'Foundations', difficulty: 'Beginner',     color: '#00c2ff', readTime: '8 min' },
-  { href: '/learn/foundations/sql',          title: 'SQL for Data Engineers',        section: 'Foundations', difficulty: 'Intermediate', color: '#00c2ff', readTime: '25 min' },
   { href: '/learn/foundations/postgresql',   title: 'PostgreSQL',                    section: 'Foundations', difficulty: 'Intermediate', color: '#00c2ff', readTime: '20 min' },
-  { href: '/learn/foundations/python',       title: 'Python for Data Engineers',     section: 'Foundations', difficulty: 'Intermediate', color: '#00c2ff', readTime: '20 min' },
 
   // Data Engineering Track
   { href: '/learn/data-engineering/what-is-data-engineering',   title: 'What is Data Engineering?',         section: 'Data Engineering', difficulty: 'Beginner',     color: '#00c2ff', readTime: '10 min' },
@@ -290,10 +287,6 @@ export function getNextPages(href: string): PageMeta[] {
 }
 
 export const NEXT_PAGES: Record<string, PageMeta[]> = {
-  '/learn/foundations/python': [
-    PAGE_ORDER.find(p => p.href === '/learn/azure/introduction')!,
-    PAGE_ORDER.find(p => p.href === '/learn/aws/introduction')!,
-  ],
   '/learn/azure/microsoft-fabric': [
     PAGE_ORDER.find(p => p.href === '/learn/projects/azure-batch-pipeline')!,
     PAGE_ORDER.find(p => p.href === '/learn/aws/introduction')!,

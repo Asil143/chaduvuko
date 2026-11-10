@@ -6,7 +6,7 @@ export default function DomAndEvents() {
     <LearnLayout
       title="The DOM and Events"
       description="Select and update elements, handle clicks and form input, use event delegation, and build a small interactive to-do list."
-      section="JavaScript & TypeScript — Lesson 03"
+      section="JavaScript & TypeScript — Lesson 06"
       readTime="40 min"
     >
       <Part n={1} label="From markup to behaviour" title="The DOM Is the Browser's Page Model">
@@ -295,9 +295,9 @@ function renderExpenses() {
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/javascript/async-javascript-fetch"
-        label="Lesson 04 · Async JavaScript — Promises, async/await and fetch"
-        text="Your page responds to local interactions. Next, fetch remote data without freezing the interface and handle loading, success, and error states."
+        href="/learn/javascript/browser-storage-json"
+        label="Lesson 07 · JSON, localStorage and Browser Storage"
+        text="Serialise data with JSON, persist state in localStorage and sessionStorage, understand cookies and IndexedDB, and keep stored data safe."
       />
     </LearnLayout>
   )

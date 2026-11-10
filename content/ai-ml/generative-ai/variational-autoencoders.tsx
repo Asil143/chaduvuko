@@ -1048,7 +1048,7 @@ for use, b, reason in use_cases:
           GANs are sharp but unstable. VAEs are stable but blurry.
           Diffusion models get the best of both — they are stable to train,
           produce sharp photorealistic outputs, and avoid mode collapse entirely.
-          Lesson 63 explains the forward noising process, the reverse denoising
+          Lesson 67 explains the forward noising process, the reverse denoising
           network, and how Stable Diffusion uses a VAE latent space to make
           diffusion fast enough for practical use.
         </p>
@@ -1065,7 +1065,7 @@ for use, b, reason in use_cases:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 73 · Image Gen
+              Next — Lesson 77 · Image Gen
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

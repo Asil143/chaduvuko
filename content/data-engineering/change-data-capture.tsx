@@ -120,7 +120,7 @@ export default function CDCModule() {
     <LearnLayout
       title="Change Data Capture (CDC) — Deep Dive"
       description="WAL internals, Debezium architecture, Schema Registry, the Outbox Pattern, event ordering, and operating CDC in production."
-      section="Data Engineering — Lesson 24"
+      section="Data Engineering — Lesson 27"
       readTime="70 min"
     >
 
@@ -130,7 +130,7 @@ export default function CDCModule() {
         <SectionTitle>CDC From First Principles</SectionTitle>
 
         <Para>
-          Lesson 23 introduced CDC as one of three ingestion patterns. This lesson
+          Lesson 26 introduced CDC as one of three ingestion patterns. This lesson
           goes much deeper — the internal mechanics of the WAL, how Debezium turns
           binary log records into structured events, the Schema Registry contract
           that prevents breaking changes, the Outbox Pattern that solves dual-write
@@ -183,7 +183,7 @@ export default function CDCModule() {
         </HighlightBox>
 
         <TryThis>
-          Before reading further, try to answer from Lesson 23 alone: what does
+          Before reading further, try to answer from Lesson 26 alone: what does
           CDC capture that a nightly incremental job on <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>updated_at</code> cannot?
           Keep that answer in mind through Part 06 (ordering) and Part 10&rsquo;s
           Real World case — it&rsquo;s the same gap, seen from two different angles.
@@ -1511,10 +1511,10 @@ ORDER BY updated_at, order_id;
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 25 builds a complete batch pipeline from scratch — extract, validate, transform, load, checkpoint — with full working Python code and every production decision explained as it is made.
+          Lesson 28 builds a complete batch pipeline from scratch — extract, validate, transform, load, checkpoint — with full working Python code and every production decision explained as it is made.
         </p>
         <Link href="/learn/data-engineering/batch-pipeline-from-scratch" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 25 → Building a Batch Pipeline From Scratch
+          Lesson 28 → Building a Batch Pipeline From Scratch
         </Link>
       </div>
     </LearnLayout>

@@ -188,7 +188,7 @@ export default function TransformersAndAttentionPage() {
         </h2>
 
         <p style={S.p}>
-          Lesson 47 showed the LSTM's fundamental limitation: sequential processing.
+          Lesson 51 showed the LSTM's fundamental limitation: sequential processing.
           To understand token 512 in a document you must first process tokens
           1 through 511. You cannot parallelise across the sequence.
           Modern GPUs have thousands of cores that sit idle while the LSTM

@@ -23,6 +23,9 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'performance-tuning-dbt': () => import('@/content/dbt/performance-tuning-dbt'),
   'cicd-for-dbt': () => import('@/content/dbt/cicd-for-dbt'),
   'testing-strategy-at-scale': () => import('@/content/dbt/testing-strategy-at-scale'),
+  'unit-tests-in-dbt': () => import('@/content/dbt/unit-tests-in-dbt'),
+  'contracts-versions-access-mesh': () => import('@/content/dbt/contracts-versions-access-mesh'),
+  'semantic-layer-metrics-metricflow': () => import('@/content/dbt/semantic-layer-metrics-metricflow'),
   'dbt-interview-system-design': () => import('@/content/dbt/dbt-interview-system-design'),
 }
 

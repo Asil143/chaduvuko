@@ -173,7 +173,7 @@ export default function MedallionArchitectureModule() {
     <LearnLayout
       title="Medallion Architecture — Bronze, Silver, Gold"
       description="What belongs in each layer, the exact transformations at each boundary, dbt and Spark integration, SCD handling, and governing a three-tier lakehouse."
-      section="Data Engineering — Lesson 30"
+      section="Data Engineering — Lesson 33"
       readTime="65 min"
     >
 
@@ -1359,10 +1359,10 @@ print(f"gold_current_total={sum(r['amount'] for r in current.values())}")`}</Wor
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 31 covers data warehouse internals — how columnar storage makes analytical queries 10-100× faster, and how partitioning, clustering, and distribution affect both performance and cost.
+          Lesson 34 covers data warehouse internals — how columnar storage makes analytical queries 10-100× faster, and how partitioning, clustering, and distribution affect both performance and cost.
         </p>
         <Link href="/learn/data-engineering/warehouse-concepts" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 31 → Data Warehouse Concepts — Columnar Storage and Distribution
+          Lesson 34 → Data Warehouse Concepts — Columnar Storage and Distribution
         </Link>
       </div>
     </LearnLayout>

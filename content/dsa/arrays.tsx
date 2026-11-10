@@ -606,7 +606,7 @@ int main() {
       </div>
 
       <Callout type="info">
-        We will cover <strong>Binary Search</strong> in Lesson 11 — a far faster way to search
+        We will cover <strong>Binary Search</strong> in Lesson 8 — a far faster way to search
         that works in O(log n). But it only works on sorted arrays. For now, linear search
         is the correct tool for unsorted data.
       </Callout>
@@ -809,7 +809,7 @@ int main() {
           <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 0 }}>
             For each element, check if the same value appears again later in the array.
             This uses a nested loop — O(n²) — which is the straightforward approach.
-            There are faster methods using hashing (Lesson 15) but this version
+            There are faster methods using hashing (Lesson 12) but this version
             requires no extra knowledge.
           </p>
         </div>
@@ -931,7 +931,7 @@ int main() {
 
       <Callout type="tip">
         <strong>This is exactly why Linked Lists exist</strong> — they solve the fixed-size
-        and slow-insertion problems of arrays. We cover them in Lesson 6. Every weakness
+        and slow-insertion problems of arrays. We cover them in Lesson 9. Every weakness
         of arrays becomes a motivation for the next data structure.
       </Callout>
 
@@ -992,7 +992,7 @@ int main() {
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Reverse, palindrome, anagram, pattern matching — in C.</div>
         </div>
         <Link href="/learn/dsa/strings" style={{ background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-          Coming Soon →
+          Continue →
         </Link>
       </div>
 
@@ -1003,7 +1003,7 @@ int main() {
         'Insertion and deletion at a position require shifting elements — worst case O(n)',
         'Linear search checks every element one by one — O(n) worst case',
         '2D arrays are tables: accessed as matrix[row][column], traversal is O(rows × cols)',
-        'Arrays are fast to access but slow to insert/delete. This weakness motivates linked lists in Lesson 6',
+        'Arrays are fast to access but slow to insert/delete. This weakness motivates linked lists in Lesson 9',
       ]} />
 
     </LearnLayout>

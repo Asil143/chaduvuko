@@ -80,7 +80,7 @@ export default function CICDPipelinesModule() {
     <LearnLayout
       title="CI/CD for Data Pipelines"
       description="Testing dbt models in CI, environment promotion, blue-green deployments, Airflow deployment patterns, slim CI, and building a safe deployment pipeline for data transformations."
-      section="Data Engineering — Lesson 44"
+      section="Data Engineering — Lesson 47"
       readTime="70 min"
     >
 
@@ -934,10 +934,10 @@ Recover
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 45 covers Infrastructure as Code — provisioning cloud data infrastructure with Terraform so your environments are version-controlled, reproducible, and never subject to configuration drift.
+          Lesson 48 covers Infrastructure as Code — provisioning cloud data infrastructure with Terraform so your environments are version-controlled, reproducible, and never subject to configuration drift.
         </p>
         <Link href="/learn/data-engineering/infrastructure-as-code" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 45 → Infrastructure as Code for Data Engineers
+          Lesson 48 → Infrastructure as Code for Data Engineers
         </Link>
       </div>
     </LearnLayout>

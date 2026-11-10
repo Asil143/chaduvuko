@@ -1275,7 +1275,7 @@ print("""
           Pipelines produce models automatically. But which of the 50 models
           trained over the past month is the best? What hyperparameters,
           what data version, what feature set produced it? Without experiment
-          tracking you cannot answer these questions. Lesson 70 covers MLflow
+          tracking you cannot answer these questions. Lesson 74 covers MLflow
           and Weights & Biases — log every run, compare experiments on a
           dashboard, version models, and register the best ones for deployment.
         </p>
@@ -1292,7 +1292,7 @@ print("""
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 75 · MLOps
+              Next — Lesson 79 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -278,9 +278,9 @@ def public_tool_result(operation):
       ]} />
       <H3>Next</H3>
       <NextLesson
-        href="/learn/generative-ai/embeddings-in-practice"
-        label="Lesson 05 · Embeddings in Practice — Chunking and Similarity Search"
-        text="Tools let the model act on narrow capabilities. Next, learn how to represent documents as vectors and retrieve relevant context."
+        href="/learn/generative-ai/multimodal-apis"
+        label="Lesson 05 · Multimodal APIs — Vision, Audio and Speech"
+        text="Send images and documents to vision-capable models, transcribe and generate speech, and design features that combine text, images and audio."
       />
     </LearnLayout>
   )

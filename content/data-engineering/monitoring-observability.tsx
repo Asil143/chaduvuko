@@ -80,7 +80,7 @@ export default function MonitoringObservabilityModule() {
     <LearnLayout
       title="Monitoring and Observability for Data Pipelines"
       description="SLAs, alerting tiers, pipeline health dashboards, structured logging, metric collection, DLQ monitoring, and building an on-call culture for data teams."
-      section="Data Engineering — Lesson 37"
+      section="Data Engineering — Lesson 42"
       readTime="70 min"
     >
 
@@ -865,10 +865,10 @@ print(f"remaining_budget={allowed - failed}")`}</WorkshopCode>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 38 covers data governance — data catalogues, column-level lineage, data classification, and role-based access control — the four pillars every mature data platform must have in place.
+          Lesson 43 covers data governance — data catalogues, column-level lineage, data classification, and role-based access control — the four pillars every mature data platform must have in place.
         </p>
         <Link href="/learn/data-engineering/data-governance" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 38 → Data Governance — Catalogues, Lineage and Access Control
+          Lesson 43 → Data Governance — Catalogues, Lineage and Access Control
         </Link>
       </div>
     </LearnLayout>

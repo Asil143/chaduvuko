@@ -6,7 +6,7 @@ export default function DataStorytelling() {
     <LearnLayout
       title="Data Storytelling — From Analysis to Decision"
       description="Structure an analysis as a story, choose the one chart that makes the point, write the headline, and present to stakeholders."
-      section="Data Analytics & Statistics — Lesson 07"
+      section="Data Analytics & Statistics — Lesson 14"
       readTime="30 min"
     >
       <Part n={1} label="Purpose" title="A Data Story Connects Evidence to a Decision">
@@ -224,9 +224,9 @@ print(summary.to_string(index=False, formatters={"late_rate": "{:.1%}".format}))
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/ai-ml"
-        label="Next course · AI & Machine Learning"
-        text="You have completed the analytics and statistics track. Continue into AI & Machine Learning to build on data foundations and learn how models turn patterns into predictions and intelligent systems."
+        href="/learn/analytics-engineering-data-analytics/analytics-case-study-churn"
+        label="Lesson 15 · Analytics Case Study — Customer Churn from Question to Dashboard"
+        text="Take a churn question from stakeholder brief to SQL, analysis, a dashboard and a recommendation memo."
       />
     </LearnLayout>
   )

@@ -43,17 +43,17 @@ function getAIMLModuleNum(pathname: string): string | null {
 }
 
 const RESUME_BULLETS: Record<string, string[]> = {
-  '/learn/what-is-data-engineering': [
+  '/learn/data-engineering/what-is-data-engineering': [
     'Designed and implemented batch and streaming data pipelines using the Medallion Architecture (Bronze → Silver → Gold)',
     'Built ETL pipelines processing 5M+ records daily across structured and semi-structured data sources',
     'Applied data quality validation frameworks to detect nulls, duplicates, and schema violations before loading to analytics layers',
   ],
-  '/learn/foundations/sql': [
+  '/learn/data-engineering/sql-for-de': [
     'Wrote complex analytical SQL using window functions (ROW_NUMBER, RANK, LAG, LEAD, SUM OVER) for business reporting',
     'Optimized slow queries using indexing, partitioning, and query execution plan analysis — reducing runtime by 80%',
     'Built data reconciliation queries using CTEs and correlated subqueries to validate pipeline output accuracy',
   ],
-  '/learn/foundations/python': [
+  '/learn/data-engineering/python-for-de': [
     'Developed PySpark data transformation jobs processing 100M+ rows using distributed Spark clusters',
     'Built Python ETL scripts using pandas for data validation, type casting, and null handling in CI/CD pipelines',
     'Implemented automated data quality checks in Python catching 98% of upstream data issues before loading',

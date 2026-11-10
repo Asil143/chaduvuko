@@ -102,7 +102,7 @@ export default function SlowlyChangingDimensionsModule() {
     <LearnLayout
       title="Slowly Changing Dimensions (SCD)"
       description="Every SCD type in depth — when each is the right choice, full SQL implementations, dbt snapshot patterns, and the operational pitfalls."
-      section="Data Engineering — Lesson 34"
+      section="Data Engineering — Lesson 38"
       readTime="60 min"
     >
 
@@ -1253,10 +1253,10 @@ for order_hour in [11, 12]:
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 35 covers Data Vault 2.0 — hubs, links, and satellites from first principles, hash keys, parallel loading patterns, and when Data Vault beats dimensional modelling for enterprise integration.
+          Lesson 39 covers Data Vault 2.0 — hubs, links, and satellites from first principles, hash keys, parallel loading patterns, and when Data Vault beats dimensional modelling for enterprise integration.
         </p>
         <Link href="/learn/data-engineering/data-vault" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 35 → Data Vault 2.0 — Hubs, Links and Satellites
+          Lesson 39 → Data Vault 2.0 — Hubs, Links and Satellites
         </Link>
       </div>
     </LearnLayout>

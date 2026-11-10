@@ -25,6 +25,13 @@ const LESSONS: Record<string, React.ComponentType> = {
   'backtracking':        dynamic(() => import('@/content/dsa/backtracking')),
   'advanced':            dynamic(() => import('@/content/dsa/advanced')),
   'interview-patterns':  dynamic(() => import('@/content/dsa/interview-patterns')),
+  'tries':               dynamic(() => import('@/content/dsa/tries')),
+  'union-find':          dynamic(() => import('@/content/dsa/union-find')),
+  'minimum-spanning-trees': dynamic(() => import('@/content/dsa/minimum-spanning-trees')),
+  'graph-algorithms':    dynamic(() => import('@/content/dsa/graph-algorithms')),
+  'dynamic-programming-patterns': dynamic(() => import('@/content/dsa/dynamic-programming-patterns')),
+  'two-pointers-sliding-window': dynamic(() => import('@/content/dsa/two-pointers-sliding-window')),
+  'bit-manipulation':   dynamic(() => import('@/content/dsa/bit-manipulation')),
 }
 
 export function DsaLesson({ slug }: { slug: string }) {

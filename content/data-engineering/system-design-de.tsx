@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     'A complete framework for designing any data system from scratch — capacity estimation, storage selection, pipeline architecture, trade-off analysis, and five complete worked designs you will encounter in real interviews and real jobs.',
 }
 
-/* ── Local components (Lesson 37 style) ─────────────────────────────────── */
+/* ── Local components (Lesson 42 style) ─────────────────────────────────── */
 
 const SectionTag = ({ text }: { text: string }) => (
   <div style={{
@@ -199,7 +199,7 @@ export default function SystemDesignDEModule() {
     <LearnLayout
       title="Data Engineering System Design"
       description="A complete framework for designing any data system from scratch — capacity estimation, storage selection, pipeline architecture, trade-off analysis, and five complete worked designs."
-      section="Data Engineering — Lesson 46"
+      section="Data Engineering — Lesson 55"
       readTime="80 min"
     >
 
@@ -619,7 +619,7 @@ Conclusion:            this is a compute-trivial, throughput-trivial workload �
 
         <SubTitle>3 — Consistency vs availability</SubTitle>
         <Para>
-          As covered in Lesson 42 — during a network partition, you choose between
+          As covered in Lesson 45 — during a network partition, you choose between
           refusing requests (consistent, unavailable) or responding with potentially
           stale data (available, inconsistent). Outside of partitions, there is the
           latency vs consistency trade-off: strongly consistent reads take longer
@@ -1566,7 +1566,7 @@ spark.sql("""
 
       <DEWorkshop title="Capstone: design, build and operate FreshCart's data product"
         objective="Connect the whole track into a tested pipeline with explicit business, recovery and cost requirements."
-        prerequisites="Complete the preceding engineering, ingestion, storage, modeling, quality, streaming and production lessons. Start implementation with the local pipeline in Lesson 25.">
+        prerequisites="Complete the preceding engineering, ingestion, storage, modeling, quality, streaming and production lessons. Start implementation with the local pipeline in Lesson 28.">
         <p>Build a small order-and-payment reporting platform. Finance needs reconciled daily net revenue by store and currency at 08:00 business time; operations needs a provisional five-minute order count. Treat these as two consumer contracts over shared source facts rather than assuming one output meets both needs.</p>
         <h3>1. Size the workload from declared assumptions</h3>
         <WorkshopCode language="python" expectedOutput={"average_events_per_second=115.74\npeak_events_per_second=1157.41\nuncompressed_GB_per_day=10.00\n30_day_raw_GB=300.00"}>{`events_per_day = 10_000_000
@@ -1617,10 +1617,10 @@ print(f"30_day_raw_GB={daily_bytes * 30 / 10**9:.2f}")`}</WorkshopCode>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 47 is 60 complete interview answers across Python, SQL, pipelines, data modelling, architecture, system design, and behavioural questions — written at senior engineer depth and ready to use.
+          Lesson 56 is 60 complete interview answers across Python, SQL, pipelines, data modelling, architecture, system design, and behavioural questions — written at senior engineer depth and ready to use.
         </p>
         <Link href="/learn/data-engineering/de-interview-questions" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 47 → Interview Prep — 60 Complete Answers
+          Lesson 56 → Interview Prep — 60 Complete Answers
         </Link>
       </div>
     </LearnLayout>

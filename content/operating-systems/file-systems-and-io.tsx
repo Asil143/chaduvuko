@@ -3,7 +3,7 @@ import { Callout, Code, H3, KeyTakeaways, Mistakes, NextLesson, P, Part, Practic
 
 export default function OperatingSystemsLesson6() {
   return (
-    <LearnLayout title="File Systems and I/O" description="Files, directories, and inodes, allocation methods, journaling, buffering and caching, and disk scheduling." section="Operating Systems — Lesson 06" readTime="35 min">
+    <LearnLayout title="File Systems and I/O" description="Files, directories, and inodes, allocation methods, journaling, buffering and caching, and disk scheduling." section="Operating Systems — Lesson 07" readTime="35 min">
       <Part n={1} label="Files and names" title="A Directory Name Is Not the File Itself">
         <P>A file system organizes persistent data into named objects and directories. A pathname is resolved component by component: directory entries connect names to filesystem objects. On Unix-like filesystems, an <strong>inode</strong> stores metadata such as ownership, permissions, timestamps, size, and references to data blocks; the filename-to-inode association lives in a directory entry. Hard links are additional names for an inode, while symbolic links store a path-like target.</P>
         <P>Directory trees are a naming convention over filesystem objects. Mounting attaches a filesystem at a directory in a larger namespace. Exact metadata and allocation details differ across filesystem types and operating systems.</P>
@@ -98,7 +98,10 @@ with path.open("w", encoding="utf-8") as output:
       <KeyTakeaways items={["On Unix-like systems, directory entries map names to inode-like objects; the inode is not generally the filename.", "File descriptors are process-local handles to open-file state, not pathnames or inode numbers.", "Journaling can restore filesystem consistency but does not guarantee every recent data write is durable.", "Buffering, page caching, and DMA improve I/O efficiency at different layers and have distinct effects.", "Measure warm and cold workloads, and match sync behavior to explicit durability requirements."]} />
 
       <H3>Next</H3>
-      <NextLesson href="/learn/operating-systems/os-interview-questions" label="Lesson 07 · Operating Systems Interview Questions" text="You have covered the core mechanisms; finish by practicing common OS interview questions with precise answers." />
+      <NextLesson
+        href="/learn/operating-systems/disk-scheduling-raid-storage"
+        label="Lesson 08 · Disk Scheduling, RAID and Storage Devices"
+        text="HDDs versus SSDs, disk scheduling algorithms, RAID levels and their trade-offs, and how storage performance affects applications." />
     </LearnLayout>
   )
 }

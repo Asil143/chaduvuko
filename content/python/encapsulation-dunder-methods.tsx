@@ -77,7 +77,7 @@ export default function EncapsulationDunderMethods() {
     <LearnLayout
       title="Encapsulation and Magic/Dunder Methods"
       description="Python's convention-based privacy, and the dunder methods that make your objects behave like built-in types."
-      section="Python — Lesson 22"
+      section="Python — Lesson 23"
       readTime="40 min"
     >
 
@@ -645,11 +645,11 @@ print(len(unique))        # 1 — correct now`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 23 covers @classmethod, @staticmethod, and @property — three decorators every real
+          Lesson 24 covers @classmethod, @staticmethod, and @property — three decorators every real
           Python class eventually reaches for, and exactly when each one is the right tool.
         </p>
         <Link href="/learn/python/class-static-methods-properties" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 23 → Class Methods, Static Methods and Properties
+          Lesson 24 → Class Methods, Static Methods and Properties
         </Link>
       </div>
     </LearnLayout>

@@ -77,7 +77,7 @@ export default function PythonBestPractices() {
     <LearnLayout
       title="Python Best Practices — PEP 8, Clean Code"
       description="The conventions that separate readable, maintainable Python from code that works but nobody wants to touch."
-      section="Python — Lesson 45"
+      section="Python — Lesson 48"
       readTime="30 min"
     >
 
@@ -599,11 +599,11 @@ pre-commit install`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          The final module of this track — Python Interview Prep — synthesises everything covered across
-          all 46 modules into a focused set of real interview questions and coding patterns.
+          The next module is the Python Capstone Project — a practical delivery-order tracker that brings
+          domain modeling, SQLite persistence, a CLI, testing, and production concerns together.
         </p>
-        <Link href="/learn/python/python-interview-prep" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 46 → Python Interview Prep
+        <Link href="/learn/python/python-capstone-project" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Lesson 49 → Python Capstone Project
         </Link>
       </div>
     </LearnLayout>

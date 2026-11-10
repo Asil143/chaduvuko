@@ -731,6 +731,8 @@ export const SHELVED_TRACK_SLUGS: ReadonlySet<string> = new Set([
   'data-governance-engineering',
   'accessibility-engineering',
   'technical-product-business-analysis',
+  // Merged into the live Data Analytics & Statistics track.
+  'business-intelligence',
   'enterprise-platforms',
   'technical-communication-developer-relations',
   'game-development-graphics',

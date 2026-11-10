@@ -6,7 +6,7 @@ export default function AbTesting() {
     <LearnLayout
       title="A/B Testing — Design, Analysis and Pitfalls"
       description="Hypotheses, randomisation units, sample size, running and analysing a test, and the peeking, novelty, and multiple-testing traps."
-      section="Data Analytics & Statistics — Lesson 05"
+      section="Data Analytics & Statistics — Lesson 10"
       readTime="40 min"
     >
       <Part n={1} label="What an experiment does" title="Randomisation Makes a Fair Comparison">
@@ -251,9 +251,9 @@ print("relative lift:", treatment_rate / control_rate - 1 if control_rate else N
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/analytics-engineering-data-analytics/dashboards-bi-tools"
-        label="Lesson 06 · Dashboards with Power BI, Tableau and Looker Studio"
-        text="Experiments and metrics need reliable ways to reach decision-makers. Next, model data for BI, choose a tool for your constraints, and design dashboards around action."
+        href="/learn/analytics-engineering-data-analytics/funnel-cohort-retention"
+        label="Lesson 11 · Funnel, Cohort and Retention Analysis"
+        text="Build conversion funnels, cohort tables and retention curves in SQL and Python, and explain what they say about a product."
       />
     </LearnLayout>
   )

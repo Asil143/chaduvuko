@@ -74,7 +74,7 @@ export default function ScalingCapacityPlanning() {
     <LearnLayout
       title="Scaling and Capacity Planning"
       description="How to size a Kafka cluster before it exists and grow it correctly afterward: disk math from throughput and retention, partition count sizing, broker sizing, horizontal scaling and throttled reassignment, quotas for multi-tenancy, and a full worked capacity-planning example."
-      section="Apache Kafka — Lesson 18"
+      section="Apache Kafka — Lesson 19"
       readTime="60 min"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },

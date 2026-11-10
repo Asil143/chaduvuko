@@ -665,7 +665,7 @@ import numpy as np
 
 # ── Demonstrate contextual vs static embeddings ───────────────────────
 # Without a real BERT (large download), we show the concept
-# using a small Transformer encoder from Lesson 48
+# using a small Transformer encoder from Lesson 52
 
 class MiniContextualEncoder(nn.Module):
     """Minimal contextual encoder — same architecture as BERT."""
@@ -1199,7 +1199,7 @@ print(f"  English truncated: '{truncate_to_token_budget(samples['english'], 15)}
           The next step is using pretrained language models in production —
           loading BERT or RoBERTa from HuggingFace, fine-tuning on a
           labelled dataset, and deploying for inference.
-          Lesson 50 covers the complete HuggingFace fine-tuning workflow —
+          Lesson 54 covers the complete HuggingFace fine-tuning workflow —
           the Trainer API, evaluation, saving checkpoints, and serving
           predictions in production.
         </p>
@@ -1216,7 +1216,7 @@ print(f"  English truncated: '{truncate_to_token_budget(samples['english'], 15)}
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 59 · NLP
+              Next — Lesson 63 · NLP
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

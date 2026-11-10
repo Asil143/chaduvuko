@@ -77,7 +77,7 @@ export default function ArgsKwargs() {
     <LearnLayout
       title="*args, **kwargs and Function Arguments Deep Dive"
       description="Every way Python lets you pass arguments to a function, and how to design flexible, unambiguous function signatures."
-      section="Python — Lesson 25"
+      section="Python — Lesson 27"
       readTime="45 min"
     >
 
@@ -428,7 +428,7 @@ full_signature(1, 2, 3, 4, kw_only=5, extra=6)
           together is a <strong>wrapper function</strong> — one that adds some behaviour (logging,
           timing, retrying, authentication) around a call to another function, without needing to know
           anything about that function&apos;s specific arguments. This exact pattern is also the
-          foundation the Decorators module (Lesson 29) will build on directly.
+          foundation the Decorators module (Lesson 31) will build on directly.
         </Para>
 
         <CodeBox label="A wrapper that forwards ANY arguments to ANY function it wraps">{`import time
@@ -759,12 +759,12 @@ call_with_logging(fetch_user, 42, include_orders=True)
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 26 covers lambda functions and Python&apos;s functional toolkit — map, filter, and
+          Lesson 28 covers lambda functions and Python&apos;s functional toolkit — map, filter, and
           functools.reduce — plus an honest, non-dogmatic take on when a one-line lambda is the right
           call and when a named function genuinely reads better.
         </p>
         <Link href="/learn/python/lambda-map-filter-reduce" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 26 → Lambda Functions and Functional Tools
+          Lesson 28 → Lambda Functions and Functional Tools
         </Link>
       </div>
     </LearnLayout>

@@ -5,7 +5,7 @@ export default function ProductionOperations() {
     <LearnLayout
       title="Production Operations and Monitoring"
       description="ACCOUNT_USAGE views, INFORMATION_SCHEMA latency tradeoffs, native alerting, operational dashboards, incident response, runbooks, and freshness/latency SLOs for a Snowflake platform."
-      section="Snowflake — Lesson 18"
+      section="Snowflake — Lesson 20"
       readTime="65 min"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },

@@ -101,7 +101,7 @@ export default function AdvancedPage() {
   return (
     <LearnLayout
       title="Advanced Topics"
-      description="The final level. Segment Trees, Fenwick Trees, Tries, Union-Find, Sliding Window, Two Pointers, and Bit Manipulation — the techniques that separate good engineers from great ones in product company interviews."
+      description="An advanced overview of range-query structures and reusable techniques, with dedicated follow-up lessons for tries, union-find, two pointers, sliding windows, and bit manipulation."
       section="DSA"
       readTime="180 min"
     >
@@ -110,7 +110,7 @@ export default function AdvancedPage() {
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
           { label: 'Prerequisite: All previous units', green: false },
-          { label: 'Final Unit 🎓', green: false },
+          { label: 'Advanced Level', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -121,7 +121,7 @@ export default function AdvancedPage() {
       <p style={{ fontSize: 16, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You have come a long way. From understanding what a variable is in Lesson 1 to
         implementing graphs, dynamic programming, and backtracking — you now have a stronger
-        DSA foundation than most working engineers. This final unit covers the advanced
+        DSA foundation than most working engineers. This unit introduces advanced
         techniques that appear in senior-level interviews and competitive programming:
         efficient range queries, prefix trees, union-find, and the elegant two-pointer
         and sliding window patterns that turn O(n²) solutions into O(n).
@@ -131,16 +131,18 @@ export default function AdvancedPage() {
         and the problems each one solves — with full C code throughout.
       </p>
 
+      <Callout type="info"><strong>Focused follow-up lessons:</strong> Continue with <Link href="/learn/dsa/tries" style={{ color: 'var(--green)' }}>Tries</Link>, <Link href="/learn/dsa/union-find" style={{ color: 'var(--green)' }}>Union-Find</Link>, <Link href="/learn/dsa/two-pointers-sliding-window" style={{ color: 'var(--green)' }}>Two Pointers and Sliding Window</Link>, and <Link href="/learn/dsa/bit-manipulation" style={{ color: 'var(--green)' }}>Bit Manipulation</Link> for standalone lessons. Then continue to <Link href="/learn/dsa/interview-patterns" style={{ color: 'var(--green)' }}>Interview Problem-Solving Patterns</Link>.</Callout>
+
       {/* Topics overview */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, marginTop: 32, marginBottom: 0 }}>
         {[
-          { num: '19.1', name: 'Segment Tree', use: 'Range sum / min / max queries with updates', color: 'var(--green)' },
-          { num: '19.2', name: 'Fenwick Tree (BIT)', use: 'Prefix sums with point updates in O(log n)', color: '#4285f4' },
-          { num: '19.3', name: 'Trie', use: 'Prefix search, autocomplete, word lookup', color: '#7b61ff' },
-          { num: '19.4', name: 'Union-Find (DSU)', use: 'Connected components, Kruskal\'s MST', color: '#f97316' },
-          { num: '19.5', name: 'Sliding Window', use: 'Subarray problems in O(n)', color: '#facc15' },
-          { num: '19.6', name: 'Two Pointers', use: 'Pair sum, sorted array problems in O(n)', color: '#00e676' },
-          { num: '19.7', name: 'Bit Manipulation', use: 'XOR tricks, set/clear bits, fast operations', color: '#8b5cf6' },
+          { num: '27.1', name: 'Segment Tree', use: 'Range sum / min / max queries with updates', color: 'var(--green)' },
+          { num: '27.2', name: 'Fenwick Tree (BIT)', use: 'Prefix sums with point updates in O(log n)', color: '#4285f4' },
+          { num: '27.3', name: 'Trie', use: 'Prefix search, autocomplete, word lookup', color: '#7b61ff' },
+          { num: '27.4', name: 'Union-Find (DSU)', use: 'Connected components, Kruskal\'s MST', color: '#f97316' },
+          { num: '27.5', name: 'Sliding Window', use: 'Subarray problems in O(n)', color: '#facc15' },
+          { num: '27.6', name: 'Two Pointers', use: 'Pair sum, sorted array problems in O(n)', color: '#00e676' },
+          { num: '27.7', name: 'Bit Manipulation', use: 'XOR tricks, set/clear bits, fast operations', color: '#8b5cf6' },
         ].map((item) => (
           <div key={item.num} style={{ background: 'var(--surface)', border: `1px solid ${item.color}33`, borderRadius: 10, padding: '14px 16px' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: item.color, fontWeight: 700, marginBottom: 6 }}>{item.num}</div>
@@ -659,7 +661,7 @@ int main() {
           Two pointers start at opposite ends of a sorted array and move toward each other.
           At each step, comparing their sum to the target tells you which pointer to move —
           eliminating one element from consideration per step. The result is O(n) instead of
-          O(n²) brute force. Also applies to linked list cycle detection (Lesson 6 — that was
+          O(n²) brute force. Also applies to linked list cycle detection (Lesson 9 — that was
           also two pointers: the slow and fast pointer).
         </p>
       </div>
@@ -919,8 +921,8 @@ int main() {
           <Link href="/learn/dsa" style={{ display: 'inline-block', background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 24px', textDecoration: 'none' }}>
             ← Back to DSA Track
           </Link>
-          <Link href="/learn/interview" style={{ display: 'inline-block', background: 'var(--surface)', color: 'var(--text)', fontWeight: 600, fontSize: 13, borderRadius: 8, padding: '10px 24px', textDecoration: 'none', border: '1px solid var(--border)' }}>
-            Interview Prep →
+          <Link href="/learn/dsa/interview-patterns" style={{ display: 'inline-block', background: 'var(--surface)', color: 'var(--text)', fontWeight: 600, fontSize: 13, borderRadius: 8, padding: '10px 24px', textDecoration: 'none', border: '1px solid var(--border)' }}>
+            DSA Interview Patterns →
           </Link>
         </div>
       </div>

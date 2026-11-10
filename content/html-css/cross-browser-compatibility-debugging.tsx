@@ -77,7 +77,7 @@ export default function CrossBrowserCompatibilityDebugging() {
     <LearnLayout
       title="Cross-Browser Compatibility & Debugging"
       description="Vendor prefixes, feature detection, DevTools workflows, and debugging the CSS bug that only shows up in one browser."
-      section="HTML & CSS — Lesson 39"
+      section="HTML & CSS — Lesson 41"
       readTime="35 min"
     >
 
@@ -794,12 +794,10 @@ click any number to edit it live and see the layout update instantly.`}</CodeBox
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 40 is the capstone of the entire track — building a complete, real, responsive website
-          end to end, combining Flexbox and Grid layout, responsive images, animations, accessibility, and
-          mobile-first breakpoints into one genuine multi-section build.
+          The next lesson reviews maintainable CSS conventions and common mistakes before you prepare a site for deployment.
         </p>
-        <Link href="/learn/html-css/building-a-responsive-website" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 40 → Building a Complete Responsive Website
+        <Link href="/learn/html-css/css-best-practices-common-mistakes" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Lesson 42 → CSS Best Practices &amp; Common Mistakes
         </Link>
       </div>
     </LearnLayout>

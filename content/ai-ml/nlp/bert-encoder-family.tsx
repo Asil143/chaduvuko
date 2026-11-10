@@ -200,7 +200,7 @@ export default function BertEncoderFamilyPage() {
         <p style={S.p}>
           BERT (Bidirectional Encoder Representations from Transformers)
           uses a Transformer encoder — the left half of the original
-          Transformer architecture from Lesson 48. Every token attends
+          Transformer architecture from Lesson 52. Every token attends
           to every other token with no causal mask.
           To pretrain this bidirectional model without the ability to
           simply predict the next token (which would leak the answer),
@@ -1246,7 +1246,7 @@ def moderate_message(text, encoder_model, llm_client):
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 60 · LLMs
+              Next — Lesson 64 · LLMs
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

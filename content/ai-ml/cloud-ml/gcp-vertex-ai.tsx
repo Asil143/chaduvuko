@@ -773,7 +773,7 @@ print("Pipeline compiled to /tmp/freshmart_pipeline.yaml")
         <p style={S.p}>
           Vertex AI Feature Store is widely considered the most production-ready
           managed feature store across all three major clouds. It solves the
-          training-serving skew problem from Lesson 69 at scale — features
+          training-serving skew problem from Lesson 73 at scale — features
           are defined once, computed once, and served consistently to both
           the training pipeline (point-in-time correct historical values)
           and the inference endpoint (latest values at &lt;1ms latency).
@@ -859,7 +859,7 @@ print("""
       end_time=datetime.now(),
   )
   # Copies features from BigQuery offline store → Bigtable online store
-  # Same semantics as Feast materialize from Lesson 69
+  # Same semantics as Feast materialize from Lesson 73
 """)
 
 # ── Online serving — real-time feature lookup ─────────────────────────
@@ -903,7 +903,7 @@ Point-in-time correct batch serving for training:
       # training_events has: entity_id, timestamp columns
       # Vertex returns features AS OF each event's timestamp (no leakage)
   )
-  # Same as Feast get_historical_features() from Lesson 69
+  # Same as Feast get_historical_features() from Lesson 73
 """)`} />
       </div>
 
@@ -1321,7 +1321,7 @@ FROM
         <p style={S.p}>
           You have now covered Azure ML, SageMaker, and Vertex AI — the three
           platforms that run production ML at enterprises and startups.
-          Lesson 79 ties them together: MLOps on Cloud — how to build CI/CD
+          Lesson 83 ties them together: MLOps on Cloud — how to build CI/CD
           pipelines for ML that work regardless of which cloud you are on.
           GitHub Actions triggering retraining, model quality gates in CI,
           automated deployment to staging and production, and the patterns
@@ -1340,7 +1340,7 @@ FROM
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 84 · Cloud ML
+              Next — Lesson 89 · Cloud ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

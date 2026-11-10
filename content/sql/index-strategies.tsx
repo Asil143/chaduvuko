@@ -90,7 +90,7 @@ export default function IndexStrategies() {
     <LearnLayout
       title="Index Strategies"
       description="Production index design — composite column order, covering indexes, partial indexes, functional indexes, index-only scans, the write cost tradeoff, and the complete decision framework for when to add or drop an index"
-      section="SQL — Lesson 58"
+      section="SQL — Lesson 63"
       readTime="14–20 min"
     >
 

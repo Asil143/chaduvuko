@@ -3,7 +3,7 @@ import { Bullets, Callout, Code, H3, KeyTakeaways, Mistakes, NextLesson, P, Part
 
 export default function PostgresWithAnOrm() {
   return (
-    <LearnLayout title="PostgreSQL with an ORM — Prisma" description="Model tables in a schema, run migrations, query and relate records, and avoid N+1 queries." section="Full-Stack Development with AI — Lesson 05" readTime="35 min">
+    <LearnLayout title="PostgreSQL with an ORM — Prisma" description="Model tables in a schema, run migrations, query and relate records, and avoid N+1 queries." section="Full-Stack Development with AI — Lesson 07" readTime="35 min">
       <Part n={1} label="Relational model" title="Plan Data as Tables with Clear Relationships">
         <P>PostgreSQL is a relational database: data is stored in tables, rows have columns, and constraints protect important rules. A study planner can have students, plans, and sessions. One student can own multiple plans, and one plan can contain many sessions. Model those relationships explicitly rather than storing a comma-separated list inside one text column.</P>
         <P>Every row should have an identifier. Add constraints for required values and relationships, and consider which queries need indexes. A database constraint protects data even if two requests arrive at the same time or a bug bypasses the user interface.</P>
@@ -75,7 +75,10 @@ export default function PostgresWithAnOrm() {
       ]} />
       <Bullets items={[<span key="reference">Consult the official PostgreSQL and Prisma documentation for schema, migration, and connection guidance. Database URLs are secrets and should never be committed.</span>]} />
       <H3>Next</H3>
-      <NextLesson href="/learn/full-stack-ai/authentication-sessions-jwt" label="Lesson 06 · Authentication — Sessions, JWTs and OAuth" text="Connect student identity to database ownership with password hashing, safe cookies, and authorization checks." />
+      <NextLesson
+        href="/learn/full-stack-ai/authentication-sessions-jwt"
+        label="Lesson 08 · Authentication — Sessions, JWTs and OAuth"
+        text="Connect student identity to database ownership with password hashing, safe cookies, and authorization checks." />
     </LearnLayout>
   )
 }

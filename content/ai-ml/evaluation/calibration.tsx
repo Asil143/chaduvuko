@@ -187,7 +187,7 @@ export default function CalibrationPage() {
         </h2>
 
         <p style={S.p}>
-          Lesson 34 taught you that ROC-AUC measures ranking quality — does the model
+          Lesson 37 taught you that ROC-AUC measures ranking quality — does the model
           score fraud higher than legitimate transactions? A model with AUC = 0.95
           is excellent at ranking. But ranking quality says nothing about whether
           the actual probability values are meaningful.
@@ -1150,7 +1150,7 @@ print("  5. Monitor ECE weekly — recalibrate monthly or on drift alert")`} />
         </p>
 
         <p style={S.p}>
-          Lesson 36 — Feature Importance and Explainability — covers
+          Lesson 39 — Feature Importance and Explainability — covers
           permutation importance, SHAP values (already introduced in Lesson 30
           for XGBoost), SHAP across all model types including tree ensembles,
           linear models, and black-box models. And the business of explaining
@@ -1169,7 +1169,7 @@ print("  5. Monitor ECE weekly — recalibrate monthly or on drift alert")`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 38 · Evaluation
+              Next — Lesson 41 · Evaluation
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

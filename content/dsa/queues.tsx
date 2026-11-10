@@ -149,7 +149,7 @@ export default function QueuesPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'Prerequisite: Lesson 7 — Stacks', green: false },
+          { label: 'Prerequisite: Lesson 10 — Stacks', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -842,7 +842,7 @@ int main() {
         <strong>Note:</strong> This simple O(n) priority queue works for learning.
         In production systems, priority queues are implemented using a
         <strong> Heap</strong> data structure which gives O(log n) enqueue and dequeue.
-        We build heaps in Lesson 14 — and you will see exactly why they are better.
+        We build heaps in Lesson 15 — and you will see exactly why they are better.
       </Callout>
 
       <Divider />
@@ -942,7 +942,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Lesson 9</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 12</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now understand all queue variants — simple, circular, linked list,
@@ -950,7 +950,7 @@ int main() {
         from printers to payment APIs to graph algorithms.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Lesson 9 we tackle <strong style={{ color: 'var(--text)' }}>Recursion</strong> —
+        In Lesson 12 we learn <strong style={{ color: 'var(--text)' }}>Hashing</strong> —
         the concept that trips up almost every beginner. A function that calls itself.
         We will explain it more clearly than any textbook ever has, trace every call
         step by step, and build up to the legendary Tower of Hanoi problem.
@@ -958,12 +958,12 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 9</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 12</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Recursion — A Function That Calls Itself</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Base case, recursive case, call stack tracing, Tower of Hanoi — made simple.</div>
         </div>
-        <Link href="/learn/dsa/recursion" style={{ background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-          Coming Soon →
+        <Link href="/learn/dsa/hashing" style={{ background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+          Continue →
         </Link>
       </div>
 

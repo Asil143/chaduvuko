@@ -4,10 +4,12 @@ type StaticLesson = Omit<Lesson, 'status'>
 
 // Lessons implemented as standalone page files rather than curriculum-driven routes.
 const STATIC_LESSONS: StaticLesson[] = [
-  { track: 'data-engineering', section: 'Data Engineering Foundations', order: -4, href: '/learn/what-is-data-engineering', title: 'What is Data Engineering?' },
-  { track: 'data-engineering', section: 'Data Engineering Foundations', order: -3, href: '/learn/foundations/sql',          title: 'SQL for Data Engineers' },
-  { track: 'data-engineering', section: 'Data Engineering Foundations', order: -2, href: '/learn/foundations/postgresql',   title: 'PostgreSQL' },
-  { track: 'data-engineering', section: 'Data Engineering Foundations', order: -1, href: '/learn/foundations/python',       title: 'Python for Data Engineers' },
+  { track: 'data-engineering', section: 'Core Engineering Skills', order: 15.5, href: '/learn/foundations/postgresql', title: 'PostgreSQL for Data Engineers' },
+
+  { track: 'cloud-data', section: 'Course Introduction', order: 0, href: '/learn/cloud-data/choosing-a-cloud', title: 'Choosing a Cloud for Data — Azure vs AWS vs GCP' },
+  { track: 'cloud-data', section: 'Platform-neutral Tools', order: 400, href: '/learn/cloud-data/databricks-unity-catalog', title: 'Databricks and Unity Catalog' },
+  { track: 'cloud-data', section: 'Cross-cloud Foundations', order: 401, href: '/learn/cloud-data/iam-networking', title: 'IAM and Networking for Data Platforms' },
+  { track: 'cloud-data', section: 'Career Preparation', order: 402, href: '/learn/cloud-data/interview-prep', title: 'Cloud Data Interview Prep' },
 
   { track: 'cloud-data', section: 'Microsoft Azure', order: 201, href: '/learn/azure/introduction',     title: 'Azure Introduction' },
   { track: 'cloud-data', section: 'Microsoft Azure', order: 202, href: '/learn/azure/adls-gen2',        title: 'ADLS Gen2' },
@@ -33,6 +35,7 @@ const STATIC_LESSONS: StaticLesson[] = [
   { track: 'cloud-data', section: 'Google Cloud', order: 303, href: '/learn/gcp/dataflow',     title: 'Cloud Dataflow' },
   { track: 'cloud-data', section: 'Google Cloud', order: 304, href: '/learn/gcp/pubsub',       title: 'Cloud Pub/Sub' },
   { track: 'cloud-data', section: 'Google Cloud', order: 305, href: '/learn/gcp/composer',     title: 'Cloud Composer' },
+  { track: 'cloud-data', section: 'Google Cloud', order: 306, href: '/learn/gcp/gcs-dataproc', title: 'Google Cloud Storage and Dataproc' },
 
   { track: 'projects', order: 1, href: '/learn/projects/azure-batch-pipeline', title: 'Project 01 — Copy CSV to ADLS' },
   { track: 'projects', order: 2, href: '/learn/projects/azure-projects-02',    title: 'Project 02 — ForEach Loop' },

@@ -6,7 +6,7 @@ export default function LlmCostLatency() {
     <LearnLayout
       title="Cost and Latency Optimisation — Caching, Batching and Routing"
       description="Cut cost and response time with prompt caching, response caching, batching, smaller-model routing, and output limits."
-      section="Generative AI & LLM Engineering — Lesson 10"
+      section="Generative AI & LLM Engineering — Lesson 11"
       readTime="30 min"
     >
       <Part n={1} label="Measure first" title="Optimise the Slow or Expensive Step, Not a Guess">
@@ -265,7 +265,7 @@ print("p95_ms", percentile(observed_ms, 0.95))
       <H3>Next</H3>
       <NextLesson
         href="/learn/generative-ai/llm-frameworks"
-        label="Lesson 11 · LLM Frameworks — LangChain and LlamaIndex: When to Use Them"
+        label="Lesson 12 · LLM Frameworks — LangChain and LlamaIndex: When to Use Them"
         text="You have tools to measure and optimize a feature. Next, decide whether an LLM framework helps your architecture or adds more abstraction than you need."
       />
     </LearnLayout>

@@ -1178,24 +1178,22 @@ print("\nProduction bundle saved.")`} />
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
-          Classical ML is complete. Every major algorithm is covered.
-          Next: unsupervised learning — finding structure without labels.
+          Boosted trees are complete. Next: combine complementary learners
+          before moving from prediction to unsupervised structure.
         </h2>
 
         <p style={S.p}>
-          You have now covered every major supervised learning algorithm.
-          Linear regression, logistic regression, decision trees, SVMs, KNN,
-          Naive Bayes, Random Forest, Gradient Boosting, XGBoost, LightGBM.
-          Each one with full intuition, math, code, and real errors.
+          You have covered linear and logistic regression, SVMs, KNN, Naive Bayes,
+          Random Forest and the gradient-boosted tree family. The next lesson
+          combines complementary models and shows why out-of-fold predictions
+          matter when a second-stage learner is trained.
         </p>
 
         <p style={S.p}>
-          Lesson 32 begins unsupervised learning — K-Means Clustering.
-          Instead of predicting a label, you find hidden groups in data.
-          Retailers use it to segment customers into groups;
-          delivery apps use it to cluster delivery zones.
-          The algorithm requires no labels — it discovers structure
-          that was always there but never explicitly defined.
+          Lesson 32 covers stacking and blending. You will combine several
+          complementary models without letting the meta-model train on
+          predictions made from rows its base learners already saw. After that,
+          K-Means begins the move from supervised prediction to unlabeled data.
         </p>
 
         <div style={{
@@ -1216,14 +1214,14 @@ print("\nProduction bundle saved.")`} />
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              K-Means Clustering — Customer Segmentation
+              Ensembles — Stacking and Blending
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
-              Finding hidden groups in data without labels. Inertia, elbow method,
-              silhouette scores, and when clustering is the right approach.
+              Learn leakage-aware out-of-fold stacking, blending, and how to
+              compare ensemble gains against the strongest base model.
             </p>
           </div>
-          <Link href="/learn/ai-ml/classical-ml/kmeans-clustering" style={{
+          <Link href="/learn/ai-ml/classical-ml/ensembles-stacking-blending" style={{
             fontSize: 12, color: '#378ADD', fontWeight: 700,
             border: '1px solid #378ADD',
             padding: '7px 14px', borderRadius: 6,

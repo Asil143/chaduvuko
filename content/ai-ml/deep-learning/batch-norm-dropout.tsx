@@ -181,12 +181,12 @@ export default function TrainingDeepNetworksPage() {
       <div style={S.sec}>
         <span style={S.tag}>Before any code — what problem does this lesson solve?</span>
         <h2 style={S.h2}>
-          Lesson 41 built a network that works. This lesson makes it
+          Lesson 45 built a network that works. This lesson makes it
           train 10× faster, generalise better, and stay stable on deep architectures.
         </h2>
 
         <p style={S.p}>
-          The network from Lesson 41 used plain SGD — subtract a fixed
+          The network from Lesson 45 used plain SGD — subtract a fixed
           fraction of the gradient from each weight every step.
           It works, but it has three serious problems in practice.
           First: the same learning rate for every weight regardless of how
@@ -1288,7 +1288,7 @@ print("incident that paged the on-call engineer in the first place.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 48 · Deep Learning
+              Next — Lesson 52 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

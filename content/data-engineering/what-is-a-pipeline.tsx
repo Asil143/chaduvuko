@@ -316,7 +316,7 @@ save_checkpoint(current_run)   # advance ONLY after a successful write`}</CodeBo
 
         <Output>{`# four pitfalls this pattern has to account for:
 1. Late-arriving data past the window       → overlap by 30 min, upsert at destination
-2. Deletes are invisible to incremental SQL → use CDC (Lesson 24)
+2. Deletes are invisible to incremental SQL → use CDC (Lesson 27)
 3. Clock skew between pipeline and source   → use the source DB's own NOW()
 4. No updated_at column at all              → use max(id) watermark, or full extract`}</Output>
 

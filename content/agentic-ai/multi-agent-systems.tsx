@@ -212,9 +212,9 @@ def run_team(initial_task: str, max_handoffs: int = 4) -> dict:
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/agentic-ai/agent-evaluation-observability"
-        label="Lesson 08 · Testing, Evaluating and Tracing Agents"
-        text="A team can appear convincing while hiding a bad tool call or incomplete result. Next, test trajectories, measure task outcomes and trace each step."
+        href="/learn/agentic-ai/agent-frameworks-compared"
+        label="Lesson 08 · Agent Frameworks Compared — LangGraph, OpenAI Agents SDK and CrewAI"
+        text="Build the same small agent three ways and compare control, state, tracing, lock-in and production readiness to choose a framework."
       />
     </LearnLayout>
   )

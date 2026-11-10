@@ -1338,7 +1338,7 @@ for metric, target, desc in slos:
           Models degrade silently as the world changes around them.
           The fraud patterns Stripe trained on in January look different
           by June. The delivery time patterns from pre-monsoon do not hold
-          during monsoon season. Lesson 72 covers drift detection and monitoring —
+          during monsoon season. Lesson 76 covers drift detection and monitoring —
           how to know your model is degrading before users notice,
           and how to trigger automatic retraining when it does.
         </p>
@@ -1355,7 +1355,7 @@ for metric, target, desc in slos:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 77 · MLOps
+              Next — Lesson 81 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

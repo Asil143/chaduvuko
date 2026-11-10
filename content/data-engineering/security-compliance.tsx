@@ -190,7 +190,7 @@ export default function SecurityCompliancePage() {
     <LearnLayout
       title="Security and Compliance for Data Engineers"
       description="GDPR and the CCPA — what they mean for your pipelines and how to build systems that are compliant by design."
-      section="Data Engineering — Lesson 39"
+      section="Data Engineering — Lesson 44"
       readTime="50 min"
     >
 
@@ -1105,11 +1105,9 @@ Audit reader            Inspect operation evidence       Read full deleted recor
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 40 covers streaming data — event-driven architecture, producers and consumers, offsets, consumer groups, and replay — the core concepts behind every streaming system, without locking you to a specific tool.
+          Lesson 22 covers streaming data — event-driven architecture, producers and consumers, offsets, consumer groups, and replay — the core concepts behind every streaming system, without locking you to a specific tool.
         </p>
-        <Link href="/learn/data-engineering/streaming-data" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 40 → Streaming Data — What It Is and How It Works
-        </Link>
+        <Link href="/learn/data-engineering/distributed-systems" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>Lesson 45 → Distributed Systems for Data Engineers</Link>
       </div>
     </LearnLayout>
   )

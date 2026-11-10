@@ -10,15 +10,7 @@ export const metadata = {
 }
 
 
-const phaseColors: Record<string, string> = {
-  '00': '#00e676', '01': '#00e676', '02': '#00e676',
-  '03': '#7b61ff', '04': '#7b61ff', '05': '#7b61ff',
-  '06': '#f97316', '07': '#f97316', '08': '#f97316',
-  '09': '#facc15', '10': '#facc15', '11': '#facc15', '12': '#facc15',
-  '13': '#4285f4', '14': '#4285f4', '15': '#4285f4',
-  '16': '#0078d4', '17': '#0078d4', '18': '#0078d4',
-  '19': '#8b5cf6',
-}
+const sections = ['Foundations', 'Linear Structures', 'Non-Linear Structures', 'Algorithm Paradigms', 'Interview'] as const
 
 export default function DSAPage() {
   const totalTopics = units.reduce((acc, u) => acc + u.topics.length, 0)
@@ -116,20 +108,25 @@ export default function DSAPage() {
           {units.length} Lessons. Zero to Advanced.
         </h2>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.7, maxWidth: 560 }}>
-          Go in order. Each lesson builds on the last. Do not skip — every concept
-          is introduced exactly when you need it, not before.
+          Follow the sections from foundations to interview practice. The new focused lessons deepen graph algorithms, DP patterns, and common array techniques; the Interview unit brings those patterns together without repeating this curriculum.
         </p>
       </div>
 
       {/* ── Unit Cards ── */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 28 }}>
-        {units.map((unit) => {
-          const accentColor = phaseColors[unit.number] || 'var(--green)'
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 32, marginTop: 28 }}>
+        {sections.map((section) => {
+          const sectionUnits = units.filter((unit) => unit.section === section)
+          return (
+            <section key={section} aria-labelledby={`dsa-section-${section.toLowerCase().replace(/ /g, '-')}`}>
+              <h2 id={`dsa-section-${section.toLowerCase().replace(/ /g, '-')}`} style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 12 }}>{section}</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {sectionUnits.map((unit) => {
+          const accentColor = unit.color
           const isLive = unit.status === 'live'
 
           return (
             <div
-              key={unit.number}
+              key={unit.slug}
               style={{
                 background: 'var(--surface)',
                 border: '1px solid var(--border)',
@@ -250,6 +247,10 @@ export default function DSAPage() {
                 </div>
               </div>
             </div>
+          )
+                })}
+              </div>
+            </section>
           )
         })}
       </div>

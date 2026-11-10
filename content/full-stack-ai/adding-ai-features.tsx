@@ -3,7 +3,7 @@ import { Bullets, Callout, Code, H3, KeyTakeaways, Mistakes, NextLesson, P, Part
 
 export default function AddingAiFeatures() {
   return (
-    <LearnLayout title="Adding an AI Feature — Streaming Chat in a Web App" description="Call an LLM from a server route, stream the answer into a React UI, keep API keys server-side, and handle limits and failures." section="Full-Stack Development with AI — Lesson 07" readTime="40 min">
+    <LearnLayout title="Adding an AI Feature — Streaming Chat in a Web App" description="Call an LLM from a server route, stream the answer into a React UI, keep API keys server-side, and handle limits and failures." section="Full-Stack Development with AI — Lesson 11" readTime="40 min">
       <Part n={1} label="Product decision" title="Give AI a Specific Job in the Study Planner">
         <P>An AI feature is useful when it helps a learner make progress on a concrete task. Our planner can offer a study coach that turns a student's own topic and available time into a short revision plan. It should not pretend to know the student's exam syllabus or guarantee a grade. Start with a clearly bounded task and a visible way for the learner to review the suggestion.</P>
         <P>Before adding a model call, decide what information the feature needs, what it must not receive, how the learner will evaluate the result, and what happens when the provider is unavailable. A generated answer is not verified educational content. Keep the existing planner useful without AI and never block essential study scheduling on model availability.</P>
@@ -78,7 +78,10 @@ export default function AddingAiFeatures() {
       ]} />
       <Bullets items={[<span key="reference">Check the provider's current API documentation for streaming event shapes, supported models, limits, and usage reporting; these details can change.</span>]} />
       <H3>Next</H3>
-      <NextLesson href="/learn/full-stack-ai/deploying-full-stack-apps" label="Lesson 08 · Deploying a Full-Stack App" text="Move the planner from local development to a production deployment with secrets, managed PostgreSQL, and operational checks." />
+      <NextLesson
+        href="/learn/full-stack-ai/real-time-websockets-sse"
+        label="Lesson 12 · Real-Time Features — WebSockets and Server-Sent Events"
+        text="Push live updates to users with server-sent events and WebSockets, choose between them, and scale real-time connections." />
     </LearnLayout>
   )
 }

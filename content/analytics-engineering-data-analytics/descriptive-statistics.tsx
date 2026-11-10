@@ -6,7 +6,7 @@ export default function DescriptiveStatistics() {
     <LearnLayout
       title="Descriptive Statistics and Distributions"
       description="Mean, median, percentiles, spread, skew, and outliers; reading histograms and box plots; and choosing the right summary."
-      section="Data Analytics & Statistics — Lesson 01"
+      section="Data Analytics & Statistics — Lesson 05"
       readTime="35 min"
     >
       <Part n={1} label="Why summarise?" title="A Single Number Can Hide a Whole Dataset">
@@ -248,7 +248,7 @@ print(summary.round(1))
       <H3>Next</H3>
       <NextLesson
         href="/learn/analytics-engineering-data-analytics/sampling-confidence-intervals"
-        label="Lesson 02 · Sampling and Confidence Intervals"
+        label="Lesson 06 · Sampling and Confidence Intervals"
         text="Summaries describe the records you have. Next, learn how carefully chosen samples help estimate a larger population—and how to communicate uncertainty around that estimate."
       />
     </LearnLayout>

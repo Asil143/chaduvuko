@@ -77,7 +77,7 @@ export default function ClosuresScope() {
     <LearnLayout
       title="Closures and Scope — The LEGB Rule"
       description="How Python resolves variable names, what a closure actually captures, and the scoping bugs that confuse everyone once."
-      section="Python — Lesson 31"
+      section="Python — Lesson 33"
       readTime="35 min"
     >
 
@@ -547,11 +547,11 @@ callbacks[101]()   # correctly sends command for 101 now`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 32 begins the Advanced Python phase with regular expressions — pattern matching for
+          Lesson 34 begins the Advanced Python phase with regular expressions — pattern matching for
           text, and the syntax that looks intimidating but follows a small set of real rules.
         </p>
         <Link href="/learn/python/regular-expressions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 32 → Regular Expressions with re
+          Lesson 34 → Regular Expressions with re
         </Link>
       </div>
     </LearnLayout>

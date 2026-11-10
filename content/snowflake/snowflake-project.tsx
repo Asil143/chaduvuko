@@ -5,7 +5,7 @@ export default function SnowflakeProject() {
     <LearnLayout
       title="End-to-End Snowflake Project"
       description="A full capstone build: raw ingestion, semi-structured JSON, idempotent Bronze/Silver/Gold pipelines, streams and tasks, masking and row access policies, time travel recovery, clustering, resource monitors, and monitoring — one orders analytics platform synthesizing the whole track."
-      section="Snowflake — Lesson 19"
+      section="Snowflake — Lesson 21"
       readTime="120 min"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
@@ -15,7 +15,7 @@ export default function SnowflakeProject() {
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Capstone framing" />
-        <SectionTitle>Eighteen Modules, One Real Build</SectionTitle>
+        <SectionTitle>Twenty Modules, One Real Build</SectionTitle>
         <HighlightBox>
           <Para>
             <strong>Where you are:</strong> you have learned Snowflake architecture, SQL basics, roles and
@@ -897,7 +897,7 @@ ORDER BY 1 DESC;
           platform: redelivered files, bad rows, bad queries, access drift, silent staleness, unwatched test
           failures, and lost institutional knowledge. The difference between a fragile pipeline and a
           production-ready one is whether these were designed for in advance, which is exactly what lessons 8
-          (idempotency), 9 (time travel), 15 (governance), and 18 (operations) were teaching.
+          (idempotency), 9 (time travel), 15 (governance), and 20 (operations) were teaching.
         </Callout>
       </section>
 

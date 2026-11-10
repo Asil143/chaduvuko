@@ -77,7 +77,7 @@ export default function LambdaMapFilterReduce() {
     <LearnLayout
       title="Lambda Functions and Functional Tools"
       description="Lambda syntax and its real constraint, when it genuinely earns its place, map/filter/reduce in depth, and why comprehensions usually win."
-      section="Python — Lesson 26"
+      section="Python — Lesson 28"
       readTime="45 min"
     >
 
@@ -102,7 +102,7 @@ def square(x):
 
         <Para>
           A lambda can take any number of arguments — including <code>*args</code>,{' '}
-          <code>**kwargs</code>, and default values, exactly like a normal function from Lesson 25 —
+          <code>**kwargs</code>, and default values, exactly like a normal function from Lesson 27 —
           but its body must be a <strong>single expression</strong>. This is not a stylistic
           limitation; it is enforced by Python&apos;s grammar. A lambda cannot contain statements:
           no <code>if</code>/<code>else</code> as separate lines, no <code>for</code> loops, no{' '}
@@ -619,7 +619,7 @@ final = sorted(step1, key=lambda e: e["dept"])`}</CodeBox>
           },
           {
             q: 'Using a lambda inside a loop and accidentally capturing the loop variable by reference',
-            a: 'This is a genuinely famous Python gotcha covered in full in Lesson 31 (Closures and Scope) — a lambda defined inside a loop, referencing the loop variable, captures the variable itself, not its value at definition time. Every lambda created in the loop ends up seeing the loop variable\'s FINAL value once the loop finishes.',
+            a: 'This is a genuinely famous Python gotcha covered in full in Lesson 33 (Closures and Scope) — a lambda defined inside a loop, referencing the loop variable, captures the variable itself, not its value at definition time. Every lambda created in the loop ends up seeing the loop variable\'s FINAL value once the loop finishes.',
           },
           {
             q: 'Assuming filter(function, iterable) removes items where the function returns True',
@@ -732,11 +732,11 @@ final = sorted(step1, key=lambda e: e["dept"])`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 27 goes underneath the for loop itself — the iterable and iterator protocols, what
+          Lesson 29 goes underneath the for loop itself — the iterable and iterator protocols, what
           Python is actually doing on every pass, and how to build your own iterator class from scratch.
         </p>
         <Link href="/learn/python/iterators-iterables" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 27 → Iterators and Iterables
+          Lesson 29 → Iterators and Iterables
         </Link>
       </div>
     </LearnLayout>

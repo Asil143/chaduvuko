@@ -775,6 +775,59 @@ Sink:
           'State, windows, and time semantics are the hard parts.',
         ],
       },
+      {
+        id: 15,
+        slug: 'stream-processing-apache-flink',
+        title: 'Stream Processing with Apache Flink',
+        description: 'Build Kafka-to-Flink pipelines with event time, watermarks, stateful windows, checkpointing, and reliable output contracts.',
+        tags: ['Apache Flink', 'Kafka Source', 'Event time', 'Watermarks', 'State', 'Checkpoints'],
+        status: 'live',
+        readTime: '35-45 min',
+        difficulty: 'Advanced',
+        plainEnglish: 'Apache Flink is a distributed engine for continuously computing over event streams. It reads Kafka records, maintains state, handles late events with event-time watermarks, and writes derived results to downstream systems.',
+        analogy: 'Kafka is the durable stream of receipts. Flink is the live operations desk that continuously groups, checks, and updates those receipts while remembering enough state to recover after a restart.',
+        coreIdeas: [
+          'Kafka stores and distributes records; Flink runs stateful stream computations.',
+          'Event time describes when a business event happened; processing time describes when a task handled it.',
+          'Watermarks estimate event-time progress and make late-data behavior explicit.',
+          'Windows group an unbounded stream into finite calculations such as five-minute totals.',
+          'Checkpoints capture state and source progress so a job can recover consistently.',
+        ],
+        walkthrough: [
+          'Read order events from a Kafka topic with a dedicated consumer group.',
+          'Parse and validate the event schema, routing malformed records for inspection.',
+          'Assign event timestamps and a watermark strategy based on observed lateness.',
+          'Group valid events by a business key and calculate a bounded event-time window.',
+          'Write a versioned result to an output topic with explicit update and delivery semantics.',
+        ],
+        exampleTitle: 'Five-Minute Revenue Pipeline',
+        example: `Kafka orders topic
+  -> Flink Kafka source
+  -> validate schema and event timestamp
+  -> key by region, aggregate event-time windows
+  -> Kafka output topic for downstream dashboards`,
+        commonMistakes: [
+          'Using processing time for a question about when the event occurred. Assign event timestamps and test late arrivals.',
+          'Assuming a watermark proves no older event can arrive. It is a progress estimate controlled by policy.',
+          'Keeping unbounded state for high-cardinality keys. Define windows or state cleanup and monitor state growth.',
+          'Claiming exactly-once for arbitrary external side effects. Understand the checkpoint and sink transaction boundary.',
+        ],
+        advancedNotes: [
+          'Kafka source and sink connector artifacts must match the Flink distribution and runtime.',
+          'Checkpoint storage, restart policy, state size, backpressure, and sink latency are production concerns.',
+          'Kafka Streams may be simpler for Kafka-centric application processing; Flink is a separate distributed engine with a broader stateful runtime.',
+        ],
+        checklist: [
+          'Does the job use event time or processing time, and why?',
+          'What lateness does the watermark strategy tolerate?',
+          'How are state, checkpoints, and output duplicates handled after failure?',
+        ],
+        takeaways: [
+          'Flink computes over streams; Kafka remains the durable event log.',
+          'Event time, watermarks, windows, and state define streaming semantics.',
+          'Recovery and sink guarantees must be designed and tested together.',
+        ],
+      },
     ],
   },
   {
@@ -784,7 +837,7 @@ Sink:
     difficulty: 'Advanced',
     modules: [
       {
-        id: 15,
+        id: 16,
         slug: 'security-acls-sasl-tls',
         title: 'Kafka Security: TLS, SASL, and ACLs',
         description: 'Encrypt traffic, authenticate clients, and authorize topic access.',
@@ -837,7 +890,7 @@ billing-consumer:
         ],
       },
       {
-        id: 16,
+        id: 17,
         slug: 'monitoring-observability',
         title: 'Monitoring and Observability',
         description: 'Metrics, logs, lag, broker health, and what to alert on.',
@@ -890,7 +943,7 @@ Warning:
         ],
       },
       {
-        id: 17,
+        id: 18,
         slug: 'performance-tuning',
         title: 'Performance Tuning',
         description: 'Tune producers, consumers, partitions, compression, batching, and broker resources.',
@@ -941,7 +994,7 @@ Measure latency after changing these settings; do not copy blindly.`,
         ],
       },
       {
-        id: 18,
+        id: 19,
         slug: 'scaling-capacity-planning',
         title: 'Scaling and Capacity Planning',
         description: 'Plan partitions, brokers, replication, disk, network, and growth.',
@@ -992,7 +1045,7 @@ Plan more than 2.1 TB usable capacity.`,
         ],
       },
       {
-        id: 19,
+        id: 20,
         slug: 'disaster-recovery-multi-region',
         title: 'Disaster Recovery and Multi-Region Kafka',
         description: 'Backups, replication, failover, MirrorMaker 2, active-passive, and active-active tradeoffs.',
@@ -1044,6 +1097,63 @@ Global low-latency product:
           'Test failover before the emergency.',
         ],
       },
+      {
+        id: 21,
+        slug: 'kafka-without-zookeeper-kraft-mode',
+        title: 'Kafka Without ZooKeeper — KRaft Mode',
+        description: 'Understand Kafka’s built-in metadata quorum, controller roles, local KRaft setup, and the Kafka 3.3 and 4.0 migration milestones.',
+        tags: ['KRaft', 'ZooKeeper', 'Metadata quorum', 'Controllers', 'Kafka 4.0', 'Migration'],
+        status: 'live',
+        readTime: '30-40 min',
+        difficulty: 'Advanced',
+        plainEnglish: 'KRaft is Kafka’s built-in consensus-based metadata mode. Controllers replicate cluster metadata inside Kafka rather than relying on a separate ZooKeeper ensemble.',
+        analogy: 'Instead of keeping the event log in one system and the cluster’s authoritative map in another, KRaft lets Kafka maintain its own replicated metadata ledger with an elected controller.',
+        coreIdeas: [
+          'Kafka needs cluster metadata for brokers, topics, partition leaders, and configuration.',
+          'KRaft stores metadata in a replicated log maintained by a controller quorum.',
+          'Controller nodes participate in metadata consensus; brokers serve data partitions.',
+          'KRaft became generally available in Kafka 3.3; Kafka 4.0 removed ZooKeeper mode.',
+          'Migration and upgrades require a release-specific plan, not a one-command switch.',
+        ],
+        walkthrough: [
+          'Choose a Kafka release and follow its versioned KRaft deployment guide.',
+          'Configure node identities, process roles, listeners, and quorum membership.',
+          'For a disposable local cluster, generate a cluster ID and format fresh storage once.',
+          'Start the broker, create a topic, and inspect its metadata using the normal Kafka CLI.',
+          'For production, monitor quorum health and test the supported migration and recovery path.',
+        ],
+        exampleTitle: 'KRaft Role Sketch',
+        example: `Local development:
+  one process: broker + controller
+
+Larger production cluster:
+  dedicated controller quorum
+  separate broker nodes
+  private controller listener
+  secured client listener`,
+        commonMistakes: [
+          'Assuming Kafka 4.0 can run with ZooKeeper. ZooKeeper mode was removed in 4.0.',
+          'Formatting an existing metadata directory as if it were a new node. Identify the cluster and storage state first.',
+          'Counting broker nodes as quorum voters when they are not configured with the controller role.',
+          'Treating KRaft adoption as an automatic migration. Follow the exact supported upgrade procedure.',
+        ],
+        advancedNotes: [
+          'KRaft reached general availability in Kafka 3.3.',
+          'Controller quorum configuration and membership procedures differ across static and dynamic quorum modes and Kafka releases.',
+          'KRaft changes metadata management; broker replication, security, backups, and monitoring remain essential.',
+        ],
+        checklist: [
+          'Which processes are controllers and which are brokers?',
+          'What quorum majority is needed for metadata progress?',
+          'Has the ZooKeeper-to-KRaft migration been tested for the exact release path?',
+        ],
+        takeaways: [
+          'KRaft brings Kafka metadata consensus into Kafka itself.',
+          'Controllers manage metadata quorum; brokers serve client data.',
+          'Kafka 3.3 made KRaft GA and Kafka 4.0 removed ZooKeeper mode.',
+          'A single-node local setup is a learning tool, not a highly available production design.',
+        ],
+      },
     ],
   },
   {
@@ -1053,7 +1163,7 @@ Global low-latency product:
     difficulty: 'Advanced',
     modules: [
       {
-        id: 20,
+        id: 22,
         slug: 'event-driven-architecture',
         title: 'Event-Driven Architecture',
         description: 'Use Kafka to decouple services, publish facts, and design business events.',
@@ -1107,7 +1217,7 @@ Weaker:
         ],
       },
       {
-        id: 21,
+        id: 23,
         slug: 'cdc-debezium',
         title: 'Change Data Capture with Debezium',
         description: 'Stream database changes into Kafka without fragile polling jobs.',
@@ -1157,7 +1267,7 @@ Weaker:
         ],
       },
       {
-        id: 22,
+        id: 24,
         slug: 'managed-kafka-cloud',
         title: 'Managed Kafka and Cloud Choices',
         description: 'Compare self-managed Kafka, Confluent Cloud, MSK, Azure Event Hubs Kafka API, and other managed options.',
@@ -1211,7 +1321,7 @@ Choose self-managed when:
         ],
       },
       {
-        id: 23,
+        id: 25,
         slug: 'testing-debugging',
         title: 'Testing and Debugging Kafka Systems',
         description: 'Local tests, embedded clusters, Testcontainers, contract tests, replay, and incident debugging.',
@@ -1262,7 +1372,7 @@ Choose self-managed when:
         ],
       },
       {
-        id: 24,
+        id: 26,
         slug: 'kafka-interview-system-design',
         title: 'Kafka Interview and System Design Guide',
         description: 'Prepare for Kafka interviews and design reviews with practical tradeoff language.',

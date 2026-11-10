@@ -3,7 +3,7 @@ import { Bullets, Callout, Code, H3, KeyTakeaways, Mistakes, NextLesson, P, Part
 
 export default function NodeExpressRestApi() {
   return (
-    <LearnLayout title="Building a REST API with Node.js and Express" description="Routes, middleware, validation, status codes, and error handling for a JSON API, tested with curl." section="Full-Stack Development with AI — Lesson 04" readTime="40 min">
+    <LearnLayout title="Building a REST API with Node.js and Express" description="Routes, middleware, validation, status codes, and error handling for a JSON API, tested with curl." section="Full-Stack Development with AI — Lesson 06" readTime="40 min">
       <Part n={1} label="API contract" title="Model Resources Before Writing Routes">
         <P>A REST-style API exposes resources through URLs and uses HTTP methods to describe operations. For the study planner, a plan is a resource and study sessions belong to a plan. The browser sends JSON; the server checks the request, applies business rules, and returns JSON with an HTTP status that explains the result.</P>
         <P>Keep endpoints predictable. Use plural nouns for collections, path parameters for a specific resource, and query parameters for filtering or pagination. The server—not the route name—must enforce identity and ownership. In this lesson the API accepts a student ID as a teaching placeholder; the authentication lesson replaces that untrusted input with the verified session identity.</P>
@@ -77,7 +77,10 @@ export default function NodeExpressRestApi() {
       ]} />
       <Bullets items={[<span key="reference">Use the official Express and Zod documentation for current setup and API details. Keep exact dependency versions in the repository manifest and lockfile.</span>]} />
       <H3>Next</H3>
-      <NextLesson href="/learn/full-stack-ai/postgres-with-an-orm" label="Lesson 05 · PostgreSQL with an ORM — Prisma" text="Replace placeholder service functions with relational tables, migrations, and typed database queries." />
+      <NextLesson
+        href="/learn/full-stack-ai/postgres-with-an-orm"
+        label="Lesson 07 · PostgreSQL with an ORM — Prisma"
+        text="Replace placeholder service functions with relational tables, migrations, and typed database queries." />
     </LearnLayout>
   )
 }

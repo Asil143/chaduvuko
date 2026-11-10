@@ -3,12 +3,12 @@ import { useState } from 'react'
 import { Copy, Check, Linkedin, ChevronDown } from 'lucide-react'
 
 const POSTS: Record<string, { headline: string; body: string; hashtags: string }> = {
-  '/learn/what-is-data-engineering': {
+  '/learn/data-engineering/what-is-data-engineering': {
     headline: "I just started my Data Engineering journey",
     body: "Today I learned what Data Engineers actually do — we build the pipelines that move raw data into clean, structured formats for analysts and ML teams to use.\n\nKey concepts I studied:\n• ETL vs ELT\n• Batch vs Streaming pipelines\n• The Medallion Architecture (Bronze → Silver → Gold)\n• Why Data Engineering is the fastest-growing cloud skill in 2026\n\nUsing Asil (asil.dev) to learn Azure, AWS, and GCP data engineering for free.",
     hashtags: "#DataEngineering #Azure #AWS #GCP #CloudComputing #LearningInPublic"
   },
-  '/learn/foundations/sql': {
+  '/learn/data-engineering/sql-for-de': {
     headline: "SQL Window Functions are a game changer for Data Engineers",
     body: "Just completed the SQL for Data Engineers module. The concept that clicked for me today: Window Functions.\n\nROW_NUMBER(), RANK(), LAG(), LEAD(), and SUM() OVER () — these are not just nice-to-know. Every data engineering interview tests these.\n\nMost useful pattern I learned:\n\nSELECT *, LAG(revenue) OVER (PARTITION BY region ORDER BY date) AS prev_month\nFROM sales\n\nThis calculates month-over-month revenue per region in a single query. No joins needed.\n\nStudying on Asil — 100% free data engineering education.",
     hashtags: "#SQL #DataEngineering #WindowFunctions #LearningInPublic #DataAnalytics"

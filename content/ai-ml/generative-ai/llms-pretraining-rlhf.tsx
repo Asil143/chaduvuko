@@ -188,11 +188,11 @@ export default function LLMsPretrainingRLHFPage() {
         </h2>
 
         <p style={S.p}>
-          Lesson 48 covered the Transformer architecture — attention, positional
+          Lesson 52 covered the Transformer architecture — attention, positional
           encoding, encoder-decoder. LLMs use only the decoder half
           (or a modified encoder-only variant for BERT).
           GPT, LLaMA, Mistral, and Gemini are all decoder-only Transformers.
-          The key difference from what you built in Lesson 48:
+          The key difference from what you built in Lesson 52:
           scale. GPT-3 has 175 billion parameters trained on 300 billion tokens
           using thousands of A100 GPUs over months. LLaMA-3-70B has 70 billion
           parameters trained on 15 trillion tokens.
@@ -1250,7 +1250,7 @@ for m, sz, vram, qual, use in quant_methods:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 62 · LLMs
+              Next — Lesson 66 · LLMs
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

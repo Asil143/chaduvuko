@@ -1148,20 +1148,16 @@ print(f"\nNew restaurant (47.58°N, -122.31°W) → Zone {zone_id}")`} />
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
-          K-Means groups data into clusters. PCA compresses data into fewer dimensions.
+          K-Means finds compact groups. Next compare nested clusters and density-based groups.
         </h2>
 
         <p style={S.p}>
-          K-Means answers: which group does this point belong to?
-          PCA (Principal Component Analysis) answers a different question:
-          can I represent this data with fewer features while
-          preserving most of the information?
-          You have a customer with 50 features — PCA finds the 5 most
-          informative directions in that 50-dimensional space and
-          projects the customer onto them. The result: 5 numbers instead
-          of 50, capturing 95% of the original information.
-          PCA and K-Means are often used together — PCA first to reduce
-          dimensions, K-Means after to find groups in the reduced space.
+          K-Means assumes compact groups around centroids. Hierarchical
+          clustering instead records how small groups merge into larger ones,
+          while DBSCAN looks for dense regions and can leave noise unassigned.
+          The next lesson compares these assumptions, the linkage choices, and
+          the density parameters that shape the resulting clusters. PCA follows
+          after these clustering alternatives.
         </p>
 
         <div style={{
@@ -1176,20 +1172,20 @@ print(f"\nNew restaurant (47.58°N, -122.31°W) → Zone {zone_id}")`} />
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 33 · Classical ML
+              Next — Lesson 34 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              PCA — Dimensionality Reduction
+              More Clustering — Hierarchical and DBSCAN
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
-              Turn 100 features into 10 without losing most of the information.
-              Explained variance, scree plots, and when PCA helps and when it hurts.
+              Compare agglomerative linkage with density-based clustering,
+              and evaluate cluster shapes, noise and parameter sensitivity.
             </p>
           </div>
-          <Link href="/learn/ai-ml/classical-ml/pca" style={{
+          <Link href="/learn/ai-ml/classical-ml/more-clustering" style={{
             fontSize: 12, color: '#378ADD', fontWeight: 700,
             border: '1px solid #378ADD',
             padding: '7px 14px', borderRadius: 6,

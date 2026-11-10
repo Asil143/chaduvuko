@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     'CAP theorem applied to real data systems, consistency models, replication strategies, partitioning and sharding, distributed joins, fault tolerance and delivery semantics, consensus protocols, and the Saga pattern — explained for data engineers, not distributed systems PhDs.',
 }
 
-/* ── Local components (Lesson 37 style) ─────────────────────────────────── */
+/* ── Local components (Lesson 42 style) ─────────────────────────────────── */
 
 const SectionTag = ({ text }: { text: string }) => (
   <div style={{
@@ -173,7 +173,7 @@ export default function DistributedSystemsModule() {
     <LearnLayout
       title="Distributed Systems for Data Engineers"
       description="CAP theorem applied to real data systems, consistency models, replication strategies, partitioning and sharding, distributed joins, fault tolerance and delivery semantics, consensus protocols, and the Saga pattern — explained for data engineers, not distributed systems PhDs."
-      section="Data Engineering — Lesson 42"
+      section="Data Engineering — Lesson 45"
       readTime="65 min"
     >
 
@@ -1601,10 +1601,10 @@ print(f"W2_R2_always_overlap={all(bool(w & r) for w in pairs for r in pairs)}")`
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 43 covers performance tuning — how to identify whether a pipeline is I/O bound, CPU bound, or network bound, and the specific techniques for fixing each bottleneck type without rebuilding everything.
+          Lesson 46 covers performance tuning — how to identify whether a pipeline is I/O bound, CPU bound, or network bound, and the specific techniques for fixing each bottleneck type without rebuilding everything.
         </p>
         <Link href="/learn/data-engineering/performance-tuning" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 43 → Performance Tuning and Cost Optimisation
+          Lesson 46 → Performance Tuning and Cost Optimisation
         </Link>
       </div>
     </LearnLayout>

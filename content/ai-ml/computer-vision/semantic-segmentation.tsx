@@ -1128,7 +1128,7 @@ print("standard, near-universal steps between model output and production use.")
         <p style={S.p}>
           You have built segmentation from scratch and used pretrained models.
           Both required labelled masks — expensive to collect.
-          Lesson 59 covers transfer learning for vision:
+          Lesson 63 covers transfer learning for vision:
           how to use a ResNet or EfficientNet backbone pretrained on ImageNet
           as a feature extractor for your own task, freezing early layers
           and fine-tuning later layers. The same technique powers every
@@ -1148,7 +1148,7 @@ print("standard, near-universal steps between model output and production use.")
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 57 · Vision
+              Next — Lesson 61 · Vision
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

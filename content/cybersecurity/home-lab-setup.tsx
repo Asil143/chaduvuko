@@ -52,7 +52,7 @@ export default function Module39() {
     <LearnLayout
       title="Building a Home Lab for Cybersecurity Practice"
       description="Build a realistic cybersecurity lab on your own hardware or for free in the cloud. Set up virtualisation, a vulnerable Active Directory environment, SIEM, IDS, and a safe isolated network to practice every technique in this course legally."
-      section="Cybersecurity — Lesson 39"
+      section="Cybersecurity — Lesson 45"
       readTime="38 min"
     >
 
@@ -778,8 +778,8 @@ Key Learnings:
       ]} />
 
       <Callout type="info">
-        <strong>Up Next — Lesson 40: Interview Preparation and Landing Your First Security Job</strong><br />
-        The final module brings everything together. You will learn how to position yourself for security roles, answer the most common technical and behavioural interview questions, negotiate your first offer, and build the professional network that accelerates your career. This is where 39 modules of knowledge becomes a job.
+        <strong>Up Next — Lesson 46: Interview Preparation and Landing Your First Security Job</strong><br />
+        The final module brings everything together. You will learn how to position yourself for security roles, answer the most common technical and behavioural interview questions, negotiate your first offer, and build the professional network that accelerates your career. This is where 45 modules of knowledge becomes a job.
       </Callout>
 
     </LearnLayout>

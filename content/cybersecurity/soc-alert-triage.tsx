@@ -26,7 +26,7 @@ export default function Module41() {
     <LearnLayout
       title="SOC Alert Triage and Incident Response"
       description="Work an alert from first signal to disposition: SOC roles, triage, MITRE ATT&CK mapping, incident response, and reporting considerations."
-      section="Cybersecurity — Lesson 41"
+      section="Cybersecurity — Lesson 35"
       readTime="40 min"
     >
       <Part title="From SIEM Alert to a Defensible Decision">
@@ -90,9 +90,9 @@ automation) open until validated.`}</Block>
       ]} />
 
       <Callout type="info">
-        <strong>Up Next — Lesson 42: Packet Analysis with Wireshark</strong><br />
+        <strong>Up Next — Lesson 36: Packet Analysis with Wireshark</strong><br />
         Move from alert context to network evidence: practise filters, TCP stream review, and defensively recognising suspicious patterns in an authorised capture.{' '}
-        <Link href="/learn/cybersecurity/wireshark-packet-analysis" style={{ color: C, fontWeight: 700 }}>Continue to Lesson 42 →</Link>
+        <Link href="/learn/cybersecurity/wireshark-packet-analysis" style={{ color: C, fontWeight: 700 }}>Continue to Lesson 36 →</Link>
       </Callout>
     </LearnLayout>
   )

@@ -6,7 +6,7 @@ export default function SamplingConfidenceIntervals() {
     <LearnLayout
       title="Sampling and Confidence Intervals"
       description="Populations versus samples, sampling bias, the central limit theorem, standard error, and confidence intervals in Python."
-      section="Data Analytics & Statistics — Lesson 02"
+      section="Data Analytics & Statistics — Lesson 06"
       readTime="35 min"
     >
       <Part n={1} label="Population and sample" title="You Usually Cannot Measure Everyone">
@@ -247,7 +247,7 @@ print({"n": len(sample), "estimate_minutes": round(mean, 1),
       <H3>Next</H3>
       <NextLesson
         href="/learn/analytics-engineering-data-analytics/hypothesis-testing"
-        label="Lesson 03 · Hypothesis Testing and p-values"
+        label="Lesson 07 · Hypothesis Testing and p-values"
         text="You can estimate a population value with uncertainty. Next, use hypothesis tests to assess whether observed differences are compatible with chance variation—and understand what a p-value does not say."
       />
     </LearnLayout>

@@ -78,7 +78,7 @@ export default function RankingFunctions() {
     <LearnLayout
       title="Ranking Functions"
       description="Advanced ranking — percentile rank, cumulative distribution, conditional rankings, multi-level leaderboards, and every production pattern where ranking drives business decisions"
-      section="SQL — Lesson 53"
+      section="SQL — Lesson 54"
       readTime="14–20 min"
     >
 

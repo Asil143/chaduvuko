@@ -256,7 +256,7 @@ export default function EigenvaluesEigenvectorsPage() {
             PCA (Principal Component Analysis) uses exactly this idea.
             It finds the directions in your data where the shadow is longest —
             where the data varies the most — and uses those as the new axes.
-            Lesson 33 covers PCA in full. This lesson gives you the mathematical
+            Lesson 36 covers PCA in full. This lesson gives you the mathematical
             foundation to understand how it works.
           </p>
         </AnalogyBox>

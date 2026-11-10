@@ -4,7 +4,7 @@ import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { DsaLesson } from '@/components/dsa/DsaLesson'
 import { DSA_UNITS } from '@/data/dsa-curriculum'
 
-const LIVE_SLUGS = new Set(DSA_UNITS.filter(unit => unit.status === 'live').map(unit => unit.slug))
+const LIVE_SLUGS = new Set<string>(DSA_UNITS.filter(unit => unit.status === 'live').map(unit => unit.slug))
 
 export const dynamicParams = false
 
@@ -29,8 +29,15 @@ const moduleMeta: Record<string, { title: string; description: string }> = {
   'dynamic-programming': { title: 'Dynamic Programming',          description: 'Memoization, tabulation, knapsack, LCS, coin change, edit distance.' },
   'greedy':              { title: 'Greedy Algorithms',            description: 'Activity selection, fractional knapsack, Huffman coding, greedy vs DP.' },
   'backtracking':        { title: 'Backtracking',                 description: 'N-Queens, rat in a maze, Sudoku solver, subset sum.' },
-  'advanced':            { title: 'Advanced Topics',              description: 'Segment tree, trie, union-find, sliding window, two pointers, bit manipulation.' },
+  'advanced':            { title: 'Advanced Topics',              description: 'Segment Trees, Fenwick Trees, and an overview of focused advanced DSA techniques.' },
   'interview-patterns':  { title: 'Interview Problem-Solving Patterns', description: 'Recognise common interview patterns, explain trade-offs, and practise classic placement problems in C.' },
+  'tries':               { title: 'Tries', description: 'Build prefix trees for dictionary lookup, autocomplete, and prefix queries.' },
+  'union-find':          { title: 'Union-Find (Disjoint Set Union)', description: 'Track connected components with path compression and union by size.' },
+  'minimum-spanning-trees': { title: 'Minimum Spanning Trees — Kruskal and Prim', description: 'Connect every vertex in a weighted graph at minimum total cost using Kruskal and Prim.' },
+  'graph-algorithms':    { title: 'Graph Algorithms — BFS/DFS Applications, Topological Sort, Shortest Paths', description: 'Apply graph traversals to reachability, dependencies, and shortest paths.' },
+  'dynamic-programming-patterns': { title: 'Dynamic Programming Patterns — 1D, 2D, Knapsack, Subsequences', description: 'Design DP states and transitions for sequences, grids, capacities, and subsequences.' },
+  'two-pointers-sliding-window': { title: 'Two Pointers and Sliding Window', description: 'Use pointer invariants and maintained windows to solve array and string problems efficiently.' },
+  'bit-manipulation':   { title: 'Bit Manipulation', description: 'Use binary representations and bitwise operators for masks, flags, and compact state.' },
 };
 
 export function generateStaticParams() {

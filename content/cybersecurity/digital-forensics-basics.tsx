@@ -26,7 +26,7 @@ export default function Module43() {
     <LearnLayout
       title="Digital Forensics Basics"
       description="Preserve and examine digital evidence methodically: volatility, chain of custody, imaging and hashes, memory analysis, timelines, and operating-system artefacts."
-      section="Cybersecurity — Lesson 43"
+      section="Cybersecurity — Lesson 37"
       readTime="45 min"
     >
       <Part title="Forensics Starts with Preservation">
@@ -105,9 +105,9 @@ Linux examples
       ]} />
 
       <Callout type="info">
-        <strong>Cybersecurity lesson sequence complete</strong><br />
-        Continue exploring the defensive and career lessons from the{' '}
-        <Link href="/learn/cybersecurity" style={{ color: C, fontWeight: 700 }}>Cybersecurity curriculum →</Link>
+        <strong>Up Next — Lesson 38: AI and LLM Security Basics</strong><br />
+        Continue with a short introduction to prompt injection, data exposure, and model abuse. The lesson also links to the full AI Security course.{' '}
+        <Link href="/learn/cybersecurity/ai-llm-security-basics" style={{ color: C, fontWeight: 700 }}>Continue to Lesson 38 →</Link>
       </Callout>
     </LearnLayout>
   )

@@ -77,7 +77,7 @@ export default function PerformanceProfiling() {
     <LearnLayout
       title="Python Performance — Profiling and Optimisation"
       description="Finding real bottlenecks before optimising anything — profiling tools and the optimisations that actually matter."
-      section="Python — Lesson 42"
+      section="Python — Lesson 45"
       readTime="40 min"
     >
 
@@ -553,11 +553,11 @@ if record["id"] not in seen:   # now O(1) instead of O(n)`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 43 introduces NumPy and pandas — the bridge from core Python into real data work, and
+          Lesson 46 introduces NumPy and pandas — the bridge from core Python into real data work, and
           why vectorised operations exist at all.
         </p>
         <Link href="/learn/python/numpy-pandas-intro" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 43 → Intro to NumPy and pandas
+          Lesson 46 → Intro to NumPy and pandas
         </Link>
       </div>
     </LearnLayout>

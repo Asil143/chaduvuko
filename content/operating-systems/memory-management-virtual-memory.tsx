@@ -3,7 +3,7 @@ import { Callout, Code, H3, KeyTakeaways, Mistakes, NextLesson, P, Part, Practic
 
 export default function OperatingSystemsLesson5() {
   return (
-    <LearnLayout title="Memory Management and Virtual Memory" description="Address spaces, paging, page tables and the TLB, page faults, replacement algorithms, and thrashing." section="Operating Systems — Lesson 05" readTime="45 min">
+    <LearnLayout title="Memory Management and Virtual Memory" description="Address spaces, paging, page tables and the TLB, page faults, replacement algorithms, and thrashing." section="Operating Systems — Lesson 06" readTime="45 min">
       <Part n={1} label="Address spaces" title="Each Process Sees a Virtual View of Memory">
         <P>A process uses <strong>virtual addresses</strong>, not raw physical RAM locations. The memory-management unit (MMU) and OS-managed page tables translate virtual addresses to physical frames and enforce access permissions. This abstraction allows processes to have isolated address spaces, simplifies allocation, and lets the OS move or share physical pages under controlled rules.</P>
         <P>With paging, virtual memory is divided into fixed-size <strong>pages</strong>, and physical memory into <strong>frames</strong>. A virtual address can be split into a virtual page number and an offset. Translation maps the page number to a frame while preserving the offset. Page size and address width are platform properties; avoid hard-coding them when writing portable software.</P>
@@ -92,7 +92,10 @@ print(fifo_faults(refs, 3))`} />
       <KeyTakeaways items={["Virtual addresses are translated through page tables; pages map to physical frames while preserving offsets.", "The TLB caches translations; a miss may need a page-table walk, while a nonresident access can fault.", "Page faults may be recoverable demand loads or illegal accesses; inspect the cause, not just the event name.", "For the given three-frame reference string, FIFO and LRU each fault 10 times and Optimal 7 times.", "Optimal is a future-aware benchmark; FIFO, LRU, and real policies have different costs and behaviors.", "Thrashing reflects working sets that overwhelm available memory and can make extra multiprogramming harmful."]} />
 
       <H3>Next</H3>
-      <NextLesson href="/learn/operating-systems/file-systems-and-io" label="Lesson 06 · File Systems and I/O" text="After exploring memory that backs running processes, next see how persistent files and devices are organized." />
+      <NextLesson
+        href="/learn/operating-systems/file-systems-and-io"
+        label="Lesson 07 · File Systems and I/O"
+        text="After exploring memory that backs running processes, next see how persistent files and devices are organized." />
     </LearnLayout>
   )
 }

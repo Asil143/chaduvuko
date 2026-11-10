@@ -75,7 +75,7 @@ export default function DbtInterviewSystemDesign() {
     <LearnLayout
       title="dbt Interview and System Design Guide"
       description="The capstone module for the dbt track: full worked system-design interview questions synthesizing project structure, testing, incremental models, CI/CD, and migration strategy, plus a complete vocabulary cheat sheet, common interview traps, and rapid-fire conceptual Q&A."
-      section="dbt — Lesson 20"
+      section="dbt — Lesson 23"
       readTime="90 min"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
@@ -86,10 +86,10 @@ export default function DbtInterviewSystemDesign() {
       {/* ── Opening ─────────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// The Capstone Module" />
-        <SectionTitle>You Have Completed All 19 Prior dbt Modules. Here Is How It Comes Together.</SectionTitle>
+        <SectionTitle>You Have Completed All 22 Prior dbt Modules. Here Is How It Comes Together.</SectionTitle>
         <HighlightBox>
           <Para>
-            <strong>This lesson is different from the previous 19.</strong> It does not introduce new dbt
+            <strong>This lesson is different from the previous 22.</strong> It does not introduce new dbt
             mechanics. It is a synthesis — a place where project structure, testing strategy, incremental
             models, snapshots, macros, CI/CD, and performance all show up together, the way they actually do
             in a real analytics-engineering system-design interview or a real architecture review, instead of
@@ -102,7 +102,7 @@ export default function DbtInterviewSystemDesign() {
             you to arrive at a layered <code>staging → intermediate → marts</code> structure, a specific
             testing strategy, and a specific incremental debugging methodology as the natural consequence of
             reasoning through the problem — not as a memorized fact recited on cue. That is the skill this
-            module builds: taking everything from Lessons 01 through 19 and using it to reason through a
+            module builds: taking everything from Lessons 01 through 22 and using it to reason through a
             system from a cold start, out loud, the way an interviewer actually wants to see it happen.
           </Para>
           <Para>
@@ -1127,7 +1127,7 @@ SELECT ...
         <SectionTag text="// Part 13 — Reference" />
         <SectionTitle>dbt Vocabulary Cheat Sheet</SectionTitle>
         <Para>
-          A dense, precise reference covering every major term used across the 20-module track — built for
+          A dense, precise reference covering every major term used across the 23-module track — built for
           interview cramming, not first-time learning. If a definition here is unclear, the module it maps to
           covers it in full depth.
         </Para>
@@ -1366,7 +1366,7 @@ SELECT ...
         'The same underlying patterns recur across very different prompts: a layered staging/intermediate/marts structure for organizing ownership, a snapshot for anything genuinely needing point-in-time history, Slim CI for validating change cheaply, and a full-refresh diff for diagnosing any suspected incremental-model bug.',
         'Materialization, testing depth, and migration pace are deliberate trade-offs tied to actual business cost, never a uniform default — the right answer for a fast-moving analytics team is not the right answer for an audited finance layer, in the very same project.',
         'Some correctness questions are outside what an automated check alone can answer — CI passing is a strong signal, not a guarantee, and a snapshot\'s validity window is only as good as its run cadence — knowing exactly where the automated guarantee ends is what separates a strong answer from a memorized one.',
-        'This 20-module track went from "what is dbt" to designing multi-team, audited, migration-aware analytics engineering systems from scratch — that arc is the actual skill being tested in a senior analytics engineering interview, and it is now yours to apply.',
+        'This 23-module track went from "what is dbt" to designing multi-team, audited, migration-aware analytics engineering systems from scratch — that arc is the actual skill being tested in a senior analytics engineering interview, and it is now yours to apply.',
         'When two numbers disagree, or a mistake keeps recurring, the strongest answer is a structural fix — a timing-aware diagnostic, a contract, an automated guardrail — over asking people to individually remember more, and this same instinct scales from a single incremental model up to a multi-project dbt Mesh rollout.',
       ]} />
 
@@ -1382,7 +1382,7 @@ SELECT ...
             fontSize: 10, color: K, letterSpacing: '.14em', textTransform: 'uppercase',
             fontFamily: FONT_MONO, fontWeight: 800, margin: '0 0 12px',
           }}>
-            🎉 Track Complete — All 20 Modules
+            🎉 Track Complete — All 23 Modules
           </p>
           <h2 style={{
             fontSize: 'clamp(22px, 3vw, 30px)', fontWeight: 900, letterSpacing: '-1px',

@@ -31,7 +31,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function SparkPerformanceTuningModule() {
   return (
-    <LearnLayout title="Spark Performance — Partitions, Shuffles and Joins" description="Diagnose Spark bottlenecks by reasoning about partitions, shuffles, join strategies, skew, AQE, and caching." section="Data Engineering — Lesson 49" readTime="40 min">
+    <LearnLayout title="Spark Performance — Partitions, Shuffles and Joins" description="Diagnose Spark bottlenecks by reasoning about partitions, shuffles, join strategies, skew, AQE, and caching." section="Data Engineering — Lesson 51" readTime="40 min">
       <section style={{ marginBottom: 56 }}>
         <SectionTag text="// Part 01 — Start with Measurement" />
         <SectionTitle>Performance Tuning Is a Diagnosis, Not a List of Knobs</SectionTitle>
@@ -188,8 +188,8 @@ print(f"matched_rows={len(matched)}")`}</WorkshopCode>
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 24, marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
-        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>Lesson 50 moves from processing jobs to coordinating them: Airflow DAGs, schedules, retries, idempotency, XCom, and sensors.</p>
-        <Link href="/learn/data-engineering/airflow-orchestration" style={{ background: '#14b8a6', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>Lesson 50 → Apache Airflow — DAGs, Scheduling and Retries</Link>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>Lesson 52 moves from processing jobs to coordinating them: Airflow DAGs, schedules, retries, idempotency, XCom, and sensors.</p>
+        <Link href="/learn/data-engineering/airflow-orchestration" style={{ background: '#14b8a6', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>Lesson 52 → Apache Airflow — DAGs, Scheduling and Retries</Link>
       </div>
     </LearnLayout>
   )

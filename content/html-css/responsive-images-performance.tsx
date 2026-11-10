@@ -77,7 +77,7 @@ export default function ResponsiveImagesPerformance() {
     <LearnLayout
       title="Responsive Images & Performance"
       description="srcset, sizes, picture, and the image-loading techniques that keep a real page fast on real connections."
-      section="HTML & CSS — Lesson 37"
+      section="HTML & CSS — Lesson 39"
       readTime="35 min"
     >
 
@@ -862,12 +862,12 @@ decoding="async" | "sync" | "auto"
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 38 turns to accessibility at the CSS level — visible focus states, WCAG color contrast
+          Lesson 40 turns to accessibility at the CSS level — visible focus states, WCAG color contrast
           ratios, respecting <code>prefers-reduced-motion</code>, and designing hover interactions that
           still work on touch devices with no true hover state.
         </p>
         <Link href="/learn/html-css/css-accessibility-best-practices" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 38 → CSS Accessibility Best Practices
+          Lesson 40 → CSS Accessibility Best Practices
         </Link>
       </div>
     </LearnLayout>

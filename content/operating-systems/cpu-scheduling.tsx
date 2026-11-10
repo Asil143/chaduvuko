@@ -3,7 +3,7 @@ import { Callout, Code, H3, KeyTakeaways, Mistakes, NextLesson, P, Part, Practic
 
 export default function OperatingSystemsLesson3() {
   return (
-    <LearnLayout title="CPU Scheduling" description="FCFS, SJF, round robin, priority, and multilevel feedback queues, with worked Gantt charts and the metrics interviewers ask about." section="Operating Systems — Lesson 03" readTime="35 min">
+    <LearnLayout title="CPU Scheduling" description="FCFS, SJF, round robin, priority, and multilevel feedback queues, with worked Gantt charts and the metrics interviewers ask about." section="Operating Systems — Lesson 04" readTime="35 min">
       <Part n={1} label="The decision" title="Which Runnable Task Runs Next?">
         <P>The CPU scheduler chooses a runnable task when a CPU becomes available. It does not choose blocked tasks: they must first become ready. Scheduling policy trades response time, throughput, fairness, and overhead. Preemptive policies can interrupt a running task; non-preemptive policies let it keep the CPU until it blocks or finishes.</P>
         <P>For hand calculations, use <strong>arrival time (AT)</strong>, <strong>burst time (BT)</strong>, <strong>completion time (CT)</strong>, <strong>turnaround time (TAT = CT − AT)</strong>, and <strong>waiting time (WT = TAT − BT)</strong> when a job's only non-CPU work is waiting in the ready queue. Response time is first CPU start minus arrival time. State assumptions—especially tie breaks and switch overhead—before drawing a chart.</P>
@@ -93,7 +93,10 @@ print("average WT=", sum(c - a - b for a, b, c in jobs.values()) / len(jobs))`} 
       <KeyTakeaways items={["Scheduling selects among runnable tasks, and every comparison depends on explicit workload assumptions.", "FCFS is simple but can have a convoy effect; SJF can lower average waiting when burst lengths are known.", "Round robin trades interactive response against preemption and context-switch overhead.", "Priority and MLFQ need mechanisms such as aging or boosts to reduce starvation.", "Linux normal scheduling uses fair-sharing ideas associated with CFS, while implementation details evolve.", "Compute waiting, turnaround, and response per job before comparing averages."]} />
 
       <H3>Next</H3>
-      <NextLesson href="/learn/operating-systems/concurrency-synchronization-deadlocks" label="Lesson 04 · Concurrency, Synchronisation and Deadlocks" text="Scheduling chooses who runs; next learn how concurrent tasks safely coordinate shared state." />
+      <NextLesson
+        href="/learn/operating-systems/concurrency-synchronization-deadlocks"
+        label="Lesson 05 · Concurrency, Synchronisation and Deadlocks"
+        text="Scheduling chooses who runs; next learn how concurrent tasks safely coordinate shared state." />
     </LearnLayout>
   )
 }

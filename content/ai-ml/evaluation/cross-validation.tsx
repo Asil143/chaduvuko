@@ -1190,7 +1190,7 @@ print("already honest before it got there.")`} />
           Cross-validation tells you how good a model is at a given set of
           hyperparameters. Hyperparameter tuning searches across many combinations
           to find the set that produces the best CV score.
-          Lesson 38 covers Optuna — a modern hyperparameter optimisation framework
+          Lesson 41 covers Optuna — a modern hyperparameter optimisation framework
           that is far more efficient than GridSearchCV or RandomizedSearchCV.
           It uses Bayesian optimisation to focus the search on promising regions
           of the hyperparameter space instead of evaluating combinations randomly.
@@ -1208,7 +1208,7 @@ print("already honest before it got there.")`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 40 · Evaluation
+              Next — Lesson 44 · Evaluation
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

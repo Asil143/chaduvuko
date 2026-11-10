@@ -442,7 +442,7 @@ total_over_50 = sum((t for t in transactions if t > 50))   # identical, just mor
         <Para>
           This lesson is only a brief introduction — generator expressions are one specific, narrow
           application of the much larger idea of <strong>generators</strong>, built with the{' '}
-          <code>yield</code> keyword, which you will cover in full depth in Lesson 28. For now, the
+          <code>yield</code> keyword, which you will cover in full depth in Lesson 30. For now, the
           practical rule is simple: if you are about to build a list purely to immediately loop over it
           once and discard it (like feeding it straight into <code>sum()</code>, <code>max()</code>, or{' '}
           <code>any()</code>), a generator expression does the same job without the wasted memory

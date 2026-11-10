@@ -32,7 +32,7 @@ export default function NetworkingTrackPage() {
   return (
     <LearnLayout
       title="Networking Fundamentals — Zero to Advanced"
-      description="From what a packet is to subnetting, routing, DNS, TCP, and firewalls — 35 live lessons, no prerequisites"
+      description="From packets and subnetting to cloud networking, security, and troubleshooting — 49 lessons, no prerequisites"
       section="Networking"
       readTime="Self-paced"
       updatedAt="May 2026"
@@ -110,7 +110,7 @@ export default function NetworkingTrackPage() {
         <strong style={{ color: N }}>This course builds the networking foundation every security professional needs.</strong>{' '}
         You will understand how packets move from your keyboard to a server on the other side of the planet —
         every hop, every protocol, every layer. Lesson 01 assumes zero prior knowledge.
-        The live modules build from packets and layers through routing, transport protocols, application protocols, and network security.
+        The lessons build from packets and layers through routing, security, modern network architecture, operations, and interview preparation.
       </div>
 
       {/* ── What Makes This Different ────────────────────────────────────── */}

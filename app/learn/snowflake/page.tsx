@@ -69,7 +69,7 @@ export default function SnowflakeTrackPage() {
           // Curriculum
         </div>
         <h2 style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 900, letterSpacing: '-1px', color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 6 }}>
-          20 Lessons. Snowflake from First Query to Production Platform.
+          22 Lessons. Snowflake from First Query to Production Platform.
         </h2>
         <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 660, margin: 0 }}>
           Follow in order. Each module starts from the beginner mental model and ends with production and interview readiness.

@@ -77,7 +77,7 @@ export default function RegularExpressions() {
     <LearnLayout
       title="Regular Expressions with re"
       description="What regex is actually for, when it's overkill, the re module built up systematically, and a real log-parsing example."
-      section="Python — Lesson 32"
+      section="Python — Lesson 34"
       readTime="50 min"
     >
 
@@ -863,11 +863,11 @@ is_valid_phone("303-555-0192 ext 4")    # True — ALSO accepted, incorrectly`}<
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 33 covers dates and times — the datetime module, timezone-aware datetimes, and the
+          Lesson 35 covers dates and times — the datetime module, timezone-aware datetimes, and the
           formatting codes that trip up almost everyone the first time they need them.
         </p>
         <Link href="/learn/python/dates-times" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 33 → Working with Dates and Times
+          Lesson 35 → Working with Dates and Times
         </Link>
       </div>
     </LearnLayout>

@@ -6,7 +6,7 @@ export default function CiCdGithubActions() {
     <LearnLayout
       title="CI/CD with GitHub Actions"
       description="Build a controlled delivery pipeline that tests a change, builds and publishes a Docker image, and deploys through a protected environment."
-      section="DevOps & Cloud Infrastructure — Lesson 08"
+      section="DevOps & Cloud Infrastructure — Lesson 10"
       readTime="35 min"
     >
       <Part n={1} label="From commit to release" title="Automate the Checks You Already Trust">
@@ -286,7 +286,7 @@ coverage
       <H3>Next</H3>
       <NextLesson
         href="/learn/devops-mlops/kubernetes-fundamentals"
-        label="Lesson 09 · Kubernetes Fundamentals — Pods, Deployments and Services"
+        label="Lesson 11 · Kubernetes Fundamentals — Pods, Deployments and Services"
         text="Your workflow can produce and deploy an image. Next, learn the Kubernetes objects that keep container workloads running and reachable."
       />
     </LearnLayout>

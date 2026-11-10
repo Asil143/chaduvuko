@@ -434,7 +434,7 @@ aws logs tail /aws/sagemaker/TrainingJobs \\
           A single Estimator runs one script. A Pipeline chains multiple steps
           together — the output artifact of one step flows automatically into
           the next. This is SageMaker&apos;s equivalent of the Prefect flow you built
-          in Lesson 69 and the AML Pipeline from Lesson 76. SageMaker Pipelines
+          in Lesson 73 and the AML Pipeline from Lesson 80. SageMaker Pipelines
           add managed data passing, step-level caching (skip unchanged steps),
           a visual DAG in Studio, and a cron/event trigger for automated retraining.
         </p>

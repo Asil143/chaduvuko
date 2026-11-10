@@ -175,7 +175,7 @@ export default function SortingPage() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
         {[
-          { icon: '🔍', title: 'Binary search requires sorted data', desc: 'The O(log n) search algorithm we cover in Lesson 11 only works if the array is sorted. Searching 1 million items takes 20 steps instead of 1 million — but only if sorted.' },
+          { icon: '🔍', title: 'Binary search requires sorted data', desc: 'The O(log n) search algorithm we cover in Lesson 8 only works if the array is sorted. Searching 1 million items takes 20 steps instead of 1 million — but only if sorted.' },
           { icon: '📊', title: 'Databases sort constantly', desc: 'Every ORDER BY in SQL triggers a sort. Every index in PostgreSQL or MySQL is a sorted structure. Database performance depends heavily on efficient sorting.' },
           { icon: '🤝', title: 'Merge operations need sorted input', desc: 'Combining two datasets, removing duplicates, finding common elements — all of these are trivial with sorted data and expensive without.' },
           { icon: '📱', title: 'Leaderboards, rankings, feeds', desc: 'Every time you see a leaderboard, search results, or a ranked feed — a sorting algorithm ran to produce that view.' },
@@ -505,7 +505,7 @@ int main() {
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '16px 20px', marginBottom: 20 }}>
         <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
-          Merge sort uses the divide-and-conquer strategy and recursion from Lesson 9.
+          Merge sort uses the divide-and-conquer strategy and recursion from Lesson 6.
           Split the array in half, recursively sort each half, then merge the two sorted
           halves back together. The merge step is where the real work happens — and it
           is linear. This guarantees O(n log n) in all cases — best, average, and worst.
@@ -910,7 +910,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Lesson 11</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 8</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now know six sorting algorithms inside out — their logic, their code,
@@ -918,7 +918,7 @@ int main() {
         significant portion of what most coding interviews test.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Lesson 11 we cover <strong style={{ color: 'var(--text)' }}>Searching Algorithms</strong> —
+        In Lesson 8 we cover <strong style={{ color: 'var(--text)' }}>Searching Algorithms</strong> —
         linear search for unsorted data, and the elegant binary search that cuts the
         problem in half each step to achieve O(log n). Sorting and searching always
         go together — sorted data makes searching dramatically faster.
@@ -926,7 +926,7 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 11</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 8</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Searching Algorithms — Find It Fast</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Linear search, binary search, variations — with full C code and complexity.</div>
         </div>

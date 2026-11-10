@@ -1045,7 +1045,7 @@ print("entire reason to use bbox_params instead of a plain torchvision Compose."
           Classification predicts one label for the entire image.
           Object detection predicts the location and class of every
           object in the image — drawing bounding boxes around each one.
-          Lesson 57 covers YOLO — the fastest object detection architecture —
+          Lesson 61 covers YOLO — the fastest object detection architecture —
           and the key concepts: anchor boxes, IoU, non-maximum suppression.
           The same augmentation techniques apply but with an important twist:
           geometric augmentations must also transform the bounding box coordinates.
@@ -1063,7 +1063,7 @@ print("entire reason to use bbox_params instead of a plain torchvision Compose."
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 55 · Vision
+              Next — Lesson 59 · Vision
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

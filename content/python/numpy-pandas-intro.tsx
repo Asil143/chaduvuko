@@ -77,7 +77,7 @@ export default function NumpyPandasIntro() {
     <LearnLayout
       title="Intro to NumPy and pandas"
       description="The bridge from core Python into data work — arrays, DataFrames, and why these libraries exist at all."
-      section="Python — Lesson 43"
+      section="Python — Lesson 46"
       readTime="45 min"
     >
 
@@ -540,11 +540,11 @@ summary = df.groupby("campaign_id")["spend"].agg(["sum", "mean", "count"])`}</Co
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 44 puts everything from this phase together in a full, real project — building a
+          Lesson 47 puts everything from this phase together in a full, real project — building a
           complete command-line tool from scratch with argparse.
         </p>
         <Link href="/learn/python/building-a-cli-tool" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 44 → Building a CLI Tool
+          Lesson 47 → Building a CLI Tool
         </Link>
       </div>
     </LearnLayout>

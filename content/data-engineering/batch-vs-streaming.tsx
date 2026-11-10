@@ -1280,11 +1280,9 @@ print(f"event_window_after_replay={len(window)}")`}</WorkshopCode>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 22 covers ETL and ELT — why ETL dominated for 30 years, why modern lakehouses shifted to ELT, and the specific situations where transforming before loading is still the right answer.
+          Lesson 25 covers ETL and ELT — why ETL dominated for 30 years, why modern lakehouses shifted to ELT, and the specific situations where transforming before loading is still the right answer.
         </p>
-        <Link href="/learn/data-engineering/etl-vs-elt" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 22 → ETL vs ELT — History, Difference, When to Use Each
-        </Link>
+        <Link href="/learn/data-engineering/streaming-data" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>Lesson 22 → Streaming Data — What It Is and How It Works</Link>
       </div>
     </LearnLayout>
   )

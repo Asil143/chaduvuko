@@ -439,7 +439,7 @@ print(f"\nLength: {len(formatted)} characters")`} />
         <h2 style={S.h2}>QLoRA fine-tuning — 4-bit quantisation + LoRA on a 7B model</h2>
 
         <p style={S.p}>
-          QLoRA (Lesson 51) combines 4-bit quantisation of the frozen base model
+          QLoRA (Lesson 55) combines 4-bit quantisation of the frozen base model
           with LoRA adapters that train in fp16. This makes fine-tuning a 7B model
           possible on a single 16GB GPU — a Google Colab T4 or a local RTX 4090.
           The TRL library (from HuggingFace) wraps SFTTrainer — a Trainer
@@ -1118,7 +1118,7 @@ Production monitoring checklist:
           The next frontier is multimodal models — models that jointly understand
           images and text. CLIP encodes images and text in a shared embedding space.
           LLaVA connects a vision encoder to an LLM decoder, enabling visual
-          question answering. Lesson 66 covers how these architectures work
+          question answering. Lesson 70 covers how these architectures work
           and how to use them for tasks that require understanding both
           what is written and what is shown.
         </p>
@@ -1135,7 +1135,7 @@ Production monitoring checklist:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 70 · Fine-Tuning
+              Next — Lesson 74 · Fine-Tuning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

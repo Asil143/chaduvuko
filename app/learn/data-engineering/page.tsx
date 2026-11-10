@@ -6,13 +6,6 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import { TrackStats } from '@/components/content/TrackStats'
 import { DE_CURRICULUM } from '@/data/de-curriculum'
 
-const FOUNDATION_LESSONS = [
-  { href: '/learn/what-is-data-engineering', title: 'What is Data Engineering?' },
-  { href: '/learn/foundations/sql', title: 'SQL for Data Engineers' },
-  { href: '/learn/foundations/postgresql', title: 'PostgreSQL' },
-  { href: '/learn/foundations/python', title: 'Python for Data Engineers' },
-]
-
 type PhaseFilter = 'all' | '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
 interface Module {
@@ -61,7 +54,7 @@ export default function DataEngineeringTrack() {
   return (
     <LearnLayout
       title="Data Engineering"
-      description="A structured Data Engineering course: four foundation lessons, then 51 core lessons from first pipelines to production patterns."
+      description="A structured Data Engineering course: foundations, core engineering skills, practical pipelines, storage, production systems, and a complete capstone."
       section="Data Engineering"
       readTime="Self-paced"
       updatedAt="November 2026"
@@ -119,43 +112,8 @@ export default function DataEngineeringTrack() {
       </div>
 
       <p style={{ margin: '-20px 0 32px', color: 'var(--muted)', fontSize: 13, lineHeight: 1.7 }}>
-        No prior Data Engineering job experience is required. Lessons 14 and 15 assume Python and SQL basics; if needed,
-        start with <Link href="/learn/python" style={{ color: 'var(--accent)' }}>Python foundations</Link> and{' '}
-        <Link href="/learn/sql" style={{ color: 'var(--accent)' }}>SQL foundations</Link> first.
+        No prior Data Engineering job experience is required. Lessons 14 and 15 assume Python and SQL basics; if needed, start with the dedicated foundation lessons: <Link href="/learn/data-engineering/python-for-de" style={{ color: 'var(--accent)' }}>Python for Data Engineering</Link> and <Link href="/learn/data-engineering/sql-for-de" style={{ color: 'var(--accent)' }}>SQL for Data Engineers</Link>.
       </p>
-
-      {/* ── Start here: foundation lessons ─────────────────────────────── */}
-      <section aria-labelledby="de-foundations" style={{ marginBottom: 8 }}>
-        <div style={{
-          fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
-          textTransform: 'uppercase', color: 'var(--muted)',
-          fontFamily: 'var(--font-mono)', marginBottom: 10,
-        }}>
-          {'// Start here'}
-        </div>
-        <h2 id="de-foundations" style={{
-          fontSize: 'clamp(18px, 2.2vw, 24px)', fontWeight: 900, letterSpacing: '-0.5px',
-          color: 'var(--text)', fontFamily: 'var(--font-display)', margin: '0 0 6px',
-        }}>
-          Data Engineering Foundations
-        </h2>
-        <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 560, margin: '0 0 16px' }}>
-          Four short lessons on what the job is and the SQL, PostgreSQL, and Python you use every day. Then start the core curriculum below.
-        </p>
-        <ol style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 10, gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
-          {FOUNDATION_LESSONS.map((lesson, i) => (
-            <li key={lesson.href}>
-              <Link href={lesson.href} style={{
-                display: 'block', height: '100%', background: 'var(--surface)',
-                border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px', textDecoration: 'none',
-              }}>
-                <span style={{ display: 'block', fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>F{i + 1}</span>
-                <span style={{ display: 'block', marginTop: 4, fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{lesson.title}</span>
-              </Link>
-            </li>
-          ))}
-        </ol>
-      </section>
 
       {/* ── Curriculum heading + phase filter ─────────────────────────── */}
       <div style={{ marginTop: 48, marginBottom: 8 }}>
@@ -177,7 +135,7 @@ export default function DataEngineeringTrack() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              Core curriculum: 51 lessons.
+              Core curriculum: 56 lessons.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
               Follow in order. Each module builds on the last. Every concept is
@@ -370,7 +328,16 @@ export default function DataEngineeringTrack() {
                   </div>
                 </div>
               </div>
-
+              {mod.slug === 'sql-for-de' && (
+                <Link href="/learn/foundations/postgresql" style={{
+                  display: 'block', marginTop: 10, padding: '16px 20px', textDecoration: 'none',
+                  background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10,
+                }}>
+                  <span style={{ display: 'block', fontSize: 10, fontWeight: 700, color: 'var(--muted)', fontFamily: 'var(--font-mono)', letterSpacing: '.08em', textTransform: 'uppercase' }}>Optional foundation · after SQL</span>
+                  <span style={{ display: 'block', marginTop: 4, fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>PostgreSQL</span>
+                  <span style={{ display: 'block', marginTop: 4, fontSize: 12, color: 'var(--muted)' }}>Continue with relational database practice and SQL in PostgreSQL.</span>
+                </Link>
+              )}
             </div>
           )
         })}

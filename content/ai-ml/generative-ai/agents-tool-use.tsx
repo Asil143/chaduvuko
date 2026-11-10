@@ -158,9 +158,9 @@ export default function AgentsToolUsePage() {
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
-        <span style={S.tag}>Before any code — what agents are beyond Lesson 54</span>
+        <span style={S.tag}>Before any code — what agents are beyond Lesson 58</span>
         <h2 style={S.h2}>
-          Lesson 54 built a toy ReAct agent with text parsing.
+          Lesson 58 built a toy ReAct agent with text parsing.
           This lesson builds production agents — structured tool calling,
           persistent memory, failure recovery, and the architectural patterns
           top tech teams actually ship.
@@ -221,7 +221,7 @@ export default function AgentsToolUsePage() {
         <h2 style={S.h2}>Structured tool calling — JSON schemas, not text parsing</h2>
 
         <p style={S.p}>
-          Lesson 54 parsed tool calls by extracting text between
+          Lesson 58 parsed tool calls by extracting text between
           "Action:" and "(" with regex. This breaks constantly — the LLM
           formats output slightly differently each run, adds punctuation,
           or skips the format entirely. Structured tool calling solves this:
@@ -599,7 +599,7 @@ for query in test_queries:
           the agent knows what was said earlier in this conversation.
           Episodic memory stores summaries of past sessions — the agent knows
           this merchant called last week about the same issue.
-          Semantic memory is the knowledge base (RAG from Lesson 67) —
+          Semantic memory is the knowledge base (RAG from Lesson 71) —
           the agent knows Stripe's policies and documentation.
         </p>
 
@@ -689,7 +689,7 @@ class EpisodicMemory:
 
 # ── Memory 3: Semantic memory (knowledge base) ────────────────────────
 class SemanticMemory:
-    """Vector store for Stripe documentation — same as RAG Lesson 67."""
+    """Vector store for Stripe documentation — same as RAG Lesson 71."""
     def __init__(self):
         self.chunks = []
         self.index  = None

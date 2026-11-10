@@ -168,9 +168,9 @@ export const LESSON_PRACTICE: Record<string, LessonPractice> = {
     challengeId: 'sql-freshcart-repeat-customers',
     challengeLabel: 'Open the SQL challenge',
   },
-  '/learn/foundations/sql': {
+  '/learn/data-engineering/sql-for-de': {
     id: 'sql-customers-without-orders',
-    lessonHref: '/learn/foundations/sql',
+    lessonHref: '/learn/data-engineering/sql-for-de',
     title: 'Find customers who have never ordered',
     prompt: 'Use a LEFT JOIN and a NULL filter to find customers with no matching order. Sort the results by city.',
     challengeId: 'customers-zero-orders',
@@ -184,9 +184,9 @@ export const LESSON_PRACTICE: Record<string, LessonPractice> = {
     challengeId: 'customers-zero-orders',
     challengeLabel: 'Customers with zero orders',
   },
-  '/learn/what-is-data-engineering': {
+  '/learn/data-engineering/what-is-data-engineering': {
     id: 'data-engineering-pipeline-plan',
-    lessonHref: '/learn/what-is-data-engineering',
+    lessonHref: '/learn/data-engineering/what-is-data-engineering',
     title: 'Sketch a reliable data pipeline',
     prompt: 'Choose a source and destination, then outline how data should be ingested, validated, transformed, and monitored.',
     challengeId: 'pipeline-plan',

@@ -754,7 +754,7 @@ for metric in ['mae', 'rmse', 'mape', 'within_5min', 'bias']:
           Manual retraining — a data scientist noticing a metric, running a notebook,
           and deploying — does not scale to dozens of models.
           Automated retraining monitors metrics and triggers the training pipeline
-          (Lesson 69) when thresholds are breached.
+          (Lesson 73) when thresholds are breached.
           The trigger calls the Airflow DAG or Prefect flow with a flag
           indicating emergency retraining. The pipeline runs, evaluates the new model,
           and either promotes it automatically (if above a quality threshold)
@@ -1260,7 +1260,7 @@ for scenario in test_scenarios:
           Monitoring tells you when to retrain. But when you retrain,
           you need to know exactly what data produced each model —
           so you can reproduce results, audit decisions, and debug regressions.
-          Lesson 73 covers retraining pipelines with champion-challenger evaluation,
+          Lesson 77 covers retraining pipelines with champion-challenger evaluation,
           safe model promotion, and the rollback patterns that protect production
           when a new model unexpectedly underperforms after deployment.
         </p>
@@ -1277,7 +1277,7 @@ for scenario in test_scenarios:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 78 · MLOps
+              Next — Lesson 82 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

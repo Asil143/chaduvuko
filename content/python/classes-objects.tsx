@@ -77,7 +77,7 @@ export default function ClassesObjects() {
     <LearnLayout
       title="Classes and Objects — The Basics"
       description="What a class actually is, what an object actually is, how self really works under the hood, and when object-oriented Python genuinely earns its complexity."
-      section="Python — Lesson 19"
+      section="Python — Lesson 20"
       readTime="40 min"
     >
 
@@ -342,7 +342,7 @@ print(bella.tricks)     # [] — completely unaffected by what happened to rex`}
         <Para>
           You can also read and write instance attributes directly from outside the class, using dot
           notation on the object — <code>rex.name</code>, <code>rex.tricks</code>. Nothing in plain
-          Python prevents this by default (that is exactly the subject of encapsulation, Lesson 22,
+          Python prevents this by default (that is exactly the subject of encapsulation, Lesson 23,
           later in this phase). For now, treat instance attributes as an object&apos;s own private
           notebook of facts about itself.
         </Para>
@@ -676,7 +676,7 @@ def end_trip(trip):
           },
           {
             q: 'Confusing Dog (the class) with rex (an instance of it) when reading errors',
-            a: 'Error messages and code both refer to classes and instances by very similar-looking names. Getting comfortable reading type(rex) and isinstance(rex, Dog) early makes debugging far less confusing once inheritance is introduced in Lesson 21.',
+            a: 'Error messages and code both refer to classes and instances by very similar-looking names. Getting comfortable reading type(rex) and isinstance(rex, Dog) early makes debugging far less confusing once inheritance is introduced in Lesson 22.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -717,7 +717,7 @@ def end_trip(trip):
           {
             error: `TypeError: __init__() missing 1 required positional argument: 'breed'`,
             cause: 'The class was called with fewer arguments than __init__ requires — for example, Dog("Rex") when __init__(self, name, breed) requires both name and breed.',
-            fix: 'Pass every required argument, or give the missing parameter a default value in __init__ (covered in depth in Lesson 20) if it should be optional.',
+            fix: 'Pass every required argument, or give the missing parameter a default value in __init__ (covered in depth in Lesson 21) if it should be optional.',
           },
           {
             error: `TypeError: 'Dog' object is not callable`,
@@ -776,12 +776,12 @@ def end_trip(trip):
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 20 goes deeper on __init__, and covers the single most infamous gotcha in
+          Lesson 21 goes deeper on __init__, and covers the single most infamous gotcha in
           object-oriented Python: what happens when a class attribute is a mutable object, shared
           silently across every instance until you know to watch for it.
         </p>
         <Link href="/learn/python/constructors-attributes" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 20 → Constructors, Instance vs Class Attributes
+          Lesson 21 → Constructors, Instance vs Class Attributes
         </Link>
       </div>
     </LearnLayout>

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     'How messages flow from producer to consumer. Queues vs topics, durability, replication, compaction, backpressure, dead letter queues, ordering guarantees, and exactly-once semantics — the internal mechanics without tool noise.',
 }
 
-/* ── Local components (Lesson 37 style) ─────────────────────────────────── */
+/* ── Local components (Lesson 42 style) ─────────────────────────────────── */
 
 const SectionTag = ({ text }: { text: string }) => (
   <div style={{
@@ -173,7 +173,7 @@ export default function MessageBrokersQueuesModule() {
     <LearnLayout
       title="Message Brokers and Queues — How They Work Internally"
       description="How messages flow from producer to consumer. Queues vs topics, durability, replication, compaction, backpressure, dead letter queues, ordering guarantees, and exactly-once semantics — the internal mechanics without tool noise."
-      section="Data Engineering — Lesson 41"
+      section="Data Engineering — Lesson 23"
       readTime="50 min"
     >
 
@@ -666,7 +666,7 @@ export default function MessageBrokersQueuesModule() {
         <SectionTitle>Ordering Guarantees — What the Broker Actually Promises</SectionTitle>
 
         <Para>
-          Lesson 40 covered ordering at the conceptual level. Here we go deeper
+          Lesson 22 covered ordering at the conceptual level. Here we go deeper
           into the specific ordering guarantees and the ways ordering can break
           in real production systems even when you think it is guaranteed.
         </Para>
@@ -951,7 +951,7 @@ def process_with_dlq(
         <SectionTitle>Exactly-Once Internals — Idempotent Producers and Transactional APIs</SectionTitle>
 
         <Para>
-          Lesson 40 explained exactly-once semantics conceptually. Here is
+          Lesson 22 explained exactly-once semantics conceptually. Here is
           the mechanism — specifically how Kafka implements idempotent producers
           and transactions, because understanding the mechanism tells you
           exactly where it works and where it breaks down.
@@ -994,7 +994,7 @@ def process_with_dlq(
 # This means idempotent producer only deduplicates retries within one producer session
 # Producer restart = new PID = no deduplication for messages from the old session
 # → This is why idempotent producer alone is not enough for crash recovery
-# → You also need consumer-side idempotency (as covered in Lesson 40)`}
+# → You also need consumer-side idempotency (as covered in Lesson 22)`}
         </CodeBox>
 
         <SubTitle>Transactions — atomic writes across partitions and topics</SubTitle>
@@ -1394,11 +1394,9 @@ print(f"deliveries={len(deliveries)} unique_effects={count} total_minor={amount}
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 42 covers distributed systems — CAP theorem, consistency models, partitioning, replication, and fault tolerance — explained with data engineering scenarios, not abstract distributed systems theory.
+          Lesson 45 covers distributed systems — CAP theorem, consistency models, partitioning, replication, and fault tolerance — explained with data engineering scenarios, not abstract distributed systems theory.
         </p>
-        <Link href="/learn/data-engineering/distributed-systems" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 42 → Distributed Systems for Data Engineers
-        </Link>
+        <Link href="/learn/data-engineering/stream-processing-spark-flink" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>Lesson 24 → Stream Processing — Spark Structured Streaming and Flink</Link>
       </div>
     </LearnLayout>
   )

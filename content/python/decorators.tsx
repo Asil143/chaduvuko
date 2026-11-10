@@ -77,7 +77,7 @@ export default function Decorators() {
     <LearnLayout
       title="Decorators — Writing and Using Them"
       description="Functions that wrap functions. How decorators actually work, and writing your own from scratch."
-      section="Python — Lesson 29"
+      section="Python — Lesson 31"
       readTime="45 min"
     >
 
@@ -612,11 +612,11 @@ get_route_info("JFK", "LAX")   # ~0ms  — cache hit, returns the stored result 
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 30 covers context managers and the with statement — what with is actually doing under
+          Lesson 32 covers context managers and the with statement — what with is actually doing under
           the hood, and building your own for resource management.
         </p>
         <Link href="/learn/python/context-managers" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 30 → Context Managers and the with Statement
+          Lesson 32 → Context Managers and the with Statement
         </Link>
       </div>
     </LearnLayout>

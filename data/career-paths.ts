@@ -54,8 +54,9 @@ export const CAREER_PATHS: CareerPath[] = [
       { title: 'Prompting, RAG, agents and fine-tuning', outcome: 'Design prompts, build retrieval pipelines, add tool-using agents, and know when to fine-tune.', track: 'ai-ml', sections: [LLM_APPS, 'Fine-Tuning and Multimodal Models'] },
       { title: 'AI in production', outcome: 'Deploy, monitor, and run models on cloud ML platforms.', track: 'ai-ml', sections: ['MLOps and Production', 'Cloud ML Platforms'] },
     ],
-    capstone: { title: 'Document Q&A assistant', description: 'A RAG application over your own documents, with an evaluation set, citations, and a deployed demo.' },
+    capstone: { title: 'Document Q&A assistant', description: 'A RAG application over your own documents, with an evaluation set, citations, and a deployed demo.', href: '/learn/generative-ai/genai-capstone-rag-assistant' },
     interview: [
+      { title: 'Generative AI interview prep', href: '/learn/generative-ai/genai-interview-prep' },
       { title: 'ML interview prep', href: '/learn/ai-ml/ml-interview-prep' },
       { title: 'Python interview prep', href: '/learn/python/python-interview-prep' },
     ],
@@ -74,10 +75,13 @@ export const CAREER_PATHS: CareerPath[] = [
       { title: 'LLM engineering', outcome: 'LLM APIs, structured outputs, tool calling, vector databases, evaluation, and guardrails.', track: 'generative-ai' },
       { title: 'Prompting, RAG and agent basics', outcome: 'Prompt design, retrieval-augmented generation, and the tool-use loop.', track: 'ai-ml', sections: [LLM_APPS] },
       { title: 'Agents and automation', outcome: 'Agent state, memory, planning, LangGraph, MCP, multi-agent systems, and observability.', track: 'agentic-ai' },
-      { title: 'Securing agents', outcome: 'Prompt injection, tool permissions, and abuse-case testing.', track: 'ai-security' },
+      { title: 'Securing agents', outcome: 'Threat modelling, prompt injection, RAG permissions, and tool safety.', track: 'ai-security', sections: ['Threats to AI Systems', 'Securing AI Applications'] },
     ],
-    capstone: { title: 'Tool-using support agent', description: 'An agent that uses tools and retrieval, asks for human approval on risky actions, and is traced and evaluated.' },
-    interview: [{ title: 'ML interview prep', href: '/learn/ai-ml/ml-interview-prep' }],
+    capstone: { title: 'Tool-using support agent', description: 'An agent that uses tools and retrieval, asks for human approval on risky actions, and is traced and evaluated.', href: '/learn/agentic-ai/agent-capstone-support-agent' },
+    interview: [
+      { title: 'Agentic AI interview prep', href: '/learn/agentic-ai/agentic-ai-interview-prep' },
+      { title: 'ML interview prep', href: '/learn/ai-ml/ml-interview-prep' },
+    ],
   },
   {
     slug: 'ml-engineer',
@@ -122,6 +126,7 @@ export const CAREER_PATHS: CareerPath[] = [
     interview: [
       { title: 'Data engineering interview questions', href: '/learn/data-engineering/de-interview-questions' },
       { title: 'SQL interview questions', href: '/learn/sql/interview-questions' },
+      { title: 'System design interview', href: '/learn/system-design/system-design-interview' },
     ],
   },
   {
@@ -134,15 +139,17 @@ export const CAREER_PATHS: CareerPath[] = [
     milestones: [
       { title: 'SQL', outcome: 'From SELECT to window functions and query performance.', track: 'sql' },
       { title: 'Python basics', outcome: 'Automate small data tasks in Python.', track: 'python', sections: ['Python Foundations', 'Core Data Structures & Logic'] },
-      { title: 'Data analysis with pandas', outcome: 'Clean, reshape, and visualise data with NumPy, pandas, and Matplotlib.', track: 'ai-ml', sections: ['Programming Ecosystem'] },
+      { title: 'Analyst toolkit', outcome: 'Spreadsheets, analytical SQL, pandas, and exploratory data analysis.', track: 'analytics-engineering-data-analytics', sections: ['Analyst Toolkit'] },
       { title: 'Statistics, metrics and experiments', outcome: 'Descriptive statistics, hypothesis tests, KPIs, and A/B testing.', track: 'analytics-engineering-data-analytics', sections: ['Statistics for Data', 'Metrics & Experiments'] },
       { title: 'Data modelling and warehousing', outcome: 'Dimensional models, star schemas, and warehouse design.', track: 'data-engineering', sections: ['Storage & Architecture'] },
       { title: 'Transformation with dbt', outcome: 'Model, test, and document warehouse transformations.', track: 'dbt' },
       { title: 'Cloud warehouse: Snowflake', outcome: 'Load, transform, secure, and tune a cloud warehouse.', track: 'snowflake' },
       { title: 'BI and data storytelling', outcome: 'Build dashboards people use and present findings that drive decisions.', track: 'analytics-engineering-data-analytics', sections: ['BI & Storytelling'] },
+      { title: 'Analytics case study', outcome: 'Run an end-to-end churn analysis and present it to stakeholders.', track: 'analytics-engineering-data-analytics', sections: ['Case Studies & Career'] },
     ],
     capstone: { title: 'Metrics layer and dashboard', description: 'A tested dbt project feeding a dashboard with documented metric definitions.' },
     interview: [
+      { title: 'Data analyst interview prep', href: '/learn/analytics-engineering-data-analytics/data-analyst-interview-prep' },
       { title: 'SQL interview questions', href: '/learn/sql/interview-questions' },
       { title: 'dbt interview and system design', href: '/learn/dbt/dbt-interview-system-design' },
     ],
@@ -163,8 +170,12 @@ export const CAREER_PATHS: CareerPath[] = [
       { title: 'Full-stack development with AI', outcome: 'React, Next.js, REST APIs, Postgres, auth, AI features, and deployment.', track: 'full-stack-ai' },
       { title: 'LLM features in depth', outcome: 'Structured outputs, tool calling, and streaming responses from LLM APIs.', track: 'generative-ai', sections: ['Building with LLM APIs'] },
     ],
-    capstone: { title: 'AI-assisted web app', description: 'A deployed app with authentication, a database, and one useful AI feature.' },
-    interview: [{ title: 'HTML & CSS interview prep', href: '/learn/html-css/html-css-interview-prep' }],
+    capstone: { title: 'AI-assisted web app', description: 'A deployed app with authentication, a database, and one useful AI feature.', href: '/learn/full-stack-ai/full-stack-capstone' },
+    interview: [
+      { title: 'Full-stack interview prep', href: '/learn/full-stack-ai/full-stack-interview-prep' },
+      { title: 'JavaScript project and interview prep', href: '/learn/javascript/javascript-project-interview-prep' },
+      { title: 'HTML & CSS interview prep', href: '/learn/html-css/html-css-interview-prep' },
+    ],
   },
   {
     slug: 'cloud-devops-engineer',
@@ -183,8 +194,11 @@ export const CAREER_PATHS: CareerPath[] = [
       { title: 'AWS services in practice', outcome: 'Storage, compute, and managed services on AWS.', track: 'cloud-data', sections: ['AWS'] },
       { title: 'Site reliability engineering', outcome: 'SLOs, incident response, and capacity planning.', track: 'sre-platform-engineering' },
     ],
-    capstone: { title: 'Automated cloud deployment', description: 'An app deployed with infrastructure as code, a CI/CD pipeline, and dashboards and alerts.' },
-    interview: [{ title: 'Interview prep hub', href: '/learn/interview' }],
+    capstone: { title: 'Automated cloud deployment', description: 'An app deployed with infrastructure as code, a CI/CD pipeline, and dashboards and alerts.', href: '/learn/devops-mlops/devops-capstone' },
+    interview: [
+      { title: 'DevOps interview prep', href: '/learn/devops-mlops/devops-interview-prep' },
+      { title: 'Interview prep hub', href: '/learn/interview' },
+    ],
   },
   {
     slug: 'cybersecurity-analyst',
@@ -219,8 +233,11 @@ export const CAREER_PATHS: CareerPath[] = [
       { title: 'Application security and DevSecOps', outcome: 'Secure design reviews and vulnerability management.', track: 'application-security-devsecops' },
       { title: 'AI and LLM security', outcome: 'Prompt injection, model abuse, red-teaming, and guardrails.', track: 'ai-security' },
     ],
-    capstone: { title: 'LLM red-team report', description: 'Attack and harden a sample RAG app, then document findings and mitigations.' },
-    interview: [{ title: 'Security interview prep', href: '/learn/cybersecurity/interview-prep-security' }],
+    capstone: { title: 'LLM red-team report', description: 'Attack and harden a sample RAG app, then document findings and mitigations.', href: '/learn/ai-security/ai-red-teaming' },
+    interview: [
+      { title: 'AI security interview prep', href: '/learn/ai-security/ai-security-interview-prep' },
+      { title: 'Security interview prep', href: '/learn/cybersecurity/interview-prep-security' },
+    ],
   },
   {
     slug: 'software-engineer',
@@ -239,13 +256,14 @@ export const CAREER_PATHS: CareerPath[] = [
       { title: 'Networking', outcome: 'Explain what happens when you load a web page.', track: 'networking' },
       { title: 'System design', outcome: 'Design scalable services and discuss trade-offs.', track: 'system-design' },
     ],
-    capstone: { title: 'Mock interview set', description: 'Timed DSA problems, a database design, and a system design walkthrough.' },
+    capstone: { title: 'Mock interview set', description: 'Timed DSA problems, a database design, and a system design walkthrough.', href: '/learn/system-design/system-design-interview' },
     interview: [
       { title: 'Python interview prep', href: '/learn/python/python-interview-prep' },
       { title: 'DBMS interview questions', href: '/learn/dbms/interview-questions' },
       { title: 'SQL interview questions', href: '/learn/sql/interview-questions' },
       { title: 'Operating systems interview questions', href: '/learn/operating-systems/os-interview-questions' },
       { title: 'DSA interview patterns', href: '/learn/dsa/interview-patterns' },
+      { title: 'System design interview', href: '/learn/system-design/system-design-interview' },
     ],
   },
 ]

@@ -54,6 +54,11 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'spark-performance-tuning':     () => import('@/content/data-engineering/spark-performance-tuning'),
   'airflow-orchestration':        () => import('@/content/data-engineering/airflow-orchestration'),
   'delta-iceberg-table-formats':  () => import('@/content/data-engineering/delta-iceberg-table-formats'),
+  'stream-processing-spark-flink': () => import('@/content/data-engineering/stream-processing-spark-flink'),
+  'data-contracts-schema-evolution': () => import('@/content/data-engineering/data-contracts-schema-evolution'),
+  'nosql-stores-data-engineers': () => import('@/content/data-engineering/nosql-stores-data-engineers'),
+  'reverse-etl-operational-analytics': () => import('@/content/data-engineering/reverse-etl-operational-analytics'),
+  'data-engineering-capstone': () => import('@/content/data-engineering/data-engineering-capstone'),
 };
 
 const moduleMeta: Record<string, { title: string; description: string }> = {
@@ -108,6 +113,11 @@ const moduleMeta: Record<string, { title: string; description: string }> = {
   'spark-performance-tuning':     { title: 'Spark Performance — Partitions, Shuffles and Joins', description: 'Diagnose Spark bottlenecks by reasoning about partitions, shuffles, join strategies, skew, AQE, and caching.' },
   'airflow-orchestration':        { title: 'Apache Airflow — DAGs, Scheduling and Retries',       description: 'Design reliable Airflow workflows with explicit dependencies, schedules, retries, sensors, and safe task interfaces.' },
   'delta-iceberg-table-formats':  { title: 'Delta Lake and Apache Iceberg Table Formats',         description: 'Compare transactional table concepts and apply time travel, schema evolution, MERGE, and compaction safely.' },
+  'stream-processing-spark-flink': { title: 'Stream Processing — Spark Structured Streaming and Flink', description: 'Learn event time, windows, state, watermarks, checkpoints, and how Spark Structured Streaming and Flink approach continuous processing.' },
+  'data-contracts-schema-evolution': { title: 'Data Contracts and Schema Evolution', description: 'Design producer-consumer expectations, validate data at boundaries, and roll out compatible schema changes safely.' },
+  'nosql-stores-data-engineers': { title: 'NoSQL Stores for Data Engineers — Document, Key-Value, Wide-Column', description: 'Compare document, key-value, and wide-column data models through access patterns, consistency choices, and analytics integration.' },
+  'reverse-etl-operational-analytics': { title: 'Reverse ETL and Operational Analytics', description: 'Activate governed warehouse data in operational systems with safe syncs, clear ownership, and measurable feedback loops.' },
+  'data-engineering-capstone': { title: 'Data Engineering Capstone — End-to-End Batch + Streaming Pipeline', description: 'Design and build a reliable end-to-end data product combining batch history, streaming events, quality controls, and operational readiness.' },
 };
 
 export function generateStaticParams() {

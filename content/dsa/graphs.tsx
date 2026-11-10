@@ -447,7 +447,7 @@ int main() {
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 20 }}>
         BFS explores a graph <strong style={{ color: 'var(--green)' }}>level by level</strong> —
         all neighbours at distance 1 first, then distance 2, then distance 3, and so on.
-        It uses a <strong>queue</strong> — exactly like level order traversal of a tree from Lesson 12.
+        It uses a <strong>queue</strong> — exactly like level order traversal of a tree from Lesson 13.
         BFS finds the <strong>shortest path</strong> in an unweighted graph —
         the first time it reaches a node, it has found the fewest-step route.
       </p>
@@ -1085,25 +1085,24 @@ int main() {
       <SectionTitle>You Are Ready for Lesson 17</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
-        You now understand graphs completely — types, representations, BFS, DFS, cycle detection,
-        Dijkstra's shortest path, and topological sort. These algorithms appear in
-        every serious technical interview and power every map application, social network,
-        and build system on earth.
+        You have learned how to represent graphs and reason about traversal, connectivity,
+        and weighted relationships. These foundations model maps, social networks, and
+        dependency systems. The dedicated Graph Algorithms lesson later in the path
+        develops BFS/DFS applications, topological sorting, and shortest paths in detail.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Lesson 17 we cover <strong style={{ color: 'var(--text)' }}>Dynamic Programming</strong> —
-        the hardest and most rewarding topic in all of DSA. Remember what you already computed
-        so you never compute it twice. We go from naive recursion to memoization to tabulation,
-        solving the knapsack, LCS, coin change, and edit distance problems from first principles.
+        The next lesson is <strong style={{ color: 'var(--text)' }}>Tries</strong>, a prefix-tree
+        structure for dictionary lookup and autocomplete. You can also jump directly to{' '}
+        <Link href="/learn/dsa/graph-algorithms" style={{ color: 'var(--green)' }}>Graph Algorithms</Link> when you want to focus on graph problem-solving.
       </p>
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
           <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 17</div>
-          <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Dynamic Programming — Remember, Don't Recompute</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)' }}>Memoization, tabulation, knapsack, LCS, coin change, edit distance — in C.</div>
+          <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Tries — Share Common Prefixes</div>
+          <div style={{ fontSize: 13, color: 'var(--muted)' }}>Prefix lookup, autocomplete, and memory trade-offs — in C.</div>
         </div>
-        <Link href="/learn/dsa/dynamic-programming" style={{ background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+        <Link href="/learn/dsa/tries" style={{ background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
           Continue →
         </Link>
       </div>

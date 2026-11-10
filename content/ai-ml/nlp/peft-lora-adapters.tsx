@@ -187,7 +187,7 @@ export default function PeftLoraAdaptersPage() {
         </h2>
 
         <p style={S.p}>
-          Lesson 50 showed full fine-tuning — update all 110M parameters
+          Lesson 54 showed full fine-tuning — update all 110M parameters
           of BERT for 3 epochs. That costs 4GB of GPU memory and 30 minutes.
           Acceptable for BERT. Completely impractical for LLaMA-3 (8B),
           Mistral (7B), or Falcon (40B). Full fine-tuning a 7B model
@@ -1213,7 +1213,7 @@ print("""
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 69 · Fine-Tuning
+              Next — Lesson 73 · Fine-Tuning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

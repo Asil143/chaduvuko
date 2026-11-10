@@ -68,7 +68,7 @@ const problems = [
   {
     title: '2. Longest Substring Without Repeating Characters — sliding window',
     prompt: 'Find the length of the longest substring with no repeated byte characters.',
-    insight: 'Maintain a valid window [left, right]. When a character repeats inside it, jump left past that character’s previous position. This is the variable-window technique from Unit 19, now used as a pattern-recognition example.',
+    insight: 'Maintain a valid window [left, right]. When a character repeats inside it, jump left past that character’s previous position. This is the variable-window technique taught in the dedicated Two Pointers and Sliding Window lesson, now used as a pattern-recognition example.',
     code: `int longestUniqueSubstring(const char *s) {
     int lastSeen[256];
     for (int i = 0; i < 256; i++) lastSeen[i] = -1;
@@ -308,7 +308,7 @@ const interviewSteps = [
 ]
 
 const practiceWeeks = [
-  { week: 'Week 1 · Arrays and strings', focus: 'Two pointers, sliding windows, prefix sums, hash-based lookup.', routine: 'Five focused sessions: learn/review one pattern, solve two easy and three medium problems, then explain one solution aloud. Revisit Unit 19 for the underlying window and pointer mechanics.' },
+  { week: 'Week 1 · Arrays and strings', focus: 'Two pointers, sliding windows, prefix sums, hash-based lookup.', routine: 'Five focused sessions: learn/review one pattern, solve two easy and three medium problems, then explain one solution aloud. Revisit the Two Pointers and Sliding Window lesson for the underlying mechanics.' },
   { week: 'Week 2 · Search and ordering', focus: 'Binary search on answer, intervals, monotonic stacks, heaps / top-k.', routine: 'Practise boundary-safe binary search and heap invariants. Complete at least one timed 45-minute set and review every incorrect assumption.' },
   { week: 'Week 3 · Graphs and choices', focus: 'Grid BFS/DFS, union-find, topological sort, backtracking, DP state design.', routine: 'Draw states and transitions before coding. Solve one graph and one DP problem on most days; explain why the algorithm is complete.' },
   { week: 'Week 4 · Placement simulation', focus: 'Mixed pattern selection, online assessments, communication, revision.', routine: 'Take three timed mock assessments; practise writing compilable C under the platform constraints; maintain an error log and redo missed problems without hints.' },
@@ -325,7 +325,7 @@ export default function InterviewPatternsPage() {
       readTime="180 min"
     >
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24 }}>
-        {['Prerequisite: DSA Units 00–19', 'C solutions', 'Placement practice'].map(label => (
+        {['Prerequisite: DSA foundations and core structures', 'C solutions', 'Placement practice'].map(label => (
           <span key={label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--muted)', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: '5px 10px' }}>{label}</span>
         ))}
       </div>
@@ -337,7 +337,7 @@ export default function InterviewPatternsPage() {
       </p>
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '16px 18px', marginTop: 22 }}>
         <strong style={{ color: 'var(--text)' }}>Avoid duplication:</strong>{' '}
-        <span style={{ color: 'var(--muted)', lineHeight: 1.75 }}>Unit 19, <Link href="/learn/dsa/advanced" style={{ color: 'var(--green)' }}>Advanced Topics</Link>, already teaches sliding window and two pointers (along with DSU, tries, segment trees, and bit manipulation). Use that unit for the detailed mechanics; this unit focuses on recognition, trade-offs, interview delivery, and applying those patterns alongside others.</span>
+        <span style={{ color: 'var(--muted)', lineHeight: 1.75 }}>The dedicated <Link href="/learn/dsa/two-pointers-sliding-window" style={{ color: 'var(--green)' }}>Two Pointers and Sliding Window</Link>, <Link href="/learn/dsa/union-find" style={{ color: 'var(--green)' }}>Union-Find</Link>, <Link href="/learn/dsa/tries" style={{ color: 'var(--green)' }}>Tries</Link>, <Link href="/learn/dsa/bit-manipulation" style={{ color: 'var(--green)' }}>Bit Manipulation</Link>, <Link href="/learn/dsa/graph-algorithms" style={{ color: 'var(--green)' }}>Graph Algorithms</Link>, <Link href="/learn/dsa/dynamic-programming-patterns" style={{ color: 'var(--green)' }}>DP Patterns</Link>, and <Link href="/learn/dsa/minimum-spanning-trees" style={{ color: 'var(--green)' }}>Minimum Spanning Trees</Link> lessons teach the underlying mechanics. This unit focuses on recognition, trade-offs, interview delivery, and applying patterns together.</span>
       </div>
 
       <section style={{ marginTop: 42 }}>
@@ -408,7 +408,7 @@ export default function InterviewPatternsPage() {
       <KeyTakeaways items={[
         'Translate the prompt into an input model, constraints, and output before selecting a pattern.',
         'Use signal phrases to generate candidate patterns, then verify the invariant with examples and edge cases.',
-        'Two pointers and sliding window are covered in Unit 19; this unit connects them to interview recognition and other core patterns.',
+        'Two pointers and sliding window have dedicated lessons; this unit connects those techniques to interview recognition and other core patterns.',
         'Use the clarify → brute force → optimise → code → test framework to make reasoning visible.',
         'For product-company placements and online assessments, practise the actual language, editor, timing, and rules announced for that process.',
         'Review mistakes deliberately and solve again without hints; durable pattern recognition beats answer memorisation.',

@@ -108,7 +108,7 @@ export default function TreesPage() {
       {/* ── Badges ── */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
         {[
-          { label: 'Prerequisite: Lesson 6 — Linked Lists', green: false },
+          { label: 'Prerequisite: Lesson 9 — Linked Lists', green: false },
         ].map((b) => (
           <span key={b.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: b.green ? 700 : 600, color: b.green ? 'var(--green)' : 'var(--muted)', background: b.green ? 'rgba(0,230,118,0.1)' : 'var(--surface)', border: `1px solid ${b.green ? 'rgba(0,230,118,0.3)' : 'var(--border)'}`, borderRadius: 6, padding: '4px 10px' }}>
             {b.label}
@@ -743,7 +743,7 @@ int main() {
           { icon: '🌐', title: 'HTML / DOM', desc: 'Every webpage is a tree. The html tag is the root, head and body are children, and every div, p, span is a node. JavaScript\'s querySelector walks this tree.' },
           { icon: '🧮', title: 'Expression trees', desc: 'The expression (3 + 4) × 2 is stored as a tree with × at root, 2 as right child, and + as left child with 3 and 4 as its children. Postorder evaluates it correctly.' },
           { icon: '🗄️', title: 'Database indexes', desc: 'MySQL and PostgreSQL use B-Trees (a generalisation of binary trees) for indexes. Every time you query with WHERE id = 5, a tree traversal finds it in O(log n).' },
-          { icon: '🔤', title: 'Auto-complete and spell check', desc: 'The Trie data structure (Lesson 20) is a tree where each path from root to leaf spells a word. Google\'s search suggestions use trie-based trees.' },
+          { icon: '🔤', title: 'Auto-complete and spell check', desc: 'The Trie data structure (Lesson 17) is a tree where each path from root to leaf spells a word. Google\'s search suggestions use trie-based trees.' },
         ].map((item) => (
           <div key={item.title} style={{ display: 'flex', gap: 16, alignItems: 'flex-start', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '16px 20px' }}>
             <span style={{ fontSize: 24, flexShrink: 0 }}>{item.icon}</span>
@@ -831,7 +831,7 @@ int main() {
           WHAT'S NEXT
       ══════════════════════════════════════ */}
       <SectionTag text="What's Next" />
-      <SectionTitle>You Are Ready for Lesson 13</SectionTitle>
+      <SectionTitle>You Are Ready for Lesson 14</SectionTitle>
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         You now understand trees completely — the terminology, the node structure in C,
@@ -839,7 +839,7 @@ int main() {
         real systems from file systems to databases.
       </p>
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
-        In Lesson 13 we cover the <strong style={{ color: 'var(--text)' }}>Binary Search Tree (BST)</strong> —
+        In Lesson 14 we cover the <strong style={{ color: 'var(--text)' }}>Binary Search Tree (BST)</strong> —
         a binary tree with one powerful rule: every left child is smaller than its parent,
         every right child is larger. This rule makes search, insert, and delete
         all run in O(log n) on a balanced tree. The BST is the gateway to understanding
@@ -848,7 +848,7 @@ int main() {
 
       <div style={{ background: 'linear-gradient(135deg, rgba(0,230,118,0.06) 0%, rgba(0,230,118,0.02) 100%)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         <div>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 13</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--green)', fontWeight: 700, marginBottom: 6 }}>UP NEXT → LESSON 14</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>Binary Search Tree — O(log n) Everything</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Insert, search, delete (3 cases), balanced vs unbalanced — in C.</div>
         </div>

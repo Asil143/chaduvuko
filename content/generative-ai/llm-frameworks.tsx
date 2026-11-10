@@ -6,7 +6,7 @@ export default function LlmFrameworks() {
     <LearnLayout
       title="LLM Frameworks — LangChain and LlamaIndex: When to Use Them"
       description="What LangChain and LlamaIndex give you, what they cost in complexity, and how to decide between a framework and plain SDK code."
-      section="Generative AI & LLM Engineering — Lesson 11"
+      section="Generative AI & LLM Engineering — Lesson 12"
       readTime="25 min"
     >
       <Part n={1} label="Why frameworks" title="Frameworks Package Repeated LLM Application Patterns">
@@ -256,9 +256,9 @@ def test_service_passes_question_through_boundary() -> None:
 
       <H3>Next</H3>
       <NextLesson
-        href="/learn/generative-ai/shipping-ai-feature-fastapi"
-        label="Lesson 12 · Shipping an AI Feature — FastAPI Backend and Chat UI"
-        text="You have chosen your application abstractions. Next, package a feature behind a FastAPI endpoint with streaming, configuration, tests, and deployment safeguards."
+        href="/learn/generative-ai/running-open-models"
+        label="Lesson 13 · Running Open Models — Ollama, vLLM and Hugging Face"
+        text="Run open-weight models locally with Ollama, serve them with vLLM, pick a model from Hugging Face, and compare cost, latency and quality with hosted APIs."
       />
     </LearnLayout>
   )

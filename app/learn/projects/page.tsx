@@ -195,11 +195,11 @@ export default function ProjectsPage() {
       <div className="border-b" style={{ borderColor: 'var(--border)' }}>
         <div className="max-w-5xl mx-auto px-4 py-12">
           <div className="text-xs font-mono uppercase tracking-widest mb-3" style={{ color: 'var(--muted)' }}>
-            // Real World Projects
+            // Cloud Data Projects
           </div>
           <h1 className="text-3xl font-bold mb-3" style={{ color: 'var(--text)' }}>Build. Don't Just Read.</h1>
           <p className="text-base max-w-2xl" style={{ color: 'var(--text2)', lineHeight: 1.7 }}>
-            End-to-end data engineering projects with step-by-step instructions, screenshot guides, and real cloud configurations.
+            Hands-on cloud data engineering projects — Azure Data Factory builds live now, AWS and GCP next — with step-by-step instructions, screenshot guides, and real cloud configurations.
             Every project builds on the previous one using the same FreshCart dataset.
           </p>
           {/* Stats */}

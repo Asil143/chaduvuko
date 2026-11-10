@@ -1183,7 +1183,7 @@ for i, applicant in enumerate(new_applications):
           the model learns its own representations.
           Instead of gradient boosting on tabular data, you train
           multi-layer networks on images, sequences, and text.
-          Lesson 40 builds a neural network from scratch —
+          Lesson 44 builds a neural network from scratch —
           forward pass, backpropagation, and gradient descent —
           before introducing PyTorch.
         </p>

@@ -77,7 +77,7 @@ export default function CssTransitions() {
     <LearnLayout
       title="CSS Transitions"
       description="Smooth, performant state changes — transition-property, timing functions, and the properties that animate cheaply vs expensively."
-      section="HTML & CSS — Lesson 31"
+      section="HTML & CSS — Lesson 32"
       readTime="30 min"
     >
 

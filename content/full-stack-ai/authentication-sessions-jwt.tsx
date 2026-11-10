@@ -3,7 +3,7 @@ import { Bullets, Callout, Code, H3, KeyTakeaways, Mistakes, NextLesson, P, Part
 
 export default function AuthenticationSessionsJwt() {
   return (
-    <LearnLayout title="Authentication — Sessions, JWTs and OAuth" description="Password hashing, cookie sessions versus JWTs, OAuth sign-in, protecting routes, and the security mistakes to avoid." section="Full-Stack Development with AI — Lesson 06" readTime="40 min">
+    <LearnLayout title="Authentication — Sessions, JWTs and OAuth" description="Password hashing, cookie sessions versus JWTs, OAuth sign-in, protecting routes, and the security mistakes to avoid." section="Full-Stack Development with AI — Lesson 08" readTime="40 min">
       <Part n={1} label="Identity" title="Authentication Is Not the Same as Authorization">
         <P>Authentication answers who is making a request. Authorization answers whether that person may perform a particular action on a particular resource. A student can be signed in and still have no permission to read another student's study plan. Every server-side read and write needs an ownership or role check appropriate to the action.</P>
         <P>For this planner, an authenticated identity should come from a verified session or token. It must not come from a user ID, email, or role in the request body. The browser is controlled by the user; the server decides which identity and permissions to trust.</P>
@@ -81,7 +81,10 @@ export default function AuthenticationSessionsJwt() {
       ]} />
       <Bullets items={[<span key="reference">For production, use a maintained authentication library and consult its current security guidance. Do not log passwords, authorization headers, session IDs, or tokens.</span>]} />
       <H3>Next</H3>
-      <NextLesson href="/learn/full-stack-ai/adding-ai-features" label="Lesson 07 · Adding an AI Feature — Streaming Chat in a Web App" text="Add a study assistant with a server-only model key, a streaming route, bounded inputs, and a responsive UI." />
+      <NextLesson
+        href="/learn/full-stack-ai/web-security-full-stack"
+        label="Lesson 09 · Web Security for Full-Stack Developers — XSS, CSRF and CORS"
+        text="Prevent cross-site scripting, cross-site request forgery and injection, configure CORS and security headers, and handle secrets safely." />
     </LearnLayout>
   )
 }

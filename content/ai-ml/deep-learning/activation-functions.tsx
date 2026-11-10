@@ -1075,7 +1075,7 @@ print("network capacity is much smaller than the parameter count suggests.")`} /
         <p style={S.p}>
           You now know what a neuron computes (activation functions)
           and what the network minimises (loss functions).
-          Lesson 44 covers the final missing piece of the training loop:
+          Lesson 48 covers the final missing piece of the training loop:
           optimisers. SGD takes the same step size for every weight.
           Adam adapts the step size per weight based on gradient history.
           AdamW adds proper weight decay. Momentum accumulates direction.
@@ -1094,7 +1094,7 @@ print("network capacity is much smaller than the parameter count suggests.")`} /
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 46 · Deep Learning
+              Next — Lesson 50 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -75,7 +75,7 @@ export default function KafkaInterviewSystemDesign() {
     <LearnLayout
       title="Kafka Interview and System Design Guide"
       description="The capstone module for the Apache Kafka track: full worked system-design interview questions synthesizing partitioning, delivery semantics, schema design, consumer groups, and monitoring, plus a complete vocabulary cheat sheet, common interview traps, and rapid-fire conceptual Q&A."
-      section="Apache Kafka — Lesson 24"
+      section="Apache Kafka — Lesson 26"
       readTime="70 min"
       breadcrumbs={[
         { label: 'Learn', href: '/learn' },
@@ -86,10 +86,10 @@ export default function KafkaInterviewSystemDesign() {
       {/* ── Opening ─────────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// The Capstone Module" />
-        <SectionTitle>You Have Learned All 23 Modules. Here Is How It Comes Together.</SectionTitle>
+        <SectionTitle>You Have Learned the Previous 25 Modules. Here Is How It Comes Together.</SectionTitle>
         <HighlightBox>
           <Para>
-            <strong>This lesson is different from the previous 23.</strong> It does not introduce new Kafka
+            <strong>This lesson is different from the previous 25.</strong> It does not introduce new Kafka
             mechanics. It is a synthesis — a place where partitioning strategy, delivery semantics, schema
             design, consumer group topology, and monitoring all show up together, the way they actually do
             in a real system-design interview or a real production architecture review, instead of one
@@ -101,7 +101,7 @@ export default function KafkaInterviewSystemDesign() {
             you to arrive at <code>acks=all</code> — and a partitioning key, and a retention policy, and a
             consumer group topology — as the natural consequence of reasoning through requirements, not as a
             memorized fact recited on cue. That is the skill this lesson builds: taking everything from
-            Lessons 01 through 23 and using it to reason through a system from a cold start, out loud, the
+            Lessons 01 through 25 and using it to reason through a system from a cold start, out loud, the
             way an interviewer actually wants to see it happen.
           </Para>
           <Para>
@@ -850,7 +850,7 @@ enriched.to("playback.events.enriched");`}
         <SectionTag text="// Part 10 — Reference" />
         <SectionTitle>Kafka Vocabulary Cheat Sheet</SectionTitle>
         <Para>
-          A dense, precise reference covering every major term used across the 24-module track — built for
+          A dense, precise reference covering every major term used across the 26-module track — built for
           interview cramming, not first-time learning. If a definition here is unclear, the module it maps to
           covers it in full depth.
         </Para>
@@ -1035,7 +1035,7 @@ enriched.to("playback.events.enriched");`}
           },
           {
             q: 'Q7. Why is idempotent producer configuration alone not sufficient for exactly-once processing?',
-            a: 'Idempotent producers deduplicate retries only within a single producer session, tracked by a Producer ID that is discarded when the producer restarts. A crashed and restarted producer resending the same logical event under a new session is invisible to that mechanism — genuine exactly-once semantics for a read-process-write loop additionally needs transactions and a read_committed consumer, as covered in Lesson 24\'s Part 02 payment example.',
+            a: 'Idempotent producers deduplicate retries only within a single producer session, tracked by a Producer ID that is discarded when the producer restarts. A crashed and restarted producer resending the same logical event under a new session is invisible to that mechanism — genuine exactly-once semantics for a read-process-write loop additionally needs transactions and a read_committed consumer, as covered in the earlier delivery-semantics lesson.',
           },
           {
             q: 'Q8. When would you reach for Kafka Connect instead of writing a custom producer or consumer?',
@@ -1064,7 +1064,7 @@ enriched.to("playback.events.enriched");`}
         'The same underlying tools recur across very different systems: a keyed topic for per-entity ordering, a compacted topic for current-state materialization, separate consumer groups for independent fan-out, and a DLQ for isolating poison messages — recognize the pattern, then adapt the specifics to the prompt.',
         'Durability and latency settings are deliberate trade-offs tied to the actual cost of losing or delaying a specific kind of data, never a uniform default — acks=1 was the right call for driver locations and acks=all plus idempotency keys was the right call for payments, in the very same module.',
         'Some system boundaries are outside what Kafka itself can guarantee — a transaction cannot make an external HTTP call atomic, and replication factor cannot replicate across regions — knowing exactly where Kafka\'s guarantees end is what separates a strong answer from a memorized one.',
-        'This 24-module track went from "what is an event" to designing multi-region, latency-critical, exactly-once systems from scratch — that arc is the actual skill being tested in a senior Kafka interview, and it is now yours to apply.',
+        'This 26-module track went from "what is an event" to designing multi-region, latency-critical, exactly-once systems from scratch — that arc is the actual skill being tested in a senior Kafka interview, and it is now yours to apply.',
       ]} />
 
       <Divider />
@@ -1079,7 +1079,7 @@ enriched.to("playback.events.enriched");`}
             fontSize: 10, color: K, letterSpacing: '.14em', textTransform: 'uppercase',
             fontFamily: FONT_MONO, fontWeight: 800, margin: '0 0 12px',
           }}>
-            🎉 Track Complete — All 24 Modules
+            🎉 Track Complete — All 26 Modules
           </p>
           <h2 style={{
             fontSize: 'clamp(22px, 3vw, 30px)', fontWeight: 900, letterSpacing: '-1px',

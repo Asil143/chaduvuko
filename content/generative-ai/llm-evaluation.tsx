@@ -6,7 +6,7 @@ export default function LlmEvaluation() {
     <LearnLayout
       title="Evaluating LLM Apps — Eval Sets, LLM-as-Judge and RAG Metrics"
       description="Build an evaluation set, score outputs with code checks and LLM judges, measure RAG faithfulness and relevance, and gate releases on results."
-      section="Generative AI & LLM Engineering — Lesson 07"
+      section="Generative AI & LLM Engineering — Lesson 08"
       readTime="35 min"
     >
       <Part n={1} label="Why evaluate" title="A Fluent Answer Is Not Proof of a Correct Feature">
@@ -250,7 +250,7 @@ def test_golden_cases_have_no_missing_or_prohibited_claims() -> None:
       <H3>Next</H3>
       <NextLesson
         href="/learn/generative-ai/guardrails-prompt-injection"
-        label="Lesson 08 · Guardrails, Prompt Injection and PII Handling"
+        label="Lesson 09 · Guardrails, Prompt Injection and PII Handling"
         text="You can measure response quality. Next, learn how to handle hostile instructions, validate inputs and outputs, and reduce sensitive-data exposure."
       />
     </LearnLayout>

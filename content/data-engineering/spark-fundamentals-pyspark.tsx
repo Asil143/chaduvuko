@@ -31,7 +31,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function SparkFundamentalsPySparkModule() {
   return (
-    <LearnLayout title="Spark Fundamentals with PySpark" description="Build a mental model of distributed DataFrame processing, lazy evaluation, transformations, actions, and the Spark UI." section="Data Engineering — Lesson 48" readTime="40 min">
+    <LearnLayout title="Spark Fundamentals with PySpark" description="Build a mental model of distributed DataFrame processing, lazy evaluation, transformations, actions, and the Spark UI." section="Data Engineering — Lesson 50" readTime="40 min">
       <section style={{ marginBottom: 56 }}>
         <SectionTag text="// Part 01 — From a Python Script to a Distributed Plan" />
         <SectionTitle>Spark Divides Work; It Does Not Make Every Job Faster</SectionTitle>
@@ -152,8 +152,8 @@ print(f"paid_paise={sum(row[2] for row in result)}")`}</WorkshopCode>
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 24, marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
-        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>Lesson 49 applies this execution model to partitions, shuffles, join strategies, skew, adaptive query execution, and caching.</p>
-        <Link href="/learn/data-engineering/spark-performance-tuning" style={{ background: '#14b8a6', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>Lesson 49 → Spark Performance — Partitions, Shuffles and Joins</Link>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>Lesson 51 applies this execution model to partitions, shuffles, join strategies, skew, adaptive query execution, and caching.</p>
+        <Link href="/learn/data-engineering/spark-performance-tuning" style={{ background: '#14b8a6', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>Lesson 51 → Spark Performance — Partitions, Shuffles and Joins</Link>
       </div>
     </LearnLayout>
   )

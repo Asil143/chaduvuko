@@ -1181,7 +1181,7 @@ jobs:
 
         <p style={S.p}>
           Experiment tracking gives you a registered model artifact.
-          Lesson 71 takes that artifact and deploys it — wrapping the model
+          Lesson 75 takes that artifact and deploys it — wrapping the model
           in a FastAPI REST endpoint, containerising it with Docker,
           and scaling it with Kubernetes. The full deployment path
           from a pkl file to a production API serving thousands of
@@ -1200,7 +1200,7 @@ jobs:
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 76 · MLOps
+              Next — Lesson 80 · MLOps
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

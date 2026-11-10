@@ -71,7 +71,7 @@ export default function DataModellingModule() {
     <LearnLayout
       title="Data Modelling — Dimensional Modelling, Star Schema, Facts and Dimensions"
       description="Dimensional modelling from first principles — grain, fact types, dimension design, surrogate keys, conformed dimensions, and the modern wide-table pattern."
-      section="Data Engineering — Lesson 33"
+      section="Data Engineering — Lesson 37"
       readTime="65 min"
     >
 
@@ -982,10 +982,10 @@ print(f"weighted_conversion={rate:.2%}")`}</WorkshopCode>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 34 covers Slowly Changing Dimensions — what happens when a customer moves city or changes job title, and the three SCD types that handle historical tracking correctly, partially, or not at all.
+          Lesson 38 covers Slowly Changing Dimensions — what happens when a customer moves city or changes job title, and the three SCD types that handle historical tracking correctly, partially, or not at all.
         </p>
         <Link href="/learn/data-engineering/slowly-changing-dimensions" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 34 → Slowly Changing Dimensions — SCD Types 1, 2 and 3
+          Lesson 38 → Slowly Changing Dimensions — SCD Types 1, 2 and 3
         </Link>
       </div>
     </LearnLayout>

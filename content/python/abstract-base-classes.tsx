@@ -77,7 +77,7 @@ export default function AbstractBaseClasses() {
     <LearnLayout
       title="Abstract Base Classes and Interfaces"
       description="Enforcing a contract across subclasses with the abc module — how larger Python codebases stay consistent."
-      section="Python — Lesson 24"
+      section="Python — Lesson 25"
       readTime="30 min"
     >
 
@@ -539,11 +539,10 @@ class S3Source(DataSource):
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 25 begins the Intermediate & Functional Python phase with a deep dive into *args and
-          **kwargs — every way Python lets you pass arguments to a function.
+          Lesson 26 compares dataclasses, enums, and Pydantic models for representing, constraining, and validating application data.
         </p>
-        <Link href="/learn/python/args-kwargs" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 25 → *args, **kwargs and Function Arguments Deep Dive
+        <Link href="/learn/python/dataclasses-enums-pydantic" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Lesson 26 → Dataclasses, Enums and Pydantic Models
         </Link>
       </div>
     </LearnLayout>

@@ -55,7 +55,7 @@ export default function PythonTrack() {
   return (
     <LearnLayout
       title="Python"
-      description="Zero to production Python — 46 lessons, no prerequisites"
+      description="Zero to production Python — 50 lessons, no prerequisites"
       section="Python"
       readTime="Self-paced"
       updatedAt="August 2026"
@@ -158,7 +158,7 @@ export default function PythonTrack() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              46 Lessons. Foundations to Advanced.
+              50 Lessons. Foundations to Advanced.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
               Follow in order. Each module builds on the last. Every concept is

@@ -77,7 +77,7 @@ export default function DebuggingTechniques() {
     <LearnLayout
       title="Debugging Techniques and Tools"
       description="Reading a traceback the right way, the real limits of print debugging, pdb, VS Code's debugger, and a full worked debugging session."
-      section="Python — Lesson 39"
+      section="Python — Lesson 42"
       readTime="50 min"
     >
 
@@ -811,11 +811,11 @@ IndexError: list index out of range`}</CodeBox>
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 40 covers logging — why print() genuinely is not logging, the logging module, log levels,
+          Lesson 43 covers logging — why print() genuinely is not logging, the logging module, log levels,
           and configuring a logger the way real production services do it.
         </p>
         <Link href="/learn/python/logging-best-practices" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 40 → Logging Best Practices
+          Lesson 43 → Logging Best Practices
         </Link>
       </div>
     </LearnLayout>

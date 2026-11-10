@@ -1,6 +1,6 @@
 /** Track overview path → its cheat sheet. Strings only, safe for client components. */
 export const CHEAT_SHEET_FOR_PATH: Record<string, { href: string; label: string }> = {
-  '/learn/what-is-data-engineering': { href: '/learn/what-is-data-engineering/cheatsheet', label: 'Foundations cheat sheet and project ideas' },
+  '/learn/data-engineering/what-is-data-engineering': { href: '/learn/what-is-data-engineering/cheatsheet', label: 'Foundations cheat sheet and project ideas' },
   '/learn/data-engineering': { href: '/learn/data-engineering/cheatsheet', label: 'Data engineering cheat sheet and project ideas' },
   '/learn/sql': { href: '/learn/sql/cheatsheet', label: 'SQL cheat sheet and project ideas' },
   '/learn/apache-kafka': { href: '/learn/apache-kafka/cheatsheet', label: 'Kafka cheat sheet and project ideas' },

@@ -65,7 +65,7 @@ export const DBMS_MODULES = [
     topics: ['How Indexes Work', 'B+ Tree Index', 'Clustered vs Non-Clustered', 'Composite & Covering Indexes', 'When NOT to Index'],
     time: '35–40 min', difficulty: 'Intermediate', status: 'live' as const,
   },
-  // ── Section 3 — Internals (09–12) ──────────────────────────────────────────
+  // ── Section 3 — Internals (09–13) ──────────────────────────────────────────
   {
     number: '09', section: 3, slug: 'transactions',
     title: 'Transactions & ACID Properties',
@@ -81,72 +81,86 @@ export const DBMS_MODULES = [
     time: '40–45 min', difficulty: 'Intermediate', status: 'live' as const,
   },
   {
-    number: '11', section: 3, slug: 'query-processing',
+    number: '11', section: 3, slug: 'mvcc-postgresql',
+    title: 'MVCC — How PostgreSQL Handles Concurrent Reads and Writes',
+    desc: 'Follow a row through PostgreSQL snapshots, tuple versions, transaction visibility, isolation levels, and VACUUM to understand how readers and writers make progress concurrently.',
+    topics: ['Snapshots & Tuple Versions', 'xmin / xmax Visibility', 'READ COMMITTED vs REPEATABLE READ', 'Serializable Snapshot Isolation', 'VACUUM & Dead Tuples'],
+    time: '35–40 min', difficulty: 'Advanced', status: 'live' as const,
+  },
+  {
+    number: '12', section: 3, slug: 'query-processing',
     title: 'Query Processing & Optimization',
     desc: 'What actually happens the moment you press Enter on a query — parsing, planning, optimization, execution. Then how to make it 10x faster using EXPLAIN.',
     topics: ['Parsing → Planning → Execution', 'Query Optimizer', 'EXPLAIN & EXPLAIN ANALYZE', 'Sequential vs Index Scan', 'Real Optimization Examples'],
     time: '35–40 min', difficulty: 'Intermediate', status: 'live' as const,
   },
   {
-    number: '12', section: 3, slug: 'storage-file-organization',
+    number: '13', section: 3, slug: 'storage-file-organization',
     title: 'Storage & File Organization',
     desc: 'How data physically lives on disk — blocks, pages, buffer pool, heap files, sequential files. Understanding this is what separates developers from engineers.',
     topics: ['Blocks & Pages', 'Buffer Pool & Cache', 'Heap File Organization', 'Sequential & Hash Organization', 'Why This Affects Query Speed'],
     time: '30–35 min', difficulty: 'Intermediate', status: 'live' as const,
   },
-  // ── Section 4 — Advanced Theory (13–16) ────────────────────────────────────
+  // ── Section 4 — Advanced Theory (14–17) ────────────────────────────────────
   {
-    number: '13', section: 4, slug: 'hashing-btrees',
+    number: '14', section: 4, slug: 'hashing-btrees',
     title: 'Hashing & B+ Trees',
     desc: 'The two most important data structures inside every database. Static and dynamic hashing for fast lookups, B+ tree structure for range queries and indexes.',
     topics: ['Static & Dynamic Hashing', 'Collision Handling', 'B+ Tree Structure', 'Search · Insert · Delete', 'Why B+ Tree is the Standard'],
     time: '40–45 min', difficulty: 'Intermediate', status: 'live' as const,
   },
   {
-    number: '14', section: 4, slug: 'relational-algebra',
+    number: '15', section: 4, slug: 'relational-algebra',
     title: 'Relational Algebra',
     desc: 'The mathematics SQL is built on. Select, Project, Join, Union, Difference, Division — shown with plain English explanations and direct SQL equivalents.',
     topics: ['Select (σ) & Project (π)', 'Union · Intersection · Difference', 'Cartesian Product & Join', 'Division (÷)', 'Mapping RA to SQL'],
     time: '30–35 min', difficulty: 'Intermediate', status: 'live' as const,
   },
   {
-    number: '15', section: 4, slug: 'views-procedures-triggers',
+    number: '16', section: 4, slug: 'views-procedures-triggers',
     title: 'Views, Stored Procedures & Triggers',
     desc: 'Database objects that encapsulate logic — virtual tables, pre-compiled SQL procedures, and triggers that run automatically on INSERT/UPDATE/DELETE.',
     topics: ['Views & Materialized Views', 'Stored Procedures vs Functions', 'Triggers — BEFORE & AFTER', 'Cursors', 'Real Use Cases at Companies'],
     time: '35–40 min', difficulty: 'Intermediate', status: 'live' as const,
   },
   {
-    number: '16', section: 4, slug: 'crash-recovery',
+    number: '17', section: 4, slug: 'crash-recovery',
     title: 'Crash Recovery',
     desc: 'How databases survive power failures, OS crashes, and hardware failures without losing a single committed transaction. WAL, checkpoints, and the ARIES algorithm.',
     topics: ['Write-Ahead Logging (WAL)', 'Undo & Redo Logs', 'Checkpoints', 'ARIES Algorithm', 'What Happens at 3am When DB Crashes'],
     time: '30–35 min', difficulty: 'Advanced', status: 'live' as const,
   },
-  // ── Section 5 — Distributed & Interview (17–20) ────────────────────────────
+  // ── Section 5 — Distributed & Interview (18–22) ────────────────────────────
   {
-    number: '17', section: 5, slug: 'distributed-databases',
+    number: '18', section: 5, slug: 'distributed-databases',
     title: 'Distributed Databases & CAP Theorem',
     desc: 'Data across multiple machines — fragmentation, replication, two-section commit, and the CAP theorem that every system design interview asks about.',
     topics: ['Horizontal & Vertical Fragmentation', 'Replication Strategies', 'Two-Phase Commit (2PC)', 'CAP Theorem', 'CA · CP · AP Real Examples'],
     time: '35–40 min', difficulty: 'Advanced', status: 'live' as const,
   },
   {
-    number: '18', section: 5, slug: 'nosql-databases',
+    number: '19', section: 5, slug: 'replication-partitioning-sharding',
+    title: 'Replication, Partitioning and Sharding',
+    desc: 'Choose the right way to scale a database: copy data for availability and read capacity, split tables into partitions, or distribute rows across shards—with practical trade-offs and routing examples.',
+    topics: ['Replication & Replica Lag', 'Range · List · Hash Partitioning', 'Sharding Keys & Routing', 'Hot Partitions & Rebalancing', 'Choosing a Scaling Strategy'],
+    time: '40–45 min', difficulty: 'Advanced', status: 'live' as const,
+  },
+  {
+    number: '20', section: 5, slug: 'nosql-databases',
     title: 'NoSQL Databases',
     desc: 'When and why to break away from relational — MongoDB, Redis, Cassandra, Neo4j explained clearly. The SQL vs NoSQL decision framework for real projects.',
     topics: ['Document Stores — MongoDB', 'Key-Value — Redis', 'Column-Family — Cassandra', 'Graph — Neo4j', 'SQL vs NoSQL Decision Framework'],
     time: '35–40 min', difficulty: 'Advanced', status: 'live' as const,
   },
   {
-    number: '19', section: 5, slug: 'database-security',
+    number: '21', section: 5, slug: 'database-security',
     title: 'Database Security',
     desc: 'Protecting data at every layer — authentication, authorization, roles, SQL injection attacks and exactly how to prevent them, encryption, and auditing.',
     topics: ['Authentication vs Authorization', 'GRANT & REVOKE', 'SQL Injection — How & Prevention', 'Encryption at Rest & in Transit', 'Auditing & Row-Level Security'],
     time: '25–30 min', difficulty: 'Intermediate', status: 'live' as const,
   },
   {
-    number: '20', section: 5, slug: 'interview-questions',
+    number: '22', section: 5, slug: 'interview-questions',
     title: 'Interview Questions — All 60',
     desc: '60 DBMS questions categorized by company type. Accenture/KPMG/Deloitte for campus placements, Amazon/DoorDash for product companies, and GATE-level for competitive exams.',
     topics: ['Service Company Questions (Accenture, KPMG)', 'Product Company Questions (Amazon, DoorDash)', 'GATE CS Level Questions', 'System Design DB Questions', 'Answers with Explanations'],

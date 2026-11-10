@@ -55,7 +55,7 @@ export default function HtmlCssTrack() {
   return (
     <LearnLayout
       title="HTML & CSS"
-      description="Web foundations done right — 42 lessons, no prerequisites"
+      description="Web foundations done right — 45 lessons, no prerequisites"
       section="HTML & CSS"
       readTime="Self-paced"
       updatedAt="August 2026"
@@ -378,7 +378,7 @@ export default function HtmlCssTrack() {
           color: 'var(--text)', fontFamily: 'var(--font-display)',
           letterSpacing: '-1px', marginBottom: 12,
         }}>
-          All 42 lessons are live. Start today.
+          All 45 lessons are live. Start today.
         </h3>
         <p style={{
           fontSize: 14, color: 'var(--muted)', lineHeight: 1.7,

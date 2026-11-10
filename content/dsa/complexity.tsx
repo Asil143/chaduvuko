@@ -802,7 +802,7 @@ export default function ComplexityPage() {
             padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap',
           }}
         >
-          Coming Soon →
+          Continue →
         </Link>
       </div>
 

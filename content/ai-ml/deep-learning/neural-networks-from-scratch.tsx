@@ -1300,7 +1300,7 @@ print("silently wrong gradient, degrading accuracy with no error raised.")`} />
 
         <p style={S.p}>
           The network you just built works — but plain SGD is the slowest,
-          least reliable optimizer available. Lesson 41 covers the training
+          least reliable optimizer available. Lesson 45 covers the training
           techniques that make modern deep learning practical:
           Adam optimizer (adaptive learning rates per parameter),
           batch normalisation (stabilise activations between layers),
@@ -1322,7 +1322,7 @@ print("silently wrong gradient, degrading accuracy with no error raised.")`} />
               textTransform: 'uppercase' as const, color: '#7b61ff',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Lesson 44 · Deep Learning
+              Next — Lesson 48 · Deep Learning
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

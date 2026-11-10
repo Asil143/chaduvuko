@@ -96,7 +96,7 @@ export default function ExplainAnalyze() {
     <LearnLayout
       title="EXPLAIN and Query Optimisation"
       description="Read execution plans, spot bottlenecks, understand every node type, and apply the systematic workflow that turns a 30-second query into a 300-millisecond one"
-      section="SQL — Lesson 57"
+      section="SQL — Lesson 62"
       readTime="14–20 min"
     >
 

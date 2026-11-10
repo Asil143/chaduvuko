@@ -77,7 +77,7 @@ export default function DatesTimes() {
     <LearnLayout
       title="Working with Dates and Times"
       description="The datetime module in depth — creating and formatting dates, naive vs timezone-aware datetimes, zoneinfo, and a real scheduling example."
-      section="Python — Lesson 33"
+      section="Python — Lesson 35"
       readTime="45 min"
     >
 
@@ -796,12 +796,12 @@ print(result["reminder_local_display"])    # 2026-08-13 09:00:00-06:00 — 9am t
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 34 covers multithreading and multiprocessing — the Global Interpreter Lock, when
+          Lesson 36 covers multithreading and multiprocessing — the Global Interpreter Lock, when
           threads genuinely help despite it, and when you need real parallelism with separate processes
           instead.
         </p>
         <Link href="/learn/python/multithreading-multiprocessing" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 34 → Multithreading and Multiprocessing Basics
+          Lesson 36 → Multithreading and Multiprocessing Basics
         </Link>
       </div>
     </LearnLayout>

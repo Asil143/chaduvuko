@@ -173,7 +173,7 @@ export default function DataLakeArchitectureModule() {
     <LearnLayout
       title="Data Lake Architecture"
       description="What a data lake is, why it was invented, zone-based organisation, compute-storage separation, and the rise of the lakehouse."
-      section="Data Engineering — Lesson 29"
+      section="Data Engineering — Lesson 32"
       readTime="55 min"
     >
 
@@ -405,7 +405,7 @@ GENERATION 2: CLOUD OBJECT STORAGE + SPARK (2015-2022)
           The difference is organisation. Every mature data lake uses a zone-based
           architecture that separates data by its quality level, transformation
           state, and access pattern. The zone model is the foundation of both
-          the Medallion Architecture (covered in Lesson 30) and every well-governed
+          the Medallion Architecture (covered in Lesson 33) and every well-governed
           data lake.
         </Para>
 
@@ -1337,10 +1337,10 @@ For new projects in 2026, Iceberg is the most future-proof choice due to its eng
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Lesson 30 covers the Medallion Architecture — why it became the dominant data lake design pattern, what each layer does, and the decisions that determine what data belongs where.
+          Lesson 33 covers the Medallion Architecture — why it became the dominant data lake design pattern, what each layer does, and the decisions that determine what data belongs where.
         </p>
         <Link href="/learn/data-engineering/medallion-architecture" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Lesson 30 → Medallion Architecture — Bronze, Silver, Gold
+          Lesson 33 → Medallion Architecture — Bronze, Silver, Gold
         </Link>
       </div>
     </LearnLayout>

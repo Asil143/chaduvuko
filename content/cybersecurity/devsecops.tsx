@@ -52,7 +52,7 @@ export default function Module35() {
     <LearnLayout
       title="DevSecOps — Security Embedded in the Pipeline"
       description="Embed security into every phase of the SDLC without slowing delivery. Build SAST/DAST/SCA gates, secure CI/CD pipelines, scan infrastructure-as-code, manage secrets, and build a security culture where developers own security outcomes."
-      section="Cybersecurity — Lesson 35"
+      section="Cybersecurity — Lesson 41"
       readTime="38 min"
     >
 
@@ -871,8 +871,8 @@ jobs:
       ]} />
 
       <Callout type="info">
-        <strong>Up Next — Lesson 36: Compliance Frameworks</strong><br />
-        Lesson 36 demystifies the compliance landscape: SOC 2, PCI-DSS, HIPAA, ISO 27001, GDPR, and NIST frameworks. You will learn what each framework requires, how they overlap, how to build a unified control library that satisfies multiple frameworks simultaneously, and how to prepare for and survive an audit.
+        <strong>Up Next — Lesson 42: Compliance Frameworks</strong><br />
+        Lesson 42 demystifies the compliance landscape: SOC 2, PCI-DSS, HIPAA, ISO 27001, GDPR, and NIST frameworks. You will learn what each framework requires, how they overlap, how to build a unified control library that satisfies multiple frameworks simultaneously, and how to prepare for and survive an audit.
       </Callout>
 
     </LearnLayout>
