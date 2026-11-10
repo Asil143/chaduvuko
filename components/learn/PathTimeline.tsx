@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
 import { useProgress } from '@/lib/progress'
 import type { PathLesson } from '@/lib/catalog/paths'
 
@@ -77,28 +78,62 @@ export function PathProgressCard({ milestones, stats }: Props) {
   )
 }
 
+function MilestoneStepper({ milestones, isComplete }: { milestones: TimelineMilestone[]; isComplete: (milestone: TimelineMilestone) => boolean }) {
+  const scroller = useRef<HTMLOListElement>(null)
+  const [edges, setEdges] = useState({ left: false, right: false })
+
+  useEffect(() => {
+    const el = scroller.current
+    if (!el) return
+    const update = () => setEdges({
+      left: el.scrollLeft > 4,
+      right: el.scrollLeft + el.clientWidth < el.scrollWidth - 4,
+    })
+    update()
+    el.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      el.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [])
+
+  const scrollBy = (direction: 1 | -1) => {
+    const el = scroller.current
+    if (el) el.scrollBy({ left: direction * el.clientWidth * 0.7, behavior: 'smooth' })
+  }
+
+  return (
+    <nav aria-label="Jump to milestone" className="cp-stepper" data-left={edges.left || undefined} data-right={edges.right || undefined}>
+      <button type="button" className="cp-stepper-arrow cp-stepper-prev" onClick={() => scrollBy(-1)} disabled={!edges.left} aria-label="Scroll to earlier milestones">‹</button>
+      <ol ref={scroller}>
+        {milestones.map((milestone, index) => {
+          const complete = isComplete(milestone)
+          return (
+            <li key={`${milestone.title}-step`}>
+              <a href={`#milestone-${index + 1}`} data-state={complete ? 'complete' : milestone.status}>
+                <span className="cp-step-num" aria-hidden="true">{complete ? '✓' : index + 1}</span>
+                <span className="cp-step-label">{milestone.title}</span>
+              </a>
+            </li>
+          )
+        })}
+      </ol>
+      <button type="button" className="cp-stepper-arrow cp-stepper-next" onClick={() => scrollBy(1)} disabled={!edges.right} aria-label="Scroll to more milestones">›</button>
+      {(edges.left || edges.right) && (
+        <p className="cp-stepper-hint" aria-hidden="true">{milestones.length} milestones · {edges.right ? 'scroll or use the arrows to see more →' : '← scroll back to see earlier ones'}</p>
+      )}
+    </nav>
+  )
+}
+
 export function PathTimeline({ milestones }: Pick<Props, 'milestones'>) {
   const progress = useProgress()
   const done = (href: string) => Boolean(progress?.completed[href])
 
   return (
     <div>
-      <nav aria-label="Jump to milestone" className="cp-stepper">
-        <ol>
-          {milestones.map((milestone, index) => {
-            const total = milestone.lessons.length
-            const complete = total > 0 && milestone.lessons.every(lesson => done(lesson.href))
-            return (
-              <li key={`${milestone.title}-step`}>
-                <a href={`#milestone-${index + 1}`} data-state={complete ? 'complete' : milestone.status}>
-                  <span className="cp-step-num" aria-hidden="true">{complete ? '✓' : index + 1}</span>
-                  <span className="cp-step-label">{milestone.title}</span>
-                </a>
-              </li>
-            )
-          })}
-        </ol>
-      </nav>
+      <MilestoneStepper milestones={milestones} isComplete={milestone => milestone.lessons.length > 0 && milestone.lessons.every(lesson => done(lesson.href))} />
 
       <ol className="cp-timeline">
         {milestones.map((milestone, index) => {
