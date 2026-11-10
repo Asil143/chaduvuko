@@ -6,12 +6,20 @@ import type { Lesson } from './types'
 /** Used when a lesson has no reading-time estimate. */
 const DEFAULT_LESSON_MINUTES = 30
 
+export interface PathLesson {
+  href: string
+  title: string
+  /** Module name inside the track, when the track has modules. */
+  section?: string
+  minutes: number
+}
+
 export interface ResolvedMilestone extends PathMilestone {
   status: 'live' | 'planned'
   href: string
   trackTitle: string
-  /** [href, title] of live lessons in curriculum order; empty when planned. */
-  lessons: [href: string, title: string][]
+  /** Live lessons in curriculum order; empty when planned. */
+  lessons: PathLesson[]
   minutes: number
 }
 
@@ -38,7 +46,7 @@ function resolveMilestone(milestone: PathMilestone): ResolvedMilestone {
       status: 'live',
       href: track.indexHref,
       trackTitle: track.title,
-      lessons: lessons.map(lesson => [lesson.href, lesson.title]),
+      lessons: lessons.map(lesson => ({ href: lesson.href, title: lesson.title, section: lesson.section, minutes: lessonMinutes(lesson) })),
       minutes: lessons.reduce((sum, lesson) => sum + lessonMinutes(lesson), 0),
     }
   }
@@ -55,7 +63,7 @@ function resolveMilestone(milestone: PathMilestone): ResolvedMilestone {
 
 export function resolvePath(path: CareerPath): ResolvedPath {
   const milestones = path.milestones.map(resolveMilestone)
-  const unique = new Set(milestones.flatMap(milestone => milestone.lessons.map(([href]) => href)))
+  const unique = new Set(milestones.flatMap(milestone => milestone.lessons.map(lesson => lesson.href)))
   return {
     ...path,
     milestones,
