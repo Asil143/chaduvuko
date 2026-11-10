@@ -13,7 +13,7 @@
 | Published lessons | 490 | `lib/catalog` (`LIVE_LESSONS`) |
 | Hidden tracks / lessons | 1 / 3 | `hidden` flag in `lib/catalog/tracks.ts` |
 | Unpublished (`soon`) lessons | 59 | `data/*-curriculum.ts` |
-| Planned tracks (skills maps) | 37 | `data/planned-tracks.ts` |
+| Planned tracks (skills maps) | 11 | `data/planned-tracks.ts` |
 | Schools | 6 | `lib/catalog/schools.ts` |
 | Career paths | 10 | `data/career-paths.ts` |
 | Career roadmaps | 20 | `data/roadmaps/role-registry.ts` |
@@ -27,7 +27,7 @@ flowchart LR
   root(["Chaduvuko"])
   root --> area_ai["School of AI"]
   area_ai --> t_ai_ml["AI and Machine Learning<br/>82 lessons"]
-  area_ai -.-> p_ai["3 planned tracks"]:::planned
+  area_ai -.-> p_ai["2 planned tracks"]:::planned
   root --> area_data["School of Data"]
   area_data --> t_foundations["Data Engineering Foundations<br/>4 lessons"]
   area_data --> t_data_engineering["Data Engineering<br/>47 lessons"]
@@ -35,24 +35,24 @@ flowchart LR
   area_data --> t_apache_kafka["Apache Kafka<br/>24 lessons"]
   area_data --> t_dbt["dbt<br/>20 lessons"]
   area_data --> t_snowflake["Snowflake<br/>20 lessons"]
-  area_data -.-> p_data["4 planned tracks"]:::planned
+  area_data -.-> p_data["2 planned tracks"]:::planned
   root --> area_programming["School of Software Engineering"]
   area_programming --> t_python["Python<br/>46 lessons"]
   area_programming --> t_html_css["HTML and CSS<br/>42 lessons"]
-  area_programming -.-> p_programming["15 planned tracks"]:::planned
+  area_programming -.-> p_programming["2 planned tracks"]:::planned
   root --> area_cloud["School of Cloud and Platforms"]
   area_cloud --> t_aws["AWS<br/>9 lessons"]
   area_cloud --> t_azure["Microsoft Azure<br/>8 lessons"]
   area_cloud --> t_gcp["Google Cloud<br/>5 lessons"]
-  area_cloud -.-> p_cloud["3 planned tracks"]:::planned
+  area_cloud -.-> p_cloud["2 planned tracks"]:::planned
   root --> area_security["School of Security"]
   area_security --> t_cybersecurity["Cybersecurity<br/>40 lessons"]
-  area_security -.-> p_security["3 planned tracks"]:::planned
+  area_security -.-> p_security["2 planned tracks"]:::planned
   root --> area_cs["School of Computer Science"]
   area_cs --> t_dsa["Data Structures and Algorithms<br/>20 lessons"]
   area_cs --> t_dbms["DBMS<br/>20 lessons"]
   area_cs --> t_networking["Networking<br/>35 lessons"]
-  area_cs -.-> p_cs["9 planned tracks"]:::planned
+  area_cs -.-> p_cs["1 planned tracks"]:::planned
   root --> area_practice["Practice"]
   area_practice --> t_projects["Projects<br/>6 lessons"]
   root --> practice["Practice and tools<br/>roadmaps, playgrounds, interview prep, blog"]
@@ -283,41 +283,15 @@ Skills maps only; no lessons are published yet. Each page collects learner inter
 |---|---|---|---:|
 | School of AI | Generative AI & LLM Engineering | `/learn/generative-ai` | 33 |
 | School of AI | Agentic AI & Automation | `/learn/track-plan/agentic-ai` | 26 |
-| School of AI | Applied AI Specializations | `/learn/track-plan/applied-ai-specializations` | 23 |
-| School of Data | Database Engineering | `/learn/track-plan/database-engineering` | 23 |
 | School of Data | Business Intelligence & Analytics | `/learn/track-plan/business-intelligence` | 20 |
 | School of Data | Data Analytics & Analytics Engineering | `/learn/track-plan/analytics-engineering-data-analytics` | 23 |
-| School of Data | Data Governance & Data Quality | `/learn/track-plan/data-governance-engineering` | 23 |
 | School of Software Engineering | Full-Stack Development with AI | `/learn/track-plan/full-stack-ai` | 29 |
 | School of Software Engineering | JavaScript & TypeScript | `/learn/track-plan/javascript` | 24 |
-| School of Software Engineering | Java & Backend Engineering | `/learn/track-plan/java` | 26 |
-| School of Software Engineering | Systems & Programming Languages | `/learn/track-plan/systems-programming` | 24 |
-| School of Software Engineering | Software Testing & Quality Engineering | `/learn/track-plan/quality-engineering` | 20 |
-| School of Software Engineering | Mobile Development | `/learn/track-plan/mobile-development` | 22 |
-| School of Software Engineering | Accessibility Engineering | `/learn/track-plan/accessibility-engineering` | 21 |
-| School of Software Engineering | Enterprise Platforms & Business Applications | `/learn/track-plan/enterprise-platforms` | 22 |
-| School of Software Engineering | Technical Communication & Developer Relations | `/learn/track-plan/technical-communication-developer-relations` | 21 |
-| School of Software Engineering | Game Development & Computer Graphics | `/learn/track-plan/game-development-graphics` | 23 |
-| School of Software Engineering | Embedded Systems & Internet of Things | `/learn/track-plan/embedded-iot` | 23 |
-| School of Software Engineering | Robotics & Autonomous Systems | `/learn/track-plan/robotics-autonomous-systems` | 22 |
-| School of Software Engineering | Blockchain & Smart Contract Engineering | `/learn/track-plan/blockchain-smart-contracts` | 22 |
-| School of Software Engineering | AR, VR & Spatial Computing | `/learn/track-plan/xr-ar-vr-development` | 21 |
-| School of Software Engineering | Additional Programming Language Pathways | `/learn/track-plan/additional-language-pathways` | 23 |
 | School of Cloud & Platforms | DevOps, Kubernetes & MLOps | `/learn/track-plan/devops-mlops` | 26 |
 | School of Cloud & Platforms | Site Reliability & Platform Engineering | `/learn/track-plan/sre-platform-engineering` | 24 |
-| School of Cloud & Platforms | Cloud Architecture & FinOps | `/learn/track-plan/cloud-architecture-finops` | 23 |
 | School of Security | AI Security & LLM Security | `/learn/track-plan/ai-security` | 26 |
 | School of Security | Application Security & DevSecOps | `/learn/track-plan/application-security-devsecops` | 23 |
-| School of Security | Security Governance, Risk & Privacy | `/learn/track-plan/security-governance-risk-privacy` | 23 |
-| School of Computer Science | Mathematics for AI & Engineering | `/learn/track-plan/mathematics` | 21 |
-| School of Computer Science | Physics for Computing & Engineering | `/learn/track-plan/physics` | 20 |
 | School of Computer Science | System Design & Software Engineering | `/learn/track-plan/system-design` | 24 |
-| School of Computer Science | IT Support & Systems Administration | `/learn/track-plan/it-support-systems-administration` | 23 |
-| School of Computer Science | Networking & Telecommunications | `/learn/track-plan/networking-telecommunications` | 25 |
-| School of Computer Science | Technical Product Management & Business Analysis | `/learn/track-plan/technical-product-business-analysis` | 22 |
-| School of Computer Science | Digital Hardware & Semiconductor Design | `/learn/track-plan/semiconductor-digital-hardware` | 22 |
-| School of Computer Science | Programming Languages & Compiler Engineering | `/learn/track-plan/programming-languages-compilers` | 21 |
-| School of Computer Science | High-Performance & Scientific Computing | `/learn/track-plan/high-performance-scientific-computing` | 22 |
 
 ## Health checks
 

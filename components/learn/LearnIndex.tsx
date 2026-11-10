@@ -514,6 +514,7 @@ export default function LearnPage({ tracks, stats }: { tracks: TrackSummaries; s
     )
     .map(({ track }) => track)
   const orderedSkills = SKILLS
+    .filter(skill => !skill.track || Boolean(tracks[skill.track]))
     .map((skill, originalIndex) => ({ skill, originalIndex }))
     .sort((a, b) =>
       (trackPriorityRank.get(a.skill.track ?? '') ?? Number.MAX_SAFE_INTEGER)

@@ -1,16 +1,16 @@
 url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboundLinks,sourceFile,updatedAt
-/,site,,,,,,live,true,true,478,38,app/page.tsx,
+/,site,,,,,,live,true,true,517,12,app/page.tsx,
 /about,site,,,,,,live,true,true,823,0,app/about/page.tsx,
 /blog,site,,,,,,live,true,true,1181,33,app/blog/page.tsx,
 /careers,site,,,,,,live,true,true,69,1,app/careers/page.tsx,
-/dashboard,site,,,,,,live,false,true,40,2,app/dashboard/page.tsx,
+/dashboard,site,,,,,,live,false,true,39,2,app/dashboard/page.tsx,
 /newsletter,site,,,,,,live,true,true,123,1,app/newsletter/page.tsx,
 /playground,site,,,,,,live,true,true,31,19,app/playground/page.tsx,
-/privacy,site,,,,,,live,true,true,403,38,app/privacy/page.tsx,
+/privacy,site,,,,,,live,true,true,403,12,app/privacy/page.tsx,
 /search,site,,,,,,live,false,true,1,0,app/search/page.tsx,
 /terms,site,,,,,,live,true,true,69,0,app/terms/page.tsx,
-/learn,catalog,,,,,,live,true,true,4321,43,app/learn/page.tsx,
-/learn/all-courses,hub,,,,,,live,true,true,3385,2,app/learn/all-courses/page.tsx,
+/learn,catalog,,,,,,live,true,true,2295,17,app/learn/page.tsx,
+/learn/all-courses,hub,,,,,,live,true,true,2991,2,app/learn/all-courses/page.tsx,
 /learn/find-video,tool,,,,,,live,true,true,52,1,app/learn/find-video/page.tsx,
 /learn/find-your-path,hub,,,,,,live,true,true,132,4,app/learn/find-your-path/page.tsx,
 /learn/industry,hub,,,,,,live,true,true,1174,2,app/learn/industry/page.tsx,
@@ -47,15 +47,13 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/roadmap/python-developer,roadmap,,,,,,live,true,true,812,1,app/learn/roadmap/[slug]/page.tsx,
 /learn/roadmap/site-reliability-engineer,roadmap,,,,,,live,true,true,857,1,app/learn/roadmap/[slug]/page.tsx,
 /learn/roadmap/software-architect,roadmap,,,,,,live,true,true,870,1,app/learn/roadmap/[slug]/page.tsx,
-/learn/schools,hub,,,,,,live,true,true,195,10,app/learn/schools/page.tsx,
-/learn/schools/ai,hub,,,,,,live,true,true,148,4,app/learn/schools/[slug]/page.tsx,
-/learn/schools/cloud,hub,,,,,,live,true,true,91,2,app/learn/schools/[slug]/page.tsx,
-/learn/schools/computer-science,hub,,,,,,live,true,true,118,2,app/learn/schools/[slug]/page.tsx,
-/learn/schools/data,hub,,,,,,live,true,true,139,3,app/learn/schools/[slug]/page.tsx,
-/learn/schools/security,hub,,,,,,live,true,true,104,3,app/learn/schools/[slug]/page.tsx,
-/learn/schools/software-engineering,hub,,,,,,live,true,true,136,2,app/learn/schools/[slug]/page.tsx,
-/learn/track-plan/accessibility-engineering,planned-track,accessibility-engineering,Accessibility Engineering,programming,,,planned,true,true,716,3,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/additional-language-pathways,planned-track,additional-language-pathways,Additional Programming Language Pathways,programming,,,planned,true,true,831,3,app/learn/track-plan/[slug]/page.tsx,
+/learn/schools,hub,,,,,,live,true,true,189,9,app/learn/schools/page.tsx,
+/learn/schools/ai,hub,,,,,,live,true,true,145,5,app/learn/schools/[slug]/page.tsx,
+/learn/schools/cloud,hub,,,,,,live,true,true,88,3,app/learn/schools/[slug]/page.tsx,
+/learn/schools/computer-science,hub,,,,,,live,true,true,88,3,app/learn/schools/[slug]/page.tsx,
+/learn/schools/data,hub,,,,,,live,true,true,133,4,app/learn/schools/[slug]/page.tsx,
+/learn/schools/security,hub,,,,,,live,true,true,100,4,app/learn/schools/[slug]/page.tsx,
+/learn/schools/software-engineering,hub,,,,,,live,true,true,90,3,app/learn/schools/[slug]/page.tsx,
 /learn/track-plan/agentic-ai,planned-track,agentic-ai,Agentic AI & Automation,ai,,,planned,true,true,785,4,app/learn/track-plan/[slug]/page.tsx,
 /learn/ai-ml,track-index,ai-ml,AI & Machine Learning,ai,,,live,true,true,3428,93,app/learn/ai-ml/page.tsx,
 /learn/ai-ml/cheatsheet,tool,ai-ml,AI & Machine Learning,ai,,,live,true,true,1397,1,app/learn/ai-ml/cheatsheet/page.tsx,
@@ -170,9 +168,8 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/apache-kafka/testing-debugging,lesson,apache-kafka,Apache Kafka,data,Architecture and Real-World Practice,23,live,true,true,9796,6,content/apache-kafka/testing-debugging.tsx,2026-09-11
 /learn/apache-kafka/kafka-interview-system-design,lesson,apache-kafka,Apache Kafka,data,Architecture and Real-World Practice,24,live,true,true,10013,5,content/apache-kafka/kafka-interview-system-design.tsx,2026-09-11
 /learn/track-plan/application-security-devsecops,planned-track,application-security-devsecops,Application Security & DevSecOps,security,,,planned,true,true,802,5,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/applied-ai-specializations,planned-track,applied-ai-specializations,Applied AI Specializations,ai,,,planned,true,true,802,3,app/learn/track-plan/[slug]/page.tsx,
 /learn/aws/cheatsheet,tool,aws,AWS,cloud,,,live,true,true,990,1,app/learn/aws/cheatsheet/page.tsx,
-/learn/aws/introduction,lesson,aws,AWS,cloud,,1,live,true,true,1196,16,app/learn/aws/introduction/page.tsx,2026-03-11
+/learn/aws/introduction,lesson,aws,AWS,cloud,,1,live,true,true,1196,17,app/learn/aws/introduction/page.tsx,2026-03-11
 /learn/aws/s3,lesson,aws,AWS,cloud,,2,live,true,true,1047,6,app/learn/aws/s3/page.tsx,2026-03-11
 /learn/aws/glue,lesson,aws,AWS,cloud,,3,live,true,true,1164,7,app/learn/aws/glue/page.tsx,2026-03-11
 /learn/aws/redshift,lesson,aws,AWS,cloud,,4,live,true,true,1193,8,app/learn/aws/redshift/page.tsx,2026-03-11
@@ -182,7 +179,7 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/aws/step-functions,lesson,aws,AWS,cloud,,8,live,true,true,1194,6,app/learn/aws/step-functions/page.tsx,2026-03-11
 /learn/aws/lake-formation,lesson,aws,AWS,cloud,,9,live,true,true,1373,5,app/learn/aws/lake-formation/page.tsx,2026-03-11
 /learn/azure/cheatsheet,tool,azure,Microsoft Azure,cloud,,,live,true,true,1028,1,app/learn/azure/cheatsheet/page.tsx,
-/learn/azure/introduction,lesson,azure,Microsoft Azure,cloud,,1,live,true,true,1997,16,app/learn/azure/introduction/page.tsx,2026-04-27
+/learn/azure/introduction,lesson,azure,Microsoft Azure,cloud,,1,live,true,true,1997,17,app/learn/azure/introduction/page.tsx,2026-04-27
 /learn/azure/adls-gen2,lesson,azure,Microsoft Azure,cloud,,2,live,true,true,1146,5,app/learn/azure/adls-gen2/page.tsx,2026-11-09
 /learn/azure/adf,lesson,azure,Microsoft Azure,cloud,,3,live,true,true,1351,6,app/learn/azure/adf/page.tsx,2026-03-11
 /learn/azure/databricks,lesson,azure,Microsoft Azure,cloud,,4,live,true,true,1549,9,app/learn/azure/databricks/page.tsx,2026-03-11
@@ -190,9 +187,7 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/azure/event-hubs,lesson,azure,Microsoft Azure,cloud,,6,live,true,true,1339,5,app/learn/azure/event-hubs/page.tsx,2026-03-11
 /learn/azure/key-vault,lesson,azure,Microsoft Azure,cloud,,7,live,true,true,1306,5,app/learn/azure/key-vault/page.tsx,2026-03-11
 /learn/azure/microsoft-fabric,lesson,azure,Microsoft Azure,cloud,,8,live,true,true,1512,5,app/learn/azure/microsoft-fabric/page.tsx,2026-03-11
-/learn/track-plan/blockchain-smart-contracts,planned-track,blockchain-smart-contracts,Blockchain & Smart Contract Engineering,programming,,,planned,true,true,771,3,app/learn/track-plan/[slug]/page.tsx,
 /learn/track-plan/business-intelligence,planned-track,business-intelligence,Business Intelligence & Analytics,data,,,planned,true,true,665,4,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/cloud-architecture-finops,planned-track,cloud-architecture-finops,Cloud Architecture & FinOps,cloud,,,planned,true,true,806,3,app/learn/track-plan/[slug]/page.tsx,
 /learn/cybersecurity,track-index,cybersecurity,Cybersecurity,security,,,live,true,true,2279,48,app/learn/cybersecurity/page.tsx,
 /learn/cybersecurity/cheatsheet,tool,cybersecurity,Cybersecurity,security,,,live,true,true,1315,1,app/learn/cybersecurity/cheatsheet/page.tsx,
 /learn/cybersecurity/what-is-cybersecurity,lesson,cybersecurity,Cybersecurity,security,What Even Is This?,1,live,true,true,4935,5,content/cybersecurity/what-is-cybersecurity.tsx,2026-05-11
@@ -284,7 +279,6 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/data-engineering/infrastructure-as-code,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",45,live,true,true,6807,7,content/data-engineering/infrastructure-as-code.tsx,2026-11-08
 /learn/data-engineering/system-design-de,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",46,live,true,true,9895,7,content/data-engineering/system-design-de.tsx,2026-11-09
 /learn/data-engineering/de-interview-questions,lesson,data-engineering,Data Engineering,data,"Quality, Governance & Production",47,live,true,true,16181,5,content/data-engineering/de-interview-questions.tsx,2026-11-09
-/learn/track-plan/data-governance-engineering,planned-track,data-governance-engineering,Data Governance & Data Quality,data,,,planned,true,true,808,3,app/learn/track-plan/[slug]/page.tsx,
 /learn/data-science,track-index,data-science,Data Science,ai,,,hidden,false,true,2302,4,app/learn/data-science/page.tsx,
 /learn/data-science/cheatsheet,tool,data-science,Data Science,ai,,,hidden,false,true,1225,1,app/learn/data-science/cheatsheet/page.tsx,
 /learn/data-science/what-is-data-science,lesson,data-science,Data Science,ai,Data Science Foundations,1,hidden,false,true,4493,2,content/data-science/what-is-data-science.tsx,2026-07-11
@@ -340,8 +334,7 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/data-science/cohort-and-retention-analysis,lesson,data-science,Data Science,ai,Real-World Case Studies and Career,51,soon,false,false,0,0,,
 /learn/data-science/data-science-interview-questions,lesson,data-science,Data Science,ai,Real-World Case Studies and Career,52,soon,false,false,0,0,,
 /learn/data-science/building-your-portfolio-project,lesson,data-science,Data Science,ai,Real-World Case Studies and Career,53,soon,false,false,0,0,,
-/learn/track-plan/database-engineering,planned-track,database-engineering,Database Engineering,data,,,planned,true,true,717,3,app/learn/track-plan/[slug]/page.tsx,
-/learn/dbms,track-index,dbms,DBMS,cs,,,live,true,true,1283,26,app/learn/dbms/page.tsx,
+/learn/dbms,track-index,dbms,DBMS,cs,,,live,true,true,1283,27,app/learn/dbms/page.tsx,
 /learn/dbms/cheatsheet,tool,dbms,DBMS,cs,,,live,true,true,951,1,app/learn/dbms/cheatsheet/page.tsx,
 /learn/dbms/introduction,lesson,dbms,DBMS,cs,Foundations,1,live,true,true,8058,5,app/learn/dbms/introduction/page.tsx,2026-08-14
 /learn/dbms/data-models,lesson,dbms,DBMS,cs,Foundations,2,live,true,true,10074,6,app/learn/dbms/data-models/page.tsx,2026-08-14
@@ -363,7 +356,7 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/dbms/nosql-databases,lesson,dbms,DBMS,cs,Distributed & Interview,18,live,true,true,6981,7,app/learn/dbms/nosql-databases/page.tsx,2026-08-14
 /learn/dbms/database-security,lesson,dbms,DBMS,cs,Distributed & Interview,19,live,true,true,6668,6,app/learn/dbms/database-security/page.tsx,2026-08-14
 /learn/dbms/interview-questions,lesson,dbms,DBMS,cs,Distributed & Interview,20,live,true,true,12893,5,app/learn/dbms/interview-questions/page.tsx,2026-08-14
-/learn/dbt,track-index,dbt,dbt,data,,,live,true,true,952,30,app/learn/dbt/page.tsx,
+/learn/dbt,track-index,dbt,dbt,data,,,live,true,true,952,31,app/learn/dbt/page.tsx,
 /learn/dbt/cheatsheet,tool,dbt,dbt,data,,,live,true,true,1045,1,app/learn/dbt/cheatsheet/page.tsx,
 /learn/dbt/what-is-dbt,lesson,dbt,dbt,data,dbt Foundations,1,live,true,true,8777,5,content/dbt/what-is-dbt.tsx,2026-11-09
 /learn/dbt/how-dbt-works,lesson,dbt,dbt,data,dbt Foundations,2,live,true,true,7786,6,content/dbt/how-dbt-works.tsx,2026-09-12
@@ -386,7 +379,7 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/dbt/testing-strategy-at-scale,lesson,dbt,dbt,data,Production and Advanced dbt,19,live,true,true,9251,6,content/dbt/testing-strategy-at-scale.tsx,2026-11-09
 /learn/dbt/dbt-interview-system-design,lesson,dbt,dbt,data,Production and Advanced dbt,20,live,true,true,13144,5,content/dbt/dbt-interview-system-design.tsx,2026-09-12
 /learn/track-plan/devops-mlops,planned-track,devops-mlops,"DevOps, Kubernetes & MLOps",cloud,,,planned,true,true,784,5,app/learn/track-plan/[slug]/page.tsx,
-/learn/dsa,track-index,dsa,Data Structures & Algorithms,cs,,,live,true,true,1102,25,app/learn/dsa/page.tsx,
+/learn/dsa,track-index,dsa,Data Structures & Algorithms,cs,,,live,true,true,1102,26,app/learn/dsa/page.tsx,
 /learn/dsa/cheatsheet,tool,dsa,Data Structures & Algorithms,cs,,,live,true,true,982,1,app/learn/dsa/cheatsheet/page.tsx,
 /learn/dsa/introduction,lesson,dsa,Data Structures & Algorithms,cs,,0,live,true,true,2315,4,content/dsa/introduction.tsx,2026-08-14
 /learn/dsa/complexity,lesson,dsa,Data Structures & Algorithms,cs,,1,live,true,true,2286,5,content/dsa/complexity.tsx,2026-04-05
@@ -408,23 +401,19 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/dsa/greedy,lesson,dsa,Data Structures & Algorithms,cs,,17,live,true,true,3015,5,content/dsa/greedy.tsx,2026-09-10
 /learn/dsa/backtracking,lesson,dsa,Data Structures & Algorithms,cs,,18,live,true,true,3102,7,content/dsa/backtracking.tsx,2026-09-10
 /learn/dsa/advanced,lesson,dsa,Data Structures & Algorithms,cs,,19,live,true,true,3582,6,content/dsa/advanced.tsx,2026-04-27
-/learn/track-plan/embedded-iot,planned-track,embedded-iot,Embedded Systems & Internet of Things,programming,,,planned,true,true,816,3,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/enterprise-platforms,planned-track,enterprise-platforms,Enterprise Platforms & Business Applications,programming,,,planned,true,true,804,3,app/learn/track-plan/[slug]/page.tsx,
 /learn/what-is-data-engineering/cheatsheet,tool,foundations,Data Engineering Foundations,data,,,live,true,true,433,1,app/learn/what-is-data-engineering/cheatsheet/page.tsx,
 /learn/what-is-data-engineering,lesson,foundations,Data Engineering Foundations,data,,1,live,true,true,1475,7,app/learn/what-is-data-engineering/page.tsx,2026-08-14
 /learn/foundations/sql,lesson,foundations,Data Engineering Foundations,data,,2,live,true,true,1549,4,app/learn/foundations/sql/page.tsx,2026-03-11
 /learn/foundations/postgresql,lesson,foundations,Data Engineering Foundations,data,,3,live,true,true,2623,4,app/learn/foundations/postgresql/page.tsx,2026-08-14
 /learn/foundations/python,lesson,foundations,Data Engineering Foundations,data,,4,live,true,true,1157,4,app/learn/foundations/python/page.tsx,2026-03-11
 /learn/track-plan/full-stack-ai,planned-track,full-stack-ai,Full-Stack Development with AI,programming,,,planned,true,true,890,4,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/game-development-graphics,planned-track,game-development-graphics,Game Development & Computer Graphics,programming,,,planned,true,true,812,3,app/learn/track-plan/[slug]/page.tsx,
 /learn/gcp/cheatsheet,tool,gcp,Google Cloud,cloud,,,live,true,true,856,1,app/learn/gcp/cheatsheet/page.tsx,
-/learn/gcp/introduction,lesson,gcp,Google Cloud,cloud,,1,live,true,true,1008,10,app/learn/gcp/introduction/page.tsx,2026-03-11
+/learn/gcp/introduction,lesson,gcp,Google Cloud,cloud,,1,live,true,true,1008,11,app/learn/gcp/introduction/page.tsx,2026-03-11
 /learn/gcp/bigquery,lesson,gcp,Google Cloud,cloud,,2,live,true,true,1187,5,app/learn/gcp/bigquery/page.tsx,2026-03-11
 /learn/gcp/dataflow,lesson,gcp,Google Cloud,cloud,,3,live,true,true,968,5,app/learn/gcp/dataflow/page.tsx,2026-03-11
 /learn/gcp/pubsub,lesson,gcp,Google Cloud,cloud,,4,live,true,true,936,6,app/learn/gcp/pubsub/page.tsx,2026-03-11
 /learn/gcp/composer,lesson,gcp,Google Cloud,cloud,,5,live,true,true,1135,5,app/learn/gcp/composer/page.tsx,2026-03-11
 /learn/generative-ai,planned-track,generative-ai,Generative AI & LLM Engineering,ai,,,planned,true,true,1220,5,app/learn/generative-ai/page.tsx,
-/learn/track-plan/high-performance-scientific-computing,planned-track,high-performance-scientific-computing,High-Performance & Scientific Computing,cs,,,planned,true,true,748,3,app/learn/track-plan/[slug]/page.tsx,
 /learn/html-css,track-index,html-css,HTML & CSS,programming,,,live,true,true,1833,48,app/learn/html-css/page.tsx,
 /learn/html-css/cheatsheet,tool,html-css,HTML & CSS,programming,,,live,true,true,569,1,app/learn/html-css/cheatsheet/page.tsx,
 /learn/html-css/what-is-html-how-the-web-works,lesson,html-css,HTML & CSS,programming,HTML Foundations,1,live,true,true,4971,4,content/html-css/what-is-html-how-the-web-works.tsx,2026-08-17
@@ -469,11 +458,7 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/html-css/building-a-responsive-website,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,40,live,true,true,2634,6,content/html-css/building-a-responsive-website.tsx,2026-08-17
 /learn/html-css/css-best-practices-common-mistakes,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,41,live,true,true,5222,6,content/html-css/css-best-practices-common-mistakes.tsx,2026-08-17
 /learn/html-css/html-css-interview-prep,lesson,html-css,HTML & CSS,programming,Production & Career Readiness,42,live,true,true,4550,5,content/html-css/html-css-interview-prep.tsx,2026-08-17
-/learn/track-plan/it-support-systems-administration,planned-track,it-support-systems-administration,IT Support & Systems Administration,cs,,,planned,true,true,785,3,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/java,planned-track,java,Java & Backend Engineering,programming,,,planned,true,true,766,3,app/learn/track-plan/[slug]/page.tsx,
 /learn/track-plan/javascript,planned-track,javascript,JavaScript & TypeScript,programming,,,planned,true,true,719,4,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/mathematics,planned-track,mathematics,Mathematics for AI & Engineering,cs,,,planned,true,true,694,3,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/mobile-development,planned-track,mobile-development,Mobile Development,programming,,,planned,true,true,690,3,app/learn/track-plan/[slug]/page.tsx,
 /learn/networking,track-index,networking,Networking,cs,,,live,true,true,2127,44,app/learn/networking/page.tsx,
 /learn/networking/cheatsheet,tool,networking,Networking,cs,,,live,true,true,1013,1,app/learn/networking/cheatsheet/page.tsx,
 /learn/networking/topology-preview,preview,networking,Networking,cs,,,preview,false,true,73,0,app/learn/networking/topology-preview/page.tsx,
@@ -521,9 +506,6 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/networking/tcpdump,lesson,networking,Networking,cs,Tools and Troubleshooting,42,soon,false,false,0,0,,
 /learn/networking/nmap,lesson,networking,Networking,cs,Tools and Troubleshooting,43,soon,false,false,0,0,,
 /learn/networking/network-monitoring,lesson,networking,Networking,cs,Tools and Troubleshooting,44,soon,false,false,0,0,,
-/learn/track-plan/networking-telecommunications,planned-track,networking-telecommunications,Networking & Telecommunications,cs,,,planned,true,true,793,3,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/physics,planned-track,physics,Physics for Computing & Engineering,cs,,,planned,true,true,671,3,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/programming-languages-compilers,planned-track,programming-languages-compilers,Programming Languages & Compiler Engineering,cs,,,planned,true,true,750,3,app/learn/track-plan/[slug]/page.tsx,
 /learn/projects,track-index,projects,Projects,practice,,,live,true,true,421,15,app/learn/projects/page.tsx,
 /learn/projects/azure-batch-pipeline,lesson,projects,Projects,practice,,1,live,true,true,4042,16,app/learn/projects/azure-batch-pipeline/page.tsx,2026-08-14
 /learn/projects/azure-projects-02,lesson,projects,Projects,practice,,2,live,true,true,3003,4,app/learn/projects/azure-projects-02/page.tsx,2026-08-14
@@ -579,10 +561,6 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/python/building-a-cli-tool,lesson,python,Python,programming,Production & Career Readiness,44,live,true,true,2802,6,content/python/building-a-cli-tool.tsx,2026-08-16
 /learn/python/python-best-practices,lesson,python,Python,programming,Production & Career Readiness,45,live,true,true,2744,6,content/python/python-best-practices.tsx,2026-08-16
 /learn/python/python-interview-prep,lesson,python,Python,programming,Production & Career Readiness,46,live,true,true,3892,6,content/python/python-interview-prep.tsx,2026-08-16
-/learn/track-plan/quality-engineering,planned-track,quality-engineering,Software Testing & Quality Engineering,programming,,,planned,true,true,691,3,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/robotics-autonomous-systems,planned-track,robotics-autonomous-systems,Robotics & Autonomous Systems,programming,,,planned,true,true,757,3,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/security-governance-risk-privacy,planned-track,security-governance-risk-privacy,"Security Governance, Risk & Privacy",security,,,planned,true,true,822,3,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/semiconductor-digital-hardware,planned-track,semiconductor-digital-hardware,Digital Hardware & Semiconductor Design,cs,,,planned,true,true,775,3,app/learn/track-plan/[slug]/page.tsx,
 /learn/snowflake,track-index,snowflake,Snowflake,data,,,live,true,true,814,29,app/learn/snowflake/page.tsx,
 /learn/snowflake/cheatsheet,tool,snowflake,Snowflake,data,,,live,true,true,1608,1,app/learn/snowflake/cheatsheet/page.tsx,
 /learn/snowflake/what-is-snowflake,lesson,snowflake,Snowflake,data,Snowflake Foundations,1,live,true,true,5184,5,content/snowflake/what-is-snowflake.tsx,2026-09-11
@@ -673,10 +651,6 @@ url,kind,track,trackTitle,area,section,order,status,inSitemap,built,words,inboun
 /learn/sql/sql-projects,lesson,sql,SQL,data,Real-World & Interview,62,live,true,true,8037,5,content/sql/sql-projects.tsx,2026-09-01
 /learn/track-plan/sre-platform-engineering,planned-track,sre-platform-engineering,Site Reliability & Platform Engineering,cloud,,,planned,true,true,827,4,app/learn/track-plan/[slug]/page.tsx,
 /learn/track-plan/system-design,planned-track,system-design,System Design & Software Engineering,cs,,,planned,true,true,762,4,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/systems-programming,planned-track,systems-programming,Systems & Programming Languages,programming,,,planned,true,true,730,3,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/technical-communication-developer-relations,planned-track,technical-communication-developer-relations,Technical Communication & Developer Relations,programming,,,planned,true,true,759,3,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/technical-product-business-analysis,planned-track,technical-product-business-analysis,Technical Product Management & Business Analysis,cs,,,planned,true,true,803,3,app/learn/track-plan/[slug]/page.tsx,
-/learn/track-plan/xr-ar-vr-development,planned-track,xr-ar-vr-development,"AR, VR & Spatial Computing",programming,,,planned,true,true,769,3,app/learn/track-plan/[slug]/page.tsx,
 /admin,unregistered,,,,,,unregistered,false,true,3,0,app/admin/page.tsx,
 /auth/callback,unregistered,,,,,,unregistered,false,true,8,0,app/auth/callback/page.tsx,
 /blog/adf-vs-airflow-vs-step-functions,blog,,,,,,live,true,true,470,4,data/blog-articles.ts,

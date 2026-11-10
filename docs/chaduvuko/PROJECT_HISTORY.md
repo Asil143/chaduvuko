@@ -168,6 +168,13 @@ Recovered Library content shows a Chaduvuko practice product called **Pipeline P
 - Footer: Learn, Schools, Practice, and Chaduvuko columns; CTA points to career paths.
 - Verified with lint, `npm run build` (all postbuild validators), and desktop/mobile screenshots.
 
+## November 9, 2026 — Shelved unused planned tracks
+
+- Reviewed all tracks. All 16 live courses stay (14 feed at least one career path; Projects is the practice area; GCP is unused by paths and is a candidate to merge with AWS/Azure into one cloud-for-data course).
+- Shelved 26 of 37 planned ("coming soon") tracks that no career path uses, via `SHELVED_TRACK_SLUGS` in `data/planned-tracks.ts`. Their plans stay in `ALL_PLANNED_TRACKS`; `PLANNED_TRACKS` (used by the catalog, `/learn`, track-plan pages, search, and sitemap) now lists the 11 that career paths depend on. Shelved plan pages return 404 and left the sitemap.
+- To revive a track, remove its slug from `SHELVED_TRACK_SLUGS`.
+- Not done yet (changes lesson URLs, needs approval): fold Foundations into Data Engineering; merge AWS/Azure/GCP.
+
 ## Ongoing rules
 - Keep StudyX Overseas separate.
 - Chaduvuko remains the primary EdTech project.

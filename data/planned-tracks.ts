@@ -23,7 +23,8 @@ export interface PlannedTrack {
   stages: { title: string; skills: string[] }[]
 }
 
-export const PLANNED_TRACKS: PlannedTrack[] = [
+/** Every drafted skills plan, including shelved ones. Most code should use PLANNED_TRACKS. */
+export const ALL_PLANNED_TRACKS: PlannedTrack[] = [
   {
     slug: 'generative-ai',
     title: 'Generative AI & LLM Engineering',
@@ -709,3 +710,39 @@ export const PLANNED_TRACKS: PlannedTrack[] = [
     ],
   },
 ]
+
+/**
+ * Plans kept in the repository but not shown on the site: no career path uses them and no
+ * lessons are scheduled. Remove a slug from this set when work on that track starts.
+ */
+export const SHELVED_TRACK_SLUGS: ReadonlySet<string> = new Set([
+  'java',
+  'systems-programming',
+  'database-engineering',
+  'mathematics',
+  'quality-engineering',
+  'physics',
+  'mobile-development',
+  'it-support-systems-administration',
+  'networking-telecommunications',
+  'cloud-architecture-finops',
+  'security-governance-risk-privacy',
+  'data-governance-engineering',
+  'accessibility-engineering',
+  'technical-product-business-analysis',
+  'enterprise-platforms',
+  'technical-communication-developer-relations',
+  'game-development-graphics',
+  'embedded-iot',
+  'semiconductor-digital-hardware',
+  'robotics-autonomous-systems',
+  'blockchain-smart-contracts',
+  'xr-ar-vr-development',
+  'programming-languages-compilers',
+  'high-performance-scientific-computing',
+  'applied-ai-specializations',
+  'additional-language-pathways',
+])
+
+/** Planned tracks shown on the site as "coming soon". */
+export const PLANNED_TRACKS: PlannedTrack[] = ALL_PLANNED_TRACKS.filter(track => !SHELVED_TRACK_SLUGS.has(track.slug))

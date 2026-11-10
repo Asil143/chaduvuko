@@ -2,13 +2,13 @@
   "summary": {
     "generatedAt": "2026-11-10",
     "totals": {
-      "rows": 712,
+      "rows": 686,
       "liveLessons": 490,
       "hiddenLessons": 3,
       "unpublishedLessons": 59,
       "liveTracks": 17,
       "hiddenTracks": 1,
-      "plannedTracks": 37,
+      "plannedTracks": 11,
       "roadmaps": 20,
       "blogArticles": 31,
       "careerRoles": 1
@@ -37,8 +37,8 @@
       "updatedAt": "",
       "inSitemap": true,
       "built": true,
-      "words": 478,
-      "inboundLinks": 38,
+      "words": 517,
+      "inboundLinks": 12,
       "sourceFile": "app/page.tsx"
     },
     {
@@ -101,7 +101,7 @@
       "updatedAt": "",
       "inSitemap": false,
       "built": true,
-      "words": 40,
+      "words": 39,
       "inboundLinks": 2,
       "sourceFile": "app/dashboard/page.tsx"
     },
@@ -150,7 +150,7 @@
       "inSitemap": true,
       "built": true,
       "words": 403,
-      "inboundLinks": 38,
+      "inboundLinks": 12,
       "sourceFile": "app/privacy/page.tsx"
     },
     {
@@ -197,8 +197,8 @@
       "updatedAt": "",
       "inSitemap": true,
       "built": true,
-      "words": 4321,
-      "inboundLinks": 43,
+      "words": 2295,
+      "inboundLinks": 17,
       "sourceFile": "app/learn/page.tsx"
     },
     {
@@ -213,7 +213,7 @@
       "updatedAt": "",
       "inSitemap": true,
       "built": true,
-      "words": 3385,
+      "words": 2991,
       "inboundLinks": 2,
       "sourceFile": "app/learn/all-courses/page.tsx"
     },
@@ -805,8 +805,8 @@
       "updatedAt": "",
       "inSitemap": true,
       "built": true,
-      "words": 195,
-      "inboundLinks": 10,
+      "words": 189,
+      "inboundLinks": 9,
       "sourceFile": "app/learn/schools/page.tsx"
     },
     {
@@ -821,8 +821,8 @@
       "updatedAt": "",
       "inSitemap": true,
       "built": true,
-      "words": 148,
-      "inboundLinks": 4,
+      "words": 145,
+      "inboundLinks": 5,
       "sourceFile": "app/learn/schools/[slug]/page.tsx"
     },
     {
@@ -837,8 +837,8 @@
       "updatedAt": "",
       "inSitemap": true,
       "built": true,
-      "words": 91,
-      "inboundLinks": 2,
+      "words": 88,
+      "inboundLinks": 3,
       "sourceFile": "app/learn/schools/[slug]/page.tsx"
     },
     {
@@ -853,8 +853,8 @@
       "updatedAt": "",
       "inSitemap": true,
       "built": true,
-      "words": 118,
-      "inboundLinks": 2,
+      "words": 88,
+      "inboundLinks": 3,
       "sourceFile": "app/learn/schools/[slug]/page.tsx"
     },
     {
@@ -869,8 +869,8 @@
       "updatedAt": "",
       "inSitemap": true,
       "built": true,
-      "words": 139,
-      "inboundLinks": 3,
+      "words": 133,
+      "inboundLinks": 4,
       "sourceFile": "app/learn/schools/[slug]/page.tsx"
     },
     {
@@ -885,8 +885,8 @@
       "updatedAt": "",
       "inSitemap": true,
       "built": true,
-      "words": 104,
-      "inboundLinks": 3,
+      "words": 100,
+      "inboundLinks": 4,
       "sourceFile": "app/learn/schools/[slug]/page.tsx"
     },
     {
@@ -901,41 +901,9 @@
       "updatedAt": "",
       "inSitemap": true,
       "built": true,
-      "words": 136,
-      "inboundLinks": 2,
+      "words": 90,
+      "inboundLinks": 3,
       "sourceFile": "app/learn/schools/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/accessibility-engineering",
-      "kind": "planned-track",
-      "track": "accessibility-engineering",
-      "trackTitle": "Accessibility Engineering",
-      "area": "programming",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 716,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/additional-language-pathways",
-      "kind": "planned-track",
-      "track": "additional-language-pathways",
-      "trackTitle": "Additional Programming Language Pathways",
-      "area": "programming",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 831,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/track-plan/agentic-ai",
@@ -2762,22 +2730,6 @@
       "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
-      "url": "/learn/track-plan/applied-ai-specializations",
-      "kind": "planned-track",
-      "track": "applied-ai-specializations",
-      "trackTitle": "Applied AI Specializations",
-      "area": "ai",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 802,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
       "url": "/learn/aws/cheatsheet",
       "kind": "tool",
       "track": "aws",
@@ -2806,7 +2758,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1196,
-      "inboundLinks": 16,
+      "inboundLinks": 17,
       "sourceFile": "app/learn/aws/introduction/page.tsx"
     },
     {
@@ -2966,7 +2918,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1997,
-      "inboundLinks": 16,
+      "inboundLinks": 17,
       "sourceFile": "app/learn/azure/introduction/page.tsx"
     },
     {
@@ -3082,22 +3034,6 @@
       "sourceFile": "app/learn/azure/microsoft-fabric/page.tsx"
     },
     {
-      "url": "/learn/track-plan/blockchain-smart-contracts",
-      "kind": "planned-track",
-      "track": "blockchain-smart-contracts",
-      "trackTitle": "Blockchain & Smart Contract Engineering",
-      "area": "programming",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 771,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
       "url": "/learn/track-plan/business-intelligence",
       "kind": "planned-track",
       "track": "business-intelligence",
@@ -3111,22 +3047,6 @@
       "built": true,
       "words": 665,
       "inboundLinks": 4,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/cloud-architecture-finops",
-      "kind": "planned-track",
-      "track": "cloud-architecture-finops",
-      "trackTitle": "Cloud Architecture & FinOps",
-      "area": "cloud",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 806,
-      "inboundLinks": 3,
       "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
@@ -4586,22 +4506,6 @@
       "sourceFile": "content/data-engineering/de-interview-questions.tsx"
     },
     {
-      "url": "/learn/track-plan/data-governance-engineering",
-      "kind": "planned-track",
-      "track": "data-governance-engineering",
-      "trackTitle": "Data Governance & Data Quality",
-      "area": "data",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 808,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
       "url": "/learn/data-science",
       "kind": "track-index",
       "track": "data-science",
@@ -5482,22 +5386,6 @@
       "sourceFile": ""
     },
     {
-      "url": "/learn/track-plan/database-engineering",
-      "kind": "planned-track",
-      "track": "database-engineering",
-      "trackTitle": "Database Engineering",
-      "area": "data",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 717,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
       "url": "/learn/dbms",
       "kind": "track-index",
       "track": "dbms",
@@ -5510,7 +5398,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1283,
-      "inboundLinks": 26,
+      "inboundLinks": 27,
       "sourceFile": "app/learn/dbms/page.tsx"
     },
     {
@@ -5862,7 +5750,7 @@
       "inSitemap": true,
       "built": true,
       "words": 952,
-      "inboundLinks": 30,
+      "inboundLinks": 31,
       "sourceFile": "app/learn/dbt/page.tsx"
     },
     {
@@ -6230,7 +6118,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1102,
-      "inboundLinks": 25,
+      "inboundLinks": 26,
       "sourceFile": "app/learn/dsa/page.tsx"
     },
     {
@@ -6570,38 +6458,6 @@
       "sourceFile": "content/dsa/advanced.tsx"
     },
     {
-      "url": "/learn/track-plan/embedded-iot",
-      "kind": "planned-track",
-      "track": "embedded-iot",
-      "trackTitle": "Embedded Systems & Internet of Things",
-      "area": "programming",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 816,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/enterprise-platforms",
-      "kind": "planned-track",
-      "track": "enterprise-platforms",
-      "trackTitle": "Enterprise Platforms & Business Applications",
-      "area": "programming",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 804,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
       "url": "/learn/what-is-data-engineering/cheatsheet",
       "kind": "tool",
       "track": "foundations",
@@ -6698,22 +6554,6 @@
       "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
-      "url": "/learn/track-plan/game-development-graphics",
-      "kind": "planned-track",
-      "track": "game-development-graphics",
-      "trackTitle": "Game Development & Computer Graphics",
-      "area": "programming",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 812,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
       "url": "/learn/gcp/cheatsheet",
       "kind": "tool",
       "track": "gcp",
@@ -6742,7 +6582,7 @@
       "inSitemap": true,
       "built": true,
       "words": 1008,
-      "inboundLinks": 10,
+      "inboundLinks": 11,
       "sourceFile": "app/learn/gcp/introduction/page.tsx"
     },
     {
@@ -6824,22 +6664,6 @@
       "words": 1220,
       "inboundLinks": 5,
       "sourceFile": "app/learn/generative-ai/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/high-performance-scientific-computing",
-      "kind": "planned-track",
-      "track": "high-performance-scientific-computing",
-      "trackTitle": "High-Performance & Scientific Computing",
-      "area": "cs",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 748,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/html-css",
@@ -7546,38 +7370,6 @@
       "sourceFile": "content/html-css/html-css-interview-prep.tsx"
     },
     {
-      "url": "/learn/track-plan/it-support-systems-administration",
-      "kind": "planned-track",
-      "track": "it-support-systems-administration",
-      "trackTitle": "IT Support & Systems Administration",
-      "area": "cs",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 785,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/java",
-      "kind": "planned-track",
-      "track": "java",
-      "trackTitle": "Java & Backend Engineering",
-      "area": "programming",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 766,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
       "url": "/learn/track-plan/javascript",
       "kind": "planned-track",
       "track": "javascript",
@@ -7591,38 +7383,6 @@
       "built": true,
       "words": 719,
       "inboundLinks": 4,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/mathematics",
-      "kind": "planned-track",
-      "track": "mathematics",
-      "trackTitle": "Mathematics for AI & Engineering",
-      "area": "cs",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 694,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/mobile-development",
-      "kind": "planned-track",
-      "track": "mobile-development",
-      "trackTitle": "Mobile Development",
-      "area": "programming",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 690,
-      "inboundLinks": 3,
       "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
@@ -8376,54 +8136,6 @@
       "words": 0,
       "inboundLinks": 0,
       "sourceFile": ""
-    },
-    {
-      "url": "/learn/track-plan/networking-telecommunications",
-      "kind": "planned-track",
-      "track": "networking-telecommunications",
-      "trackTitle": "Networking & Telecommunications",
-      "area": "cs",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 793,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/physics",
-      "kind": "planned-track",
-      "track": "physics",
-      "trackTitle": "Physics for Computing & Engineering",
-      "area": "cs",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 671,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/programming-languages-compilers",
-      "kind": "planned-track",
-      "track": "programming-languages-compilers",
-      "trackTitle": "Programming Languages & Compiler Engineering",
-      "area": "cs",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 750,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/projects",
@@ -9304,70 +9016,6 @@
       "words": 3892,
       "inboundLinks": 6,
       "sourceFile": "content/python/python-interview-prep.tsx"
-    },
-    {
-      "url": "/learn/track-plan/quality-engineering",
-      "kind": "planned-track",
-      "track": "quality-engineering",
-      "trackTitle": "Software Testing & Quality Engineering",
-      "area": "programming",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 691,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/robotics-autonomous-systems",
-      "kind": "planned-track",
-      "track": "robotics-autonomous-systems",
-      "trackTitle": "Robotics & Autonomous Systems",
-      "area": "programming",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 757,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/security-governance-risk-privacy",
-      "kind": "planned-track",
-      "track": "security-governance-risk-privacy",
-      "trackTitle": "Security Governance, Risk & Privacy",
-      "area": "security",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 822,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/semiconductor-digital-hardware",
-      "kind": "planned-track",
-      "track": "semiconductor-digital-hardware",
-      "trackTitle": "Digital Hardware & Semiconductor Design",
-      "area": "cs",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 775,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
       "url": "/learn/snowflake",
@@ -10807,70 +10455,6 @@
       "built": true,
       "words": 762,
       "inboundLinks": 4,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/systems-programming",
-      "kind": "planned-track",
-      "track": "systems-programming",
-      "trackTitle": "Systems & Programming Languages",
-      "area": "programming",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 730,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/technical-communication-developer-relations",
-      "kind": "planned-track",
-      "track": "technical-communication-developer-relations",
-      "trackTitle": "Technical Communication & Developer Relations",
-      "area": "programming",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 759,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/technical-product-business-analysis",
-      "kind": "planned-track",
-      "track": "technical-product-business-analysis",
-      "trackTitle": "Technical Product Management & Business Analysis",
-      "area": "cs",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 803,
-      "inboundLinks": 3,
-      "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
-    },
-    {
-      "url": "/learn/track-plan/xr-ar-vr-development",
-      "kind": "planned-track",
-      "track": "xr-ar-vr-development",
-      "trackTitle": "AR, VR & Spatial Computing",
-      "area": "programming",
-      "section": "",
-      "order": "",
-      "status": "planned",
-      "updatedAt": "",
-      "inSitemap": true,
-      "built": true,
-      "words": 769,
-      "inboundLinks": 3,
       "sourceFile": "app/learn/track-plan/[slug]/page.tsx"
     },
     {
