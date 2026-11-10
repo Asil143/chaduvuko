@@ -160,6 +160,14 @@ Recovered Library content shows a Chaduvuko practice product called **Pipeline P
 - `validate-catalog` now checks career paths; `site-inventory.ts` lists schools and paths in `SITE_MAP.md`.
 - Verified with `npm run lint` (3 known warnings) and `npm run build` including all postbuild validators.
 
+## November 9, 2026 — Header, footer, and home page redesign (Phase 1)
+
+- Terminology: tracks are now called "courses" everywhere; "path" means career path only; role roadmaps are "skill roadmaps".
+- Header: Courses, Career paths (new menu listing all career paths plus Find your path and skill roadmaps; replaces the Roadmaps menu), Practice (now includes Projects), Career prep, Resources.
+- Home: hero uses the official tagline "Learn. Build. Grow.", leads with "Choose a career path", and shows career path, course, lesson, and project counts; the lesson preview card is hidden on phones. Career paths come first with a Find your path callout, then a "Browse by school" grid with course chips. Removed the three-ways-in block and the closing CTA that duplicated the footer CTA.
+- Footer: Learn, Schools, Practice, and Chaduvuko columns; CTA points to career paths.
+- Verified with lint, `npm run build` (all postbuild validators), and desktop/mobile screenshots.
+
 ## Ongoing rules
 - Keep StudyX Overseas separate.
 - Chaduvuko remains the primary EdTech project.

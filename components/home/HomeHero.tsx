@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { ArrowRight, BookOpenCheck, CirclePlay, Code2, Map, Sparkles } from 'lucide-react'
+import { ArrowRight, BookOpenCheck, CirclePlay, Code2, Sparkles } from 'lucide-react'
 import { useLearnerProgress } from '@/components/layout/useLearnerProgress'
 import type { HeaderData } from '@/lib/lesson-nav'
 import type { HomePreview } from '@/components/home/HomePage'
@@ -22,19 +22,19 @@ export function HomeHero({ header, projects, preview }: { header: HeaderData; pr
         <div className="relative z-10">
           <p className={`${eyebrow} inline-flex items-center gap-2 rounded-full border px-3 py-2`} style={{ borderColor: 'var(--border2)', background: 'var(--surface)', color: 'var(--muted)' }}>
             <Sparkles size={14} aria-hidden="true" style={{ color: 'var(--brand-green)' }} />
-            Practical learning for the work ahead
+            Free tech learning for the AI era
           </p>
           <h1 id="home-hero" className="mt-6 max-w-[760px] text-[clamp(2.5rem,6vw,5rem)] font-black leading-[0.99] tracking-[-0.055em]">
             {resume ? (
               <>Keep your <span style={{ color: 'var(--brand-green)' }}>momentum.</span></>
             ) : (
-              <>Learn it. Build it. <span style={{ color: 'var(--brand-green)' }}>Become it.</span></>
+              <>Learn. Build. <span style={{ color: 'var(--brand-green)' }}>Grow.</span></>
             )}
           </h1>
           <p className="mt-5 max-w-[610px] text-base leading-7 sm:text-lg sm:leading-8" style={{ color: 'var(--text2)' }}>
             {resume
-              ? `Pick up ${track?.title ?? 'your learning'} where you left off—or choose a new path and keep growing.`
-              : 'Follow structured technology learning paths from foundations to real projects, with practice and career preparation built in.'}
+              ? `Pick up ${track?.title ?? 'your learning'} where you left off, or choose a career path and keep growing.`
+              : 'Choose a career path, such as AI engineer, data engineer, or full-stack developer, and follow structured courses from foundations to real projects, with practice and interview prep built in.'}
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             {resume ? (
@@ -42,24 +42,25 @@ export function HomeHero({ header, projects, preview }: { header: HeaderData; pr
                 <Link href={resume.href} className={primary} style={{ background: 'var(--header-cta)', color: 'var(--header-cta-text)' }}>
                   Continue learning <ArrowRight size={16} aria-hidden="true" />
                 </Link>
-                {track && <Link href={track.href} className={secondary} style={{ border: '1px solid var(--border2)' }}>{track.title} path</Link>}
+                {track && <Link href={track.href} className={secondary} style={{ border: '1px solid var(--border2)' }}>{track.title} course</Link>}
               </>
             ) : (
               <>
-                <Link href="/learn" className={primary} style={{ background: 'var(--header-cta)', color: 'var(--header-cta-text)' }}>
-                  Explore learning paths <ArrowRight size={16} aria-hidden="true" />
+                <Link href="/learn/paths" className={primary} style={{ background: 'var(--header-cta)', color: 'var(--header-cta-text)' }}>
+                  Choose a career path <ArrowRight size={16} aria-hidden="true" />
                 </Link>
-                <Link href="/learn/roadmap" className={secondary} style={{ border: '1px solid var(--border2)' }}>
-                  Find your roadmap <Map size={16} aria-hidden="true" />
+                <Link href="/learn" className={secondary} style={{ border: '1px solid var(--border2)' }}>
+                  Browse all courses
                 </Link>
               </>
             )}
           </div>
           <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm" style={{ color: 'var(--muted)' }}>
-            <span><strong style={{ color: 'var(--text)' }}>{header.trackCount}</strong> learning paths</span>
+            <span><strong style={{ color: 'var(--text)' }}>{header.careerPaths.length}</strong> career paths</span>
+            <span><strong style={{ color: 'var(--text)' }}>{header.trackCount}</strong> courses</span>
             <span><strong style={{ color: 'var(--text)' }}>{header.lessonCount}</strong> lessons</span>
             <span><strong style={{ color: 'var(--text)' }}>{projects}</strong> projects</span>
-            <span>No account required</span>
+            <span>Free, no account required</span>
           </div>
         </div>
 
@@ -86,7 +87,7 @@ export function HomeHero({ header, projects, preview }: { header: HeaderData; pr
             </span>
           </Link>
         ) : (
-          <Link href={preview.href} aria-label={`Open the lesson ${preview.title}`} className="home-feature-card block rounded-2xl p-5 sm:p-7">
+          <Link href={preview.href} aria-label={`Open the lesson ${preview.title}`} className="home-feature-card hidden rounded-2xl p-5 sm:block sm:p-7">
             <span className="flex items-center justify-between gap-3 border-b pb-4" style={{ borderColor: 'var(--border)' }}>
               <span className="flex items-center gap-2 text-sm font-semibold" style={{ color: 'var(--brand-green)' }}>
                 <CirclePlay size={17} aria-hidden="true" /> A lesson, the Chaduvuko way

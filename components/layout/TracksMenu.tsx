@@ -149,7 +149,7 @@ export function TracksMenuDesktop({ header, completedByTrack, active, onOpenChan
                 <p className="mt-1 text-xs" style={{ color: 'var(--muted)' }}>Structured lessons to help you build practical skills, step by step.</p>
               </div>
               <span className="hidden rounded-full px-3 py-1 text-xs font-medium sm:inline-flex" style={{ background: 'var(--brand-soft)', color: 'var(--brand-green)' }}>
-                {header.trackCount} paths · {header.lessonCount} lessons
+                {header.trackCount} courses · {header.lessonCount} lessons
               </span>
             </div>
             <div className="grid grid-cols-3 gap-10">
@@ -163,7 +163,7 @@ export function TracksMenuDesktop({ header, completedByTrack, active, onOpenChan
             </div>
             <button
               type="button"
-              aria-label="Close learning paths"
+              aria-label="Close courses"
               onClick={close}
               className="site-header-icon-button absolute right-5 top-4 w-10 h-10 flex items-center justify-center rounded-xl"
             >
@@ -172,16 +172,12 @@ export function TracksMenuDesktop({ header, completedByTrack, active, onOpenChan
           </div>
           <div className="px-7 py-3.5 flex flex-wrap justify-between gap-2 text-[13px] sm:px-8" style={{ borderTop: '1px solid var(--border)', color: 'var(--muted)' }}>
             <span>
-              {header.lessonCount} lessons across {header.trackCount} learning paths ·{' '}
-              <Link href={TRACKS_HREF} onClick={navigate} style={{ color: 'var(--brand-green)' }}>Browse all paths</Link>
-              {' · '}
-              <Link href="/learn/paths" onClick={navigate} style={{ color: 'var(--brand-green)' }}>Career paths</Link>
+              {header.lessonCount} lessons across {header.trackCount} courses ·{' '}
+              <Link href={TRACKS_HREF} onClick={navigate} style={{ color: 'var(--brand-green)' }}>Browse all courses</Link>
               {' · '}
               <Link href="/learn/schools" onClick={navigate} style={{ color: 'var(--brand-green)' }}>Schools</Link>
               {' · '}
-              <Link href="/learn/find-your-path" onClick={navigate} style={{ color: 'var(--brand-green)' }}>Find your path</Link>
-              {' · '}
-              <Link href="/learn/all-courses" onClick={navigate} style={{ color: 'var(--brand-green)' }}>All courses</Link>
+              <Link href="/learn/all-courses" onClick={navigate} style={{ color: 'var(--brand-green)' }}>Full catalog</Link>
             </span>
             <span>
               Your learning progress is saved in this browser ·{' '}
@@ -221,7 +217,7 @@ export function TracksListMobile({ header, completedByTrack, resumeTrack, active
         className="w-full min-h-[50px] flex items-center justify-between px-3 text-base font-semibold rounded-xl"
         style={{ color: 'var(--text)', background: active ? 'var(--bg2)' : 'transparent' }}
       >
-        Learning paths
+        Courses
         <span className="flex items-center gap-2 text-[13px] font-normal" style={{ color: 'var(--muted)' }}>
           {header.trackCount}
           <ChevronDown size={14} aria-hidden="true" style={{ transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s', transformOrigin: 'center' }} />
@@ -243,7 +239,7 @@ export function TracksListMobile({ header, completedByTrack, resumeTrack, active
             <AreaGroup key={area} idPrefix={listId} area={area} header={header} completedByTrack={{}} pathname={pathname} onNavigate={onNavigate} tall />
           ))}
           <Link href={TRACKS_HREF} onClick={onNavigate} className="flex items-center min-h-11 text-sm font-semibold" style={{ color: 'var(--brand-green)' }}>
-            All {header.trackCount} learning paths →
+            All {header.trackCount} courses →
           </Link>
           <Link href="/learn/paths" onClick={onNavigate} className="flex items-center min-h-11 text-sm font-semibold" style={{ color: 'var(--brand-green)' }}>
             Career paths →

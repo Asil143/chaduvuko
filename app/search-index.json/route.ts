@@ -14,7 +14,7 @@ const SITE_PAGES: SearchEntry[] = [
   { href: '/learn/all-courses',     title: 'All courses',         context: 'Site map of every track and lesson', kind: 'page' },
   { href: '/learn/paths',           title: 'Career paths',        context: 'Step-by-step routes to a job', kind: 'page' },
   { href: '/learn/schools',         title: 'Schools',             context: 'Six subject areas',           kind: 'page' },
-  { href: '/learn/roadmap',         title: 'Career roadmaps',     context: 'Role-by-role learning paths', kind: 'roadmap' },
+  { href: '/learn/roadmap',         title: 'Skill roadmaps',      context: 'Role-by-role skill maps', kind: 'roadmap' },
   { href: '/learn/interview',       title: 'Interview prep',      context: 'Questions and answers',       kind: 'interview' },
   { href: '/learn/industry',        title: 'Industry guide',      context: 'Companies and roles',         kind: 'page' },
   { href: '/learn/sql/playground',  title: 'SQL playground',      context: 'Practice',                    kind: 'practice' },

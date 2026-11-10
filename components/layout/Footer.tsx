@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { BrandLogo } from '@/components/layout/BrandLogo'
+import { SCHOOLS } from '@/lib/catalog/schools'
 
 type FooterLink = {
   label: string
@@ -9,29 +10,27 @@ type FooterLink = {
 
 const footerSections: { title: string; links: FooterLink[] }[] = [
   {
-    title: 'Learning paths',
+    title: 'Learn',
     links: [
-      { label: 'Explore all learning', href: '/learn' },
       { label: 'Career paths', href: '/learn/paths' },
-      { label: 'Schools', href: '/learn/schools' },
-      { label: 'All courses (site map)', href: '/learn/all-courses' },
-      { label: 'Data Engineering', href: '/learn/data-engineering' },
-      { label: 'Python', href: '/learn/python' },
-      { label: 'AI & Machine Learning', href: '/learn/ai-ml' },
-      { label: 'Cybersecurity', href: '/learn/cybersecurity' },
-      { label: 'AWS', href: '/learn/aws/introduction' },
-      { label: 'Azure', href: '/learn/azure/introduction' },
-      { label: 'Google Cloud', href: '/learn/gcp/introduction' },
+      { label: 'All courses', href: '/learn' },
+      { label: 'Find your path', href: '/learn/find-your-path' },
+      { label: 'Skill roadmaps', href: '/learn/roadmap' },
+      { label: 'Full course catalog', href: '/learn/all-courses' },
     ],
   },
   {
-    title: 'Practice & grow',
+    title: 'Schools',
+    links: SCHOOLS.map(school => ({ label: school.short, href: `/learn/schools/${school.slug}` })),
+  },
+  {
+    title: 'Practice',
     links: [
-      { label: 'Roadmaps', href: '/learn/roadmap' },
-      { label: 'Hands-on projects', href: '/learn/projects' },
-      { label: 'SQL practice', href: '/learn/sql/playground' },
+      { label: 'Projects', href: '/learn/projects' },
+      { label: 'Code playground', href: '/playground' },
+      { label: 'SQL playground', href: '/learn/sql/playground' },
       { label: 'Interview preparation', href: '/learn/interview' },
-      { label: 'Learning dashboard', href: '/dashboard' },
+      { label: 'Your progress', href: '/dashboard' },
     ],
   },
   {
@@ -83,11 +82,11 @@ export function Footer() {
           <div>
             <p className="footer-eyebrow">LEARN. BUILD. GROW.</p>
             <h2 id="footer-cta-title">Build skills for what’s next.</h2>
-            <p>Choose a learning path, practise with purpose, and turn new skills into real projects.</p>
+            <p>Choose a career path, practise with purpose, and turn new skills into real projects.</p>
           </div>
           <div className="footer-cta-actions">
-            <Link href="/learn" className="footer-cta-link">
-              Explore learning paths <span aria-hidden="true">→</span>
+            <Link href="/learn/paths" className="footer-cta-link">
+              Choose a career path <span aria-hidden="true">→</span>
             </Link>
             <Link href="/newsletter" className="footer-cta-secondary">
               Get learning updates
@@ -104,7 +103,7 @@ export function Footer() {
             >
               <BrandLogo variant="footer" />
             </Link>
-            <p>Structured, practical IT learning that takes you from the foundations to real-world projects.</p>
+            <p>Free, structured tech learning for the AI era, from foundations to real-world projects and your first role.</p>
           </div>
 
           {footerSections.map(section => (

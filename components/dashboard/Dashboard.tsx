@@ -370,7 +370,7 @@ export default function Dashboard({ lessons, tracks, quizLessons, roadmaps }: Pr
           </div>
           <Link href={view?.next?.[0] ?? '/learn'} className="dashboard-primary-action">
             <BookOpen size={17} aria-hidden="true" />
-            {view?.next ? 'Continue learning' : 'Explore learning paths'}
+            {view?.next ? 'Continue learning' : 'Explore courses'}
             <ArrowRight size={16} aria-hidden="true" />
           </Link>
         </header>

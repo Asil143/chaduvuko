@@ -105,7 +105,7 @@ export default function RoadmapIndex() {
           <div className="roadmap-index-highlights" aria-label="Roadmap benefits">
             <div>
               <span className="roadmap-index-highlight-icon"><Route size={18} aria-hidden="true" /></span>
-              <span><strong>{roadmaps.length} learning paths</strong><small>Explore different tech roles</small></span>
+              <span><strong>{roadmaps.length} skill roadmaps</strong><small>Explore different tech roles</small></span>
             </div>
             <div>
               <span className="roadmap-index-highlight-icon"><BookOpenCheck size={18} aria-hidden="true" /></span>

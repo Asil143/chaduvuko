@@ -2,12 +2,12 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
-import { FolderKanban, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { ThemeChoice, ThemeMenu } from '@/components/ui/ThemePicker'
 import { SiteSearch, type SearchResume } from '@/components/ui/SiteSearch'
 import { TRACKS_HREF, TracksListMobile, TracksMenuDesktop } from '@/components/layout/TracksMenu'
 import { PRACTICE_ITEMS, PracticeListMobile, PracticeMenuDesktop } from '@/components/layout/PracticeMenu'
-import { RoadmapsListMobile, RoadmapsMenuDesktop } from '@/components/layout/RoadmapsMenu'
+import { PATHS_MENU_HREFS, PathsListMobile, PathsMenuDesktop } from '@/components/layout/PathsMenu'
 import { RESOURCE_ITEMS, ResourcesListMobile, ResourcesMenuDesktop } from '@/components/layout/ResourcesMenu'
 import { LessonHeaderControls } from '@/components/layout/LessonRow'
 import { ReadingLine } from '@/components/layout/ReadingLine'
@@ -21,14 +21,12 @@ import { BrandLogo } from '@/components/layout/BrandLogo'
 type NavItem = { label: string; href: string }
 
 // Blog and the Industry guide live in the footer and search.
-const ROADMAPS: NavItem = { label: 'Roadmaps', href: '/learn/roadmap' }
-const PROJECTS: NavItem = { label: 'Projects', href: '/learn/projects' }
 const CAREER_PREP: NavItem = { label: 'Career prep', href: '/learn/interview' }
 
-// Longest matching prefix wins, so /learn/roadmap/x highlights Roadmaps and
+// Longest matching prefix wins, so /learn/roadmap/x highlights Career paths and
 // /learn/sql/playground highlights Practice, not Tracks.
 function getActiveHref(pathname: string): string | null {
-  const candidates = [TRACKS_HREF, ROADMAPS.href, PROJECTS.href, CAREER_PREP.href, ...PRACTICE_ITEMS.map(i => i.href), ...RESOURCE_ITEMS.map(i => i.href)]
+  const candidates = [TRACKS_HREF, ...PATHS_MENU_HREFS, CAREER_PREP.href, ...PRACTICE_ITEMS.map(i => i.href), ...RESOURCE_ITEMS.map(i => i.href)]
   let best: string | null = null
   for (const href of candidates) {
     const matches = pathname === href || pathname.startsWith(href + '/')
@@ -40,6 +38,7 @@ function getActiveHref(pathname: string): string | null {
 export function Navbar({ header }: { header: HeaderData }) {
   const pathname = usePathname()
   const activeHref = getActiveHref(pathname)
+  const pathsActive = activeHref !== null && PATHS_MENU_HREFS.includes(activeHref)
   const isLessonPage = useIsLessonPage()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [tracksOpened, setTracksOpened] = useState(false)
@@ -47,7 +46,6 @@ export function Navbar({ header }: { header: HeaderData }) {
   // per-track completion counts once a track list is opened.
   const learner = useLearnerProgress(!isLessonPage || tracksOpened || mobileOpen)
   const lesson = useLessonChrome()
-  const projectCount = header.tracks.projects?.lessons ?? 0
   const searchTracks = useMemo(
     () => Object.values(header.tracks)
       .filter(track => track.area !== 'practice' && track.lessons > 0)
@@ -96,8 +94,7 @@ export function Navbar({ header }: { header: HeaderData }) {
                 onOpenChange={open => { if (open) setTracksOpened(true) }}
               />
             </li>
-            <li><RoadmapsMenuDesktop header={header} active={activeHref === ROADMAPS.href} /></li>
-            <li><DesktopLink item={PROJECTS} active={activeHref === PROJECTS.href} count={projectCount} /></li>
+            <li><PathsMenuDesktop header={header} active={pathsActive} /></li>
             <li><PracticeMenuDesktop activeHref={activeHref} /></li>
             <li><DesktopLink item={CAREER_PREP} active={activeHref === CAREER_PREP.href} /></li>
             <li><ResourcesMenuDesktop activeHref={activeHref} /></li>
@@ -118,7 +115,6 @@ export function Navbar({ header }: { header: HeaderData }) {
           learner={learner}
           resume={resume}
           activeHref={activeHref}
-          projectCount={projectCount}
           onOpenChange={setMobileOpen}
         />
       </div>
@@ -128,12 +124,11 @@ export function Navbar({ header }: { header: HeaderData }) {
 }
 
 /** Phones and tablets: a full-screen modal menu with the same destinations as the bar. */
-function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenChange }: {
+function MobileMenu({ header, learner, resume, activeHref, onOpenChange }: {
   header: HeaderData
   learner: LearnerProgress
   resume: SearchResume | null
   activeHref: string | null
-  projectCount: number
   onOpenChange: (open: boolean) => void
 }) {
   const { open, setOpen, close, containerRef, buttonRef } = useMenuDisclosure()
@@ -223,8 +218,7 @@ function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenC
               active={activeHref === TRACKS_HREF}
               onNavigate={navigate}
             />
-            <RoadmapsListMobile header={header} active={activeHref === ROADMAPS.href} onNavigate={navigate} />
-            <MobileLink item={PROJECTS} active={activeHref === PROJECTS.href} onNavigate={navigate} count={projectCount} />
+            <PathsListMobile header={header} active={activeHref !== null && PATHS_MENU_HREFS.includes(activeHref)} onNavigate={navigate} />
             <PracticeListMobile activeHref={activeHref} onNavigate={navigate} />
             <MobileLink item={CAREER_PREP} active={activeHref === CAREER_PREP.href} onNavigate={navigate} />
             <ResourcesListMobile activeHref={activeHref} onNavigate={navigate} />
@@ -290,7 +284,6 @@ function DesktopLink({ item, active, count }: { item: NavItem; active: boolean; 
       className="site-nav-control relative flex items-center gap-1.5 h-11 px-1.5 min-[900px]:px-2 min-[1200px]:px-2 rounded-xl text-[13px] min-[1200px]:text-sm transition-colors whitespace-nowrap"
       style={{ color: active ? 'var(--text)' : 'var(--text2)', fontWeight: active ? 600 : 500 }}
     >
-      {item.href === PROJECTS.href && <FolderKanban className="hidden min-[1440px]:block" size={14} aria-hidden="true" />}
       {item.label}
       {count !== undefined && <span className="hidden min-[1200px]:inline-flex min-w-5 justify-center rounded-full px-1 text-[10px] font-medium" style={{ background: 'var(--bg2)', color: 'var(--muted)' }}>{count}</span>}
     </Link>

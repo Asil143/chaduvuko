@@ -1,5 +1,7 @@
 import { getCatalogStats, getTrackSummaries } from '@/lib/catalog'
 import { ROLE_ROADMAPS } from '@/data/roadmaps/role-registry'
+import { getResolvedPaths } from '@/lib/catalog/paths'
+import { areaLabel } from '@/lib/catalog/schools'
 import type { HeaderData, TrackSummaries } from '@/lib/lesson-nav'
 
 // One line under each track name in the header. Counts stay separate, so these do not repeat them.
@@ -24,14 +26,6 @@ const TRACK_BLURBS: Record<string, string> = {
   'data-science': 'pandas, statistics, and modeling',
 }
 
-// Roadmaps featured in the Roadmaps menu; titles come from the registry.
-const FEATURED: [slug: string, blurb: string][] = [
-  ['data-engineer', 'Pipelines, SQL, cloud, Kafka'],
-  ['ml-engineer', 'Python, models, deployment'],
-  ['ai-engineer', 'LLM apps on top of ML'],
-  ['cybersecurity-analyst', 'Networks, Linux, threat defense'],
-]
-
 function withBlurbs(tracks: TrackSummaries): TrackSummaries {
   return Object.fromEntries(
     Object.entries(tracks).map(([slug, track]) => [slug, { ...track, blurb: TRACK_BLURBS[slug] }]),
@@ -45,10 +39,11 @@ export function getHeaderData(): HeaderData {
     lessonCount: stats.lessons - stats.projects,
     trackCount: stats.liveTracks,
     roadmapCount: Object.keys(ROLE_ROADMAPS).length,
-    featuredRoadmaps: FEATURED.map(([slug, blurb]) => {
-      const roadmap = ROLE_ROADMAPS[slug]
-      if (!roadmap) throw new Error(`Featured roadmap "${slug}" is not in ROLE_ROADMAPS`)
-      return { href: `/learn/roadmap/${slug}`, title: roadmap.title, blurb }
-    }),
+    careerPaths: getResolvedPaths().map(path => ({
+      href: `/learn/paths/${path.slug}`,
+      title: path.title,
+      school: areaLabel(path.school),
+      lessons: path.liveLessons,
+    })),
   }
 }

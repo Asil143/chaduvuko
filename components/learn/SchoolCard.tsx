@@ -42,7 +42,7 @@ export function SchoolCard({ school }: { school: School }) {
       <span style={{ display: 'block', fontSize: 17, fontWeight: 700, color: 'var(--text)' }}>{school.title}</span>
       <span style={{ display: 'block', marginTop: 6, fontSize: 13, lineHeight: 1.6, color: 'var(--muted)' }}>{school.description}</span>
       <span style={{ display: 'block', marginTop: 12, fontSize: 12, color: 'var(--text2)' }}>
-        {tracks.length} live track{tracks.length === 1 ? '' : 's'} · {lessons} lessons
+        {tracks.length} course{tracks.length === 1 ? '' : 's'} · {lessons} lessons
         {paths.length > 0 && ` · ${paths.length} career path${paths.length === 1 ? '' : 's'}`}
         {planned.length > 0 && ` · ${planned.length} coming next`}
       </span>

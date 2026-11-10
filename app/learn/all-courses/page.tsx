@@ -19,7 +19,7 @@ const PRACTICE_LINKS = [
   { href: '/learn/paths', title: 'Career paths', detail: 'Ten step-by-step routes to a job' },
   { href: '/learn/schools', title: 'Schools', detail: 'Six subject areas' },
   { href: '/learn/find-your-path', title: 'Find your path', detail: 'Two questions, then a suggested path' },
-  { href: '/learn/roadmap', title: 'Career roadmaps', detail: `${Object.keys(ROLE_ROADMAPS).length} role-by-role learning paths` },
+  { href: '/learn/roadmap', title: 'Skill roadmaps', detail: `${Object.keys(ROLE_ROADMAPS).length} role-by-role skill maps` },
   { href: '/learn/projects', title: 'Projects', detail: 'End-to-end builds' },
   { href: '/learn/sql/playground', title: 'SQL playground', detail: 'Run SQL in the browser' },
   { href: '/playground', title: 'Code playground', detail: 'Run code in the browser' },

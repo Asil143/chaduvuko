@@ -25,10 +25,12 @@ export interface SiteStats {
 /** Keyed by track slug, in catalog order. */
 export type TrackSummaries = Record<string, TrackSummary>
 
-export interface FeaturedRoadmap {
+export interface CareerPathSummary {
   href: string
   title: string
-  blurb: string
+  /** Short school label, e.g. "AI" or "Data". */
+  school: string
+  lessons: number
 }
 
 /** Everything the site header renders from the catalog, built on the server. */
@@ -39,7 +41,7 @@ export interface HeaderData {
   /** Learning tracks with at least one live lesson (projects excluded). */
   trackCount: number
   roadmapCount: number
-  featuredRoadmaps: FeaturedRoadmap[]
+  careerPaths: CareerPathSummary[]
 }
 
 export interface LessonNavLink {

@@ -5,6 +5,7 @@ import { ChevronDown } from 'lucide-react'
 import { useMenuDisclosure } from '@/components/layout/useMenuDisclosure'
 
 export const PRACTICE_ITEMS = [
+  { label: 'Projects',        href: '/learn/projects',       desc: 'Portfolio builds with real data and code' },
   { label: 'Code Playground', href: '/playground',           desc: 'Write and run code in the browser' },
   { label: 'SQL Playground',  href: '/learn/sql/playground', desc: 'Query a real sample database' },
 ]
